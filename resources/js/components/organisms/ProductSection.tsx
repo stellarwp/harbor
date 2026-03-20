@@ -11,7 +11,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { Badge } from '@/components/ui/badge';
+import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { ProductLogo } from '@/components/atoms/ProductLogo';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
 import { TierGroup } from '@/components/molecules/TierGroup';
@@ -65,11 +65,9 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     { product.name }
                 </h2>
                 { tierName ? (
-                    <Badge variant="gradient">{ tierName }</Badge>
+                    <LicenseBadge type="licensed" tierName={ tierName } />
                 ) : (
-                    <Badge variant="outline" className="text-white border-white/40">
-                        { __( 'Not Licensed', '%TEXTDOMAIN%' ) }
-                    </Badge>
+                    <LicenseBadge type="not-licensed" className="text-white border-white/40" />
                 ) }
                 <span className="ml-auto text-xs text-white/70">
                     { activeCount } { __( 'active', '%TEXTDOMAIN%' ) }
