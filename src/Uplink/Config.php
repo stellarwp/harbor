@@ -2,17 +2,12 @@
 
 namespace StellarWP\Uplink;
 
-use InvalidArgumentException;
 use RuntimeException;
 use StellarWP\ContainerContract\ContainerInterface;
-use StellarWP\Uplink\Auth\Token\Contracts\Token_Manager;
 use StellarWP\Uplink\Storage\Contracts\Storage;
 use StellarWP\Uplink\Storage\Drivers\Option_Storage;
-use StellarWP\Uplink\Utils\Sanitize;
 
 class Config {
-
-	public const TOKEN_OPTION_NAME = 'uplink.token_prefix';
 
 	/**
 	 * The default authorization cache time in seconds (6 hours).
@@ -147,10 +142,6 @@ class Config {
 		static::$hook_prefix           = '';
 		static::$auth_cache_expiration = self::DEFAULT_AUTH_CACHE;
 		static::$api_base_url          = self::DEFAULT_API_BASE_URL;
-
-		if ( self::has_container() ) {
-			self::$container->singleton( self::TOKEN_OPTION_NAME, null );
-		}
 	}
 
 	/**
@@ -177,46 +168,6 @@ class Config {
 	 */
 	public static function set_hook_prefix( string $prefix ): void {
 		static::$hook_prefix = $prefix;
-	}
-
-	/**
-	 * Sets a token options table prefix for storing an origin's authorization token.
-	 *
-	 * This should be the same across all of your products.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $prefix The token auth prefix.
-	 *
-	 * @throws RuntimeException          If the container has not been set.
-	 * @throws InvalidArgumentException  If the prefix is too long.
-	 *
-	 * @return void
-	 */
-	public static function set_token_auth_prefix( string $prefix ): void {
-		if ( ! self::has_container() ) {
-			throw new RuntimeException(
-				__( 'You must set a container with StellarWP\Uplink\Config::set_container() before setting a token auth prefix.', '%TEXTDOMAIN%' )
-			);
-		}
-
-		$prefix = Sanitize::sanitize_title_with_hyphens( rtrim( $prefix, '_' ) );
-		$key    = sprintf( '%s_%s', $prefix, Token_Manager::TOKEN_SUFFIX );
-
-		// The option_name column in wp_options is a varchar(191).
-		$max_length = 191;
-
-		if ( strlen( $key ) > $max_length ) {
-			throw new InvalidArgumentException(
-				sprintf(
-					/* translators: %d is the maximum character length for the token auth prefix. */
-					__( 'The token auth prefix must be at most %d characters, including a trailing hyphen.', '%TEXTDOMAIN%' ),
-					absint( $max_length - strlen( Token_Manager::TOKEN_SUFFIX ) )
-				)
-			);
-		}
-
-		self::get_container()->singleton( self::TOKEN_OPTION_NAME, $key );
 	}
 
 	/**

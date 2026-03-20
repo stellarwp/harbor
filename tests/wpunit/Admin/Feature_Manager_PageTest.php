@@ -3,9 +3,7 @@
 namespace wpunit\Admin;
 
 use StellarWP\Uplink\Admin\Feature_Manager_Page;
-use StellarWP\Uplink\Register;
 use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Uplink;
 
 class Feature_Manager_PageTest extends UplinkTestCase {
 
@@ -18,14 +16,6 @@ class Feature_Manager_PageTest extends UplinkTestCase {
 		parent::setUp();
 
 		$this->page = new Feature_Manager_Page();
-
-		Register::plugin(
-			'manager-test',
-			'Manager Test Plugin',
-			'1.5.0',
-			'uplink/tests/plugin.php',
-			Uplink::class
-		);
 	}
 
 	/**
