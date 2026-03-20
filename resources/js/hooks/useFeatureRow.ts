@@ -23,6 +23,8 @@ export interface FeatureRowState {
 	badgeStatus:     FeatureStatus;
 	showSwitch:      boolean;
 	switchChecked:   boolean;
+	showLegacyBadge: boolean;
+	showFreeBadge:   boolean;
 	handleToggle:    ( checked: boolean ) => Promise<void>;
 	handleUpdate:    () => Promise<void>;
 }
@@ -40,6 +42,17 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 			select( harborStore ).isAnyInstallableBusy(),
 		[ feature.type ]
 	);
+
+	const showLegacyBadge = useSelect(
+		( select ) => {
+			const activeLegacy = select( uplinkStore ).getActiveLegacyLicense( feature.slug );
+			if ( ! activeLegacy ) return false;
+			return ! select( uplinkStore ).isProductUnifiedLicensed( feature.product );
+		},
+		[ feature.slug, feature.product ]
+	);
+
+	const showFreeBadge = feature.tier === null;
 
 	const [ pendingAction, setPendingAction ] = useState<PendingAction>( null );
 
@@ -92,9 +105,11 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 	return {
 		pendingAction,
 		installableBusy,
-		badgeStatus:  badgeStatus as FeatureStatus,
+		badgeStatus:     badgeStatus as FeatureStatus,
 		showSwitch,
 		switchChecked,
+		showLegacyBadge,
+		showFreeBadge,
 		handleToggle,
 		handleUpdate,
 	};
