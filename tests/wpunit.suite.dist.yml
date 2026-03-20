@@ -20,7 +20,7 @@ modules:
             theme: twentytwentythree
             multisite: false
             plugins:
-                - uplink/bootstrap-plugin.php
+                - license-manager/bootstrap-plugin.php
 
 env:
   # nothing changes

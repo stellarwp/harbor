@@ -20,4 +20,4 @@ modules:
             title: 'StellarWP Uplink Tests'
             theme: twentytwentythree
             plugins:
-                - uplink/bootstrap-plugin.php
+                - license-manager/bootstrap-plugin.php
