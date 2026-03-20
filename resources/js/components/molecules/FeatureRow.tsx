@@ -11,6 +11,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FeatureIcon } from '@/components/atoms/FeatureIcon';
+import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { VersionDisplay } from '@/components/molecules/VersionDisplay';
 import { Switch } from '@/components/ui/switch';
@@ -34,6 +35,8 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 		badgeStatus,
 		showSwitch,
 		switchChecked,
+		showLegacyBadge,
+		showFreeBadge,
 		handleToggle,
 		handleUpdate,
 	} = useFeatureRow( feature );
@@ -60,6 +63,8 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 					) }>
 						{ feature.name }
 					</span>
+					{ showFreeBadge   && <LicenseBadge type="free" /> }
+					{ showLegacyBadge && <LicenseBadge type="legacy" /> }
 				</div>
 
 				{ feature.is_available ? (
