@@ -77,7 +77,11 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 							feature={ feature }
 							pendingAction={ pendingAction }
 							installableBusy={ installableBusy }
-							onUpdate={ handleUpdate }
+							upgradeLabel={ showLegacyBadge
+								? __( 'Upgrade your license to receive updates and support.', '%TEXTDOMAIN%' )
+								: undefined
+							}
+							onUpdate={ showLegacyBadge ? undefined : handleUpdate }
 						/>
 						<StatusBadge status={ badgeStatus } />
 						{ showSwitch && (
