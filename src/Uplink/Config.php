@@ -4,15 +4,8 @@ namespace StellarWP\Uplink;
 
 use RuntimeException;
 use StellarWP\ContainerContract\ContainerInterface;
-use StellarWP\Uplink\Storage\Contracts\Storage;
-use StellarWP\Uplink\Storage\Drivers\Option_Storage;
 
 class Config {
-
-	/**
-	 * The default authorization cache time in seconds (6 hours).
-	 */
-	public const DEFAULT_AUTH_CACHE = 21600;
 
 	/**
 	 * The default base URL for the StellarWP licensing and catalog API.
@@ -38,21 +31,6 @@ class Config {
 	 * @var string
 	 */
 	protected static $hook_prefix = '';
-
-	/**
-	 * How long in seconds we cache successful authorization
-	 * token requests.
-	 *
-	 * @var int
-	 */
-	protected static $auth_cache_expiration = self::DEFAULT_AUTH_CACHE;
-
-	/**
-	 * The storage driver FQCN to use.
-	 *
-	 * @var class-string<Storage>
-	 */
-	protected static $storage_driver = Option_Storage::class;
 
 	/**
 	 * The base URL for the StellarWP licensing and catalog API.
@@ -139,9 +117,8 @@ class Config {
 	 * @return void
 	 */
 	public static function reset(): void {
-		static::$hook_prefix           = '';
-		static::$auth_cache_expiration = self::DEFAULT_AUTH_CACHE;
-		static::$api_base_url          = self::DEFAULT_API_BASE_URL;
+		static::$hook_prefix = '';
+		static::$api_base_url = self::DEFAULT_API_BASE_URL;
 	}
 
 	/**
@@ -168,51 +145,6 @@ class Config {
 	 */
 	public static function set_hook_prefix( string $prefix ): void {
 		static::$hook_prefix = $prefix;
-	}
-
-	/**
-	 * Set the token authorization expiration.
-	 *
-	 * @param int $seconds  The time seconds the cache will exist for.
-	 *                       -1 = disabled, 0 = no expiration.
-	 *
-	 * @return void
-	 */
-	public static function set_auth_cache_expiration( int $seconds ): void {
-		static::$auth_cache_expiration = $seconds;
-	}
-
-	/**
-	 * Get the token authorization expiration.
-	 *
-	 * @return int
-	 */
-	public static function get_auth_cache_expiration(): int {
-		return static::$auth_cache_expiration;
-	}
-
-	/**
-	 * Set the underlying storage driver.
-	 *
-	 * @param string $class_name The FQCN to a storage driver.
-	 *
-	 * @phpstan-param class-string<Storage> $class_name
-	 *
-	 * @return void
-	 */
-	public static function set_storage_driver( string $class_name ): void {
-		static::$storage_driver = $class_name;
-	}
-
-	/**
-	 * Get the underlying storage driver.
-	 *
-	 * @return class-string<Storage>
-	 */
-	public static function get_storage_driver(): string {
-		$driver = static::$storage_driver;
-
-		return $driver ?: Option_Storage::class;
 	}
 
 	/**
