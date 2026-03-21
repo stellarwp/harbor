@@ -11,14 +11,14 @@ use LiquidWeb\Harbor\Utils\Version;
 /**
  * Registers the feature update pathway in the DI container and hooks.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Provider extends Abstract_Provider {
 
 	/**
 	 * Registers singletons and defers hook registration to init.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -53,7 +53,7 @@ class Provider extends Abstract_Provider {
 	/**
 	 * Registers the feature update filters if this is the highest Uplink version.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

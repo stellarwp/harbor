@@ -20,14 +20,14 @@ use WP_REST_Server;
  *
  * All endpoints require the manage_options capability.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Controller extends WP_REST_Controller {
 
 	/**
 	 * The REST API namespace.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -36,7 +36,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * The REST API route base.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -45,7 +45,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * The license manager.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
@@ -54,7 +54,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * The site data provider.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Data
 	 */
@@ -63,7 +63,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Manager $manager   The license manager.
 	 * @param Data            $site_data The site data provider.
@@ -78,7 +78,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -149,7 +149,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Permission callback: require manage_options capability.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -165,7 +165,7 @@ final class License_Controller extends WP_REST_Controller {
 	 * be null if no key is stored and none is discoverable from the product
 	 * registry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -195,7 +195,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Looks up the products for a license key, skipping storage.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -222,7 +222,7 @@ final class License_Controller extends WP_REST_Controller {
 	 * Verifies the key is recognized (has products) but does not activate
 	 * any product or consume a seat. Returns the stored key on success.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -263,7 +263,7 @@ final class License_Controller extends WP_REST_Controller {
 	 * Calls the licensing API validate endpoint, which may consume an
 	 * activation seat. Returns the validation result.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -304,7 +304,7 @@ final class License_Controller extends WP_REST_Controller {
 	 * This only removes the locally stored key. It does not free any
 	 * activation seats on the licensing service.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -321,7 +321,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the schema for the license resource.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -412,7 +412,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the argument definitions for the store (POST) endpoint.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
@@ -436,7 +436,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the argument definitions for the validate (POST) endpoint.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
@@ -454,7 +454,7 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the shared network argument definition.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */

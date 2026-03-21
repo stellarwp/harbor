@@ -19,14 +19,14 @@ namespace LiquidWeb\Harbor\Licensing\Registry;
  *       return $products;
  *   } );
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Product_Registry {
 
 	/**
 	 * Filter hook used by products to opt in to unified licensing.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -38,7 +38,7 @@ final class Product_Registry {
 	 * Entries that are not arrays or that are missing a valid slug are silently
 	 * skipped, so a poorly formed callback cannot break the rest of the registry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Registered_Product[]
 	 */
@@ -66,7 +66,7 @@ final class Product_Registry {
 	/**
 	 * Find the first registered product that has a locally embedded license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Registered_Product|null
 	 */

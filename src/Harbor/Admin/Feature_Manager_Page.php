@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Utils\Version;
 /**
  * Manages the unified feature manager admin page.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @package LiquidWeb\Harbor
  */
@@ -16,7 +16,7 @@ class Feature_Manager_Page {
 	/**
 	 * The admin page slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public const PAGE_SLUG = 'lws-feature-manager';
 
@@ -24,7 +24,7 @@ class Feature_Manager_Page {
 	 * Hook suffix returned by add_menu_page().
 	 * Empty string until the page is registered.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -33,7 +33,7 @@ class Feature_Manager_Page {
 	/**
 	 * Registers the unified feature manager page if this instance is the version leader.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -62,7 +62,7 @@ class Feature_Manager_Page {
 	 * $this->page_hook — the value returned by add_menu_page() — to ensure
 	 * the React bundle is loaded only on this specific admin page.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 *
@@ -88,7 +88,7 @@ class Feature_Manager_Page {
 	 *   dirname(dirname(__DIR__))             → src
 	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (uplink/)
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -147,7 +147,7 @@ class Feature_Manager_Page {
 	 * The .uplink-ui class activates CSS scoping for Tailwind styles,
 	 * preventing conflicts with WordPress Admin global styles.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

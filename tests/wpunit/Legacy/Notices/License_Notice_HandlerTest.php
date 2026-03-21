@@ -11,7 +11,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Notice_HandlerTest extends HarborTestCase {
 

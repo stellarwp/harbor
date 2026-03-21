@@ -15,7 +15,7 @@ use LiquidWeb\Harbor\Harbor;
  * and feature state. They delegate to version-keyed closures in _lw_harbor_global_function_registry()
  * so that the highest-version Uplink instance's logic always runs.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class GlobalFunctionsTest extends HarborTestCase {
 

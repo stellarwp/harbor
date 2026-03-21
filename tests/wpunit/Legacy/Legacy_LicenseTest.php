@@ -6,12 +6,12 @@ use LiquidWeb\Harbor\Legacy\Legacy_License;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Legacy_LicenseTest extends HarborTestCase {
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_sets_properties_via_from_data(): void {
 		$license = Legacy_License::from_data(
@@ -34,7 +34,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_defaults_is_active_to_false_and_page_url_to_empty_when_omitted(): void {
 		$license = Legacy_License::from_data(
@@ -51,7 +51,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_creates_inactive_instance_from_array_via_from_data(): void {
 		$license = Legacy_License::from_data(
@@ -75,7 +75,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_uses_explicit_is_active_value(): void {
 		$active = Legacy_License::from_data(
@@ -103,7 +103,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_uses_defaults_for_missing_array_keys(): void {
 		$license = Legacy_License::from_data( [] );
@@ -117,7 +117,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_casts_non_string_values_to_string_in_from_data(): void {
 		$license = Legacy_License::from_data(

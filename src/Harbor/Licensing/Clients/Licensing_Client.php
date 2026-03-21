@@ -9,14 +9,14 @@ use WP_Error;
 /**
  * Contract for the v4 licensing API client.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 interface Licensing_Client {
 
 	/**
 	 * Fetch the products associated with a license and domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    License key.
 	 * @param string $domain Site domain.
@@ -28,7 +28,7 @@ interface Licensing_Client {
 	/**
 	 * Validate a license for a specific product on a domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key          License key.
 	 * @param string $domain       Site domain.

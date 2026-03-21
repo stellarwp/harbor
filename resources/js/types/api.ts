@@ -11,14 +11,14 @@
 /**
  * Feature type identifier returned by the REST API.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export type FeatureType = 'plugin' | 'theme' | 'flag';
 
 /**
  * Base properties shared by all feature types.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 interface BaseFeature {
     /**
@@ -71,7 +71,7 @@ interface BaseFeature {
 /**
  * A feature delivered as a standalone WordPress plugin.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface PluginFeature extends BaseFeature {
     type: 'plugin';
@@ -96,7 +96,7 @@ export interface PluginFeature extends BaseFeature {
 /**
  * A feature delivered as a WordPress theme.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface ThemeFeature extends BaseFeature {
     type: 'theme';
@@ -113,7 +113,7 @@ export interface ThemeFeature extends BaseFeature {
 /**
  * A feature gated by a database option flag.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface FlagFeature extends BaseFeature {
     type: 'flag';
@@ -122,7 +122,7 @@ export interface FlagFeature extends BaseFeature {
 /**
  * Discriminated union of all feature types as returned by the REST API.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export type Feature = PluginFeature | ThemeFeature | FlagFeature;
 
@@ -130,7 +130,7 @@ export type Feature = PluginFeature | ThemeFeature | FlagFeature;
  * Plugin and theme features that trigger WordPress install/activate/deactivate
  * operations. Flag features are excluded because they only flip a DB option.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export type InstallableFeature = PluginFeature | ThemeFeature;
 
@@ -145,7 +145,7 @@ export type InstallableFeature = PluginFeature | ThemeFeature;
  * endpoint response. These differ from the resolved Feature types above
  * (e.g. feature_slug vs slug, minimum_tier vs tier).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface CatalogFeature {
     /**
@@ -201,7 +201,7 @@ export interface CatalogFeature {
 /**
  * A tier entry from the product catalog.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface CatalogTier {
     /**
@@ -225,7 +225,7 @@ export interface CatalogTier {
 /**
  * A product catalog entry as returned by GET /liquidweb/v1/catalog.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface ProductCatalog {
     /**
@@ -251,7 +251,7 @@ export interface ProductCatalog {
  *
  * Tier definitions come from the catalog API (CatalogTier[]) — not stored here.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Product {
     /**
@@ -275,7 +275,7 @@ export interface Product {
 /**
  * A legacy per-plugin license as returned by the legacy-licenses endpoint.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface LegacyLicense {
 	key: string;
@@ -294,7 +294,7 @@ export interface LegacyLicense {
 /**
  * A licensed product entry as returned alongside the license key.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface LicenseProduct {
     product_slug: string;
@@ -315,7 +315,7 @@ export interface LicenseProduct {
 /**
  * Unified license key as returned by GET/POST /liquidweb/v1/license.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface License {
     /**

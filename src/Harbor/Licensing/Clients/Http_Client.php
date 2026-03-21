@@ -15,7 +15,7 @@ use WP_Error;
 /**
  * PSR-18 HTTP implementation of the v4 licensing API client.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Http_Client implements Licensing_Client {
 
@@ -24,7 +24,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * The PSR-18 HTTP client.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var ClientInterface
 	 */
@@ -33,7 +33,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * The PSR-17 request factory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var RequestFactoryInterface
 	 */
@@ -42,7 +42,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * The PSR-17 stream factory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var StreamFactoryInterface
 	 */
@@ -51,7 +51,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * The API base URL (no trailing slash).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -60,7 +60,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param ClientInterface         $client          PSR-18 HTTP client.
 	 * @param RequestFactoryInterface $request_factory PSR-17 request factory.
@@ -82,7 +82,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * Fetch the products associated with a license and domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    License key.
 	 * @param string $domain Site domain.
@@ -165,7 +165,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * Validate a license for a specific product on a domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key          License key.
 	 * @param string $domain       Site domain.
@@ -250,7 +250,7 @@ final class Http_Client implements Licensing_Client {
 	/**
 	 * Build a WP_Error from an error HTTP response.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $body        The response body.
 	 * @param int    $status_code The HTTP status code.

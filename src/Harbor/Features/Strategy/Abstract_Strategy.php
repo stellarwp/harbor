@@ -11,7 +11,7 @@ use LiquidWeb\Harbor\Traits\With_Debugging;
  *
  * Each strategy instance is bound to a single Feature at construction time.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 abstract class Abstract_Strategy implements Strategy {
 
@@ -20,7 +20,7 @@ abstract class Abstract_Strategy implements Strategy {
 	/**
 	 * The feature this strategy operates on.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature
 	 */
@@ -29,7 +29,7 @@ abstract class Abstract_Strategy implements Strategy {
 	/**
 	 * Construct the strategy.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature $feature The feature this strategy operates on.
 	 */

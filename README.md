@@ -1,13 +1,13 @@
-# StellarWP Uplink
+# LiquidWeb Harbor
 
-[![CI](https://github.com/stellarwp/uplink/workflows/CI/badge.svg)](https://github.com/stellarwp/uplink/actions?query=branch%3Amain) [![Static Analysis](https://github.com/stellarwp/uplink/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/uplink/actions/workflows/static-analysis.yml)
+[![CI](https://github.com/liquidweb/harbor/workflows/CI/badge.svg)](https://github.com/liquidweb/harbor/actions?query=branch%3Amain) [![Static Analysis](https://github.com/liquidweb/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/liquidweb/harbor/actions/workflows/static-analysis.yml)
 
 ## Installation
 
-It's recommended that you install Uplink as a project dependency via [Composer](https://getcomposer.org/):
+It's recommended that you install Harbor as a project dependency via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require stellarwp/uplink
+composer require liquidweb/harbor
 ```
 
 > We _actually_ recommend that this library gets included in your project using [Strauss](https://github.com/BrianHenryIE/strauss).
@@ -16,10 +16,10 @@ composer require stellarwp/uplink
 
 ## Initialize the library
 
-Initializing the StellarWP Uplink library should be done within the `plugins_loaded` action, preferably at priority `0`.
+Initializing the Harbor library should be done within the `plugins_loaded` action, preferably at priority `0`.
 
 ```php
-use StellarWP\Uplink\Uplink;
+use LiquidWeb\Harbor\Harbor;
 
 add_action( 'plugins_loaded', function() {
  /**
@@ -51,7 +51,7 @@ add_action( 'plugins_loaded', function() {
  // Or, disable it completely.
  Config::set_auth_cache_expiration( -1 );
 
- Uplink::init();
+ Harbor::init();
 }, 0 );
 ```
 
@@ -60,13 +60,13 @@ add_action( 'plugins_loaded', function() {
 Package is using `__( 'Invalid request: nonce field is expired. Please try again.', '%TEXTDOMAIN%' )` function for translation. In order to change domain placeholder `'%TEXTDOMAIN%'` to your plugin translation domain run
 
 ```bash
-./bin/stellar-uplink domain=<your-plugin-domain>
+./bin/stellar-harbor domain=<your-plugin-domain>
 ```
 
 or
 
 ```bash
-./bin/stellar-uplink
+./bin/stellar-harbor
 ```
 
 and prompt the plugin domain
@@ -74,32 +74,32 @@ You can also add lines below to your composer file in order to run command autom
 
 ```json
 "scripts": {
- "stellar-uplink": [
-   "vendor/bin/stellar-uplink domain=<your-plugin-domain>"
+ "stellar-harbor": [
+   "vendor/bin/stellar-harbor domain=<your-plugin-domain>"
  ],
  "post-install-cmd": [
-   "@stellar-uplink"
+   "@stellar-harbor"
  ],
  "post-update-cmd": [
-   "@stellar-uplink"
+   "@stellar-harbor"
  ]
   }
 ```
 
 ## Embedding a license in your plugin
 
-StellarWP Uplink plugins are downloaded with an embedded license key so that users do not need to manually enter the key when activating their plugin. There are two ways to embed a license key: using a **class constant** or using a **simple license file**.
+LiquidWeb Harbor plugins are downloaded with an embedded license key so that users do not need to manually enter the key when activating their plugin. There are two ways to embed a license key: using a **class constant** or using a **simple license file**.
 
 ### Class constant (default)
 
-The class file can be placed anywhere in your plugin. The default convention is `src/Uplink/Helper.php`, but you can use any path as long as you pass the corresponding class as the `$license_class` parameter when registering.
+The class file can be placed anywhere in your plugin. The default convention is `src/Harbor/Helper.php`, but you can use any path as long as you pass the corresponding class as the `$license_class` parameter when registering.
 
 The file should match the following - keeping the `KEY` constant set to a blank string, or, if you want a default license key, set it to that.:
 
 ```php
 <?php declare( strict_types=1 );
 
-namespace Whatever\Namespace\Uplink;
+namespace Whatever\Namespace\Harbor;
 
 final class Helper {
  public const KEY = '';
@@ -138,14 +138,14 @@ Subdirectory paths are also supported (e.g. `config/license.php`).
 Registers a plugin for licensing and updates.
 
 ```php
-use StellarWP\Uplink\Register;
+use LiquidWeb\Harbor\Register;
 
 $plugin_slug    = 'my-plugin';
 $plugin_name    = 'My Plugin';
 $plugin_version = MyPlugin::VERSION;
 $plugin_path    = 'my-plugin/my-plugin.php';
 $plugin_class   = MyPlugin::class;
-$license_class  = MyPlugin\Uplink\Helper::class;
+$license_class  = MyPlugin\Harbor\Helper::class;
 
 Register::plugin(
  $plugin_slug,
@@ -163,7 +163,7 @@ Register::plugin(
 Registers a service for licensing. Since services require a plugin, we pull version and class information from the plugin.
 
 ```php
-use StellarWP\Uplink\Register;
+use LiquidWeb\Harbor\Register;
 
 $service_slug    = 'my-service';
 $service_name    = 'My Service';
@@ -186,16 +186,16 @@ Register::service(
 
 In order to render license key form just add the following to your settings page, tab, etc.
 
-> ⚠️ This will render license key fields for all of your registered plugins/services in the same Uplink/Container instance.
+> ⚠️ This will render license key fields for all of your registered plugins/services in the same Harbor/Container instance.
 
 ```php
-use StellarWP\Uplink as UplinkNamespace;
+use LiquidWeb\Harbor as HarborNamespace;
 
-$form = UplinkNamespace\get_form();
-$plugins = UplinkNamespace\get_plugins();
+$form = HarborNamespace\get_form();
+$plugins = HarborNamespace\get_plugins();
 
 foreach ( $plugins as $plugin ) {
- $field = UplinkNamespace\get_field( $plugin->get_slug() );
+ $field = HarborNamespace\get_field( $plugin->get_slug() );
  // Tha name property of the input field.
  $field->set_field_name( 'field-' . $slug );
  $form->add_field( $field );
@@ -208,9 +208,9 @@ $form->render();
 To render a single product's license key, use the following:
 
 ```php
-use StellarWP\Uplink as UplinkNamespace;
+use LiquidWeb\Harbor as HarborNamespace;
 
-$field = UplinkNamespace\get_field( 'my-test-plugin' );
+$field = HarborNamespace\get_field( 'my-test-plugin' );
 
 $field->render();
 // or echo $field->get_render_html();
@@ -240,15 +240,15 @@ add_action( 'admin_menu', function () {
 Add lines below to your settings page. This will render license key form with titles and a submit button.
 
 ```php
-use StellarWP\Uplink as UplinkNamespace;
+use LiquidWeb\Harbor as HarborNamespace;
 
 function render_settings_page() {
     // ...
- $form = UplinkNamespace\get_form();
- $plugins = UplinkNamespace\get_plugins();
+ $form = HarborNamespace\get_form();
+ $plugins = HarborNamespace\get_plugins();
 
  foreach ( $plugins as $plugin ) {
-  $field = UplinkNamespace\get_field( $plugin->get_slug() );
+  $field = HarborNamespace\get_field( $plugin->get_slug() );
   // Tha name property of the input field.
   $field->set_field_name( 'field-' . $slug );
   $form->add_field( $field );
@@ -280,13 +280,13 @@ functionality:
 3. The ability for the customer's site to accept specific Query Variables in wp-admin, that will store the generated Token, and an optional new License Key for a Product Slug.
 4. Check if a license is authorized, either in the License Validation payload, or manually.
 
-> ⚠️ Generating a Token requires manual configuration on your Origin site using the [Uplink Origin Plugin](https://github.com/stellarwp/uplink-origin).
+> ⚠️ Generating a Token requires manual configuration on your Origin site using the [Uplink Origin Plugin](https://github.com/liquidweb/harbor-origin).
 
 ### Render Authorize Button
 
 > 💡 Note: the button is only rendered if the following conditions are met:
 
-1. You have an `auth_url` set on the StellarWP Licensing Server.
+1. You have an `auth_url` set on the Licensing Server.
 2. The current user is a Super Admin (can be changed with a WP filter).
 3. This is not a multisite installation, or...
 4. If multisite and using subfolders, only on the root network dashboard.
@@ -294,32 +294,32 @@ functionality:
 
 ```php
 // Call the namespaced function with your plugin slug.
-\StellarWP\Uplink\render_authorize_button( 'kadence-blocks-pro' );
+\LiquidWeb\Harbor\render_authorize_button( 'kadence-blocks-pro' );
 ```
 
 You can also pass in a custom license domain, which can be fetched on the Uplink Origin side from the `uplink_domain` query variable:
 
 ```php
 // Call the namespaced function with your plugin slug and license domain.
-\StellarWP\Uplink\render_authorize_button( 'kadence-blocks-pro', 'customer-site.com' );
+\LiquidWeb\Harbor\render_authorize_button( 'kadence-blocks-pro', 'customer-site.com' );
 ```
 
-> 💡 The button is very customizable with filters, see [Authorize_Button_Controller.php](src/Uplink/Components/Admin/Authorize_Button_Controller.php).
+> 💡 The button is very customizable with filters, see [Authorize_Button_Controller.php](src/Harbor/Components/Admin/Authorize_Button_Controller.php).
 
 ### Manually Check if a License is Remotely Authorized
 
 This connects to the licensing server to check in real time if the license is authorized. Use sparingly.
 
 ```php
-$token       = \StellarWP\Uplink\get_authorization_token( 'my-plugin-slug' );
-$license_key = \StellarWP\Uplink\get_license_key( 'my-plugin-slug' );
-$domain      = \StellarWP\Uplink\get_license_domain();
+$token       = \LiquidWeb\Harbor\get_authorization_token( 'my-plugin-slug' );
+$license_key = \LiquidWeb\Harbor\get_license_key( 'my-plugin-slug' );
+$domain      = \LiquidWeb\Harbor\get_license_domain();
 
 if ( ! $token || ! $license_key || ! $domain ) {
  return; // or, log/show errors.
 }
 
-$is_authorized = \StellarWP\Uplink\is_authorized( $license_key, 'my-plugin-slug', $token, $domain );
+$is_authorized = \LiquidWeb\Harbor\is_authorized( $license_key, 'my-plugin-slug', $token, $domain );
 
 echo $is_authorized ? esc_html__( 'authorized' ) : esc_html__( 'not authorized' );
 ```
@@ -329,7 +329,7 @@ echo $is_authorized ? esc_html__( 'authorized' ) : esc_html__( 'not authorized' 
 If for some reason you need to fetch your `auth_url` manually, you can do so by:
 
 ```php
-echo esc_url( \StellarWP\Uplink\get_auth_url( 'my-plugin-slug' ) );
+echo esc_url( \LiquidWeb\Harbor\get_auth_url( 'my-plugin-slug' ) );
 ```
 
 > 💡 Auth URL connections are cached for one day using transients.
@@ -375,14 +375,14 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 
 ## Additional documentation
 
-### Uplink v3
+### Harbor
 
-- [Uplink v3](/docs/uplink-v3.md) — Primary architecture document for v3 unified licensing.
+- [Harbor](/docs/harbor.md) — Primary architecture document for v3 unified licensing.
 - [Licensing](/docs/licensing.md) — Key discovery, API responses, validation workflows, caching.
 - [Catalog](/docs/catalog.md) — Product families, tiers, features, the Commerce Portal API.
 - [Features](/docs/features.md) — Feature types, resolution, strategies, Manager API, REST endpoints.
 - [Unified License Key](/docs/unified-license-key-system-design.md) — Key model, seat mechanics, system boundaries.
-- [Multi-Instance Architecture](/docs/uplink-v3-fat-leader-thin-instance.md) — Leader election, cross-instance hooks, thin instances.
+- [Multi-Instance Architecture](/docs/harbor-fat-leader-thin-instance.md) — Leader election, cross-instance hooks, thin instances.
 
 ### General
 

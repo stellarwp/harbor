@@ -23,7 +23,7 @@ const FilterContext = createContext<FilterContextValue>( {
 } );
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function FilterProvider( { children }: { children: ReactNode } ) {
     const [ searchQuery, setSearchQuery ]     = useState( '' );
@@ -37,6 +37,6 @@ export function FilterProvider( { children }: { children: ReactNode } ) {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const useFilter = () => useContext( FilterContext );

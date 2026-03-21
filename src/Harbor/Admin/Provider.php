@@ -8,7 +8,7 @@ class Provider extends Abstract_Provider {
 	/**
 	 * Register the service provider.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -22,7 +22,7 @@ class Provider extends Abstract_Provider {
 	 * Registers the unified feature manager page if this instance
 	 * has the highest Harbor version among all active instances.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

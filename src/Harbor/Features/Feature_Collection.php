@@ -11,7 +11,7 @@ use LiquidWeb\Harbor\Utils\Collection;
 /**
  * A collection of Feature objects, keyed by slug.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @extends Collection<Feature>
  */
@@ -20,7 +20,7 @@ class Feature_Collection extends Collection {
 	/**
 	 * Adds a feature to the collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature $feature Feature instance.
 	 *
@@ -37,7 +37,7 @@ class Feature_Collection extends Collection {
 	/**
 	 * Alias of offsetGet().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The feature slug.
 	 *
@@ -50,7 +50,7 @@ class Feature_Collection extends Collection {
 	/**
 	 * Converts the collection to an array of raw data arrays.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -70,7 +70,7 @@ class Feature_Collection extends Collection {
 	 * When given raw arrays, dispatches to the correct subclass based on the 'type' field.
 	 * Unknown types default to Flag.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<Feature|array<string, mixed>> $data Feature objects or raw arrays.
 	 *
@@ -105,7 +105,7 @@ class Feature_Collection extends Collection {
 	 *
 	 * All parameters are optional. When null, that criterion is not applied.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string|null $product   Filter by product (e.g. 'LearnDash', 'TEC').
 	 * @param string|null $tier      Filter by tier (e.g. 'Tier 1', 'Tier 2').

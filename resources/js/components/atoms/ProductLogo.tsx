@@ -36,7 +36,7 @@ interface ProductLogoProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function ProductLogo( { slug, size, variant = 'default' }: ProductLogoProps ) {
     const src = ( variant === 'nobg' ? LOGOS_NOBG : LOGOS )[ slug ];

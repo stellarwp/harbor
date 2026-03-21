@@ -5,14 +5,14 @@ namespace LiquidWeb\Harbor\CLI;
 /**
  * Display formatting helpers for CLI table output.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Display {
 
 	/**
 	 * Converts a boolean to a display-friendly 'true'/'false' string.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param bool $value The boolean value.
 	 *
@@ -27,7 +27,7 @@ class Display {
 	 *
 	 * Returns 'true'/'false' for boolean values, or an empty string for null.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param bool|null $value The nullable boolean value.
 	 *

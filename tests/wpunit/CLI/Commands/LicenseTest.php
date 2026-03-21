@@ -17,7 +17,7 @@ use WP_Error;
 /**
  * Tests for the WP-CLI `wp uplink license` command.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class LicenseTest extends HarborTestCase {
 

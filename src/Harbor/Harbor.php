@@ -11,11 +11,11 @@ class Harbor {
 	/**
 	 * The Harbor library version.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	public const VERSION = '3.0.0';
+	public const VERSION = '1.0.0';
 
 	/**
 	 * Initializes the service provider.
@@ -68,7 +68,7 @@ class Harbor {
 	 * Registers shared, non-prefixed WordPress hooks that enable cross-instance
 	 * communication between vendor-prefixed copies of Harbor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

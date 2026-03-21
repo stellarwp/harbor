@@ -9,7 +9,7 @@ use LiquidWeb\Harbor\Utils\Cast;
  *
  * Immutable value object hydrated from the catalog API response.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @phpstan-type TierAttributes array{
  *     slug: string,
@@ -23,7 +23,7 @@ final class Catalog_Tier {
 	/**
 	 * The tier attributes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var TierAttributes
 	 */
@@ -37,7 +37,7 @@ final class Catalog_Tier {
 	/**
 	 * Constructor for a Catalog_Tier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-param TierAttributes $attributes
 	 *
@@ -52,7 +52,7 @@ final class Catalog_Tier {
 	/**
 	 * Creates a Catalog_Tier from a raw data array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The tier data.
 	 *
@@ -72,7 +72,7 @@ final class Catalog_Tier {
 	/**
 	 * Converts the tier to an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -83,7 +83,7 @@ final class Catalog_Tier {
 	/**
 	 * Gets the tier slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -94,7 +94,7 @@ final class Catalog_Tier {
 	/**
 	 * Gets the tier display name.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -105,7 +105,7 @@ final class Catalog_Tier {
 	/**
 	 * Gets the tier rank for ordering and comparison.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int
 	 */
@@ -116,7 +116,7 @@ final class Catalog_Tier {
 	/**
 	 * Gets the purchase URL for this tier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */

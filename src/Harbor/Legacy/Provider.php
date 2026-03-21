@@ -10,7 +10,7 @@ use LiquidWeb\Harbor\Notice\Notice_Controller;
 /**
  * Registers services for legacy license discovery.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Provider extends Abstract_Provider {
 
@@ -39,7 +39,7 @@ class Provider extends Abstract_Provider {
 	 * Register the user meta field that tracks dismissed notice IDs and their
 	 * expiry timestamps, exposed via the REST API for JS to read and update.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

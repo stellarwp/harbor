@@ -7,14 +7,14 @@ use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 class VersionTest extends HarborTestCase {
 
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_be_highest_when_no_higher_version_exists(): void {
 		$this->assertTrue( Version::is_highest() );
@@ -23,7 +23,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_not_be_highest_when_a_higher_version_exists(): void {
 		$this->assertFalse( Version::is_highest_among( [ '99.0.0' ] ) );
@@ -32,7 +32,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_be_highest_when_versions_are_equal(): void {
 		$this->assertTrue( Version::is_highest_among( [ Harbor::VERSION ] ) );
@@ -41,7 +41,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_handle_when_it_has_the_highest_version(): void {
 		$this->assertTrue( Version::should_handle( 'test_action' ) );
@@ -50,7 +50,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_not_handle_when_a_higher_version_exists(): void {
 		$this->assertFalse( Version::is_highest_among( [ '99.0.0' ] ) );
@@ -59,7 +59,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_not_handle_when_action_already_claimed(): void {
 		do_action( 'lw-harbor/handled/test_action' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
@@ -70,7 +70,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_fire_the_hook_on_success(): void {
 		$this->assertSame( 0, did_action( 'lw-harbor/handled/test_action' ) );
@@ -83,7 +83,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_handle_different_actions_independently(): void {
 		$this->assertTrue( Version::should_handle( 'admin_page' ) );
@@ -93,7 +93,7 @@ class VersionTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_only_handle_an_action_once(): void {
 		$this->assertTrue( Version::should_handle( 'admin_page' ) );

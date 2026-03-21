@@ -12,21 +12,21 @@ use LiquidWeb\Harbor\Traits\With_Debugging;
  * Skipped entirely when no license key is stored since there is nothing
  * to validate against the API.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Refresh_License_Job {
 
 	use With_Debugging;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
 	private License_Manager $license_manager;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Data
 	 */
@@ -35,7 +35,7 @@ class Refresh_License_Job {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Manager $license_manager The license manager.
 	 * @param Data            $site_data       The site data.
@@ -48,7 +48,7 @@ class Refresh_License_Job {
 	/**
 	 * Fetch fresh license product data from the remote API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

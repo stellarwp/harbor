@@ -42,7 +42,7 @@ export const receiveLegacyLicenses = (licenses: LegacyLicense[]): Action => ({
  * Enable a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const enableFeature =
 	(slug: string): Thunk<LiquidError | null> =>
@@ -73,7 +73,7 @@ export const enableFeature =
  * Disable a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const disableFeature =
 	(slug: string): Thunk<LiquidError | null> =>
@@ -104,7 +104,7 @@ export const disableFeature =
  * Update a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const updateFeature =
 	(slug: string): Thunk<LiquidError | null> =>
@@ -136,7 +136,7 @@ export const updateFeature =
  * and features resolvers so the UI refreshes with the new entitlements.
  *
  * @param key
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const storeLicense =
 	(key: string): Thunk<LiquidError | null> =>
@@ -181,7 +181,7 @@ export const storeLicense =
  * Validate a specific product against the license via the REST API.
  *
  * @param productSlug
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const validateProduct =
 	(productSlug: string): Thunk<LiquidError | null> =>
@@ -226,7 +226,7 @@ export const validateProduct =
  * Delete the stored license key via the REST API, then invalidate the
  * features resolver so the UI refreshes.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const deleteLicense =
 	(): Thunk<LiquidError | null> =>

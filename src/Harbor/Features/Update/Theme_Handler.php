@@ -17,7 +17,7 @@ use LiquidWeb\Harbor\Utils\Cast;
  * and `site_transient_update_themes` to provide update information
  * from the consolidation server.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Theme_Handler {
 
@@ -26,7 +26,7 @@ class Theme_Handler {
 	/**
 	 * The update data resolver.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Resolve_Update_Data
 	 */
@@ -35,7 +35,7 @@ class Theme_Handler {
 	/**
 	 * The feature repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature_Repository
 	 */
@@ -44,7 +44,7 @@ class Theme_Handler {
 	/**
 	 * The license manager.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
@@ -53,7 +53,7 @@ class Theme_Handler {
 	/**
 	 * Constructor for the consolidated theme update handler.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Resolve_Update_Data $resolver           The update data resolver.
 	 * @param Feature_Repository  $feature_repository The feature repository.
@@ -76,7 +76,7 @@ class Theme_Handler {
 	 *
 	 * Resolves update data by joining the Feature_Repository and Catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed       $result The current result (false or object).
 	 * @param string|null $action The API action.
@@ -145,7 +145,7 @@ class Theme_Handler {
 	/**
 	 * Filters the update_themes transient to inject consolidated updates.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $transient The update_themes transient value.
 	 *
@@ -231,7 +231,7 @@ class Theme_Handler {
 	/**
 	 * Builds a WordPress-format theme info object for themes_api responses.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string               $slug        The theme slug.
 	 * @param array<string, mixed> $update_data The update data from the consolidation server.
@@ -260,7 +260,7 @@ class Theme_Handler {
 	 *
 	 * WordPress theme transients use arrays (not stdClass objects) keyed by stylesheet.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string               $slug        The theme slug (stylesheet).
 	 * @param array<string, mixed> $update_data The update data from the consolidation server.

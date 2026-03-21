@@ -16,14 +16,14 @@ use LiquidWeb\Harbor\Site\Data;
 /**
  * Registers the Features subsystem in the DI container and hooks.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Provider extends Abstract_Provider {
 
 	/**
 	 * Registers singletons and hooks for the Features subsystem.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -73,7 +73,7 @@ class Provider extends Abstract_Provider {
 	/**
 	 * Registers the default feature type to class mappings.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Resolve_Feature_Collection $resolver The feature collection resolver.
 	 *

@@ -37,7 +37,7 @@ use function wp_json_encode;
  * A plugin feature is active when WordPress reports the plugin as active.
  * A plugin feature is disabled if the plugin is deactivated or uninstalled.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Plugin_Strategy extends Installable_Strategy {
 
@@ -52,7 +52,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * Install path: emitted by Plugin_Upgrader::check_package() and captured by the skin.
 	 * Activation path: returned directly by activate_plugin() via validate_plugin_requirements().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string[]
 	 */
@@ -69,7 +69,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether the plugin is currently active in WordPress.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -83,7 +83,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether the plugin is installed on disk.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -98,7 +98,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * be filtered by the Features Provider to return catalog data for known
 	 * feature slugs.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -170,7 +170,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * (ParseError, TypeError, etc.) and a shutdown function with output
 	 * buffering to handle die()/exit() calls during plugin activation.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -323,7 +323,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * Never deletes plugin files — deactivation is safe and reversible.
 	 * Idempotent: returns true if the plugin is already inactive.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -372,7 +372,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Run the plugin upgrade.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -408,7 +408,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * the same file path AND installing over a different developer's plugin
 	 * that occupies the same directory with a different main file.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * TODO: We probably should move it to another place so we can use it during the WP plugins update setup as well.
 	 *
@@ -459,7 +459,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether an update is available for this plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -478,7 +478,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether a specific plugin file's Author header matches expected authors.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string   $full_path        Absolute path to the plugin file.
 	 * @param string   $plugin_file      Plugin file path relative to plugins directory.
@@ -514,7 +514,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * Used when the expected plugin file doesn't exist but the folder does,
 	 * indicating another plugin may occupy the directory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string   $plugin_dir       Absolute path to the plugin directory.
 	 * @param string   $plugin_slug      The plugin directory slug (e.g. "test-feature").
@@ -572,7 +572,7 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * needed for is_plugin_active(), activate_plugin(), deactivate_plugins(),
 	 * and Plugin_Upgrader.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

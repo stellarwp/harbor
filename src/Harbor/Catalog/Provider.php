@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 /**
  * Registers the Catalog subsystem in the DI container.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 

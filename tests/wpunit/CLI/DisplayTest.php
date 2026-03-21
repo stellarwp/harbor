@@ -6,14 +6,14 @@ use LiquidWeb\Harbor\CLI\Display;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 class DisplayTest extends HarborTestCase {
 
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_convert_true_to_display_string(): void {
 		$this->assertSame( 'true', Display::bool( true ) );
@@ -22,7 +22,7 @@ class DisplayTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_convert_false_to_display_string(): void {
 		$this->assertSame( 'false', Display::bool( false ) );
@@ -31,7 +31,7 @@ class DisplayTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_convert_nullable_true_to_display_string(): void {
 		$this->assertSame( 'true', Display::nullable_bool( true ) );
@@ -40,7 +40,7 @@ class DisplayTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_convert_nullable_false_to_display_string(): void {
 		$this->assertSame( 'false', Display::nullable_bool( false ) );
@@ -49,7 +49,7 @@ class DisplayTest extends HarborTestCase {
 	/**
 	 * @test
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public function it_should_convert_null_to_empty_string(): void {
 		$this->assertSame( '', Display::nullable_bool( null ) );

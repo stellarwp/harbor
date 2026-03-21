@@ -12,14 +12,14 @@ use WP_REST_Server;
 /**
  * WP REST API controller for reading legacy per-plugin license data.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Legacy_License_Controller extends WP_REST_Controller {
 
 	/**
 	 * The REST API namespace.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -28,7 +28,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * The REST API route base.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -37,7 +37,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * The legacy license repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Repository
 	 */
@@ -46,7 +46,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Repository $repository The legacy license repository.
 	 *
@@ -59,7 +59,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -81,7 +81,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * Permission callback: require manage_options capability.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -92,7 +92,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * Returns all legacy licenses.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -110,7 +110,7 @@ final class Legacy_License_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the schema for a legacy license item.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */

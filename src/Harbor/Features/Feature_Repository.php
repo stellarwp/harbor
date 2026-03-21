@@ -12,7 +12,7 @@ use WP_Error;
  * class only caches the result for the current request. Fresh requests always
  * resolve from the upstream caches, which are the single source of truth.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Feature_Repository {
 
@@ -21,7 +21,7 @@ class Feature_Repository {
 	/**
 	 * The feature collection resolver.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Resolve_Feature_Collection
 	 */
@@ -30,7 +30,7 @@ class Feature_Repository {
 	/**
 	 * In-memory cache of the resolved result for the current request.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature_Collection|WP_Error|null
 	 */
@@ -39,7 +39,7 @@ class Feature_Repository {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Resolve_Feature_Collection $resolver The feature collection resolver.
 	 */
@@ -50,7 +50,7 @@ class Feature_Repository {
 	/**
 	 * Gets the resolved feature collection, using the in-memory cache when available.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Feature_Collection|WP_Error
 	 */
@@ -65,7 +65,7 @@ class Feature_Repository {
 	/**
 	 * Clears the in-memory cache and re-resolves.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Feature_Collection|WP_Error
 	 */
@@ -78,7 +78,7 @@ class Feature_Repository {
 	/**
 	 * Delegates resolution to the resolver and caches the result in memory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Feature_Collection|WP_Error
 	 */

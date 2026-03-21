@@ -2,9 +2,9 @@
 
 ## Summary
 
-StellarWP is moving from per-product license keys to a single unified license key per customer. A customer has one unified key (`LWSW-` prefix). That key is the site's identity to the licensing system. Licensing tells the site what products and tiers are associated with that key, and the site acts on that information.
+Liquid Web is moving from per-product license keys to a single unified license key per customer. A customer has one unified key (`LWSW-` prefix). That key is the site's identity to the licensing system. Licensing tells the site what products and tiers are associated with that key, and the site acts on that information.
 
-This document describes how the unified key relates to three systems: **Licensing** (the v4 API), **Portal** (customer-facing management), and **Plugins** (WordPress, via the Uplink library).
+This document describes how the unified key relates to three systems: **Licensing** (the v4 API), **Portal** (customer-facing management), and **Plugins** (WordPress, via the Harbor library).
 
 ## The Unified Key
 
@@ -22,7 +22,7 @@ If multi-key scenarios arise from business needs, agency sharing access with a c
 
 The unified key reaches a WordPress site in one of two ways:
 
-- **Embedded** a product purchased from the StellarWP store ships with a license file containing the key
+- **Embedded** a product purchased from the Liquid Web store ships with a license file containing the key
 - **User-entered** the user types the key into the admin UI
 
 Products downloaded from WordPress.org don't have an embedded key. The site must already have one from another product, or the user must enter one.
@@ -61,7 +61,7 @@ Portal is the customer-facing management interface. It is the only system that c
 
 The WordPress site is a consumer of Licensing data. It stores the unified key, presents it to Licensing, and acts on the response.
 
-**The site stores one key.** All installed StellarWP products share it. Products that shipped with an embedded key contribute it on first activation. Once the site has a key, it's the canonical copy, individual products don't maintain their own.
+**The site stores one key.** All installed Liquid Web products share it. Products that shipped with an embedded key contribute it on first activation. Once the site has a key, it's the canonical copy, individual products don't maintain their own.
 
 **The site asks Licensing what the key covers.** The response determines which products are licensed, what tier each is on, and whether seats are available. This is the source of truth for all product entitlement decisions on the site.
 
@@ -95,7 +95,7 @@ Validation returns that no seats are available. The site shows the customer thei
 
 | Concern                       | Owner           | Why                                             |
 | ----------------------------- | --------------- | ----------------------------------------------- |
-| Storing the key on a site     | Plugin (Uplink) | The site is the consumer                        |
+| Storing the key on a site     | Plugin (Harbor) | The site is the consumer                        |
 | Determining what a key covers | Licensing       | Licensing is the authority                      |
 | Consuming a seat              | Licensing       | Side effect of first validation per domain      |
 | Releasing a seat              | Portal          | Requires authenticated user, abuse prevention   |

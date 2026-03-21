@@ -8,14 +8,14 @@ namespace LiquidWeb\Harbor\Features;
  * PHP 7.4 does not support native enums, so string
  * constants serve as the next-best compile-time guard.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Error_Code {
 
 	/**
 	 * A requested feature was not found in the catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -24,7 +24,7 @@ class Error_Code {
 	/**
 	 * A feature check failed due to an unexpected error.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -33,7 +33,7 @@ class Error_Code {
 	/**
 	 * A feature request failed due to an unexpected error.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -42,7 +42,7 @@ class Error_Code {
 	/**
 	 * The feature catalog response was invalid or could not be parsed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -51,7 +51,7 @@ class Error_Code {
 	/**
 	 * A feature was passed to a strategy that does not support its type.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -60,7 +60,7 @@ class Error_Code {
 	/**
 	 * Plugin deactivation did not take effect.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -69,7 +69,7 @@ class Error_Code {
 	/**
 	 * A concurrent install is already in progress for the same plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -78,7 +78,7 @@ class Error_Code {
 	/**
 	 * The expected plugin file was not found on disk after installation.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -87,7 +87,7 @@ class Error_Code {
 	/**
 	 * The WordPress plugins_api() call failed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -96,7 +96,7 @@ class Error_Code {
 	/**
 	 * No download link was returned by plugins_api() for the requested plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -105,7 +105,7 @@ class Error_Code {
 	/**
 	 * The plugin installation failed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -114,7 +114,7 @@ class Error_Code {
 	/**
 	 * A fatal PHP error (Throwable) occurred during plugin activation.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -123,7 +123,7 @@ class Error_Code {
 	/**
 	 * Plugin activation failed or did not take effect.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -132,7 +132,7 @@ class Error_Code {
 	/**
 	 * An installed plugin's author does not match the expected author(s).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -141,7 +141,7 @@ class Error_Code {
 	/**
 	 * The server's PHP or WordPress version does not meet the plugin's requirements.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -150,7 +150,7 @@ class Error_Code {
 	/**
 	 * The active theme cannot be disabled (WordPress always needs an active theme).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -159,7 +159,7 @@ class Error_Code {
 	/**
 	 * A theme feature cannot be deactivated programmatically — the user must delete it manually.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -168,7 +168,7 @@ class Error_Code {
 	/**
 	 * The expected theme was not found on disk after installation.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -177,7 +177,7 @@ class Error_Code {
 	/**
 	 * The WordPress themes_api() call failed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -186,7 +186,7 @@ class Error_Code {
 	/**
 	 * An installed theme's author does not match the expected author(s).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -195,7 +195,7 @@ class Error_Code {
 	/**
 	 * The feature is not currently active (installed and enabled).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -204,7 +204,7 @@ class Error_Code {
 	/**
 	 * The feature type does not support updates (e.g. flag features).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -213,7 +213,7 @@ class Error_Code {
 	/**
 	 * No update is available for the feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -222,7 +222,7 @@ class Error_Code {
 	/**
 	 * The feature update failed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -231,7 +231,7 @@ class Error_Code {
 	/**
 	 * A feature could not be enabled (strategy threw an exception).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -240,7 +240,7 @@ class Error_Code {
 	/**
 	 * A feature could not be disabled (strategy threw an exception).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -249,7 +249,7 @@ class Error_Code {
 	/**
 	 * A catalog feature has a type with no registered Feature subclass.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -258,7 +258,7 @@ class Error_Code {
 	/**
 	 * Maps an error code to its recommended HTTP status code.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $code An Error_Code constant value.
 	 *

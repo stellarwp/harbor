@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Licensing\Registry\Registered_Product;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Product_RegistryTest extends HarborTestCase {
 

@@ -13,7 +13,7 @@ use LiquidWeb\Harbor\Harbor;
  * routes, etc.). This class centralizes that check using the global
  * _lw_harbor_instance_registry() function as the cross-copy registry.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Version {
 
@@ -23,7 +23,7 @@ class Version {
 	 * Set to true the first time should_handle() succeeds. Stored as a static
 	 * on this (Strauss-prefixed) class, so each vendor copy tracks its own state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var bool
 	 */
@@ -32,7 +32,7 @@ class Version {
 	/**
 	 * Determines whether this Uplink instance is the highest active version.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -43,7 +43,7 @@ class Version {
 	/**
 	 * Determines whether this Uplink instance is the highest among the given versions.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string[] $versions All registered version strings.
 	 *
@@ -65,7 +65,7 @@ class Version {
 	 * Determines whether this Uplink instance should handle the given
 	 * action, and if so, claims it so no other instance can.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $action A short, unique identifier for the responsibility
 	 *                       (e.g. 'admin_page', 'rest_routes').
@@ -93,7 +93,7 @@ class Version {
 	/**
 	 * Returns whether this instance has claimed at least one leadership responsibility.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -104,7 +104,7 @@ class Version {
 	/**
 	 * Registers an admin_footer hook to print leader debug info when WP_DEBUG is enabled.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

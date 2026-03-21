@@ -21,7 +21,7 @@ interface TierGroupProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function TierGroup( { tier, features, forceOpen = false }: TierGroupProps ) {
     const [ expanded, setExpanded ] = useState( false );

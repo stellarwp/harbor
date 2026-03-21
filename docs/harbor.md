@@ -1,4 +1,4 @@
-# Uplink v3
+# Harbor
 
 > **Development status.** This system is under active development. The architectural patterns described here (how the layers connect, how resolution works, how strategies operate) are stable. Specific data shapes are not. Tier slugs, tier names, catalog structure, and API response formats are all subject to change as we negotiate the final contracts with the Licensing and Portal teams.
 >
@@ -8,15 +8,15 @@
 
 ## What This Is
 
-Uplink is a PHP library that StellarWP plugins bundle to handle licensing, updates, and feature management. Each StellarWP plugin ships its own vendor-prefixed copy via Strauss, and there is no shared installation. Multiple copies coexist on a single WordPress site, and the library negotiates internally to avoid conflicts.
+Harbor is a PHP library that Liquid Web plugins bundle to handle licensing, updates, and feature management. Each Liquid Web plugin ships its own vendor-prefixed copy via Strauss, and there is no shared installation. Multiple copies coexist on a single WordPress site, and the library negotiates internally to avoid conflicts.
 
-Uplink v3 introduces **unified licensing**. Instead of each plugin managing its own license key independently, all StellarWP products on a site share a single `LWSW-`-prefixed key. That key determines what products are entitled, what tier each is on, and what features are available. The site asks two external services (the Licensing API and the Commerce Portal) and combines their answers to produce a resolved picture of what the customer can use.
+Harbor introduces **unified licensing**. Instead of each plugin managing its own license key independently, all Liquid Web products on a site share a single `LWSW-`-prefixed key. That key determines what products are entitled, what tier each is on, and what features are available. The site asks two external services (the Licensing API and the Commerce Portal) and combines their answers to produce a resolved picture of what the customer can use.
 
 ## Products and Entry Plugins
 
 A product is a brand family, like Kadence, GiveWP, The Events Calendar, or LearnDash. Each product encompasses many features: plugins, themes, and capability flags that the customer can enable based on their tier.
 
-Each product has an **entry plugin**, a WordPress plugin that bootstraps Uplink on the site. The entry plugin bundles a vendor-prefixed copy of the Uplink library, registers the product with the leader via the product registry, and may contribute an embedded license key. The entry plugin is how a product gets on the site, but it is not the product itself.
+Each product has an **entry plugin**, a WordPress plugin that bootstraps Harbor on the site. The entry plugin bundles a vendor-prefixed copy of the Harbor library, registers the product with the leader via the product registry, and may contribute an embedded license key. The entry plugin is how a product gets on the site, but it is not the product itself.
 
 Most entry plugins are free and available on WordPress.org. This is deliberate. A customer can install the entry plugin for free, and the unified key unlocks the premium features within that product family.
 
@@ -31,7 +31,7 @@ All entry plugins share the same unified `LWSW-` key. When an entry plugin activ
 
 ## The Three Data Layers
 
-Uplink v3 is organized around three data layers. Each answers a different question, and none is sufficient alone.
+Harbor is organized around three data layers. Each answers a different question, and none is sufficient alone.
 
 ### Licensing: "What does this key cover?"
 
@@ -95,7 +95,7 @@ This design allows the licensing service to handle cases that tier rank comparis
 
 ## One Key Per Site
 
-A site stores exactly one unified key. All StellarWP products share it. The key enters the site either embedded in a product's license file or typed into the admin UI by the user. If a key already exists, it takes precedence over newly contributed embedded keys.
+A site stores exactly one unified key. All Liquid Web products share it. The key enters the site either embedded in a product's license file or typed into the admin UI by the user. If a key already exists, it takes precedence over newly contributed embedded keys.
 
 The key is the site's identity to the licensing system. Without a key, the site is unlicensed and no API calls are made.
 
@@ -103,41 +103,41 @@ See [Unified License Key: System Design](unified-license-key-system-design.md) f
 
 ## Multi-Instance Architecture
 
-Because each entry plugin bundles its own vendor-prefixed copy of Uplink, a site with multiple StellarWP products has many Uplink instances loaded simultaneously. The instances negotiate leadership (the highest version wins), and the leader takes ownership of all unified licensing concerns: key storage, API communication, feature resolution, REST routes, and the admin page.
+Because each entry plugin bundles its own vendor-prefixed copy of Harbor, a site with multiple Liquid Web products has many Harbor instances loaded simultaneously. The instances negotiate leadership (the highest version wins), and the leader takes ownership of all unified licensing concerns: key storage, API communication, feature resolution, REST routes, and the admin page.
 
 Non-leader instances (thin instances) declare themselves to the leader through the product registry and defer to it for everything else. They do not validate keys, talk to APIs, or render licensing UI.
 
-See [Multi-Instance Architecture](uplink-v3-fat-leader-thin-instance.md) for leader election, cross-instance communication, and the product registry.
+See [Multi-Instance Architecture](harbor-fat-leader-thin-instance.md) for leader election, cross-instance communication, and the product registry.
 
 ## The Admin Page
 
-The leader renders the Software Manager, a React-based admin page for managing all StellarWP products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
+The leader renders the Software Manager, a React-based admin page for managing all Liquid Web products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
 
 ## Caching
 
 The data layers use different caching strategies:
 
-| Cache             | Type      | TTL             | Key / Location                        | Invalidation                    |
-| ----------------- | --------- | --------------- | ------------------------------------- | ------------------------------- |
-| Licensed products | Option    | None (persist)  | `stellarwp_uplink_licensing_products` | `License_Repository::refresh()` |
-| Product catalog   | Option    | None (persist)  | `stellarwp_uplink_catalog_state`      | `Catalog_Repository::refresh()` |
-| Resolved features | In-memory | Current request | —                                     | `Feature_Repository::refresh()` |
+| Cache             | Type      | TTL             | Key / Location                 | Invalidation                    |
+| ----------------- | --------- | --------------- | ------------------------------ | ------------------------------- |
+| Licensed products | Option    | None (persist)  | `lw_harbor_licensing_products` | `License_Repository::refresh()` |
+| Product catalog   | Option    | None (persist)  | `lw_harbor_catalog_state`      | `Catalog_Repository::refresh()` |
+| Resolved features | In-memory | Current request | —                              | `Feature_Repository::refresh()` |
 
-The unified key itself is stored in a WordPress option (`stellarwp_uplink_unified_license_key`), not a transient.
+The unified key itself is stored in a WordPress option (`lw_harbor_unified_license_key`), not a transient.
 
 ## Legacy Compatibility
 
-Uplink v3 does not replace per-resource licensing for products that haven't adopted unified keys. Products using v2/v3 per-resource keys continue through their existing path unchanged. The leader displays legacy key information in the admin UI but does not validate legacy keys. Validation stays in the per-resource path.
+Harbor does not replace per-resource licensing for products that haven't adopted unified keys. Products using v2/v3 per-resource keys continue through their existing path unchanged. The leader displays legacy key information in the admin UI but does not validate legacy keys. Validation stays in the per-resource path.
 
 There is no automatic migration from per-resource keys to unified keys.
 
 ## Documentation Map
 
-| Document                                                             | Covers                                                             |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| [This document](uplink-v3.md)                                        | Architecture overview and how the layers relate                    |
-| [Licensing](licensing.md)                                            | Key discovery, API responses, validation workflows, caching        |
-| [Catalog](catalog.md)                                                | Product families, tiers, features, the Commerce Portal API         |
-| [Features](features.md)                                              | Feature types, resolution, strategies, Manager API, REST endpoints |
-| [Unified License Key](unified-license-key-system-design.md)          | Key model, seat mechanics, system boundaries                       |
-| [Multi-Instance Architecture](uplink-v3-fat-leader-thin-instance.md) | Leader election, cross-instance hooks, thin instances              |
+| Document                                                          | Covers                                                             |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [This document](harbor.md)                                        | Architecture overview and how the layers relate                    |
+| [Licensing](licensing.md)                                         | Key discovery, API responses, validation workflows, caching        |
+| [Catalog](catalog.md)                                             | Product families, tiers, features, the Commerce Portal API         |
+| [Features](features.md)                                           | Feature types, resolution, strategies, Manager API, REST endpoints |
+| [Unified License Key](unified-license-key-system-design.md)       | Key model, seat mechanics, system boundaries                       |
+| [Multi-Instance Architecture](harbor-fat-leader-thin-instance.md) | Leader election, cross-instance hooks, thin instances              |

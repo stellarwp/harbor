@@ -17,7 +17,7 @@ import { useToast } from '@/context/toast-context';
 import { LiquidError } from '@/errors';
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function LicensePanel() {
     const { addToast }      = useToast();

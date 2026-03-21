@@ -1,47 +1,47 @@
 # WP-CLI Commands
 
-Uplink registers WP-CLI commands automatically when WP-CLI is present. No additional setup is needed.
+Harbor registers WP-CLI commands automatically when WP-CLI is present. No additional setup is needed.
 
 ## Command Reference
 
-### `wp uplink license`
+### `wp lw license`
 
 Manage the unified license key.
 
-| Command    | Usage                               | Description                                               |
-| ---------- | ----------------------------------- | --------------------------------------------------------- |
-| `get`      | `wp uplink license get`             | Show the current license key and associated products      |
-| `set`      | `wp uplink license set <key>`       | Validate and store a license key                          |
-| `lookup`   | `wp uplink license lookup <key>`    | Look up products for a key without storing it             |
-| `validate` | `wp uplink license validate <slug>` | Validate a product on this domain (may consume a seat)    |
-| `delete`   | `wp uplink license delete`          | Delete the stored unified license key                     |
-| `legacy`   | `wp uplink license legacy`          | List legacy per-plugin licenses from all Uplink instances |
+| Command    | Usage                           | Description                                               |
+| ---------- | ------------------------------- | --------------------------------------------------------- |
+| `get`      | `wp lw license get`             | Show the current license key and associated products      |
+| `set`      | `wp lw license set <key>`       | Validate and store a license key                          |
+| `lookup`   | `wp lw license lookup <key>`    | Look up products for a key without storing it             |
+| `validate` | `wp lw license validate <slug>` | Validate a product on this domain (may consume a seat)    |
+| `delete`   | `wp lw license delete`          | Delete the stored unified license key                     |
+| `legacy`   | `wp lw license legacy`          | List legacy per-plugin licenses from all Harbor instances |
 
-### `wp uplink catalog`
+### `wp lw catalog`
 
 Manage the product catalog.
 
-| Command    | Usage                               | Description                                       |
-| ---------- | ----------------------------------- | ------------------------------------------------- |
-| `list`     | `wp uplink catalog list`            | List all products in the catalog                  |
-| `tiers`    | `wp uplink catalog tiers <slug>`    | Show tiers for a specific product                 |
-| `features` | `wp uplink catalog features <slug>` | Show features for a specific product              |
-| `refresh`  | `wp uplink catalog refresh`         | Force refresh the catalog from the API            |
-| `status`   | `wp uplink catalog status`          | Show when the catalog was last fetched and errors |
-| `delete`   | `wp uplink catalog delete`          | Delete the cached catalog                         |
+| Command    | Usage                           | Description                                       |
+| ---------- | ------------------------------- | ------------------------------------------------- |
+| `list`     | `wp lw catalog list`            | List all products in the catalog                  |
+| `tiers`    | `wp lw catalog tiers <slug>`    | Show tiers for a specific product                 |
+| `features` | `wp lw catalog features <slug>` | Show features for a specific product              |
+| `refresh`  | `wp lw catalog refresh`         | Force refresh the catalog from the API            |
+| `status`   | `wp lw catalog status`          | Show when the catalog was last fetched and errors |
+| `delete`   | `wp lw catalog delete`          | Delete the cached catalog                         |
 
-### `wp uplink feature`
+### `wp lw feature`
 
-Manage Uplink features.
+Manage Harbor features.
 
-| Command      | Usage                                 | Description                                       |
-| ------------ | ------------------------------------- | ------------------------------------------------- |
-| `list`       | `wp uplink feature list`              | List features with optional filters               |
-| `get`        | `wp uplink feature get <slug>`        | Show detailed information for a single feature    |
-| `is-enabled` | `wp uplink feature is-enabled <slug>` | Check if a feature is enabled (exit code 0 = yes) |
-| `enable`     | `wp uplink feature enable <slug>`     | Enable a feature                                  |
-| `disable`    | `wp uplink feature disable <slug>`    | Disable a feature                                 |
-| `update`     | `wp uplink feature update <slug>`     | Update a feature to the latest version            |
+| Command      | Usage                             | Description                                       |
+| ------------ | --------------------------------- | ------------------------------------------------- |
+| `list`       | `wp lw feature list`              | List features with optional filters               |
+| `get`        | `wp lw feature get <slug>`        | Show detailed information for a single feature    |
+| `is-enabled` | `wp lw feature is-enabled <slug>` | Check if a feature is enabled (exit code 0 = yes) |
+| `enable`     | `wp lw feature enable <slug>`     | Enable a feature                                  |
+| `disable`    | `wp lw feature disable <slug>`    | Disable a feature                                 |
+| `update`     | `wp lw feature update <slug>`     | Update a feature to the latest version            |
 
 ## License Commands
 
@@ -50,7 +50,7 @@ Manage Uplink features.
 Shows the current license key and associated products.
 
 ```bash
-wp uplink license get [--fields=<fields>] [--format=<format>]
+wp lw license get [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `product_slug, tier, status, expires, site_limit, active_count`
@@ -60,8 +60,8 @@ wp uplink license get [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp uplink license get
-wp uplink license get --format=json
+wp lw license get
+wp lw license get --format=json
 ```
 
 ### set
@@ -69,7 +69,7 @@ wp uplink license get --format=json
 Validates and stores a license key. Does not activate any product or consume a seat.
 
 ```bash
-wp uplink license set <key> [--network] [--fields=<fields>] [--format=<format>]
+wp lw license set <key> [--network] [--fields=<fields>] [--format=<format>]
 ```
 
 | Option      | Description                               |
@@ -80,8 +80,8 @@ wp uplink license set <key> [--network] [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp uplink license set LWSW-abcdef-123456
-wp uplink license set LWSW-abcdef-123456 --network
+wp lw license set LWSW-abcdef-123456
+wp lw license set LWSW-abcdef-123456 --network
 ```
 
 ### lookup
@@ -89,13 +89,13 @@ wp uplink license set LWSW-abcdef-123456 --network
 Looks up products for a key without storing it.
 
 ```bash
-wp uplink license lookup <key> [--fields=<fields>] [--format=<format>]
+wp lw license lookup <key> [--fields=<fields>] [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp uplink license lookup LWSW-abcdef-123456
+wp lw license lookup LWSW-abcdef-123456
 ```
 
 ### validate
@@ -103,13 +103,13 @@ wp uplink license lookup LWSW-abcdef-123456
 Validates a product on this domain using the stored license key. This may consume an activation seat.
 
 ```bash
-wp uplink license validate <product_slug>
+wp lw license validate <product_slug>
 ```
 
 **Examples:**
 
 ```bash
-wp uplink license validate kadence
+wp lw license validate kadence
 ```
 
 ### delete
@@ -117,7 +117,7 @@ wp uplink license validate kadence
 Deletes the stored unified license key. Does not free any activation seats on the licensing service.
 
 ```bash
-wp uplink license delete [--network]
+wp lw license delete [--network]
 ```
 
 | Option      | Description                               |
@@ -127,16 +127,16 @@ wp uplink license delete [--network]
 **Examples:**
 
 ```bash
-wp uplink license delete
-wp uplink license delete --network
+wp lw license delete
+wp lw license delete --network
 ```
 
 ### legacy
 
-Lists legacy per-plugin licenses discovered across all Uplink instances. Read-only view of old-style keys stored individually by each plugin before unified licensing.
+Lists legacy per-plugin licenses discovered across all Harbor instances. Read-only view of old-style keys stored individually by each plugin before unified licensing.
 
 ```bash
-wp uplink license legacy [--fields=<fields>] [--format=<format>]
+wp lw license legacy [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `slug, name, product, key, status, expires_at`
@@ -146,8 +146,8 @@ wp uplink license legacy [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp uplink license legacy
-wp uplink license legacy --format=json
+wp lw license legacy
+wp lw license legacy --format=json
 ```
 
 ## Catalog Commands
@@ -157,7 +157,7 @@ wp uplink license legacy --format=json
 Lists all products in the catalog.
 
 ```bash
-wp uplink catalog list [--format=<format>]
+wp lw catalog list [--format=<format>]
 ```
 
 **Default fields:** `product_slug, tiers, features`
@@ -165,8 +165,8 @@ wp uplink catalog list [--format=<format>]
 **Examples:**
 
 ```bash
-wp uplink catalog list
-wp uplink catalog list --format=json
+wp lw catalog list
+wp lw catalog list --format=json
 ```
 
 ### tiers
@@ -174,7 +174,7 @@ wp uplink catalog list --format=json
 Shows tiers for a specific product.
 
 ```bash
-wp uplink catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
+wp lw catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `slug, name, rank, purchase_url`
@@ -182,8 +182,8 @@ wp uplink catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp uplink catalog tiers kadence
-wp uplink catalog tiers kadence --format=json
+wp lw catalog tiers kadence
+wp lw catalog tiers kadence --format=json
 ```
 
 ### features
@@ -191,7 +191,7 @@ wp uplink catalog tiers kadence --format=json
 Shows features for a specific product.
 
 ```bash
-wp uplink catalog features <product_slug> [--fields=<fields>] [--format=<format>]
+wp lw catalog features <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `feature_slug, type, minimum_tier, name, category`
@@ -201,8 +201,8 @@ wp uplink catalog features <product_slug> [--fields=<fields>] [--format=<format>
 **Examples:**
 
 ```bash
-wp uplink catalog features kadence
-wp uplink catalog features kadence --format=json
+wp lw catalog features kadence
+wp lw catalog features kadence --format=json
 ```
 
 ### refresh
@@ -210,13 +210,13 @@ wp uplink catalog features kadence --format=json
 Force refreshes the catalog from the API, then displays the resulting product list.
 
 ```bash
-wp uplink catalog refresh [--format=<format>]
+wp lw catalog refresh [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp uplink catalog refresh
+wp lw catalog refresh
 ```
 
 ### status
@@ -224,13 +224,13 @@ wp uplink catalog refresh
 Shows when the catalog was last fetched and any errors.
 
 ```bash
-wp uplink catalog status
+wp lw catalog status
 ```
 
 **Examples:**
 
 ```bash
-wp uplink catalog status
+wp lw catalog status
 ```
 
 ### delete
@@ -238,13 +238,13 @@ wp uplink catalog status
 Deletes the cached catalog. The next request for the catalog will fetch fresh data from the API.
 
 ```bash
-wp uplink catalog delete
+wp lw catalog delete
 ```
 
 **Examples:**
 
 ```bash
-wp uplink catalog delete
+wp lw catalog delete
 ```
 
 ## Feature Commands
@@ -254,7 +254,7 @@ wp uplink catalog delete
 Lists features with optional filters.
 
 ```bash
-wp uplink feature list [--product=<product>] [--tier=<tier>] [--available=<bool>] [--type=<type>] [--fields=<fields>] [--format=<format>]
+wp lw feature list [--product=<product>] [--tier=<tier>] [--available=<bool>] [--type=<type>] [--fields=<fields>] [--format=<format>]
 ```
 
 **Options:**
@@ -280,19 +280,19 @@ wp uplink feature list [--product=<product>] [--tier=<tier>] [--available=<bool>
 
 ```bash
 # Table output (default)
-wp uplink feature list
+wp lw feature list
 
 # JSON for scripting
-wp uplink feature list --format=json
+wp lw feature list --format=json
 
 # Available flag features only
-wp uplink feature list --type=flag --available=true
+wp lw feature list --type=flag --available=true
 
 # Count features in a product
-wp uplink feature list --product=kadence --format=count
+wp lw feature list --product=kadence --format=count
 
 # Show plugin-specific fields
-wp uplink feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
+wp lw feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
 ```
 
 ### get
@@ -300,14 +300,14 @@ wp uplink feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_or
 Shows detailed information for a single feature.
 
 ```bash
-wp uplink feature get <slug> [--fields=<fields>] [--format=<format>]
+wp lw feature get <slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp uplink feature get my-feature
-wp uplink feature get my-feature --format=json
+wp lw feature get my-feature
+wp lw feature get my-feature --format=json
 ```
 
 ### is-enabled
@@ -315,14 +315,14 @@ wp uplink feature get my-feature --format=json
 Checks whether a feature is currently enabled. Exits with code 0 if enabled, 1 if not.
 
 ```bash
-wp uplink feature is-enabled <slug>
+wp lw feature is-enabled <slug>
 ```
 
 **Examples:**
 
 ```bash
 # Check in a script
-if wp uplink feature is-enabled my-feature; then
+if wp lw feature is-enabled my-feature; then
   echo "Feature is enabled"
 fi
 ```
@@ -332,13 +332,13 @@ fi
 Enables a feature.
 
 ```bash
-wp uplink feature enable <slug>
+wp lw feature enable <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp uplink feature enable my-feature
+wp lw feature enable my-feature
 ```
 
 ### disable
@@ -346,13 +346,13 @@ wp uplink feature enable my-feature
 Disables a feature.
 
 ```bash
-wp uplink feature disable <slug>
+wp lw feature disable <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp uplink feature disable my-feature
+wp lw feature disable my-feature
 ```
 
 ### update
@@ -360,13 +360,13 @@ wp uplink feature disable my-feature
 Updates a feature to the latest available version. Only applies to plugin and theme features — flag features do not support updates.
 
 ```bash
-wp uplink feature update <slug>
+wp lw feature update <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp uplink feature update my-feature
+wp lw feature update my-feature
 ```
 
 ## Scripting Patterns
@@ -375,22 +375,22 @@ wp uplink feature update my-feature
 
 ```bash
 # Get all feature slugs
-wp uplink feature list --format=json | jq -r '.[].slug'
+wp lw feature list --format=json | jq -r '.[].slug'
 
 # Get enabled features
-wp uplink feature list --format=json | jq '[.[] | select(.is_enabled == "true")]'
+wp lw feature list --format=json | jq '[.[] | select(.is_enabled == "true")]'
 
 # Get legacy license keys
-wp uplink license legacy --format=json | jq -r '.[].key'
+wp lw license legacy --format=json | jq -r '.[].key'
 ```
 
 ### Conditional logic
 
 ```bash
-if wp uplink feature is-enabled my-feature; then
+if wp lw feature is-enabled my-feature; then
   echo "my-feature is enabled"
 else
-  wp uplink feature enable my-feature
+  wp lw feature enable my-feature
 fi
 ```
 
@@ -398,11 +398,11 @@ fi
 
 ```bash
 # Enable all available flag features
-for slug in $(wp uplink feature list --type=flag --available=true --format=json | jq -r '.[].slug'); do
-  wp uplink feature enable "$slug"
+for slug in $(wp lw feature list --type=flag --available=true --format=json | jq -r '.[].slug'); do
+  wp lw feature enable "$slug"
 done
 ```
 
 ## Cross-Instance Safety
 
-When multiple vendor-prefixed copies of Uplink are active, only the highest version registers CLI commands. This uses the same `Version::should_handle()` mechanism as the REST API routes.
+When multiple vendor-prefixed copies of Harbor are active, only the highest version registers CLI commands. This uses the same `Version::should_handle()` mechanism as the REST API routes.

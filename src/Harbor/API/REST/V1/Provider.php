@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Utils\Version;
 /**
  * Registers all v1 WP REST API controllers and hooks routes.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 
@@ -26,7 +26,7 @@ final class Provider extends Abstract_Provider {
 	/**
 	 * Registers all v1 REST API routes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

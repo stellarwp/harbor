@@ -27,7 +27,7 @@ function ToastIcon( { variant }: { variant: ToastVariant } ) {
 
 /**
  * Renders the toast stack. Mount as a sibling of AppShell in App.tsx.
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function Toaster() {
     const { toasts, removeToast } = useToast();

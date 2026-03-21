@@ -20,7 +20,7 @@ interface BState {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export class ErrorBoundary extends Component<Props, BState> {
     state: BState = { hasError: false };

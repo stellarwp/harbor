@@ -16,7 +16,7 @@ use RuntimeException;
  *   $client->add_response( new Response( 200, [], '{"ok":true}' ) );
  *   $response = $client->sendRequest( $request ); // returns the queued response
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Mock_Client implements ClientInterface {
 

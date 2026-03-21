@@ -10,14 +10,14 @@ use LiquidWeb\Harbor\Utils\License_Key;
  * Products report these via the lw-harbor/product_registry filter
  * to opt in to the unified licensing system.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Registered_Product {
 
 	/**
 	 * The product slug (e.g. 'give', 'kadence').
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -26,7 +26,7 @@ final class Registered_Product {
 	/**
 	 * The locally embedded license key, if the product ships with one.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string|null
 	 */
@@ -35,7 +35,7 @@ final class Registered_Product {
 	/**
 	 * Human-readable product name.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string|null
 	 */
@@ -44,7 +44,7 @@ final class Registered_Product {
 	/**
 	 * Currently installed version of the product.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string|null
 	 */
@@ -53,7 +53,7 @@ final class Registered_Product {
 	/**
 	 * Product brand (e.g. 'givewp', 'kadence').
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string|null
 	 */
@@ -62,7 +62,7 @@ final class Registered_Product {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string      $slug         The product slug.
 	 * @param string|null $embedded_key The locally embedded license key.
@@ -89,7 +89,7 @@ final class Registered_Product {
 	 *
 	 * Returns null if the required 'slug' field is missing or empty.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The product registration data.
 	 *
@@ -116,7 +116,7 @@ final class Registered_Product {
 	/**
 	 * Whether this product has a locally embedded license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */

@@ -30,7 +30,7 @@ use function wp_get_theme;
  * No DB option is stored — disk presence is the sole source of truth.
  * A theme feature is disabled if the theme is uninstalled (deleted from disk).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Theme_Strategy extends Installable_Strategy {
 
@@ -48,7 +48,7 @@ class Theme_Strategy extends Installable_Strategy {
 	 * means the theme is installed and available for the user to activate through
 	 * the WordPress UI.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -59,7 +59,7 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether the theme is installed on disk.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -74,7 +74,7 @@ class Theme_Strategy extends Installable_Strategy {
 	 * be filtered by the Features Provider to return catalog data for known
 	 * feature slugs.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -146,7 +146,7 @@ class Theme_Strategy extends Installable_Strategy {
 	 * The theme is installed and ready for the user to activate through
 	 * WordPress's Appearance → Themes UI. No further action needed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -161,7 +161,7 @@ class Theme_Strategy extends Installable_Strategy {
 	 * If the theme IS on disk, we cannot programmatically delete it; the user
 	 * must remove it themselves via Appearance → Themes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -194,7 +194,7 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Run the theme upgrade.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -220,7 +220,7 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Verify that the installed theme belongs to an expected author.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True if ownership matches or no theme on disk, WP_Error on mismatch.
 	 */
@@ -269,7 +269,7 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Check whether an update is available for this theme.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -286,7 +286,7 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Load WordPress admin includes required for theme management.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

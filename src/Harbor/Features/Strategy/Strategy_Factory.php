@@ -14,14 +14,14 @@ use LiquidWeb\Harbor\Features\Types\Theme;
  * Maps feature type strings to their corresponding Strategy classes.
  * Each call creates a new Strategy instance bound to the given Feature.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Strategy_Factory {
 
 	/**
 	 * Creates the correct strategy for a given feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature $feature The feature to create a strategy for.
 	 *

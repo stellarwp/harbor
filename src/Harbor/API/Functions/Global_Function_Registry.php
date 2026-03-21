@@ -17,7 +17,7 @@ use Throwable;
  * here (inside the namespaced file) so Strauss-prefixed class references
  * resolve correctly for this specific instance.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Global_Function_Registry {
 
@@ -26,7 +26,7 @@ class Global_Function_Registry {
 	/**
 	 * Registers this instance's callbacks into the global function registry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $version The version of this Uplink instance.
 	 *

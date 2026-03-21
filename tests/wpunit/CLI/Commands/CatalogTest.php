@@ -18,7 +18,7 @@ use WP_Error;
 /**
  * Tests for the WP-CLI `wp uplink catalog` command.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class CatalogTest extends HarborTestCase {
 

@@ -11,14 +11,14 @@ use WP_REST_Server;
 /**
  * WP REST API controller for reading the product catalog.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Catalog_Controller extends WP_REST_Controller {
 
 	/**
 	 * The REST API namespace.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -27,7 +27,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * The REST API route base.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -36,7 +36,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * The catalog repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -45,7 +45,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Repository $repository The catalog repository.
 	 *
@@ -58,7 +58,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -80,7 +80,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * Permission callback: require manage_options capability.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -91,7 +91,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * Returns all product catalogs.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -110,7 +110,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the schema for a single catalog item.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */

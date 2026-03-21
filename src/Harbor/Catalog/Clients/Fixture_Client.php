@@ -10,14 +10,14 @@ use WP_Error;
 /**
  * A fixture-based catalog client that reads from a JSON file.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Fixture_Client implements Catalog_Client {
 
 	/**
 	 * The path to the fixture JSON file.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -26,7 +26,7 @@ final class Fixture_Client implements Catalog_Client {
 	/**
 	 * In-memory cache of the parsed catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Collection|WP_Error|null
 	 */
@@ -35,7 +35,7 @@ final class Fixture_Client implements Catalog_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $fixture_file Path to the fixture JSON file.
 	 */
@@ -46,7 +46,7 @@ final class Fixture_Client implements Catalog_Client {
 	/**
 	 * Fetch the full catalog for all products.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|WP_Error
 	 */

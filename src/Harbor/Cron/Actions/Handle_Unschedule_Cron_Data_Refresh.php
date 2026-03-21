@@ -22,12 +22,12 @@ use function is_plugin_active_for_network;
  * Conservative defaults: when the catalog is unreadable or contains no installable
  * features, the event is left in place since we cannot confirm Uplink is gone.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Handle_Unschedule_Cron_Data_Refresh {
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -36,7 +36,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Repository $catalog The catalog repository.
 	 */
@@ -45,7 +45,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -60,7 +60,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 	/**
 	 * Check whether any plugin or theme listed in the stored catalog is still active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */

@@ -8,14 +8,14 @@ use WP_Error;
 /**
  * Contract for the product catalog API client.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 interface Catalog_Client {
 
 	/**
 	 * Fetch the full catalog for all products.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|WP_Error
 	 */

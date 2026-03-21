@@ -37,14 +37,14 @@ use WP_CLI_Command;
  *     # Show legacy per-plugin licenses
  *     wp uplink license legacy
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class License extends WP_CLI_Command {
 
 	/**
 	 * Default fields shown in product table output.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -53,7 +53,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * Default fields shown in legacy license table output.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -62,7 +62,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * The license manager instance.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
@@ -71,7 +71,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * The site data provider.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Data
 	 */
@@ -80,7 +80,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * The legacy license repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Legacy_License_Repository
 	 */
@@ -89,7 +89,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Manager           $manager            The license manager.
 	 * @param Data                      $site_data          The site data provider.
@@ -400,7 +400,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * Displays a product collection as a table.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Collection    $products   The product collection.
 	 * @param array<string, string> $assoc_args Associative arguments for the formatter.
@@ -434,7 +434,7 @@ class License extends WP_CLI_Command {
 	/**
 	 * Converts a product entry to a flat display-ready associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Entry $product The product entry.
 	 *

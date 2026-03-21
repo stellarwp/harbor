@@ -29,7 +29,7 @@ const ToastContext = createContext<ToastContextValue>( {
 } );
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function ToastProvider( { children }: { children: ReactNode } ) {
     const [ toasts, setToasts ] = useState<Toast[]>( [] );
@@ -55,6 +55,6 @@ export function ToastProvider( { children }: { children: ReactNode } ) {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const useToast = () => useContext( ToastContext );

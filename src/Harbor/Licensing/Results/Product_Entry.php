@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Utils\Cast;
  * Immutable value object hydrated from the GET /stellarwp/v4/products response.
  * Mirrors the licensing service's Catalog_Entry_Result API response shape.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @phpstan-type ProductAttributes array{
  *     product_slug: string,
@@ -32,7 +32,7 @@ final class Product_Entry {
 	/**
 	 * The product entry attributes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var ProductAttributes
 	 */
@@ -52,7 +52,7 @@ final class Product_Entry {
 	/**
 	 * Constructor for a Product_Entry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-param ProductAttributes $attributes
 	 *
@@ -67,7 +67,7 @@ final class Product_Entry {
 	/**
 	 * Creates a Product_Entry from an API response array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The product data from the API response.
 	 *
@@ -97,7 +97,7 @@ final class Product_Entry {
 	/**
 	 * Converts the product entry to an associative array matching the API response shape.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -131,7 +131,7 @@ final class Product_Entry {
 	/**
 	 * Gets the product slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -142,7 +142,7 @@ final class Product_Entry {
 	/**
 	 * Gets the subscription tier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -153,7 +153,7 @@ final class Product_Entry {
 	/**
 	 * Gets the pending tier (scheduled downgrade), or null if none.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -164,7 +164,7 @@ final class Product_Entry {
 	/**
 	 * Gets the subscription status.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -175,7 +175,7 @@ final class Product_Entry {
 	/**
 	 * Gets the expiration date.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return DateTimeImmutable
 	 */
@@ -186,7 +186,7 @@ final class Product_Entry {
 	/**
 	 * Gets the maximum number of site activations (0 = unlimited).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int
 	 */
@@ -197,7 +197,7 @@ final class Product_Entry {
 	/**
 	 * Gets the current number of active site activations.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int
 	 */
@@ -210,7 +210,7 @@ final class Product_Entry {
 	 *
 	 * Returns null when no domain was provided in the request.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool|null
 	 */
@@ -221,7 +221,7 @@ final class Product_Entry {
 	/**
 	 * Gets the list of feature slugs this license grants access to.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */
@@ -232,7 +232,7 @@ final class Product_Entry {
 	/**
 	 * Gets the validation status string, or null when not provided.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null A Validation_Status constant value, or null.
 	 */
@@ -243,7 +243,7 @@ final class Product_Entry {
 	/**
 	 * Whether the product's validation status is valid.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -254,7 +254,7 @@ final class Product_Entry {
 	/**
 	 * Whether the product has exceeded its activation seat limit.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */

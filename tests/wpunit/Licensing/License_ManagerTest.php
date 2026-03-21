@@ -15,7 +15,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_ManagerTest extends HarborTestCase {
 

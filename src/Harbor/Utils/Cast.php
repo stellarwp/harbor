@@ -5,14 +5,14 @@ namespace LiquidWeb\Harbor\Utils;
 /**
  * Safe type casting utilities.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Cast {
 
 	/**
 	 * Safely casts a value to a string.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $value The value to cast.
 	 *
@@ -33,7 +33,7 @@ class Cast {
 	/**
 	 * Safely casts a value to an int.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $value The value to cast.
 	 *
@@ -54,7 +54,7 @@ class Cast {
 	/**
 	 * Safely casts a value to a float.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $value The value to cast.
 	 *
@@ -75,7 +75,7 @@ class Cast {
 	/**
 	 * Safely casts a value to a bool.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $value The value to cast.
 	 *

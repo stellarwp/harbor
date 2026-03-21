@@ -40,14 +40,14 @@ use WP_CLI_Command;
  *     # Update a feature to the latest version
  *     wp uplink feature update my-feature
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Feature extends WP_CLI_Command {
 
 	/**
 	 * Default fields shown in table output.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -56,7 +56,7 @@ class Feature extends WP_CLI_Command {
 	/**
 	 * The feature manager instance.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Manager
 	 */
@@ -65,7 +65,7 @@ class Feature extends WP_CLI_Command {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Manager $manager The feature manager.
 	 */
@@ -363,7 +363,7 @@ class Feature extends WP_CLI_Command {
 	/**
 	 * Converts a feature collection to display items with boolean casting.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature_Collection $features The feature collection.
 	 *
@@ -385,7 +385,7 @@ class Feature extends WP_CLI_Command {
 	 * Booleans are cast to 'true'/'false' strings for table display.
 	 * The is_enabled field is resolved via the Manager.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature_Type $feature The feature instance.
 	 *

@@ -14,7 +14,7 @@ The catalog data comes from the Commerce Portal API. It is not license-specific.
 
 The catalog is organized by product. Kadence, GiveWP, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins, themes, flags) that customers can enable based on their tier.
 
-Each product has an entry plugin that bootstraps Uplink on the site (see [Products and Entry Plugins](uplink-v3.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
+Each product has an entry plugin that bootstraps Harbor on the site (see [Products and Entry Plugins](harbor.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
 
 The product's own entry plugin is also returned as a feature within its catalog. For example, the `kadence` product includes a `kadence` feature of type `theme` representing Kadence itself. This means the update and feature management pipelines treat the product the same as any other feature — there is no special case for "the product itself" versus "add-on features."
 
@@ -76,7 +76,7 @@ The catalog defines what tier a feature requires. Licensing defines what tier th
 
 ### Catalog Repository
 
-The `Catalog_Repository` wraps the catalog client with transient caching. The cache uses a 12-hour TTL (`stellarwp_uplink_catalog`), the same duration as the licensing cache.
+The `Catalog_Repository` wraps the catalog client with transient caching. The cache uses a 12-hour TTL (`lw_harbor_catalog`), the same duration as the licensing cache.
 
 ```
 Catalog_Repository::get()
@@ -115,10 +115,10 @@ Tests use a fixture PSR-18 client that serves local JSON from `tests/_data/catal
 
 ## Error Codes
 
-| Code                                         | Constant            | Meaning                                   |
-| -------------------------------------------- | ------------------- | ----------------------------------------- |
-| `stellarwp-uplink-catalog-product-not-found` | `PRODUCT_NOT_FOUND` | Requested product slug not in the catalog |
-| `stellarwp-uplink-catalog-invalid-response`  | `INVALID_RESPONSE`  | API response couldn't be parsed           |
+| Code                                  | Constant            | Meaning                                   |
+| ------------------------------------- | ------------------- | ----------------------------------------- |
+| `lw-harbor-catalog-product-not-found` | `PRODUCT_NOT_FOUND` | Requested product slug not in the catalog |
+| `lw-harbor-catalog-invalid-response`  | `INVALID_RESPONSE`  | API response couldn't be parsed           |
 
 ## Catalog Shape
 

@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Utils\Collection;
 /**
  * A collection of Product_Entry objects, keyed by product slug.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @extends Collection<Product_Entry>
  */
@@ -17,7 +17,7 @@ final class Product_Collection extends Collection {
 	/**
 	 * Adds a product entry to the collection, keyed by its slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Entry $entry Product entry instance.
 	 *
@@ -34,7 +34,7 @@ final class Product_Collection extends Collection {
 	/**
 	 * Retrieves a product entry by slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The product slug.
 	 *
@@ -47,7 +47,7 @@ final class Product_Collection extends Collection {
 	/**
 	 * Converts the collection to an array of raw data arrays.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -64,7 +64,7 @@ final class Product_Collection extends Collection {
 	/**
 	 * Creates a Product_Collection from an array of Product_Entry objects or raw data arrays.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<Product_Entry|array<string, mixed>> $entries Product entries or raw arrays.
 	 *

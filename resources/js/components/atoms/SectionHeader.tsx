@@ -12,7 +12,7 @@ interface SectionHeaderProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function SectionHeader( { icon, label, action }: SectionHeaderProps ) {
 	return (

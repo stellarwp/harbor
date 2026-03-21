@@ -24,14 +24,14 @@ use WP_Error;
  * to the site option. Callers control the storage level explicitly
  * via the $network parameter on store_key() and delete_key().
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Repository {
 
 	/**
 	 * The option name used to store the unified license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -49,7 +49,7 @@ final class License_Repository {
 	 *   - last_error      (WP_Error|null) Error from the most recent failed attempt, or
 	 *                                     null when the last fetch succeeded.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -58,7 +58,7 @@ final class License_Repository {
 	/**
 	 * State envelope key for the serialized product collection array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -67,7 +67,7 @@ final class License_Repository {
 	/**
 	 * State envelope key for the last successful fetch timestamp.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -76,7 +76,7 @@ final class License_Repository {
 	/**
 	 * State envelope key for the last failed fetch timestamp.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -85,7 +85,7 @@ final class License_Repository {
 	/**
 	 * State envelope key for the last fetch error.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -98,7 +98,7 @@ final class License_Repository {
 	 *
 	 *  TODO: Decide where to store this data. See discussion in https://github.com/lw-harbor/pull/162/changes#r2906722318
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -110,7 +110,7 @@ final class License_Repository {
 	 * On multisite, the network-level key takes precedence over a
 	 * site-level key. Returns null if no key exists at either level.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return ?string The license key, or null if not set.
 	 */
@@ -133,7 +133,7 @@ final class License_Repository {
 	/**
 	 * Store the unified license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key     The license key to store.
 	 * @param bool   $network Whether to store at the network level (multisite only).
@@ -158,7 +158,7 @@ final class License_Repository {
 				/**
 				 * Fires when the unified license key is changed.
 				 *
-				 * @since 3.0.0
+				 * @since 1.0.0
 				 *
 				 * @param string $new_key The new license key.
 				 * @param string $old_key The previous license key.
@@ -183,7 +183,7 @@ final class License_Repository {
 			/**
 			 * Fires when the unified license key is changed.
 			 *
-			 * @since 3.0.0
+			 * @since 1.0.0
 			 *
 			 * @param string $new_key The new license key.
 			 * @param string $old_key The previous license key.
@@ -197,7 +197,7 @@ final class License_Repository {
 	/**
 	 * Delete the stored unified license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param bool $network Whether to delete from the network level (multisite only).
 	 *
@@ -216,7 +216,7 @@ final class License_Repository {
 			/**
 			 * Fires when the unified license key is changed.
 			 *
-			 * @since 3.0.0
+			 * @since 1.0.0
 			 *
 			 * @param string $new_key The new license key.
 			 * @param string $old_key The previous license key.
@@ -233,7 +233,7 @@ final class License_Repository {
 	 * Follows the same precedence as get_key(): network-level on multisite,
 	 * then site-level.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool Whether a license key exists.
 	 */
@@ -252,7 +252,7 @@ final class License_Repository {
 	 * Use License_Manager::get_products() for a call that will fetch from the
 	 * API on a miss.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Product_Collection|WP_Error|null
 	 */
@@ -280,7 +280,7 @@ final class License_Repository {
 	 * last_success_at are preserved so callers can still use the last known-good
 	 * catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Collection|WP_Error $data The product catalog or fetch error to store.
 	 *
@@ -309,7 +309,7 @@ final class License_Repository {
 	/**
 	 * Delete the entire license state option.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -320,7 +320,7 @@ final class License_Repository {
 	/**
 	 * Unix timestamp of the last successful products fetch, or null if never fetched.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int|null
 	 */
@@ -334,7 +334,7 @@ final class License_Repository {
 	 * Unix timestamp of the most recent failed products fetch, or null if no
 	 * failure has occurred.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int|null
 	 */
@@ -348,7 +348,7 @@ final class License_Repository {
 	 * WP_Error from the most recent failed fetch attempt, or null if the last
 	 * fetch was successful (or no fetch has occurred).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error|null
 	 */
@@ -362,7 +362,7 @@ final class License_Repository {
 	 * Read the raw license state array from the option, returning a zeroed
 	 * default when nothing has been stored.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array{collection: array<array<string,mixed>>|null, last_success_at: int|null, last_failure_at: int|null, last_error: WP_Error|null}
 	 */
@@ -401,7 +401,7 @@ final class License_Repository {
 	 *
 	 * Returns null if no catalog is cached or the product is not found.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to retrieve.
 	 *
@@ -420,7 +420,7 @@ final class License_Repository {
 	/**
 	 * Whether a product exists in the cached catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to check.
 	 *
@@ -433,7 +433,7 @@ final class License_Repository {
 	/**
 	 * Whether a product has a valid license status in the cached catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to check.
 	 *
@@ -453,7 +453,7 @@ final class License_Repository {
 	 * This prevents platform fees from being charged immediately after a license
 	 * expires or when a network issue prevents reaching the licensing server.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to retrieve.
 	 *
@@ -472,7 +472,7 @@ final class License_Repository {
 	 *
 	 * Returns null when no active date has been recorded for the slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to retrieve.
 	 *
@@ -493,7 +493,7 @@ final class License_Repository {
 	 * Called whenever a fetch confirms the product has a valid license so that
 	 * the grace period is anchored to the most recent known-good state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug      The product slug to record.
 	 * @param int    $timestamp Unix timestamp (UTC) to record.
@@ -517,7 +517,7 @@ final class License_Repository {
 	 * 30 days gives customers and the licensing server reasonable time to
 	 * recover from network issues or an unintentional lapse in renewal.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int
 	 */
@@ -528,7 +528,7 @@ final class License_Repository {
 	/**
 	 * Whether a product is within the grace period after its last active date.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The product slug to check.
 	 *

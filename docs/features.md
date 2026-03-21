@@ -47,7 +47,7 @@ A capability toggle within an existing plugin, not a separate installable. The o
 
 | Aspect              | Behavior                                                                         |
 | ------------------- | -------------------------------------------------------------------------------- |
-| **Source of truth** | WordPress option `stellarwp_uplink_feature_{slug}_active` (autoloaded)           |
+| **Source of truth** | WordPress option `lw_harbor_feature_{slug}_active` (autoloaded)                  |
 | **Enable**          | Sets option to `'1'`. Requires a qualifying tier                                 |
 | **Disable**         | Sets option to `'0'`. Always allowed, but re-enabling requires a qualifying tier |
 
@@ -55,7 +55,7 @@ A capability toggle within an existing plugin, not a separate installable. The o
 
 ### Install Lock
 
-Plugin and Theme features share a global transient lock (`stellarwp_uplink_install_lock`, 120s TTL). Only one installable feature can install at a time. Flags are unaffected.
+Plugin and Theme features share a global transient lock (`lw_harbor_install_lock`, 120s TTL). Only one installable feature can install at a time. Flags are unaffected.
 
 ## Resolution
 
@@ -88,21 +88,21 @@ The `Manager` is the public interface for all feature operations.
 | `disable(string $slug)`      | `Feature\|WP_Error`            | Disable a feature, return updated Feature          |
 | `update(string $slug)`       | `Feature\|WP_Error`            | Update a feature to latest version                 |
 
-Global convenience functions in `src/Uplink/global-functions.php` (non-namespaced, always delegate to the version leader):
+Global convenience functions in `src/Harbor/global-functions.php` (non-namespaced, always delegate to the version leader):
 
-- **`stellarwp_uplink_is_feature_enabled(string $slug): bool|WP_Error`** — in the catalog AND active locally?
-- **`stellarwp_uplink_is_feature_available(string $slug): bool|WP_Error`** — does the customer's tier include this feature?
+- **`lw_harbor_is_feature_enabled(string $slug): bool|WP_Error`** — in the catalog AND active locally?
+- **`lw_harbor_is_feature_available(string $slug): bool|WP_Error`** — does the customer's tier include this feature?
 
 ### WordPress Hooks
 
 Actions fired before and after enable/disable, both globally and per-slug:
 
-- `stellarwp/uplink/feature_enabling` / `stellarwp/uplink/{slug}/feature_enabling`
-- `stellarwp/uplink/feature_enabled` / `stellarwp/uplink/{slug}/feature_enabled`
-- `stellarwp/uplink/feature_disabling` / `stellarwp/uplink/{slug}/feature_disabling`
-- `stellarwp/uplink/feature_disabled` / `stellarwp/uplink/{slug}/feature_disabled`
-- `stellarwp/uplink/feature_updating` / `stellarwp/uplink/{slug}/feature_updating`
-- `stellarwp/uplink/feature_updated` / `stellarwp/uplink/{slug}/feature_updated`
+- `lw-harbor/feature_enabling` / `lw-harbor/{slug}/feature_enabling`
+- `lw-harbor/feature_enabled` / `lw-harbor/{slug}/feature_enabled`
+- `lw-harbor/feature_disabling` / `lw-harbor/{slug}/feature_disabling`
+- `lw-harbor/feature_disabled` / `lw-harbor/{slug}/feature_disabled`
+- `lw-harbor/feature_updating` / `lw-harbor/{slug}/feature_updating`
+- `lw-harbor/feature_updated` / `lw-harbor/{slug}/feature_updated`
 
 ## Caching
 
@@ -125,7 +125,7 @@ All parameters optional. Returns a new collection without mutating the original.
 
 ## REST API
 
-Five endpoints under `stellarwp/uplink/v1`. All require `manage_options`.
+Five endpoints under `liquidweb/v1`. All require `manage_options`.
 
 | Route                      | Method | Purpose                                                         |
 | -------------------------- | ------ | --------------------------------------------------------------- |

@@ -21,7 +21,7 @@ trait With_Debugging {
 	 *
 	 * All messages are prefixed with "Uplink:" for easy filtering in the debug log.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $message The message to log.
 	 *
@@ -43,7 +43,7 @@ trait With_Debugging {
 	/**
 	 * Log a Throwable with context when WP_DEBUG is enabled.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Throwable $e       The Throwable to log.
 	 * @param string    $context A short description of where the error occurred.
@@ -59,7 +59,7 @@ trait With_Debugging {
 	/**
 	 * Log a WP_Error with context when WP_DEBUG is enabled.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_Error $error   The WP_Error to log.
 	 * @param string   $context A short description of where the error occurred.

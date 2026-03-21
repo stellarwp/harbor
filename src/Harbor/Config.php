@@ -10,7 +10,7 @@ class Config {
 	/**
 	 * The default base URL for the StellarWP licensing and catalog API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public const DEFAULT_API_BASE_URL = 'https://licensing.stellarwp.com';
 
@@ -35,7 +35,7 @@ class Config {
 	/**
 	 * The base URL for the StellarWP licensing and catalog API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -150,7 +150,7 @@ class Config {
 	/**
 	 * Set the base URL for the StellarWP licensing and catalog API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $url The API base URL (no trailing slash).
 	 *
@@ -163,7 +163,7 @@ class Config {
 	/**
 	 * Get the base URL for the StellarWP licensing and catalog API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
