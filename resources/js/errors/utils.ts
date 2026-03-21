@@ -1,7 +1,7 @@
 /**
  * Error utility functions.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type { WpRestError } from './types';
 

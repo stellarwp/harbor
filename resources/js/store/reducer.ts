@@ -1,7 +1,7 @@
 /**
- * Reducer for the stellarwp/uplink @wordpress/data store.
+ * Reducer for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { combineReducers } from '@wordpress/data';
 import type {

@@ -1,7 +1,7 @@
 /**
- * Machine-readable error codes for UplinkError instances.
+ * Machine-readable error codes for LiquidError instances.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 export enum ErrorCode {
 	FeaturesFetchFailed = 'features-fetch-failed',

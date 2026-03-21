@@ -1,7 +1,7 @@
-import type { UplinkData } from './uplink-data';
+import type { LiquidData } from './liquid-data';
 
 declare global {
     interface Window {
-        uplinkData?: UplinkData;
+        uplinkData?: LiquidData;
     }
 }

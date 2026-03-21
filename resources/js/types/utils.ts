@@ -1,7 +1,7 @@
 /**
  * Type guard utilities for narrowing Feature union types.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type {
 	Feature,

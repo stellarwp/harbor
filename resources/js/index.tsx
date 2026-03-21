@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import { registerUplinkStore } from '@/store';
+import { registerHarborStore } from '@/store';
 import { App } from '@/App';
 import '@css/globals.css';
 
-registerUplinkStore();
+registerHarborStore();
 
 const rootElement = document.getElementById( 'uplink-root' );
 

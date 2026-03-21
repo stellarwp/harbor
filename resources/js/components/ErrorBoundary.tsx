@@ -4,7 +4,7 @@
  * Wrap any subtree to prevent a render crash from taking down the whole page.
  * Used in App.tsx and around each tab panel in AppShell.tsx.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { Component, type ReactNode } from 'react';
 import { __ } from '@wordpress/i18n';

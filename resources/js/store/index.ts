@@ -1,10 +1,10 @@
 /**
- * Registers the stellarwp/uplink @wordpress/data store.
+ * Registers the lw @wordpress/data store.
  *
- * Call registerUplinkStore() once before createRoot() in index.tsx.
+ * Call registerHarborStore() once before createRoot() in index.tsx.
  * Consumers import the store descriptor and use useSelect / useDispatch.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { createReduxStore, register } from '@wordpress/data';
 import { reducer } from './reducer';
@@ -20,7 +20,7 @@ export const store = createReduxStore(STORE_NAME, {
 	resolvers,
 });
 
-export function registerUplinkStore(): void {
+export function registerHarborStore(): void {
 	register(store);
 }
 

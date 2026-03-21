@@ -1,11 +1,11 @@
 /**
  * API type definitions for the License Manager Dashboard.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // ---------------------------------------------------------------------------
-// Feature types — GET /stellarwp/uplink/v1/features
+// Feature types — GET /liquidweb/v1/features
 // ---------------------------------------------------------------------------
 
 /**
@@ -135,7 +135,7 @@ export type Feature = PluginFeature | ThemeFeature | FlagFeature;
 export type InstallableFeature = PluginFeature | ThemeFeature;
 
 // ---------------------------------------------------------------------------
-// Catalog types — GET /stellarwp/uplink/v1/catalog
+// Catalog types — GET /liquidweb/v1/catalog
 // ---------------------------------------------------------------------------
 
 /**
@@ -223,7 +223,7 @@ export interface CatalogTier {
 }
 
 /**
- * A product catalog entry as returned by GET /stellarwp/uplink/v1/catalog.
+ * A product catalog entry as returned by GET /liquidweb/v1/catalog.
  *
  * @since 3.0.0
  */
@@ -269,7 +269,7 @@ export interface Product {
 }
 
 // ---------------------------------------------------------------------------
-// Legacy license types — GET /stellarwp/uplink/v1/legacy-licenses
+// Legacy license types — GET /liquidweb/v1/legacy-licenses
 // ---------------------------------------------------------------------------
 
 /**
@@ -288,7 +288,7 @@ export interface LegacyLicense {
 }
 
 // ---------------------------------------------------------------------------
-// License types — GET/POST /stellarwp/uplink/v1/license
+// License types — GET/POST /liquidweb/v1/license
 // ---------------------------------------------------------------------------
 
 /**
@@ -313,7 +313,7 @@ export interface LicenseProduct {
 }
 
 /**
- * Unified license key as returned by GET/POST /stellarwp/uplink/v1/license.
+ * Unified license key as returned by GET/POST /liquidweb/v1/license.
  *
  * @since 3.0.0
  */

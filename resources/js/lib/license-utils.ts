@@ -1,7 +1,7 @@
 /**
  * Pure utility functions for license expiry display.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 /**

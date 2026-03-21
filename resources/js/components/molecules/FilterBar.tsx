@@ -4,7 +4,7 @@
  * Displays the product logo, a feature search input, and a product filter
  * dropdown. Both inputs are wired to FilterContext via useFilter().
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { Search } from 'lucide-react';

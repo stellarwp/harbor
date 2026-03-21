@@ -4,7 +4,7 @@
  * Falls back to a neutral placeholder box when no asset is found.
  * Use variant="nobg" for the transparent (no background) logo variants.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import logoGive from '@img/logo-give.svg';
 import logoTheEventsCalendar from '@img/logo-tec.svg';

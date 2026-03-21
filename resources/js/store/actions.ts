@@ -1,12 +1,12 @@
 /**
- * Action creators for the stellarwp/uplink @wordpress/data store.
+ * Action creators for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { UplinkError, ErrorCode } from '@/errors';
+import { LiquidError, ErrorCode } from '@/errors';
 import type { Feature, LegacyLicense, License, ProductCatalog } from '@/types/api';
 import type { Action, Thunk } from './types';
 
@@ -45,18 +45,18 @@ export const receiveLegacyLicenses = (licenses: LegacyLicense[]): Action => ({
  * @since 3.0.0
  */
 export const enableFeature =
-	(slug: string): Thunk<UplinkError | null> =>
+	(slug: string): Thunk<LiquidError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/stellarwp/uplink/v1/features/${slug}/enable`,
+				path: `/liquidweb/v1/features/${slug}/enable`,
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.FeatureEnableFailed,
 				__(
@@ -76,18 +76,18 @@ export const enableFeature =
  * @since 3.0.0
  */
 export const disableFeature =
-	(slug: string): Thunk<UplinkError | null> =>
+	(slug: string): Thunk<LiquidError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/stellarwp/uplink/v1/features/${slug}/disable`,
+				path: `/liquidweb/v1/features/${slug}/disable`,
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.FeatureDisableFailed,
 				__(
@@ -107,18 +107,18 @@ export const disableFeature =
  * @since 3.0.0
  */
 export const updateFeature =
-	(slug: string): Thunk<UplinkError | null> =>
+	(slug: string): Thunk<LiquidError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'UPDATE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/stellarwp/uplink/v1/features/${slug}/update`,
+				path: `/liquidweb/v1/features/${slug}/update`,
 				method: 'POST',
 			});
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.FeatureUpdateFailed,
 				__(
@@ -139,10 +139,10 @@ export const updateFeature =
  * @since 3.0.0
  */
 export const storeLicense =
-	(key: string): Thunk<UplinkError | null> =>
+	(key: string): Thunk<LiquidError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new UplinkError(
+			return new LiquidError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to activate your license, another action is in progress.',
@@ -153,7 +153,7 @@ export const storeLicense =
 		dispatch({ type: 'STORE_LICENSE_START' });
 		try {
 			const result = await apiFetch<License>({
-				path: '/stellarwp/uplink/v1/license',
+				path: '/liquidweb/v1/license',
 				method: 'POST',
 				data: { key },
 			});
@@ -164,7 +164,7 @@ export const storeLicense =
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.LicenseStoreFailed,
 				__(
@@ -184,10 +184,10 @@ export const storeLicense =
  * @since 3.0.0
  */
 export const validateProduct =
-	(productSlug: string): Thunk<UplinkError | null> =>
+	(productSlug: string): Thunk<LiquidError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new UplinkError(
+			return new LiquidError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to validate your product, another action is in progress.',
@@ -198,7 +198,7 @@ export const validateProduct =
 		dispatch({ type: 'VALIDATE_PRODUCT_START' });
 		try {
 			const result = await apiFetch<License>({
-				path: '/stellarwp/uplink/v1/license/validate',
+				path: '/liquidweb/v1/license/validate',
 				method: 'POST',
 				data: { product_slug: productSlug },
 			});
@@ -209,7 +209,7 @@ export const validateProduct =
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.LicenseValidateFailed,
 				__(
@@ -229,10 +229,10 @@ export const validateProduct =
  * @since 3.0.0
  */
 export const deleteLicense =
-	(): Thunk<UplinkError | null> =>
+	(): Thunk<LiquidError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new UplinkError(
+			return new LiquidError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to delete your license, another action is in progress.',
@@ -243,14 +243,14 @@ export const deleteLicense =
 		dispatch({ type: 'DELETE_LICENSE_START' });
 		try {
 			await apiFetch<void>({
-				path: '/stellarwp/uplink/v1/license',
+				path: '/liquidweb/v1/license',
 				method: 'DELETE',
 			});
 			dispatch({ type: 'DELETE_LICENSE_FINISHED' });
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await UplinkError.wrap(
+			const error = await LiquidError.wrap(
 				err,
 				ErrorCode.LicenseDeleteFailed,
 				__(

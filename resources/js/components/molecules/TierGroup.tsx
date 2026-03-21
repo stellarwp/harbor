@@ -4,7 +4,7 @@
  * Shows the tier name, feature count, a lock indicator, and an upgrade
  * button. Expanding the accordion reveals the locked FeatureRow entries.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';

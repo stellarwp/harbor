@@ -2,10 +2,10 @@
  * Product catalog data.
  *
  * Product metadata. Tier definitions and feature lists come from the
- * stellarwp/uplink/v1/catalog and stellarwp/uplink/v1/features REST
+ * liquidweb/v1/catalog and liquidweb/v1/features REST
  * endpoints — not stored here.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type { Product } from '@/types/api';
 

@@ -4,19 +4,19 @@
  * Legacy license data is fetched from the REST API via the store's
  * getLegacyLicenses resolver.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { AlertTriangle } from 'lucide-react';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 
 /**
  * @since 3.0.0
  */
 export function LegacyLicenseBanner() {
     const hasLegacy = useSelect(
-        ( select ) => select( uplinkStore ).hasLegacyLicenses(),
+        ( select ) => select( harborStore ).hasLegacyLicenses(),
         []
     );
 

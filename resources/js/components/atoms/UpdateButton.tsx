@@ -5,7 +5,7 @@
  * upsell tooltip. The Tooltip component handles the span wrapper needed to
  * keep hover events working when pointer-events are disabled on the button.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Download } from 'lucide-react';

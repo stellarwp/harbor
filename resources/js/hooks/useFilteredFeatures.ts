@@ -6,11 +6,11 @@
  * directly, so ProductSection only re-renders when features or the query
  * actually change.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useSelect } from '@wordpress/data';
 import { useFilter } from '@/context/filter-context';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import type { Feature } from '@/types/api';
 
 /**
@@ -20,7 +20,7 @@ export function useFilteredFeatures( productSlug: string ): Feature[] {
     const { searchQuery } = useFilter();
 
     const features = useSelect(
-        ( select ) => select( uplinkStore ).getFeaturesByProduct( productSlug ),
+        ( select ) => select( harborStore ).getFeaturesByProduct( productSlug ),
         [ productSlug ],
     );
 

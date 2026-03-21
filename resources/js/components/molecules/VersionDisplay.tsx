@@ -5,7 +5,7 @@
  * When upgradeLabel is provided the update button is rendered fully disabled
  * (no onClick handler) with an upsell tooltip.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { sprintf, __ } from '@wordpress/i18n';
 import { UpdateButton } from '@/components/atoms/UpdateButton';

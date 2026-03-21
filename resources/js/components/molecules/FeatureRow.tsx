@@ -4,7 +4,7 @@
  * Clicking the row header expands/collapses the feature description.
  * The toggle switch remains independently clickable.
  *
- * @package StellarWP\\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';

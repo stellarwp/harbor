@@ -1,6 +1,6 @@
 /**
- * @wordpress/data store name for the Uplink plugin.
+ * @wordpress/data store name for the Harbor library.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
-export const STORE_NAME = 'stellarwp/uplink' as const;
+export const STORE_NAME = 'lw' as const;

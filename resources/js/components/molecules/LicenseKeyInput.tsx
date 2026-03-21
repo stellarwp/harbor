@@ -1,10 +1,10 @@
 /**
  * License key input form.
  *
- * Wires activation to the stellarwp/uplink @wordpress/data store.
+ * Wires activation to the lw @wordpress/data store.
  * Success toast on completion.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
@@ -12,9 +12,9 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { KeyRound, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
-import { UplinkError } from '@/errors';
+import { LiquidError } from '@/errors';
 
 interface LicenseKeyInputProps {
 	/** Called on successful activation (dialog can close) */
@@ -33,17 +33,17 @@ export function LicenseKeyInput( {
 	const [ key, setKey ]               = useState( '' );
 	const [ localError, setLocalError ] = useState< string | null >( null );
 
-	const { storeLicense } = useDispatch( uplinkStore );
+	const { storeLicense } = useDispatch( harborStore );
 	const { addToast }     = useToast();
 
 	// TODO: Refactor error display to use an error modal instead of inline
-	// text. The modal will show safe, user-facing messages from the UplinkError
+	// text. The modal will show safe, user-facing messages from the LiquidError
 	// chain.
 
 	const { isStoring, canModifyLicense } = useSelect(
 		( select ) => ( {
-			isStoring:        select( uplinkStore ).isLicenseStoring(),
-			canModifyLicense: select( uplinkStore ).canModifyLicense(),
+			isStoring:        select( harborStore ).isLicenseStoring(),
+			canModifyLicense: select( harborStore ).canModifyLicense(),
 		} ),
 		[]
 	);
@@ -64,7 +64,7 @@ export function LicenseKeyInput( {
 		setLocalError( null );
 		const result = await storeLicense( trimmedKey );
 
-		if ( result instanceof UplinkError ) {
+		if ( result instanceof LiquidError ) {
 			addToast( result.message, 'error' );
 		} else {
 			addToast(

@@ -1,15 +1,15 @@
 /**
- * Resolvers for the stellarwp/uplink @wordpress/data store.
+ * Resolvers for the lw @wordpress/data store.
  *
  * Each resolver name matches a selector. @wordpress/data calls the resolver
  * automatically the first time the matching selector is invoked, then marks
  * it as resolved so subsequent calls hit the cache.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { UplinkError, ErrorCode } from '@/errors';
+import { LiquidError, ErrorCode } from '@/errors';
 import type { Feature, LegacyLicense, ProductCatalog, License } from '@/types/api';
 import type { Thunk } from './types';
 import { forwardResolver, forwardResolverWithoutArgs } from '@/lib/forward-resolver';
@@ -23,11 +23,11 @@ export const getFeatures =
 	async ({ dispatch }) => {
 		try {
 			const features = await apiFetch<Feature[]>({
-				path: '/stellarwp/uplink/v1/features',
+				path: '/liquidweb/v1/features',
 			});
 			dispatch.receiveFeatures(features);
 		} catch (err) {
-			throw await UplinkError.wrap(
+			throw await LiquidError.wrap(
 				err,
 				ErrorCode.FeaturesFetchFailed,
 				__('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%')
@@ -51,11 +51,11 @@ export const getLegacyLicenses =
 	async ({ dispatch }) => {
 		try {
 			const licenses = await apiFetch<LegacyLicense[]>({
-				path: '/stellarwp/uplink/v1/legacy-licenses',
+				path: '/liquidweb/v1/legacy-licenses',
 			});
 			dispatch.receiveLegacyLicenses(licenses);
 		} catch (err) {
-			throw await UplinkError.wrap(
+			throw await LiquidError.wrap(
 				err,
 				ErrorCode.LegacyLicensesFetchFailed,
 				__('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%')
@@ -80,11 +80,11 @@ export const getCatalog =
 	async ({ dispatch }) => {
 		try {
 			const catalogs = await apiFetch<ProductCatalog[]>({
-				path: '/stellarwp/uplink/v1/catalog',
+				path: '/liquidweb/v1/catalog',
 			});
 			dispatch.receiveCatalog(catalogs);
 		} catch (err) {
-			throw await UplinkError.wrap(
+			throw await LiquidError.wrap(
 				err,
 				ErrorCode.CatalogFetchFailed,
 				__('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%')
@@ -109,11 +109,11 @@ export const getLicenseKey =
 	async ({ dispatch }) => {
 		try {
 			const result = await apiFetch<License>({
-				path: '/stellarwp/uplink/v1/license',
+				path: '/liquidweb/v1/license',
 			});
 			dispatch.receiveLicense(result);
 		} catch (err) {
-			throw await UplinkError.wrap(
+			throw await LiquidError.wrap(
 				err,
 				ErrorCode.LicenseFetchFailed,
 				__('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%')

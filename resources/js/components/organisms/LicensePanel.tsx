@@ -4,30 +4,30 @@
  * Always visible. Fetches license and catalog data from the store and passes
  * it to LicenseSection and UpsellSection.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { LicenseSection } from '@/components/organisms/LicenseSection';
 import { UpsellSection } from '@/components/organisms/UpsellSection';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import { PRODUCTS } from '@/data/products';
 import { useToast } from '@/context/toast-context';
-import { UplinkError } from '@/errors';
+import { LiquidError } from '@/errors';
 
 /**
  * @since 3.0.0
  */
 export function LicensePanel() {
     const { addToast }      = useToast();
-    const { deleteLicense } = useDispatch( uplinkStore );
+    const { deleteLicense } = useDispatch( harborStore );
 
     const { licenseKey, licenseProducts, catalogs } = useSelect(
         ( select ) => ({
-            licenseKey:      select( uplinkStore ).getLicenseKey(),
-            licenseProducts: select( uplinkStore ).getLicenseProducts(),
-            catalogs:        select( uplinkStore ).getCatalog(),
+            licenseKey:      select( harborStore ).getLicenseKey(),
+            licenseProducts: select( harborStore ).getLicenseProducts(),
+            catalogs:        select( harborStore ).getCatalog(),
         }),
         []
     );
@@ -60,7 +60,7 @@ export function LicensePanel() {
 
     const handleRemove = async () => {
         const result = await deleteLicense();
-        if ( result instanceof UplinkError ) {
+        if ( result instanceof LiquidError ) {
             addToast( result.message, 'error' );
         } else {
             addToast( __( 'License removed.', '%TEXTDOMAIN%' ), 'default' );

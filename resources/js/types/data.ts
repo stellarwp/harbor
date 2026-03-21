@@ -3,7 +3,7 @@
  *
  * Ported from sync-saas @utils/data/types.ts
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type {
 	ActionCreatorsOf as BaseActionCreatorsOf,
