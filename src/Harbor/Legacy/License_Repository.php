@@ -29,7 +29,7 @@ class License_Repository {
 			return $this->cache;
 		}
 
-		$filtered_licenses = (array) apply_filters( 'stellarwp/uplink/legacy_licenses', [] );
+		$filtered_licenses = (array) apply_filters( 'lw-harbor/legacy_licenses', [] );
 
 		$licenses = [];
 

@@ -35,7 +35,7 @@ final class License_Repository {
 	 *
 	 * @var string
 	 */
-	public const KEY_OPTION_NAME = 'stellarwp_uplink_unified_license_key';
+	public const KEY_OPTION_NAME = 'lw_harbor_unified_license_key';
 
 	/**
 	 * Option name for the license state envelope.
@@ -53,7 +53,7 @@ final class License_Repository {
 	 *
 	 * @var string
 	 */
-	public const PRODUCTS_STATE_OPTION_NAME = 'stellarwp_uplink_licensing_products_state';
+	public const PRODUCTS_STATE_OPTION_NAME = 'lw_harbor_licensing_products_state';
 
 	/**
 	 * State envelope key for the serialized product collection array.
@@ -96,13 +96,13 @@ final class License_Repository {
 	 *
 	 * Stored as an associative array keyed by product slug.
 	 *
-	 *  TODO: Decide where to store this data. See discussion in https://github.com/stellarwp/uplink/pull/162/changes#r2906722318
+	 *  TODO: Decide where to store this data. See discussion in https://github.com/lw-harbor/pull/162/changes#r2906722318
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var string
 	 */
-	public const PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME = 'stellarwp_uplink_licensing_products_last_active_dates';
+	public const PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME = 'lw_harbor_licensing_products_last_active_dates';
 
 	/**
 	 * Get the stored unified license key.
@@ -163,7 +163,7 @@ final class License_Repository {
 				 * @param string $new_key The new license key.
 				 * @param string $old_key The previous license key.
 				 */
-				do_action( 'stellarwp/uplink/unified_license_key_changed', $key, $current );
+				do_action( 'lw-harbor/unified_license_key_changed', $key, $current );
 			}
 
 			return $result;
@@ -188,7 +188,7 @@ final class License_Repository {
 			 * @param string $new_key The new license key.
 			 * @param string $old_key The previous license key.
 			 */
-			do_action( 'stellarwp/uplink/unified_license_key_changed', $key, $current );
+			do_action( 'lw-harbor/unified_license_key_changed', $key, $current );
 		}
 
 		return $result;
@@ -221,7 +221,7 @@ final class License_Repository {
 			 * @param string $new_key The new license key.
 			 * @param string $old_key The previous license key.
 			 */
-			do_action( 'stellarwp/uplink/unified_license_key_changed', '', $old_key );
+			do_action( 'lw-harbor/unified_license_key_changed', '', $old_key );
 		}
 
 		return $result;

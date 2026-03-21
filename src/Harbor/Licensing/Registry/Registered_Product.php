@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Utils\License_Key;
 /**
  * Represents a single product's entry in the unified product registry.
  *
- * Products report these via the stellarwp/uplink/product_registry filter
+ * Products report these via the lw-harbor/product_registry filter
  * to opt in to the unified licensing system.
  *
  * @since 3.0.0

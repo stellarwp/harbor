@@ -13,7 +13,7 @@ use Throwable;
  * Registers this Uplink instance's callbacks into the global function registry.
  *
  * Each vendor-prefixed Uplink instance calls register() during init, storing
- * version-keyed closures via _stellarwp_uplink_global_function_registry(). The closures are defined
+ * version-keyed closures via _lw_harbor_global_function_registry(). The closures are defined
  * here (inside the namespaced file) so Strauss-prefixed class references
  * resolve correctly for this specific instance.
  *
@@ -33,8 +33,8 @@ class Global_Function_Registry {
 	 * @return void
 	 */
 	public static function register( string $version ): void {
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_has_unified_license_key',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_has_unified_license_key',
 			$version,
 			static function (): bool {
 				try {
@@ -47,8 +47,8 @@ class Global_Function_Registry {
 			}
 		);
 
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_get_unified_license_key',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_get_unified_license_key',
 			$version,
 			static function (): ?string {
 				try {
@@ -61,8 +61,8 @@ class Global_Function_Registry {
 			}
 		);
 
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_is_product_license_active',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_is_product_license_active',
 			$version,
 			static function ( string $product ): bool {
 				try {
@@ -75,8 +75,8 @@ class Global_Function_Registry {
 			}
 		);
 
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_is_feature_enabled',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_is_feature_enabled',
 			$version,
 			static function ( string $slug ) {
 				try {
@@ -97,8 +97,8 @@ class Global_Function_Registry {
 			}
 		);
 
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_is_feature_available',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_is_feature_available',
 			$version,
 			static function ( string $slug ) {
 				try {
@@ -119,8 +119,8 @@ class Global_Function_Registry {
 			}
 		);
 
-		\_stellarwp_uplink_global_function_registry(
-			'stellarwp_uplink_get_license_page_url',
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_get_license_page_url',
 			$version,
 			static function (): string {
 				return admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG );

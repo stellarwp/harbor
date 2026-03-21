@@ -11,7 +11,7 @@
  * equivalents to ensure they always execute the most up-to-date implementation.
  */
 
-if ( ! function_exists( '_stellarwp_uplink_instance_registry' ) ) {
+if ( ! function_exists( '_lw_harbor_instance_registry' ) ) {
 	/**
 	 * Reads from or writes to the active Uplink instance registry.
 	 *
@@ -19,8 +19,8 @@ if ( ! function_exists( '_stellarwp_uplink_instance_registry' ) ) {
 	 * vendor-prefixed copies share the same registry. Only currently-active
 	 * instances can register themselves, so there is no stale-version problem.
 	 *
-	 * - Register: _stellarwp_uplink_instance_registry( '3.0.1' )
-	 * - Read all:  _stellarwp_uplink_instance_registry()
+	 * - Register: _lw_harbor_instance_registry( '3.0.1' )
+	 * - Read all:  _lw_harbor_instance_registry()
 	 *
 	 * @internal Not intended for direct use by plugins.
 	 *
@@ -28,7 +28,7 @@ if ( ! function_exists( '_stellarwp_uplink_instance_registry' ) ) {
 	 *
 	 * @return array<string, true> Map of registered version strings.
 	 */
-	function _stellarwp_uplink_instance_registry( string $version = '' ): array {
+	function _lw_harbor_instance_registry( string $version = '' ): array {
 		/** @var array<string, true> $versions */
 		static $versions = [];
 
@@ -44,15 +44,15 @@ if ( ! function_exists( '_stellarwp_uplink_instance_registry' ) ) {
 	}
 }
 
-if ( ! function_exists( '_stellarwp_uplink_global_function_registry' ) ) {
+if ( ! function_exists( '_lw_harbor_global_function_registry' ) ) {
 	/**
 	 * Reads from or writes to the global function registry.
 	 *
 	 * The static variable lives inside this single function so all callers
 	 * share the same registry without relying on $GLOBALS.
 	 *
-	 * - Register: _stellarwp_uplink_global_function_registry( 'key', '1.0.0', $callable )
-	 * - Retrieve leader callable: _stellarwp_uplink_global_function_registry( 'key' )
+	 * - Register: _lw_harbor_global_function_registry( 'key', '1.0.0', $callable )
+	 * - Retrieve leader callable: _lw_harbor_global_function_registry( 'key' )
 	 *
 	 * @internal Not intended for direct use by plugins.
 	 *
@@ -62,7 +62,7 @@ if ( ! function_exists( '_stellarwp_uplink_global_function_registry' ) ) {
 	 *
 	 * @return callable|null Null when writing, or the leader's callable when reading.
 	 */
-	function _stellarwp_uplink_global_function_registry( string $key, string $version = '', ?callable $callback = null ): ?callable {
+	function _lw_harbor_global_function_registry( string $key, string $version = '', ?callable $callback = null ): ?callable {
 		/** @var array<string, array<string, callable>> $registry */
 		static $registry = [];
 
@@ -75,7 +75,7 @@ if ( ! function_exists( '_stellarwp_uplink_global_function_registry' ) ) {
 			return null;
 		}
 
-		$versions = array_keys( _stellarwp_uplink_instance_registry() );
+		$versions = array_keys( _lw_harbor_instance_registry() );
 		$highest  = array_reduce(
 			$versions,
 			static function ( string $carry, string $v ): string {
@@ -88,7 +88,7 @@ if ( ! function_exists( '_stellarwp_uplink_global_function_registry' ) ) {
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_has_unified_license_key' ) ) {
+if ( ! function_exists( 'lw_harbor_has_unified_license_key' ) ) {
 	/**
 	 * Whether the site has a unified license key stored or discoverable.
 	 *
@@ -99,14 +99,14 @@ if ( ! function_exists( 'stellarwp_uplink_has_unified_license_key' ) ) {
 	 *
 	 * @return bool
 	 */
-	function stellarwp_uplink_has_unified_license_key(): bool {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_has_unified_license_key' );
+	function lw_harbor_has_unified_license_key(): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_has_unified_license_key' );
 
 		return $callback ? (bool) $callback() : false;
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_get_unified_license_key' ) ) {
+if ( ! function_exists( 'lw_harbor_get_unified_license_key' ) ) {
 	/**
 	 * Get the unified license key.
 	 *
@@ -114,15 +114,15 @@ if ( ! function_exists( 'stellarwp_uplink_get_unified_license_key' ) ) {
 	 *
 	 * @return string|null The unified license key, or null if not found.
 	 */
-	function stellarwp_uplink_get_unified_license_key(): ?string {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_get_unified_license_key' );
+	function lw_harbor_get_unified_license_key(): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_unified_license_key' );
 
 		// @phpstan-ignore return.type
 		return $callback ? $callback() : null;
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_is_product_license_active' ) ) {
+if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 	/**
 	 * Whether a specific product has an active, valid license.  *
 	 *
@@ -132,14 +132,14 @@ if ( ! function_exists( 'stellarwp_uplink_is_product_license_active' ) ) {
 	 *
 	 * @return bool
 	 */
-	function stellarwp_uplink_is_product_license_active( string $product ): bool {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_is_product_license_active' );
+	function lw_harbor_is_product_license_active( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_product_license_active' );
 
 		return $callback ? (bool) $callback( $product ) : false;
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_is_feature_enabled' ) ) {
+if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 	/**
 	 * Checks if a feature is available in the catalog AND enabled/active.
 	 * Returns false if the feature is not in the catalog at all.
@@ -150,14 +150,14 @@ if ( ! function_exists( 'stellarwp_uplink_is_feature_enabled' ) ) {
 	 *
 	 * @return bool
 	 */
-	function stellarwp_uplink_is_feature_enabled( string $slug ): bool {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_is_feature_enabled' );
+	function lw_harbor_is_feature_enabled( string $slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_feature_enabled' );
 
 		return $callback ? (bool) $callback( $slug ) : false;
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_is_feature_available' ) ) {
+if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	/**
 	 * Checks if a feature is available in the catalog, regardless of enabled state.
 	 *
@@ -167,14 +167,14 @@ if ( ! function_exists( 'stellarwp_uplink_is_feature_available' ) ) {
 	 *
 	 * @return bool
 	 */
-	function stellarwp_uplink_is_feature_available( string $slug ): bool {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_is_feature_available' );
+	function lw_harbor_is_feature_available( string $slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_feature_available' );
 
 		return $callback ? (bool) $callback( $slug ) : false;
 	}
 }
 
-if ( ! function_exists( 'stellarwp_uplink_get_license_page_url' ) ) {
+if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	/**
 	 * Returns the admin URL for the unified Feature Manager page.
 	 *
@@ -182,8 +182,8 @@ if ( ! function_exists( 'stellarwp_uplink_get_license_page_url' ) ) {
 	 *
 	 * @return string The admin URL, or an empty string if no instance is active.
 	 */
-	function stellarwp_uplink_get_license_page_url(): string {
-		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_get_license_page_url' );
+	function lw_harbor_get_license_page_url(): string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_license_page_url' );
 
 		$result = $callback ? $callback() : '';
 

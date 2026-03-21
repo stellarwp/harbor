@@ -26,7 +26,7 @@ class License_Notice_Handler {
 	 *
 	 * @since 3.0.0
 	 */
-	public const DISMISSED_META_KEY = 'stellarwp_uplink_dismissed_notices';
+	public const DISMISSED_META_KEY = 'lw_harbor_dismissed_notices';
 
 	/**
 	 * How long a dismissal lasts in seconds (7 days).
@@ -82,7 +82,7 @@ class License_Notice_Handler {
 		$by_product = [];
 
 		foreach ( $licenses as $license ) {
-			if ( stellarwp_uplink_is_feature_available( $license->slug ) ) {
+			if ( lw_harbor_is_feature_available( $license->slug ) ) {
 				continue;
 			}
 
@@ -210,7 +210,7 @@ class License_Notice_Handler {
 	 * @return void Enqueues the notice dismiss script.
 	 */
 	private function enqueue_dismiss_script(): void {
-		$handle = 'stellarwp-uplink-notice-dismiss';
+		$handle = 'lw-harbor-notice-dismiss';
 
 		if ( ! wp_script_is( $handle, 'registered' ) ) {
 			$assets_url = trailingslashit( plugin_dir_url( __DIR__ . '/index.php' ) );

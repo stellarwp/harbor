@@ -52,7 +52,7 @@ class Catalog_Repository {
 	 *
 	 * @var string
 	 */
-	public const CATALOG_STATE_OPTION_NAME = 'stellarwp_uplink_catalog_state';
+	public const CATALOG_STATE_OPTION_NAME = 'lw_harbor_catalog_state';
 
 	/**
 	 * State envelope key for the serialized catalog collection array.

@@ -11,7 +11,7 @@ use WP_Error;
  * This is the simplest strategy: enable/disable just sets a boolean option
  * in the database. The stored DB flag is the sole source of truth.
  *
- * Option key: `stellarwp_uplink_feature_{slug}_active`
+ * Option key: `lw_harbor_feature_{slug}_active`
  * Values: '1' (active) or '0' (inactive).
  *
  * @since 3.0.0
@@ -26,7 +26,7 @@ class Flag_Strategy extends Abstract_Strategy {
 	 * @return string
 	 */
 	private function get_option_key(): string {
-		return 'stellarwp_uplink_feature_' . $this->feature->get_slug() . '_active';
+		return 'lw_harbor_feature_' . $this->feature->get_slug() . '_active';
 	}
 
 	/**

@@ -34,7 +34,7 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton( Catalog_Repository::class, Catalog_Repository::class );
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function () {
 				delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
 			}

@@ -11,7 +11,7 @@ use LiquidWeb\Harbor\Harbor;
  * When multiple vendor-prefixed copies of Uplink are active, only the
  * highest version should own shared responsibilities (admin page, REST
  * routes, etc.). This class centralizes that check using the global
- * _stellarwp_uplink_instance_registry() function as the cross-copy registry.
+ * _lw_harbor_instance_registry() function as the cross-copy registry.
  *
  * @since 3.0.0
  */
@@ -37,7 +37,7 @@ class Version {
 	 * @return bool
 	 */
 	public static function is_highest(): bool {
-		return self::is_highest_among( array_keys( _stellarwp_uplink_instance_registry() ) );
+		return self::is_highest_among( array_keys( _lw_harbor_instance_registry() ) );
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Version {
 			return false;
 		}
 
-		$hook = 'stellarwp/uplink/handled/' . $action;
+		$hook = 'lw-harbor/handled/' . $action;
 
 		if ( did_action( $hook ) ) {
 			return false;
@@ -121,7 +121,7 @@ class Version {
 						return;
 					}
 					$data = [
-						'stellarwp/uplink' => [
+						'lw-harbor' => [
 							'leader'  => $prefix,
 							'version' => $version,
 						],

@@ -16,7 +16,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const INVALID_KEY = 'stellarwp-uplink-invalid-key';
+	public const INVALID_KEY = 'lw-harbor-invalid-key';
 
 	/**
 	 * The license response could not be decoded.
@@ -25,7 +25,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const INVALID_RESPONSE = 'stellarwp-uplink-invalid-response';
+	public const INVALID_RESPONSE = 'lw-harbor-invalid-response';
 
 	/**
 	 * The requested product slug was not found in the catalog.
@@ -34,7 +34,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const PRODUCT_NOT_FOUND = 'stellarwp-uplink-product-not-found';
+	public const PRODUCT_NOT_FOUND = 'lw-harbor-product-not-found';
 
 	/**
 	 * The license key could not be stored.
@@ -43,7 +43,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const STORE_FAILED = 'stellarwp-uplink-store-failed';
+	public const STORE_FAILED = 'lw-harbor-store-failed';
 
 	/**
 	 * The subscription has expired.
@@ -52,7 +52,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const EXPIRED = 'stellarwp-uplink-expired';
+	public const EXPIRED = 'lw-harbor-expired';
 
 	/**
 	 * The subscription is suspended.
@@ -61,7 +61,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const SUSPENDED = 'stellarwp-uplink-suspended';
+	public const SUSPENDED = 'lw-harbor-suspended';
 
 	/**
 	 * The subscription is cancelled.
@@ -70,7 +70,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const CANCELLED = 'stellarwp-uplink-cancelled';
+	public const CANCELLED = 'lw-harbor-cancelled';
 
 	/**
 	 * The license is suspended (all products affected).
@@ -79,7 +79,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const LICENSE_SUSPENDED = 'stellarwp-uplink-license-suspended';
+	public const LICENSE_SUSPENDED = 'lw-harbor-license-suspended';
 
 	/**
 	 * The license is banned (all products affected).
@@ -88,7 +88,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const LICENSE_BANNED = 'stellarwp-uplink-license-banned';
+	public const LICENSE_BANNED = 'lw-harbor-license-banned';
 
 	/**
 	 * No subscription exists for this product under the license.
@@ -97,7 +97,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const NO_SUBSCRIPTION = 'stellarwp-uplink-no-subscription';
+	public const NO_SUBSCRIPTION = 'lw-harbor-no-subscription';
 
 	/**
 	 * All activation seats are in use.
@@ -106,7 +106,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const OUT_OF_ACTIVATIONS = 'stellarwp-uplink-out-of-activations';
+	public const OUT_OF_ACTIVATIONS = 'lw-harbor-out-of-activations';
 
 	/**
 	 * An unexpected or unrecognized error occurred.
@@ -115,7 +115,7 @@ final class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const UNKNOWN_ERROR = 'stellarwp-uplink-unknown-error';
+	public const UNKNOWN_ERROR = 'lw-harbor-unknown-error';
 
 	/**
 	 * Maps an error code to its recommended HTTP status code.

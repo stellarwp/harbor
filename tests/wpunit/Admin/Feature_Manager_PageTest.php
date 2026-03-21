@@ -43,7 +43,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 
 		// In production the higher-version instance claims the action first.
 		// Simulate that here so this instance defers correctly.
-		do_action( 'stellarwp/uplink/handled/admin_page' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		do_action( 'lw-harbor/handled/admin_page' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		$this->page->maybe_register_page();
 
@@ -60,7 +60,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 
 		set_current_screen( 'dashboard' );
 
-		do_action( 'stellarwp/uplink/handled/admin_page' );
+		do_action( 'lw-harbor/handled/admin_page' );
 
 		$this->page->maybe_register_page();
 

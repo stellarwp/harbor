@@ -76,8 +76,8 @@ final class Provider extends Abstract_Provider {
 			return;
 		}
 
-		WP_CLI::add_command( 'uplink feature', $this->container->get( Feature::class ) );
-		WP_CLI::add_command( 'uplink license', $this->container->get( License::class ) );
-		WP_CLI::add_command( 'uplink catalog', $this->container->get( Catalog::class ) );
+		WP_CLI::add_command( 'lw feature', $this->container->get( Feature::class ) );
+		WP_CLI::add_command( 'lw license', $this->container->get( License::class ) );
+		WP_CLI::add_command( 'lw catalog', $this->container->get( Catalog::class ) );
 	}
 }

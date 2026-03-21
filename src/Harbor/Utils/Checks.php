@@ -10,7 +10,7 @@ class Checks {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $var
+	 * @param mixed $var Value to check.
 	 *
 	 * @return bool
 	 */
@@ -23,10 +23,10 @@ class Checks {
 		 * Provides an opportunity to modify strings that will be
 		 * deemed to evaluate to true.
 		 *
-		 * @param array $truthy_strings
+		 * @param array $truthy_strings Strings considered truthy.
 		 */
 		$truthy_strings = (array) apply_filters(
-			'stellarwp/uplink/' . Config::get_hook_prefix() . '/is_truthy_strings',
+			'lw-harbor/' . Config::get_hook_prefix() . '/is_truthy_strings',
 			[
 				'1',
 				'enable',

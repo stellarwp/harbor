@@ -64,7 +64,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 
 	protected function tearDown(): void {
 		// Clean up locks.
-		WP_Upgrader::release_lock( 'stellarwp_uplink_install_lock' );
+		WP_Upgrader::release_lock( 'lw_harbor_install_lock' );
 
 		// Restore original active theme.
 		update_option( 'stylesheet', $this->original_stylesheet );
@@ -144,7 +144,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 	 * in progress (global lock).
 	 */
 	public function test_enable_returns_install_locked_error_when_concurrent_install_in_progress(): void {
-		WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
+		WP_Upgrader::create_lock( 'lw_harbor_install_lock', 120 );
 
 		$result = $this->strategy->enable();
 
@@ -163,7 +163,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 		$this->install_test_theme( self::STYLESHEET, 'StellarWP' );
 
 		// Simulate a stale lock from 5 minutes ago (TTL is 2 minutes).
-		update_option( 'stellarwp_uplink_install_lock.lock', time() - 300, false );
+		update_option( 'lw_harbor_install_lock.lock', time() - 300, false );
 
 		$result = $this->strategy->enable();
 
@@ -179,7 +179,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 	 */
 	public function test_enable_blocked_by_fresh_lock_within_ttl(): void {
 		// Lock acquired 10 seconds ago — still valid.
-		update_option( 'stellarwp_uplink_install_lock.lock', time() - 10, false );
+		update_option( 'lw_harbor_install_lock.lock', time() - 10, false );
 
 		$result = $this->strategy->enable();
 
@@ -197,7 +197,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 		$result = $this->strategy->enable();
 
 		$this->assertTrue( $result );
-		$this->assertFalse( get_option( 'stellarwp_uplink_install_lock.lock' ) );
+		$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
 		// The active theme should NOT have changed.
 		$this->assertSame( $this->original_stylesheet, get_option( 'stylesheet' ) );
 	}
@@ -269,7 +269,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 
 		$this->strategy->is_active();
 
-		$this->assertFalse( get_option( 'stellarwp_uplink_feature_test-theme-feature_active', false ) );
+		$this->assertFalse( get_option( 'lw_harbor_feature_test-theme-feature_active', false ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -371,7 +371,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 			// Exception details must not leak.
 			$this->assertStringNotContainsString( 'Simulated fatal', $result->get_error_message() );
 			// Lock should be released even after a fatal throw.
-			$this->assertFalse( get_option( 'stellarwp_uplink_install_lock.lock' ) );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
 		} finally {
 			remove_filter( 'themes_api', $api_filter, 10 );
 			remove_filter( 'pre_http_request', $http_filter, 10 );
@@ -413,7 +413,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 
 		\LiquidWeb\Harbor\Tests\Updater::seedThemeUpdate( self::STYLESHEET, '2.0.0' );
 
-		WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
+		WP_Upgrader::create_lock( 'lw_harbor_install_lock', 120 );
 
 		$result = $this->strategy->update();
 

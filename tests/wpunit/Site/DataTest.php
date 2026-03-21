@@ -40,7 +40,7 @@ class DataTest extends HarborTestCase {
 	 * @test
 	 */
 	public function it_should_collect_full_stats() {
-		add_filter( 'stellarwp/uplink/test/use_full_stats', '__return_true' );
+		add_filter( 'lw-harbor/test/use_full_stats', '__return_true' );
 
 		$data  = $this->container->make( Harbor\Site\Data::class );
 		$stats = $data->get_stats();
@@ -54,6 +54,6 @@ class DataTest extends HarborTestCase {
 
 		$this->assertEquals( phpversion(), $stats['versions']['php'] );
 
-		remove_filter( 'stellarwp/uplink/test/use_full_stats', '__return_true' );
+		remove_filter( 'lw-harbor/test/use_full_stats', '__return_true' );
 	}
 }

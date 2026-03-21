@@ -5,10 +5,10 @@ namespace LiquidWeb\Harbor\Licensing\Registry;
 /**
  * Collects and normalizes products that have opted in to unified licensing.
  *
- * Products register via the stellarwp/uplink/product_registry filter by
+ * Products register via the lw-harbor/product_registry filter by
  * appending a data array for each product they represent:
  *
- *   add_filter( 'stellarwp/uplink/product_registry', function( array $products ) {
+ *   add_filter( 'lw-harbor/product_registry', function( array $products ) {
  *       $products[] = [
  *           'slug'         => 'give',
  *           'embedded_key' => GIVE_LICENSE_KEY,
@@ -30,7 +30,7 @@ final class Product_Registry {
 	 *
 	 * @var string
 	 */
-	public const FILTER = 'stellarwp/uplink/product_registry';
+	public const FILTER = 'lw-harbor/product_registry';
 
 	/**
 	 * Get all products that have opted in to unified licensing.

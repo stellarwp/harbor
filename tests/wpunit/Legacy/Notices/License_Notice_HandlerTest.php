@@ -43,9 +43,9 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		remove_all_filters( 'stellarwp/uplink/legacy_licenses' );
-		wp_dequeue_script( 'stellarwp-uplink-notice-dismiss' );
-		wp_deregister_script( 'stellarwp-uplink-notice-dismiss' );
+		remove_all_filters( 'lw-harbor/legacy_licenses' );
+		wp_dequeue_script( 'lw-harbor-notice-dismiss' );
+		wp_deregister_script( 'lw-harbor-notice-dismiss' );
 		wp_set_current_user( 0 );
 		parent::tearDown();
 	}
@@ -301,7 +301,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 
 		$this->capture_display();
 
-		$this->assertTrue( wp_script_is( 'stellarwp-uplink-notice-dismiss', 'enqueued' ) );
+		$this->assertTrue( wp_script_is( 'lw-harbor-notice-dismiss', 'enqueued' ) );
 	}
 
 	/**
@@ -310,7 +310,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 	public function it_does_not_enqueue_script_when_no_notices_render(): void {
 		$this->capture_display();
 
-		$this->assertFalse( wp_script_is( 'stellarwp-uplink-notice-dismiss', 'enqueued' ) );
+		$this->assertFalse( wp_script_is( 'lw-harbor-notice-dismiss', 'enqueued' ) );
 	}
 
 	// ------------------------------------------------------------------
@@ -333,7 +333,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 	 */
 	private function add_licenses( array $licenses ): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function () use ( $licenses ) {
 				return array_map(
 					static function ( array $entry ): array {

@@ -410,7 +410,7 @@ final class LicenseTest extends HarborTestCase {
 
 	public function test_legacy_shows_licenses(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function () {
 				return [
 					[

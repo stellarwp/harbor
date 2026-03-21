@@ -19,7 +19,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_NOT_FOUND = 'stellarwp-uplink-feature-not-found';
+	public const FEATURE_NOT_FOUND = 'lw-harbor-feature-not-found';
 
 	/**
 	 * A feature check failed due to an unexpected error.
@@ -28,7 +28,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_CHECK_FAILED = 'stellarwp-uplink-feature-check-failed';
+	public const FEATURE_CHECK_FAILED = 'lw-harbor-feature-check-failed';
 
 	/**
 	 * A feature request failed due to an unexpected error.
@@ -37,7 +37,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_REQUEST_FAILED = 'stellarwp-uplink-feature-request-failed';
+	public const FEATURE_REQUEST_FAILED = 'lw-harbor-feature-request-failed';
 
 	/**
 	 * The feature catalog response was invalid or could not be parsed.
@@ -46,7 +46,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const INVALID_RESPONSE = 'stellarwp-uplink-feature-invalid-response';
+	public const INVALID_RESPONSE = 'lw-harbor-feature-invalid-response';
 
 	/**
 	 * A feature was passed to a strategy that does not support its type.
@@ -55,7 +55,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_TYPE_MISMATCH = 'stellarwp-uplink-feature-type-mismatch';
+	public const FEATURE_TYPE_MISMATCH = 'lw-harbor-feature-type-mismatch';
 
 	/**
 	 * Plugin deactivation did not take effect.
@@ -64,7 +64,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const DEACTIVATION_FAILED = 'stellarwp-uplink-deactivation-failed';
+	public const DEACTIVATION_FAILED = 'lw-harbor-deactivation-failed';
 
 	/**
 	 * A concurrent install is already in progress for the same plugin.
@@ -73,7 +73,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const INSTALL_LOCKED = 'stellarwp-uplink-install-locked';
+	public const INSTALL_LOCKED = 'lw-harbor-install-locked';
 
 	/**
 	 * The expected plugin file was not found on disk after installation.
@@ -82,7 +82,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const PLUGIN_NOT_FOUND_AFTER_INSTALL = 'stellarwp-uplink-plugin-not-found-after-install';
+	public const PLUGIN_NOT_FOUND_AFTER_INSTALL = 'lw-harbor-plugin-not-found-after-install';
 
 	/**
 	 * The WordPress plugins_api() call failed.
@@ -91,7 +91,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const PLUGINS_API_FAILED = 'stellarwp-uplink-plugins-api-failed';
+	public const PLUGINS_API_FAILED = 'lw-harbor-plugins-api-failed';
 
 	/**
 	 * No download link was returned by plugins_api() for the requested plugin.
@@ -100,7 +100,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const DOWNLOAD_LINK_MISSING = 'stellarwp-uplink-download-link-missing';
+	public const DOWNLOAD_LINK_MISSING = 'lw-harbor-download-link-missing';
 
 	/**
 	 * The plugin installation failed.
@@ -109,7 +109,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const INSTALL_FAILED = 'stellarwp-uplink-install-failed';
+	public const INSTALL_FAILED = 'lw-harbor-install-failed';
 
 	/**
 	 * A fatal PHP error (Throwable) occurred during plugin activation.
@@ -118,7 +118,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const ACTIVATION_FATAL = 'stellarwp-uplink-activation-fatal';
+	public const ACTIVATION_FATAL = 'lw-harbor-activation-fatal';
 
 	/**
 	 * Plugin activation failed or did not take effect.
@@ -127,7 +127,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const ACTIVATION_FAILED = 'stellarwp-uplink-activation-failed';
+	public const ACTIVATION_FAILED = 'lw-harbor-activation-failed';
 
 	/**
 	 * An installed plugin's author does not match the expected author(s).
@@ -136,7 +136,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const PLUGIN_OWNERSHIP_MISMATCH = 'stellarwp-uplink-plugin-ownership-mismatch';
+	public const PLUGIN_OWNERSHIP_MISMATCH = 'lw-harbor-plugin-ownership-mismatch';
 
 	/**
 	 * The server's PHP or WordPress version does not meet the plugin's requirements.
@@ -145,7 +145,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const REQUIREMENTS_NOT_MET = 'stellarwp-uplink-requirements-not-met';
+	public const REQUIREMENTS_NOT_MET = 'lw-harbor-requirements-not-met';
 
 	/**
 	 * The active theme cannot be disabled (WordPress always needs an active theme).
@@ -154,7 +154,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const THEME_IS_ACTIVE = 'stellarwp-uplink-theme-is-active';
+	public const THEME_IS_ACTIVE = 'lw-harbor-theme-is-active';
 
 	/**
 	 * A theme feature cannot be deactivated programmatically — the user must delete it manually.
@@ -163,7 +163,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const THEME_DELETE_REQUIRED = 'stellarwp-uplink-theme-delete-required';
+	public const THEME_DELETE_REQUIRED = 'lw-harbor-theme-delete-required';
 
 	/**
 	 * The expected theme was not found on disk after installation.
@@ -172,7 +172,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const THEME_NOT_FOUND_AFTER_INSTALL = 'stellarwp-uplink-theme-not-found-after-install';
+	public const THEME_NOT_FOUND_AFTER_INSTALL = 'lw-harbor-theme-not-found-after-install';
 
 	/**
 	 * The WordPress themes_api() call failed.
@@ -181,7 +181,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const THEMES_API_FAILED = 'stellarwp-uplink-themes-api-failed';
+	public const THEMES_API_FAILED = 'lw-harbor-themes-api-failed';
 
 	/**
 	 * An installed theme's author does not match the expected author(s).
@@ -190,7 +190,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const THEME_OWNERSHIP_MISMATCH = 'stellarwp-uplink-theme-ownership-mismatch';
+	public const THEME_OWNERSHIP_MISMATCH = 'lw-harbor-theme-ownership-mismatch';
 
 	/**
 	 * The feature is not currently active (installed and enabled).
@@ -199,7 +199,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_NOT_ACTIVE = 'stellarwp-uplink-feature-not-active';
+	public const FEATURE_NOT_ACTIVE = 'lw-harbor-feature-not-active';
 
 	/**
 	 * The feature type does not support updates (e.g. flag features).
@@ -208,7 +208,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const UPDATE_NOT_SUPPORTED = 'stellarwp-uplink-update-not-supported';
+	public const UPDATE_NOT_SUPPORTED = 'lw-harbor-update-not-supported';
 
 	/**
 	 * No update is available for the feature.
@@ -217,7 +217,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const NO_UPDATE_AVAILABLE = 'stellarwp-uplink-no-update-available';
+	public const NO_UPDATE_AVAILABLE = 'lw-harbor-no-update-available';
 
 	/**
 	 * The feature update failed.
@@ -226,7 +226,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const UPDATE_FAILED = 'stellarwp-uplink-update-failed';
+	public const UPDATE_FAILED = 'lw-harbor-update-failed';
 
 	/**
 	 * A feature could not be enabled (strategy threw an exception).
@@ -235,7 +235,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_ENABLE_FAILED = 'stellarwp-uplink-feature-enable-failed';
+	public const FEATURE_ENABLE_FAILED = 'lw-harbor-feature-enable-failed';
 
 	/**
 	 * A feature could not be disabled (strategy threw an exception).
@@ -244,7 +244,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const FEATURE_DISABLE_FAILED = 'stellarwp-uplink-feature-disable-failed';
+	public const FEATURE_DISABLE_FAILED = 'lw-harbor-feature-disable-failed';
 
 	/**
 	 * A catalog feature has a type with no registered Feature subclass.
@@ -253,7 +253,7 @@ class Error_Code {
 	 *
 	 * @var string
 	 */
-	public const UNKNOWN_FEATURE_TYPE = 'stellarwp-uplink-unknown-feature-type';
+	public const UNKNOWN_FEATURE_TYPE = 'lw-harbor-unknown-feature-type';
 
 	/**
 	 * Maps an error code to its recommended HTTP status code.

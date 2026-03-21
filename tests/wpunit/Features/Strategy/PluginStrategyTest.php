@@ -57,7 +57,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 	protected function tearDown(): void {
 		// Clean up locks.
-		WP_Upgrader::release_lock( 'stellarwp_uplink_install_lock' );
+		WP_Upgrader::release_lock( 'lw_harbor_install_lock' );
 
 		// Ensure the test plugin is deactivated.
 		$active = get_option( 'active_plugins', [] );
@@ -155,7 +155,7 @@ final class PluginStrategyTest extends HarborTestCase {
 	 */
 	public function test_enable_returns_install_locked_error_when_concurrent_install_in_progress(): void {
 		// Simulate an in-progress install by acquiring the WP_Upgrader lock.
-		WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
+		WP_Upgrader::create_lock( 'lw_harbor_install_lock', 120 );
 
 		$result = $this->strategy->enable();
 
@@ -180,7 +180,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: StellarWP\n */\n" );
 
 		// Simulate a stale lock from 5 minutes ago (TTL is 2 minutes).
-		update_option( 'stellarwp_uplink_install_lock.lock', time() - 300, false );
+		update_option( 'lw_harbor_install_lock.lock', time() - 300, false );
 
 		try {
 			$result = $this->strategy->enable();
@@ -206,7 +206,7 @@ final class PluginStrategyTest extends HarborTestCase {
 	 */
 	public function test_enable_blocked_by_fresh_lock_within_ttl(): void {
 		// Lock acquired 10 seconds ago — still valid.
-		update_option( 'stellarwp_uplink_install_lock.lock', time() - 10, false );
+		update_option( 'lw_harbor_install_lock.lock', time() - 10, false );
 
 		$result = $this->strategy->enable();
 
@@ -240,7 +240,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 			// Verify no lock was left behind (it should have been released or
 			// never acquired since the plugin was already on disk).
-			$this->assertFalse( get_option( 'stellarwp_uplink_install_lock.lock' ) );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
 		} finally {
 			// Clean up the dummy plugin.
 			deactivate_plugins( self::PLUGIN_FILE );
@@ -289,7 +289,7 @@ final class PluginStrategyTest extends HarborTestCase {
 			$this->assertWPError( $result );
 
 			// Lock should be released.
-			$this->assertFalse( get_option( 'stellarwp_uplink_install_lock.lock' ) );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
 		} finally {
 			remove_filter( 'plugins_api', $filter, 10 );
 		}
@@ -345,7 +345,7 @@ final class PluginStrategyTest extends HarborTestCase {
 	 */
 	public function test_is_active_ignores_stale_stored_state(): void {
 		// Even if a stale option exists, is_active() only checks live state.
-		update_option( 'stellarwp_uplink_feature_test-feature_active', '1', true );
+		update_option( 'lw_harbor_feature_test-feature_active', '1', true );
 
 		$this->assertFalse( $this->strategy->is_active() );
 	}
@@ -356,7 +356,7 @@ final class PluginStrategyTest extends HarborTestCase {
 	public function test_is_active_does_not_write_stored_state(): void {
 		$this->strategy->is_active();
 
-		$this->assertFalse( get_option( 'stellarwp_uplink_feature_test-feature_active', false ) );
+		$this->assertFalse( get_option( 'lw_harbor_feature_test-feature_active', false ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -920,7 +920,7 @@ final class PluginStrategyTest extends HarborTestCase {
 			// Exception details must not leak.
 			$this->assertStringNotContainsString( 'Simulated fatal', $result->get_error_message() );
 			// Lock should be released even after a fatal throw.
-			$this->assertFalse( get_option( 'stellarwp_uplink_install_lock.lock' ) );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
 		} finally {
 			remove_filter( 'plugins_api', $api_filter, 10 );
 			remove_filter( 'pre_http_request', $http_filter, 10 );
@@ -989,7 +989,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 			\LiquidWeb\Harbor\Tests\Updater::seedPluginUpdate( self::PLUGIN_FILE, '2.0.0' );
 
-			WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
+			WP_Upgrader::create_lock( 'lw_harbor_install_lock', 120 );
 
 			$result = $this->strategy->update();
 

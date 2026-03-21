@@ -21,11 +21,11 @@ final class FlagStrategyTest extends HarborTestCase {
 	/**
 	 * The option key for the test feature's stored state.
 	 *
-	 * Follows the convention: stellarwp_uplink_feature_{slug}_active
+	 * Follows the convention: lw_harbor_feature_{slug}_active
 	 *
 	 * @var string
 	 */
-	private const OPTION_KEY = 'stellarwp_uplink_feature_advanced-tickets_active';
+	private const OPTION_KEY = 'lw_harbor_feature_advanced-tickets_active';
 
 	/**
 	 * @var Flag_Strategy
@@ -198,7 +198,7 @@ final class FlagStrategyTest extends HarborTestCase {
 		$this->assertFalse( $other_strategy->is_active() );
 
 		// Clean up.
-		delete_option( 'stellarwp_uplink_feature_other-feature_active' );
+		delete_option( 'lw_harbor_feature_other-feature_active' );
 	}
 
 	// -------------------------------------------------------------------------

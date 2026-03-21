@@ -38,7 +38,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 *
 	 * @since 3.0.0
 	 */
-	protected const LOCK_KEY = 'stellarwp_uplink_install_lock';
+	protected const LOCK_KEY = 'lw_harbor_install_lock';
 
 
 	// ── Abstract hooks ──────────────────────────────────────────────────

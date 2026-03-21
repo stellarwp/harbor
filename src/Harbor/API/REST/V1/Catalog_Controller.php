@@ -22,7 +22,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'stellarwp/uplink/v1';
+	protected $namespace = 'liquidweb/v1';
 
 	/**
 	 * The REST API route base.

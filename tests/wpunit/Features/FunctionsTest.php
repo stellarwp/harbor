@@ -74,7 +74,7 @@ final class FunctionsTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_is_feature_enabled_returns_true_for_active_feature(): void {
-		$this->assertTrue( stellarwp_uplink_is_feature_enabled( 'test-feature' ) );
+		$this->assertTrue( lw_harbor_is_feature_enabled( 'test-feature' ) );
 	}
 
 	/**
@@ -83,7 +83,7 @@ final class FunctionsTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_is_feature_enabled_returns_false_for_unknown_feature(): void {
-		$this->assertFalse( stellarwp_uplink_is_feature_enabled( 'nonexistent' ) );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'nonexistent' ) );
 	}
 
 	/**
@@ -92,7 +92,7 @@ final class FunctionsTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_is_feature_available_returns_true_for_available_feature(): void {
-		$this->assertTrue( stellarwp_uplink_is_feature_available( 'test-feature' ) );
+		$this->assertTrue( lw_harbor_is_feature_available( 'test-feature' ) );
 	}
 
 	/**
@@ -145,7 +145,7 @@ final class FunctionsTest extends HarborTestCase {
 			}
 		);
 
-		$this->assertFalse( stellarwp_uplink_is_feature_available( 'locked-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'locked-feature' ) );
 	}
 
 	/**
@@ -154,7 +154,7 @@ final class FunctionsTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_is_feature_available_returns_false_for_unknown_feature(): void {
-		$this->assertFalse( stellarwp_uplink_is_feature_available( 'nonexistent' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'nonexistent' ) );
 	}
 
 	/**
@@ -183,7 +183,7 @@ final class FunctionsTest extends HarborTestCase {
 			}
 		);
 
-		$this->assertFalse( stellarwp_uplink_is_feature_enabled( 'test-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'test-feature' ) );
 	}
 
 	/**
@@ -212,6 +212,6 @@ final class FunctionsTest extends HarborTestCase {
 			}
 		);
 
-		$this->assertFalse( stellarwp_uplink_is_feature_available( 'test-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'test-feature' ) );
 	}
 }

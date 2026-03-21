@@ -156,7 +156,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_returns_all_features(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -176,7 +176,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_by_group(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'product', 'GroupA' );
 		$response = $this->server->dispatch( $request );
 
@@ -196,7 +196,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_by_tier(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'tier', 'Tier 2' );
 		$response = $this->server->dispatch( $request );
 
@@ -216,7 +216,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_by_available(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'available', true );
 		$response = $this->server->dispatch( $request );
 
@@ -236,7 +236,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_by_type(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'type', 'flag' );
 		$response = $this->server->dispatch( $request );
 
@@ -256,7 +256,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_returns_empty_for_no_matches(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'product', 'NonexistentGroup' );
 		$response = $this->server->dispatch( $request );
 
@@ -272,7 +272,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_by_combined_group_and_tier(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'product', 'GroupA' );
 		$request->set_param( 'tier', 'Tier 1' );
 		$response = $this->server->dispatch( $request );
@@ -293,7 +293,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_combined_filters_no_match(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'product', 'GroupA' );
 		$request->set_param( 'tier', 'Tier 2' );
 		$response = $this->server->dispatch( $request );
@@ -310,7 +310,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_filters_available_false_returns_unavailable(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$request->set_param( 'available', false );
 		$response = $this->server->dispatch( $request );
 
@@ -330,7 +330,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_includes_is_enabled_for_each_feature(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$response = $this->server->dispatch( $request );
 
 		foreach ( $response->get_data() as $feature ) {
@@ -346,7 +346,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -360,7 +360,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_list_rejects_unauthenticated(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -376,7 +376,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_get_single_feature_returns_all_fields(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -402,7 +402,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_get_unknown_slug_returns_404(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/nonexistent' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/nonexistent' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 404, $response->get_status() );
@@ -416,7 +416,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_get_single_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -430,7 +430,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_get_single_rejects_unauthenticated(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -444,7 +444,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_get_single_feature_returns_correct_is_enabled_value(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -479,7 +479,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 502, $response->get_status() );
@@ -495,7 +495,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_returns_success_for_admin(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -514,7 +514,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -535,7 +535,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_unauthenticated_request_is_rejected(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -549,7 +549,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_invalid_slug_returns_error(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/nonexistent/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/nonexistent/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 400, $response->get_status() );
@@ -563,7 +563,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_returns_complete_feature_data(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -591,7 +591,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_disable_returns_success_for_admin(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -610,7 +610,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_disable_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -631,7 +631,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_disable_unauthenticated_request_is_rejected(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -645,7 +645,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_disable_invalid_slug_returns_error(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/nonexistent/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/nonexistent/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 400, $response->get_status() );
@@ -659,7 +659,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_disable_returns_complete_feature_data(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -687,7 +687,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_update_returns_success_for_admin(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/update' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/update' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -705,7 +705,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_update_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/update' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/update' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -719,7 +719,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_update_unauthenticated_request_is_rejected(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/update' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/update' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -733,7 +733,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_update_invalid_slug_returns_error(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/nonexistent/update' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/nonexistent/update' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 400, $response->get_status() );
@@ -771,7 +771,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/update' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/update' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 422, $response->get_status() );
@@ -787,14 +787,14 @@ final class Feature_ControllerTest extends HarborTestCase {
 	public function test_enable_disable_round_trip_updates_is_enabled(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$get = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features/feature-alpha' );
+		$get = new WP_REST_Request( 'GET', '/liquidweb/v1/features/feature-alpha' );
 
 		// Initially disabled.
 		$response = $this->server->dispatch( $get );
 		$this->assertFalse( $response->get_data()['is_enabled'] );
 
 		// Enable.
-		$enable   = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$enable   = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $enable );
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertTrue( $response->get_data()['is_enabled'] );
@@ -804,7 +804,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertTrue( $response->get_data()['is_enabled'] );
 
 		// Disable.
-		$disable  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$disable  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $disable );
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertFalse( $response->get_data()['is_enabled'] );
@@ -847,7 +847,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 409, $response->get_status() );
@@ -881,7 +881,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/features' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/features' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 502, $response->get_status() );
@@ -918,7 +918,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/disable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/disable' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 409, $response->get_status() );
@@ -956,7 +956,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $manager );
 		$controller->register_routes();
 
-		$request  = new WP_REST_Request( 'POST', '/stellarwp/uplink/v1/features/feature-alpha/enable' );
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/v1/features/feature-alpha/enable' );
 		$response = $this->server->dispatch( $request );
 
 		// The original 503 status should be preserved, not overridden by the error code mapping (422).

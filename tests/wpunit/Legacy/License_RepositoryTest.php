@@ -22,7 +22,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		remove_all_filters( 'stellarwp/uplink/legacy_licenses' );
+		remove_all_filters( 'lw-harbor/legacy_licenses' );
 		parent::tearDown();
 	}
 
@@ -38,7 +38,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_normalizes_array_items_to_legacy_license_instances(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -69,7 +69,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_merges_licenses_from_multiple_filter_callbacks(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -85,7 +85,7 @@ final class License_RepositoryTest extends HarborTestCase {
 			}
 		);
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -113,7 +113,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_ignores_non_array_items(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				$licenses[] = (object) [ 'slug' => 'invalid' ];
 				$licenses[] = [
@@ -138,7 +138,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_finds_license_by_slug(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -178,7 +178,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_returns_null_when_slug_not_found(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -204,7 +204,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$call_count = 0;
 
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) use ( &$call_count ) {
 				$call_count++;
 
@@ -235,7 +235,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_all_active_returns_only_active_licenses(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -270,7 +270,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_all_inactive_returns_only_inactive_licenses(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,
@@ -320,7 +320,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	 */
 	public function it_returns_true_for_has_any_when_licenses_exist(): void {
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			static function ( array $licenses ) {
 				return array_merge(
 					$licenses,

@@ -16,5 +16,5 @@ class CronHook {
 	 *
 	 * @var string
 	 */
-	const DATA_REFRESH = 'stellarwp_uplink_data_refresh';
+	const DATA_REFRESH = 'lw_harbor_data_refresh';
 }

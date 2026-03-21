@@ -98,7 +98,7 @@ class Feature_Manager_Page {
 		$plugin_root_url = trailingslashit(
 			plugin_dir_url( $plugin_root_dir . '/index.php' )
 		);
-		$handle = 'stellarwp-uplink-ui';
+		$handle = 'lw-harbor-ui';
 
 		// Load asset file for dependencies and version.
 		$asset_file = $plugin_root_dir . '/' . $build_dir . '/index.asset.php';
@@ -121,7 +121,7 @@ class Feature_Manager_Page {
 			$handle,
 			'uplinkData',
 			[
-				'restUrl' => rest_url( 'uplink/v1/' ),
+				'restUrl' => rest_url( 'liquidweb/v1/' ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 			]
 		);

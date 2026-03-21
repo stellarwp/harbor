@@ -100,7 +100,7 @@ final class ManagerTest extends HarborTestCase {
 	 * @return void
 	 */
 	protected function tearDown(): void {
-		delete_option( 'stellarwp_uplink_feature_kad-pattern-hub_active' );
+		delete_option( 'lw_harbor_feature_kad-pattern-hub_active' );
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
@@ -211,28 +211,28 @@ final class ManagerTest extends HarborTestCase {
 		$slug_updated_fired  = false;
 
 		add_action(
-			'stellarwp/uplink/feature_updating',
+			'lw-harbor/feature_updating',
 			static function () use ( &$updating_fired ) {
 				$updating_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/feature_updated',
+			'lw-harbor/feature_updated',
 			static function () use ( &$updated_fired ) {
 				$updated_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_updating',
+			'lw-harbor/test-feature/feature_updating',
 			static function () use ( &$slug_updating_fired ) {
 				$slug_updating_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_updated',
+			'lw-harbor/test-feature/feature_updated',
 			static function () use ( &$slug_updated_fired ) {
 				$slug_updated_fired = true;
 			}
@@ -280,7 +280,7 @@ final class ManagerTest extends HarborTestCase {
 		$updated_fired = false;
 
 		add_action(
-			'stellarwp/uplink/feature_updated',
+			'lw-harbor/feature_updated',
 			static function () use ( &$updated_fired ) {
 				$updated_fired = true;
 			}
@@ -379,7 +379,7 @@ final class ManagerTest extends HarborTestCase {
 
 		$this->bind_fixture_clients();
 		$manager    = $this->container->get( Manager::class );
-		$option_key = 'stellarwp_uplink_feature_kad-pattern-hub_active';
+		$option_key = 'lw_harbor_feature_kad-pattern-hub_active';
 
 		// Enable — DB flag set, returned feature and is_enabled agree.
 		$enabled = $manager->enable( 'kad-pattern-hub' );
@@ -408,28 +408,28 @@ final class ManagerTest extends HarborTestCase {
 		$slug_enabled_fired  = false;
 
 		add_action(
-			'stellarwp/uplink/feature_enabling',
+			'lw-harbor/feature_enabling',
 			static function () use ( &$enabling_fired ) {
 				$enabling_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/feature_enabled',
+			'lw-harbor/feature_enabled',
 			static function () use ( &$enabled_fired ) {
 				$enabled_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_enabling',
+			'lw-harbor/test-feature/feature_enabling',
 			static function () use ( &$slug_enabling_fired ) {
 				$slug_enabling_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_enabled',
+			'lw-harbor/test-feature/feature_enabled',
 			static function () use ( &$slug_enabled_fired ) {
 				$slug_enabled_fired = true;
 			}
@@ -455,28 +455,28 @@ final class ManagerTest extends HarborTestCase {
 		$slug_disabled_fired  = false;
 
 		add_action(
-			'stellarwp/uplink/feature_disabling',
+			'lw-harbor/feature_disabling',
 			static function () use ( &$disabling_fired ) {
 				$disabling_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/feature_disabled',
+			'lw-harbor/feature_disabled',
 			static function () use ( &$disabled_fired ) {
 				$disabled_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_disabling',
+			'lw-harbor/test-feature/feature_disabling',
 			static function () use ( &$slug_disabling_fired ) {
 				$slug_disabling_fired = true;
 			}
 		);
 
 		add_action(
-			'stellarwp/uplink/test-feature/feature_disabled',
+			'lw-harbor/test-feature/feature_disabled',
 			static function () use ( &$slug_disabled_fired ) {
 				$slug_disabled_fired = true;
 			}
@@ -524,7 +524,7 @@ final class ManagerTest extends HarborTestCase {
 		$enabled_fired = false;
 
 		add_action(
-			'stellarwp/uplink/feature_enabled',
+			'lw-harbor/feature_enabled',
 			static function () use ( &$enabled_fired ) {
 				$enabled_fired = true;
 			}
@@ -570,7 +570,7 @@ final class ManagerTest extends HarborTestCase {
 		$disabled_fired = false;
 
 		add_action(
-			'stellarwp/uplink/feature_disabled',
+			'lw-harbor/feature_disabled',
 			static function () use ( &$disabled_fired ) {
 				$disabled_fired = true;
 			}

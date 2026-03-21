@@ -62,7 +62,7 @@ class VersionTest extends HarborTestCase {
 	 * @since 3.0.0
 	 */
 	public function it_should_not_handle_when_action_already_claimed(): void {
-		do_action( 'stellarwp/uplink/handled/test_action' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		do_action( 'lw-harbor/handled/test_action' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		$this->assertFalse( Version::should_handle( 'test_action' ) );
 	}
@@ -73,11 +73,11 @@ class VersionTest extends HarborTestCase {
 	 * @since 3.0.0
 	 */
 	public function it_should_fire_the_hook_on_success(): void {
-		$this->assertSame( 0, did_action( 'stellarwp/uplink/handled/test_action' ) );
+		$this->assertSame( 0, did_action( 'lw-harbor/handled/test_action' ) );
 
 		Version::should_handle( 'test_action' );
 
-		$this->assertSame( 1, did_action( 'stellarwp/uplink/handled/test_action' ) );
+		$this->assertSame( 1, did_action( 'lw-harbor/handled/test_action' ) );
 	}
 
 	/**

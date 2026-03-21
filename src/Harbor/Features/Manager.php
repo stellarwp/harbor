@@ -57,7 +57,7 @@ class Manager {
 	/**
 	 * Enables a feature by slug.
 	 *
-	 * Fires 'stellarwp/uplink/feature_enabling' and 'stellarwp/uplink/{slug}/feature_enabling'
+	 * Fires 'lw-harbor/feature_enabling' and 'lw-harbor/{slug}/feature_enabling'
 	 * before the operation, and the corresponding 'feature_enabled' actions after success.
 	 *
 	 * @since 3.0.0
@@ -110,7 +110,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_enabling', $feature->to_array() );
+		do_action( 'lw-harbor/feature_enabling', $feature->to_array() );
 
 		/**
 		 * Fires before a specific feature is enabled.
@@ -121,7 +121,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_enabling", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_enabling", $feature->to_array() );
 
 		try {
 			$strategy = $this->strategy_factory->make( $feature );
@@ -182,7 +182,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_enabled', $feature->to_array() );
+		do_action( 'lw-harbor/feature_enabled', $feature->to_array() );
 
 		/**
 		 * Fires after a specific feature has been successfully enabled.
@@ -193,7 +193,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_enabled", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_enabled", $feature->to_array() );
 
 		return $feature;
 	}
@@ -201,7 +201,7 @@ class Manager {
 	/**
 	 * Disables a feature by slug.
 	 *
-	 * Fires 'stellarwp/uplink/feature_disabling' and 'stellarwp/uplink/{slug}/feature_disabling'
+	 * Fires 'lw-harbor/feature_disabling' and 'lw-harbor/{slug}/feature_disabling'
 	 * before the operation, and the corresponding 'feature_disabled' actions after success.
 	 *
 	 * @since 3.0.0
@@ -254,7 +254,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_disabling', $feature->to_array() );
+		do_action( 'lw-harbor/feature_disabling', $feature->to_array() );
 
 		/**
 		 * Fires before a specific feature is disabled.
@@ -265,7 +265,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_disabling", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_disabling", $feature->to_array() );
 
 		try {
 			$strategy = $this->strategy_factory->make( $feature );
@@ -326,7 +326,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_disabled', $feature->to_array() );
+		do_action( 'lw-harbor/feature_disabled', $feature->to_array() );
 
 		/**
 		 * Fires after a specific feature has been successfully disabled.
@@ -337,7 +337,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_disabled", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_disabled", $feature->to_array() );
 
 		return $feature;
 	}
@@ -345,7 +345,7 @@ class Manager {
 	/**
 	 * Updates a feature by slug.
 	 *
-	 * Fires 'stellarwp/uplink/feature_updating' and 'stellarwp/uplink/{slug}/feature_updating'
+	 * Fires 'lw-harbor/feature_updating' and 'lw-harbor/{slug}/feature_updating'
 	 * before the operation, and the corresponding 'feature_updated' actions after success.
 	 *
 	 * @since 3.0.0
@@ -398,7 +398,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_updating', $feature->to_array() );
+		do_action( 'lw-harbor/feature_updating', $feature->to_array() );
 
 		/**
 		 * Fires before a specific feature is updated.
@@ -409,7 +409,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_updating", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_updating", $feature->to_array() );
 
 		try {
 			$strategy = $this->strategy_factory->make( $feature );
@@ -470,7 +470,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( 'stellarwp/uplink/feature_updated', $feature->to_array() );
+		do_action( 'lw-harbor/feature_updated', $feature->to_array() );
 
 		/**
 		 * Fires after a specific feature has been successfully updated.
@@ -481,7 +481,7 @@ class Manager {
 		 *
 		 * @return void
 		 */
-		do_action( "stellarwp/uplink/{$slug}/feature_updated", $feature->to_array() );
+		do_action( "lw-harbor/{$slug}/feature_updated", $feature->to_array() );
 
 		return $feature;
 	}

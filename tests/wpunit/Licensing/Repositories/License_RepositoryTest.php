@@ -550,7 +550,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$fired = [];
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function ( string $new_key, string $old_key ) use ( &$fired ) {
 				$fired[] = [ $new_key, $old_key ];
 			},
@@ -571,7 +571,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$fired = false;
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function () use ( &$fired ) {
 				$fired = true;
 			}
@@ -588,7 +588,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$fired = [];
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function ( string $new_key, string $old_key ) use ( &$fired ) {
 				$fired[] = [ $new_key, $old_key ];
 			},
@@ -609,7 +609,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$fired = [];
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function ( string $new_key, string $old_key ) use ( &$fired ) {
 				$fired[] = [ $new_key, $old_key ];
 			},
@@ -628,7 +628,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$fired = false;
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function () use ( &$fired ) {
 				$fired = true;
 			}

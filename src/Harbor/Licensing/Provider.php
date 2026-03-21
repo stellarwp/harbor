@@ -40,7 +40,7 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton( License_Manager::class, License_Manager::class );
 
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			function () {
 				/** @var License_Repository $license_repository */
 				$license_repository = $this->container->get( License_Repository::class );

@@ -68,7 +68,7 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 	public function test_returns_empty_array_when_no_legacy_licenses(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -79,13 +79,13 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			function () {
 				return [ $this->license_data ];
 			}
 		);
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -96,13 +96,13 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			function () {
 				return [ $this->license_data ];
 			}
 		);
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 		$item     = $response->get_data()[0];
 
@@ -127,7 +127,7 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		add_filter(
-			'stellarwp/uplink/legacy_licenses',
+			'lw-harbor/legacy_licenses',
 			function () {
 				return [
 					$this->license_data,
@@ -142,7 +142,7 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 			}
 		);
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -152,7 +152,7 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 	public function test_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -161,7 +161,7 @@ final class Legacy_License_ControllerTest extends HarborTestCase {
 	public function test_rejects_unauthenticated(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'GET', '/stellarwp/uplink/v1/legacy-licenses' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/legacy-licenses' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );

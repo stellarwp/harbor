@@ -41,11 +41,11 @@ final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 
 		// Register cache invalidation hooks that providers normally wire up.
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			[ $this->license_repository, 'delete_products' ]
 		);
 		add_action(
-			'stellarwp/uplink/unified_license_key_changed',
+			'lw-harbor/unified_license_key_changed',
 			static function () {
 				delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
 			}
@@ -57,7 +57,7 @@ final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		remove_all_filters( 'stellarwp/uplink/unified_license_key_changed' );
+		remove_all_filters( 'lw-harbor/unified_license_key_changed' );
 
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
 		delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );

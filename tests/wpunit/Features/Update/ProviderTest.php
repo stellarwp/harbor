@@ -97,7 +97,7 @@ final class ProviderTest extends HarborTestCase {
 	public function test_it_does_not_register_hooks_when_higher_version_exists(): void {
 		// In production the higher-version instance claims the action first.
 		// Simulate that here so this instance defers correctly.
-		do_action( 'stellarwp/uplink/handled/feature_updates' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		do_action( 'lw-harbor/handled/feature_updates' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		$provider = new Provider( $this->container );
 		$provider->register();
