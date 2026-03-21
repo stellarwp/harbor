@@ -2,14 +2,14 @@
 
 namespace wpunit\Utils;
 
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Uplink;
-use StellarWP\Uplink\Utils\Version;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Harbor;
+use LiquidWeb\Harbor\Utils\Version;
 
 /**
  * @since 3.0.0
  */
-class VersionTest extends UplinkTestCase {
+class VersionTest extends HarborTestCase {
 
 	/**
 	 * @test
@@ -35,7 +35,7 @@ class VersionTest extends UplinkTestCase {
 	 * @since 3.0.0
 	 */
 	public function it_should_be_highest_when_versions_are_equal(): void {
-		$this->assertTrue( Version::is_highest_among( [ Uplink::VERSION ] ) );
+		$this->assertTrue( Version::is_highest_among( [ Harbor::VERSION ] ) );
 	}
 
 	/**

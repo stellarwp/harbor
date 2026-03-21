@@ -1,17 +1,17 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Contracts\Strategy;
-use StellarWP\Uplink\Features\Manager;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Contracts\Strategy;
+use LiquidWeb\Harbor\Features\Manager;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class FunctionsTest extends UplinkTestCase {
+final class FunctionsTest extends HarborTestCase {
 
 	/**
 	 * Sets up a manager with a mocked active feature before each test.

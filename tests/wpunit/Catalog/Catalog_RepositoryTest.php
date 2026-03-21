@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog;
+namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Catalog_Client;
-use StellarWP\Uplink\Catalog\Clients\Fixture_Client;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Catalog\Error_Code;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class Catalog_RepositoryTest extends UplinkTestCase {
+final class Catalog_RepositoryTest extends HarborTestCase {
 
 	use With_Uopz;
 

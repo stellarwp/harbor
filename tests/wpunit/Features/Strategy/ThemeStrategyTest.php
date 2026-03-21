@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Strategy;
+namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Strategy\Theme_Strategy;
-use StellarWP\Uplink\Features\Types\Theme;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
+use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 use WP_Upgrader;
 
@@ -24,7 +24,7 @@ use WP_Upgrader;
  *
  * @see Theme_Strategy
  */
-final class ThemeStrategyTest extends UplinkTestCase {
+final class ThemeStrategyTest extends HarborTestCase {
 
 	/**
 	 * Test stylesheet used across tests.
@@ -411,30 +411,14 @@ final class ThemeStrategyTest extends UplinkTestCase {
 	public function test_update_returns_install_locked_when_lock_held(): void {
 		$this->install_test_theme( self::STYLESHEET, 'StellarWP' );
 
-		// Seed the update transient.
-		set_site_transient(
-			'update_themes',
-			(object) [
-				'response' => [
-					self::STYLESHEET => [
-						'theme'       => self::STYLESHEET,
-						'new_version' => '2.0.0',
-						'package'     => 'https://example.com/test-theme-2.0.0.zip',
-					],
-				],
-			]
-		);
+		\LiquidWeb\Harbor\Tests\Updater::seedThemeUpdate( self::STYLESHEET, '2.0.0' );
 
 		WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
 
-		try {
-			$result = $this->strategy->update();
+		$result = $this->strategy->update();
 
-			$this->assertWPError( $result );
-			$this->assertSame( Error_Code::INSTALL_LOCKED, $result->get_error_code() );
-		} finally {
-			delete_site_transient( 'update_themes' );
-		}
+		$this->assertWPError( $result );
+		$this->assertSame( Error_Code::INSTALL_LOCKED, $result->get_error_code() );
 	}
 
 	/**

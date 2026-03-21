@@ -1,26 +1,26 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Catalog_Client;
-use StellarWP\Uplink\Catalog\Clients\Fixture_Client as Catalog_Fixture;
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Contracts\Strategy;
-use StellarWP\Uplink\Features\Manager;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Types\Feature;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client as Licensing_Fixture;
-use StellarWP\Uplink\Licensing\Clients\Licensing_Client;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Contracts\Strategy;
+use LiquidWeb\Harbor\Features\Manager;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
+use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class ManagerTest extends UplinkTestCase {
+final class ManagerTest extends HarborTestCase {
 
 	/**
 	 * The feature manager instance under test.

@@ -1,8 +1,8 @@
 <?php
 
-namespace StellarWP\Uplink\Tests;
+namespace LiquidWeb\Harbor\Tests;
 
-use StellarWP\Uplink\Uplink;
+use LiquidWeb\Harbor\Harbor;
 
 trait TestUtils {
 	protected $base;
@@ -18,8 +18,8 @@ trait TestUtils {
 				'slug'          => 'plugin-1',
 				'name'          => 'Plugin 1',
 				'path'          => $base . '/plugin.php',
-				'class'         => Uplink::class,
-				'license_class' => Uplink::class,
+				'class'         => Harbor::class,
+				'license_class' => Harbor::class,
 				'version'       => '1.0.0',
 				'type'          => 'plugin',
 			],
@@ -27,8 +27,8 @@ trait TestUtils {
 				'slug'          => 'plugin-2',
 				'name'          => 'Plugin 2',
 				'path'          => $base . '/plugin.php',
-				'class'         => Uplink::class,
-				'license_class' => Uplink::class,
+				'class'         => Harbor::class,
+				'license_class' => Harbor::class,
 				'version'       => '2.0.0',
 				'type'          => 'plugin',
 			],
@@ -36,8 +36,8 @@ trait TestUtils {
 				'slug'          => 'service-1',
 				'name'          => 'Service 1',
 				'path'          => $base . '/service1.php',
-				'class'         => Uplink::class,
-				'license_class' => Uplink::class,
+				'class'         => Harbor::class,
+				'license_class' => Harbor::class,
 				'version'       => '3.0.0',
 				'type'          => 'service',
 			],
@@ -45,8 +45,8 @@ trait TestUtils {
 				'slug'          => 'service-2',
 				'name'          => 'Service 2',
 				'path'          => $base . '/service2.php',
-				'class'         => Uplink::class,
-				'license_class' => Uplink::class,
+				'class'         => Harbor::class,
+				'license_class' => Harbor::class,
 				'version'       => '4.0.0',
 				'type'          => 'service',
 			],

@@ -3,10 +3,10 @@
 namespace wpunit;
 
 use StellarWP\ContainerContract\ContainerInterface;
-use StellarWP\Uplink\Config;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-class ContainerTest extends UplinkTestCase {
+class ContainerTest extends HarborTestCase {
 
 	/**
 	 * Test that the container is correctly instantiated.

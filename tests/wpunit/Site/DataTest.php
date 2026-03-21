@@ -1,16 +1,16 @@
 <?php
 
-namespace StellarWP\Uplink\Tests\Site;
+namespace LiquidWeb\Harbor\Tests\Site;
 
-use StellarWP\Uplink;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-class DataTest extends UplinkTestCase {
+class DataTest extends HarborTestCase {
 	public $container;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->container = Uplink\Config::get_container();
+		$this->container = Harbor\Config::get_container();
 	}
 
 	/**
@@ -21,7 +21,7 @@ class DataTest extends UplinkTestCase {
 	public function it_should_collect_base_stats() {
 		global $wp_version;
 
-		$data  = $this->container->make( Uplink\Site\Data::class );
+		$data  = $this->container->make( Harbor\Site\Data::class );
 		$stats = $data->get_stats();
 
 		$this->assertArrayHasKey( 'versions', $stats );
@@ -42,7 +42,7 @@ class DataTest extends UplinkTestCase {
 	public function it_should_collect_full_stats() {
 		add_filter( 'stellarwp/uplink/test/use_full_stats', '__return_true' );
 
-		$data  = $this->container->make( Uplink\Site\Data::class );
+		$data  = $this->container->make( Harbor\Site\Data::class );
 		$stats = $data->get_stats();
 
 		$this->assertArrayHasKey( 'versions', $stats );

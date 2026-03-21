@@ -1,10 +1,10 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests;
+namespace LiquidWeb\Harbor\Tests;
 
-use StellarWP\Uplink\Config;
+use LiquidWeb\Harbor\Config;
 
-final class ConfigTest extends UplinkTestCase {
+final class ConfigTest extends HarborTestCase {
 
 	public function test_it_gets_default_api_base_url(): void {
 		$this->assertSame( Config::DEFAULT_API_BASE_URL, Config::get_api_base_url() );

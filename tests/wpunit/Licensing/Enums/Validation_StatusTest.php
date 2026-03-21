@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Enums;
+namespace LiquidWeb\Harbor\Tests\Licensing\Enums;
 
-use StellarWP\Uplink\Licensing\Enums\Validation_Status;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Validation_StatusTest extends UplinkTestCase {
+final class Validation_StatusTest extends HarborTestCase {
 
 	public function test_constants_match_licensing_service(): void {
 		$this->assertSame( 'valid', Validation_Status::VALID );

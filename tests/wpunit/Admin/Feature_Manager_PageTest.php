@@ -2,10 +2,10 @@
 
 namespace wpunit\Admin;
 
-use StellarWP\Uplink\Admin\Feature_Manager_Page;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-class Feature_Manager_PageTest extends UplinkTestCase {
+class Feature_Manager_PageTest extends HarborTestCase {
 
 	/**
 	 * @var Feature_Manager_Page

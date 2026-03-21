@@ -1,19 +1,19 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Legacy\Notices;
+namespace LiquidWeb\Harbor\Tests\Legacy\Notices;
 
-use StellarWP\Uplink\Config;
-use StellarWP\Uplink\Legacy\License_Repository;
-use StellarWP\Uplink\Legacy\Notices\License_Notice_Handler;
-use StellarWP\Uplink\Notice\Notice_Controller;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Utils\Version;
+use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Legacy\License_Repository;
+use LiquidWeb\Harbor\Legacy\Notices\License_Notice_Handler;
+use LiquidWeb\Harbor\Notice\Notice_Controller;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Utils\Version;
 
 /**
  * @since 3.0.0
  */
-final class License_Notice_HandlerTest extends UplinkTestCase {
+final class License_Notice_HandlerTest extends HarborTestCase {
 
 	use With_Uopz;
 
@@ -152,7 +152,7 @@ final class License_Notice_HandlerTest extends UplinkTestCase {
 
 		$this->assertStringContainsString( 'Give', $output );
 		$this->assertStringContainsString( 'https://example.com/licenses', $output );
-		$this->assertStringContainsString( 'data-uplink-notice-id="legacy-give"', $output );
+		$this->assertStringContainsString( 'data-lw-harbor-notice-id="legacy-give"', $output );
 	}
 
 	/**
@@ -226,7 +226,7 @@ final class License_Notice_HandlerTest extends UplinkTestCase {
 
 		$output = $this->capture_display();
 
-		$this->assertSame( 1, substr_count( $output, 'data-uplink-notice-id="legacy-give"' ) );
+		$this->assertSame( 1, substr_count( $output, 'data-lw-harbor-notice-id="legacy-give"' ) );
 		$this->assertStringContainsString( '3', $output );
 	}
 
@@ -251,8 +251,8 @@ final class License_Notice_HandlerTest extends UplinkTestCase {
 
 		$output = $this->capture_display();
 
-		$this->assertStringContainsString( 'data-uplink-notice-id="legacy-give"', $output );
-		$this->assertStringContainsString( 'data-uplink-notice-id="legacy-kadence"', $output );
+		$this->assertStringContainsString( 'data-lw-harbor-notice-id="legacy-give"', $output );
+		$this->assertStringContainsString( 'data-lw-harbor-notice-id="legacy-kadence"', $output );
 	}
 
 	/**
@@ -278,7 +278,7 @@ final class License_Notice_HandlerTest extends UplinkTestCase {
 
 		$output = $this->capture_display();
 
-		$this->assertStringContainsString( 'data-uplink-notice-id="legacy-give"', $output );
+		$this->assertStringContainsString( 'data-lw-harbor-notice-id="legacy-give"', $output );
 	}
 
 	// ------------------------------------------------------------------

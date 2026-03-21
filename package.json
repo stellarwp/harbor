@@ -1,5 +1,5 @@
 {
-  "name": "@stellarwp/uplink",
+  "name": "@stellarwp/harbor",
   "private": true,
   "scripts": {
     "build": "bun run build:dev && bun run build:prod",
@@ -41,7 +41,7 @@
   },
   "changelogger": {
     "changesDir": "changelog",
-    "linkTemplate": "https://github.com/stellarwp/uplink/compare/${old}...${new}",
+    "linkTemplate": "https://github.com/stellarwp/harbor/compare/${old}...${new}",
     "ordering": [
       "type",
       "content"

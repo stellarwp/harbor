@@ -1,13 +1,13 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog;
+namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Catalog_Client;
-use StellarWP\Uplink\Catalog\Clients\Http_Client;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Catalog\Clients\Http_Client;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	public function test_it_registers_catalog_client(): void {
 		$this->assertInstanceOf(

@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Utils;
+namespace LiquidWeb\Harbor\Tests\Utils;
 
 use ArrayIterator;
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Utils\Collection;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Utils\Collection;
 
-final class CollectionTest extends UplinkTestCase {
+final class CollectionTest extends HarborTestCase {
 
 	/**
 	 * Tests that items can be set and retrieved by key.

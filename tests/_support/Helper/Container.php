@@ -1,6 +1,6 @@
 <?php
 
-namespace StellarWP\Uplink\Tests;
+namespace LiquidWeb\Harbor\Tests;
 
 use StellarWP\ContainerContract\ContainerInterface;
 use lucatume\DI52\Container as DI52Container;

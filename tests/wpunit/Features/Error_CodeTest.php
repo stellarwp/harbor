@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Error_CodeTest extends UplinkTestCase {
+final class Error_CodeTest extends HarborTestCase {
 
 	/**
 	 * Provides every known error code with its expected HTTP status.

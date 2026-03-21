@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Types;
+namespace LiquidWeb\Harbor\Tests\Features\Types;
 
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class FlagTest extends UplinkTestCase {
+final class FlagTest extends HarborTestCase {
 
 	/**
 	 * Tests a Flag feature can be hydrated from an associative array.

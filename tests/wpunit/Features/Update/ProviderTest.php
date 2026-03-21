@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Update;
+namespace LiquidWeb\Harbor\Tests\Features\Update;
 
-use StellarWP\Uplink\Features\Update\Plugin_Handler;
-use StellarWP\Uplink\Features\Update\Provider;
-use StellarWP\Uplink\Features\Update\Resolve_Update_Data;
-use StellarWP\Uplink\Features\Update\Theme_Handler;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Update\Plugin_Handler;
+use LiquidWeb\Harbor\Features\Update\Provider;
+use LiquidWeb\Harbor\Features\Update\Resolve_Update_Data;
+use LiquidWeb\Harbor\Features\Update\Theme_Handler;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	/**
 	 * Tests that Resolve_Update_Data is registered as a singleton in the container.

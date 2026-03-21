@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Strategy;
+namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Strategy\Flag_Strategy;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Strategy\Flag_Strategy;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * Tests for the Flag_Strategy feature-gating strategy.
@@ -16,7 +16,7 @@ use StellarWP\Uplink\Tests\UplinkTestCase;
  *
  * @see Flag_Strategy
  */
-final class FlagStrategyTest extends UplinkTestCase {
+final class FlagStrategyTest extends HarborTestCase {
 
 	/**
 	 * The option key for the test feature's stored state.

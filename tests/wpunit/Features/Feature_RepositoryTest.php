@@ -1,29 +1,29 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
 use ReflectionMethod;
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Fixture_Client as Catalog_Fixture;
-use StellarWP\Uplink\Catalog\Results\Catalog_Feature;
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Catalog\Results\Tier_Collection;
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Resolve_Feature_Collection;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Licensing\Clients\Licensing_Client;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client as Licensing_Fixture;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Registry\Product_Registry;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Resolve_Feature_Collection;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class Feature_RepositoryTest extends UplinkTestCase {
+final class Feature_RepositoryTest extends HarborTestCase {
 
 	/**
 	 * Clears upstream caches before each test.
@@ -61,7 +61,7 @@ final class Feature_RepositoryTest extends UplinkTestCase {
 		Catalog_Repository $catalog,
 		License_Manager $licensing
 	): Resolve_Feature_Collection {
-		$site_data = $this->makeEmpty( \StellarWP\Uplink\Site\Data::class, [ 'get_domain' => 'example.com' ] );
+		$site_data = $this->makeEmpty( \LiquidWeb\Harbor\Site\Data::class, [ 'get_domain' => 'example.com' ] );
 		$resolver  = new Resolve_Feature_Collection( $catalog, $licensing, $site_data );
 
 		$resolver->register_type( 'plugin', Plugin::class );

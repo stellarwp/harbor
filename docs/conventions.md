@@ -138,14 +138,18 @@ wp_enqueue_script( 'lw-harbor-notice-dismiss', ... );
 
 ### JavaScript and TypeScript
 
-| Identifier | Convention |
-|---|---|
-| Error class | `LiquidError` (file: `liquid-error.ts`) |
-| Store name | `'lw'` |
-| Store registration | `registerHarborStore` |
-| Store import alias | `harborStore` |
-| REST paths | `'/liquidweb/v1/...'` |
-| Docblock package | `@package LiquidWeb\Harbor` |
+<!-- markdownlint-disable MD060 -->
+
+| Identifier         | Convention                              |
+| ------------------ | --------------------------------------- |
+| Error class        | `LiquidError` (file: `liquid-error.ts`) |
+| Store name         | `'lw'`                                  |
+| Store registration | `registerHarborStore`                   |
+| Store import alias | `harborStore`                           |
+| REST paths         | `'/liquidweb/v1/...'`                   |
+| Docblock package   | `@package LiquidWeb\Harbor`             |
+
+<!-- markdownlint-enable MD060 -->
 
 ### Error Codes (JS)
 
@@ -162,15 +166,19 @@ The library version starts at `0.0.1`. All `@since` tags for new code use `@sinc
 
 ## Summary
 
-| Scope | Prefix | Separator | Example |
-|---|---|---|---|
-| PHP namespace | `LiquidWeb\Harbor` | `\` | `LiquidWeb\Harbor\Features\Manager` |
-| Hooks | `lw-harbor` | `/` | `lw-harbor/catalog/fetched` |
-| Options/meta/cache/cron | `lw_harbor` | `_` | `lw_harbor_unified_license_key` |
-| Container keys | `lw-harbor` | `.` | `lw-harbor.admin-views.path` |
-| REST namespace | `liquidweb` | `/` | `liquidweb/v1/features` |
-| Global functions | `lw_harbor` | `_` | `lw_harbor_is_feature_enabled()` |
-| WP-CLI | `lw` | ` ` | `wp lw feature list` |
-| Error codes (PHP) | `lw-harbor` | `-` | `lw-harbor-feature-not-found` |
-| CSS/DOM | `lw-harbor` | `-` | `.lw-harbor`, `#lw-harbor-root` |
-| Script handles | `lw-harbor` | `-` | `lw-harbor-ui` |
+<!-- markdownlint-disable MD060 -->
+
+| Scope                   | Prefix             | Separator | Example                              |
+| ----------------------- | ------------------ | --------- | ------------------------------------ |
+| PHP namespace           | `LiquidWeb\Harbor` | `\`       | `LiquidWeb\Harbor\Features\Manager` |
+| Hooks                   | `lw-harbor`        | `/`       | `lw-harbor/catalog/fetched`          |
+| Options/meta/cache/cron | `lw_harbor`        | `_`       | `lw_harbor_unified_license_key`      |
+| Container keys          | `lw-harbor`        | `.`       | `lw-harbor.admin-views.path`         |
+| REST namespace          | `liquidweb`        | `/`       | `liquidweb/v1/features`              |
+| Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`     |
+| WP-CLI                  | `lw`               | ` `       | `wp lw feature list`                 |
+| Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`        |
+| CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor`, `#lw-harbor-root`      |
+| Script handles          | `lw-harbor`        | `-`       | `lw-harbor-ui`                       |
+
+<!-- markdownlint-enable MD060 -->

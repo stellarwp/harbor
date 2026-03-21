@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog\Results;
+namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Catalog_TierTest extends UplinkTestCase {
+final class Catalog_TierTest extends HarborTestCase {
 
 	private array $valid_data = [
 		'slug'         => 'kadence-pro',

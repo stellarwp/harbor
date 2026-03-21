@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Registry;
+namespace LiquidWeb\Harbor\Tests\Licensing\Registry;
 
-use StellarWP\Uplink\Licensing\Registry\Registered_Product;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Registry\Registered_Product;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * @since 3.0.0
  */
-final class Registered_ProductTest extends UplinkTestCase {
+final class Registered_ProductTest extends HarborTestCase {
 
 	public function test_from_array_returns_null_when_slug_missing(): void {
 		$this->assertNull( Registered_Product::from_array( [ 'embedded_key' => 'KEY' ] ) );

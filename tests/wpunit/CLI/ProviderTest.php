@@ -1,20 +1,20 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\CLI;
+namespace LiquidWeb\Harbor\Tests\CLI;
 
-use StellarWP\Uplink\CLI\Commands\Catalog;
-use StellarWP\Uplink\CLI\Commands\Feature;
-use StellarWP\Uplink\CLI\Commands\License;
-use StellarWP\Uplink\CLI\Provider;
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\CLI\Commands\Catalog;
+use LiquidWeb\Harbor\CLI\Commands\Feature;
+use LiquidWeb\Harbor\CLI\Commands\License;
+use LiquidWeb\Harbor\CLI\Provider;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 
 /**
  * Tests for the CLI Provider.
  *
  * @since 3.0.0
  */
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	use With_Uopz;
 

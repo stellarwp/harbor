@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Types;
+namespace LiquidWeb\Harbor\Tests\Features\Types;
 
-use StellarWP\Uplink\Features\Types\Feature;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class FeatureTest extends UplinkTestCase {
+final class FeatureTest extends HarborTestCase {
 
 	/**
 	 * The feature instance under test.

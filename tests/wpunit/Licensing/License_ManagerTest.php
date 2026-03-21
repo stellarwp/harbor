@@ -1,23 +1,23 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing;
+namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use StellarWP\Uplink\Licensing\Enums\Validation_Status;
-use StellarWP\Uplink\Licensing\Error_Code;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Product_Collection;
-use StellarWP\Uplink\Licensing\Registry\Product_Registry;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Licensing\Results\Validation_Result;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
+use LiquidWeb\Harbor\Licensing\Error_Code;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Product_Collection;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
 /**
  * @since 3.0.0
  */
-final class License_ManagerTest extends UplinkTestCase {
+final class License_ManagerTest extends HarborTestCase {
 
 	use With_Uopz;
 

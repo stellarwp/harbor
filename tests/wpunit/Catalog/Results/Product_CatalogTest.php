@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog\Results;
+namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use StellarWP\Uplink\Catalog\Results\Catalog_Feature;
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Catalog\Results\Tier_Collection;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Product_CatalogTest extends UplinkTestCase {
+final class Product_CatalogTest extends HarborTestCase {
 
 	private array $valid_data = [
 		'product_slug' => 'kadence',

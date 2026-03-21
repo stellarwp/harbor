@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Uplink Test Bootstrap
- * Description: Bootstraps StellarWP Uplink during plugins_loaded, before wp_loaded fires.
+ * Plugin Name: Harbor Test Bootstrap
+ * Description: Bootstraps LiquidWeb Harbor during plugins_loaded, before wp_loaded fires.
  * Version: 1.0.0
- * Author: StellarWP
+ * Author: Liquid Web
  */
 
 use StellarWP\ContainerContract\ContainerInterface;
-use StellarWP\Uplink\Config;
-use StellarWP\Uplink\Tests\Container;
-use StellarWP\Uplink\Uplink;
+use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Tests\Container;
+use LiquidWeb\Harbor\Harbor;
 
 add_action(
 	'plugins_loaded',
@@ -18,7 +18,7 @@ add_action(
 		$container->singleton( ContainerInterface::class, $container );
 		Config::set_container( $container );
 		Config::set_hook_prefix( 'test' );
-		Uplink::init();
+		Harbor::init();
 	},
 	0
 );

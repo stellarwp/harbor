@@ -1,8 +1,8 @@
 <?php
 
-namespace StellarWP\Uplink\Tests\Licensing;
+namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use StellarWP\Uplink\Tests\Http_API\Http_API_Mock;
+use LiquidWeb\Harbor\Tests\Http_API\Http_API_Mock;
 
 class Service_Mock extends Http_API_Mock {
 

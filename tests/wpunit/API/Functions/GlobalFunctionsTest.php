@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\API\Functions;
+namespace LiquidWeb\Harbor\Tests\API\Functions;
 
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Licensing\Product_Collection;
-use StellarWP\Uplink\Licensing\Results\Product_Entry;
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Uplink;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Licensing\Product_Collection;
+use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Harbor;
 
 /**
  * Tests for the global helper functions defined in global-functions.php.
@@ -17,7 +17,7 @@ use StellarWP\Uplink\Uplink;
  *
  * @since 3.0.0
  */
-final class GlobalFunctionsTest extends UplinkTestCase {
+final class GlobalFunctionsTest extends HarborTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -48,7 +48,7 @@ final class GlobalFunctionsTest extends UplinkTestCase {
 	}
 
 	public function test_registry_returns_callable_for_bootstrap_registered_key(): void {
-		// Callbacks registered before wp_loaded (by the bootstrap plugin via Uplink::init())
+		// Callbacks registered before wp_loaded (by the bootstrap plugin via Harbor::init())
 		// should be accessible through the registry.
 		$callback = _stellarwp_uplink_global_function_registry( 'stellarwp_uplink_has_unified_license_key' );
 
@@ -59,7 +59,7 @@ final class GlobalFunctionsTest extends UplinkTestCase {
 	public function test_registry_silently_ignores_writes_after_wp_loaded(): void {
 		// Writes after wp_loaded are blocked to prevent late injection.
 		// The write returns null (same as a successful write) but the callback is not stored.
-		_stellarwp_uplink_global_function_registry( 'test_post_lock_key', Uplink::VERSION, fn() => 'new' );
+		_stellarwp_uplink_global_function_registry( 'test_post_lock_key', Harbor::VERSION, fn() => 'new' );
 
 		$callback = _stellarwp_uplink_global_function_registry( 'test_post_lock_key' );
 

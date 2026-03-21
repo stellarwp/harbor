@@ -1,6 +1,6 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\CLI;
+namespace LiquidWeb\Harbor\Tests\CLI;
 
 use WP_CLI\Loggers\Base as Logger_Base;
 

@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\CLI\Commands;
+namespace LiquidWeb\Harbor\Tests\CLI\Commands;
 
-use StellarWP\Uplink\CLI\Commands\Feature as Feature_Command;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Contracts\Strategy;
-use StellarWP\Uplink\Features\Manager;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Tests\CLI\Spy_Logger;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\CLI\Commands\Feature as Feature_Command;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Contracts\Strategy;
+use LiquidWeb\Harbor\Features\Manager;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
 use WP_Error;
 
@@ -24,7 +24,7 @@ use WP_Error;
  *
  * @since 3.0.0
  */
-final class FeatureTest extends UplinkTestCase {
+final class FeatureTest extends HarborTestCase {
 
 	use With_Uopz;
 
@@ -479,11 +479,11 @@ final class FeatureTest extends UplinkTestCase {
 
 	/**
 	 * @param Feature_Command                          $command
-	 * @param \StellarWP\Uplink\Features\Types\Feature $feature
+	 * @param \LiquidWeb\Harbor\Features\Types\Feature $feature
 	 *
 	 * @return mixed
 	 */
-	private function invoke_feature_to_display_item( Feature_Command $command, \StellarWP\Uplink\Features\Types\Feature $feature ) {
+	private function invoke_feature_to_display_item( Feature_Command $command, \LiquidWeb\Harbor\Features\Types\Feature $feature ) {
 		$method = new \ReflectionMethod( Feature_Command::class, 'feature_to_display_item' );
 		$method->setAccessible( true );
 

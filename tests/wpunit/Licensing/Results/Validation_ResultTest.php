@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Results;
+namespace LiquidWeb\Harbor\Tests\Licensing\Results;
 
-use StellarWP\Uplink\Licensing\Enums\Validation_Status;
-use StellarWP\Uplink\Licensing\Results\Validation_Result;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
+use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Validation_ResultTest extends UplinkTestCase {
+final class Validation_ResultTest extends HarborTestCase {
 
 	private array $valid_data = [
 		'status'       => 'valid',

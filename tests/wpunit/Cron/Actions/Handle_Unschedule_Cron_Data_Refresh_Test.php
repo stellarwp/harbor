@@ -1,19 +1,19 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Cron\Actions;
+namespace LiquidWeb\Harbor\Tests\Cron\Actions;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
-use StellarWP\Uplink\Cron\ValueObjects\CronHook;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
+use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * Tests the Handle_Unschedule_Cron_Data_Refresh action.
  *
  * @since 3.0.0
  */
-final class Handle_Unschedule_Cron_Data_Refresh_Test extends UplinkTestCase {
+final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 
 	/**
 	 * Test that the action does not unschedule when no catalog is cached (e.g. never fetched or error).

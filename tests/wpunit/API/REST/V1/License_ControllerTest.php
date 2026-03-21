@@ -1,21 +1,21 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\API\REST\V1;
+namespace LiquidWeb\Harbor\Tests\API\REST\V1;
 
-use StellarWP\Uplink\Licensing\Error_Code;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Registry\Product_Registry;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\API\REST\V1\License_Controller;
-use StellarWP\Uplink\Site\Data;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Error_Code;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\API\REST\V1\License_Controller;
+use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Server;
 
-final class License_ControllerTest extends UplinkTestCase {
+final class License_ControllerTest extends HarborTestCase {
 
 	use With_Uopz;
 

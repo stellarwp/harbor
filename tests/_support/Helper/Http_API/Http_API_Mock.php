@@ -1,6 +1,6 @@
 <?php
 
-namespace StellarWP\Uplink\Tests\Http_API;
+namespace LiquidWeb\Harbor\Tests\Http_API;
 
 use WpOrg\Requests\Response as Requests_Response;
 

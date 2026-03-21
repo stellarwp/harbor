@@ -1,13 +1,13 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Cron\Jobs;
+namespace LiquidWeb\Harbor\Tests\Cron\Jobs;
 
-use StellarWP\Uplink\Cron\Jobs\Refresh_License_Job;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Site\Data;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Cron\Jobs\Refresh_License_Job;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Refresh_License_JobTest extends UplinkTestCase {
+final class Refresh_License_JobTest extends HarborTestCase {
 
 	public function test_run_skips_when_no_key_stored(): void {
 		$refresh_called = false;

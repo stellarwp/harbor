@@ -1,17 +1,17 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog\Clients;
+namespace LiquidWeb\Harbor\Tests\Catalog\Clients;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Clients\Http_Client;
-use StellarWP\Uplink\Catalog\Error_Code;
-use StellarWP\Uplink\Tests\Http\Mock_Client;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Clients\Http_Client;
+use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Tests\Http\Mock_Client;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class Http_ClientTest extends UplinkTestCase {
+final class Http_ClientTest extends HarborTestCase {
 
 	private Mock_Client $mock;
 	private Psr17Factory $factory;
