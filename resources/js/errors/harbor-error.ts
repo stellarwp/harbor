@@ -1,12 +1,12 @@
 /**
- * LiquidError -- typed wrapper around the WP REST API serialized WP_Error.
+ * HarborError -- typed wrapper around the WP REST API serialized WP_Error.
  *
  * @wordpress/api-fetch throws the parsed JSON body (a plain object) when
- * the server returns a non-2xx response. LiquidError normalizes that into
+ * the server returns a non-2xx response. HarborError normalizes that into
  * a proper Error subclass with structured access to code, data, and any
  * additional errors.
  *
- * The entire error chain is typed. `additionalErrors` contains LiquidError
+ * The entire error chain is typed. `additionalErrors` contains HarborError
  * instances (not plain WpRestError objects), so consumers get `.code`,
  * `.status`, and `.data` on every entry without casting.
  *
@@ -17,7 +17,7 @@ import type { WpRestError } from './types';
 import { isWpRestError } from './utils';
 import { ErrorCode } from './error-code';
 
-export default class LiquidError extends Error {
+export default class HarborError extends Error {
 	/**
 	 * Machine-readable error code from the WP_Error.
 	 */
@@ -30,10 +30,10 @@ export default class LiquidError extends Error {
 
 	/**
 	 * Secondary errors from a multi-code WP_Error response. This is a
-	 * deserialization concern only. Use `cause` (via `LiquidError.wrap()`)
+	 * deserialization concern only. Use `cause` (via `HarborError.wrap()`)
 	 * to chain errors on the frontend.
 	 */
-	readonly additionalErrors: LiquidError[];
+	readonly additionalErrors: HarborError[];
 
 	/**
 	 * Original cause, if this error wraps another.
@@ -49,18 +49,18 @@ export default class LiquidError extends Error {
 	) {
 		if (typeof codeOrError === 'string') {
 			super(messageOrOptions as string);
-			this.name = 'LiquidError';
+			this.name = 'HarborError';
 			this.code = codeOrError;
 			this.data = {};
 			this.additionalErrors = [];
 			this.cause = options?.cause;
 		} else {
 			super(codeOrError.message);
-			this.name = 'LiquidError';
+			this.name = 'HarborError';
 			this.code = codeOrError.code;
 			this.data = codeOrError.data ?? {};
 			this.additionalErrors = (codeOrError.additional_errors ?? []).map(
-				(entry) => new LiquidError(entry)
+				(entry) => new HarborError(entry)
 			);
 			this.cause = (messageOrOptions as { cause?: Error } | undefined)?.cause;
 		}
@@ -79,19 +79,19 @@ export default class LiquidError extends Error {
 	 * Flatten the error tree into an array. Collects this error, then its
 	 * additionalErrors (server-side siblings), then recurses into cause.
 	 */
-	toArray(): LiquidError[] {
-		const result: LiquidError[] = [this];
+	toArray(): HarborError[] {
+		const result: HarborError[] = [this];
 		for (const additional of this.additionalErrors) {
 			result.push(...additional.toArray());
 		}
-		if (this.cause instanceof LiquidError) {
+		if (this.cause instanceof HarborError) {
 			result.push(...this.cause.toArray());
 		}
 		return result;
 	}
 
 	/**
-	 * Async conversion of an unknown value into an LiquidError.
+	 * Async conversion of an unknown value into an HarborError.
 	 *
 	 * Handles everything `syncFrom` does, plus `Response` objects that
 	 * apiFetch throws when it cannot parse JSON or when `parse: false`
@@ -101,53 +101,53 @@ export default class LiquidError extends Error {
 		error: unknown,
 		code: ErrorCode,
 		message: string
-	): Promise<LiquidError> {
+	): Promise<HarborError> {
 		if (error instanceof Response) {
 			try {
 				const body = await error.json();
 				if (isWpRestError(body)) {
-					return new LiquidError(body);
+					return new HarborError(body);
 				}
 			} catch {
 				// Response body wasn't JSON, fall through.
 			}
 
-			return new LiquidError(code, message);
+			return new HarborError(code, message);
 		}
 
-		return LiquidError.syncFrom(error, code, message);
+		return HarborError.syncFrom(error, code, message);
 	}
 
 	/**
-	 * Synchronous conversion of an unknown value into an LiquidError.
+	 * Synchronous conversion of an unknown value into an HarborError.
 	 *
-	 * If the value is already an LiquidError, returns it as-is. If it is
+	 * If the value is already an HarborError, returns it as-is. If it is
 	 * a WpRestError, hydrates it via the constructor. Anything else
-	 * (plain Error, string, etc.) produces an LiquidError with the given
+	 * (plain Error, string, etc.) produces an HarborError with the given
 	 * fallback `code` and `message`, and the original is stored as `cause`.
 	 */
 	static syncFrom(
 		error: unknown,
 		code: ErrorCode,
 		message: string
-	): LiquidError {
-		if (error instanceof LiquidError) {
+	): HarborError {
+		if (error instanceof HarborError) {
 			return error;
 		}
 
 		if (isWpRestError(error)) {
-			return new LiquidError(error);
+			return new HarborError(error);
 		}
 
 		if (error instanceof Error) {
-			return new LiquidError({ code, message }, { cause: error });
+			return new HarborError({ code, message }, { cause: error });
 		}
 
-		return new LiquidError({ code, message });
+		return new HarborError({ code, message });
 	}
 
 	/**
-	 * Async wrap of an unknown caught value into an LiquidError with context.
+	 * Async wrap of an unknown caught value into an HarborError with context.
 	 *
 	 * The provided `code` and `message` describe what operation failed.
 	 * The original value is preserved as `cause` so the full error chain
@@ -161,55 +161,55 @@ export default class LiquidError extends Error {
 		error: unknown,
 		code: ErrorCode,
 		message: string
-	): Promise<LiquidError> {
+	): Promise<HarborError> {
 		if (error instanceof Response) {
 			try {
 				const body = await error.json();
 				if (isWpRestError(body)) {
-					return new LiquidError(
+					return new HarborError(
 						{
 							code,
 							message,
 							data: body.data,
 							additional_errors: body.additional_errors,
 						},
-						{ cause: new LiquidError(body) }
+						{ cause: new HarborError(body) }
 					);
 				}
 			} catch {
 				// Response body wasn't JSON, fall through.
 			}
 
-			return new LiquidError({ code, message });
+			return new HarborError({ code, message });
 		}
 
-		return LiquidError.wrapSync(error, code, message);
+		return HarborError.wrapSync(error, code, message);
 	}
 
 	/**
-	 * Synchronous wrap of an unknown caught value into an LiquidError
+	 * Synchronous wrap of an unknown caught value into an HarborError
 	 * with context.
 	 *
 	 * Same as `wrap` but cannot handle `Response` objects. Use this in
 	 * synchronous code paths where `await` is not available.
 	 */
-	static wrapSync(error: unknown, code: ErrorCode, message: string): LiquidError {
-		if (error instanceof LiquidError || error instanceof Error) {
-			return new LiquidError({ code, message }, { cause: error });
+	static wrapSync(error: unknown, code: ErrorCode, message: string): HarborError {
+		if (error instanceof HarborError || error instanceof Error) {
+			return new HarborError({ code, message }, { cause: error });
 		}
 
 		if (isWpRestError(error)) {
-			return new LiquidError(
+			return new HarborError(
 				{
 					code,
 					message,
 					data: error.data,
 					additional_errors: error.additional_errors,
 				},
-				{ cause: new LiquidError(error) }
+				{ cause: new HarborError(error) }
 			);
 		}
 
-		return new LiquidError({ code, message });
+		return new HarborError({ code, message });
 	}
 }

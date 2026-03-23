@@ -1257,7 +1257,7 @@ function LicenseKeyInput({
   } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_8__.useToast)();
 
   // TODO: Refactor error display to use an error modal instead of inline
-  // text. The modal will show safe, user-facing messages from the LiquidError
+  // text. The modal will show safe, user-facing messages from the HarborError
   // chain.
 
   const {
@@ -1281,7 +1281,7 @@ function LicenseKeyInput({
     }
     setLocalError(null);
     const result = await storeLicense(trimmedKey);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.LiquidError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError) {
       addToast(result.message, 'error');
     } else {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License activated successfully.', '%TEXTDOMAIN%'), 'success');
@@ -1705,7 +1705,7 @@ function LicensePanel() {
   const upsellProducts = _data_products__WEBPACK_IMPORTED_MODULE_6__.PRODUCTS.filter(p => !licensedSlugs.has(p.slug));
   const handleRemove = async () => {
     const result = await deleteLicense();
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.LiquidError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.HarborError) {
       addToast(result.message, 'error');
     } else {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License removed.', '%TEXTDOMAIN%'), 'default');
@@ -3003,7 +3003,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   ErrorCode: () => (/* binding */ ErrorCode)
 /* harmony export */ });
 /**
- * Machine-readable error codes for LiquidError instances.
+ * Machine-readable error codes for HarborError instances.
  *
  * @package LiquidWeb\Harbor
  */
@@ -3025,47 +3025,26 @@ let ErrorCode = /*#__PURE__*/function (ErrorCode) {
 
 /***/ },
 
-/***/ "./resources/js/errors/index.ts"
-/*!**************************************!*\
-  !*** ./resources/js/errors/index.ts ***!
-  \**************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ErrorCode: () => (/* reexport safe */ _error_code__WEBPACK_IMPORTED_MODULE_1__.ErrorCode),
-/* harmony export */   LiquidError: () => (/* reexport safe */ _liquid_error__WEBPACK_IMPORTED_MODULE_0__["default"]),
-/* harmony export */   isWpRestError: () => (/* reexport safe */ _utils__WEBPACK_IMPORTED_MODULE_2__.isWpRestError)
-/* harmony export */ });
-/* harmony import */ var _liquid_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./liquid-error */ "./resources/js/errors/liquid-error.ts");
-/* harmony import */ var _error_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./error-code */ "./resources/js/errors/error-code.ts");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./resources/js/errors/utils.ts");
-
-
-
-
-/***/ },
-
-/***/ "./resources/js/errors/liquid-error.ts"
+/***/ "./resources/js/errors/harbor-error.ts"
 /*!*********************************************!*\
-  !*** ./resources/js/errors/liquid-error.ts ***!
+  !*** ./resources/js/errors/harbor-error.ts ***!
   \*********************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ LiquidError)
+/* harmony export */   "default": () => (/* binding */ HarborError)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./resources/js/errors/utils.ts");
 /**
- * LiquidError -- typed wrapper around the WP REST API serialized WP_Error.
+ * HarborError -- typed wrapper around the WP REST API serialized WP_Error.
  *
  * @wordpress/api-fetch throws the parsed JSON body (a plain object) when
- * the server returns a non-2xx response. LiquidError normalizes that into
+ * the server returns a non-2xx response. HarborError normalizes that into
  * a proper Error subclass with structured access to code, data, and any
  * additional errors.
  *
- * The entire error chain is typed. `additionalErrors` contains LiquidError
+ * The entire error chain is typed. `additionalErrors` contains HarborError
  * instances (not plain WpRestError objects), so consumers get `.code`,
  * `.status`, and `.data` on every entry without casting.
  *
@@ -3073,7 +3052,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-class LiquidError extends Error {
+class HarborError extends Error {
   /**
    * Machine-readable error code from the WP_Error.
    */
@@ -3084,7 +3063,7 @@ class LiquidError extends Error {
 
   /**
    * Secondary errors from a multi-code WP_Error response. This is a
-   * deserialization concern only. Use `cause` (via `LiquidError.wrap()`)
+   * deserialization concern only. Use `cause` (via `HarborError.wrap()`)
    * to chain errors on the frontend.
    */
 
@@ -3095,17 +3074,17 @@ class LiquidError extends Error {
   constructor(codeOrError, messageOrOptions, options) {
     if (typeof codeOrError === 'string') {
       super(messageOrOptions);
-      this.name = 'LiquidError';
+      this.name = 'HarborError';
       this.code = codeOrError;
       this.data = {};
       this.additionalErrors = [];
       this.cause = options?.cause;
     } else {
       super(codeOrError.message);
-      this.name = 'LiquidError';
+      this.name = 'HarborError';
       this.code = codeOrError.code;
       this.data = codeOrError.data ?? {};
-      this.additionalErrors = (codeOrError.additional_errors ?? []).map(entry => new LiquidError(entry));
+      this.additionalErrors = (codeOrError.additional_errors ?? []).map(entry => new HarborError(entry));
       this.cause = messageOrOptions?.cause;
     }
   }
@@ -3126,14 +3105,14 @@ class LiquidError extends Error {
     for (const additional of this.additionalErrors) {
       result.push(...additional.toArray());
     }
-    if (this.cause instanceof LiquidError) {
+    if (this.cause instanceof HarborError) {
       result.push(...this.cause.toArray());
     }
     return result;
   }
 
   /**
-   * Async conversion of an unknown value into an LiquidError.
+   * Async conversion of an unknown value into an HarborError.
    *
    * Handles everything `syncFrom` does, plus `Response` objects that
    * apiFetch throws when it cannot parse JSON or when `parse: false`
@@ -3144,47 +3123,47 @@ class LiquidError extends Error {
       try {
         const body = await error.json();
         if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(body)) {
-          return new LiquidError(body);
+          return new HarborError(body);
         }
       } catch {
         // Response body wasn't JSON, fall through.
       }
-      return new LiquidError(code, message);
+      return new HarborError(code, message);
     }
-    return LiquidError.syncFrom(error, code, message);
+    return HarborError.syncFrom(error, code, message);
   }
 
   /**
-   * Synchronous conversion of an unknown value into an LiquidError.
+   * Synchronous conversion of an unknown value into an HarborError.
    *
-   * If the value is already an LiquidError, returns it as-is. If it is
+   * If the value is already an HarborError, returns it as-is. If it is
    * a WpRestError, hydrates it via the constructor. Anything else
-   * (plain Error, string, etc.) produces an LiquidError with the given
+   * (plain Error, string, etc.) produces an HarborError with the given
    * fallback `code` and `message`, and the original is stored as `cause`.
    */
   static syncFrom(error, code, message) {
-    if (error instanceof LiquidError) {
+    if (error instanceof HarborError) {
       return error;
     }
     if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(error)) {
-      return new LiquidError(error);
+      return new HarborError(error);
     }
     if (error instanceof Error) {
-      return new LiquidError({
+      return new HarborError({
         code,
         message
       }, {
         cause: error
       });
     }
-    return new LiquidError({
+    return new HarborError({
       code,
       message
     });
   }
 
   /**
-   * Async wrap of an unknown caught value into an LiquidError with context.
+   * Async wrap of an unknown caught value into an HarborError with context.
    *
    * The provided `code` and `message` describe what operation failed.
    * The original value is preserved as `cause` so the full error chain
@@ -3199,36 +3178,36 @@ class LiquidError extends Error {
       try {
         const body = await error.json();
         if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(body)) {
-          return new LiquidError({
+          return new HarborError({
             code,
             message,
             data: body.data,
             additional_errors: body.additional_errors
           }, {
-            cause: new LiquidError(body)
+            cause: new HarborError(body)
           });
         }
       } catch {
         // Response body wasn't JSON, fall through.
       }
-      return new LiquidError({
+      return new HarborError({
         code,
         message
       });
     }
-    return LiquidError.wrapSync(error, code, message);
+    return HarborError.wrapSync(error, code, message);
   }
 
   /**
-   * Synchronous wrap of an unknown caught value into an LiquidError
+   * Synchronous wrap of an unknown caught value into an HarborError
    * with context.
    *
    * Same as `wrap` but cannot handle `Response` objects. Use this in
    * synchronous code paths where `await` is not available.
    */
   static wrapSync(error, code, message) {
-    if (error instanceof LiquidError || error instanceof Error) {
-      return new LiquidError({
+    if (error instanceof HarborError || error instanceof Error) {
+      return new HarborError({
         code,
         message
       }, {
@@ -3236,21 +3215,42 @@ class LiquidError extends Error {
       });
     }
     if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(error)) {
-      return new LiquidError({
+      return new HarborError({
         code,
         message,
         data: error.data,
         additional_errors: error.additional_errors
       }, {
-        cause: new LiquidError(error)
+        cause: new HarborError(error)
       });
     }
-    return new LiquidError({
+    return new HarborError({
       code,
       message
     });
   }
 }
+
+/***/ },
+
+/***/ "./resources/js/errors/index.ts"
+/*!**************************************!*\
+  !*** ./resources/js/errors/index.ts ***!
+  \**************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ErrorCode: () => (/* reexport safe */ _error_code__WEBPACK_IMPORTED_MODULE_1__.ErrorCode),
+/* harmony export */   HarborError: () => (/* reexport safe */ _harbor_error__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   isWpRestError: () => (/* reexport safe */ _utils__WEBPACK_IMPORTED_MODULE_2__.isWpRestError)
+/* harmony export */ });
+/* harmony import */ var _harbor_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./harbor-error */ "./resources/js/errors/harbor-error.ts");
+/* harmony import */ var _error_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./error-code */ "./resources/js/errors/error-code.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./resources/js/errors/utils.ts");
+
+
+
 
 /***/ },
 
@@ -3310,7 +3310,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _use_resolvable_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
-/* harmony import */ var _errors_liquid_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors/liquid-error */ "./resources/js/errors/liquid-error.ts");
+/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
 /* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
 /**
  * Wrapper around useResolvableSelect that throws resolution errors
@@ -3331,13 +3331,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Find the first error among a set of resolvable results and wrap it
- * as an LiquidError.
+ * as an HarborError.
  */
 function findError(results) {
   for (const key in results) {
     const entry = results[key];
     if (entry.status === 'ERROR') {
-      return _errors_liquid_error__WEBPACK_IMPORTED_MODULE_2__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_3__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%'));
+      return _errors_harbor_error__WEBPACK_IMPORTED_MODULE_2__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_3__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%'));
     }
   }
   return null;
@@ -3349,9 +3349,9 @@ function findError(results) {
  *
  * The consumer callback must return a flat object of resolvable results.
  *
- * @throws {LiquidError} When any selector's resolution fails. If the resolver
- *   threw an LiquidError, that exact instance is re-thrown. Otherwise a new
- *   LiquidError with code {@link ErrorCode.ResolutionFailed} is created.
+ * @throws {HarborError} When any selector's resolution fails. If the resolver
+ *   threw an HarborError, that exact instance is re-thrown. Otherwise a new
+ *   HarborError with code {@link ErrorCode.ResolutionFailed} is created.
  *
  * @example
  * ```ts
@@ -3533,7 +3533,7 @@ function useFeatureRow(feature) {
     setPendingAction(checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling');
     if (checked) {
       const result = await enableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.HarborError) {
         addToast(result.message, 'error');
       } else {
         /* translators: %s is the name of the feature being enabled */
@@ -3541,7 +3541,7 @@ function useFeatureRow(feature) {
       }
     } else {
       const result = await disableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.HarborError) {
         addToast(result.message, 'error');
       } else {
         /* translators: %s is the name of the feature being disabled */
@@ -3553,7 +3553,7 @@ function useFeatureRow(feature) {
   const handleUpdate = async () => {
     setPendingAction('updating');
     const result = await updateFeature(feature.slug);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.HarborError) {
       addToast(result.message, 'error');
     } else {
       /* translators: %s is the name of the feature being updated */
@@ -3877,7 +3877,7 @@ const enableFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to enable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to enable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -3911,7 +3911,7 @@ const disableFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to disable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to disable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -3945,7 +3945,7 @@ const updateFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to update your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to update your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'UPDATE_FEATURE_FAILED',
       slug,
@@ -3967,7 +3967,7 @@ const storeLicense = key => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'STORE_LICENSE_START'
@@ -3987,7 +3987,7 @@ const storeLicense = key => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'STORE_LICENSE_FAILED',
       error
@@ -4007,7 +4007,7 @@ const validateProduct = productSlug => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'VALIDATE_PRODUCT_START'
@@ -4027,7 +4027,7 @@ const validateProduct = productSlug => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'VALIDATE_PRODUCT_FAILED',
       error
@@ -4047,7 +4047,7 @@ const deleteLicense = () => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'DELETE_LICENSE_START'
@@ -4063,7 +4063,7 @@ const deleteLicense = () => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to remove your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to remove your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'DELETE_LICENSE_FAILED',
       error
@@ -4089,7 +4089,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
-const STORE_NAME = 'lw';
+const STORE_NAME = 'lw/harbor';
 
 /***/ },
 
@@ -4490,7 +4490,7 @@ const getFeatures = () => async ({
     });
     dispatch.receiveFeatures(features);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%'));
   }
 };
 const getFeaturesByProduct = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getFeatures');
@@ -4513,7 +4513,7 @@ const getLegacyLicenses = () => async ({
     });
     dispatch.receiveLegacyLicenses(licenses);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%'));
   }
 };
 const getLegacyLicenseBySlug = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getLegacyLicenses');
@@ -4537,7 +4537,7 @@ const getCatalog = () => async ({
     });
     dispatch.receiveCatalog(catalogs);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%'));
   }
 };
 const getProductCatalog = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
@@ -4561,7 +4561,7 @@ const getLicenseKey = () => async ({
     });
     dispatch.receiveLicense(result);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%'));
   }
 };
 const hasLicense = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolver)('getLicenseKey');

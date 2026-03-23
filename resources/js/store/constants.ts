@@ -3,4 +3,4 @@
  *
  * @package LiquidWeb\Harbor
  */
-export const STORE_NAME = 'lw' as const;
+export const STORE_NAME = 'lw/harbor' as const;

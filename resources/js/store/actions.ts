@@ -6,7 +6,7 @@
 
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { LiquidError, ErrorCode } from '@/errors';
+import { HarborError, ErrorCode } from '@/errors';
 import type { Feature, LegacyLicense, License, ProductCatalog } from '@/types/api';
 import type { Action, Thunk } from './types';
 
@@ -45,7 +45,7 @@ export const receiveLegacyLicenses = (licenses: LegacyLicense[]): Action => ({
  * @since 1.0.0
  */
 export const enableFeature =
-	(slug: string): Thunk<LiquidError | null> =>
+	(slug: string): Thunk<HarborError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
@@ -56,7 +56,7 @@ export const enableFeature =
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.FeatureEnableFailed,
 				__(
@@ -76,7 +76,7 @@ export const enableFeature =
  * @since 1.0.0
  */
 export const disableFeature =
-	(slug: string): Thunk<LiquidError | null> =>
+	(slug: string): Thunk<HarborError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
@@ -87,7 +87,7 @@ export const disableFeature =
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.FeatureDisableFailed,
 				__(
@@ -107,7 +107,7 @@ export const disableFeature =
  * @since 1.0.0
  */
 export const updateFeature =
-	(slug: string): Thunk<LiquidError | null> =>
+	(slug: string): Thunk<HarborError | null> =>
 	async ({ dispatch }) => {
 		dispatch({ type: 'UPDATE_FEATURE_START', slug });
 		try {
@@ -118,7 +118,7 @@ export const updateFeature =
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.FeatureUpdateFailed,
 				__(
@@ -139,10 +139,10 @@ export const updateFeature =
  * @since 1.0.0
  */
 export const storeLicense =
-	(key: string): Thunk<LiquidError | null> =>
+	(key: string): Thunk<HarborError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new LiquidError(
+			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to activate your license, another action is in progress.',
@@ -164,7 +164,7 @@ export const storeLicense =
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.LicenseStoreFailed,
 				__(
@@ -184,10 +184,10 @@ export const storeLicense =
  * @since 1.0.0
  */
 export const validateProduct =
-	(productSlug: string): Thunk<LiquidError | null> =>
+	(productSlug: string): Thunk<HarborError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new LiquidError(
+			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to validate your product, another action is in progress.',
@@ -209,7 +209,7 @@ export const validateProduct =
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.LicenseValidateFailed,
 				__(
@@ -229,10 +229,10 @@ export const validateProduct =
  * @since 1.0.0
  */
 export const deleteLicense =
-	(): Thunk<LiquidError | null> =>
+	(): Thunk<HarborError | null> =>
 	async ({ dispatch, select }) => {
 		if (!select.canModifyLicense()) {
-			return new LiquidError(
+			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
 					'Liquid Web Software failed to delete your license, another action is in progress.',
@@ -250,7 +250,7 @@ export const deleteLicense =
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
-			const error = await LiquidError.wrap(
+			const error = await HarborError.wrap(
 				err,
 				ErrorCode.LicenseDeleteFailed,
 				__(

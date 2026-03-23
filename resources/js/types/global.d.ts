@@ -1,7 +1,7 @@
-import type { LiquidData } from './liquid-data';
+import type { HarborData } from './harbor-data';
 
 declare global {
     interface Window {
-        uplinkData?: LiquidData;
+        uplinkData?: HarborData;
     }
 }
