@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Repositories;
+namespace LiquidWeb\Harbor\Tests\Licensing\Repositories;
 
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Fixture_Client as Catalog_Fixture;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client as Licensing_Fixture;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Product_Collection;
-use StellarWP\Uplink\Licensing\Registry\Product_Registry;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Product_Collection;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * Integration tests verifying that changing the unified license key
@@ -18,7 +18,7 @@ use StellarWP\Uplink\Tests\UplinkTestCase;
  *
  * @since 3.0.0
  */
-final class License_Key_Cache_InvalidationTest extends UplinkTestCase {
+final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 
 	private License_Repository $license_repository;
 	private License_Manager $license_manager;

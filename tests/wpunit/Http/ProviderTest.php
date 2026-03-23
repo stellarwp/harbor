@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Http;
+namespace LiquidWeb\Harbor\Tests\Http;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use Symfony\Component\HttpClient\Psr18Client;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	public function test_it_registers_request_factory(): void {
 		$this->assertInstanceOf(

@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog\Results;
+namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use StellarWP\Uplink\Catalog\Results\Catalog_Feature;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Catalog_FeatureTest extends UplinkTestCase {
+final class Catalog_FeatureTest extends HarborTestCase {
 
 	private array $plugin_data = [
 		'feature_slug'      => 'kadence-security',

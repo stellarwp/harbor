@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog;
+namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Catalog_CollectionTest extends UplinkTestCase {
+final class Catalog_CollectionTest extends HarborTestCase {
 
 	public function test_it_adds_and_gets_catalogs(): void {
 		$collection = new Catalog_Collection();

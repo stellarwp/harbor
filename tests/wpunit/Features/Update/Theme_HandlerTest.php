@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Update;
+namespace LiquidWeb\Harbor\Tests\Features\Update;
 
-use StellarWP\Uplink\Features\Update\Resolve_Update_Data;
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Types\Theme;
-use StellarWP\Uplink\Features\Update\Theme_Handler;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Update\Resolve_Update_Data;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Features\Update\Theme_Handler;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use stdClass;
 use WP_Error;
 
-final class Theme_HandlerTest extends UplinkTestCase {
+final class Theme_HandlerTest extends HarborTestCase {
 
 	/**
 	 * The handler under test.

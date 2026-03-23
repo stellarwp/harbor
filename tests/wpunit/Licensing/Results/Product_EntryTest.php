@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Results;
+namespace LiquidWeb\Harbor\Tests\Licensing\Results;
 
 use DateTimeImmutable;
-use StellarWP\Uplink\Licensing\Results\Product_Entry;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Product_EntryTest extends UplinkTestCase {
+final class Product_EntryTest extends HarborTestCase {
 
 	private array $valid_data = [
 		'product_slug'      => 'kadence',

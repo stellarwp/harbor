@@ -1,16 +1,16 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing;
+namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use StellarWP\Uplink\Licensing\Error_Code;
-use StellarWP\Uplink\Licensing\Enums\Validation_Status;
-use StellarWP\Uplink\Licensing\Clients\Fixture_Client;
-use StellarWP\Uplink\Licensing\Results\Product_Entry;
-use StellarWP\Uplink\Licensing\Results\Validation_Result;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Error_Code;
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
+use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class Fixture_ClientTest extends UplinkTestCase {
+final class Fixture_ClientTest extends HarborTestCase {
 
 	private Fixture_Client $client;
 

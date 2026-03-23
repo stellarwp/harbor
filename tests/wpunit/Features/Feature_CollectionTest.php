@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
 use ArrayIterator;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Types\Feature;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Feature_CollectionTest extends UplinkTestCase {
+final class Feature_CollectionTest extends HarborTestCase {
 
 	/**
 	 * Tests that features can be added and retrieved by slug.

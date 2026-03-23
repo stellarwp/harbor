@@ -1,17 +1,17 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\CLI\Commands;
+namespace LiquidWeb\Harbor\Tests\CLI\Commands;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Results\Catalog_Feature;
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Catalog\Results\Tier_Collection;
-use StellarWP\Uplink\CLI\Commands\Catalog as Catalog_Command;
-use StellarWP\Uplink\Tests\CLI\Spy_Logger;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\CLI\Commands\Catalog as Catalog_Command;
+use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
 use WP_Error;
 
@@ -20,7 +20,7 @@ use WP_Error;
  *
  * @since 3.0.0
  */
-final class CatalogTest extends UplinkTestCase {
+final class CatalogTest extends HarborTestCase {
 
 	use With_Uopz;
 

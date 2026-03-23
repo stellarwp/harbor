@@ -1,11 +1,11 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Strategy;
+namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Strategy\Plugin_Strategy;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Strategy\Plugin_Strategy;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 use WP_Upgrader;
 
@@ -22,7 +22,7 @@ use WP_Upgrader;
  *
  * @see Plugin_Strategy
  */
-final class PluginStrategyTest extends UplinkTestCase {
+final class PluginStrategyTest extends HarborTestCase {
 
 	/**
 	 * Test plugin file path used across tests.
@@ -987,19 +987,7 @@ final class PluginStrategyTest extends UplinkTestCase {
 		try {
 			$this->mock_activate_plugin( self::PLUGIN_FILE );
 
-			// Seed the update transient.
-			set_site_transient(
-				'update_plugins',
-				(object) [
-					'response' => [
-						self::PLUGIN_FILE => (object) [
-							'slug'        => 'test-feature',
-							'new_version' => '2.0.0',
-							'package'     => 'https://example.com/test-feature-2.0.0.zip',
-						],
-					],
-				]
-			);
+			\LiquidWeb\Harbor\Tests\Updater::seedPluginUpdate( self::PLUGIN_FILE, '2.0.0' );
 
 			WP_Upgrader::create_lock( 'stellarwp_uplink_install_lock', 120 );
 
@@ -1009,7 +997,6 @@ final class PluginStrategyTest extends UplinkTestCase {
 			$this->assertSame( Error_Code::INSTALL_LOCKED, $result->get_error_code() );
 		} finally {
 			deactivate_plugins( self::PLUGIN_FILE );
-			delete_site_transient( 'update_plugins' );
 			if ( file_exists( $plugin_path ) ) {
 				unlink( $plugin_path );
 			}

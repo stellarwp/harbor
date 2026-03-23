@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features;
+namespace LiquidWeb\Harbor\Tests\Features;
 
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Manager;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Strategy\Theme_Strategy;
-use StellarWP\Uplink\Features\Types\Theme;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Manager;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
+use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	/**
 	 * Tests that the Feature_Repository is registered as a singleton in the container.

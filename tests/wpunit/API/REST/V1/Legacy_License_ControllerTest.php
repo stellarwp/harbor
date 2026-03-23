@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\API\REST\V1;
+namespace LiquidWeb\Harbor\Tests\API\REST\V1;
 
-use StellarWP\Uplink\API\REST\V1\Legacy_License_Controller;
-use StellarWP\Uplink\Legacy\License_Repository;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\API\REST\V1\Legacy_License_Controller;
+use LiquidWeb\Harbor\Legacy\License_Repository;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_REST_Request;
 use WP_REST_Server;
 
-final class Legacy_License_ControllerTest extends UplinkTestCase {
+final class Legacy_License_ControllerTest extends HarborTestCase {
 
 	use With_Uopz;
 

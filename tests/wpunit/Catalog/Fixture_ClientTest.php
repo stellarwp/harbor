@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog;
+namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Clients\Fixture_Client;
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Catalog\Results\Product_Catalog;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Fixture_ClientTest extends UplinkTestCase {
+final class Fixture_ClientTest extends HarborTestCase {
 
 	private Fixture_Client $client;
 

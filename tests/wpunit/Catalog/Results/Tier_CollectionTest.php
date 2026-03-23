@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Catalog\Results;
+namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use StellarWP\Uplink\Catalog\Results\Catalog_Tier;
-use StellarWP\Uplink\Catalog\Results\Tier_Collection;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Tier_CollectionTest extends UplinkTestCase {
+final class Tier_CollectionTest extends HarborTestCase {
 
 	public function test_it_adds_and_gets_tiers(): void {
 		$collection = new Tier_Collection();

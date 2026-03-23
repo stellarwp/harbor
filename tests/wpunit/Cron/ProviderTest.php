@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Cron;
+namespace LiquidWeb\Harbor\Tests\Cron;
 
-use StellarWP\Uplink\Catalog\Catalog_Collection;
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Catalog\Clients\Catalog_Client;
-use StellarWP\Uplink\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
-use StellarWP\Uplink\Cron\Jobs\Refresh_Catalog_Job;
-use StellarWP\Uplink\Cron\Jobs\Refresh_License_Job;
-use StellarWP\Uplink\Cron\ValueObjects\CronHook;
-use StellarWP\Uplink\Licensing\Clients\Licensing_Client;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
+use LiquidWeb\Harbor\Cron\Jobs\Refresh_Catalog_Job;
+use LiquidWeb\Harbor\Cron\Jobs\Refresh_License_Job;
+use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
+use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();

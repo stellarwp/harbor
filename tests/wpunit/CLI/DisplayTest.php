@@ -2,13 +2,13 @@
 
 namespace wpunit\CLI;
 
-use StellarWP\Uplink\CLI\Display;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\CLI\Display;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * @since 3.0.0
  */
-class DisplayTest extends UplinkTestCase {
+class DisplayTest extends HarborTestCase {
 
 	/**
 	 * @test

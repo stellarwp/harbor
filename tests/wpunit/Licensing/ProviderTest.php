@@ -1,15 +1,15 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing;
+namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use StellarWP\Uplink\Licensing\Clients\Licensing_Client;
-use StellarWP\Uplink\Licensing\Clients\Http_Client;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Registry\Product_Registry;
-use StellarWP\Uplink\Licensing\Repositories\License_Repository;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
+use LiquidWeb\Harbor\Licensing\Clients\Http_Client;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class ProviderTest extends UplinkTestCase {
+final class ProviderTest extends HarborTestCase {
 
 	public function test_it_registers_licensing_client(): void {
 		$this->assertInstanceOf(

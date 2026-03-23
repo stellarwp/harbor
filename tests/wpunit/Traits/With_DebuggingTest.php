@@ -1,10 +1,10 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Traits;
+namespace LiquidWeb\Harbor\Tests\Traits;
 
 use RuntimeException;
-use StellarWP\Uplink\Tests\UplinkTestCase;
-use StellarWP\Uplink\Traits\With_Debugging;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Traits\With_Debugging;
 use WP_Error;
 
 /**
@@ -13,7 +13,7 @@ use WP_Error;
  * Uses uopz to toggle WP_DEBUG and capture error_log() calls so we can
  * assert both the gating logic and the message format without side effects.
  */
-final class With_DebuggingTest extends UplinkTestCase {
+final class With_DebuggingTest extends HarborTestCase {
 
 	use With_Uopz;
 

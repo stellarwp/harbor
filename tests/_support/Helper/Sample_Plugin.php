@@ -1,5 +1,5 @@
 <?php
 
-namespace StellarWP\Uplink\Tests;
+namespace LiquidWeb\Harbor\Tests;
 
 class Sample_Plugin {}

@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Strategy;
+namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
 use InvalidArgumentException;
-use StellarWP\Uplink\Features\Strategy\Flag_Strategy;
-use StellarWP\Uplink\Features\Strategy\Plugin_Strategy;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Strategy\Theme_Strategy;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Features\Types\Theme;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Strategy\Flag_Strategy;
+use LiquidWeb\Harbor\Features\Strategy\Plugin_Strategy;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Strategy_FactoryTest extends UplinkTestCase {
+final class Strategy_FactoryTest extends HarborTestCase {
 
 	/**
 	 * The strategy factory under test.
@@ -90,7 +90,7 @@ final class Strategy_FactoryTest extends UplinkTestCase {
 	 * @return void
 	 */
 	public function test_it_throws_for_unknown_type(): void {
-		$feature = $this->makeEmpty( \StellarWP\Uplink\Features\Types\Feature::class, [ 'get_type' => 'unknown' ] );
+		$feature = $this->makeEmpty( \LiquidWeb\Harbor\Features\Types\Feature::class, [ 'get_type' => 'unknown' ] );
 
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'No strategy for feature type "unknown".' );

@@ -2,7 +2,7 @@
 
 namespace wpunit;
 
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * Tests for _stellarwp_uplink_instance_registry().
@@ -13,7 +13,7 @@ use StellarWP\Uplink\Tests\UplinkTestCase;
  *
  * @since 3.0.0
  */
-class InstanceRegistryTest extends UplinkTestCase {
+class InstanceRegistryTest extends HarborTestCase {
 
 	public function test_it_returns_an_array(): void {
 		// @phpstan-ignore function.internal

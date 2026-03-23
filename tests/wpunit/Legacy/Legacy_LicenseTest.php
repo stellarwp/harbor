@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Legacy;
+namespace LiquidWeb\Harbor\Tests\Legacy;
 
-use StellarWP\Uplink\Legacy\Legacy_License;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Legacy\Legacy_License;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
  * @since 3.0.0
  */
-final class Legacy_LicenseTest extends UplinkTestCase {
+final class Legacy_LicenseTest extends HarborTestCase {
 
 	/**
 	 * @since 3.0.0

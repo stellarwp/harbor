@@ -1,18 +1,18 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Licensing\Clients;
+namespace LiquidWeb\Harbor\Tests\Licensing\Clients;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use StellarWP\Uplink\Licensing\Clients\Http_Client;
-use StellarWP\Uplink\Licensing\Error_Code;
-use StellarWP\Uplink\Licensing\Results\Product_Entry;
-use StellarWP\Uplink\Licensing\Results\Validation_Result;
-use StellarWP\Uplink\Tests\Http\Mock_Client;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Licensing\Clients\Http_Client;
+use LiquidWeb\Harbor\Licensing\Error_Code;
+use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
+use LiquidWeb\Harbor\Tests\Http\Mock_Client;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
-final class Http_ClientTest extends UplinkTestCase {
+final class Http_ClientTest extends HarborTestCase {
 
 	private Mock_Client $mock;
 	private Psr17Factory $factory;

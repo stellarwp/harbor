@@ -1,24 +1,24 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\API\REST\V1;
+namespace LiquidWeb\Harbor\Tests\API\REST\V1;
 
-use StellarWP\Uplink\Features\Error_Code;
-use StellarWP\Uplink\Features\Feature_Collection;
-use StellarWP\Uplink\Features\Feature_Repository;
-use StellarWP\Uplink\Features\Contracts\Strategy;
-use StellarWP\Uplink\Features\Manager;
-use StellarWP\Uplink\API\REST\V1\Feature_Controller;
-use StellarWP\Uplink\Features\Strategy\Strategy_Factory;
-use StellarWP\Uplink\Features\Types\Feature;
-use StellarWP\Uplink\Features\Types\Flag;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Feature_Collection;
+use LiquidWeb\Harbor\Features\Feature_Repository;
+use LiquidWeb\Harbor\Features\Contracts\Strategy;
+use LiquidWeb\Harbor\Features\Manager;
+use LiquidWeb\Harbor\API\REST\V1\Feature_Controller;
+use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
+use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Server;
 
-final class Feature_ControllerTest extends UplinkTestCase {
+final class Feature_ControllerTest extends HarborTestCase {
 
 	use With_Uopz;
 

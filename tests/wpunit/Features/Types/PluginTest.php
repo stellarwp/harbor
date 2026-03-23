@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Features\Types;
+namespace LiquidWeb\Harbor\Tests\Features\Types;
 
-use StellarWP\Uplink\Features\Contracts\Installable;
-use StellarWP\Uplink\Features\Types\Plugin;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Features\Contracts\Installable;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class PluginTest extends UplinkTestCase {
+final class PluginTest extends HarborTestCase {
 
 	/**
 	 * Standard test values.

@@ -1,16 +1,16 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\CLI\Commands;
+namespace LiquidWeb\Harbor\Tests\CLI\Commands;
 
-use StellarWP\Uplink\CLI\Commands\License as License_Command;
-use StellarWP\Uplink\Legacy\License_Repository as Legacy_License_Repository;
-use StellarWP\Uplink\Licensing\License_Manager;
-use StellarWP\Uplink\Licensing\Product_Collection;
-use StellarWP\Uplink\Licensing\Results\Product_Entry;
-use StellarWP\Uplink\Site\Data;
-use StellarWP\Uplink\Tests\CLI\Spy_Logger;
-use StellarWP\Uplink\Tests\Traits\With_Uopz;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\CLI\Commands\License as License_Command;
+use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Product_Collection;
+use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
 use WP_Error;
 
@@ -19,7 +19,7 @@ use WP_Error;
  *
  * @since 3.0.0
  */
-final class LicenseTest extends UplinkTestCase {
+final class LicenseTest extends HarborTestCase {
 
 	use With_Uopz;
 
@@ -271,7 +271,7 @@ final class LicenseTest extends UplinkTestCase {
 			License_Manager::class,
 			[
 				'validate_product' => $this->makeEmpty(
-					\StellarWP\Uplink\Licensing\Results\Validation_Result::class,
+					\LiquidWeb\Harbor\Licensing\Results\Validation_Result::class,
 					[ 'is_valid' => true ]
 				),
 			]

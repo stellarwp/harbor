@@ -1,12 +1,12 @@
 <?php declare( strict_types=1 );
 
-namespace StellarWP\Uplink\Tests\Cron\Jobs;
+namespace LiquidWeb\Harbor\Tests\Cron\Jobs;
 
-use StellarWP\Uplink\Catalog\Catalog_Repository;
-use StellarWP\Uplink\Cron\Jobs\Refresh_Catalog_Job;
-use StellarWP\Uplink\Tests\UplinkTestCase;
+use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Cron\Jobs\Refresh_Catalog_Job;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Refresh_Catalog_JobTest extends UplinkTestCase {
+final class Refresh_Catalog_JobTest extends HarborTestCase {
 
 	public function test_run_calls_catalog_refresh(): void {
 		$called = false;

@@ -1,6 +1,6 @@
 <?php
 
-namespace StellarWP\Uplink\Tests\Traits;
+namespace LiquidWeb\Harbor\Tests\Traits;
 
 use PHPUnit\Framework\Assert;
 
