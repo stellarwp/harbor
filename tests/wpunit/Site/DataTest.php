@@ -14,46 +14,15 @@ class DataTest extends HarborTestCase {
 	}
 
 	/**
-	 * It should collect base stats.
+	 * It should return the site domain.
 	 *
 	 * @test
 	 */
-	public function it_should_collect_base_stats() {
-		global $wp_version;
+	public function it_should_return_the_site_domain() {
+		$data   = $this->container->make( Harbor\Site\Data::class );
+		$domain = $data->get_domain();
 
-		$data  = $this->container->make( Harbor\Site\Data::class );
-		$stats = $data->get_stats();
-
-		$this->assertArrayHasKey( 'versions', $stats );
-		$this->assertArrayHasKey( 'wp', $stats['versions'] );
-		$this->assertArrayHasKey( 'multisite', $stats['network'] );
-		$this->assertArrayHasKey( 'network_activated', $stats['network'] );
-		$this->assertArrayHasKey( 'active_sites', $stats['network'] );
-		$this->assertArrayNotHasKey( 'totals', $stats );
-
-		$this->assertEquals( $wp_version, $stats['versions']['wp'] );
-	}
-
-	/**
-	 * It should collect full stats.
-	 *
-	 * @test
-	 */
-	public function it_should_collect_full_stats() {
-		add_filter( 'lw-harbor/test/use_full_stats', '__return_true' );
-
-		$data  = $this->container->make( Harbor\Site\Data::class );
-		$stats = $data->get_stats();
-
-		$this->assertArrayHasKey( 'versions', $stats );
-		$this->assertArrayHasKey( 'wp', $stats['versions'] );
-		$this->assertArrayHasKey( 'multisite', $stats['network'] );
-		$this->assertArrayHasKey( 'network_activated', $stats['network'] );
-		$this->assertArrayHasKey( 'active_sites', $stats['network'] );
-		$this->assertArrayHasKey( 'totals', $stats );
-
-		$this->assertEquals( phpversion(), $stats['versions']['php'] );
-
-		remove_filter( 'lw-harbor/test/use_full_stats', '__return_true' );
+		$this->assertIsString( $domain );
+		$this->assertNotEmpty( $domain );
 	}
 }

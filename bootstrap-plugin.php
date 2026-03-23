@@ -17,7 +17,6 @@ add_action(
 		$container = new Container();
 		$container->singleton( ContainerInterface::class, $container );
 		Config::set_container( $container );
-		Config::set_hook_prefix( 'test' );
 		Harbor::init();
 	},
 	0
