@@ -1585,7 +1585,7 @@ function VersionDisplay({
   installableBusy = false,
   onUpdate
 }) {
-  if (feature.has_update) {
+  if (feature.update_version) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       className: "flex items-center gap-1.5",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
@@ -1596,7 +1596,7 @@ function VersionDisplay({
         children: "\u2192"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
         className: "text-xs font-mono font-bold",
-        children: ["v", feature.version]
+        children: ["v", feature.update_version]
       }), (upgradeLabel || onUpdate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_components_atoms_UpdateButton__WEBPACK_IMPORTED_MODULE_0__.UpdateButton, {
         featureName: feature.name,
         disabled: !!pendingAction || installableBusy,
@@ -1605,12 +1605,12 @@ function VersionDisplay({
       })]
     });
   }
-  if (!feature.version && !feature.installed_version) {
+  if (!feature.installed_version) {
     return null;
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
     className: "text-xs font-mono text-muted-foreground text-right",
-    children: `v${feature.installed_version ?? feature.version}`
+    children: `v${feature.installed_version}`
   });
 }
 
@@ -3525,7 +3525,7 @@ function useFeatureRow(feature) {
     disableFeature,
     updateFeature
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
-  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => feature.type !== 'flag' && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
+  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), []);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const featureEnabled = feature.is_enabled;
   const featureInstalled = feature.installed_version !== null;
@@ -4625,11 +4625,10 @@ const getFeatureError = (state, slug) => state.features.errorBySlug[slug] ?? nul
 const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? false;
 
 /**
- * True when any plugin or theme feature is being toggled or updated.
+ * True when any feature is being toggled or updated.
  *
- * Both toggle and update operations trigger WordPress install/activate/deactivate
- * operations that should not run concurrently. Flag features are exempt
- * because they only flip a database option.
+ * Toggle and update operations trigger WordPress install/activate/deactivate
+ * operations that should not run concurrently.
  *
  * Memoized via createSelector so the loops only re-run when
  * the relevant sub-trees actually change.
@@ -4637,15 +4636,10 @@ const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? fals
 const isAnyInstallableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => {
   const {
     toggling,
-    updating,
-    bySlug
+    updating
   } = state.features;
-  const isNonFlag = slug => {
-    const feature = bySlug[slug];
-    return feature !== undefined && feature.type !== 'flag';
-  };
-  return Object.keys(toggling).some(isNonFlag) || Object.keys(updating).some(isNonFlag);
-}, state => [state.features.toggling, state.features.updating, state.features.bySlug]);
+  return Object.keys(toggling).length > 0 || Object.keys(updating).length > 0;
+}, state => [state.features.toggling, state.features.updating]);
 
 // ---------------------------------------------------------------------------
 // Legacy licenses
