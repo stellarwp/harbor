@@ -23,12 +23,18 @@ final class ProviderTest extends HarborTestCase {
 		remove_all_actions( 'deactivated_plugin' );
 		remove_all_actions( 'switch_theme' );
 
-		add_action( 'deactivated_plugin', function () {
-			$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
-		} );
-		add_action( 'switch_theme', function () {
-			$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
-		} );
+		add_action(
+			'deactivated_plugin',
+			function () {
+				$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
+			}
+		);
+		add_action(
+			'switch_theme',
+			function () {
+				$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
+			}
+		);
 
 		wp_clear_scheduled_hook( CronHook::DATA_REFRESH );
 
