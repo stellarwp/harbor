@@ -23,7 +23,7 @@ modules:
             theme: twentytwentythree
             multisite: false
             plugins:
-                - license-manager/bootstrap-plugin.php
+                - harbor/bootstrap-plugin.php
 
 env:
   # nothing changes

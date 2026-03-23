@@ -90,7 +90,7 @@ jobs:
 
       - name: Set up LiquidWeb Harbor (Sets PHP version for containers)
         run: |
-          ${SLIC_BIN} use license-manager
+          ${SLIC_BIN} use harbor
           ${SLIC_BIN} composer set-version 2
           ${SLIC_BIN} composer validate
           ${SLIC_BIN} composer install
