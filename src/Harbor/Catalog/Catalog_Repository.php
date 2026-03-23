@@ -4,6 +4,7 @@ namespace LiquidWeb\Harbor\Catalog;
 
 use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
 use LiquidWeb\Harbor\Traits\With_Debugging;
+use LiquidWeb\Harbor\Traits\With_Error_Throttle;
 use WP_Error;
 
 /**
@@ -13,7 +14,7 @@ use WP_Error;
  * exposes the client directly.
  *
  * Any call that would hit the remote API first checks whether a recent
- * failure is within the ERROR_THROTTLE_TTL window. When throttled, the
+ * failure is within the error throttle TTL window. When throttled, the
  * cached WP_Error is returned immediately without hitting the upstream
  * service. The throttle resets automatically on the next successful fetch.
  *
@@ -22,19 +23,7 @@ use WP_Error;
 class Catalog_Repository {
 
 	use With_Debugging;
-
-	/**
-	 * How long (in seconds) to suppress outbound API calls after a failure.
-	 *
-	 * When a remote API call fails, subsequent calls that would hit the API
-	 * again are short-circuited and return the cached error until this window
-	 * expires. This prevents hammering a degraded upstream service.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var int
-	 */
-	const ERROR_THROTTLE_TTL = 60;
+	use With_Error_Throttle;
 
 	/**
 	 * Option name for the catalog state envelope.
@@ -285,31 +274,6 @@ class Catalog_Repository {
 	 */
 	public function get_last_error(): ?WP_Error {
 		$error = $this->read_catalog_state()[ self::STATE_KEY_LAST_ERROR ];
-
-		return $error instanceof WP_Error ? $error : null;
-	}
-
-	/**
-	 * Returns the cached WP_Error if a recent API failure is within the
-	 * ERROR_THROTTLE_TTL window, or null if the call should proceed.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return WP_Error|null
-	 */
-	private function get_throttled_error(): ?WP_Error {
-		$state      = $this->read_catalog_state();
-		$failure_at = $state[ self::STATE_KEY_LAST_FAILURE_AT ];
-
-		if ( ! is_int( $failure_at ) ) {
-			return null;
-		}
-
-		if ( ( time() - $failure_at ) > self::ERROR_THROTTLE_TTL ) {
-			return null;
-		}
-
-		$error = $state[ self::STATE_KEY_LAST_ERROR ];
 
 		return $error instanceof WP_Error ? $error : null;
 	}

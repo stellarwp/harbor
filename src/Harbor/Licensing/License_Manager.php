@@ -9,6 +9,7 @@ use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
 use LiquidWeb\Harbor\Traits\With_Debugging;
+use LiquidWeb\Harbor\Traits\With_Error_Throttle;
 use WP_Error;
 
 /**
@@ -25,7 +26,7 @@ use WP_Error;
  *      auto-stored for subsequent requests.
  *
  * Any method that would call the remote API first checks whether a recent
- * failure is within the ERROR_THROTTLE_TTL window. When throttled, the
+ * failure is within the error throttle TTL window. When throttled, the
  * cached WP_Error is returned immediately without hitting the upstream
  * service. The throttle resets automatically on the next successful call.
  *
@@ -34,19 +35,7 @@ use WP_Error;
 class License_Manager {
 
 	use With_Debugging;
-
-	/**
-	 * How long (in seconds) to suppress outbound API calls after a failure.
-	 *
-	 * When a remote API call fails, subsequent calls that would hit the API
-	 * again are short-circuited and return the cached error until this window
-	 * expires. This prevents hammering a degraded upstream service.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var int
-	 */
-	const ERROR_THROTTLE_TTL = 60;
+	use With_Error_Throttle;
 
 	/**
 	 * @since 1.0.0
@@ -488,28 +477,6 @@ class License_Manager {
 	 * @return WP_Error|null
 	 */
 	public function get_last_error(): ?WP_Error {
-		return $this->repository->get_products_last_error();
-	}
-
-	/**
-	 * Returns the cached WP_Error if a recent API failure is within the
-	 * ERROR_THROTTLE_TTL window, or null if the call should proceed.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return WP_Error|null
-	 */
-	private function get_throttled_error(): ?WP_Error {
-		$failure_at = $this->repository->get_products_last_failure_at();
-
-		if ( $failure_at === null ) {
-			return null;
-		}
-
-		if ( ( time() - $failure_at ) > self::ERROR_THROTTLE_TTL ) {
-			return null;
-		}
-
 		return $this->repository->get_products_last_error();
 	}
 
