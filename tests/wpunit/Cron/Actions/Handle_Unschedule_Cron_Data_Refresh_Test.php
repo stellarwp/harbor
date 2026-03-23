@@ -11,14 +11,14 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 /**
  * Tests the Handle_Unschedule_Cron_Data_Refresh action.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 
 	/**
 	 * Test that the action does not unschedule when no catalog is cached (e.g. never fetched or error).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -39,7 +39,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Test that the action does not unschedule when the catalog has no installable features.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -60,7 +60,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Test that the action does not unschedule when the catalog plugin is active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -82,7 +82,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Test that the action unschedules when all catalog plugins are inactive.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -104,7 +104,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Test that the action does not unschedule when the catalog theme is active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -127,7 +127,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Test that the action unschedules when the catalog theme is not active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -148,7 +148,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Build a minimal catalog collection containing one plugin feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $plugin_file Plugin basename, e.g. 'give/give.php'.
 	 *
@@ -181,7 +181,7 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 	/**
 	 * Build a minimal catalog collection containing one theme feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $theme_slug Theme stylesheet slug, e.g. 'twentytwentyfour'.
 	 *

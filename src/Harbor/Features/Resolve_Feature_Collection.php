@@ -20,7 +20,7 @@ use WP_Error;
  * the feature's slug appears in the product entry's capabilities array.
  * When no license exists, only free-tier features (minimum tier rank 0) are available.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Resolve_Feature_Collection {
 
@@ -29,7 +29,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * The catalog repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -38,7 +38,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * The license manager.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
@@ -47,7 +47,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * The site data provider.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Data
 	 */
@@ -56,7 +56,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * Map of catalog type strings to Feature subclass names.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var array<string, class-string<Feature>>
 	 */
@@ -65,7 +65,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Repository $catalog   The catalog repository.
 	 * @param License_Manager    $licensing The license manager.
@@ -84,7 +84,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * Registers a Feature subclass for a given catalog type string.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string                $type          A Feature::TYPE_* constant (e.g. Feature::TYPE_PLUGIN).
 	 * @param class-string<Feature> $feature_class The Feature subclass FQCN.
@@ -101,7 +101,7 @@ class Resolve_Feature_Collection {
 	 * Iterates each catalog product, finds the matching license entry,
 	 * and hydrates Feature objects with computed is_available values.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Feature_Collection|WP_Error
 	 */
@@ -162,7 +162,7 @@ class Resolve_Feature_Collection {
 	 * Returns the capabilities array from the product entry when a license exists,
 	 * or null when no license is present for this product.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Catalog    $product  The catalog product.
 	 * @param Product_Collection $products The licensing product collection.
@@ -188,7 +188,7 @@ class Resolve_Feature_Collection {
 	 * When capabilities is null (no license), only free-tier features
 	 * (minimum tier rank 0) are available.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Feature $catalog_feature The catalog feature entry.
 	 * @param Product_Catalog $product         The parent catalog product.

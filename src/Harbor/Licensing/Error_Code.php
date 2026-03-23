@@ -5,14 +5,14 @@ namespace LiquidWeb\Harbor\Licensing;
 /**
  * WP_Error codes for the Licensing system.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Error_Code {
 
 	/**
 	 * The license key is not recognized.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -21,7 +21,7 @@ final class Error_Code {
 	/**
 	 * The license response could not be decoded.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -30,7 +30,7 @@ final class Error_Code {
 	/**
 	 * The requested product slug was not found in the catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -39,7 +39,7 @@ final class Error_Code {
 	/**
 	 * The license key could not be stored.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -48,7 +48,7 @@ final class Error_Code {
 	/**
 	 * The subscription has expired.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -57,7 +57,7 @@ final class Error_Code {
 	/**
 	 * The subscription is suspended.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -66,7 +66,7 @@ final class Error_Code {
 	/**
 	 * The subscription is cancelled.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -75,7 +75,7 @@ final class Error_Code {
 	/**
 	 * The license is suspended (all products affected).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -84,7 +84,7 @@ final class Error_Code {
 	/**
 	 * The license is banned (all products affected).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -93,7 +93,7 @@ final class Error_Code {
 	/**
 	 * No subscription exists for this product under the license.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -102,7 +102,7 @@ final class Error_Code {
 	/**
 	 * All activation seats are in use.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -111,7 +111,7 @@ final class Error_Code {
 	/**
 	 * An unexpected or unrecognized error occurred.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -120,7 +120,7 @@ final class Error_Code {
 	/**
 	 * Maps an error code to its recommended HTTP status code.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $code An Error_Code constant value.
 	 *

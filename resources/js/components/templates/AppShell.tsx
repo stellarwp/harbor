@@ -20,7 +20,7 @@ import { useFilter } from '@/context/filter-context';
 import { useResolvableSelectWithError } from '@/hooks/use-resolvable-select';
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function AppShell() {
     // Trigger all three resolvers and wait for completion before rendering

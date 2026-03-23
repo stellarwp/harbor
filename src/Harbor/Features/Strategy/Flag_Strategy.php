@@ -14,14 +14,14 @@ use WP_Error;
  * Option key: `lw_harbor_feature_{slug}_active`
  * Values: '1' (active) or '0' (inactive).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Flag_Strategy extends Abstract_Strategy {
 
 	/**
 	 * Build the wp_options key for the feature's stored state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -34,7 +34,7 @@ class Flag_Strategy extends Abstract_Strategy {
 	 *
 	 * Idempotent: returns true if already active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true
 	 */
@@ -51,7 +51,7 @@ class Flag_Strategy extends Abstract_Strategy {
 	/**
 	 * Flag features do not support updates.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error Always returns an error.
 	 */
@@ -71,7 +71,7 @@ class Flag_Strategy extends Abstract_Strategy {
 	 *
 	 * Idempotent: returns true if already inactive.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true
 	 */
@@ -91,7 +91,7 @@ class Flag_Strategy extends Abstract_Strategy {
 	 * The stored DB flag is the source of truth. Defaults to false if no
 	 * state has been stored yet.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */

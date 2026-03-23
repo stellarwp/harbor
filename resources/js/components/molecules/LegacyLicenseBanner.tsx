@@ -12,7 +12,7 @@ import { AlertTriangle } from 'lucide-react';
 import { store as harborStore } from '@/store';
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function LegacyLicenseBanner() {
     const hasLegacy = useSelect(

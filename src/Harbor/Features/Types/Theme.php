@@ -12,14 +12,14 @@ use LiquidWeb\Harbor\Utils\Cast;
  * The Theme_Strategy installs the theme via themes_api() + Theme_Upgrader,
  * and uses the stylesheet (directory name) to switch/detect the active theme.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Theme extends Feature implements Installable {
 
 	/**
 	 * Constructor for a Feature delivered as a WordPress theme.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $attributes The feature attributes.
 	 *
@@ -49,7 +49,7 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Creates a Theme instance from an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data from the API response.
 	 *
@@ -62,7 +62,7 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Gets the expected theme authors for ownership verification.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */
@@ -79,7 +79,7 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Whether this theme is available on WordPress.org.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -90,7 +90,7 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Whether a newer version is available and this theme is currently installed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -113,7 +113,7 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Builds the complete update data array for this Theme feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Feature $catalog_feature The catalog entry providing version and download URL.
 	 *
@@ -141,7 +141,7 @@ final class Theme extends Feature implements Installable {
 	 * Uses the feature slug as the stylesheet (directory name) to check
 	 * whether the theme exists on disk.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -157,7 +157,7 @@ final class Theme extends Feature implements Installable {
 	 * Gets the currently installed version of this theme feature.
 	 * Returns null if the theme is not installed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */

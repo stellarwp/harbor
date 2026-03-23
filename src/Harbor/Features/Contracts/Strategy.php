@@ -11,14 +11,14 @@ use WP_Error;
  * Each Strategy instance is bound to a single Feature at construction time.
  * The Strategy_Factory creates the right Strategy for each Feature.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 interface Strategy {
 
 	/**
 	 * Enables the feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -27,7 +27,7 @@ interface Strategy {
 	/**
 	 * Disables the feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -39,7 +39,7 @@ interface Strategy {
 	 * Returns a WP_Error if the feature is not installed or active,
 	 * if no update is available, or if the update fails.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -52,7 +52,7 @@ interface Strategy {
 	 * If the live state differs from any stored flag, the stored flag
 	 * should be updated to match (self-healing).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool Whether the feature is currently active.
 	 */

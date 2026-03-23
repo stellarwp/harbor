@@ -10,7 +10,7 @@ use Iterator;
 /**
  * A generic keyed collection.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @template TValue
  *
@@ -22,7 +22,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * The collection items.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var array<string, TValue>
 	 */
@@ -31,7 +31,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * The original Iterator, for memoization.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Iterator<string, TValue>|null
 	 */
@@ -40,7 +40,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Constructor for a keyed collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Iterator<string, TValue>|array<string, TValue> $items An array or iterator of items.
 	 *
@@ -56,7 +56,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return TValue|false
 	 */
@@ -68,7 +68,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Retrieves an item by key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The item key.
 	 *
@@ -79,7 +79,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array-key|null
 	 */
@@ -98,7 +98,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Checks whether an item exists at the given key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The item key.
 	 *
@@ -111,7 +111,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Retrieves an item by its key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The item key.
 	 *
@@ -125,7 +125,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Sets an item at the given key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The item key.
 	 * @param TValue $value  The item value.
@@ -139,7 +139,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Removes an item at the given key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The item key.
 	 *
@@ -152,7 +152,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Removes an item from the collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key The item key.
 	 *
@@ -186,7 +186,7 @@ class Collection implements ArrayAccess, Iterator, Countable {
 	/**
 	 * Returns a clone of the underlying iterator.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Iterator<string, TValue>
 	 */

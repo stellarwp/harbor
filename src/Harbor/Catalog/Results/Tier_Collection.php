@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Utils\Collection;
 /**
  * A collection of Catalog_Tier objects, keyed by slug.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @extends Collection<Catalog_Tier>
  */
@@ -16,7 +16,7 @@ final class Tier_Collection extends Collection {
 	/**
 	 * Adds a tier to the collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Tier $tier Tier instance.
 	 *
@@ -33,7 +33,7 @@ final class Tier_Collection extends Collection {
 	/**
 	 * Alias of offsetGet().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The tier slug.
 	 *

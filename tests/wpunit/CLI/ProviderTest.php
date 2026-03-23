@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 /**
  * Tests for the CLI Provider.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class ProviderTest extends HarborTestCase {
 

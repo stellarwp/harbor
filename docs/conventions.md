@@ -156,8 +156,8 @@ wp_enqueue_script( 'lw-harbor-notice-dismiss', ... );
 The `ErrorCode` enum values in TypeScript do not carry a prefix. They are scoped by the enum itself.
 
 ```typescript
-ErrorCode.FeaturesFetchFailed   // 'features-fetch-failed'
-ErrorCode.LicenseStoreFailed    // 'license-store-failed'
+ErrorCode.FeaturesFetchFailed; // 'features-fetch-failed'
+ErrorCode.LicenseStoreFailed; // 'license-store-failed'
 ```
 
 ### Version Tags
@@ -168,17 +168,17 @@ The library version starts at `0.0.1`. All `@since` tags for new code use `@sinc
 
 <!-- markdownlint-disable MD060 -->
 
-| Scope                   | Prefix             | Separator | Example                              |
-| ----------------------- | ------------------ | --------- | ------------------------------------ |
+| Scope                   | Prefix             | Separator | Example                             |
+| ----------------------- | ------------------ | --------- | ----------------------------------- |
 | PHP namespace           | `LiquidWeb\Harbor` | `\`       | `LiquidWeb\Harbor\Features\Manager` |
-| Hooks                   | `lw-harbor`        | `/`       | `lw-harbor/catalog/fetched`          |
-| Options/meta/cache/cron | `lw_harbor`        | `_`       | `lw_harbor_unified_license_key`      |
-| Container keys          | `lw-harbor`        | `.`       | `lw-harbor.admin-views.path`         |
-| REST namespace          | `liquidweb`        | `/`       | `liquidweb/v1/features`              |
-| Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`     |
-| WP-CLI                  | `lw`               | ` `       | `wp lw feature list`                 |
-| Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`        |
-| CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor`, `#lw-harbor-root`      |
-| Script handles          | `lw-harbor`        | `-`       | `lw-harbor-ui`                       |
+| Hooks                   | `lw-harbor`        | `/`       | `lw-harbor/catalog/fetched`         |
+| Options/meta/cache/cron | `lw_harbor`        | `_`       | `lw_harbor_unified_license_key`     |
+| Container keys          | `lw-harbor`        | `.`       | `lw-harbor.admin-views.path`        |
+| REST namespace          | `liquidweb`        | `/`       | `liquidweb/v1/features`             |
+| Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`    |
+| WP-CLI                  | `lw`               | ` `       | `wp lw feature list`                |
+| Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`       |
+| CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor`, `#lw-harbor-root`     |
+| Script handles          | `lw-harbor`        | `-`       | `lw-harbor-ui`                      |
 
 <!-- markdownlint-enable MD060 -->

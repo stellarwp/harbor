@@ -24,7 +24,7 @@ use WP_Error;
  * feature type constant, and the handler is responsible for reading any
  * type-specific fields (e.g. plugin_file, stylesheet) from the Feature object.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Resolve_Update_Data {
 
@@ -33,7 +33,7 @@ class Resolve_Update_Data {
 	/**
 	 * The feature repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature_Repository
 	 */
@@ -42,7 +42,7 @@ class Resolve_Update_Data {
 	/**
 	 * The catalog repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -51,7 +51,7 @@ class Resolve_Update_Data {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature_Repository $feature_repository The feature repository.
 	 * @param Catalog_Repository $catalog_repository The catalog repository.
@@ -70,7 +70,7 @@ class Resolve_Update_Data {
 	 * Joins feature availability from the Feature_Repository with download
 	 * URLs and versions from the Catalog_Repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $type The feature type to resolve (a Feature::TYPE_* constant).
 	 *
@@ -124,7 +124,7 @@ class Resolve_Update_Data {
 	/**
 	 * Builds a flat map of feature slug to Catalog_Feature from the catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Collection $catalog The catalog collection.
 	 *

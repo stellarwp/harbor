@@ -14,7 +14,7 @@ interface ShellProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function Shell( { header, sideContent, children }: ShellProps ) {
     return (

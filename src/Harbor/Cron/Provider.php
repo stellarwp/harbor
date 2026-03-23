@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Utils\Version;
 /**
  * Registers the scheduled data refresh cron job.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 

@@ -19,7 +19,7 @@ modules:
             tablePrefix: test_
             domain: %WP_DOMAIN%
             adminEmail: admin@tribe.localhost
-            title: 'StellarWP Uplink Tests'
+            title: 'LiquidWeb Harbor Tests'
             theme: twentytwentythree
             multisite: false
             plugins:

@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\Psr18Client;
  * Consumers can override any of these bindings in the container to
  * swap in a different HTTP client (Guzzle, a WordPress adapter, etc.).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 

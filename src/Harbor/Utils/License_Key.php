@@ -9,14 +9,14 @@ namespace LiquidWeb\Harbor\Utils;
  * LWSW- prefix. Any key that does not match this format should be
  * rejected before storage or use.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Key {
 
 	/**
 	 * The expected prefix for all unified license keys.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -29,7 +29,7 @@ final class License_Key {
 	 * This is an initial format check only — it does not contact the
 	 * licensing server to verify the key is active or correct.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key The key to validate.
 	 *

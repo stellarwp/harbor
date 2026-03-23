@@ -15,7 +15,7 @@ interface UpsellSectionProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function UpsellSection( { products, upsellUrlMap }: UpsellSectionProps ) {
     if ( products.length === 0 ) return null;

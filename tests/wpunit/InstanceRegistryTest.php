@@ -11,7 +11,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
  * where wp_loaded has already fired. Registration and reset require the
  * production bootstrap window (before wp_loaded) and are covered by integration tests.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class InstanceRegistryTest extends HarborTestCase {
 

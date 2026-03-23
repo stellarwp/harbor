@@ -18,14 +18,14 @@ use WP_REST_Server;
  * Supports listing, retrieving, enabling, disabling, and updating features.
  * Restricted to logged-in Administrators (manage_options capability).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Feature_Controller extends WP_REST_Controller {
 
 	/**
 	 * The REST API namespace.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -34,7 +34,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * The REST API route base.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -43,7 +43,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * The feature manager instance.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Manager
 	 */
@@ -52,7 +52,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor for the feature REST API controller.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Manager $manager The feature manager.
 	 *
@@ -65,7 +65,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -150,7 +150,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Permission callback: require manage_options capability.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -161,7 +161,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Lists features with optional filters.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -200,7 +200,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves a single feature by slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -230,7 +230,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Enables a feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -253,7 +253,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Disables a feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -275,7 +275,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Triggers an update for a feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_REST_Request $request The request object.
 	 *
@@ -297,7 +297,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the schema for a single feature response.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -466,7 +466,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the query parameters for the features collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */
@@ -502,7 +502,7 @@ class Feature_Controller extends WP_REST_Controller {
 	 * appropriate HTTP status before the error reaches the REST
 	 * infrastructure (which defaults to 500 when no status is set).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param WP_Error $error The error to enrich.
 	 *
@@ -529,7 +529,7 @@ class Feature_Controller extends WP_REST_Controller {
 	/**
 	 * Gets the slug argument definition for toggle endpoints.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, array<string, mixed>>
 	 */

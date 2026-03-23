@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Harbor;
 /**
  * Registers global (non-namespaced) Uplink helper functions.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 

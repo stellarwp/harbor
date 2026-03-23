@@ -12,7 +12,7 @@ This document describes the data the site gets from Licensing, how it stores tha
 
 A site has one unified license key. It reaches the site in one of two ways:
 
-- **Embedded**: a product purchased from the StellarWP store ships with a license file containing the key
+- **Embedded**: a product purchased from the Liquid Web store ships with a license file containing the key
 - **User-entered**: the user types the key into the admin UI
 
 The `License_Manager` resolves the key using a priority system: a stored key always wins. If no key is stored, it checks whether any registered product contributed an embedded key. If one is found, it auto-stores it so future lookups skip the discovery step.
@@ -59,8 +59,8 @@ When the site calls `validate()` for a single product, Licensing returns a more 
 
 ```json
 {
-    "key": "LWSW-...",
-    "status": "active"
+  "key": "LWSW-...",
+  "status": "active"
 }
 ```
 
@@ -68,11 +68,11 @@ When the site calls `validate()` for a single product, Licensing returns a more 
 
 ```json
 {
-    "product_slug": "give",
-    "tier": "give-pro",
-    "site_limit": 3,
-    "expiration_date": "2026-12-31 23:59:59",
-    "status": "active"
+  "product_slug": "give",
+  "tier": "give-pro",
+  "site_limit": 3,
+  "expiration_date": "2026-12-31 23:59:59",
+  "status": "active"
 }
 ```
 
@@ -80,8 +80,8 @@ When the site calls `validate()` for a single product, Licensing returns a more 
 
 ```json
 {
-    "domain": "example.com",
-    "activated_at": "2024-03-04 12:34:56"
+  "domain": "example.com",
+  "activated_at": "2024-03-04 12:34:56"
 }
 ```
 
@@ -108,11 +108,11 @@ The `Validation_Status` enum covers every state a product can be in:
 
 ### Key Storage
 
-The unified key is stored in a WordPress option (`stellarwp_uplink_unified_license_key`). The `License_Repository` handles reads and writes, including multisite-aware lookups.
+The unified key is stored in a WordPress option (`lw_harbor_unified_license_key`). The `License_Repository` handles reads and writes, including multisite-aware lookups.
 
 ### License State Storage
 
-The full product catalog and related metadata are stored in a WordPress option (`stellarwp_uplink_licensing_products_state`) as a state envelope with four keys:
+The full product catalog and related metadata are stored in a WordPress option (`lw_harbor_licensing_products_state`) as a state envelope with four keys:
 
 | Key               | Type                 | Description                                                                                 |
 | ----------------- | -------------------- | ------------------------------------------------------------------------------------------- |
@@ -129,7 +129,7 @@ Since there is only one unified key per site, there is only one state entry. Inv
 
 ## Product Registry
 
-Products opt into unified licensing by declaring themselves through a WordPress filter (`stellarwp/uplink/product_registry`). Each product contributes:
+Products opt into unified licensing by declaring themselves through a WordPress filter (`lw-harbor/product_registry`). Each product contributes:
 
 | Field          | Required | Description                                         |
 | -------------- | -------- | --------------------------------------------------- |
@@ -168,12 +168,12 @@ The fixture set covers the common scenarios:
 
 All errors use `WP_Error` with these codes:
 
-| Code                                 | Constant            | Meaning                                            |
-| ------------------------------------ | ------------------- | -------------------------------------------------- |
-| `stellarwp-uplink-invalid-key`       | `INVALID_KEY`       | Key not recognized by the API                      |
-| `stellarwp-uplink-invalid-response`  | `INVALID_RESPONSE`  | API response couldn't be decoded                   |
-| `stellarwp-uplink-product-not-found` | `PRODUCT_NOT_FOUND` | Product slug not found in the catalog for this key |
-| `stellarwp-uplink-store-failed`      | `STORE_FAILED`      | Key couldn't be persisted to the database          |
+| Code                          | Constant            | Meaning                                            |
+| ----------------------------- | ------------------- | -------------------------------------------------- |
+| `lw-harbor-invalid-key`       | `INVALID_KEY`       | Key not recognized by the API                      |
+| `lw-harbor-invalid-response`  | `INVALID_RESPONSE`  | API response couldn't be decoded                   |
+| `lw-harbor-product-not-found` | `PRODUCT_NOT_FOUND` | Product slug not found in the catalog for this key |
+| `lw-harbor-store-failed`      | `STORE_FAILED`      | Key couldn't be persisted to the database          |
 
 ## HTTP Infrastructure
 

@@ -15,7 +15,7 @@ use WP_Error;
  * Each license key maps to a JSON file in the fixture directory.
  * The filename is the kebab-case lowercase of the key.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @phpstan-import-type ProductAttributes from Product_Entry
  * @phpstan-type FixtureData array{products: list<array<string, mixed>>}
@@ -25,7 +25,7 @@ final class Fixture_Client implements Licensing_Client {
 	/**
 	 * The directory containing fixture JSON files.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -34,7 +34,7 @@ final class Fixture_Client implements Licensing_Client {
 	/**
 	 * In-memory cache of parsed products keyed by lowercase key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var array<string, Product_Entry[]|WP_Error>
 	 */
@@ -43,7 +43,7 @@ final class Fixture_Client implements Licensing_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $fixture_dir Path to the directory containing fixture JSON files.
 	 */
@@ -56,7 +56,7 @@ final class Fixture_Client implements Licensing_Client {
 	 *
 	 * Resolves the key to a kebab-case JSON filename in the fixture directory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    License key.
 	 * @param string $domain Site domain (accepted but ignored by fixture).
@@ -121,7 +121,7 @@ final class Fixture_Client implements Licensing_Client {
 	 *
 	 * Loads the fixture data via get_products() and finds the matching entry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key          License key.
 	 * @param string $domain       Site domain.
@@ -153,7 +153,7 @@ final class Fixture_Client implements Licensing_Client {
 	/**
 	 * Build the validation data array from a product entry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Entry $entry  The matched product entry.
 	 * @param string        $key    The license key.

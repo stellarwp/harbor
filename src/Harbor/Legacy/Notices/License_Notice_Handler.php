@@ -17,21 +17,21 @@ use LiquidWeb\Harbor\Utils\Version;
  * Only fires on the leader Uplink instance to prevent duplicate notices
  * when multiple plugins bundle Uplink.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class License_Notice_Handler {
 
 	/**
 	 * User meta key that stores a map of notice ID => dismissed-until timestamp.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public const DISMISSED_META_KEY = 'lw_harbor_dismissed_notices';
 
 	/**
 	 * How long a dismissal lasts in seconds (7 days).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	public const DISMISS_TTL = 7 * DAY_IN_SECONDS;
 
@@ -46,7 +46,7 @@ class License_Notice_Handler {
 	private $controller;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Repository $repository The license repository.
 	 * @param Notice_Controller  $controller The notice controller.
@@ -122,7 +122,7 @@ class License_Notice_Handler {
 	/**
 	 * Whether a notice is currently dismissed for the current user.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $id The notice ID.
 	 *
@@ -141,7 +141,7 @@ class License_Notice_Handler {
 	 * current request so the notice is suppressed when the user is already
 	 * on the page they would be directed to.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $page_url The product's license page URL.
 	 *
@@ -174,7 +174,7 @@ class License_Notice_Handler {
 	/**
 	 * Render a single product's license notice.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * TODO: Decide on messaging for all products.
 	 *
@@ -205,7 +205,7 @@ class License_Notice_Handler {
 	/**
 	 * Register and enqueue the notice dismiss script, passing config via wp_localize_script.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void Enqueues the notice dismiss script.
 	 */

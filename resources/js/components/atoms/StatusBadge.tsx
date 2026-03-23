@@ -26,7 +26,7 @@ const SPAN_CONFIG: Record< string, { label: string; color: string } > = {
 };
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function StatusBadge( { status, requiredTier }: StatusBadgeProps ) {
     if ( status === 'installing' || status === 'updating' ) {

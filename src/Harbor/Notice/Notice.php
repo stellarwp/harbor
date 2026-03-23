@@ -117,7 +117,7 @@ final class Notice {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array{type: string, message: string, dismissible: bool, alt: bool, large: bool, id: string}
 	 */

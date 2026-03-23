@@ -10,14 +10,14 @@ use LiquidWeb\Harbor\Utils\Cast;
  * Features are immutable value objects hydrated from the Commerce Portal API.
  * Each subclass implements from_array() to handle type-specific fields.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 abstract class Feature {
 
 	/**
 	 * A feature delivered as a standalone WordPress plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -26,7 +26,7 @@ abstract class Feature {
 	/**
 	 * A feature built in to an existing plugin, gated by a DB option flag.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -35,7 +35,7 @@ abstract class Feature {
 	/**
 	 * A feature delivered as a WordPress theme.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -44,7 +44,7 @@ abstract class Feature {
 	/**
 	 * The feature attributes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var array<string, mixed>
 	 */
@@ -53,7 +53,7 @@ abstract class Feature {
 	/**
 	 * Constructor for a Feature object.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $attributes The feature attributes.
 	 *
@@ -66,7 +66,7 @@ abstract class Feature {
 	/**
 	 * Creates a Feature instance from an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data from the API response.
 	 *
@@ -77,7 +77,7 @@ abstract class Feature {
 	/**
 	 * Converts the feature to an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -88,7 +88,7 @@ abstract class Feature {
 	/**
 	 * Gets the feature slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -99,7 +99,7 @@ abstract class Feature {
 	/**
 	 * Gets the product the feature belongs to.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -110,7 +110,7 @@ abstract class Feature {
 	/**
 	 * Gets the feature tier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -121,7 +121,7 @@ abstract class Feature {
 	/**
 	 * Gets the feature display name.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -132,7 +132,7 @@ abstract class Feature {
 	/**
 	 * Gets the feature description.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -143,7 +143,7 @@ abstract class Feature {
 	/**
 	 * Gets the feature type identifier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -154,7 +154,7 @@ abstract class Feature {
 	/**
 	 * Checks whether the feature is available for the current site.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -165,7 +165,7 @@ abstract class Feature {
 	/**
 	 * Checks whether the feature is currently enabled/active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -176,7 +176,7 @@ abstract class Feature {
 	/**
 	 * Gets the URL to the feature documentation or learn-more page.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -187,7 +187,7 @@ abstract class Feature {
 	/**
 	 * Extracts the common base attributes shared by all feature types.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data from the API response.
 	 *
@@ -209,7 +209,7 @@ abstract class Feature {
 	/**
 	 * Gets an attribute by name.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key The attribute name.
 	 *

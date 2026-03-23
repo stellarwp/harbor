@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Utils\Collection;
 /**
  * A collection of Product_Catalog objects, keyed by product slug.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @extends Collection<Product_Catalog>
  */
@@ -17,7 +17,7 @@ final class Catalog_Collection extends Collection {
 	/**
 	 * Adds a product catalog to the collection.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Product_Catalog $catalog Product catalog instance.
 	 *
@@ -34,7 +34,7 @@ final class Catalog_Collection extends Collection {
 	/**
 	 * Alias of offsetGet().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $offset The product slug.
 	 *
@@ -47,7 +47,7 @@ final class Catalog_Collection extends Collection {
 	/**
 	 * Converts the collection to an array of raw data arrays.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -64,7 +64,7 @@ final class Catalog_Collection extends Collection {
 	/**
 	 * Creates a Catalog_Collection from an array of Product_Catalog objects or raw data arrays.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<Product_Catalog|array<string, mixed>> $data Product catalogs or raw arrays.
 	 *

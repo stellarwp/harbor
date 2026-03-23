@@ -22,7 +22,7 @@ interface LicenseSectionProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove }: LicenseSectionProps ) {
     const [ editingOpen, setEditingOpen ] = useState( false );

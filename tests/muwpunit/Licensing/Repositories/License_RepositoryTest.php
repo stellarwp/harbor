@@ -6,7 +6,7 @@ use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_RepositoryTest extends HarborTestCase {
 

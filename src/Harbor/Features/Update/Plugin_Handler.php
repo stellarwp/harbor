@@ -16,7 +16,7 @@ use stdClass;
  * and `site_transient_update_plugins` to provide update information
  * from the consolidation server.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Plugin_Handler {
 
@@ -25,7 +25,7 @@ class Plugin_Handler {
 	/**
 	 * The update data resolver.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Resolve_Update_Data
 	 */
@@ -34,7 +34,7 @@ class Plugin_Handler {
 	/**
 	 * The feature repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature_Repository
 	 */
@@ -43,7 +43,7 @@ class Plugin_Handler {
 	/**
 	 * The license manager.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Manager
 	 */
@@ -52,7 +52,7 @@ class Plugin_Handler {
 	/**
 	 * Constructor for the consolidated update handler.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Resolve_Update_Data $resolver           The update data resolver.
 	 * @param Feature_Repository  $feature_repository The feature repository.
@@ -75,7 +75,7 @@ class Plugin_Handler {
 	 *
 	 * Resolves update data by joining the Feature_Repository and Catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed       $result The current result (false or object).
 	 * @param string|null $action The API action.
@@ -144,7 +144,7 @@ class Plugin_Handler {
 	/**
 	 * Filters the update_plugins transient to inject consolidated updates.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $transient The update_plugins transient value.
 	 *
@@ -237,7 +237,7 @@ class Plugin_Handler {
 	/**
 	 * Builds a WordPress-format plugin info object for plugins_api responses.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string               $slug        The plugin slug.
 	 * @param array<string, mixed> $update_data The update data from the consolidation server.
@@ -264,7 +264,7 @@ class Plugin_Handler {
 	/**
 	 * Builds an update object for the update_plugins transient.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string               $slug        The plugin slug.
 	 * @param string               $plugin_file The plugin file path.

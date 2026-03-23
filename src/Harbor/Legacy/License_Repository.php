@@ -6,7 +6,7 @@ namespace LiquidWeb\Harbor\Legacy;
  * Provides access to legacy licenses reported by all Uplink
  * instances through the cross-instance filter.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class License_Repository {
 
@@ -20,7 +20,7 @@ class License_Repository {
 	/**
 	 * Get all legacy licenses reported across all Uplink instances.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Legacy_License[]
 	 */
@@ -48,7 +48,7 @@ class License_Repository {
 	/**
 	 * Get all legacy licenses that are currently active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Legacy_License[]
 	 */
@@ -66,7 +66,7 @@ class License_Repository {
 	/**
 	 * Get all legacy licenses that are not currently active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Legacy_License[]
 	 */
@@ -84,7 +84,7 @@ class License_Repository {
 	/**
 	 * Get a legacy license by resource slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The resource slug.
 	 *
@@ -103,7 +103,7 @@ class License_Repository {
 	/**
 	 * Whether any legacy licenses exist across all instances.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */

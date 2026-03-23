@@ -15,7 +15,7 @@ use WP_Upgrader;
  * Subclasses provide WP-specific behavior via abstract hook methods (do_install,
  * do_activate, do_deactivate, verify_ownership, etc.).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 abstract class Installable_Strategy extends Abstract_Strategy {
 
@@ -25,7 +25,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * 120 seconds is generous enough to cover slow downloads on shared hosting,
 	 * but short enough that a crashed install won't block retries for long.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	protected const LOCK_TTL = MINUTE_IN_SECONDS * 2;
 
@@ -36,7 +36,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * type (plugin or theme). This prevents filesystem conflicts when multiple
 	 * install requests arrive concurrently.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 */
 	protected const LOCK_KEY = 'lw_harbor_install_lock';
 
@@ -46,7 +46,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Check whether the extension is currently active in WordPress.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -55,7 +55,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Check whether the extension is installed on disk.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -64,7 +64,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Install the extension from its download source.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -77,7 +77,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * varies significantly between plugins and themes (e.g. fatal error
 	 * protection for plugins).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -89,7 +89,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * The subclass owns the full deactivation flow after the common prefix
 	 * (type-guard, includes, ownership) handled by the template's disable().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
 	 */
@@ -98,7 +98,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Verify that the installed extension belongs to an expected author.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True if ownership matches, WP_Error on mismatch.
 	 */
@@ -107,7 +107,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Error code for "extension not found after install".
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string An Error_Code constant value.
 	 */
@@ -116,7 +116,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Check whether an update is available for this extension.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool True if an update is available.
 	 */
@@ -125,7 +125,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Run the upgrade for this extension.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -137,7 +137,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Subclasses implement this to load the specific files needed for their
 	 * extension type (plugin.php, theme.php, upgrader classes, etc.).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -151,7 +151,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Idempotent: returns true if the extension is already active. Uses a
 	 * global lock to prevent concurrent installs of any extension.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -234,7 +234,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * here. The subclass's do_deactivate() owns the rest because plugin and
 	 * theme disable flows diverge fundamentally.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -263,7 +263,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Checks the WordPress update transient for an available update. If one
 	 * exists, acquires the global install lock and runs the upgrade.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True on success, WP_Error on failure.
 	 */
@@ -356,7 +356,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Check whether the feature's extension is currently active.
 
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -375,7 +375,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 *
 	 * If the extension is already installed, returns true immediately (no lock needed).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error True if installed (or already was), WP_Error on failure.
 	 */
@@ -464,7 +464,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * and falsy values, and inspects the skin for errors. This eliminates
 	 * duplicated error handling across install and update paths.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param callable              $operation  Returns the upgrader result.
 	 * @param WP_Ajax_Upgrader_Skin $skin       The upgrader skin collecting errors.
@@ -572,7 +572,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Override in subclasses that need to detect PHP/WP version mismatches
 	 * from the upgrader skin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */
@@ -587,7 +587,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * on wp_options for atomicity. The lock auto-expires after LOCK_TTL
 	 * seconds even if the process crashes without releasing it.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $lock_key Lock name.
 	 *
@@ -607,7 +607,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Release the install lock.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $lock_key Lock name.
 	 *

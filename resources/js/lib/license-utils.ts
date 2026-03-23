@@ -5,7 +5,7 @@
  */
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function formatDate( dateStr: string ): string {
     return new Date( dateStr ).toLocaleDateString( 'en-US', {
@@ -16,7 +16,7 @@ export function formatDate( dateStr: string ): string {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function getExpiryStatus( dateStr: string ): 'expired' | 'expiring-soon' | 'ok' {
     const diff = new Date( dateStr ).getTime() - Date.now();

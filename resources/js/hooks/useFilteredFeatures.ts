@@ -14,7 +14,7 @@ import { store as harborStore } from '@/store';
 import type { Feature } from '@/types/api';
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function useFilteredFeatures( productSlug: string ): Feature[] {
     const { searchQuery } = useFilter();

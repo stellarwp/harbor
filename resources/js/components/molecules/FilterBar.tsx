@@ -15,7 +15,7 @@ import { useFilter } from '@/context/filter-context';
 import logoLW from '@img/logo-lw-software.svg';
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function FilterBar() {
     const { searchQuery, setSearchQuery, productFilter, setProductFilter } = useFilter();

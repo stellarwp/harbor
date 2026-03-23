@@ -95,7 +95,7 @@ if ( ! function_exists( 'lw_harbor_has_unified_license_key' ) ) {
 	 * Does not make any remote API calls — only checks local storage and
 	 * registered products for an embedded key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -110,7 +110,7 @@ if ( ! function_exists( 'lw_harbor_get_unified_license_key' ) ) {
 	/**
 	 * Get the unified license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null The unified license key, or null if not found.
 	 */
@@ -126,7 +126,7 @@ if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 	/**
 	 * Whether a specific product has an active, valid license.  *
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $product The product slug (e.g. 'give', 'learndash', 'kadence', 'the-events-calendar').
 	 *
@@ -144,7 +144,7 @@ if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 	 * Checks if a feature is available in the catalog AND enabled/active.
 	 * Returns false if the feature is not in the catalog at all.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -161,7 +161,7 @@ if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	/**
 	 * Checks if a feature is available in the catalog, regardless of enabled state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -178,7 +178,7 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	/**
 	 * Returns the admin URL for the unified Feature Manager page.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string The admin URL, or an empty string if no instance is active.
 	 */

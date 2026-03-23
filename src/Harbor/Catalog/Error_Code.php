@@ -5,14 +5,14 @@ namespace LiquidWeb\Harbor\Catalog;
 /**
  * WP_Error codes for the Catalog system.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Error_Code {
 
 	/**
 	 * The requested product slug was not found in the catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -21,7 +21,7 @@ final class Error_Code {
 	/**
 	 * The catalog response could not be decoded.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */

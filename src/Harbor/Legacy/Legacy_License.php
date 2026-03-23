@@ -9,33 +9,33 @@ use LiquidWeb\Harbor\Utils\Cast;
 /**
  * Represents a license key discovered from a plugin's legacy storage.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Legacy_License {
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
 	public string $key;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
 	public string $slug;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
 	public string $name;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -44,28 +44,28 @@ class Legacy_License {
 	/**
 	 * Whether the license is currently active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var bool
 	 */
 	public bool $is_active;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
 	public string $page_url;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
 	public string $expires_at;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -82,7 +82,7 @@ class Legacy_License {
 	}
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The legacy license data.
 	 */

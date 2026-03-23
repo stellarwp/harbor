@@ -13,7 +13,7 @@ use WP_Error;
  * Immutable value object hydrated from the POST /stellarwp/v4/licenses/validate response.
  * Mirrors the licensing service's Validation_Result API response shape.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @phpstan-type LicenseData array{key: string, status: string}
  * @phpstan-type SubscriptionData array{product_slug: string, tier: string, site_limit: int, expiration_date: string, status: string}
@@ -30,7 +30,7 @@ class Validation_Result {
 	/**
 	 * The validation result attributes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var ValidationAttributes
 	 */
@@ -44,7 +44,7 @@ class Validation_Result {
 	/**
 	 * Constructor for a Validation_Result.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-param ValidationAttributes $attributes
 	 *
@@ -59,7 +59,7 @@ class Validation_Result {
 	/**
 	 * Creates a Validation_Result from an API response array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The validation data from the API response.
 	 *
@@ -97,7 +97,7 @@ class Validation_Result {
 	/**
 	 * Converts the validation result to an associative array matching the API response shape.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -114,7 +114,7 @@ class Validation_Result {
 	/**
 	 * Gets the validation status.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string A Validation_Status constant value.
 	 */
@@ -125,7 +125,7 @@ class Validation_Result {
 	/**
 	 * Gets the license data, or null if the key was not found.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-return LicenseData|null
 	 */
@@ -136,7 +136,7 @@ class Validation_Result {
 	/**
 	 * Gets the subscription data, or null if not applicable.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-return SubscriptionData|null
 	 */
@@ -147,7 +147,7 @@ class Validation_Result {
 	/**
 	 * Gets the activation data, or null if not activated on this domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-return ActivationData|null
 	 */
@@ -158,7 +158,7 @@ class Validation_Result {
 	/**
 	 * Whether the validation status is valid.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -173,7 +173,7 @@ class Validation_Result {
 	 * such as the site limit for out_of_activations. Falls back to a
 	 * generic unknown error when the status has no mapping.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error
 	 */

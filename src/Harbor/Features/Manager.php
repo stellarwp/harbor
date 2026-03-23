@@ -15,7 +15,7 @@ use WP_Error;
  * Delegates the actual mechanism to the appropriate strategy and fires
  * global + slug-specific WordPress actions around each operation.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Manager {
 
@@ -24,7 +24,7 @@ class Manager {
 	/**
 	 * The repository for fetching available features.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Feature_Repository
 	 */
@@ -33,7 +33,7 @@ class Manager {
 	/**
 	 * The strategy factory for determining how to toggle features.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Strategy_Factory
 	 */
@@ -42,7 +42,7 @@ class Manager {
 	/**
 	 * Constructor for the central feature orchestrator.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature_Repository $repository       The repository for fetching available features.
 	 * @param Strategy_Factory   $strategy_factory The strategy factory.
@@ -60,7 +60,7 @@ class Manager {
 	 * Fires 'lw-harbor/feature_enabling' and 'lw-harbor/{slug}/feature_enabling'
 	 * before the operation, and the corresponding 'feature_enabled' actions after success.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -104,7 +104,7 @@ class Manager {
 		/**
 		 * Fires before a feature is enabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being enabled.
 		 *
@@ -115,7 +115,7 @@ class Manager {
 		/**
 		 * Fires before a specific feature is enabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being enabled.
 		 *
@@ -176,7 +176,7 @@ class Manager {
 		/**
 		 * Fires after a feature has been successfully enabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was enabled.
 		 *
@@ -187,7 +187,7 @@ class Manager {
 		/**
 		 * Fires after a specific feature has been successfully enabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was enabled.
 		 *
@@ -204,7 +204,7 @@ class Manager {
 	 * Fires 'lw-harbor/feature_disabling' and 'lw-harbor/{slug}/feature_disabling'
 	 * before the operation, and the corresponding 'feature_disabled' actions after success.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -248,7 +248,7 @@ class Manager {
 		/**
 		 * Fires before a feature is disabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being disabled.
 		 *
@@ -259,7 +259,7 @@ class Manager {
 		/**
 		 * Fires before a specific feature is disabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being disabled.
 		 *
@@ -320,7 +320,7 @@ class Manager {
 		/**
 		 * Fires after a feature has been successfully disabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was disabled.
 		 *
@@ -331,7 +331,7 @@ class Manager {
 		/**
 		 * Fires after a specific feature has been successfully disabled.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was disabled.
 		 *
@@ -348,7 +348,7 @@ class Manager {
 	 * Fires 'lw-harbor/feature_updating' and 'lw-harbor/{slug}/feature_updating'
 	 * before the operation, and the corresponding 'feature_updated' actions after success.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -392,7 +392,7 @@ class Manager {
 		/**
 		 * Fires before a feature is updated.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being updated.
 		 *
@@ -403,7 +403,7 @@ class Manager {
 		/**
 		 * Fires before a specific feature is updated.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature being updated.
 		 *
@@ -464,7 +464,7 @@ class Manager {
 		/**
 		 * Fires after a feature has been successfully updated.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was updated.
 		 *
@@ -475,7 +475,7 @@ class Manager {
 		/**
 		 * Fires after a specific feature has been successfully updated.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $feature The feature that was updated.
 		 *
@@ -489,7 +489,7 @@ class Manager {
 	/**
 	 * Checks whether a feature is in the catalog AND currently enabled/active.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -517,7 +517,7 @@ class Manager {
 	/**
 	 * Checks whether a feature is available for the current site's tier.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -545,7 +545,7 @@ class Manager {
 	/**
 	 * Checks whether a feature exists in the catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -564,7 +564,7 @@ class Manager {
 	/**
 	 * Gets the feature collection from the catalog with live enabled state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Feature_Collection|WP_Error
 	 */
@@ -586,7 +586,7 @@ class Manager {
 	 * Returns null when the feature is not found or when the API
 	 * request fails, since the catalog is unavailable.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The feature slug.
 	 *
@@ -609,7 +609,7 @@ class Manager {
 	 * is_enabled state. This method overwrites each feature's
 	 * is_enabled with the current live state from its strategy.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Feature_Collection $features The collection to stamp.
 	 *

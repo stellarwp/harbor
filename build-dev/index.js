@@ -596,7 +596,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 class ErrorBoundary extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   state = {
@@ -646,7 +646,7 @@ __webpack_require__.r(__webpack_exports__);
 // Key: feature slug. Value: imported SVG URL.
 const FEATURE_LOGOS = {};
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function FeatureIcon({
   slug
@@ -716,7 +716,7 @@ const LOGOS_NOBG = {
   kadence: _img_logo_kadence_nobg_svg__WEBPACK_IMPORTED_MODULE_7__["default"]
 };
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function ProductLogo({
   slug,
@@ -766,7 +766,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function SectionHeader({
   icon,
@@ -829,7 +829,7 @@ const SPAN_CONFIG = {
 };
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function StatusBadge({
   status,
@@ -914,7 +914,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function UpdateButton({
   featureName,
@@ -984,7 +984,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function FeatureRow({
   feature,
@@ -1090,7 +1090,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 function FilterBar() {
@@ -1177,7 +1177,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 function LegacyLicenseBanner() {
@@ -1241,7 +1241,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function LicenseKeyInput({
   onSuccess,
@@ -1368,7 +1368,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function LicenseProductCard({
   lp,
@@ -1440,7 +1440,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function TierGroup({
   tier,
@@ -1518,7 +1518,7 @@ const UPSELL_TAGLINES = {
   kadence: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Themes, blocks & design tools', '%TEXTDOMAIN%')
 };
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function UpsellCard({
   product,
@@ -1576,7 +1576,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function VersionDisplay({
   feature,
@@ -1659,7 +1659,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 function LicensePanel() {
@@ -1768,7 +1768,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function LicenseSection({
   licenseKey,
@@ -1892,7 +1892,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function ProductSection({
   product
@@ -2009,7 +2009,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function UpsellSection({
   products,
@@ -2086,7 +2086,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 function AppShell() {
@@ -2155,7 +2155,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function Shell({
   header,
@@ -2347,7 +2347,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Dialog overlay + panel. Traps focus via the backdrop click handler.
- * @since 3.0.0
+ * @since 1.0.0
  */
 function Dialog({
   open,
@@ -2717,7 +2717,7 @@ function ToastIcon({
 
 /**
  * Renders the toast stack. Mount as a sibling of AppShell in App.tsx.
- * @since 3.0.0
+ * @since 1.0.0
  */
 function Toaster() {
   const {
@@ -2785,7 +2785,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function Tooltip({
   label,
@@ -2854,7 +2854,7 @@ const FilterContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
 });
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function FilterProvider({
   children
@@ -2873,7 +2873,7 @@ function FilterProvider({
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 const useFilter = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(FilterContext);
 
@@ -2911,7 +2911,7 @@ const ToastContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
 });
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function ToastProvider({
   children
@@ -2940,7 +2940,7 @@ function ToastProvider({
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 const useToast = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(ToastContext);
 
@@ -3514,7 +3514,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function useFeatureRow(feature) {
   const {
@@ -3605,7 +3605,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function useFilteredFeatures(productSlug) {
   const {
@@ -3651,7 +3651,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function useProductFeatureGroups(productSlug) {
   const allFeatures = (0,_hooks_useFilteredFeatures__WEBPACK_IMPORTED_MODULE_1__.useFilteredFeatures)(productSlug);
@@ -3743,7 +3743,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -3754,7 +3754,7 @@ function formatDate(dateStr) {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 function getExpiryStatus(dateStr) {
   const diff = new Date(dateStr).getTime() - Date.now();
@@ -3857,7 +3857,7 @@ const receiveLegacyLicenses = licenses => ({
  * Enable a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 const enableFeature = slug => async ({
   dispatch
@@ -3891,7 +3891,7 @@ const enableFeature = slug => async ({
  * Disable a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 const disableFeature = slug => async ({
   dispatch
@@ -3925,7 +3925,7 @@ const disableFeature = slug => async ({
  * Update a feature via the REST API.
  *
  * @param slug
- * @since 3.0.0
+ * @since 1.0.0
  */
 const updateFeature = slug => async ({
   dispatch
@@ -3960,7 +3960,7 @@ const updateFeature = slug => async ({
  * and features resolvers so the UI refreshes with the new entitlements.
  *
  * @param key
- * @since 3.0.0
+ * @since 1.0.0
  */
 const storeLicense = key => async ({
   dispatch,
@@ -4000,7 +4000,7 @@ const storeLicense = key => async ({
  * Validate a specific product against the license via the REST API.
  *
  * @param productSlug
- * @since 3.0.0
+ * @since 1.0.0
  */
 const validateProduct = productSlug => async ({
   dispatch,
@@ -4040,7 +4040,7 @@ const validateProduct = productSlug => async ({
  * Delete the stored license key via the REST API, then invalidate the
  * features resolver so the UI refreshes.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 const deleteLicense = () => async ({
   dispatch,

@@ -17,29 +17,29 @@ Fetches all products (subscriptions) under a license key. When a domain is provi
 
 ```json
 {
-    "products": [
-        {
-            "product_slug": "kadence",
-            "tier": "kadence-pro",
-            "pending_tier": null,
-            "status": "active",
-            "expires": "2027-02-18 00:00:00",
-            "activations": {
-                "site_limit": 5,
-                "active_count": 2,
-                "over_limit": false
-            },
-            "installed_here": true,
-            "validation_status": "valid",
-            "is_valid": true,
-            "capabilities": [
-                "kadence-blocks",
-                "kadence",
-                "kad-blocks-pro",
-                "kad-pattern-hub"
-            ]
-        }
-    ]
+  "products": [
+    {
+      "product_slug": "kadence",
+      "tier": "kadence-pro",
+      "pending_tier": null,
+      "status": "active",
+      "expires": "2027-02-18 00:00:00",
+      "activations": {
+        "site_limit": 5,
+        "active_count": 2,
+        "over_limit": false
+      },
+      "installed_here": true,
+      "validation_status": "valid",
+      "is_valid": true,
+      "capabilities": [
+        "kadence-blocks",
+        "kadence",
+        "kad-blocks-pro",
+        "kad-pattern-hub"
+      ]
+    }
+  ]
 }
 ```
 
@@ -77,23 +77,23 @@ Validates a license for a specific product on a domain. Automatically creates an
 
 ```json
 {
-    "status": "valid",
-    "is_valid": true,
-    "license": {
-        "key": "LWSW-TEST-TEST-TEST-TEST-TEST",
-        "status": "active"
-    },
-    "subscription": {
-        "product_slug": "kadence",
-        "tier": "kadence-agency",
-        "site_limit": 5,
-        "expiration_date": "2027-02-18 00:00:00",
-        "status": "active"
-    },
-    "activation": {
-        "domain": "example.com",
-        "activated_at": "2026-02-18 00:00:00"
-    }
+  "status": "valid",
+  "is_valid": true,
+  "license": {
+    "key": "LWSW-TEST-TEST-TEST-TEST-TEST",
+    "status": "active"
+  },
+  "subscription": {
+    "product_slug": "kadence",
+    "tier": "kadence-agency",
+    "site_limit": 5,
+    "expiration_date": "2027-02-18 00:00:00",
+    "status": "active"
+  },
+  "activation": {
+    "domain": "example.com",
+    "activated_at": "2026-02-18 00:00:00"
+  }
 }
 ```
 

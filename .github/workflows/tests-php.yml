@@ -88,7 +88,7 @@ jobs:
           ${SLIC_BIN} debug on
           ${SLIC_BIN} php-version set ${{ matrix.php }} --skip-rebuild
 
-      - name: Set up StellarWP Uplink (Sets PHP version for containers)
+      - name: Set up LiquidWeb Harbor (Sets PHP version for containers)
         run: |
           ${SLIC_BIN} use license-manager
           ${SLIC_BIN} composer set-version 2

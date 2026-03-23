@@ -9,7 +9,7 @@ use LiquidWeb\Harbor\Utils\Cast;
  *
  * Immutable value object hydrated from the catalog API response.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @phpstan-type FeatureAttributes array{
  *     feature_slug: string,
@@ -33,7 +33,7 @@ final class Catalog_Feature {
 	/**
 	 * The feature attributes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var FeatureAttributes
 	 */
@@ -57,7 +57,7 @@ final class Catalog_Feature {
 	/**
 	 * Constructor for a Catalog_Feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @phpstan-param FeatureAttributes $attributes
 	 *
@@ -72,7 +72,7 @@ final class Catalog_Feature {
 	/**
 	 * Creates a Catalog_Feature from a raw data array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data.
 	 *
@@ -104,7 +104,7 @@ final class Catalog_Feature {
 	/**
 	 * Converts the feature to an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -115,7 +115,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the feature slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -126,7 +126,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the feature type (flag, plugin, or theme).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -137,7 +137,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the minimum tier required for this feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -150,7 +150,7 @@ final class Catalog_Feature {
 	 *
 	 * Only present for plugin features.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -161,7 +161,7 @@ final class Catalog_Feature {
 	/**
 	 * Whether the feature is available on WordPress.org.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -172,7 +172,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the download URL, or null if is_dot_org is true.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -183,7 +183,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the latest available version, or null if not provided.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -194,7 +194,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the release date (ISO 8601), or null if not provided.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -205,7 +205,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the changelog as an HTML string, or null if not provided.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
@@ -216,7 +216,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the display name.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -227,7 +227,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the short description.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -238,7 +238,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the category for grouping/filtering.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -249,7 +249,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the author/product names, or null if not applicable for this feature type.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]|null
 	 */
@@ -260,7 +260,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the documentation URL.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */

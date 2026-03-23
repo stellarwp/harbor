@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Licensing\Error_Code;
 /**
  * Validation status constants mirroring the v4 licensing API.
  *
- * @since 3.0.0
+ * @since 1.0.0
  *
  * @see \StellarWP\Licensing\V4\Domain\Enums\Validation_Status (licensing service)
  */
@@ -16,7 +16,7 @@ final class Validation_Status {
 	/**
 	 * The license is valid and the product is activated on this domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -25,7 +25,7 @@ final class Validation_Status {
 	/**
 	 * The subscription has expired.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -34,7 +34,7 @@ final class Validation_Status {
 	/**
 	 * The subscription is suspended.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -43,7 +43,7 @@ final class Validation_Status {
 	/**
 	 * The subscription is cancelled.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -52,7 +52,7 @@ final class Validation_Status {
 	/**
 	 * The license itself is suspended (all products affected).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -61,7 +61,7 @@ final class Validation_Status {
 	/**
 	 * The license is banned (all products affected).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -70,7 +70,7 @@ final class Validation_Status {
 	/**
 	 * No subscription exists for this product under the license.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -79,7 +79,7 @@ final class Validation_Status {
 	/**
 	 * The product is not activated on this domain.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -88,7 +88,7 @@ final class Validation_Status {
 	/**
 	 * All available activation seats are consumed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -97,7 +97,7 @@ final class Validation_Status {
 	/**
 	 * The license key is not recognized.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -106,7 +106,7 @@ final class Validation_Status {
 	/**
 	 * Returns all valid status values.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */
@@ -128,7 +128,7 @@ final class Validation_Status {
 	/**
 	 * Returns whether the given value is a valid status.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $value The status value to check.
 	 *
@@ -141,7 +141,7 @@ final class Validation_Status {
 	/**
 	 * Returns a human-readable error message for a non-valid status.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $value The status value.
 	 *
@@ -166,7 +166,7 @@ final class Validation_Status {
 	/**
 	 * Maps a validation status to its corresponding Error_Code constant.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $value The validation status value.
 	 *

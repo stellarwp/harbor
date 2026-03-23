@@ -5,14 +5,14 @@ namespace LiquidWeb\Harbor\Features\Types;
 /**
  * A Feature built in to an existing plugin, gated by a DB option flag.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Flag extends Feature {
 
 	/**
 	 * Constructor for a Feature built in to an existing plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $attributes The feature attributes.
 	 *
@@ -27,7 +27,7 @@ final class Flag extends Feature {
 	/**
 	 * Creates a Feature instance from an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data from the API response.
 	 *

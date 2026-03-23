@@ -9,14 +9,14 @@ use LiquidWeb\Harbor\Utils\Cast;
  *
  * Immutable value object hydrated from the catalog API response.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Product_Catalog {
 
 	/**
 	 * The product slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -25,7 +25,7 @@ final class Product_Catalog {
 	/**
 	 * The tier collection, sorted by rank.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Tier_Collection
 	 */
@@ -34,7 +34,7 @@ final class Product_Catalog {
 	/**
 	 * The feature objects.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Feature[]
 	 */
@@ -43,7 +43,7 @@ final class Product_Catalog {
 	/**
 	 * Constructor for a Product_Catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string            $product_slug The product slug.
 	 * @param Tier_Collection   $tiers        The tier collection.
@@ -60,7 +60,7 @@ final class Product_Catalog {
 	/**
 	 * Creates a Product_Catalog from a raw data array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The product catalog data.
 	 *
@@ -112,7 +112,7 @@ final class Product_Catalog {
 	/**
 	 * Converts the product catalog to an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -139,7 +139,7 @@ final class Product_Catalog {
 	/**
 	 * Gets the product slug.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -150,7 +150,7 @@ final class Product_Catalog {
 	/**
 	 * Gets the tier collection, ordered by rank.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Tier_Collection
 	 */
@@ -161,7 +161,7 @@ final class Product_Catalog {
 	/**
 	 * Gets a tier by its slug, or null if not found.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $slug The tier slug.
 	 *
@@ -174,7 +174,7 @@ final class Product_Catalog {
 	/**
 	 * Gets the hydrated feature objects.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Feature[]
 	 */

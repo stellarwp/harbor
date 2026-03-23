@@ -16,7 +16,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
  * invalidates upstream repository caches, causing fresh data
  * to be fetched on the next call.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 

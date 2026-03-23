@@ -31,14 +31,14 @@ use WP_CLI_Command;
  *     # Show catalog status
  *     wp uplink catalog status
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Catalog extends WP_CLI_Command {
 
 	/**
 	 * The catalog repository.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -47,7 +47,7 @@ class Catalog extends WP_CLI_Command {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Repository $repository The catalog repository.
 	 */
@@ -385,7 +385,7 @@ class Catalog extends WP_CLI_Command {
 	/**
 	 * Fetches a single product catalog by slug, with error handling.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $product_slug The product slug.
 	 *

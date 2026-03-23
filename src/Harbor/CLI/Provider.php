@@ -21,7 +21,7 @@ use WP_CLI;
  * Early-returns when WP-CLI is not present, so command classes are never
  * instantiated during normal web requests.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 
@@ -67,7 +67,7 @@ final class Provider extends Abstract_Provider {
 	 * Uses Version::should_handle() to prevent duplicate registration
 	 * across vendor-prefixed copies of Uplink.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

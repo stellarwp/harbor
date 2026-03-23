@@ -24,7 +24,7 @@ interface FeatureRowProps {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 	const [ expanded, setExpanded ] = useState( false );

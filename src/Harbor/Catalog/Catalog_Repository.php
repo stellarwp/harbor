@@ -17,7 +17,7 @@ use WP_Error;
  * cached WP_Error is returned immediately without hitting the upstream
  * service. The throttle resets automatically on the next successful fetch.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Catalog_Repository {
 
@@ -30,7 +30,7 @@ class Catalog_Repository {
 	 * again are short-circuited and return the cached error until this window
 	 * expires. This prevents hammering a degraded upstream service.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var int
 	 */
@@ -48,7 +48,7 @@ class Catalog_Repository {
 	 *   - last_error      (WP_Error|null) Error from the most recent failed attempt, or
 	 *                                     null when the last fetch succeeded.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -57,7 +57,7 @@ class Catalog_Repository {
 	/**
 	 * State envelope key for the serialized catalog collection array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -66,7 +66,7 @@ class Catalog_Repository {
 	/**
 	 * State envelope key for the last successful fetch timestamp.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -75,7 +75,7 @@ class Catalog_Repository {
 	/**
 	 * State envelope key for the last failed fetch timestamp.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -84,7 +84,7 @@ class Catalog_Repository {
 	/**
 	 * State envelope key for the last fetch error.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -93,7 +93,7 @@ class Catalog_Repository {
 	/**
 	 * The catalog client.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Client
 	 */
@@ -102,7 +102,7 @@ class Catalog_Repository {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Client $client The catalog client to fetch from.
 	 */
@@ -117,7 +117,7 @@ class Catalog_Repository {
 	 * Otherwise fetches from the API, which covers the first-ever request and
 	 * error-only state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|WP_Error
 	 */
@@ -151,7 +151,7 @@ class Catalog_Repository {
 	 * that need a best-effort read without triggering outbound HTTP (e.g.
 	 * during plugin/theme deactivation hooks) should use this instead of get().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|null
 	 */
@@ -168,7 +168,7 @@ class Catalog_Repository {
 	/**
 	 * Always fetches from the API, bypassing stored state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|WP_Error
 	 */
@@ -179,7 +179,7 @@ class Catalog_Repository {
 	/**
 	 * Fetches from the client and persists the result.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return Catalog_Collection|WP_Error
 	 */
@@ -211,7 +211,7 @@ class Catalog_Repository {
 	 * existing collection is preserved so callers can still use the last
 	 * known-good catalog.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Collection|WP_Error $data The catalog or fetch error to store.
 	 *
@@ -240,7 +240,7 @@ class Catalog_Repository {
 	/**
 	 * Delete the entire catalog state option.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
@@ -251,7 +251,7 @@ class Catalog_Repository {
 	/**
 	 * Unix timestamp of the last successful catalog fetch, or null if never fetched.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int|null
 	 */
@@ -265,7 +265,7 @@ class Catalog_Repository {
 	 * Unix timestamp of the most recent failed catalog fetch, or null if no
 	 * failure has occurred.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int|null
 	 */
@@ -279,7 +279,7 @@ class Catalog_Repository {
 	 * WP_Error from the most recent failed fetch attempt, or null if the last
 	 * fetch was successful (or no fetch has occurred).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error|null
 	 */
@@ -293,7 +293,7 @@ class Catalog_Repository {
 	 * Returns the cached WP_Error if a recent API failure is within the
 	 * ERROR_THROTTLE_TTL window, or null if the call should proceed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error|null
 	 */
@@ -318,7 +318,7 @@ class Catalog_Repository {
 	 * Read the raw catalog state array from the option, returning a zeroed
 	 * default when nothing has been stored.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array{collection: array<array<string,mixed>>|null, last_success_at: int|null, last_failure_at: int|null, last_error: WP_Error|null}
 	 */

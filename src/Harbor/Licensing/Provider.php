@@ -15,7 +15,7 @@ use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 /**
  * Registers the Licensing subsystem in the DI container.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Provider extends Abstract_Provider {
 

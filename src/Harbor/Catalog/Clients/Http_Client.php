@@ -14,7 +14,7 @@ use WP_Error;
 /**
  * PSR-18 HTTP implementation of the catalog API client.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Http_Client implements Catalog_Client {
 
@@ -23,7 +23,7 @@ final class Http_Client implements Catalog_Client {
 	/**
 	 * The PSR-18 HTTP client.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var ClientInterface
 	 */
@@ -32,7 +32,7 @@ final class Http_Client implements Catalog_Client {
 	/**
 	 * The PSR-17 request factory.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var RequestFactoryInterface
 	 */
@@ -41,7 +41,7 @@ final class Http_Client implements Catalog_Client {
 	/**
 	 * The API base URL (no trailing slash).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
@@ -50,7 +50,7 @@ final class Http_Client implements Catalog_Client {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param ClientInterface         $client          PSR-18 HTTP client.
 	 * @param RequestFactoryInterface $request_factory PSR-17 request factory.

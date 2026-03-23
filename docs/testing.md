@@ -15,7 +15,7 @@ This repository uses Codeception for automated testing and leverages [`slic`](ht
 To run tests for the first time, there are a couple of things you need to do:
 
 1. Run `slic here` in the parent directory from where this library is cloned. (e.g. If you ran `git clone` in your `wp-content/plugins` directory, run `slic here` from `wp-content/plugins`)
-2. Run `slic use uplink` to tell `slic` to point to the uplink library.
+2. Run `slic use harbor` to tell `slic` to point to the Harbor library.
 3. Run `slic composer install` to bring in all the dependencies.
 
 ### Running the tests
@@ -24,7 +24,7 @@ You can simply run `slic run` or `slic run SUITE_YOU_WANT_TO_RUN` to quickly run
 
 ## Debug logging
 
-Uplink uses the `With_Debugging` trait (`src/Uplink/Traits/With_Debugging.php`) for all debug output. When `WP_DEBUG` is enabled, log messages are written via `error_log()` with an `Uplink:` prefix so they're easy to filter.
+Harbor uses the `With_Debugging` trait (`src/Harbor/Traits/With_Debugging.php`) for all debug output. When `WP_DEBUG` is enabled, log messages are written via `error_log()` with an `Harbor:` prefix so they're easy to filter.
 
 The trait provides three methods:
 
@@ -34,11 +34,11 @@ The trait provides three methods:
 | `debug_log_throwable()` | Exceptions — logs message, file, line, trace |
 | `debug_log_wp_error()`  | `WP_Error` objects — logs code and message   |
 
-To see Uplink debug output during test runs, make sure `WP_DEBUG` is `true` in the test environment (slic sets this by default). Grep for `Uplink:` in the PHP error log to isolate Uplink messages from other output.
+To see Harbor debug output during test runs, make sure `WP_DEBUG` is `true` in the test environment (slic sets this by default). Grep for `Harbor:` in the PHP error log to isolate Harbor messages from other output.
 
 ## Local development with fixtures
 
-During development the [sample plugin](https://github.com/stellarwp/uplink-sample-plugin) replaces the real API clients with fixture clients that read local JSON files. The admin settings page (under **Uplink Sample Plugin**) exposes three controls:
+During development the [sample plugin](https://github.com/lw-harbor-sample-plugin) replaces the real API clients with fixture clients that read local JSON files. The admin settings page (under **Harbor Sample Plugin**) exposes three controls:
 
 - **Fixture Mode** — toggle between fixture files and the real API.
 - **Fixture Key** — select which fixture set to use.
@@ -67,7 +67,7 @@ Some fixture keys (like `lwsw-unified-test-fixtures`) ship a dedicated catalog f
 The sample plugin resolves fixture files from two directories, in order:
 
 1. `fixtures/` inside the sample plugin — custom or one-off files
-2. `WP_PLUGIN_DIR/uplink/tests/_data/` — shared uplink test fixtures
+2. `WP_PLUGIN_DIR/harbor/tests/_data/` — shared Harbor test fixtures
 
 The first match wins. For the catalog, if no key-specific file is found in either location, it falls back to `default.json` in the same order.
 

@@ -7,14 +7,14 @@ use LiquidWeb\Harbor\Licensing\Product_Collection;
 /**
  * Builds the standard {key, products} response shape.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class License_Response {
 
 	/**
 	 * Builds the standard license response array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string|null        $key      The license key.
 	 * @param Product_Collection $products The product collection.

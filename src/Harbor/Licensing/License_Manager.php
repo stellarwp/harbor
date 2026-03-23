@@ -29,7 +29,7 @@ use WP_Error;
  * cached WP_Error is returned immediately without hitting the upstream
  * service. The throttle resets automatically on the next successful call.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class License_Manager {
 
@@ -42,28 +42,28 @@ class License_Manager {
 	 * again are short-circuited and return the cached error until this window
 	 * expires. This prevents hammering a degraded upstream service.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var int
 	 */
 	const ERROR_THROTTLE_TTL = 60;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var License_Repository
 	 */
 	private License_Repository $repository;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Product_Registry
 	 */
 	private Product_Registry $registry;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Licensing_Client
 	 */
@@ -72,7 +72,7 @@ class License_Manager {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param License_Repository $repository The license repository.
 	 * @param Product_Registry   $registry   The product registry.
@@ -94,7 +94,7 @@ class License_Manager {
 	 * Checks the repository first. If no key is stored, checks the product
 	 * registry for an embedded key and auto-stores the first one found.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null The license key, or null if none exists.
 	 */
@@ -119,7 +119,7 @@ class License_Manager {
 	 *
 	 * Returns false without writing if the key does not begin with LWSW-.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key     The license key to store.
 	 * @param bool   $network Whether to store at the network level (multisite only).
@@ -149,7 +149,7 @@ class License_Manager {
 	 * Fetches the product catalog to confirm the key exists, then persists it.
 	 * Does not activate any products or consume seats.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key     The license key to validate and store.
 	 * @param string $domain  The site domain sent to the licensing API.
@@ -242,7 +242,7 @@ class License_Manager {
 	 * consume) an activation seat for the given product. On success the
 	 * product cache is cleared so the next read reflects the new state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $domain       The site domain.
 	 * @param string $product_slug The product to validate.
@@ -332,7 +332,7 @@ class License_Manager {
 	/**
 	 * Delete the stored unified license key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param bool $network Whether to delete from the network level (multisite only).
 	 *
@@ -352,7 +352,7 @@ class License_Manager {
 	/**
 	 * Whether a unified license key is stored or discoverable via the registry.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -366,7 +366,7 @@ class License_Manager {
 	 * Returns the cached catalog if available; otherwise fetches from the
 	 * licensing API and primes the cache.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $domain Site domain.
 	 *
@@ -408,7 +408,7 @@ class License_Manager {
 	/**
 	 * Flush the cached product catalog and re-fetch from the API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $domain Site domain.
 	 *
@@ -436,7 +436,7 @@ class License_Manager {
 	 * Validates the key format, calls the remote API, and returns the
 	 * product collection. Never persists the key or caches results.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    The license key to look up.
 	 * @param string $domain The site domain.
@@ -471,7 +471,7 @@ class License_Manager {
 	 * Unix timestamp of the most recent failed API call, or null if no failure
 	 * has occurred since the last successful call.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return int|null
 	 */
@@ -483,7 +483,7 @@ class License_Manager {
 	 * WP_Error from the most recent failed API call, or null if the last call
 	 * was successful (or no call has occurred).
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error|null
 	 */
@@ -495,7 +495,7 @@ class License_Manager {
 	 * Returns the cached WP_Error if a recent API failure is within the
 	 * ERROR_THROTTLE_TTL window, or null if the call should proceed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return WP_Error|null
 	 */
@@ -520,7 +520,7 @@ class License_Manager {
 	 * product that reports a valid license. This anchors the grace period
 	 * to the most recent confirmed-good state.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    License key.
 	 * @param string $domain Site domain.
@@ -565,7 +565,7 @@ class License_Manager {
 	 * Finds the first registered product with an embedded key, stores it,
 	 * and returns it. Returns null if no product reports an embedded key.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */

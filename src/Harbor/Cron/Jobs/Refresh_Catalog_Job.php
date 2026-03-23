@@ -8,14 +8,14 @@ use LiquidWeb\Harbor\Traits\With_Debugging;
 /**
  * Refreshes the product catalog from the remote API.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Refresh_Catalog_Job {
 
 	use With_Debugging;
 
 	/**
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @var Catalog_Repository
 	 */
@@ -24,7 +24,7 @@ class Refresh_Catalog_Job {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Repository $catalog The catalog repository.
 	 */
@@ -35,7 +35,7 @@ class Refresh_Catalog_Job {
 	/**
 	 * Fetch fresh catalog data from the remote API.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return void
 	 */

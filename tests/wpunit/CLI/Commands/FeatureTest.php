@@ -22,7 +22,7 @@ use WP_Error;
  * Uses a spy logger to capture WP_CLI output and uopz to prevent
  * exit() from killing the test process.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class FeatureTest extends HarborTestCase {
 

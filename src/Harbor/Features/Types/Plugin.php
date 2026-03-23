@@ -12,14 +12,14 @@ use LiquidWeb\Harbor\Utils\Cast;
  * The Plugin_Strategy installs the plugin via plugins_api() + Plugin_Upgrader,
  * and uses plugin_file (plugin file path) to activate/deactivate it.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 final class Plugin extends Feature implements Installable {
 
 	/**
 	 * Constructor for a Feature delivered as a standalone WordPress plugin.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $attributes The feature attributes.
 	 *
@@ -50,7 +50,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Creates a Feature instance from an associative array.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data from the API response.
 	 *
@@ -64,7 +64,7 @@ final class Plugin extends Feature implements Installable {
 	 * Gets the plugin file path relative to the plugins directory
 	 * (e.g. "stellar-export/stellar-export.php").
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -75,7 +75,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Gets the expected plugin authors for ownership verification.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string[]
 	 */
@@ -92,7 +92,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Whether this plugin is available on WordPress.org.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -103,7 +103,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Whether a newer version is available and this plugin is currently installed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -126,7 +126,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Builds the complete update data array for this Plugin feature.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param Catalog_Feature $catalog_feature The catalog entry providing version and download URL.
 	 *
@@ -155,7 +155,7 @@ final class Plugin extends Feature implements Installable {
 	 * For "stellar-export/stellar-export.php" this returns "stellar-export".
 	 * Used for filesystem operations and ownership checks.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -166,7 +166,7 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Checks whether this Zip feature's plugin is currently installed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -185,7 +185,7 @@ final class Plugin extends Feature implements Installable {
 	 * Gets the currently installed version of this Zip feature's plugin.
 	 * Returns null if the plugin is not installed.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
