@@ -233,9 +233,9 @@ class Catalog_Repository {
 	 * @return void
 	 */
 	public function set_catalog( $data ): void {
-		$this->cached_collection = null;
-
 		if ( $data instanceof Catalog_Collection ) {
+			$this->cached_collection = $data;
+
 			$state                                    = $this->read_catalog_state();
 			$state[ self::STATE_KEY_COLLECTION ]      = $data->to_array();
 			$state[ self::STATE_KEY_LAST_SUCCESS_AT ] = time();
@@ -245,6 +245,8 @@ class Catalog_Repository {
 
 			return;
 		}
+
+		$this->cached_collection = null;
 
 		if ( is_wp_error( $data ) ) {
 			$state                                    = $this->read_catalog_state();

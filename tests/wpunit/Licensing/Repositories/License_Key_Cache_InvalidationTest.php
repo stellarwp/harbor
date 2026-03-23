@@ -44,10 +44,12 @@ final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 			'lw-harbor/unified_license_key_changed',
 			[ $this->license_repository, 'delete_products' ]
 		);
+
+		$catalog_repository = $this->catalog_repository;
 		add_action(
 			'lw-harbor/unified_license_key_changed',
-			static function () {
-				delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
+			static function () use ( $catalog_repository ) {
+				$catalog_repository->delete_catalog();
 			}
 		);
 
