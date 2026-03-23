@@ -20,4 +20,4 @@ modules:
             title: 'LiquidWeb Harbor Tests'
             theme: twentytwentythree
             plugins:
-                - license-manager/bootstrap-plugin.php
+                - harbor/bootstrap-plugin.php
