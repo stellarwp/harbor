@@ -2,7 +2,7 @@
  * Product catalog data.
  *
  * Product metadata. Tier definitions and feature lists come from the
- * liquidweb/v1/catalog and liquidweb/v1/features REST
+ * liquidweb/harbor/v1/catalog and liquidweb/harbor/v1/features REST
  * endpoints — not stored here.
  *
  * @package LiquidWeb\Harbor

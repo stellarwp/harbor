@@ -23,7 +23,7 @@ export const getFeatures =
 	async ({ dispatch }) => {
 		try {
 			const features = await apiFetch<Feature[]>({
-				path: '/liquidweb/v1/features',
+				path: '/liquidweb/harbor/v1/features',
 			});
 			dispatch.receiveFeatures(features);
 		} catch (err) {
@@ -51,7 +51,7 @@ export const getLegacyLicenses =
 	async ({ dispatch }) => {
 		try {
 			const licenses = await apiFetch<LegacyLicense[]>({
-				path: '/liquidweb/v1/legacy-licenses',
+				path: '/liquidweb/harbor/v1/legacy-licenses',
 			});
 			dispatch.receiveLegacyLicenses(licenses);
 		} catch (err) {
@@ -80,7 +80,7 @@ export const getCatalog =
 	async ({ dispatch }) => {
 		try {
 			const catalogs = await apiFetch<ProductCatalog[]>({
-				path: '/liquidweb/v1/catalog',
+				path: '/liquidweb/harbor/v1/catalog',
 			});
 			dispatch.receiveCatalog(catalogs);
 		} catch (err) {
@@ -109,7 +109,7 @@ export const getLicenseKey =
 	async ({ dispatch }) => {
 		try {
 			const result = await apiFetch<License>({
-				path: '/liquidweb/v1/license',
+				path: '/liquidweb/harbor/v1/license',
 			});
 			dispatch.receiveLicense(result);
 		} catch (err) {
