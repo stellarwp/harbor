@@ -1,7 +1,7 @@
 /**
  * Card showing a single licensed product: logo, name, tier badge, and expiry.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { Badge } from '@/components/ui/badge';

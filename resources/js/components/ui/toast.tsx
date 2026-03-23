@@ -4,7 +4,7 @@
  * Reads from useToastStore and renders a fixed bottom-right stack.
  * Auto-dismiss is handled by the store (3.5s).
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { X, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { __ } from '@wordpress/i18n';

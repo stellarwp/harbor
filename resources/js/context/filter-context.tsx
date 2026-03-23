@@ -4,7 +4,7 @@
  * Mount <FilterProvider> once in App.tsx; consume with useFilter() anywhere
  * in the component tree.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { createContext, useContext, useState, type ReactNode } from 'react';
 

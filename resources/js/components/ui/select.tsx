@@ -6,7 +6,7 @@
  * utilities are scoped to .uplink-ui). The Content renders in the DOM tree but
  * Radix positions it with position:fixed so it still floats above other elements.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import * as React from 'react';
 import { Select as SelectPrimitive } from 'radix-ui';

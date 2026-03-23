@@ -4,7 +4,7 @@
  * Mount <ToastProvider> once in App.tsx; consume with useToast() anywhere
  * in the component tree.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
 

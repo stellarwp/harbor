@@ -3,7 +3,7 @@
  *
  * Ported from sync-saas and extended with error support.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type { DependencyList } from 'react';
 

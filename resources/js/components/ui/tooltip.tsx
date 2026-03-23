@@ -14,7 +14,7 @@
  *       <Button disabled>...</Button>
  *   </Tooltip>
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { Tooltip as TooltipPrimitive } from 'radix-ui';
 

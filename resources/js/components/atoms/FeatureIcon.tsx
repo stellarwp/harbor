@@ -4,7 +4,7 @@
  * Renders a 32×32 placeholder box until per-feature SVG assets are
  * provided by the design team and added to resources/js/img/.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // Feature logo assets are added here as they are delivered by design.

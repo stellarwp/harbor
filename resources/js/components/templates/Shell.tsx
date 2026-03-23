@@ -1,7 +1,7 @@
 /**
  * Two-column page shell: scrollable main area + sticky sidebar.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { ReactNode } from 'react';
 

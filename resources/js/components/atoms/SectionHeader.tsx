@@ -1,7 +1,7 @@
 /**
  * Sidebar section header: icon + uppercase label + optional trailing action.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { type ReactNode } from 'react';
 

@@ -1,7 +1,7 @@
 /**
  * Upsell card for a product not covered by the current license.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { ExternalLink } from 'lucide-react';

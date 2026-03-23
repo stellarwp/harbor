@@ -4,7 +4,7 @@
  * Uses z-[100000] on the overlay so it clears the WP admin bar (z-index: 99999).
  * NOT using Radix Dialog — keeping this self-contained to control z-index.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useEffect, type ReactNode } from 'react';
 import { X } from 'lucide-react';

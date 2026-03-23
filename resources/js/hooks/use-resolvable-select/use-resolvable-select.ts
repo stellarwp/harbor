@@ -8,7 +8,7 @@
  *
  * @see https://github.com/WordPress/gutenberg/blob/c97c26fe371e3d40efe197d8f398326a16cdbf46/packages/core-data/src/hooks/use-query-select.ts
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import type { DependencyList } from 'react';
 import { useSelect } from '@wordpress/data';

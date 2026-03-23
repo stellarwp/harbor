@@ -5,11 +5,11 @@
  * into this JSON structure. @wordpress/api-fetch throws the parsed body
  * as a plain object on non-2xx responses.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 export interface WpRestError {
 	/**
-	 * Machine-readable error code (e.g. "stellarwp-uplink-feature-not-found").
+	 * Machine-readable error code (e.g. "lw-harbor-feature-not-found").
 	 */
 	code: string;
 	/**

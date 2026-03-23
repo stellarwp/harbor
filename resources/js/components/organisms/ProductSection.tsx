@@ -7,7 +7,7 @@
  * Header counts (active / deactivated) always reflect the full unfiltered
  * feature set so they remain stable while the user searches.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { ProductLogo } from '@/components/atoms/ProductLogo';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
 import { TierGroup } from '@/components/molecules/TierGroup';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
 import type { Product } from '@/types/api';
@@ -34,10 +34,10 @@ export function ProductSection( { product }: ProductSectionProps ) {
     // Full unfiltered set — used only for header counts so they stay stable.
     const { hasLicense, licenseProduct, allFeaturesUnfiltered } = useSelect(
         ( select ) => {
-            const licenseProducts = select( uplinkStore ).getLicenseProducts();
+            const licenseProducts = select( harborStore ).getLicenseProducts();
             return {
-                allFeaturesUnfiltered: select( uplinkStore ).getFeaturesByProduct( product.slug ),
-                hasLicense:            select( uplinkStore ).hasLicense(),
+                allFeaturesUnfiltered: select( harborStore ).getFeaturesByProduct( product.slug ),
+                hasLicense:            select( harborStore ).hasLicense(),
                 licenseProduct:        licenseProducts.find( ( lp ) => lp.product_slug === product.slug ) ?? null,
             };
         },

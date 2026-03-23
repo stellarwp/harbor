@@ -4,7 +4,7 @@
  * Main area: FilterBar header + product sections.
  * Sidebar: license panel.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { Loader2 } from 'lucide-react';
@@ -15,7 +15,7 @@ import { LegacyLicenseBanner } from '@/components/molecules/LegacyLicenseBanner'
 import { ProductSection } from '@/components/organisms/ProductSection';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { PRODUCTS } from '@/data/products';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
 import { useResolvableSelectWithError } from '@/hooks/use-resolvable-select';
 
@@ -29,9 +29,9 @@ export function AppShell() {
     // by the ErrorBoundary above this component.
     const { license, features, catalog } = useResolvableSelectWithError(
         ( resolve ) => ( {
-            license:  resolve( uplinkStore ).getLicenseKey(),
-            features: resolve( uplinkStore ).getFeatures(),
-            catalog:  resolve( uplinkStore ).getCatalog(),
+            license:  resolve( harborStore ).getLicenseKey(),
+            features: resolve( harborStore ).getFeatures(),
+            catalog:  resolve( harborStore ).getCatalog(),
         } ),
         [],
     );

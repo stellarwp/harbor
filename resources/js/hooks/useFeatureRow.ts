@@ -4,14 +4,14 @@
  * Encapsulates store wiring, async action handlers, and all derived state
  * so FeatureRow itself stays a pure composition of atoms.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { store as uplinkStore } from '@/store';
+import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
-import { UplinkError } from '@/errors';
+import { LiquidError } from '@/errors';
 import type { Feature } from '@/types/api';
 import type { FeatureStatus } from '@/components/atoms/StatusBadge';
 
@@ -32,12 +32,12 @@ export interface FeatureRowState {
  */
 export function useFeatureRow( feature: Feature ): FeatureRowState {
 	const { addToast } = useToast();
-	const { enableFeature, disableFeature, updateFeature } = useDispatch( uplinkStore );
+	const { enableFeature, disableFeature, updateFeature } = useDispatch( harborStore );
 
 	const installableBusy = useSelect(
 		( select ) =>
 			feature.type !== 'flag' &&
-			select( uplinkStore ).isAnyInstallableBusy(),
+			select( harborStore ).isAnyInstallableBusy(),
 		[ feature.type ]
 	);
 
@@ -50,7 +50,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		setPendingAction( checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling' );
 		if ( checked ) {
 			const result = await enableFeature( feature.slug );
-			if ( result instanceof UplinkError ) {
+			if ( result instanceof LiquidError ) {
 				addToast( result.message, 'error' );
 			} else {
 				/* translators: %s is the name of the feature being enabled */
@@ -58,7 +58,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 			}
 		} else {
 			const result = await disableFeature( feature.slug );
-			if ( result instanceof UplinkError ) {
+			if ( result instanceof LiquidError ) {
 				addToast( result.message, 'error' );
 			} else {
 				/* translators: %s is the name of the feature being disabled */
@@ -71,7 +71,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 	const handleUpdate = async () => {
 		setPendingAction( 'updating' );
 		const result = await updateFeature( feature.slug );
-		if ( result instanceof UplinkError ) {
+		if ( result instanceof LiquidError ) {
 			addToast( result.message, 'error' );
 		} else {
 			/* translators: %s is the name of the feature being updated */

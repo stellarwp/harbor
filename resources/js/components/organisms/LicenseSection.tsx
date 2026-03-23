@@ -1,7 +1,7 @@
 /**
  * License section: header, key input, licensed-product cards, and edit dialog.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';

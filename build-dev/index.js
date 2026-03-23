@@ -590,7 +590,7 @@ __webpack_require__.r(__webpack_exports__);
  * Wrap any subtree to prevent a render crash from taking down the whole page.
  * Used in App.tsx and around each tab panel in AppShell.tsx.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -639,7 +639,7 @@ __webpack_require__.r(__webpack_exports__);
  * Renders a 32×32 placeholder box until per-feature SVG assets are
  * provided by the design team and added to resources/js/img/.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // Feature logo assets are added here as they are delivered by design.
@@ -692,7 +692,7 @@ __webpack_require__.r(__webpack_exports__);
  * Falls back to a neutral placeholder box when no asset is found.
  * Use variant="nobg" for the transparent (no background) logo variants.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -762,7 +762,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Sidebar section header: icon + uppercase label + optional trailing action.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 /**
@@ -906,7 +906,7 @@ __webpack_require__.r(__webpack_exports__);
  * upsell tooltip. The Tooltip component handles the span wrapper needed to
  * keep hover events working when pointer-events are disabled on the button.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -971,7 +971,7 @@ __webpack_require__.r(__webpack_exports__);
  * Clicking the row header expands/collapses the feature description.
  * The toggle switch remains independently clickable.
  *
- * @package StellarWP\\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1079,7 +1079,7 @@ __webpack_require__.r(__webpack_exports__);
  * Displays the product logo, a feature search input, and a product filter
  * dropdown. Both inputs are wired to FilterContext via useFilter().
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1169,7 +1169,7 @@ __webpack_require__.r(__webpack_exports__);
  * Legacy license data is fetched from the REST API via the store's
  * getLegacyLicenses resolver.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1225,10 +1225,10 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * License key input form.
  *
- * Wires activation to the stellarwp/uplink @wordpress/data store.
+ * Wires activation to the lw @wordpress/data store.
  * Success toast on completion.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1257,7 +1257,7 @@ function LicenseKeyInput({
   } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_8__.useToast)();
 
   // TODO: Refactor error display to use an error modal instead of inline
-  // text. The modal will show safe, user-facing messages from the UplinkError
+  // text. The modal will show safe, user-facing messages from the LiquidError
   // chain.
 
   const {
@@ -1281,7 +1281,7 @@ function LicenseKeyInput({
     }
     setLocalError(null);
     const result = await storeLicense(trimmedKey);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.UplinkError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.LiquidError) {
       addToast(result.message, 'error');
     } else {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License activated successfully.', '%TEXTDOMAIN%'), 'success');
@@ -1360,7 +1360,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Card showing a single licensed product: logo, name, tier badge, and expiry.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1430,7 +1430,7 @@ __webpack_require__.r(__webpack_exports__);
  * Shows the tier name, feature count, a lock indicator, and an upgrade
  * button. Expanding the accordion reveals the locked FeatureRow entries.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1505,7 +1505,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Upsell card for a product not covered by the current license.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1570,7 +1570,7 @@ __webpack_require__.r(__webpack_exports__);
  * When upgradeLabel is provided the update button is rendered fully disabled
  * (no onClick handler) with an upsell tooltip.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1646,7 +1646,7 @@ __webpack_require__.r(__webpack_exports__);
  * Always visible. Fetches license and catalog data from the store and passes
  * it to LicenseSection and UpsellSection.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1705,7 +1705,7 @@ function LicensePanel() {
   const upsellProducts = _data_products__WEBPACK_IMPORTED_MODULE_6__.PRODUCTS.filter(p => !licensedSlugs.has(p.slug));
   const handleRemove = async () => {
     const result = await deleteLicense();
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.UplinkError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.LiquidError) {
       addToast(result.message, 'error');
     } else {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License removed.', '%TEXTDOMAIN%'), 'default');
@@ -1755,7 +1755,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * License section: header, key input, licensed-product cards, and edit dialog.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -1879,7 +1879,7 @@ __webpack_require__.r(__webpack_exports__);
  * Header counts (active / deactivated) always reflect the full unfiltered
  * feature set so they remain stable while the user searches.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2001,7 +2001,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Upsell section: products not covered by the current license.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2070,7 +2070,7 @@ __webpack_require__.r(__webpack_exports__);
  * Main area: FilterBar header + product sections.
  * Sidebar: license panel.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2151,7 +2151,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Two-column page shell: scrollable main area + sticky sidebar.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 /**
@@ -2338,7 +2338,7 @@ __webpack_require__.r(__webpack_exports__);
  * Uses z-[100000] on the overlay so it clears the WP admin bar (z-index: 99999).
  * NOT using Radix Dialog — keeping this self-contained to control z-index.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2509,7 +2509,7 @@ __webpack_require__.r(__webpack_exports__);
  * utilities are scoped to .uplink-ui). The Content renders in the DOM tree but
  * Radix positions it with position:fixed so it still floats above other elements.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2685,7 +2685,7 @@ __webpack_require__.r(__webpack_exports__);
  * Reads from useToastStore and renders a fixed bottom-right stack.
  * Auto-dismiss is handled by the store (3.5s).
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2780,7 +2780,7 @@ __webpack_require__.r(__webpack_exports__);
  *       <Button disabled>...</Button>
  *   </Tooltip>
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2842,7 +2842,7 @@ __webpack_require__.r(__webpack_exports__);
  * Mount <FilterProvider> once in App.tsx; consume with useFilter() anywhere
  * in the component tree.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2900,7 +2900,7 @@ __webpack_require__.r(__webpack_exports__);
  * Mount <ToastProvider> once in App.tsx; consume with useToast() anywhere
  * in the component tree.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -2961,10 +2961,10 @@ __webpack_require__.r(__webpack_exports__);
  * Product catalog data.
  *
  * Product metadata. Tier definitions and feature lists come from the
- * stellarwp/uplink/v1/catalog and stellarwp/uplink/v1/features REST
+ * liquidweb/v1/catalog and liquidweb/v1/features REST
  * endpoints — not stored here.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 const PRODUCTS = [{
@@ -3003,9 +3003,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   ErrorCode: () => (/* binding */ ErrorCode)
 /* harmony export */ });
 /**
- * Machine-readable error codes for UplinkError instances.
+ * Machine-readable error codes for LiquidError instances.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 let ErrorCode = /*#__PURE__*/function (ErrorCode) {
   ErrorCode["FeaturesFetchFailed"] = "features-fetch-failed";
@@ -3034,10 +3034,10 @@ let ErrorCode = /*#__PURE__*/function (ErrorCode) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ErrorCode: () => (/* reexport safe */ _error_code__WEBPACK_IMPORTED_MODULE_1__.ErrorCode),
-/* harmony export */   UplinkError: () => (/* reexport safe */ _uplink_error__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   LiquidError: () => (/* reexport safe */ _liquid_error__WEBPACK_IMPORTED_MODULE_0__["default"]),
 /* harmony export */   isWpRestError: () => (/* reexport safe */ _utils__WEBPACK_IMPORTED_MODULE_2__.isWpRestError)
 /* harmony export */ });
-/* harmony import */ var _uplink_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uplink-error */ "./resources/js/errors/uplink-error.ts");
+/* harmony import */ var _liquid_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./liquid-error */ "./resources/js/errors/liquid-error.ts");
 /* harmony import */ var _error_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./error-code */ "./resources/js/errors/error-code.ts");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./resources/js/errors/utils.ts");
 
@@ -3046,34 +3046,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ "./resources/js/errors/uplink-error.ts"
+/***/ "./resources/js/errors/liquid-error.ts"
 /*!*********************************************!*\
-  !*** ./resources/js/errors/uplink-error.ts ***!
+  !*** ./resources/js/errors/liquid-error.ts ***!
   \*********************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ UplinkError)
+/* harmony export */   "default": () => (/* binding */ LiquidError)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./resources/js/errors/utils.ts");
 /**
- * UplinkError -- typed wrapper around the WP REST API serialized WP_Error.
+ * LiquidError -- typed wrapper around the WP REST API serialized WP_Error.
  *
  * @wordpress/api-fetch throws the parsed JSON body (a plain object) when
- * the server returns a non-2xx response. UplinkError normalizes that into
+ * the server returns a non-2xx response. LiquidError normalizes that into
  * a proper Error subclass with structured access to code, data, and any
  * additional errors.
  *
- * The entire error chain is typed. `additionalErrors` contains UplinkError
+ * The entire error chain is typed. `additionalErrors` contains LiquidError
  * instances (not plain WpRestError objects), so consumers get `.code`,
  * `.status`, and `.data` on every entry without casting.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
-class UplinkError extends Error {
+class LiquidError extends Error {
   /**
    * Machine-readable error code from the WP_Error.
    */
@@ -3084,7 +3084,7 @@ class UplinkError extends Error {
 
   /**
    * Secondary errors from a multi-code WP_Error response. This is a
-   * deserialization concern only. Use `cause` (via `UplinkError.wrap()`)
+   * deserialization concern only. Use `cause` (via `LiquidError.wrap()`)
    * to chain errors on the frontend.
    */
 
@@ -3095,17 +3095,17 @@ class UplinkError extends Error {
   constructor(codeOrError, messageOrOptions, options) {
     if (typeof codeOrError === 'string') {
       super(messageOrOptions);
-      this.name = 'UplinkError';
+      this.name = 'LiquidError';
       this.code = codeOrError;
       this.data = {};
       this.additionalErrors = [];
       this.cause = options?.cause;
     } else {
       super(codeOrError.message);
-      this.name = 'UplinkError';
+      this.name = 'LiquidError';
       this.code = codeOrError.code;
       this.data = codeOrError.data ?? {};
-      this.additionalErrors = (codeOrError.additional_errors ?? []).map(entry => new UplinkError(entry));
+      this.additionalErrors = (codeOrError.additional_errors ?? []).map(entry => new LiquidError(entry));
       this.cause = messageOrOptions?.cause;
     }
   }
@@ -3126,14 +3126,14 @@ class UplinkError extends Error {
     for (const additional of this.additionalErrors) {
       result.push(...additional.toArray());
     }
-    if (this.cause instanceof UplinkError) {
+    if (this.cause instanceof LiquidError) {
       result.push(...this.cause.toArray());
     }
     return result;
   }
 
   /**
-   * Async conversion of an unknown value into an UplinkError.
+   * Async conversion of an unknown value into an LiquidError.
    *
    * Handles everything `syncFrom` does, plus `Response` objects that
    * apiFetch throws when it cannot parse JSON or when `parse: false`
@@ -3144,47 +3144,47 @@ class UplinkError extends Error {
       try {
         const body = await error.json();
         if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(body)) {
-          return new UplinkError(body);
+          return new LiquidError(body);
         }
       } catch {
         // Response body wasn't JSON, fall through.
       }
-      return new UplinkError(code, message);
+      return new LiquidError(code, message);
     }
-    return UplinkError.syncFrom(error, code, message);
+    return LiquidError.syncFrom(error, code, message);
   }
 
   /**
-   * Synchronous conversion of an unknown value into an UplinkError.
+   * Synchronous conversion of an unknown value into an LiquidError.
    *
-   * If the value is already an UplinkError, returns it as-is. If it is
+   * If the value is already an LiquidError, returns it as-is. If it is
    * a WpRestError, hydrates it via the constructor. Anything else
-   * (plain Error, string, etc.) produces an UplinkError with the given
+   * (plain Error, string, etc.) produces an LiquidError with the given
    * fallback `code` and `message`, and the original is stored as `cause`.
    */
   static syncFrom(error, code, message) {
-    if (error instanceof UplinkError) {
+    if (error instanceof LiquidError) {
       return error;
     }
     if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(error)) {
-      return new UplinkError(error);
+      return new LiquidError(error);
     }
     if (error instanceof Error) {
-      return new UplinkError({
+      return new LiquidError({
         code,
         message
       }, {
         cause: error
       });
     }
-    return new UplinkError({
+    return new LiquidError({
       code,
       message
     });
   }
 
   /**
-   * Async wrap of an unknown caught value into an UplinkError with context.
+   * Async wrap of an unknown caught value into an LiquidError with context.
    *
    * The provided `code` and `message` describe what operation failed.
    * The original value is preserved as `cause` so the full error chain
@@ -3199,36 +3199,36 @@ class UplinkError extends Error {
       try {
         const body = await error.json();
         if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(body)) {
-          return new UplinkError({
+          return new LiquidError({
             code,
             message,
             data: body.data,
             additional_errors: body.additional_errors
           }, {
-            cause: new UplinkError(body)
+            cause: new LiquidError(body)
           });
         }
       } catch {
         // Response body wasn't JSON, fall through.
       }
-      return new UplinkError({
+      return new LiquidError({
         code,
         message
       });
     }
-    return UplinkError.wrapSync(error, code, message);
+    return LiquidError.wrapSync(error, code, message);
   }
 
   /**
-   * Synchronous wrap of an unknown caught value into an UplinkError
+   * Synchronous wrap of an unknown caught value into an LiquidError
    * with context.
    *
    * Same as `wrap` but cannot handle `Response` objects. Use this in
    * synchronous code paths where `await` is not available.
    */
   static wrapSync(error, code, message) {
-    if (error instanceof UplinkError || error instanceof Error) {
-      return new UplinkError({
+    if (error instanceof LiquidError || error instanceof Error) {
+      return new LiquidError({
         code,
         message
       }, {
@@ -3236,16 +3236,16 @@ class UplinkError extends Error {
       });
     }
     if ((0,_utils__WEBPACK_IMPORTED_MODULE_0__.isWpRestError)(error)) {
-      return new UplinkError({
+      return new LiquidError({
         code,
         message,
         data: error.data,
         additional_errors: error.additional_errors
       }, {
-        cause: new UplinkError(error)
+        cause: new LiquidError(error)
       });
     }
-    return new UplinkError({
+    return new LiquidError({
       code,
       message
     });
@@ -3267,7 +3267,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Error utility functions.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 /**
@@ -3310,13 +3310,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _use_resolvable_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
-/* harmony import */ var _errors_uplink_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors/uplink-error */ "./resources/js/errors/uplink-error.ts");
+/* harmony import */ var _errors_liquid_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors/liquid-error */ "./resources/js/errors/liquid-error.ts");
 /* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
 /**
  * Wrapper around useResolvableSelect that throws resolution errors
  * during render so they are caught by the nearest React ErrorBoundary.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3331,13 +3331,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Find the first error among a set of resolvable results and wrap it
- * as an UplinkError.
+ * as an LiquidError.
  */
 function findError(results) {
   for (const key in results) {
     const entry = results[key];
     if (entry.status === 'ERROR') {
-      return _errors_uplink_error__WEBPACK_IMPORTED_MODULE_2__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_3__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%'));
+      return _errors_liquid_error__WEBPACK_IMPORTED_MODULE_2__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_3__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%'));
     }
   }
   return null;
@@ -3349,16 +3349,16 @@ function findError(results) {
  *
  * The consumer callback must return a flat object of resolvable results.
  *
- * @throws {UplinkError} When any selector's resolution fails. If the resolver
- *   threw an UplinkError, that exact instance is re-thrown. Otherwise a new
- *   UplinkError with code {@link ErrorCode.ResolutionFailed} is created.
+ * @throws {LiquidError} When any selector's resolution fails. If the resolver
+ *   threw an LiquidError, that exact instance is re-thrown. Otherwise a new
+ *   LiquidError with code {@link ErrorCode.ResolutionFailed} is created.
  *
  * @example
  * ```ts
  * const { features, catalog } = useResolvableSelectWithError(
  *     ( resolve ) => ( {
- *         features: resolve( uplinkStore ).getFeatures(),
- *         catalog: resolve( uplinkStore ).getCatalog(),
+ *         features: resolve( harborStore ).getFeatures(),
+ *         catalog: resolve( harborStore ).getCatalog(),
  *     } ),
  *     [],
  * );
@@ -3397,7 +3397,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://github.com/WordPress/gutenberg/blob/c97c26fe371e3d40efe197d8f398326a16cdbf46/packages/core-data/src/hooks/use-query-select.ts
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3505,7 +3505,7 @@ __webpack_require__.r(__webpack_exports__);
  * Encapsulates store wiring, async action handlers, and all derived state
  * so FeatureRow itself stays a pure composition of atoms.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3533,7 +3533,7 @@ function useFeatureRow(feature) {
     setPendingAction(checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling');
     if (checked) {
       const result = await enableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.UplinkError) {
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
         addToast(result.message, 'error');
       } else {
         /* translators: %s is the name of the feature being enabled */
@@ -3541,7 +3541,7 @@ function useFeatureRow(feature) {
       }
     } else {
       const result = await disableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.UplinkError) {
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
         addToast(result.message, 'error');
       } else {
         /* translators: %s is the name of the feature being disabled */
@@ -3553,7 +3553,7 @@ function useFeatureRow(feature) {
   const handleUpdate = async () => {
     setPendingAction('updating');
     const result = await updateFeature(feature.slug);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.UplinkError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_5__.LiquidError) {
       addToast(result.message, 'error');
     } else {
       /* translators: %s is the name of the feature being updated */
@@ -3599,7 +3599,7 @@ __webpack_require__.r(__webpack_exports__);
  * directly, so ProductSection only re-renders when features or the query
  * actually change.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3645,7 +3645,7 @@ __webpack_require__.r(__webpack_exports__);
  * Partitions features for a product into available and locked groups,
  * and groups locked features by catalog tier.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3689,7 +3689,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Ported from sync-saas @utils/data/forward-resolver.js
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -3739,7 +3739,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Pure utility functions for license expiry display.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 /**
@@ -3820,9 +3820,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
 /**
- * Action creators for the stellarwp/uplink @wordpress/data store.
+ * Action creators for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -3868,7 +3868,7 @@ const enableFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/stellarwp/uplink/v1/features/${slug}/enable`,
+      path: `/liquidweb/v1/features/${slug}/enable`,
       method: 'POST'
     });
     dispatch({
@@ -3877,7 +3877,7 @@ const enableFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to enable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to enable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -3902,7 +3902,7 @@ const disableFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/stellarwp/uplink/v1/features/${slug}/disable`,
+      path: `/liquidweb/v1/features/${slug}/disable`,
       method: 'POST'
     });
     dispatch({
@@ -3911,7 +3911,7 @@ const disableFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to disable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to disable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -3936,7 +3936,7 @@ const updateFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/stellarwp/uplink/v1/features/${slug}/update`,
+      path: `/liquidweb/v1/features/${slug}/update`,
       method: 'POST'
     });
     dispatch({
@@ -3945,7 +3945,7 @@ const updateFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to update your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to update your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'UPDATE_FEATURE_FAILED',
       slug,
@@ -3967,14 +3967,14 @@ const storeLicense = key => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'STORE_LICENSE_START'
   });
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/license',
+      path: '/liquidweb/v1/license',
       method: 'POST',
       data: {
         key
@@ -3987,7 +3987,7 @@ const storeLicense = key => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'STORE_LICENSE_FAILED',
       error
@@ -4007,14 +4007,14 @@ const validateProduct = productSlug => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'VALIDATE_PRODUCT_START'
   });
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/license/validate',
+      path: '/liquidweb/v1/license/validate',
       method: 'POST',
       data: {
         product_slug: productSlug
@@ -4027,7 +4027,7 @@ const validateProduct = productSlug => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'VALIDATE_PRODUCT_FAILED',
       error
@@ -4047,14 +4047,14 @@ const deleteLicense = () => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'DELETE_LICENSE_START'
   });
   try {
     await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/license',
+      path: '/liquidweb/v1/license',
       method: 'DELETE'
     });
     dispatch({
@@ -4063,7 +4063,7 @@ const deleteLicense = () => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to remove your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to remove your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'DELETE_LICENSE_FAILED',
       error
@@ -4085,11 +4085,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   STORE_NAME: () => (/* binding */ STORE_NAME)
 /* harmony export */ });
 /**
- * @wordpress/data store name for the Uplink plugin.
+ * @wordpress/data store name for the Harbor library.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
-const STORE_NAME = 'stellarwp/uplink';
+const STORE_NAME = 'lw';
 
 /***/ },
 
@@ -4102,7 +4102,7 @@ const STORE_NAME = 'stellarwp/uplink';
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   STORE_NAME: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_5__.STORE_NAME),
-/* harmony export */   registerUplinkStore: () => (/* binding */ registerUplinkStore),
+/* harmony export */   registerHarborStore: () => (/* binding */ registerHarborStore),
 /* harmony export */   store: () => (/* binding */ store)
 /* harmony export */ });
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
@@ -4113,12 +4113,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resolvers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./resolvers */ "./resources/js/store/resolvers.ts");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constants */ "./resources/js/store/constants.ts");
 /**
- * Registers the stellarwp/uplink @wordpress/data store.
+ * Registers the lw @wordpress/data store.
  *
- * Call registerUplinkStore() once before createRoot() in index.tsx.
+ * Call registerHarborStore() once before createRoot() in index.tsx.
  * Consumers import the store descriptor and use useSelect / useDispatch.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -4132,7 +4132,7 @@ const store = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createReduxStore)(
   selectors: _selectors__WEBPACK_IMPORTED_MODULE_3__,
   resolvers: _resolvers__WEBPACK_IMPORTED_MODULE_4__
 });
-function registerUplinkStore() {
+function registerHarborStore() {
   (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.register)(store);
 }
 
@@ -4152,9 +4152,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
 /**
- * Reducer for the stellarwp/uplink @wordpress/data store.
+ * Reducer for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 const reducer = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.combineReducers)({
@@ -4464,13 +4464,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
 /* harmony import */ var _lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/forward-resolver */ "./resources/js/lib/forward-resolver.ts");
 /**
- * Resolvers for the stellarwp/uplink @wordpress/data store.
+ * Resolvers for the lw @wordpress/data store.
  *
  * Each resolver name matches a selector. @wordpress/data calls the resolver
  * automatically the first time the matching selector is invoked, then marks
  * it as resolved so subsequent calls hit the cache.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -4486,11 +4486,11 @@ const getFeatures = () => async ({
 }) => {
   try {
     const features = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/features'
+      path: '/liquidweb/v1/features'
     });
     dispatch.receiveFeatures(features);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%'));
   }
 };
 const getFeaturesByProduct = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getFeatures');
@@ -4509,11 +4509,11 @@ const getLegacyLicenses = () => async ({
 }) => {
   try {
     const licenses = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/legacy-licenses'
+      path: '/liquidweb/v1/legacy-licenses'
     });
     dispatch.receiveLegacyLicenses(licenses);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%'));
   }
 };
 const getLegacyLicenseBySlug = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getLegacyLicenses');
@@ -4533,11 +4533,11 @@ const getCatalog = () => async ({
 }) => {
   try {
     const catalogs = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/catalog'
+      path: '/liquidweb/v1/catalog'
     });
     dispatch.receiveCatalog(catalogs);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%'));
   }
 };
 const getProductCatalog = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
@@ -4557,11 +4557,11 @@ const getLicenseKey = () => async ({
 }) => {
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/stellarwp/uplink/v1/license'
+      path: '/liquidweb/v1/license'
     });
     dispatch.receiveLicense(result);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.UplinkError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.LiquidError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%'));
   }
 };
 const hasLicense = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolver)('getLicenseKey');
@@ -4607,9 +4607,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
 /**
- * Selectors for the stellarwp/uplink @wordpress/data store.
+ * Selectors for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // ---------------------------------------------------------------------------
@@ -17168,7 +17168,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-(0,_store__WEBPACK_IMPORTED_MODULE_1__.registerUplinkStore)();
+(0,_store__WEBPACK_IMPORTED_MODULE_1__.registerHarborStore)();
 const rootElement = document.getElementById('uplink-root');
 if (rootElement) {
   // Delay execution until after the DOM is fully loaded.

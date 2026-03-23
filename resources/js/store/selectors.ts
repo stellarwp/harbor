@@ -1,7 +1,7 @@
 /**
- * Selectors for the stellarwp/uplink @wordpress/data store.
+ * Selectors for the lw @wordpress/data store.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { createSelector } from '@wordpress/data';
 import type { State } from './types';
@@ -12,7 +12,7 @@ import type {
 	LicenseProduct,
 	ProductCatalog,
 } from '@/types/api';
-import type UplinkError from '@/errors/uplink-error';
+import type LiquidError from '@/errors/liquid-error';
 
 // ---------------------------------------------------------------------------
 // Features
@@ -41,7 +41,7 @@ export const isFeatureToggling = (state: State, slug: string): boolean =>
 export const getFeatureError = (
 	state: State,
 	slug: string
-): UplinkError | null => state.features.errorBySlug[slug] ?? null;
+): LiquidError | null => state.features.errorBySlug[slug] ?? null;
 
 export const isFeatureUpdating = (state: State, slug: string): boolean =>
 	state.features.updating[slug] ?? false;
@@ -160,11 +160,11 @@ export const canModifyLicense = (state: State): boolean =>
 	!state.license.isValidating &&
 	!state.license.isDeleting;
 
-export const getStoreLicenseError = (state: State): UplinkError | null =>
+export const getStoreLicenseError = (state: State): LiquidError | null =>
 	state.license.storeError;
 
-export const getDeleteLicenseError = (state: State): UplinkError | null =>
+export const getDeleteLicenseError = (state: State): LiquidError | null =>
 	state.license.deleteError;
 
-export const getValidateProductError = (state: State): UplinkError | null =>
+export const getValidateProductError = (state: State): LiquidError | null =>
 	state.license.validateError;

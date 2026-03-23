@@ -3,7 +3,7 @@
  *
  * Ported from sync-saas @utils/data/forward-resolver.js
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

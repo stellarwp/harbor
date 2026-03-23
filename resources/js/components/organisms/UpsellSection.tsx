@@ -1,7 +1,7 @@
 /**
  * Upsell section: products not covered by the current license.
  *
- * @package StellarWP\Uplink
+ * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
 import { Rocket } from 'lucide-react';
