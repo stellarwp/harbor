@@ -50,7 +50,7 @@ export const enableFeature =
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/liquidweb/v1/features/${slug}/enable`,
+				path: `/liquidweb/harbor/v1/features/${slug}/enable`,
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
@@ -81,7 +81,7 @@ export const disableFeature =
 		dispatch({ type: 'TOGGLE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/liquidweb/v1/features/${slug}/disable`,
+				path: `/liquidweb/harbor/v1/features/${slug}/disable`,
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
@@ -112,7 +112,7 @@ export const updateFeature =
 		dispatch({ type: 'UPDATE_FEATURE_START', slug });
 		try {
 			const feature = await apiFetch<Feature>({
-				path: `/liquidweb/v1/features/${slug}/update`,
+				path: `/liquidweb/harbor/v1/features/${slug}/update`,
 				method: 'POST',
 			});
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
@@ -153,7 +153,7 @@ export const storeLicense =
 		dispatch({ type: 'STORE_LICENSE_START' });
 		try {
 			const result = await apiFetch<License>({
-				path: '/liquidweb/v1/license',
+				path: '/liquidweb/harbor/v1/license',
 				method: 'POST',
 				data: { key },
 			});
@@ -198,7 +198,7 @@ export const validateProduct =
 		dispatch({ type: 'VALIDATE_PRODUCT_START' });
 		try {
 			const result = await apiFetch<License>({
-				path: '/liquidweb/v1/license/validate',
+				path: '/liquidweb/harbor/v1/license/validate',
 				method: 'POST',
 				data: { product_slug: productSlug },
 			});
@@ -243,7 +243,7 @@ export const deleteLicense =
 		dispatch({ type: 'DELETE_LICENSE_START' });
 		try {
 			await apiFetch<void>({
-				path: '/liquidweb/v1/license',
+				path: '/liquidweb/harbor/v1/license',
 				method: 'DELETE',
 			});
 			dispatch({ type: 'DELETE_LICENSE_FINISHED' });

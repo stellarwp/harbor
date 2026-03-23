@@ -66,16 +66,16 @@ $container->get( 'lw-harbor.admin-views.path' );
 
 ### REST API
 
-Namespace: `liquidweb/v1`
+Namespace: `liquidweb/harbor/v1`
 
 ```
-/wp-json/liquidweb/v1/features
-/wp-json/liquidweb/v1/license
-/wp-json/liquidweb/v1/catalog
-/wp-json/liquidweb/v1/legacy-licenses
+/wp-json/liquidweb/harbor/v1/features
+/wp-json/liquidweb/harbor/v1/license
+/wp-json/liquidweb/harbor/v1/catalog
+/wp-json/liquidweb/harbor/v1/legacy-licenses
 ```
 
-The `liquidweb/v1` namespace is shared across Liquid Web libraries. Harbor registers its routes there, and other libraries can add their own routes under the same namespace.
+The `liquidweb/harbor/v1` namespace is shared across Liquid Web libraries. Harbor registers its routes there, and other libraries can add their own routes under the same namespace.
 
 ### Global PHP Functions
 
@@ -146,7 +146,7 @@ wp_enqueue_script( 'lw-harbor-notice-dismiss', ... );
 | Store name         | `'lw'`                                  |
 | Store registration | `registerHarborStore`                   |
 | Store import alias | `harborStore`                           |
-| REST paths         | `'/liquidweb/v1/...'`                   |
+| REST paths         | `'/liquidweb/harbor/v1/...'`                   |
 | Docblock package   | `@package LiquidWeb\Harbor`             |
 
 <!-- markdownlint-enable MD060 -->
@@ -174,7 +174,7 @@ The library version starts at `0.0.1`. All `@since` tags for new code use `@sinc
 | Hooks                   | `lw-harbor`        | `/`       | `lw-harbor/catalog/fetched`         |
 | Options/meta/cache/cron | `lw_harbor`        | `_`       | `lw_harbor_unified_license_key`     |
 | Container keys          | `lw-harbor`        | `.`       | `lw-harbor.admin-views.path`        |
-| REST namespace          | `liquidweb`        | `/`       | `liquidweb/v1/features`             |
+| REST namespace          | `liquidweb`        | `/`       | `liquidweb/harbor/v1/features`             |
 | Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`    |
 | WP-CLI                  | `lw`               | ` `       | `wp lw feature list`                |
 | Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`       |

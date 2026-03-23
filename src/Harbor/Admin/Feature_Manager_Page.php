@@ -121,7 +121,7 @@ class Feature_Manager_Page {
 			$handle,
 			'uplinkData',
 			[
-				'restUrl' => rest_url( 'liquidweb/v1/' ),
+				'restUrl' => rest_url( 'liquidweb/harbor/v1/' ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 			]
 		);

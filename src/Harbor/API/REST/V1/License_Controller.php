@@ -31,7 +31,7 @@ final class License_Controller extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'liquidweb/v1';
+	protected $namespace = 'liquidweb/harbor/v1';
 
 	/**
 	 * The REST API route base.

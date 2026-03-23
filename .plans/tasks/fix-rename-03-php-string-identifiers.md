@@ -18,9 +18,9 @@ Every `apply_filters()`, `add_filter()`, `do_action()`, and `add_action()` call 
 
 ### REST namespace
 
-The four REST controllers in `API/REST/V1/` all define `$namespace = 'stellarwp/uplink/v1'` which becomes `'liquidweb/v1'`.
+The four REST controllers in `API/REST/V1/` all define `$namespace = 'stellarwp/uplink/v1'` which becomes `'liquidweb/harbor/v1'`.
 
-`Feature_Manager_Page.php` has `rest_url('uplink/v1/')` which was a pre-existing bug (missing the `stellarwp/` prefix). This gets fixed to `rest_url('liquidweb/v1/')`.
+`Feature_Manager_Page.php` has `rest_url('uplink/v1/')` which was a pre-existing bug (missing the `stellarwp/` prefix). This gets fixed to `rest_url('liquidweb/harbor/v1/')`.
 
 ### Option, transient, and cache prefixes
 

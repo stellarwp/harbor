@@ -63,7 +63,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 	public function test_list_returns_all_catalogs(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -73,7 +73,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 	public function test_list_returns_expected_shape(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
@@ -89,7 +89,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 	public function test_list_requires_manage_options(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
-		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 403, $response->get_status() );
@@ -98,7 +98,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 	public function test_list_rejects_unauthenticated(): void {
 		wp_set_current_user( 0 );
 
-		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 401, $response->get_status() );
@@ -116,7 +116,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 		$this->repository->set_catalog( new WP_Error( Error_Code::INVALID_RESPONSE, 'API unavailable.', [ 'status' => 502 ] ) );
 		$this->set_fn_return( 'time', 1000030 );
 
-		$request  = new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' );
+		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 502, $response->get_status() );
@@ -130,7 +130,7 @@ final class Catalog_ControllerTest extends HarborTestCase {
 		$repository = new Catalog_Repository( $client );
 		$controller = new Catalog_Controller( $repository );
 
-		$response = $controller->get_items( new WP_REST_Request( 'GET', '/liquidweb/v1/catalog' ) );
+		$response = $controller->get_items( new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/catalog' ) );
 
 		$this->assertInstanceOf( WP_Error::class, $response );
 		$this->assertSame( Error_Code::INVALID_RESPONSE, $response->get_error_code() );

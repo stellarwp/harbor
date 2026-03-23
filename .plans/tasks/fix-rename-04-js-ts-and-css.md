@@ -56,7 +56,7 @@ These must match what the PHP side emits (changed in Stage 3).
 
 ### REST paths in JS
 
-`'stellarwp/uplink/v1'` becomes `'liquidweb/v1'` in `store/actions.ts` (6 paths) and `store/resolvers.ts` (4 paths).
+`'stellarwp/uplink/v1'` becomes `'liquidweb/harbor/v1'` in `store/actions.ts` (6 paths) and `store/resolvers.ts` (4 paths).
 
 ### CSS scope
 

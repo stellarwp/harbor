@@ -2961,7 +2961,7 @@ __webpack_require__.r(__webpack_exports__);
  * Product catalog data.
  *
  * Product metadata. Tier definitions and feature lists come from the
- * liquidweb/v1/catalog and liquidweb/v1/features REST
+ * liquidweb/harbor/v1/catalog and liquidweb/harbor/v1/features REST
  * endpoints — not stored here.
  *
  * @package LiquidWeb\Harbor
@@ -3868,7 +3868,7 @@ const enableFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/liquidweb/v1/features/${slug}/enable`,
+      path: `/liquidweb/harbor/v1/features/${slug}/enable`,
       method: 'POST'
     });
     dispatch({
@@ -3902,7 +3902,7 @@ const disableFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/liquidweb/v1/features/${slug}/disable`,
+      path: `/liquidweb/harbor/v1/features/${slug}/disable`,
       method: 'POST'
     });
     dispatch({
@@ -3936,7 +3936,7 @@ const updateFeature = slug => async ({
   });
   try {
     const feature = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: `/liquidweb/v1/features/${slug}/update`,
+      path: `/liquidweb/harbor/v1/features/${slug}/update`,
       method: 'POST'
     });
     dispatch({
@@ -3974,7 +3974,7 @@ const storeLicense = key => async ({
   });
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/license',
+      path: '/liquidweb/harbor/v1/license',
       method: 'POST',
       data: {
         key
@@ -4014,7 +4014,7 @@ const validateProduct = productSlug => async ({
   });
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/license/validate',
+      path: '/liquidweb/harbor/v1/license/validate',
       method: 'POST',
       data: {
         product_slug: productSlug
@@ -4054,7 +4054,7 @@ const deleteLicense = () => async ({
   });
   try {
     await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/license',
+      path: '/liquidweb/harbor/v1/license',
       method: 'DELETE'
     });
     dispatch({
@@ -4486,7 +4486,7 @@ const getFeatures = () => async ({
 }) => {
   try {
     const features = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/features'
+      path: '/liquidweb/harbor/v1/features'
     });
     dispatch.receiveFeatures(features);
   } catch (err) {
@@ -4509,7 +4509,7 @@ const getLegacyLicenses = () => async ({
 }) => {
   try {
     const licenses = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/legacy-licenses'
+      path: '/liquidweb/harbor/v1/legacy-licenses'
     });
     dispatch.receiveLegacyLicenses(licenses);
   } catch (err) {
@@ -4533,7 +4533,7 @@ const getCatalog = () => async ({
 }) => {
   try {
     const catalogs = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/catalog'
+      path: '/liquidweb/harbor/v1/catalog'
     });
     dispatch.receiveCatalog(catalogs);
   } catch (err) {
@@ -4557,7 +4557,7 @@ const getLicenseKey = () => async ({
 }) => {
   try {
     const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/v1/license'
+      path: '/liquidweb/harbor/v1/license'
     });
     dispatch.receiveLicense(result);
   } catch (err) {

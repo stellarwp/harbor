@@ -125,7 +125,7 @@ All parameters optional. Returns a new collection without mutating the original.
 
 ## REST API
 
-Five endpoints under `liquidweb/v1`. All require `manage_options`.
+Five endpoints under `liquidweb/harbor/v1`. All require `manage_options`.
 
 | Route                      | Method | Purpose                                                         |
 | -------------------------- | ------ | --------------------------------------------------------------- |

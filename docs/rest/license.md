@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-## GET /liquidweb/v1/license
+## GET /liquidweb/harbor/v1/license
 
 Returns the stored unified license key and its associated products. Products come from the cached `Product_Collection` (fetched from the Licensing API). When no key is stored, `products` is an empty array.
 
@@ -33,7 +33,7 @@ Returns the stored unified license key and its associated products. Products com
 
 When no key exists, returns `{ "key": null, "products": [] }`.
 
-## POST /liquidweb/v1/license
+## POST /liquidweb/harbor/v1/license
 
 Validates a license key against the Licensing API and stores it. Verifies the key is recognized (has products) and caches the product list, but does not activate any product or consume a seat.
 
@@ -60,7 +60,7 @@ Validates a license key against the Licensing API and stores it. Verifies the ke
 | 422  | `lw-harbor-invalid-key`  | Key not recognized by API     |
 | 500  | `lw-harbor-store-failed` | Key could not be persisted    |
 
-## POST /liquidweb/v1/license/validate
+## POST /liquidweb/harbor/v1/license/validate
 
 Validates a product on this domain using the stored license key. Calls the Licensing API validate endpoint, which may consume an activation seat on first call for a new domain. On success, the cached product list is refreshed so the next GET reflects the new activation state.
 
@@ -91,7 +91,7 @@ Returns `201 Created` with no body.
 | 422  | `lw-harbor-license-banned`     | License is banned                |
 | 422  | `lw-harbor-no-subscription`    | No subscription for this product |
 
-## DELETE /liquidweb/v1/license
+## DELETE /liquidweb/harbor/v1/license
 
 Removes the locally stored license key. Does not free any activation seats on the licensing service.
 
