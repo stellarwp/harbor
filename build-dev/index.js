@@ -1985,7 +1985,7 @@ function ProductSection({
       allFeaturesUnfiltered: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).getFeaturesByProduct(product.slug),
       hasLicense: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).hasLicense(),
       licenseProduct: licenseProducts.find(lp => lp.product_slug === product.slug) ?? null,
-      hasActiveLegacy: select(uplinkStore).hasActiveLegacyLicenseForProduct(product.slug)
+      hasActiveLegacy: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).hasActiveLegacyLicenseForProduct(product.slug)
     };
   }, [product.slug]);
   const {
@@ -3603,9 +3603,9 @@ function useFeatureRow(feature) {
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
   const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => feature.type !== 'flag' && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
   const showLegacyBadge = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
-    const activeLegacy = select(uplinkStore).getActiveLegacyLicense(feature.slug);
+    const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
-    return !select(uplinkStore).isProductUnifiedLicensed(feature.product);
+    return !select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductUnifiedLicensed(feature.product);
   }, [feature.slug, feature.product]);
   const showFreeBadge = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_4__.isFreeFeature)(feature.tier);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);

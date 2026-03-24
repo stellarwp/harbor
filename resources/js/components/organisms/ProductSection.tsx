@@ -39,7 +39,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                 allFeaturesUnfiltered: select( harborStore ).getFeaturesByProduct( product.slug ),
                 hasLicense:            select( harborStore ).hasLicense(),
                 licenseProduct:        licenseProducts.find( ( lp ) => lp.product_slug === product.slug ) ?? null,
-                hasActiveLegacy:       select( uplinkStore ).hasActiveLegacyLicenseForProduct( product.slug ),
+                hasActiveLegacy:       select( harborStore ).hasActiveLegacyLicenseForProduct( product.slug ),
             };
         },
         [ product.slug ],
