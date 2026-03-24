@@ -2,7 +2,7 @@
  * Single-component tooltip wrapper built on Radix UI.
  *
  * Uses a Portal + inline styles instead of Tailwind utilities because the
- * Portal teleports content outside .uplink-ui, where the PostCSS scope plugin
+ * Portal teleports content outside .lw-harbor-ui, where the PostCSS scope plugin
  * would no longer apply. z-index 100001 clears the WP admin bar (99999) and
  * our dialogs (100000).
  *

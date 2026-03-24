@@ -103,7 +103,7 @@ final class With_DebuggingTest extends HarborTestCase {
 		$this->subject->call_debug_log( 'Something happened.' ); // @phpstan-ignore method.notFound
 
 		$this->assertCount( 1, $this->logged );
-		$this->assertSame( 'Uplink: Something happened.', $this->logged[0] );
+		$this->assertSame( 'Harbor: Something happened.', $this->logged[0] );
 	}
 
 	public function test_debug_log_does_not_write_when_wp_debug_is_false(): void {
@@ -114,12 +114,12 @@ final class With_DebuggingTest extends HarborTestCase {
 		$this->assertCount( 0, $this->logged );
 	}
 
-	public function test_debug_log_prefixes_message_with_uplink(): void {
+	public function test_debug_log_prefixes_message_with_harbor(): void {
 		$this->set_const_value( 'WP_DEBUG', true );
 
 		$this->subject->call_debug_log( 'test message' ); // @phpstan-ignore method.notFound
 
-		$this->assertStringStartsWith( 'Uplink: ', $this->logged[0] );
+		$this->assertStringStartsWith( 'Harbor: ', $this->logged[0] );
 	}
 
 	public function test_debug_log_preserves_full_message_after_prefix(): void {
@@ -128,7 +128,7 @@ final class With_DebuggingTest extends HarborTestCase {
 		$message = 'Fatal error installing "kadence-blocks": file not found';
 		$this->subject->call_debug_log( $message ); // @phpstan-ignore method.notFound
 
-		$this->assertSame( 'Uplink: ' . $message, $this->logged[0] );
+		$this->assertSame( 'Harbor: ' . $message, $this->logged[0] );
 	}
 
 	public function test_debug_log_handles_empty_message(): void {
@@ -137,7 +137,7 @@ final class With_DebuggingTest extends HarborTestCase {
 		$this->subject->call_debug_log( '' ); // @phpstan-ignore method.notFound
 
 		$this->assertCount( 1, $this->logged );
-		$this->assertSame( 'Uplink: ', $this->logged[0] );
+		$this->assertSame( 'Harbor: ', $this->logged[0] );
 	}
 
 	public function test_debug_log_multiple_calls_log_multiple_entries(): void {
@@ -148,9 +148,9 @@ final class With_DebuggingTest extends HarborTestCase {
 		$this->subject->call_debug_log( 'third' ); // @phpstan-ignore method.notFound
 
 		$this->assertCount( 3, $this->logged );
-		$this->assertSame( 'Uplink: first', $this->logged[0] );
-		$this->assertSame( 'Uplink: second', $this->logged[1] );
-		$this->assertSame( 'Uplink: third', $this->logged[2] );
+		$this->assertSame( 'Harbor: first', $this->logged[0] );
+		$this->assertSame( 'Harbor: second', $this->logged[1] );
+		$this->assertSame( 'Harbor: third', $this->logged[2] );
 	}
 
 	// ─── debug_log_throwable() ─────────────────────────────────────────
@@ -163,7 +163,7 @@ final class With_DebuggingTest extends HarborTestCase {
 		$this->subject->call_debug_log_throwable( $exception, 'Catalog sync' ); // @phpstan-ignore method.notFound
 
 		$this->assertCount( 1, $this->logged );
-		$this->assertStringStartsWith( 'Uplink: Catalog sync: Something broke', $this->logged[0] );
+		$this->assertStringStartsWith( 'Harbor: Catalog sync: Something broke', $this->logged[0] );
 		$this->assertStringContainsString( $exception->getFile() . ':' . $exception->getLine(), $this->logged[0] );
 		$this->assertStringContainsString( $exception->getTraceAsString(), $this->logged[0] );
 	}
@@ -187,7 +187,7 @@ final class With_DebuggingTest extends HarborTestCase {
 
 		$this->assertCount( 1, $this->logged );
 		$this->assertSame(
-			'Uplink: License check: [http_request_failed] Connection timed out',
+			'Harbor: License check: [http_request_failed] Connection timed out',
 			$this->logged[0]
 		);
 	}

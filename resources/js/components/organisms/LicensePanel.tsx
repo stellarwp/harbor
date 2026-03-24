@@ -14,7 +14,7 @@ import { UpsellSection } from '@/components/organisms/UpsellSection';
 import { store as harborStore } from '@/store';
 import { PRODUCTS } from '@/data/products';
 import { useToast } from '@/context/toast-context';
-import { LiquidError } from '@/errors';
+import { HarborError } from '@/errors';
 
 /**
  * @since 1.0.0
@@ -60,7 +60,7 @@ export function LicensePanel() {
 
     const handleRemove = async () => {
         const result = await deleteLicense();
-        if ( result instanceof LiquidError ) {
+        if ( result instanceof HarborError ) {
             addToast( result.message, 'error' );
         } else {
             addToast( __( 'License removed.', '%TEXTDOMAIN%' ), 'default' );

@@ -116,7 +116,7 @@
 	--sidebar-ring: oklch(0.556 0 0);
 }
 
-.uplink-ui {
+.lw-harbor-ui {
 	background-color: var(--color-background);
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 14px;
@@ -124,23 +124,23 @@
 	color: var(--color-foreground);
 }
 
-.uplink-ui * {
+.lw-harbor-ui * {
 	border-color: var(--color-border);
 }
 
-#wpcontent:has(.uplink-ui) {
+#wpcontent:has(.lw-harbor-ui) {
 	padding-left: 0;
 }
 
-#wpcontent:has(.uplink-ui) #wpbody-content {
+#wpcontent:has(.lw-harbor-ui) #wpbody-content {
 	padding-bottom: 0;
 }
 
-#wpcontent:has(.uplink-ui) + #wpfooter {
+#wpcontent:has(.lw-harbor-ui) + #wpfooter {
 	display: none;
 }
 
-.wrap:has(> .uplink-ui) {
+.wrap:has(> .lw-harbor-ui) {
 	margin: 0;
 	padding: 0;
 }

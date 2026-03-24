@@ -2,7 +2,7 @@
 /**
  * Render a WordPress dashboard notice.
  *
- * @see \StellarWP\Uplink\Notice\Notice_Controller
+ * @see \StellarWP\Harbor\Notice\Notice_Controller
  *
  * @var string               $message           The message to display.
  * @var string               $classes           The CSS classes for the notice.

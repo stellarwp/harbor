@@ -4,7 +4,7 @@
  * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
-import { Badge } from '@/components/ui/badge';
+import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { ProductLogo } from '@/components/atoms/ProductLogo';
 import { formatDate, getExpiryStatus, expiryCardClass, expiryTextClass } from '@/lib/license-utils';
 import type { LicenseProduct } from '@/types/api';
@@ -28,9 +28,7 @@ export function LicenseProductCard( { lp, productName, tierName }: LicenseProduc
 				<span className="text-sm font-medium text-foreground flex-1 min-w-0">
 					{ productName }
 				</span>
-				<Badge variant="gradient" className="text-[10px]">
-					{ tierName }
-				</Badge>
+				<LicenseBadge type="licensed" tierName={ tierName } className="text-[10px]" />
 			</div>
 			<span className={ `text-xs ${ expiryTextClass[ expiryStatus ] }` }>
 				{ expiryStatus === 'expired'

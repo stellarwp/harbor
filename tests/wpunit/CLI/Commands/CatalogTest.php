@@ -16,7 +16,7 @@ use WP_CLI;
 use WP_Error;
 
 /**
- * Tests for the WP-CLI `wp uplink catalog` command.
+ * Tests for the WP-CLI `wp harbor catalog` command.
  *
  * @since 1.0.0
  */

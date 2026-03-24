@@ -2,8 +2,8 @@
  * Radix UI Select primitives styled to the project's design system.
  *
  * Intentionally NOT using Select.Portal — portal content renders outside
- * .uplink-ui and would be invisible to the PostCSS scope plugin (all Tailwind
- * utilities are scoped to .uplink-ui). The Content renders in the DOM tree but
+ * .lw-harbor-ui and would be invisible to the PostCSS scope plugin (all Tailwind
+ * utilities are scoped to .lw-harbor-ui). The Content renders in the DOM tree but
  * Radix positions it with position:fixed so it still floats above other elements.
  *
  * @package LiquidWeb\Harbor

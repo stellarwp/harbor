@@ -7,7 +7,7 @@ export type FeatureStatus =
     | 'enabled'
     | 'available'
     | 'locked'
-    | 'not-licensed'
+    | 'unlicensed'
     | 'installing'
     | 'enabling'
     | 'disabling'
@@ -65,11 +65,11 @@ export function StatusBadge( { status, requiredTier }: StatusBadgeProps ) {
         );
     }
 
-    // not-licensed or locked without tier label
+    // unlicensed or locked without tier label
     return (
         <Badge variant="outline">
             <Lock className="w-3 h-3" />
-            { __( 'Not Licensed', '%TEXTDOMAIN%' ) }
+            { __( 'Unlicensed', '%TEXTDOMAIN%' ) }
         </Badge>
     );
 }

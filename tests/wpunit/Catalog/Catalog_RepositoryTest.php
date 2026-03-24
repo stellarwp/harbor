@@ -161,6 +161,75 @@ final class Catalog_RepositoryTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// In-memory caching
+	// -------------------------------------------------------------------------
+
+	public function test_get_cached_returns_same_instance_on_repeated_calls(): void {
+		$this->repository->get();
+
+		$first  = $this->repository->get_cached();
+		$second = $this->repository->get_cached();
+
+		$this->assertSame( $first, $second );
+	}
+
+	public function test_get_returns_same_instance_on_repeated_calls(): void {
+		$first  = $this->repository->get();
+		$second = $this->repository->get();
+
+		$this->assertSame( $first, $second );
+	}
+
+	public function test_set_catalog_invalidates_in_memory_cache(): void {
+		$this->repository->get();
+
+		$before = $this->repository->get_cached();
+
+		// Overwrite with a different collection.
+		$this->repository->set_catalog(
+			Catalog_Collection::from_array(
+				[
+					[
+						'product_slug' => 'new-product',
+						'tiers'        => [],
+						'features'     => [],
+					],
+				]
+			)
+		);
+
+		$after = $this->repository->get_cached();
+
+		$this->assertNotSame( $before, $after );
+		$this->assertCount( 1, $after );
+		$this->assertSame( 'new-product', $after->get( 'new-product' )->get_product_slug() );
+	}
+
+	public function test_delete_catalog_invalidates_in_memory_cache(): void {
+		$this->repository->get();
+
+		$this->assertNotNull( $this->repository->get_cached() );
+
+		$this->repository->delete_catalog();
+
+		$this->assertNull( $this->repository->get_cached() );
+	}
+
+	public function test_set_catalog_error_invalidates_in_memory_cache(): void {
+		$this->repository->get();
+
+		$this->assertNotNull( $this->repository->get_cached() );
+
+		$this->repository->set_catalog( new WP_Error( Error_Code::INVALID_RESPONSE, 'fail' ) );
+
+		// The in-memory cache is cleared, but get_cached re-reads from the option
+		// which still has the preserved collection from the earlier successful fetch.
+		$result = $this->repository->get_cached();
+		$this->assertInstanceOf( Catalog_Collection::class, $result );
+		$this->assertCount( 4, $result );
+	}
+
+	// -------------------------------------------------------------------------
 	// Error throttling
 	// -------------------------------------------------------------------------
 

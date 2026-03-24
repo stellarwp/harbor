@@ -11,7 +11,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { Badge } from '@/components/ui/badge';
+import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { ProductLogo } from '@/components/atoms/ProductLogo';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
 import { TierGroup } from '@/components/molecules/TierGroup';
@@ -32,13 +32,14 @@ export function ProductSection( { product }: ProductSectionProps ) {
     const isSearching = searchQuery.trim().length > 0;
 
     // Full unfiltered set — used only for header counts so they stay stable.
-    const { hasLicense, licenseProduct, allFeaturesUnfiltered } = useSelect(
+    const { hasLicense, licenseProduct, allFeaturesUnfiltered, hasActiveLegacy } = useSelect(
         ( select ) => {
             const licenseProducts = select( harborStore ).getLicenseProducts();
             return {
                 allFeaturesUnfiltered: select( harborStore ).getFeaturesByProduct( product.slug ),
                 hasLicense:            select( harborStore ).hasLicense(),
                 licenseProduct:        licenseProducts.find( ( lp ) => lp.product_slug === product.slug ) ?? null,
+                hasActiveLegacy:       select( harborStore ).hasActiveLegacyLicenseForProduct( product.slug ),
             };
         },
         [ product.slug ],
@@ -65,11 +66,11 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     { product.name }
                 </h2>
                 { tierName ? (
-                    <Badge variant="gradient">{ tierName }</Badge>
+                    <LicenseBadge type="licensed" tierName={ tierName } />
+                ) : hasActiveLegacy ? (
+                    <LicenseBadge type="legacy" />
                 ) : (
-                    <Badge variant="outline" className="text-white border-white/40">
-                        { __( 'Not Licensed', '%TEXTDOMAIN%' ) }
-                    </Badge>
+                    <LicenseBadge type="unlicensed" className="text-white border-white/40" />
                 ) }
                 <span className="ml-auto text-xs text-white/70">
                     { activeCount } { __( 'active', '%TEXTDOMAIN%' ) }

@@ -9,7 +9,7 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { LiquidError, ErrorCode } from '@/errors';
+import { HarborError, ErrorCode } from '@/errors';
 import type { Feature, LegacyLicense, ProductCatalog, License } from '@/types/api';
 import type { Thunk } from './types';
 import { forwardResolver, forwardResolverWithoutArgs } from '@/lib/forward-resolver';
@@ -27,7 +27,7 @@ export const getFeatures =
 			});
 			dispatch.receiveFeatures(features);
 		} catch (err) {
-			throw await LiquidError.wrap(
+			throw await HarborError.wrap(
 				err,
 				ErrorCode.FeaturesFetchFailed,
 				__('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%')
@@ -55,7 +55,7 @@ export const getLegacyLicenses =
 			});
 			dispatch.receiveLegacyLicenses(licenses);
 		} catch (err) {
-			throw await LiquidError.wrap(
+			throw await HarborError.wrap(
 				err,
 				ErrorCode.LegacyLicensesFetchFailed,
 				__('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%')
@@ -84,7 +84,7 @@ export const getCatalog =
 			});
 			dispatch.receiveCatalog(catalogs);
 		} catch (err) {
-			throw await LiquidError.wrap(
+			throw await HarborError.wrap(
 				err,
 				ErrorCode.CatalogFetchFailed,
 				__('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%')
@@ -113,7 +113,7 @@ export const getLicenseKey =
 			});
 			dispatch.receiveLicense(result);
 		} catch (err) {
-			throw await LiquidError.wrap(
+			throw await HarborError.wrap(
 				err,
 				ErrorCode.LicenseFetchFailed,
 				__('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%')

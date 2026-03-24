@@ -5,6 +5,16 @@
  */
 
 /**
+ * True when a feature requires no paid tier — either it has no tier at all
+ * or its tier slug contains "free" (e.g. "give-free").
+ *
+ * @since 1.0.0
+ */
+export function isFreeFeature( tier: string | null ): boolean {
+    return ! tier || tier.toLowerCase().includes( 'free' );
+}
+
+/**
  * @since 1.0.0
  */
 export function formatDate( dateStr: string ): string {

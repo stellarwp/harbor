@@ -12,7 +12,7 @@ import type {
 	LicenseProduct,
 	ProductCatalog,
 } from '@/types/api';
-import type LiquidError from '@/errors/liquid-error';
+import type HarborError from '@/errors/harbor-error';
 
 // ---------------------------------------------------------------------------
 // Features
@@ -41,7 +41,7 @@ export const isFeatureToggling = (state: State, slug: string): boolean =>
 export const getFeatureError = (
 	state: State,
 	slug: string
-): LiquidError | null => state.features.errorBySlug[slug] ?? null;
+): HarborError | null => state.features.errorBySlug[slug] ?? null;
 
 export const isFeatureUpdating = (state: State, slug: string): boolean =>
 	state.features.updating[slug] ?? false;
@@ -86,6 +86,32 @@ export const hasLegacyLicense = (state: State, slug: string): boolean =>
 
 export const hasLegacyLicenses = (state: State): boolean =>
 	Object.keys(state.legacyLicenses.bySlug).length > 0;
+
+/**
+ * Returns the legacy license for the given feature slug only if it is active,
+ * or null if it does not exist or has expired.
+ */
+export const getActiveLegacyLicense = (state: State, slug: string): LegacyLicense | null => {
+	const license = state.legacyLicenses.bySlug[ slug ] ?? null;
+	return license !== null && license.is_active ? license : null;
+};
+
+/**
+ * True when the unified license covers the given product slug.
+ */
+export const isProductUnifiedLicensed = (state: State, productSlug: string): boolean =>
+	state.license.license.products.some( (p) => p.product_slug === productSlug );
+
+/**
+ * True when at least one feature belonging to the product has an active legacy license.
+ */
+export const hasActiveLegacyLicenseForProduct = createSelector(
+	(state: State, productSlug: string): boolean =>
+		Object.values( state.features.bySlug )
+			.filter( (f) => f.product === productSlug )
+			.some( (f) => state.legacyLicenses.bySlug[ f.slug ]?.is_active === true ),
+	(state: State, productSlug: string) => [ state.features.bySlug, state.legacyLicenses.bySlug, productSlug ]
+);
 
 // ---------------------------------------------------------------------------
 // Catalog
@@ -154,11 +180,11 @@ export const canModifyLicense = (state: State): boolean =>
 	!state.license.isValidating &&
 	!state.license.isDeleting;
 
-export const getStoreLicenseError = (state: State): LiquidError | null =>
+export const getStoreLicenseError = (state: State): HarborError | null =>
 	state.license.storeError;
 
-export const getDeleteLicenseError = (state: State): LiquidError | null =>
+export const getDeleteLicenseError = (state: State): HarborError | null =>
 	state.license.deleteError;
 
-export const getValidateProductError = (state: State): LiquidError | null =>
+export const getValidateProductError = (state: State): HarborError | null =>
 	state.license.validateError;

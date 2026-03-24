@@ -3,7 +3,7 @@
 namespace LiquidWeb\Harbor\Legacy;
 
 /**
- * Provides access to legacy licenses reported by all Uplink
+ * Provides access to legacy licenses reported by all Harbor
  * instances through the cross-instance filter.
  *
  * @since 1.0.0
@@ -18,7 +18,7 @@ class License_Repository {
 	private ?array $cache = null;
 
 	/**
-	 * Get all legacy licenses reported across all Uplink instances.
+	 * Get all legacy licenses reported across all Harbor instances.
 	 *
 	 * @since 1.0.0
 	 *

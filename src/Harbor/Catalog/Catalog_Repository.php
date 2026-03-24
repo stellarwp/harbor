@@ -10,7 +10,7 @@ use WP_Error;
 /**
  * Option-backed repository for the product catalog.
  *
- * This is the public API that the rest of Uplink uses — it never
+ * This is the public API that the rest of Harbor uses — it never
  * exposes the client directly.
  *
  * Any call that would hit the remote API first checks whether a recent
@@ -89,6 +89,15 @@ class Catalog_Repository {
 	protected Catalog_Client $client;
 
 	/**
+	 * In-memory cache of the deserialized catalog collection for the current request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Catalog_Collection|null
+	 */
+	private $cached_collection;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -145,10 +154,16 @@ class Catalog_Repository {
 	 * @return Catalog_Collection|null
 	 */
 	public function get_cached(): ?Catalog_Collection {
+		if ( $this->cached_collection !== null ) {
+			return $this->cached_collection;
+		}
+
 		$state = $this->read_catalog_state();
 
 		if ( is_array( $state[ self::STATE_KEY_COLLECTION ] ) ) {
-			return Catalog_Collection::from_array( $state[ self::STATE_KEY_COLLECTION ] );
+			$this->cached_collection = Catalog_Collection::from_array( $state[ self::STATE_KEY_COLLECTION ] );
+
+			return $this->cached_collection;
 		}
 
 		return null;
@@ -208,6 +223,8 @@ class Catalog_Repository {
 	 */
 	public function set_catalog( $data ): void {
 		if ( $data instanceof Catalog_Collection ) {
+			$this->cached_collection = $data;
+
 			$state                                    = $this->read_catalog_state();
 			$state[ self::STATE_KEY_COLLECTION ]      = $data->to_array();
 			$state[ self::STATE_KEY_LAST_SUCCESS_AT ] = time();
@@ -217,6 +234,8 @@ class Catalog_Repository {
 
 			return;
 		}
+
+		$this->cached_collection = null;
 
 		if ( is_wp_error( $data ) ) {
 			$state                                    = $this->read_catalog_state();
@@ -234,6 +253,7 @@ class Catalog_Repository {
 	 * @return void
 	 */
 	public function delete_catalog(): void {
+		$this->cached_collection = null;
 		delete_option( self::CATALOG_STATE_OPTION_NAME );
 	}
 

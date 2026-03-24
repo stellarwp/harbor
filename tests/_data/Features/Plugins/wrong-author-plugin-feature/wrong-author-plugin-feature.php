@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Uplink Test - Wrong Author Plugin Feature
+ * Plugin Name: Harbor Test - Wrong Author Plugin Feature
  * Description: A test plugin with a mismatched Author header. Used to test the PLUGIN_OWNERSHIP_MISMATCH error path.
  * Version: 1.0.0
  * Author: Unknown Developer

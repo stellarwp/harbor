@@ -12,33 +12,33 @@ use WP_CLI\Formatter;
 use WP_CLI_Command;
 
 /**
- * Manage Uplink features.
+ * Manage Harbor features.
  *
  * ## EXAMPLES
  *
  *     # List all features
- *     wp uplink feature list
+ *     wp harbor feature list
  *
  *     # List available flag features as JSON
- *     wp uplink feature list --type=flag --available=true --format=json
+ *     wp harbor feature list --type=flag --available=true --format=json
  *
  *     # Count features for a product
- *     wp uplink feature list --product=Kadence --format=count
+ *     wp harbor feature list --product=Kadence --format=count
  *
  *     # Get a single feature
- *     wp uplink feature get my-feature
+ *     wp harbor feature get my-feature
  *
  *     # Check if a feature is enabled
- *     wp uplink feature is-enabled my-feature
+ *     wp harbor feature is-enabled my-feature
  *
  *     # Enable a feature by slug
- *     wp uplink feature enable my-feature
+ *     wp harbor feature enable my-feature
  *
  *     # Disable a feature by slug
- *     wp uplink feature disable my-feature
+ *     wp harbor feature disable my-feature
  *
  *     # Update a feature to the latest version
- *     wp uplink feature update my-feature
+ *     wp harbor feature update my-feature
  *
  * @since 1.0.0
  */
@@ -127,13 +127,13 @@ class Feature extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # List all features in a table
-	 *     wp uplink feature list
+	 *     wp harbor feature list
 	 *
 	 *     # List available flag features as JSON
-	 *     wp uplink feature list --type=flag --available=true --format=json
+	 *     wp harbor feature list --type=flag --available=true --format=json
 	 *
 	 *     # Count features for a product
-	 *     wp uplink feature list --product=Kadence --format=count
+	 *     wp harbor feature list --product=Kadence --format=count
 	 *
 	 * @subcommand list
 	 *
@@ -195,10 +195,10 @@ class Feature extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Show feature details
-	 *     wp uplink feature get my-feature
+	 *     wp harbor feature get my-feature
 	 *
 	 *     # Get feature as JSON
-	 *     wp uplink feature get my-feature --format=json
+	 *     wp harbor feature get my-feature --format=json
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -229,7 +229,7 @@ class Feature extends WP_CLI_Command {
 	 * Checks whether a feature is currently enabled.
 	 *
 	 * Exits with code 0 if the feature is enabled, 1 if not enabled or not found.
-	 * Useful in shell scripts: `if wp uplink feature is-enabled my-feature; then ...`
+	 * Useful in shell scripts: `if wp harbor feature is-enabled my-feature; then ...`
 	 *
 	 * ## OPTIONS
 	 *
@@ -239,10 +239,10 @@ class Feature extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Check if a feature is enabled (exit code 0 = enabled)
-	 *     wp uplink feature is-enabled my-feature
+	 *     wp harbor feature is-enabled my-feature
 	 *
 	 *     # Use in a script
-	 *     if wp uplink feature is-enabled my-feature; then
+	 *     if wp harbor feature is-enabled my-feature; then
 	 *       echo "Feature is enabled"
 	 *     fi
 	 *
@@ -276,12 +276,12 @@ class Feature extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * <slug>
-	 * : The feature slug. Use `wp uplink feature list` to see available slugs.
+	 * : The feature slug. Use `wp harbor feature list` to see available slugs.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     # Enable a feature
-	 *     wp uplink feature enable my-feature
+	 *     wp harbor feature enable my-feature
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -305,12 +305,12 @@ class Feature extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * <slug>
-	 * : The feature slug. Use `wp uplink feature list` to see available slugs.
+	 * : The feature slug. Use `wp harbor feature list` to see available slugs.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     # Disable a feature
-	 *     wp uplink feature disable my-feature
+	 *     wp harbor feature disable my-feature
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -337,12 +337,12 @@ class Feature extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * <slug>
-	 * : The feature slug. Use `wp uplink feature list` to see available slugs.
+	 * : The feature slug. Use `wp harbor feature list` to see available slugs.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     # Update a feature
-	 *     wp uplink feature update my-feature
+	 *     wp harbor feature update my-feature
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.

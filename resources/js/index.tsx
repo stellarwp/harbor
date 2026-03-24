@@ -5,7 +5,7 @@ import '@css/globals.css';
 
 registerHarborStore();
 
-const rootElement = document.getElementById( 'uplink-root' );
+const rootElement = document.getElementById( 'lw-harbor-root' );
 
 if ( rootElement ) {
 	// Delay execution until after the DOM is fully loaded.

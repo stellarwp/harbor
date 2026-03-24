@@ -10,9 +10,9 @@ use LiquidWeb\Harbor\Traits\With_Debugging;
 use Throwable;
 
 /**
- * Registers this Uplink instance's callbacks into the global function registry.
+ * Registers this Harbor instance's callbacks into the global function registry.
  *
- * Each vendor-prefixed Uplink instance calls register() during init, storing
+ * Each vendor-prefixed Harbor instance calls register() during init, storing
  * version-keyed closures via _lw_harbor_global_function_registry(). The closures are defined
  * here (inside the namespaced file) so Strauss-prefixed class references
  * resolve correctly for this specific instance.
@@ -28,7 +28,7 @@ class Global_Function_Registry {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $version The version of this Uplink instance.
+	 * @param string $version The version of this Harbor instance.
 	 *
 	 * @return void
 	 */

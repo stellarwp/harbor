@@ -13,7 +13,7 @@ use LiquidWeb\Harbor\Harbor;
  *
  * These functions are the public API for StellarWP products to check licensing
  * and feature state. They delegate to version-keyed closures in _lw_harbor_global_function_registry()
- * so that the highest-version Uplink instance's logic always runs.
+ * so that the highest-version Harbor instance's logic always runs.
  *
  * @since 1.0.0
  */

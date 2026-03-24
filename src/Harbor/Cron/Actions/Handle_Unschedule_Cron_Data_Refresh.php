@@ -17,10 +17,10 @@ use function is_plugin_active_for_network;
  * Reads the stored catalog from the DB (no API call) and cross-references its
  * plugin and theme features against the active plugins/theme. If none match, the
  * event is removed. The cron will be rescheduled on the next page load via init
- * if any Uplink instance is still active.
+ * if any Harbor instance is still active.
  *
  * Conservative defaults: when the catalog is unreadable or contains no installable
- * features, the event is left in place since we cannot confirm Uplink is gone.
+ * features, the event is left in place since we cannot confirm Harbor is gone.
  *
  * @since 1.0.0
  */
@@ -101,7 +101,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 		}
 
 		// If the catalog has no installable features we cannot determine whether
-		// Uplink is still needed, so leave the cron in place.
+		// Harbor is still needed, so leave the cron in place.
 		if ( ! $found_catalog_feature ) {
 			return true;
 		}

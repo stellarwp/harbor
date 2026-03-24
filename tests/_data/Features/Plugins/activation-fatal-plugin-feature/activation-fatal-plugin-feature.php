@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Uplink Test - Activation Fatal
+ * Plugin Name: Harbor Test - Activation Fatal
  * Description: A test plugin that throws a fatal error in its activation hook. Used to test the ACTIVATION_FATAL error path.
  * Version: 1.0.0
  * Author: StellarWP
@@ -15,6 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 register_activation_hook(
 	__FILE__,
 	function () {
-		throw new \RuntimeException( 'Intentional activation hook fatal for Uplink Plugin Strategy testing.' );
+		throw new \RuntimeException( 'Intentional activation hook fatal for Harbor Plugin Strategy testing.' );
 	}
 );

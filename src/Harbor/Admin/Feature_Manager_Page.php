@@ -83,10 +83,10 @@ class Feature_Manager_Page {
 	 * from build/ otherwise (minified, no source maps).
 	 *
 	 * Path resolution from this file:
-	 *   __DIR__                               → src/Uplink/Admin
-	 *   dirname(__DIR__)                      → src/Uplink
+	 *   __DIR__                               → src/Harbor/Admin
+	 *   dirname(__DIR__)                      → src/Harbor
 	 *   dirname(dirname(__DIR__))             → src
-	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (uplink/)
+	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
 	 *
 	 * @since 1.0.0
 	 *
@@ -119,7 +119,7 @@ class Feature_Manager_Page {
 
 		wp_localize_script(
 			$handle,
-			'uplinkData',
+			'harborData',
 			[
 				'restUrl' => rest_url( 'liquidweb/harbor/v1/' ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
@@ -144,7 +144,7 @@ class Feature_Manager_Page {
 	 * (index.js + index.css) is registered and enqueued by enqueue_assets(),
 	 * called via maybe_enqueue_assets() on admin_enqueue_scripts.
 	 *
-	 * The .uplink-ui class activates CSS scoping for Tailwind styles,
+	 * The .lw-harbor-ui class activates CSS scoping for Tailwind styles,
 	 * preventing conflicts with WordPress Admin global styles.
 	 *
 	 * @since 1.0.0
@@ -154,7 +154,7 @@ class Feature_Manager_Page {
 	public function render(): void {
 		?>
 		<div class="wrap">
-			<div id="uplink-root" class="uplink-ui"></div>
+			<div id="lw-harbor-root" class="lw-harbor-ui"></div>
 		</div>
 		<?php
 	}

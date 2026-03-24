@@ -10,8 +10,9 @@ import { useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as harborStore } from '@/store';
+import { isFreeFeature } from '@/lib/license-utils';
 import { useToast } from '@/context/toast-context';
-import { LiquidError } from '@/errors';
+import { HarborError } from '@/errors';
 import type { Feature } from '@/types/api';
 import type { FeatureStatus } from '@/components/atoms/StatusBadge';
 
@@ -23,6 +24,8 @@ export interface FeatureRowState {
 	badgeStatus:     FeatureStatus;
 	showSwitch:      boolean;
 	switchChecked:   boolean;
+	showLegacyBadge: boolean;
+	showFreeBadge:   boolean;
 	handleToggle:    ( checked: boolean ) => Promise<void>;
 	handleUpdate:    () => Promise<void>;
 }
@@ -39,6 +42,17 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		[]
 	);
 
+	const showLegacyBadge = useSelect(
+		( select ) => {
+			const activeLegacy = select( harborStore ).getActiveLegacyLicense( feature.slug );
+			if ( ! activeLegacy ) return false;
+			return ! select( harborStore ).isProductUnifiedLicensed( feature.product );
+		},
+		[ feature.slug, feature.product ]
+	);
+
+	const showFreeBadge = isFreeFeature( feature.tier );
+
 	const [ pendingAction, setPendingAction ] = useState<PendingAction>( null );
 
 	const featureEnabled   = feature.is_enabled;
@@ -48,7 +62,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		setPendingAction( checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling' );
 		if ( checked ) {
 			const result = await enableFeature( feature.slug );
-			if ( result instanceof LiquidError ) {
+			if ( result instanceof HarborError ) {
 				addToast( result.message, 'error' );
 			} else {
 				/* translators: %s is the name of the feature being enabled */
@@ -56,7 +70,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 			}
 		} else {
 			const result = await disableFeature( feature.slug );
-			if ( result instanceof LiquidError ) {
+			if ( result instanceof HarborError ) {
 				addToast( result.message, 'error' );
 			} else {
 				/* translators: %s is the name of the feature being disabled */
@@ -69,7 +83,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 	const handleUpdate = async () => {
 		setPendingAction( 'updating' );
 		const result = await updateFeature( feature.slug );
-		if ( result instanceof LiquidError ) {
+		if ( result instanceof HarborError ) {
 			addToast( result.message, 'error' );
 		} else {
 			/* translators: %s is the name of the feature being updated */
@@ -90,9 +104,11 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 	return {
 		pendingAction,
 		installableBusy,
-		badgeStatus:  badgeStatus as FeatureStatus,
+		badgeStatus:     badgeStatus as FeatureStatus,
 		showSwitch,
 		switchChecked,
+		showLegacyBadge,
+		showFreeBadge,
 		handleToggle,
 		handleUpdate,
 	};

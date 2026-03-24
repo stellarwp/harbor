@@ -24,15 +24,6 @@ class Config {
 	protected static $container;
 
 	/**
-	 * Prefix for hook names.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	protected static $hook_prefix = '';
-
-	/**
 	 * The base URL for the StellarWP licensing and catalog API.
 	 *
 	 * @since 1.0.0
@@ -61,44 +52,6 @@ class Config {
 	}
 
 	/**
-	 * Gets the hook prefix.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @throws RuntimeException If the hook prefix has not been set.
-	 *
-	 * @return string
-	 */
-	public static function get_hook_prefix(): string {
-		if ( self::$hook_prefix === null ) {
-			throw new RuntimeException(
-				__( 'You must provide a hook prefix via LiquidWeb\Harbor\Config::set_hook_prefix() before attempting to fetch it.', '%TEXTDOMAIN%' )
-			);
-		}
-
-		return static::$hook_prefix;
-	}
-
-	/**
-	 * Gets the hook underscored prefix.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @throws RuntimeException If the hook prefix has not been set.
-	 *
-	 * @return string
-	 */
-	public static function get_hook_prefix_underscored(): string {
-		if ( self::$hook_prefix === null ) {
-			throw new RuntimeException(
-				__( 'You must provide a hook prefix via LiquidWeb\Harbor\Config::set_hook_prefix() before attempting to fetch it.', '%TEXTDOMAIN%' )
-			);
-		}
-
-		return strtolower( str_replace( '-', '_', sanitize_title( static::$hook_prefix ) ) );
-	}
-
-	/**
 	 * Returns whether the container has been set.
 	 *
 	 * @since 1.0.0
@@ -117,7 +70,6 @@ class Config {
 	 * @return void
 	 */
 	public static function reset(): void {
-		static::$hook_prefix = '';
 		static::$api_base_url = self::DEFAULT_API_BASE_URL;
 	}
 
@@ -132,19 +84,6 @@ class Config {
 	 */
 	public static function set_container( ContainerInterface $container ): void {
 		self::$container = $container;
-	}
-
-	/**
-	 * Sets the hook prefix.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $prefix The hook prefix.
-	 *
-	 * @return void
-	 */
-	public static function set_hook_prefix( string $prefix ): void {
-		static::$hook_prefix = $prefix;
 	}
 
 	/**

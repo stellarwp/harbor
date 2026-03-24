@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
-import { LiquidError } from '@/errors';
+import { HarborError } from '@/errors';
 
 interface LicenseKeyInputProps {
 	/** Called on successful activation (dialog can close) */
@@ -37,7 +37,7 @@ export function LicenseKeyInput( {
 	const { addToast }     = useToast();
 
 	// TODO: Refactor error display to use an error modal instead of inline
-	// text. The modal will show safe, user-facing messages from the LiquidError
+	// text. The modal will show safe, user-facing messages from the HarborError
 	// chain.
 
 	const { isStoring, canModifyLicense } = useSelect(
@@ -64,7 +64,7 @@ export function LicenseKeyInput( {
 		setLocalError( null );
 		const result = await storeLicense( trimmedKey );
 
-		if ( result instanceof LiquidError ) {
+		if ( result instanceof HarborError ) {
 			addToast( result.message, 'error' );
 		} else {
 			addToast(

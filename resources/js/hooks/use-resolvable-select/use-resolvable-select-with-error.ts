@@ -7,7 +7,7 @@
 import type { DependencyList } from 'react';
 import { __ } from '@wordpress/i18n';
 import useResolvableSelect from './use-resolvable-select';
-import LiquidError from '@/errors/liquid-error';
+import HarborError from '@/errors/harbor-error';
 import { ErrorCode } from '@/errors/error-code';
 import type { MapResolvableSelect, ResolvableSelectResponse } from './types';
 
@@ -19,13 +19,13 @@ type ResolvableRecord = Record<string, ResolvableSelectResponse<unknown>>;
 
 /**
  * Find the first error among a set of resolvable results and wrap it
- * as an LiquidError.
+ * as an HarborError.
  */
-function findError( results: ResolvableRecord ): LiquidError | null {
+function findError( results: ResolvableRecord ): HarborError | null {
 	for ( const key in results ) {
 		const entry = results[ key ];
 		if ( entry.status === 'ERROR' ) {
-			return LiquidError.syncFrom(
+			return HarborError.syncFrom(
 				entry.error,
 				ErrorCode.ResolutionFailed,
 				__( 'Liquid Web Software failed to load your data.', '%TEXTDOMAIN%' ),
@@ -41,9 +41,9 @@ function findError( results: ResolvableRecord ): LiquidError | null {
  *
  * The consumer callback must return a flat object of resolvable results.
  *
- * @throws {LiquidError} When any selector's resolution fails. If the resolver
- *   threw an LiquidError, that exact instance is re-thrown. Otherwise a new
- *   LiquidError with code {@link ErrorCode.ResolutionFailed} is created.
+ * @throws {HarborError} When any selector's resolution fails. If the resolver
+ *   threw an HarborError, that exact instance is re-thrown. Otherwise a new
+ *   HarborError with code {@link ErrorCode.ResolutionFailed} is created.
  *
  * @example
  * ```ts

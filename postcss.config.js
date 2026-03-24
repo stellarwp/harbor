@@ -1,5 +1,5 @@
 /**
- * Scope all Tailwind-generated CSS rules under .uplink-ui.
+ * Scope all Tailwind-generated CSS rules under .lw-harbor-ui.
  *
  * Tailwind v4's @config compatibility layer does not support the selector
  * strategy (important: '.selector'), so scoping is handled here instead.
@@ -9,22 +9,22 @@
  * Rules excluded from scoping:
  *   - :root   — CSS variables must remain global to be reachable by var()
  *   - @keyframes content — animation keyframes don't use ancestor selectors
- *   - Rules already containing .uplink-ui — written that way intentionally
+ *   - Rules already containing .lw-harbor-ui — written that way intentionally
  *     (e.g. the base resets in globals.css)
  */
-function scopeToUplinkUI() {
+function scopeToHarborUI() {
     const plugin = () => ( {
-        postcssPlugin: 'postcss-scope-to-uplink-ui',
+        postcssPlugin: 'postcss-scope-to-lw-harbor-ui',
         Rule( rule ) {
             if (
-                rule.selector.includes( '.uplink-ui' ) ||
+                rule.selector.includes( '.lw-harbor-ui' ) ||
                 /^:root\b/.test( rule.selector.trim() ) ||
                 /^keyframes$/i.test( rule.parent?.name ?? '' )
             ) {
                 return;
             }
             rule.selector = rule.selectors
-                .map( ( s ) => `.uplink-ui ${ s }` )
+                .map( ( s ) => `.lw-harbor-ui ${ s }` )
                 .join( ',\n' );
         },
     } );
@@ -35,7 +35,7 @@ function scopeToUplinkUI() {
 module.exports = {
     plugins: [
         require( '@tailwindcss/postcss' ),
-        scopeToUplinkUI(),
+        scopeToHarborUI(),
         require( 'autoprefixer' ),
     ],
 };

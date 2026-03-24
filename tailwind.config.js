@@ -9,8 +9,8 @@
  * regardless of specificity. !important inside a named layer reverses this: it beats
  * normal unlayered declarations, restoring the expected utility-first behaviour.
  *
- * Scoping to .uplink-ui is handled by the PostCSS plugin in postcss.config.js,
- * which prefixes all generated selectors with .uplink-ui after Tailwind runs.
+ * Scoping to .lw-harbor-ui is handled by the PostCSS plugin in postcss.config.js,
+ * which prefixes all generated selectors with .lw-harbor-ui after Tailwind runs.
  * Tailwind v4 does not support the selector strategy via @config compatibility.
  *
  * @see resources/css/globals.css  for the @config reference.

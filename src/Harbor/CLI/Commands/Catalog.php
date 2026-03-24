@@ -17,19 +17,19 @@ use WP_CLI_Command;
  * ## EXAMPLES
  *
  *     # List all products in the catalog
- *     wp uplink catalog list
+ *     wp harbor catalog list
  *
  *     # Show tiers for a product
- *     wp uplink catalog tiers kadence
+ *     wp harbor catalog tiers kadence
  *
  *     # Show features for a product
- *     wp uplink catalog features kadence
+ *     wp harbor catalog features kadence
  *
  *     # Force refresh from the API
- *     wp uplink catalog refresh
+ *     wp harbor catalog refresh
  *
  *     # Show catalog status
- *     wp uplink catalog status
+ *     wp harbor catalog status
  *
  * @since 1.0.0
  */
@@ -75,10 +75,10 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # List all products
-	 *     wp uplink catalog list
+	 *     wp harbor catalog list
 	 *
 	 *     # List as JSON
-	 *     wp uplink catalog list --format=json
+	 *     wp harbor catalog list --format=json
 	 *
 	 * @subcommand list
 	 *
@@ -140,7 +140,7 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Show tiers for a product
-	 *     wp uplink catalog tiers kadence
+	 *     wp harbor catalog tiers kadence
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -215,10 +215,10 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Show features for a product
-	 *     wp uplink catalog features kadence
+	 *     wp harbor catalog features kadence
 	 *
 	 *     # Show as JSON
-	 *     wp uplink catalog features kadence --format=json
+	 *     wp harbor catalog features kadence --format=json
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -284,7 +284,7 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Refresh the catalog
-	 *     wp uplink catalog refresh
+	 *     wp harbor catalog refresh
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -314,7 +314,7 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Show catalog status
-	 *     wp uplink catalog status
+	 *     wp harbor catalog status
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -369,7 +369,7 @@ class Catalog extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Delete cached catalog
-	 *     wp uplink catalog delete
+	 *     wp harbor catalog delete
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.

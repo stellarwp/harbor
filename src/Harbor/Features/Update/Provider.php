@@ -51,7 +51,7 @@ class Provider extends Abstract_Provider {
 	}
 
 	/**
-	 * Registers the feature update filters if this is the highest Uplink version.
+	 * Registers the feature update filters if this is the highest Harbor version.
 	 *
 	 * @since 1.0.0
 	 *

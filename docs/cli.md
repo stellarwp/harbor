@@ -4,44 +4,44 @@ Harbor registers WP-CLI commands automatically when WP-CLI is present. No additi
 
 ## Command Reference
 
-### `wp lw license`
+### `wp harbor license`
 
 Manage the unified license key.
 
-| Command    | Usage                           | Description                                               |
-| ---------- | ------------------------------- | --------------------------------------------------------- |
-| `get`      | `wp lw license get`             | Show the current license key and associated products      |
-| `set`      | `wp lw license set <key>`       | Validate and store a license key                          |
-| `lookup`   | `wp lw license lookup <key>`    | Look up products for a key without storing it             |
-| `validate` | `wp lw license validate <slug>` | Validate a product on this domain (may consume a seat)    |
-| `delete`   | `wp lw license delete`          | Delete the stored unified license key                     |
-| `legacy`   | `wp lw license legacy`          | List legacy per-plugin licenses from all Harbor instances |
+| Command    | Usage                                | Description                                               |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `get`      | `wp harbor license get`              | Show the current license key and associated products      |
+| `set`      | `wp harbor license set <key>`        | Validate and store a license key                          |
+| `lookup`   | `wp harbor license lookup <key>`     | Look up products for a key without storing it             |
+| `validate` | `wp harbor license validate <slug>`  | Validate a product on this domain (may consume a seat)    |
+| `delete`   | `wp harbor license delete`           | Delete the stored unified license key                     |
+| `legacy`   | `wp harbor license legacy`           | List legacy per-plugin licenses from all Harbor instances |
 
-### `wp lw catalog`
+### `wp harbor catalog`
 
 Manage the product catalog.
 
-| Command    | Usage                           | Description                                       |
-| ---------- | ------------------------------- | ------------------------------------------------- |
-| `list`     | `wp lw catalog list`            | List all products in the catalog                  |
-| `tiers`    | `wp lw catalog tiers <slug>`    | Show tiers for a specific product                 |
-| `features` | `wp lw catalog features <slug>` | Show features for a specific product              |
-| `refresh`  | `wp lw catalog refresh`         | Force refresh the catalog from the API            |
-| `status`   | `wp lw catalog status`          | Show when the catalog was last fetched and errors |
-| `delete`   | `wp lw catalog delete`          | Delete the cached catalog                         |
+| Command    | Usage                                  | Description                                       |
+| ---------- | -------------------------------------- | ------------------------------------------------- |
+| `list`     | `wp harbor catalog list`               | List all products in the catalog                  |
+| `tiers`    | `wp harbor catalog tiers <slug>`       | Show tiers for a specific product                 |
+| `features` | `wp harbor catalog features <slug>`    | Show features for a specific product              |
+| `refresh`  | `wp harbor catalog refresh`            | Force refresh the catalog from the API            |
+| `status`   | `wp harbor catalog status`             | Show when the catalog was last fetched and errors |
+| `delete`   | `wp harbor catalog delete`             | Delete the cached catalog                         |
 
-### `wp lw feature`
+### `wp harbor feature`
 
 Manage Harbor features.
 
-| Command      | Usage                             | Description                                       |
-| ------------ | --------------------------------- | ------------------------------------------------- |
-| `list`       | `wp lw feature list`              | List features with optional filters               |
-| `get`        | `wp lw feature get <slug>`        | Show detailed information for a single feature    |
-| `is-enabled` | `wp lw feature is-enabled <slug>` | Check if a feature is enabled (exit code 0 = yes) |
-| `enable`     | `wp lw feature enable <slug>`     | Enable a feature                                  |
-| `disable`    | `wp lw feature disable <slug>`    | Disable a feature                                 |
-| `update`     | `wp lw feature update <slug>`     | Update a feature to the latest version            |
+| Command      | Usage                                    | Description                                       |
+| ------------ | ---------------------------------------- | ------------------------------------------------- |
+| `list`       | `wp harbor feature list`                 | List features with optional filters               |
+| `get`        | `wp harbor feature get <slug>`           | Show detailed information for a single feature    |
+| `is-enabled` | `wp harbor feature is-enabled <slug>`    | Check if a feature is enabled (exit code 0 = yes) |
+| `enable`     | `wp harbor feature enable <slug>`        | Enable a feature                                  |
+| `disable`    | `wp harbor feature disable <slug>`       | Disable a feature                                 |
+| `update`     | `wp harbor feature update <slug>`        | Update a feature to the latest version            |
 
 ## License Commands
 
@@ -50,7 +50,7 @@ Manage Harbor features.
 Shows the current license key and associated products.
 
 ```bash
-wp lw license get [--fields=<fields>] [--format=<format>]
+wp harbor license get [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `product_slug, tier, status, expires, site_limit, active_count`
@@ -60,8 +60,8 @@ wp lw license get [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw license get
-wp lw license get --format=json
+wp harbor license get
+wp harbor license get --format=json
 ```
 
 ### set
@@ -69,7 +69,7 @@ wp lw license get --format=json
 Validates and stores a license key. Does not activate any product or consume a seat.
 
 ```bash
-wp lw license set <key> [--network] [--fields=<fields>] [--format=<format>]
+wp harbor license set <key> [--network] [--fields=<fields>] [--format=<format>]
 ```
 
 | Option      | Description                               |
@@ -80,8 +80,8 @@ wp lw license set <key> [--network] [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw license set LWSW-abcdef-123456
-wp lw license set LWSW-abcdef-123456 --network
+wp harbor license set LWSW-abcdef-123456
+wp harbor license set LWSW-abcdef-123456 --network
 ```
 
 ### lookup
@@ -89,13 +89,13 @@ wp lw license set LWSW-abcdef-123456 --network
 Looks up products for a key without storing it.
 
 ```bash
-wp lw license lookup <key> [--fields=<fields>] [--format=<format>]
+wp harbor license lookup <key> [--fields=<fields>] [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp lw license lookup LWSW-abcdef-123456
+wp harbor license lookup LWSW-abcdef-123456
 ```
 
 ### validate
@@ -103,13 +103,13 @@ wp lw license lookup LWSW-abcdef-123456
 Validates a product on this domain using the stored license key. This may consume an activation seat.
 
 ```bash
-wp lw license validate <product_slug>
+wp harbor license validate <product_slug>
 ```
 
 **Examples:**
 
 ```bash
-wp lw license validate kadence
+wp harbor license validate kadence
 ```
 
 ### delete
@@ -117,7 +117,7 @@ wp lw license validate kadence
 Deletes the stored unified license key. Does not free any activation seats on the licensing service.
 
 ```bash
-wp lw license delete [--network]
+wp harbor license delete [--network]
 ```
 
 | Option      | Description                               |
@@ -127,8 +127,8 @@ wp lw license delete [--network]
 **Examples:**
 
 ```bash
-wp lw license delete
-wp lw license delete --network
+wp harbor license delete
+wp harbor license delete --network
 ```
 
 ### legacy
@@ -136,7 +136,7 @@ wp lw license delete --network
 Lists legacy per-plugin licenses discovered across all Harbor instances. Read-only view of old-style keys stored individually by each plugin before unified licensing.
 
 ```bash
-wp lw license legacy [--fields=<fields>] [--format=<format>]
+wp harbor license legacy [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `slug, name, product, key, status, expires_at`
@@ -146,8 +146,8 @@ wp lw license legacy [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw license legacy
-wp lw license legacy --format=json
+wp harbor license legacy
+wp harbor license legacy --format=json
 ```
 
 ## Catalog Commands
@@ -157,7 +157,7 @@ wp lw license legacy --format=json
 Lists all products in the catalog.
 
 ```bash
-wp lw catalog list [--format=<format>]
+wp harbor catalog list [--format=<format>]
 ```
 
 **Default fields:** `product_slug, tiers, features`
@@ -165,8 +165,8 @@ wp lw catalog list [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw catalog list
-wp lw catalog list --format=json
+wp harbor catalog list
+wp harbor catalog list --format=json
 ```
 
 ### tiers
@@ -174,7 +174,7 @@ wp lw catalog list --format=json
 Shows tiers for a specific product.
 
 ```bash
-wp lw catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
+wp harbor catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `slug, name, rank, purchase_url`
@@ -182,8 +182,8 @@ wp lw catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw catalog tiers kadence
-wp lw catalog tiers kadence --format=json
+wp harbor catalog tiers kadence
+wp harbor catalog tiers kadence --format=json
 ```
 
 ### features
@@ -191,7 +191,7 @@ wp lw catalog tiers kadence --format=json
 Shows features for a specific product.
 
 ```bash
-wp lw catalog features <product_slug> [--fields=<fields>] [--format=<format>]
+wp harbor catalog features <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Default fields:** `feature_slug, type, minimum_tier, name, category`
@@ -201,8 +201,8 @@ wp lw catalog features <product_slug> [--fields=<fields>] [--format=<format>]
 **Examples:**
 
 ```bash
-wp lw catalog features kadence
-wp lw catalog features kadence --format=json
+wp harbor catalog features kadence
+wp harbor catalog features kadence --format=json
 ```
 
 ### refresh
@@ -210,13 +210,13 @@ wp lw catalog features kadence --format=json
 Force refreshes the catalog from the API, then displays the resulting product list.
 
 ```bash
-wp lw catalog refresh [--format=<format>]
+wp harbor catalog refresh [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp lw catalog refresh
+wp harbor catalog refresh
 ```
 
 ### status
@@ -224,13 +224,13 @@ wp lw catalog refresh
 Shows when the catalog was last fetched and any errors.
 
 ```bash
-wp lw catalog status
+wp harbor catalog status
 ```
 
 **Examples:**
 
 ```bash
-wp lw catalog status
+wp harbor catalog status
 ```
 
 ### delete
@@ -238,13 +238,13 @@ wp lw catalog status
 Deletes the cached catalog. The next request for the catalog will fetch fresh data from the API.
 
 ```bash
-wp lw catalog delete
+wp harbor catalog delete
 ```
 
 **Examples:**
 
 ```bash
-wp lw catalog delete
+wp harbor catalog delete
 ```
 
 ## Feature Commands
@@ -254,7 +254,7 @@ wp lw catalog delete
 Lists features with optional filters.
 
 ```bash
-wp lw feature list [--product=<product>] [--tier=<tier>] [--available=<bool>] [--type=<type>] [--fields=<fields>] [--format=<format>]
+wp harbor feature list [--product=<product>] [--tier=<tier>] [--available=<bool>] [--type=<type>] [--fields=<fields>] [--format=<format>]
 ```
 
 **Options:**
@@ -280,19 +280,19 @@ wp lw feature list [--product=<product>] [--tier=<tier>] [--available=<bool>] [-
 
 ```bash
 # Table output (default)
-wp lw feature list
+wp harbor feature list
 
 # JSON for scripting
-wp lw feature list --format=json
+wp harbor feature list --format=json
 
 # Available flag features only
-wp lw feature list --type=flag --available=true
+wp harbor feature list --type=flag --available=true
 
 # Count features in a product
-wp lw feature list --product=kadence --format=count
+wp harbor feature list --product=kadence --format=count
 
 # Show plugin-specific fields
-wp lw feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
+wp harbor feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
 ```
 
 ### get
@@ -300,14 +300,14 @@ wp lw feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
 Shows detailed information for a single feature.
 
 ```bash
-wp lw feature get <slug> [--fields=<fields>] [--format=<format>]
+wp harbor feature get <slug> [--fields=<fields>] [--format=<format>]
 ```
 
 **Examples:**
 
 ```bash
-wp lw feature get my-feature
-wp lw feature get my-feature --format=json
+wp harbor feature get my-feature
+wp harbor feature get my-feature --format=json
 ```
 
 ### is-enabled
@@ -315,14 +315,14 @@ wp lw feature get my-feature --format=json
 Checks whether a feature is currently enabled. Exits with code 0 if enabled, 1 if not.
 
 ```bash
-wp lw feature is-enabled <slug>
+wp harbor feature is-enabled <slug>
 ```
 
 **Examples:**
 
 ```bash
 # Check in a script
-if wp lw feature is-enabled my-feature; then
+if wp harbor feature is-enabled my-feature; then
   echo "Feature is enabled"
 fi
 ```
@@ -332,13 +332,13 @@ fi
 Enables a feature.
 
 ```bash
-wp lw feature enable <slug>
+wp harbor feature enable <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp lw feature enable my-feature
+wp harbor feature enable my-feature
 ```
 
 ### disable
@@ -346,13 +346,13 @@ wp lw feature enable my-feature
 Disables a feature.
 
 ```bash
-wp lw feature disable <slug>
+wp harbor feature disable <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp lw feature disable my-feature
+wp harbor feature disable my-feature
 ```
 
 ### update
@@ -360,13 +360,13 @@ wp lw feature disable my-feature
 Updates a feature to the latest available version. Only applies to plugin and theme features — flag features do not support updates.
 
 ```bash
-wp lw feature update <slug>
+wp harbor feature update <slug>
 ```
 
 **Examples:**
 
 ```bash
-wp lw feature update my-feature
+wp harbor feature update my-feature
 ```
 
 ## Scripting Patterns
@@ -375,22 +375,22 @@ wp lw feature update my-feature
 
 ```bash
 # Get all feature slugs
-wp lw feature list --format=json | jq -r '.[].slug'
+wp harbor feature list --format=json | jq -r '.[].slug'
 
 # Get enabled features
-wp lw feature list --format=json | jq '[.[] | select(.is_enabled == "true")]'
+wp harbor feature list --format=json | jq '[.[] | select(.is_enabled == "true")]'
 
 # Get legacy license keys
-wp lw license legacy --format=json | jq -r '.[].key'
+wp harbor license legacy --format=json | jq -r '.[].key'
 ```
 
 ### Conditional logic
 
 ```bash
-if wp lw feature is-enabled my-feature; then
+if wp harbor feature is-enabled my-feature; then
   echo "my-feature is enabled"
 else
-  wp lw feature enable my-feature
+  wp harbor feature enable my-feature
 fi
 ```
 
@@ -398,8 +398,8 @@ fi
 
 ```bash
 # Enable all available flag features
-for slug in $(wp lw feature list --type=flag --available=true --format=json | jq -r '.[].slug'); do
-  wp lw feature enable "$slug"
+for slug in $(wp harbor feature list --type=flag --available=true --format=json | jq -r '.[].slug'); do
+  wp harbor feature enable "$slug"
 done
 ```
 

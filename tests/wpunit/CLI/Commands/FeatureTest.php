@@ -17,7 +17,7 @@ use WP_CLI;
 use WP_Error;
 
 /**
- * Tests for the WP-CLI `wp uplink feature` command.
+ * Tests for the WP-CLI `wp harbor feature` command.
  *
  * Uses a spy logger to capture WP_CLI output and uopz to prevent
  * exit() from killing the test process.

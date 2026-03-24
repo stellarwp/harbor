@@ -1,5 +1,5 @@
 /**
- * Machine-readable error codes for LiquidError instances.
+ * Machine-readable error codes for HarborError instances.
  *
  * @package LiquidWeb\Harbor
  */

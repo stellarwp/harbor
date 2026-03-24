@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Uplink Test - Die On Include
+ * Plugin Name: Harbor Test - Die On Include
  * Description: A test plugin that calls die() on include. Used to test the uncatchable fatal scenario.
  * Version: 1.0.0
  * Author: StellarWP
@@ -12,4 +12,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-die( 'Intentional die() for Uplink Plugin Strategy testing.' );
+die( 'Intentional die() for Harbor Plugin Strategy testing.' );

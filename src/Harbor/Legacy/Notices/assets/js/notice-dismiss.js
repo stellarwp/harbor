@@ -1,5 +1,5 @@
 ( function() {
-	var config   = window.uplinkNoticeDismiss;
+	var config   = window.harborNoticeDismiss;
 	var TTL      = config.ttl;
 	var META_KEY = config.metaKey;
 
@@ -8,12 +8,12 @@
 			return;
 		}
 
-		var notice = e.target.closest( '[data-uplink-notice-id]' );
+		var notice = e.target.closest( '[data-lw-harbor-notice-id]' );
 		if ( ! notice ) {
 			return;
 		}
 
-		var id = notice.getAttribute( 'data-uplink-notice-id' );
+		var id = notice.getAttribute( 'data-lw-harbor-notice-id' );
 
 		( async function() {
 			try {

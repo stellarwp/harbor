@@ -2,8 +2,6 @@
 
 namespace LiquidWeb\Harbor\Utils;
 
-use LiquidWeb\Harbor\Config;
-
 class Checks {
 	/**
 	 * Determines if the provided value should be regarded as 'true'.
@@ -26,7 +24,7 @@ class Checks {
 		 * @param array $truthy_strings Strings considered truthy.
 		 */
 		$truthy_strings = (array) apply_filters(
-			'lw-harbor/' . Config::get_hook_prefix() . '/is_truthy_strings',
+			'lw-harbor/is_truthy_strings',
 			[
 				'1',
 				'enable',

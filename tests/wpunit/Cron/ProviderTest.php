@@ -17,6 +17,25 @@ final class ProviderTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		// WPTestCase shallow-copies wp_filter, so closures that capture
+		// $this->container from previous tests' Harbor::init() accumulate.
+		// Clear the hooks this test exercises and re-add with the current container.
+		remove_all_actions( 'deactivated_plugin' );
+		remove_all_actions( 'switch_theme' );
+
+		add_action(
+			'deactivated_plugin',
+			function () {
+				$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
+			}
+		);
+		add_action(
+			'switch_theme',
+			function () {
+				$this->container->get( Handle_Unschedule_Cron_Data_Refresh::class )();
+			}
+		);
+
 		wp_clear_scheduled_hook( CronHook::DATA_REFRESH );
 
 		$this->container->singleton(

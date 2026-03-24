@@ -35,8 +35,8 @@ final class Provider extends Abstract_Provider {
 
 		add_action(
 			'lw-harbor/unified_license_key_changed',
-			static function () {
-				delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
+			function () {
+				$this->container->get( Catalog_Repository::class )->delete_catalog();
 			}
 		);
 	}
