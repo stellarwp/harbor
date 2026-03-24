@@ -3,15 +3,14 @@
     {
       "product_slug": "give",
       "tier": "give-pro",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 3,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -42,20 +41,20 @@
         "give-activecampaign",
         "give-zapier",
         "give-ga-tracking"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "the-events-calendar",
       "tier": "the-events-calendar-pro",
-      "pending_tier": null,
       "status": "suspended",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 3,
         "active_count": 2,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "suspended",
       "is_valid": false,
       "capabilities": [
@@ -66,20 +65,20 @@
         "tec-community",
         "tec-promoter",
         "tec-eventbrite"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "learndash",
       "tier": "learndash-pro",
-      "pending_tier": null,
       "status": "cancelled",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 3,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": false,
       "validation_status": "cancelled",
       "is_valid": false,
       "capabilities": [
@@ -108,20 +107,20 @@
         "learndash-gradebook",
         "learndash-notes",
         "learndash-propanel"
-      ]
+      ],
+      "activated_here": false
     },
     {
       "product_slug": "kadence",
       "tier": "kadence-pro",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 3,
         "active_count": 0,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": false,
       "validation_status": "not_activated",
       "is_valid": false,
       "capabilities": [
@@ -139,7 +138,7 @@
         "kad-creative-kit",
         "kad-insights",
         "kad-conversions",
-        "solid-security",
+        "ithemes-security-pro",
         "solid-backups",
         "iconic-flux",
         "iconic-delivery-slots",
@@ -150,7 +149,8 @@
         "iconic-quickview",
         "iconic-wishlist",
         "iconic-account-pages"
-      ]
+      ],
+      "activated_here": false
     }
   ]
 }

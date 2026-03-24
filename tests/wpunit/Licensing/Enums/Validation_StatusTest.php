@@ -14,26 +14,30 @@ final class Validation_StatusTest extends HarborTestCase {
 		$this->assertSame( 'cancelled', Validation_Status::CANCELLED );
 		$this->assertSame( 'license_suspended', Validation_Status::LICENSE_SUSPENDED );
 		$this->assertSame( 'license_banned', Validation_Status::LICENSE_BANNED );
-		$this->assertSame( 'no_subscription', Validation_Status::NO_SUBSCRIPTION );
+		$this->assertSame( 'no_entitlement', Validation_Status::NO_ENTITLEMENT );
 		$this->assertSame( 'not_activated', Validation_Status::NOT_ACTIVATED );
 		$this->assertSame( 'out_of_activations', Validation_Status::OUT_OF_ACTIVATIONS );
 		$this->assertSame( 'invalid_key', Validation_Status::INVALID_KEY );
+		$this->assertSame( 'activation_required', Validation_Status::ACTIVATION_REQUIRED );
+		$this->assertSame( 'tier_selection_required', Validation_Status::TIER_SELECTION_REQUIRED );
 	}
 
 	public function test_all_returns_all_statuses(): void {
 		$all = Validation_Status::all();
 
-		$this->assertCount( 10, $all );
+		$this->assertCount( 12, $all );
 		$this->assertContains( 'valid', $all );
 		$this->assertContains( 'expired', $all );
 		$this->assertContains( 'suspended', $all );
 		$this->assertContains( 'cancelled', $all );
 		$this->assertContains( 'license_suspended', $all );
 		$this->assertContains( 'license_banned', $all );
-		$this->assertContains( 'no_subscription', $all );
+		$this->assertContains( 'no_entitlement', $all );
 		$this->assertContains( 'not_activated', $all );
 		$this->assertContains( 'out_of_activations', $all );
 		$this->assertContains( 'invalid_key', $all );
+		$this->assertContains( 'activation_required', $all );
+		$this->assertContains( 'tier_selection_required', $all );
 	}
 
 	public function test_is_valid_returns_true_for_known_values(): void {

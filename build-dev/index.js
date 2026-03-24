@@ -4168,8 +4168,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   receiveLegacyLicenses: () => (/* binding */ receiveLegacyLicenses),
 /* harmony export */   receiveLicense: () => (/* binding */ receiveLicense),
 /* harmony export */   storeLicense: () => (/* binding */ storeLicense),
-/* harmony export */   updateFeature: () => (/* binding */ updateFeature),
-/* harmony export */   validateProduct: () => (/* binding */ validateProduct)
+/* harmony export */   updateFeature: () => (/* binding */ updateFeature)
 /* harmony export */ });
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0__);
@@ -4347,46 +4346,6 @@ const storeLicense = key => async ({
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to activate your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'STORE_LICENSE_FAILED',
-      error
-    });
-    return error;
-  }
-};
-
-/**
- * Validate a specific product against the license via the REST API.
- *
- * @param productSlug
- * @since 1.0.0
- */
-const validateProduct = productSlug => async ({
-  dispatch,
-  select
-}) => {
-  if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product, another action is in progress.', '%TEXTDOMAIN%'));
-  }
-  dispatch({
-    type: 'VALIDATE_PRODUCT_START'
-  });
-  try {
-    const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/harbor/v1/license/validate',
-      method: 'POST',
-      data: {
-        product_slug: productSlug
-      }
-    });
-    dispatch({
-      type: 'VALIDATE_PRODUCT_FINISHED',
-      license: result
-    });
-    dispatch.invalidateResolution('getFeatures', []);
-    return null;
-  } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to validate your product.', '%TEXTDOMAIN%'));
-    dispatch({
-      type: 'VALIDATE_PRODUCT_FAILED',
       error
     });
     return error;
@@ -4694,10 +4653,8 @@ const LICENSE_DEFAULT = {
   },
   isStoring: false,
   isDeleting: false,
-  isValidating: false,
   storeError: null,
-  deleteError: null,
-  validateError: null
+  deleteError: null
 };
 function license(state = LICENSE_DEFAULT, action) {
   switch (action.type) {
@@ -4757,30 +4714,6 @@ function license(state = LICENSE_DEFAULT, action) {
           ...state,
           isDeleting: false,
           deleteError: action.error
-        };
-      }
-    case 'VALIDATE_PRODUCT_START':
-      {
-        return {
-          ...state,
-          isValidating: true,
-          validateError: null
-        };
-      }
-    case 'VALIDATE_PRODUCT_FINISHED':
-      {
-        return {
-          ...state,
-          isValidating: false,
-          license: action.license
-        };
-      }
-    case 'VALIDATE_PRODUCT_FAILED':
-      {
-        return {
-          ...state,
-          isValidating: false,
-          validateError: action.error
         };
       }
     default:
@@ -4950,7 +4883,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getProductCatalog: () => (/* binding */ getProductCatalog),
 /* harmony export */   getProductTiers: () => (/* binding */ getProductTiers),
 /* harmony export */   getStoreLicenseError: () => (/* binding */ getStoreLicenseError),
-/* harmony export */   getValidateProductError: () => (/* binding */ getValidateProductError),
 /* harmony export */   hasActiveLegacyLicenseForProduct: () => (/* binding */ hasActiveLegacyLicenseForProduct),
 /* harmony export */   hasLegacyLicense: () => (/* binding */ hasLegacyLicense),
 /* harmony export */   hasLegacyLicenses: () => (/* binding */ hasLegacyLicenses),
@@ -4961,8 +4893,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isFeatureUpdating: () => (/* binding */ isFeatureUpdating),
 /* harmony export */   isLicenseDeleting: () => (/* binding */ isLicenseDeleting),
 /* harmony export */   isLicenseStoring: () => (/* binding */ isLicenseStoring),
-/* harmony export */   isProductUnifiedLicensed: () => (/* binding */ isProductUnifiedLicensed),
-/* harmony export */   isProductValidating: () => (/* binding */ isProductValidating)
+/* harmony export */   isProductUnifiedLicensed: () => (/* binding */ isProductUnifiedLicensed)
 /* harmony export */ });
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
@@ -5064,11 +4995,9 @@ const hasLicense = state => state.license.license.key !== null;
 const getLicenseProducts = state => state.license.license.products;
 const isLicenseStoring = state => state.license.isStoring;
 const isLicenseDeleting = state => state.license.isDeleting;
-const isProductValidating = state => state.license.isValidating;
-const canModifyLicense = state => !state.license.isStoring && !state.license.isValidating && !state.license.isDeleting;
+const canModifyLicense = state => !state.license.isStoring && !state.license.isDeleting;
 const getStoreLicenseError = state => state.license.storeError;
 const getDeleteLicenseError = state => state.license.deleteError;
-const getValidateProductError = state => state.license.validateError;
 
 /***/ },
 

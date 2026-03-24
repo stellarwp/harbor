@@ -299,15 +299,16 @@ export interface LegacyLicense {
 export interface LicenseProduct {
     product_slug: string;
     tier: string;
-    pending_tier: string | null;
     status: string;
     expires: string;
     activations: {
         site_limit: number;
         active_count: number;
         over_limit: boolean;
+        domains: string[];
     };
-    installed_here?: boolean;
+    capabilities: string[];
+    activated_here?: boolean;
     validation_status?: string;
     is_valid?: boolean;
 }

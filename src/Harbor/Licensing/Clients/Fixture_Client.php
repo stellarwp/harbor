@@ -2,11 +2,8 @@
 
 namespace LiquidWeb\Harbor\Licensing\Clients;
 
-use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Error_Code;
-use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
 use WP_Error;
 
 /**
@@ -17,7 +14,6 @@ use WP_Error;
  *
  * @since 1.0.0
  *
- * @phpstan-import-type ProductAttributes from Product_Entry
  * @phpstan-type FixtureData array{products: list<array<string, mixed>>}
  */
 final class Fixture_Client implements Licensing_Client {
@@ -116,76 +112,4 @@ final class Fixture_Client implements Licensing_Client {
 		return $this->cache[ $cache_key ];
 	}
 
-	/**
-	 * Validate a license for a specific product on a domain.
-	 *
-	 * Loads the fixture data via get_products() and finds the matching entry.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key          License key.
-	 * @param string $domain       Site domain.
-	 * @param string $product_slug Product identifier.
-	 *
-	 * @return Validation_Result|WP_Error
-	 */
-	public function validate( string $key, string $domain, string $product_slug ) {
-		$products = $this->get_products( $key, $domain );
-
-		if ( is_wp_error( $products ) ) {
-			return $products;
-		}
-
-		$collection = Product_Collection::from_array( $products );
-		$entry      = $collection->get( $product_slug );
-
-		if ( $entry === null ) {
-			return new WP_Error(
-				Error_Code::PRODUCT_NOT_FOUND,
-				sprintf( 'Product not found: %s', $product_slug ),
-				[ 'status' => Error_Code::http_status( Error_Code::PRODUCT_NOT_FOUND ) ]
-			);
-		}
-
-		return Validation_Result::from_array( $this->build_validation_data( $entry, $key, $domain ) );
-	}
-
-	/**
-	 * Build the validation data array from a product entry.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param Product_Entry $entry  The matched product entry.
-	 * @param string        $key    The license key.
-	 * @param string        $domain The site domain.
-	 *
-	 * @return array<string, mixed>
-	 */
-	protected function build_validation_data( Product_Entry $entry, string $key, string $domain ): array {
-		$status = $entry->get_validation_status() ?? Validation_Status::NOT_ACTIVATED;
-
-		$data = [
-			'status'       => $status,
-			'license'      => [
-				'key'    => $key,
-				'status' => 'active',
-			],
-			'subscription' => [
-				'product_slug'    => $entry->get_product_slug(),
-				'tier'            => $entry->get_tier(),
-				'site_limit'      => $entry->get_site_limit(),
-				'expiration_date' => $entry->get_expires()->format( 'Y-m-d H:i:s' ),
-				'status'          => $entry->get_status(),
-			],
-		];
-
-		if ( $entry->get_installed_here() === true ) {
-			$data['activation'] = [
-				'domain'       => $domain,
-				'activated_at' => gmdate( 'Y-m-d H:i:s' ),
-			];
-		}
-
-		return $data;
-	}
 }

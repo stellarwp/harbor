@@ -3,15 +3,14 @@
     {
       "product_slug": "give",
       "tier": "give-basic",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 1,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -28,40 +27,40 @@
         "give-mailchimp",
         "give-constant-contact",
         "give-convertkit"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "the-events-calendar",
       "tier": "the-events-calendar-basic",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 1,
         "active_count": 0,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": false,
       "validation_status": "not_activated",
       "is_valid": false,
       "capabilities": [
         "tec-calendar",
         "tec-tickets-rsvp",
         "tec-filter-bar"
-      ]
+      ],
+      "activated_here": false
     },
     {
       "product_slug": "learndash",
       "tier": "learndash-basic",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 1,
         "active_count": 0,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": false,
       "validation_status": "not_activated",
       "is_valid": false,
       "capabilities": [
@@ -87,20 +86,20 @@
         "learndash-samcart",
         "learndash-multilingual",
         "learndash-restrict-content-pro"
-      ]
+      ],
+      "activated_here": false
     },
     {
       "product_slug": "kadence",
       "tier": "kadence-basic",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 1,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -114,7 +113,8 @@
         "kad-reading-time",
         "solid-performance",
         "solid-mail"
-      ]
+      ],
+      "activated_here": true
     }
   ]
 }

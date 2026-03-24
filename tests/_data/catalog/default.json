@@ -253,12 +253,12 @@
         "documentation_url": "https://www.kadencewp.com/help-center/"
       },
       {
-        "feature_slug": "solid-security",
+        "feature_slug": "ithemes-security-pro",
         "type": "plugin",
         "minimum_tier": "kadence-pro",
-        "plugin_file": "solid-security-pro/solid-security-pro.php",
+        "plugin_file": "ithemes-security-pro-pro/ithemes-security-pro-pro.php",
         "is_dot_org": false,
-        "download_url": "https://licensing.stellarwp.com/api/plugins/solid-security",
+        "download_url": "https://licensing.stellarwp.com/api/plugins/ithemes-security-pro",
         "name": "Solid Security Pro",
         "description": "Comprehensive WordPress security with malware scanning, 2FA, and brute force protection.",
         "category": "security",

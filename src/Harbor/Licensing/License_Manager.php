@@ -7,7 +7,6 @@ use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use LiquidWeb\Harbor\Traits\With_Error_Throttle;
 use WP_Error;
@@ -220,100 +219,6 @@ class License_Manager {
 		}
 
 		static::debug_log( 'License key validated and stored successfully.' );
-
-		return $result;
-	}
-
-	/**
-	 * Validate a product on this domain using the stored license key.
-	 *
-	 * Calls the licensing API validate endpoint to check (and potentially
-	 * consume) an activation seat for the given product. On success the
-	 * product cache is cleared so the next read reflects the new state.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $domain       The site domain.
-	 * @param string $product_slug The product to validate.
-	 *
-	 * @return Validation_Result|WP_Error
-	 */
-	public function validate_product( string $domain, string $product_slug ) {
-		static::debug_log(
-			sprintf(
-				'Validating product "%s" on domain "%s".',
-				$product_slug,
-				$domain
-			)
-		);
-
-		$key = $this->get_key();
-
-		if ( $key === null ) {
-			static::debug_log( 'Cannot validate product: no license key stored.' );
-
-			return new WP_Error(
-				Error_Code::INVALID_KEY,
-				__( 'No license key is stored.', '%TEXTDOMAIN%' ),
-				[ 'status' => 422 ]
-			);
-		}
-
-		$throttled = $this->get_throttled_error();
-
-		if ( $throttled !== null ) {
-			static::debug_log(
-				sprintf(
-					'Product validation throttled: %s',
-					$throttled->get_error_message()
-				)
-			);
-
-			return $throttled;
-		}
-
-		$result = $this->client->validate( $key, $domain, $product_slug );
-
-		if ( is_wp_error( $result ) ) {
-			static::debug_log(
-				sprintf(
-					'Product validation API failed: [%s] %s',
-					$result->get_error_code(),
-					$result->get_error_message()
-				)
-			);
-
-			$data = $result->get_error_data();
-
-			if ( ! is_array( $data ) || empty( $data['status'] ) ) {
-				$result->add_data( [ 'status' => 500 ] );
-			}
-
-			$this->repository->set_products( $result );
-
-			return $result;
-		}
-
-		if ( ! $result->is_valid() ) {
-			static::debug_log(
-				sprintf(
-					'Product validation failed for "%s": %s',
-					$product_slug,
-					$result->get_status()
-				)
-			);
-
-			return $result->to_wp_error();
-		}
-
-		static::debug_log(
-			sprintf(
-				'Product "%s" validated successfully, refreshing product cache.',
-				$product_slug
-			)
-		);
-
-		$this->fetch_and_cache( $key, $domain );
 
 		return $result;
 	}

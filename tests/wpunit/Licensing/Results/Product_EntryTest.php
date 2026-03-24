@@ -11,15 +11,16 @@ final class Product_EntryTest extends HarborTestCase {
 	private array $valid_data = [
 		'product_slug'      => 'kadence',
 		'tier'              => 'professional',
-		'pending_tier'      => null,
 		'status'            => 'active',
 		'expires'           => '2026-12-31 23:59:59',
 		'activations'       => [
 			'site_limit'   => 5,
 			'active_count' => 3,
 			'over_limit'   => false,
+			'domains'      => [ 'example.com', 'staging.example.com' ],
 		],
-		'installed_here'    => true,
+		'capabilities'      => [ 'feature-a', 'feature-b' ],
+		'activated_here'    => true,
 		'validation_status' => 'valid',
 		'is_valid'          => true,
 	];
@@ -29,13 +30,13 @@ final class Product_EntryTest extends HarborTestCase {
 
 		$this->assertSame( 'kadence', $entry->get_product_slug() );
 		$this->assertSame( 'professional', $entry->get_tier() );
-		$this->assertNull( $entry->get_pending_tier() );
 		$this->assertSame( 'active', $entry->get_status() );
 		$this->assertInstanceOf( DateTimeImmutable::class, $entry->get_expires() );
 		$this->assertSame( '2026-12-31 23:59:59', $entry->get_expires()->format( 'Y-m-d H:i:s' ) );
 		$this->assertSame( 5, $entry->get_site_limit() );
 		$this->assertSame( 3, $entry->get_active_count() );
-		$this->assertTrue( $entry->get_installed_here() );
+		$this->assertSame( [ 'example.com', 'staging.example.com' ], $entry->get_activation_domains() );
+		$this->assertTrue( $entry->get_activated_here() );
 		$this->assertSame( 'valid', $entry->get_validation_status() );
 	}
 
@@ -45,7 +46,6 @@ final class Product_EntryTest extends HarborTestCase {
 
 		$this->assertSame( 'kadence', $result['product_slug'] );
 		$this->assertSame( 'professional', $result['tier'] );
-		$this->assertNull( $result['pending_tier'] );
 		$this->assertSame( 'active', $result['status'] );
 		$this->assertSame( '2026-12-31 23:59:59', $result['expires'] );
 
@@ -53,8 +53,9 @@ final class Product_EntryTest extends HarborTestCase {
 		$this->assertSame( 5, $result['activations']['site_limit'] );
 		$this->assertSame( 3, $result['activations']['active_count'] );
 		$this->assertFalse( $result['activations']['over_limit'] );
+		$this->assertSame( [ 'example.com', 'staging.example.com' ], $result['activations']['domains'] );
 
-		$this->assertTrue( $result['installed_here'] );
+		$this->assertTrue( $result['activated_here'] );
 		$this->assertSame( 'valid', $result['validation_status'] );
 		$this->assertTrue( $result['is_valid'] );
 	}
@@ -122,12 +123,12 @@ final class Product_EntryTest extends HarborTestCase {
 
 	public function test_optional_fields_omitted_when_null(): void {
 		$data = $this->valid_data;
-		unset( $data['installed_here'], $data['validation_status'], $data['is_valid'] );
+		unset( $data['activated_here'], $data['validation_status'], $data['is_valid'] );
 
 		$entry  = Product_Entry::from_array( $data );
 		$result = $entry->to_array();
 
-		$this->assertArrayNotHasKey( 'installed_here', $result );
+		$this->assertArrayNotHasKey( 'activated_here', $result );
 		$this->assertArrayNotHasKey( 'validation_status', $result );
 		$this->assertArrayNotHasKey( 'is_valid', $result );
 	}
@@ -148,8 +149,8 @@ final class Product_EntryTest extends HarborTestCase {
 		$entry = Product_Entry::from_array( $data );
 
 		$this->assertSame( 'givewp', $entry->get_product_slug() );
-		$this->assertNull( $entry->get_pending_tier() );
-		$this->assertNull( $entry->get_installed_here() );
+		$this->assertSame( [], $entry->get_activation_domains() );
+		$this->assertNull( $entry->get_activated_here() );
 		$this->assertNull( $entry->get_validation_status() );
 	}
 
@@ -167,12 +168,12 @@ final class Product_EntryTest extends HarborTestCase {
 		$this->assertSame( 0, $entry->get_active_count() );
 	}
 
-	public function test_get_pending_tier_returns_string_when_set(): void {
-		$data                 = $this->valid_data;
-		$data['pending_tier'] = 'starter';
+	public function test_activation_domains_extracted_from_activations(): void {
+		$data                        = $this->valid_data;
+		$data['activations']['domains'] = [ 'site1.com', 'site2.com' ];
 
 		$entry = Product_Entry::from_array( $data );
 
-		$this->assertSame( 'starter', $entry->get_pending_tier() );
+		$this->assertSame( [ 'site1.com', 'site2.com' ], $entry->get_activation_domains() );
 	}
 }

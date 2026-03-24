@@ -9,7 +9,6 @@ use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
-use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -240,67 +239,6 @@ final class License_ManagerTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// validate_product()
-	// -------------------------------------------------------------------------
-
-	public function test_validate_product_returns_validation_result(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertInstanceOf( Validation_Result::class, $result );
-	}
-
-	public function test_validate_product_result_has_expected_status(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		/** @var Validation_Result $result */
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertSame( Validation_Status::VALID, $result->get_status() );
-		$this->assertTrue( $result->is_valid() );
-	}
-
-	public function test_validate_product_result_contains_subscription_data(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		/** @var Validation_Result $result */
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$subscription = $result->get_subscription();
-
-		$this->assertNotNull( $subscription );
-		$this->assertSame( 'give', $subscription['product_slug'] );
-		$this->assertSame( 'give-pro', $subscription['tier'] );
-	}
-
-	public function test_validate_product_refreshes_product_cache(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-		$this->manager->get_products( 'example.com' );
-		$this->assertNotEmpty( get_option( License_Repository::PRODUCTS_STATE_OPTION_NAME ) );
-
-		$this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertNotEmpty( get_option( License_Repository::PRODUCTS_STATE_OPTION_NAME ) );
-	}
-
-	public function test_validate_product_returns_error_when_no_key_stored(): void {
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
-	}
-
-	public function test_validate_product_returns_error_for_unknown_product(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		$result = $this->manager->validate_product( 'example.com', 'unknown-product' );
-
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( Error_Code::PRODUCT_NOT_FOUND, $result->get_error_code() );
-	}
-
-	// -------------------------------------------------------------------------
 	// get_products()
 	// -------------------------------------------------------------------------
 
@@ -391,38 +329,6 @@ final class License_ManagerTest extends HarborTestCase {
 
 		$this->assertIsArray( $result );
 		$this->assertNotEmpty( $result );
-	}
-
-	public function test_validate_product_returns_cached_error_when_within_throttle_window(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		// Write error state at a fixed time.
-		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure' ) );
-
-		// Advance to 30 s later — still within the 60 s TTL.
-		$this->set_fn_return( 'time', 1000030 );
-
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
-	}
-
-	public function test_validate_product_retries_api_after_throttle_window_expires(): void {
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		// Write error state at a fixed time.
-		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure' ) );
-
-		// Advance past the 60 s TTL.
-		$this->set_fn_return( 'time', 1000061 );
-
-		$result = $this->manager->validate_product( 'example.com', 'give' );
-
-		$this->assertInstanceOf( Validation_Result::class, $result );
-		$this->assertTrue( $result->is_valid() );
 	}
 
 	public function test_successful_call_clears_error_state(): void {

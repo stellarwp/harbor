@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Licensing\Error_Code;
 use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use LiquidWeb\Harbor\Licensing\Results\Validation_Result;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
@@ -131,69 +130,4 @@ final class Fixture_ClientTest extends HarborTestCase {
 		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
 	}
 
-	public function test_validate_returns_validation_result(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'kadence' );
-
-		$this->assertInstanceOf( Validation_Result::class, $result );
-	}
-
-	public function test_validate_valid_product(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'kadence' );
-
-		$this->assertSame( Validation_Status::VALID, $result->get_status() );
-		$this->assertTrue( $result->is_valid() );
-		$this->assertNotNull( $result->get_activation() );
-		$this->assertSame( 'example.com', $result->get_activation()['domain'] );
-	}
-
-	public function test_validate_not_activated_product(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'learndash' );
-
-		$this->assertSame( Validation_Status::NOT_ACTIVATED, $result->get_status() );
-		$this->assertFalse( $result->is_valid() );
-		$this->assertNull( $result->get_activation() );
-	}
-
-	public function test_validate_expired_product(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-EXPIRED', 'example.com', 'give' );
-
-		$this->assertSame( Validation_Status::EXPIRED, $result->get_status() );
-		$this->assertFalse( $result->is_valid() );
-	}
-
-	public function test_validate_includes_subscription_data(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'kadence' );
-
-		$subscription = $result->get_subscription();
-
-		$this->assertNotNull( $subscription );
-		$this->assertSame( 'kadence', $subscription['product_slug'] );
-		$this->assertSame( 'kadence-pro', $subscription['tier'] );
-		$this->assertSame( 3, $subscription['site_limit'] );
-		$this->assertSame( 'active', $subscription['status'] );
-	}
-
-	public function test_validate_includes_license_data(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'kadence' );
-
-		$license = $result->get_license();
-
-		$this->assertNotNull( $license );
-		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $license['key'] );
-		$this->assertSame( 'active', $license['status'] );
-	}
-
-	public function test_validate_unknown_product_returns_error(): void {
-		$result = $this->client->validate( 'LWSW-UNIFIED-PRO-2026', 'example.com', 'nonexistent-plugin' );
-
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( Error_Code::PRODUCT_NOT_FOUND, $result->get_error_code() );
-	}
-
-	public function test_validate_propagates_get_products_error(): void {
-		$result = $this->client->validate( 'NON-EXISTENT-KEY', 'example.com', 'kadence' );
-
-		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
-	}
 }

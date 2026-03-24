@@ -3,15 +3,14 @@
     {
       "product_slug": "give",
       "tier": "give-agency",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 0,
         "active_count": 12,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -45,20 +44,20 @@
         "give-salesforce",
         "give-woo-upsells",
         "give-double-the-donations"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "the-events-calendar",
       "tier": "the-events-calendar-agency",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 0,
         "active_count": 8,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -71,20 +70,20 @@
         "tec-eventbrite",
         "tec-seating",
         "tec-schedule-manager"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "learndash",
       "tier": "learndash-agency",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 0,
         "active_count": 5,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -117,20 +116,20 @@
         "learndash-instructor-role",
         "learndash-reviews-plus",
         "learndash-seats-plus"
-      ]
+      ],
+      "activated_here": true
     },
     {
       "product_slug": "kadence",
       "tier": "kadence-agency",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 0,
         "active_count": 15,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -148,7 +147,7 @@
         "kad-creative-kit",
         "kad-insights",
         "kad-conversions",
-        "solid-security",
+        "ithemes-security-pro",
         "solid-backups",
         "iconic-flux",
         "iconic-delivery-slots",
@@ -165,7 +164,8 @@
         "iconic-configurator",
         "iconic-custom-fields",
         "iconic-bundled"
-      ]
+      ],
+      "activated_here": true
     }
   ]
 }
