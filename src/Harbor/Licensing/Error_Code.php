@@ -91,13 +91,31 @@ final class Error_Code {
 	public const LICENSE_BANNED = 'lw-harbor-license-banned';
 
 	/**
-	 * No subscription exists for this product under the license.
+	 * No entitlement exists for this product under the license.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	public const NO_SUBSCRIPTION = 'lw-harbor-no-subscription';
+	public const NO_ENTITLEMENT = 'lw-harbor-no-entitlement';
+
+	/**
+	 * The product requires activation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const ACTIVATION_REQUIRED = 'lw-harbor-activation-required';
+
+	/**
+	 * A tier selection is required for this product.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const TIER_SELECTION_REQUIRED = 'lw-harbor-tier-selection-required';
 
 	/**
 	 * All activation seats are in use.
@@ -140,7 +158,9 @@ final class Error_Code {
 			self::CANCELLED            => 422,
 			self::LICENSE_SUSPENDED    => 422,
 			self::LICENSE_BANNED       => 422,
-			self::NO_SUBSCRIPTION      => 422,
+			self::NO_ENTITLEMENT         => 422,
+			self::ACTIVATION_REQUIRED    => 422,
+			self::TIER_SELECTION_REQUIRED => 422,
 			self::OUT_OF_ACTIVATIONS   => 422,
 
 			// 500 Internal Server Error — storage failure.

@@ -178,51 +178,6 @@ export const storeLicense =
 	};
 
 /**
- * Validate a specific product against the license via the REST API.
- *
- * @param productSlug
- * @since 1.0.0
- */
-export const validateProduct =
-	(productSlug: string): Thunk<HarborError | null> =>
-	async ({ dispatch, select }) => {
-		if (!select.canModifyLicense()) {
-			return new HarborError(
-				ErrorCode.LicenseActionInProgress,
-				__(
-					'Liquid Web Software failed to validate your product, another action is in progress.',
-					'%TEXTDOMAIN%'
-				)
-			);
-		}
-		dispatch({ type: 'VALIDATE_PRODUCT_START' });
-		try {
-			const result = await apiFetch<License>({
-				path: '/liquidweb/harbor/v1/license/validate',
-				method: 'POST',
-				data: { product_slug: productSlug },
-			});
-			dispatch({
-				type: 'VALIDATE_PRODUCT_FINISHED',
-				license: result,
-			});
-			dispatch.invalidateResolution('getFeatures', []);
-			return null;
-		} catch (err) {
-			const error = await HarborError.wrap(
-				err,
-				ErrorCode.LicenseValidateFailed,
-				__(
-					'Liquid Web Software failed to validate your product.',
-					'%TEXTDOMAIN%'
-				)
-			);
-			dispatch({ type: 'VALIDATE_PRODUCT_FAILED', error });
-			return error;
-		}
-	};
-
-/**
  * Delete the stored license key via the REST API, then invalidate the
  * features resolver so the UI refreshes.
  *

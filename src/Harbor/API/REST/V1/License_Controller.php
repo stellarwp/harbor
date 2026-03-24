@@ -131,19 +131,6 @@ final class License_Controller extends WP_REST_Controller {
 			]
 		);
 
-		register_rest_route(
-			$this->namespace,
-			'/' . $this->rest_base . '/validate',
-			[
-				[
-					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => [ $this, 'validate_item' ],
-					'permission_callback' => [ $this, 'check_permissions' ],
-					'args'                => $this->get_validate_args(),
-				],
-				'schema' => [ $this, 'get_public_item_schema' ],
-			]
-		);
 	}
 
 	/**
@@ -258,47 +245,6 @@ final class License_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Validates a product on this domain using the stored license key.
-	 *
-	 * Calls the licensing API validate endpoint, which may consume an
-	 * activation seat. Returns the validation result.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param WP_REST_Request $request The request object.
-	 *
-	 * @return WP_REST_Response|WP_Error
-	 */
-	public function validate_item( $request ) {
-		/** @var string $product_slug */
-		$product_slug = $request->get_param( 'product_slug' );
-		$domain       = $this->site_data->get_domain();
-
-		$result = $this->manager->validate_product( $domain, $product_slug );
-
-		if ( is_wp_error( $result ) ) {
-			$data = $result->get_error_data();
-
-			if ( ! is_array( $data ) || empty( $data['status'] ) ) {
-				$result->add_data( [ 'status' => 500 ] );
-			}
-
-			return $result;
-		}
-
-		// Product validation fetched the updated products list.
-		$products = $this->manager->get_products( $domain );
-
-		if ( is_wp_error( $products ) ) {
-			$products = new Product_Collection();
-		}
-
-		return new WP_REST_Response(
-			License_Response::make( $this->manager->get_key(), $products )
-		);
-	}
-
-	/**
 	 * Deletes the stored unified license key.
 	 *
 	 * This only removes the locally stored key. It does not free any
@@ -353,15 +299,11 @@ final class License_Controller extends WP_REST_Controller {
 								'type'        => 'string',
 							],
 							'tier'              => [
-								'description' => __( 'The subscription tier.', '%TEXTDOMAIN%' ),
+								'description' => __( 'The entitlement tier.', '%TEXTDOMAIN%' ),
 								'type'        => 'string',
 							],
-							'pending_tier'      => [
-								'description' => __( 'The pending tier on next renewal.', '%TEXTDOMAIN%' ),
-								'type'        => [ 'string', 'null' ],
-							],
 							'status'            => [
-								'description' => __( 'The subscription status.', '%TEXTDOMAIN%' ),
+								'description' => __( 'The entitlement status.', '%TEXTDOMAIN%' ),
 								'type'        => 'string',
 							],
 							'expires'           => [
@@ -385,9 +327,19 @@ final class License_Controller extends WP_REST_Controller {
 										'description' => __( 'Whether the seat limit is exceeded.', '%TEXTDOMAIN%' ),
 										'type'        => 'boolean',
 									],
+									'domains'      => [
+										'description' => __( 'Activated domain names.', '%TEXTDOMAIN%' ),
+										'type'        => 'array',
+										'items'       => [ 'type' => 'string' ],
+									],
 								],
 							],
-							'installed_here'    => [
+							'capabilities'      => [
+								'description' => __( 'Feature slugs granted by this entitlement.', '%TEXTDOMAIN%' ),
+								'type'        => 'array',
+								'items'       => [ 'type' => 'string' ],
+							],
+							'activated_here'    => [
 								'description' => __( 'Whether the product is activated on this domain.', '%TEXTDOMAIN%' ),
 								'type'        => [ 'boolean', 'null' ],
 							],
@@ -431,24 +383,6 @@ final class License_Controller extends WP_REST_Controller {
 			],
 			$this->get_network_args()
 		);
-	}
-
-	/**
-	 * Gets the argument definitions for the validate (POST) endpoint.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array<string, array<string, mixed>>
-	 */
-	private function get_validate_args(): array {
-		return [
-			'product_slug' => [
-				'description'       => __( 'The product to validate.', '%TEXTDOMAIN%' ),
-				'type'              => 'string',
-				'required'          => true,
-				'sanitize_callback' => 'sanitize_text_field',
-			],
-		];
 	}
 
 	/**

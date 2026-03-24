@@ -263,41 +263,6 @@ final class LicenseTest extends HarborTestCase {
 	}
 
 	// ------------------------------------------------------------------
-	// validate
-	// ------------------------------------------------------------------
-
-	public function test_validate_calls_success_on_valid_product(): void {
-		$manager = $this->makeEmpty(
-			License_Manager::class,
-			[
-				'validate_product' => $this->makeEmpty(
-					\LiquidWeb\Harbor\Licensing\Results\Validation_Result::class,
-					[ 'is_valid' => true ]
-				),
-			]
-		);
-
-		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
-		$command->validate( [ 'kadence' ], [] );
-
-		$this->assertSame( 'Product "kadence" validated successfully.', $this->logger->last_success );
-	}
-
-	public function test_validate_calls_error_on_failure(): void {
-		$manager = $this->makeEmpty(
-			License_Manager::class,
-			[
-				'validate_product' => new WP_Error( 'validation_failed', 'Product validation failed.' ),
-			]
-		);
-
-		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
-		$command->validate( [ 'kadence' ], [] );
-
-		$this->assertSame( 'Product validation failed.', $this->logger->last_error );
-	}
-
-	// ------------------------------------------------------------------
 	// delete
 	// ------------------------------------------------------------------
 
@@ -328,7 +293,7 @@ final class LicenseTest extends HarborTestCase {
 					'tier'              => 'starter',
 					'status'            => 'active',
 					'expires'           => '2027-01-01 00:00:00',
-					'installed_here'    => true,
+					'activated_here'    => true,
 					'validation_status' => 'valid',
 					'activations'       => [
 						'site_limit'   => 1,
@@ -350,7 +315,7 @@ final class LicenseTest extends HarborTestCase {
 
 		$items = $this->run_get_json( $command );
 
-		$this->assertSame( 'true', $items[0]['installed_here'] );
+		$this->assertSame( 'true', $items[0]['activated_here'] );
 		$this->assertSame( 'true', $items[0]['is_valid'] );
 		$this->assertSame( 'true', $items[0]['over_limit'] );
 	}
@@ -384,9 +349,8 @@ final class LicenseTest extends HarborTestCase {
 
 		$items = $this->run_get_json( $command );
 
-		$this->assertSame( '', $items[0]['installed_here'] );
+		$this->assertSame( '', $items[0]['activated_here'] );
 		$this->assertSame( '', $items[0]['validation_status'] );
-		$this->assertSame( '', $items[0]['pending_tier'] );
 	}
 
 	public function test_get_logs_no_products_for_empty_collection(): void {
@@ -465,7 +429,7 @@ final class LicenseTest extends HarborTestCase {
 			[],
 			[
 				'format' => 'json',
-				'fields' => 'product_slug,tier,status,expires,site_limit,active_count,over_limit,installed_here,validation_status,is_valid,pending_tier',
+				'fields' => 'product_slug,tier,status,expires,site_limit,active_count,over_limit,activated_here,validation_status,is_valid',
 			]
 		);
 		$output = ob_get_clean();

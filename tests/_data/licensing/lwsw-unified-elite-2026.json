@@ -3,15 +3,14 @@
     {
       "product_slug": "learndash",
       "tier": "learndash-elite",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 0,
         "active_count": 5,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -44,7 +43,8 @@
         "learndash-instructor-role",
         "learndash-reviews-plus",
         "learndash-seats-plus"
-      ]
+      ],
+      "activated_here": true
     }
   ]
 }

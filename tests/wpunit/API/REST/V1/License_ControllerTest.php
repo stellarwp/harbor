@@ -184,73 +184,6 @@ final class License_ControllerTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// POST /license/validate
-	// -------------------------------------------------------------------------
-
-	public function test_validate_returns_key_and_products_on_success(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$request->set_param( 'product_slug', 'give' );
-
-		$response = $this->server->dispatch( $request );
-		$data     = $response->get_data();
-
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
-		$this->assertIsArray( $data['products'] );
-		$this->assertNotEmpty( $data['products'] );
-	}
-
-	public function test_validate_requires_product_slug(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$response = $this->server->dispatch( $request );
-
-		$this->assertSame( 400, $response->get_status() );
-	}
-
-	public function test_validate_returns_error_when_no_key_stored(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-
-		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$request->set_param( 'product_slug', 'give' );
-
-		$response = $this->server->dispatch( $request );
-
-		$this->assertSame( 422, $response->get_status() );
-	}
-
-	public function test_validate_returns_error_for_unknown_product(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$request->set_param( 'product_slug', 'unknown-product' );
-
-		$response = $this->server->dispatch( $request );
-
-		$this->assertSame( 422, $response->get_status() );
-	}
-
-	public function test_validate_requires_manage_options(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
-
-		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$request->set_param( 'product_slug', 'give' );
-
-		$response = $this->server->dispatch( $request );
-
-		$this->assertSame( 403, $response->get_status() );
-	}
-
-	// -------------------------------------------------------------------------
 	// DELETE
 	// -------------------------------------------------------------------------
 
@@ -416,23 +349,4 @@ final class License_ControllerTest extends HarborTestCase {
 		$this->assertSame( 'API failure', $response->get_data()['message'] );
 	}
 
-	public function test_validate_returns_error_when_throttled(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-
-		// Write error state at a fixed time, then advance within the TTL.
-		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ) );
-		$this->set_fn_return( 'time', 1000030 );
-
-		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/validate' );
-		$request->set_param( 'product_slug', 'give' );
-
-		$response = $this->server->dispatch( $request );
-
-		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
-		$this->assertSame( 'API failure', $response->get_data()['message'] );
-	}
 }

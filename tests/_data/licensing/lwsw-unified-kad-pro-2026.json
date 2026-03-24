@@ -3,15 +3,14 @@
     {
       "product_slug": "kadence",
       "tier": "kadence-pro",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 3,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -40,7 +39,8 @@
         "iconic-quickview",
         "iconic-wishlist",
         "iconic-account-pages"
-      ]
+      ],
+      "activated_here": true
     }
   ]
 }

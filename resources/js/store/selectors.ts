@@ -178,12 +178,8 @@ export const isLicenseStoring = (state: State): boolean =>
 export const isLicenseDeleting = (state: State): boolean =>
 	state.license.isDeleting;
 
-export const isProductValidating = (state: State): boolean =>
-	state.license.isValidating;
-
 export const canModifyLicense = (state: State): boolean =>
 	!state.license.isStoring &&
-	!state.license.isValidating &&
 	!state.license.isDeleting;
 
 export const getStoreLicenseError = (state: State): HarborError | null =>
@@ -191,6 +187,3 @@ export const getStoreLicenseError = (state: State): HarborError | null =>
 
 export const getDeleteLicenseError = (state: State): HarborError | null =>
 	state.license.deleteError;
-
-export const getValidateProductError = (state: State): HarborError | null =>
-	state.license.validateError;

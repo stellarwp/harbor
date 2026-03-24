@@ -3,15 +3,14 @@
     {
       "product_slug": "give",
       "tier": "give-basic",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
         "site_limit": 1,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": []
       },
-      "installed_here": true,
       "validation_status": "valid",
       "is_valid": true,
       "capabilities": [
@@ -28,7 +27,8 @@
         "give-mailchimp",
         "give-constant-contact",
         "give-convertkit"
-      ]
+      ],
+      "activated_here": true
     }
   ]
 }

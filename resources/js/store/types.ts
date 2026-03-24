@@ -56,10 +56,6 @@ export interface LicenseState {
 	 */
 	isDeleting: boolean;
 	/**
-	 * Whether a per-product validation is in progress.
-	 */
-	isValidating: boolean;
-	/**
 	 * The error from the last failed license store.
 	 * Cleared when a new store starts.
 	 */
@@ -69,11 +65,6 @@ export interface LicenseState {
 	 * Cleared when a new deletion starts.
 	 */
 	deleteError: HarborError | null;
-	/**
-	 * The error from the last failed product validation.
-	 * Cleared when a new validation starts.
-	 */
-	validateError: HarborError | null;
 }
 
 export interface LegacyLicensesState {
@@ -107,10 +98,7 @@ export type Action =
 	| { type: 'STORE_LICENSE_FAILED'; error: HarborError }
 	| { type: 'DELETE_LICENSE_START' }
 	| { type: 'DELETE_LICENSE_FINISHED' }
-	| { type: 'DELETE_LICENSE_FAILED'; error: HarborError }
-	| { type: 'VALIDATE_PRODUCT_START' }
-	| { type: 'VALIDATE_PRODUCT_FINISHED'; license: License }
-	| { type: 'VALIDATE_PRODUCT_FAILED'; error: HarborError };
+	| { type: 'DELETE_LICENSE_FAILED'; error: HarborError };
 
 // ---------------------------------------------------------------------------
 // Thunk

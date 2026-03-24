@@ -28,9 +28,6 @@ use WP_CLI_Command;
  *     # Look up products for a key without storing
  *     wp harbor license lookup LWSW-abcdef-123456
  *
- *     # Validate a product on this domain
- *     wp harbor license validate kadence
- *
  *     # Delete the stored key
  *     wp harbor license delete
  *
@@ -274,41 +271,6 @@ class License extends WP_CLI_Command {
 	}
 
 	/**
-	 * Validates a product on this domain using the stored license key.
-	 *
-	 * This may consume an activation seat.
-	 *
-	 * ## OPTIONS
-	 *
-	 * <product_slug>
-	 * : The product slug to validate.
-	 *
-	 * ## EXAMPLES
-	 *
-	 *     # Validate a product
-	 *     wp harbor license validate kadence
-	 *
-	 * @param array<int, string>    $args       Positional arguments.
-	 * @param array<string, string> $assoc_args Associative arguments.
-	 *
-	 * @return void
-	 */
-	public function validate( array $args, array $assoc_args ): void {
-		$product_slug = $args[0];
-		$domain       = $this->site_data->get_domain();
-
-		$result = $this->manager->validate_product( $domain, $product_slug );
-
-		if ( is_wp_error( $result ) ) {
-			WP_CLI::error( $result->get_error_message() );
-
-			return; // WP_CLI::error() exits, but PHPStan needs this for type narrowing.
-		}
-
-		WP_CLI::success( sprintf( 'Product "%s" validated successfully.', $product_slug ) );
-	}
-
-	/**
 	 * Deletes the stored unified license key.
 	 *
 	 * This only removes the locally stored key. It does not free any
@@ -446,13 +408,12 @@ class License extends WP_CLI_Command {
 		return [
 			'product_slug'      => $product->get_product_slug(),
 			'tier'              => $product->get_tier(),
-			'pending_tier'      => $product->get_pending_tier() ?? '',
 			'status'            => $product->get_status(),
 			'expires'           => $product->get_expires()->format( 'Y-m-d H:i:s' ),
 			'site_limit'        => $site_limit === 0 ? 'unlimited' : (string) $site_limit,
 			'active_count'      => (string) $product->get_active_count(),
 			'over_limit'        => Display::bool( $product->is_over_limit() ),
-			'installed_here'    => Display::nullable_bool( $product->get_installed_here() ),
+			'activated_here'    => Display::nullable_bool( $product->get_activated_here() ),
 			'validation_status' => $product->get_validation_status() ?? '',
 			'is_valid'          => Display::bool( $product->is_valid() ),
 		];

@@ -174,10 +174,8 @@ const LICENSE_DEFAULT: LicenseState = {
 	license: { key: null, products: [] },
 	isStoring: false,
 	isDeleting: false,
-	isValidating: false,
 	storeError: null,
 	deleteError: null,
-	validateError: null,
 };
 
 function license(
@@ -237,30 +235,6 @@ function license(
 				...state,
 				isDeleting: false,
 				deleteError: action.error,
-			};
-		}
-
-		case 'VALIDATE_PRODUCT_START': {
-			return {
-				...state,
-				isValidating: true,
-				validateError: null,
-			};
-		}
-
-		case 'VALIDATE_PRODUCT_FINISHED': {
-			return {
-				...state,
-				isValidating: false,
-				license: action.license,
-			};
-		}
-
-		case 'VALIDATE_PRODUCT_FAILED': {
-			return {
-				...state,
-				isValidating: false,
-				validateError: action.error,
 			};
 		}
 

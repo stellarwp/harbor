@@ -68,13 +68,13 @@ final class Validation_Status {
 	public const LICENSE_BANNED = 'license_banned';
 
 	/**
-	 * No subscription exists for this product under the license.
+	 * No entitlement exists for this product under the license.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	public const NO_SUBSCRIPTION = 'no_subscription';
+	public const NO_ENTITLEMENT = 'no_entitlement';
 
 	/**
 	 * The product is not activated on this domain.
@@ -104,6 +104,24 @@ final class Validation_Status {
 	public const INVALID_KEY = 'invalid_key';
 
 	/**
+	 * The product has not been activated and requires activation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const ACTIVATION_REQUIRED = 'activation_required';
+
+	/**
+	 * The license covers multiple tiers and a tier selection is required.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const TIER_SELECTION_REQUIRED = 'tier_selection_required';
+
+	/**
 	 * Returns all valid status values.
 	 *
 	 * @since 1.0.0
@@ -118,10 +136,12 @@ final class Validation_Status {
 			self::CANCELLED,
 			self::LICENSE_SUSPENDED,
 			self::LICENSE_BANNED,
-			self::NO_SUBSCRIPTION,
+			self::NO_ENTITLEMENT,
 			self::NOT_ACTIVATED,
 			self::OUT_OF_ACTIVATIONS,
 			self::INVALID_KEY,
+			self::ACTIVATION_REQUIRED,
+			self::TIER_SELECTION_REQUIRED,
 		];
 	}
 
@@ -149,15 +169,17 @@ final class Validation_Status {
 	 */
 	public static function message( string $value ): string {
 		$messages = [
-			self::EXPIRED            => __( 'The subscription has expired.', '%TEXTDOMAIN%' ),
-			self::SUSPENDED          => __( 'The subscription is suspended.', '%TEXTDOMAIN%' ),
-			self::CANCELLED          => __( 'The subscription is cancelled.', '%TEXTDOMAIN%' ),
-			self::LICENSE_SUSPENDED  => __( 'The license is suspended.', '%TEXTDOMAIN%' ),
-			self::LICENSE_BANNED     => __( 'The license is banned.', '%TEXTDOMAIN%' ),
-			self::NO_SUBSCRIPTION    => __( 'No subscription exists for this product.', '%TEXTDOMAIN%' ),
-			self::NOT_ACTIVATED      => __( 'The product is not activated on this domain.', '%TEXTDOMAIN%' ),
-			self::OUT_OF_ACTIVATIONS => __( 'All activation seats are in use.', '%TEXTDOMAIN%' ),
-			self::INVALID_KEY        => __( 'The license key is not recognized.', '%TEXTDOMAIN%' ),
+			self::EXPIRED                => __( 'The entitlement has expired.', '%TEXTDOMAIN%' ),
+			self::SUSPENDED              => __( 'The entitlement is suspended.', '%TEXTDOMAIN%' ),
+			self::CANCELLED              => __( 'The entitlement is cancelled.', '%TEXTDOMAIN%' ),
+			self::LICENSE_SUSPENDED      => __( 'The license is suspended.', '%TEXTDOMAIN%' ),
+			self::LICENSE_BANNED         => __( 'The license is banned.', '%TEXTDOMAIN%' ),
+			self::NO_ENTITLEMENT         => __( 'No entitlement exists for this product.', '%TEXTDOMAIN%' ),
+			self::NOT_ACTIVATED          => __( 'The product is not activated on this domain.', '%TEXTDOMAIN%' ),
+			self::OUT_OF_ACTIVATIONS     => __( 'All activation seats are in use.', '%TEXTDOMAIN%' ),
+			self::INVALID_KEY            => __( 'The license key is not recognized.', '%TEXTDOMAIN%' ),
+			self::ACTIVATION_REQUIRED    => __( 'The product requires activation.', '%TEXTDOMAIN%' ),
+			self::TIER_SELECTION_REQUIRED => __( 'A tier selection is required for this product.', '%TEXTDOMAIN%' ),
 		];
 
 		return $messages[ $value ] ?? __( 'The license validation failed.', '%TEXTDOMAIN%' );
@@ -174,14 +196,16 @@ final class Validation_Status {
 	 */
 	public static function error_code( string $value ): string {
 		$map = [
-			self::EXPIRED            => Error_Code::EXPIRED,
-			self::SUSPENDED          => Error_Code::SUSPENDED,
-			self::CANCELLED          => Error_Code::CANCELLED,
-			self::LICENSE_SUSPENDED  => Error_Code::LICENSE_SUSPENDED,
-			self::LICENSE_BANNED     => Error_Code::LICENSE_BANNED,
-			self::NO_SUBSCRIPTION    => Error_Code::NO_SUBSCRIPTION,
-			self::OUT_OF_ACTIVATIONS => Error_Code::OUT_OF_ACTIVATIONS,
-			self::INVALID_KEY        => Error_Code::INVALID_KEY,
+			self::EXPIRED                => Error_Code::EXPIRED,
+			self::SUSPENDED              => Error_Code::SUSPENDED,
+			self::CANCELLED              => Error_Code::CANCELLED,
+			self::LICENSE_SUSPENDED      => Error_Code::LICENSE_SUSPENDED,
+			self::LICENSE_BANNED         => Error_Code::LICENSE_BANNED,
+			self::NO_ENTITLEMENT         => Error_Code::NO_ENTITLEMENT,
+			self::OUT_OF_ACTIVATIONS     => Error_Code::OUT_OF_ACTIVATIONS,
+			self::INVALID_KEY            => Error_Code::INVALID_KEY,
+			self::ACTIVATION_REQUIRED    => Error_Code::ACTIVATION_REQUIRED,
+			self::TIER_SELECTION_REQUIRED => Error_Code::TIER_SELECTION_REQUIRED,
 		];
 
 		return $map[ $value ] ?? Error_Code::UNKNOWN_ERROR;
