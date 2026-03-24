@@ -15,12 +15,12 @@ A site has one unified license key. It reaches the site in one of two ways:
 - **Embedded**: a product purchased from the Liquid Web store ships with a license file containing the key
 - **User-entered**: the user types the key into the admin UI
 
-The `License_Manager` resolves the key using a priority system: a stored key always wins. If no key is stored, it checks whether any registered product contributed an embedded key. If one is found, it auto-stores it so future lookups skip the discovery step.
+The `License_Manager` resolves the key using a priority system: a stored key always wins. If no key is stored, it scans active plugins for a bundled `LWSW_KEY.php` file. If one is found, the key it returns is auto-stored so future lookups skip the discovery step.
 
 ```
 get() priority:
   1. Stored key (License_Repository) → always wins
-  2. First embedded key from Product_Registry → auto-stored, then returned
+  2. First LWSW_KEY.php found in active plugins → auto-stored, then returned
   3. null (site is unlicensed)
 ```
 
@@ -129,19 +129,15 @@ Since there is only one unified key per site, there is only one state entry. Inv
 
 ## Product Registry
 
-Products opt into unified licensing by declaring themselves through a WordPress filter (`lw-harbor/product_registry`). Each product contributes:
+Products opt into unified licensing by bundling an `LWSW_KEY.php` file in their plugin root directory. The file must return a single `LWSW-`-prefixed key string:
 
-| Field          | Required | Description                                         |
-| -------------- | -------- | --------------------------------------------------- |
-| `slug`         | Yes      | Product identifier, must match what Licensing knows |
-| `embedded_key` | No       | `LWSW-`-prefixed key if the product ships with one  |
-| `name`         | No       | Human-readable display name                         |
-| `version`      | No       | Currently installed version                         |
-| `product`      | No       | Product brand/family (e.g., `givewp`, `kadence`)    |
+```php
+<?php return 'LWSW-xxxx-xxxx-xxxx-xxxx';
+```
 
-Only `slug` is required. Products do not declare their tier. Tiers are a property of the license, not the product.
+The presence of this file is the signal that a product belongs to the Harbor unified licensing system. Products managed by Uplink v2 do not ship this file; Harbor only concerns itself with products that do.
 
-The registry is consumed lazily. By the time the leader reads it, all plugins have loaded and registered.
+`Product_Registry` scans active WordPress plugins for this file at key-discovery time. No filter registration is required from the product side.
 
 ## API Client
 
@@ -201,8 +197,9 @@ License_Manager::get()
 │  └─ return key or null
 ├─ if key found → return it
 ├─ Product_Registry::first_with_embedded_key()
-│  └─ iterate registered products for embedded keys
-├─ if embedded key found → auto-store, return it
+│  └─ scan active plugins for LWSW_KEY.php
+│  └─ return first valid LWSW- key found, or null
+├─ if key found → auto-store, return it
 └─ return null (unlicensed)
 ```
 

@@ -4,7 +4,7 @@
 
 Harbor introduces **unified licensing** with `LWSW-`-prefixed keys. This changes the relationship between Harbor instances: one instance becomes the **fat leader** (owns all unified licensing concerns) and every other instance becomes a **thin instance** (declares itself to the leader, then gets out of the way).
 
-In per-resource licensing (v2/v3), every instance was self-sufficient. It stored its own key, validated against the licensing APIs, rendered admin fields, and managed its own state. The leader was just a tiebreaker for shared UI. Unified licensing inverts this: the leader takes over key storage, API delegation, feature catalogs, and the admin page. Individual instances become thin shells.
+In per-resource licensing (uplink v2/v3), every instance was self-sufficient. It stored its own key, validated against the licensing APIs, rendered admin fields, and managed its own state. The leader was just a tiebreaker for shared UI. Unified licensing inverts this: the leader takes over key storage, API delegation, feature catalogs, and the admin page. Individual instances become thin shells.
 
 For the unified key model itself: how the key relates to Licensing, Portal, and the WordPress site, how seats work, and what happens in various key change scenarios. See [Unified License Key: System Design](unified-license-key-system-design.md).
 
@@ -39,7 +39,7 @@ The leader renders the unified licensing page (the "Software Manager"). It shows
 
 A thin instance is any Harbor copy operating under a unified `LWSW-` key. It still creates its resource and license objects — it needs to know what product it is — but when it detects a `LWSW-` key, it skips wiring into v2/v3: no per-resource validation hooks, no per-resource admin fields, no per-resource API calls. The v4 path short-circuits the v3 machinery.
 
-What a thin instance does: it declares itself to the leader through the product registry so the leader knows it exists. If it has an embedded key, it contributes it via the registry. On plugin activation or key entry, it fires an action that the leader handles. And it queries the leader through global functions like `is_feature_enabled()`.
+What a thin instance does: if it ships with an embedded key, it bundles an `LWSW_KEY.php` file that the leader discovers automatically on key-discovery. On plugin activation or key entry, it fires an action that the leader handles. And it queries the leader through global functions like `is_feature_enabled()`.
 
 What a thin instance does not do: validate keys, talk to licensing APIs, or render licensing admin fields.
 
