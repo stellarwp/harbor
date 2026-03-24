@@ -544,11 +544,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_templates_AppShell__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/components/templates/AppShell */ "./resources/js/components/templates/AppShell.tsx");
 /* harmony import */ var _components_ui_toast__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/ui/toast */ "./resources/js/components/ui/toast.tsx");
 /* harmony import */ var _components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/components/ErrorBoundary */ "./resources/js/components/ErrorBoundary.tsx");
-/* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
-/* harmony import */ var _context_filter_context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/context/filter-context */ "./resources/js/context/filter-context.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_organisms_ErrorModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/components/organisms/ErrorModal */ "./resources/js/components/organisms/ErrorModal.tsx");
+/* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
+/* harmony import */ var _context_filter_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/context/filter-context */ "./resources/js/context/filter-context.tsx");
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 /**
+ * @package LiquidWeb\Harbor
  */
 
 
@@ -556,11 +559,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 const App = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_context_toast_context__WEBPACK_IMPORTED_MODULE_3__.ToastProvider, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_context_filter_context__WEBPACK_IMPORTED_MODULE_4__.FilterProvider, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_2__.ErrorBoundary, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_templates_AppShell__WEBPACK_IMPORTED_MODULE_0__.AppShell, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_ui_toast__WEBPACK_IMPORTED_MODULE_1__.Toaster, {})]
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_context_toast_context__WEBPACK_IMPORTED_MODULE_4__.ToastProvider, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_context_filter_context__WEBPACK_IMPORTED_MODULE_5__.FilterProvider, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__.ErrorModalProvider, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_2__.ErrorBoundary, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_templates_AppShell__WEBPACK_IMPORTED_MODULE_0__.AppShell, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_toast__WEBPACK_IMPORTED_MODULE_1__.Toaster, {})]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_organisms_ErrorModal__WEBPACK_IMPORTED_MODULE_3__.ErrorModal, {})]
       })
     })
   });
@@ -611,11 +618,60 @@ class ErrorBoundary extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     if (this.state.hasError) {
       return this.props.fallback ?? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
         className: "px-4 py-6 text-sm text-muted-foreground text-center",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Something went wrong.', '%TEXTDOMAIN%')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('An unexpected error occurred. Please reload the page.', '%TEXTDOMAIN%')
       });
     }
     return this.props.children;
   }
+}
+
+/***/ },
+
+/***/ "./resources/js/components/atoms/ErrorItem.tsx"
+/*!*****************************************************!*\
+  !*** ./resources/js/components/atoms/ErrorItem.tsx ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ErrorItem: () => (/* binding */ ErrorItem)
+/* harmony export */ });
+/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * Displays a HarborError as a bullet item, recursively nesting the cause
+ * chain beneath the top-level message.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+
+/**
+ * @since 1.0.0
+ */
+function ErrorItem({
+  error,
+  nested = false
+}) {
+  const cause = error.cause instanceof _errors_harbor_error__WEBPACK_IMPORTED_MODULE_0__["default"] ? error.cause : null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+    className: "flex flex-col gap-2 m-0",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+      className: `flex items-start gap-2 text-sm ${nested ? 'text-muted-foreground' : 'font-medium text-foreground'}`,
+      children: [!nested && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        className: "mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-destructive",
+        "aria-hidden": "true"
+      }), error.message]
+    }), cause && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("ul", {
+      className: "ml-4 space-y-1 border-l-2 border-border pl-4",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(ErrorItem, {
+        error: cause,
+        nested: true
+      })
+    })]
+  });
 }
 
 /***/ },
@@ -1682,6 +1738,106 @@ function VersionDisplay({
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
     className: "text-xs font-mono text-muted-foreground text-right",
     children: `v${feature.installed_version ?? feature.version}`
+  });
+}
+
+/***/ },
+
+/***/ "./resources/js/components/organisms/ErrorModal.tsx"
+/*!**********************************************************!*\
+  !*** ./resources/js/components/organisms/ErrorModal.tsx ***!
+  \**********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ErrorModal: () => (/* binding */ ErrorModal)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/external-link.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/mail.js");
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
+/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
+/* harmony import */ var _components_atoms_ErrorItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/atoms/ErrorItem */ "./resources/js/components/atoms/ErrorItem.tsx");
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+/**
+ * Error modal organism.
+ *
+ * Renders when the ErrorModalContext holds active errors. Lists each error
+ * and provides a Dismiss button so the user can close the modal and interact
+ * with the UI (e.g. to update the license key).
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+
+
+
+
+
+
+const DOCS_URL = 'https://go.liquidweb.com/harbor-docs';
+const SUPPORT_URL = 'https://go.liquidweb.com/harbor-support';
+
+/**
+ * @since 1.0.0
+ */
+function ErrorModal() {
+  const {
+    errors,
+    clearAll
+  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_3__.useErrorModal)();
+  if (errors.length === 0) return null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_4__.Dialog, {
+    open: true,
+    onClose: clearAll,
+    maxWidth: "max-w-xl",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_4__.DialogHeader, {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('There are issues that need your attention', '%TEXTDOMAIN%'),
+      onClose: clearAll
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_4__.DialogContent, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("ul", {
+        className: "flex flex-col gap-6",
+        children: errors.map(error => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_atoms_ErrorItem__WEBPACK_IMPORTED_MODULE_5__.ErrorItem, {
+          error: error
+        }, error.code))
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_4__.DialogFooter, {
+      className: "justify-between items-center bg-gray-100 rounded-b-lg py-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        className: "flex flex-col gap-1",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+          className: "text-xs text-muted-foreground m-0",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Need help resolving this?', '%TEXTDOMAIN%')
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          className: "flex gap-8",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
+            href: DOCS_URL,
+            target: "_blank",
+            rel: "noreferrer",
+            className: "flex items-center gap-1 text-xs font-bold uppercase text-muted-foreground hover:text-foreground transition-colors",
+            children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('View documentation', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              className: "w-3 h-3 -translate-y-px"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
+            href: SUPPORT_URL,
+            target: "_blank",
+            rel: "noreferrer",
+            className: "flex items-center gap-1 text-xs font-bold uppercase text-muted-foreground hover:text-foreground transition-colors",
+            children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Contact support', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              className: "w-3 h-3 -translate-y-px"
+            })]
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_6__.Button, {
+        size: "lg",
+        onClick: clearAll,
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Dismiss', '%TEXTDOMAIN%')
+      })]
+    })]
   });
 }
 
@@ -2895,6 +3051,71 @@ function Tooltip({
 
 /***/ },
 
+/***/ "./resources/js/context/error-modal-context.tsx"
+/*!******************************************************!*\
+  !*** ./resources/js/context/error-modal-context.tsx ***!
+  \******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ErrorModalProvider: () => (/* binding */ ErrorModalProvider),
+/* harmony export */   useErrorModal: () => (/* binding */ useErrorModal)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * Error modal context — surfaces resolver and API errors in a dismissible
+ * modal while keeping the full UI rendered.
+ *
+ * Mount <ErrorModalProvider> once in App.tsx; consume with useErrorModal()
+ * anywhere in the component tree.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+
+const ErrorModalContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
+  errors: [],
+  addError: () => {},
+  removeError: () => {},
+  clearAll: () => {}
+});
+
+/**
+ * @since 1.0.0
+ */
+function ErrorModalProvider({
+  children
+}) {
+  const [errors, setErrors] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const addError = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(error => {
+    setErrors(prev => prev.some(e => e.code === error.code) ? prev : [...prev, error]);
+  }, []);
+  const removeError = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(code => {
+    setErrors(prev => prev.filter(e => e.code !== code));
+  }, []);
+  const clearAll = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setErrors([]), []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(ErrorModalContext.Provider, {
+    value: {
+      errors,
+      addError,
+      removeError,
+      clearAll
+    },
+    children: children
+  });
+}
+
+/**
+ * @since 1.0.0
+ */
+const useErrorModal = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(ErrorModalContext);
+
+/***/ },
+
 /***/ "./resources/js/context/filter-context.tsx"
 /*!*************************************************!*\
   !*** ./resources/js/context/filter-context.tsx ***!
@@ -3381,17 +3602,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ useResolvableSelectWithError)
 /* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _use_resolvable_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
-/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
-/* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _use_resolvable_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
+/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
+/* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
 /**
- * Wrapper around useResolvableSelect that throws resolution errors
- * during render so they are caught by the nearest React ErrorBoundary.
+ * Wrapper around useResolvableSelect that routes resolution errors to the
+ * ErrorModalContext instead of throwing them during render.
+ *
+ * When any resolver fails the error is passed to addError() so the error modal
+ * opens while the rest of the UI stays rendered. When all resolvers succeed the
+ * previously pushed error is automatically removed (auto-clear).
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -3404,28 +3633,27 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * Find the first error among a set of resolvable results and wrap it
- * as an HarborError.
+ * Collect all errors among a set of resolvable results and normalize each
+ * as a HarborError.
  */
-function findError(results) {
+function findErrors(results) {
+  const errors = [];
   for (const key in results) {
     const entry = results[key];
     if (entry.status === 'ERROR') {
-      return _errors_harbor_error__WEBPACK_IMPORTED_MODULE_2__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_3__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%'));
+      errors.push(_errors_harbor_error__WEBPACK_IMPORTED_MODULE_3__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_4__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software failed to load your data.', '%TEXTDOMAIN%')));
     }
   }
-  return null;
+  return errors;
 }
 
 /**
- * Like useResolvableSelect, but throws resolution errors during render
- * so they are caught by the nearest React ErrorBoundary.
+ * Like useResolvableSelect, but routes resolution errors to the
+ * ErrorModalContext instead of throwing during render.
  *
- * The consumer callback must return a flat object of resolvable results.
- *
- * @throws {HarborError} When any selector's resolution fails. If the resolver
- *   threw an HarborError, that exact instance is re-thrown. Otherwise a new
- *   HarborError with code {@link ErrorCode.ResolutionFailed} is created.
+ * The component tree renders with whatever data is available (usually the
+ * store's default empty values). The modal opens automatically and clears
+ * itself when the resolver eventually succeeds (e.g. after a Retry).
  *
  * @example
  * ```ts
@@ -3439,11 +3667,25 @@ function findError(results) {
  * ```
  */
 function useResolvableSelectWithError(mapResolvableSelect, deps) {
-  const result = (0,_use_resolvable_select__WEBPACK_IMPORTED_MODULE_1__["default"])(mapResolvableSelect, deps);
-  const found = findError(result);
-  if (found) {
-    throw found;
-  }
+  const result = (0,_use_resolvable_select__WEBPACK_IMPORTED_MODULE_2__["default"])(mapResolvableSelect, deps);
+  const {
+    addError,
+    removeError
+  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_5__.useErrorModal)();
+
+  // Track the codes pushed by this hook instance so we can clear exactly
+  // those entries when all resolvers recover.
+  const lastErrorCodesRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)([]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const found = findErrors(result);
+    if (found.length > 0) {
+      lastErrorCodesRef.current = found.map(e => e.code);
+      found.forEach(error => addError(error));
+    } else if (lastErrorCodesRef.current.length > 0) {
+      lastErrorCodesRef.current.forEach(code => removeError(code));
+      lastErrorCodesRef.current = [];
+    }
+  }, [result, addError, removeError]);
   return result;
 }
 
@@ -5362,6 +5604,39 @@ const Lock = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("l
 
 
 //# sourceMappingURL=lock.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/mail.js"
+/*!**********************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/mail.js ***!
+  \**********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Mail)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.575.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+];
+const Mail = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("mail", __iconNode);
+
+
+//# sourceMappingURL=mail.js.map
 
 
 /***/ },
