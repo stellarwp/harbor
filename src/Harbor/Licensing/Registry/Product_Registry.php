@@ -2,81 +2,113 @@
 
 namespace LiquidWeb\Harbor\Licensing\Registry;
 
+use LiquidWeb\Harbor\Utils\License_Key;
+
 /**
- * Collects and normalizes products that have opted in to unified licensing.
+ * Discovers products that have opted in to unified licensing by scanning
+ * active plugins for a bundled LWSW_KEY.php file.
  *
- * Products register via the lw-harbor/product_registry filter by
- * appending a data array for each product they represent:
+ * Each LWSW_KEY.php file must return a single string containing a valid
+ * LWSW- prefixed license key:
  *
- *   add_filter( 'lw-harbor/product_registry', function( array $products ) {
- *       $products[] = [
- *           'slug'         => 'give',
- *           'embedded_key' => GIVE_LICENSE_KEY,
- *           'name'         => 'GiveWP',
- *           'version'      => GIVE_VERSION,
- *           'product'      => 'givewp',
- *       ];
- *       return $products;
- *   } );
+ *   <?php return 'LWSW-xxxx-xxxx-xxxx-xxxx';
+ *
+ * The presence of this file signals that the product belongs to the unified
+ * Harbor licensing system and is not managed by Uplink v2.
  *
  * @since 1.0.0
  */
 final class Product_Registry {
 
 	/**
-	 * Filter hook used by products to opt in to unified licensing.
+	 * The filename Harbor looks for inside each active plugin's root directory.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	public const FILTER = 'lw-harbor/product_registry';
+	public const KEY_FILE = 'LWSW_KEY.php';
 
 	/**
-	 * Get all products that have opted in to unified licensing.
-	 *
-	 * Entries that are not arrays or that are missing a valid slug are silently
-	 * skipped, so a poorly formed callback cannot break the rest of the registry.
+	 * Plugin root directories to scan. When null, auto-discovered from
+	 * the active_plugins WordPress option at scan time.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Registered_Product[]
+	 * @var string[]|null
 	 */
-	public function all(): array {
-		$raw = (array) apply_filters( self::FILTER, [] );
+	private ?array $plugin_dirs;
 
-		$products = [];
-
-		foreach ( $raw as $entry ) {
-			if ( ! is_array( $entry ) ) {
-				continue;
-			}
-
-			/** @var array<string, mixed> $entry */
-			$product = Registered_Product::from_array( $entry );
-
-			if ( $product !== null ) {
-				$products[] = $product;
-			}
-		}
-
-		return $products;
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string[]|null $plugin_dirs Plugin root directories to scan.
+	 *                                   Null (default) auto-discovers from active plugins.
+	 */
+	public function __construct( ?array $plugin_dirs = null ) {
+		$this->plugin_dirs = $plugin_dirs;
 	}
 
 	/**
-	 * Find the first registered product that has a locally embedded license key.
+	 * Find the first embedded license key from a bundled LWSW_KEY.php file.
+	 *
+	 * Scans each active plugin's root directory for an LWSW_KEY.php file.
+	 * Returns the first valid LWSW- prefixed key found, or null if none exists.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Registered_Product|null
+	 * @return string|null
 	 */
-	public function first_with_embedded_key(): ?Registered_Product {
-		foreach ( $this->all() as $product ) {
-			if ( $product->has_embedded_key() ) {
-				return $product;
+	public function first_with_embedded_key(): ?string {
+		foreach ( $this->resolve_plugin_dirs() as $dir ) {
+			$key_file = $dir . '/' . self::KEY_FILE;
+
+			if ( ! is_readable( $key_file ) ) {
+				continue;
+			}
+
+			$key = include $key_file;
+
+			if ( is_string( $key ) && License_Key::is_valid_format( $key ) ) {
+				return $key;
 			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the plugin root directories to scan.
+	 *
+	 * Uses the injected dirs if provided; otherwise builds the list from
+	 * the active_plugins WordPress option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string[]
+	 */
+	private function resolve_plugin_dirs(): array {
+		if ( $this->plugin_dirs !== null ) {
+			return $this->plugin_dirs;
+		}
+
+		$active = (array) get_option( 'active_plugins', [] );
+		$dirs   = [];
+
+		foreach ( $active as $plugin_file ) {
+			if ( ! is_string( $plugin_file ) ) {
+				continue;
+			}
+
+			$dir = WP_PLUGIN_DIR . '/' . dirname( $plugin_file );
+
+			if ( is_dir( $dir ) ) {
+				$dirs[] = $dir;
+			}
+		}
+
+		return $dirs;
 	}
 }

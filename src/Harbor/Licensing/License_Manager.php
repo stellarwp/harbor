@@ -20,9 +20,9 @@ use WP_Error;
  *
  * Priority order for get():
  *   1. Stored key (License_Repository) — always wins.
- *   2. Embedded key from the product registry — used when no key is stored;
- *      the first registered product with an embedded key wins and it is
- *      auto-stored for subsequent requests.
+ *   2. Embedded key discovered from a bundled LWSW_KEY.php file — used when
+ *      no key is stored; the first active plugin with this file wins and its
+ *      key is auto-stored for subsequent requests.
  *
  * Any method that would call the remote API first checks whether a recent
  * failure is within the error throttle TTL window. When throttled, the
@@ -434,20 +434,14 @@ class License_Manager {
 	}
 
 	/**
-	 * Finds the first registered product with an embedded key, stores it,
-	 * and returns it. Returns null if no product reports an embedded key.
+	 * Finds the first embedded key from a bundled LWSW_KEY.php file.
+	 * Returns null if no active plugin ships such a file.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
 	private function discover_embedded_key(): ?string {
-		$product = $this->registry->first_with_embedded_key();
-
-		if ( $product === null ) {
-			return null;
-		}
-
-		return $product->embedded_key ?? null;
+		return $this->registry->first_with_embedded_key();
 	}
 }

@@ -3,7 +3,6 @@
 namespace LiquidWeb\Harbor\Tests\Licensing\Registry;
 
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
-use LiquidWeb\Harbor\Licensing\Registry\Registered_Product;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
@@ -11,161 +10,93 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
  */
 final class Product_RegistryTest extends HarborTestCase {
 
-	private Product_Registry $registry;
-
-	protected function setUp(): void {
-		parent::setUp();
-		$this->registry = new Product_Registry();
-	}
+	/** @var string[] */
+	private array $temp_dirs = [];
 
 	protected function tearDown(): void {
-		remove_all_filters( Product_Registry::FILTER );
+		foreach ( $this->temp_dirs as $dir ) {
+			$key_file = $dir . '/' . Product_Registry::KEY_FILE;
+			if ( file_exists( $key_file ) ) {
+				unlink( $key_file );
+			}
+			if ( is_dir( $dir ) ) {
+				rmdir( $dir );
+			}
+		}
+		$this->temp_dirs = [];
 		parent::tearDown();
 	}
 
-	public function test_all_returns_empty_array_with_no_filter(): void {
-		$this->assertSame( [], $this->registry->all() );
+	/**
+	 * Creates a temporary plugin directory and optionally writes an LWSW_KEY.php file into it.
+	 *
+	 * @param string $key_content PHP source to write, or empty string to skip creating the file.
+	 *
+	 * @return string The directory path.
+	 */
+	private function make_plugin_dir( string $key_content = '' ): string {
+		$dir = sys_get_temp_dir() . '/harbor_test_' . uniqid();
+		mkdir( $dir, 0755, true );
+		$this->temp_dirs[] = $dir;
+
+		if ( $key_content !== '' ) {
+			file_put_contents( $dir . '/' . Product_Registry::KEY_FILE, $key_content );
+		}
+
+		return $dir;
 	}
 
-	public function test_all_normalizes_entries_to_registered_product_instances(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-UNIFIED-PRO-2026',
-					'name'         => 'GiveWP',
-					'version'      => '3.0.0',
-					'product'        => 'givewp',
-				];
-				return $products;
-			} 
-		);
+	public function test_first_with_embedded_key_returns_null_when_no_dirs(): void {
+		$registry = new Product_Registry( [] );
 
-		$result = $this->registry->all();
-
-		$this->assertCount( 1, $result );
-		$this->assertInstanceOf( Registered_Product::class, $result[0] );
-		$this->assertSame( 'give', $result[0]->slug );
+		$this->assertNull( $registry->first_with_embedded_key() );
 	}
 
-	public function test_all_collects_from_multiple_callbacks(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [ 'slug' => 'give' ];
-				return $products;
-			} 
-		);
+	public function test_first_with_embedded_key_returns_null_when_no_key_file_present(): void {
+		$dir      = $this->make_plugin_dir();
+		$registry = new Product_Registry( [ $dir ] );
 
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [ 'slug' => 'kadence' ];
-				return $products;
-			} 
-		);
-
-		$result = $this->registry->all();
-
-		$this->assertCount( 2, $result );
-		$this->assertSame( 'give', $result[0]->slug );
-		$this->assertSame( 'kadence', $result[1]->slug );
+		$this->assertNull( $registry->first_with_embedded_key() );
 	}
 
-	public function test_all_skips_non_array_entries(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = 'not-an-array';
-				$products[] = [ 'slug' => 'give' ];
-				return $products;
-			} 
-		);
+	public function test_first_with_embedded_key_returns_valid_key(): void {
+		$dir      = $this->make_plugin_dir( '<?php return "LWSW-GIVE-KEY-2026";' );
+		$registry = new Product_Registry( [ $dir ] );
 
-		$result = $this->registry->all();
-
-		$this->assertCount( 1, $result );
-		$this->assertSame( 'give', $result[0]->slug );
+		$this->assertSame( 'LWSW-GIVE-KEY-2026', $registry->first_with_embedded_key() );
 	}
 
-	public function test_all_skips_entries_without_slug(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'embedded_key' => 'KEY',
-					'name'         => 'No Slug',
-				];
-				$products[] = [ 'slug' => 'give' ];
-				return $products;
-			} 
-		);
+	public function test_first_with_embedded_key_returns_null_for_key_without_lwsw_prefix(): void {
+		$dir      = $this->make_plugin_dir( '<?php return "INVALID-KEY";' );
+		$registry = new Product_Registry( [ $dir ] );
 
-		$result = $this->registry->all();
-
-		$this->assertCount( 1, $result );
-		$this->assertSame( 'give', $result[0]->slug );
+		$this->assertNull( $registry->first_with_embedded_key() );
 	}
 
-	public function test_first_with_embedded_key_returns_null_when_no_products(): void {
-		$this->assertNull( $this->registry->first_with_embedded_key() );
-	}
+	public function test_first_with_embedded_key_returns_null_when_file_returns_non_string(): void {
+		$dir      = $this->make_plugin_dir( '<?php return 12345;' );
+		$registry = new Product_Registry( [ $dir ] );
 
-	public function test_first_with_embedded_key_returns_null_when_no_product_has_key(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug' => 'give',
-					'name' => 'GiveWP',
-				];
-				return $products;
-			} 
-		);
-
-		$this->assertNull( $this->registry->first_with_embedded_key() );
-	}
-
-	public function test_first_with_embedded_key_skips_products_without_key(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [ 'slug' => 'no-key' ];
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-GIVE-KEY',
-				];
-				return $products;
-			} 
-		);
-
-		$result = $this->registry->first_with_embedded_key();
-
-		$this->assertNotNull( $result );
-		$this->assertSame( 'give', $result->slug );
-		$this->assertSame( 'LWSW-GIVE-KEY', $result->embedded_key );
+		$this->assertNull( $registry->first_with_embedded_key() );
 	}
 
 	public function test_first_with_embedded_key_returns_first_match(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-GIVE-KEY',
-				];
-				$products[] = [
-					'slug'         => 'kadence',
-					'embedded_key' => 'LWSW-KADENCE-KEY',
-				];
-				return $products;
-			} 
-		);
+		$dir1     = $this->make_plugin_dir( '<?php return "LWSW-FIRST-KEY";' );
+		$dir2     = $this->make_plugin_dir( '<?php return "LWSW-SECOND-KEY";' );
+		$registry = new Product_Registry( [ $dir1, $dir2 ] );
 
-		$result = $this->registry->first_with_embedded_key();
+		$this->assertSame( 'LWSW-FIRST-KEY', $registry->first_with_embedded_key() );
+	}
 
-		$this->assertNotNull( $result );
-		$this->assertSame( 'give', $result->slug );
+	public function test_first_with_embedded_key_skips_dirs_without_key_file(): void {
+		$dir_no_key   = $this->make_plugin_dir();
+		$dir_with_key = $this->make_plugin_dir( '<?php return "LWSW-SECOND-KEY";' );
+		$registry     = new Product_Registry( [ $dir_no_key, $dir_with_key ] );
+
+		$this->assertSame( 'LWSW-SECOND-KEY', $registry->first_with_embedded_key() );
+	}
+
+	public function test_key_file_constant_is_lwsw_key_php(): void {
+		$this->assertSame( 'LWSW_KEY.php', Product_Registry::KEY_FILE );
 	}
 }
