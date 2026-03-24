@@ -40,7 +40,10 @@ export function ErrorModal() {
             </DialogContent>
             <DialogFooter className="justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <a
+                    <p className="text-xs text-muted-foreground m-0">
+                        { __( 'Need help resolving this?', '%TEXTDOMAIN%' ) }
+                    </p>
+                    <
                         href={ DOCS_URL }
                         target="_blank"
                         rel="noreferrer"
