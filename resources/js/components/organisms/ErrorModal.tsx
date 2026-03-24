@@ -37,34 +37,28 @@ export function ErrorModal() {
                         <ErrorItem key={ error.code } error={ error } />
                     ) ) }
                 </ul>
-                <hr className="my-4 border-border" />
-                <div className="flex flex-col gap-1.5">
-                    <p className="text-xs text-muted-foreground">
-                        { __( 'Need help resolving this?', '%TEXTDOMAIN%' ) }
-                    </p>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1">
-                        <a
-                            href={ DOCS_URL }
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                        >
-                            { __( 'View documentation', '%TEXTDOMAIN%' ) }
-                            <ExternalLink className="w-3 h-3" />
-                        </a>
-                        <a
-                            href={ SUPPORT_URL }
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                        >
-                            { __( 'Contact support', '%TEXTDOMAIN%' ) }
-                            <ExternalLink className="w-3 h-3" />
-                        </a>
-                    </div>
-                </div>
             </DialogContent>
-            <DialogFooter>
+            <DialogFooter className="justify-between items-center">
+                <div className="flex flex-col gap-1">
+                    <a
+                        href={ DOCS_URL }
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                    >
+                        { __( 'View documentation', '%TEXTDOMAIN%' ) }
+                        <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <a
+                        href={ SUPPORT_URL }
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                    >
+                        { __( 'Contact support', '%TEXTDOMAIN%' ) }
+                        <ExternalLink className="w-3 h-3" />
+                    </a>
+                </div>
                 <Button onClick={ clearAll }>
                     { __( 'Dismiss', '%TEXTDOMAIN%' ) }
                 </Button>
