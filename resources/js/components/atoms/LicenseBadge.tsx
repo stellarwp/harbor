@@ -1,7 +1,7 @@
 /**
  * Unified badge for all license-related states.
  *
- * Covers tier name, not-licensed, legacy, and free indicators so that
+ * Covers tier name, unlicensed, legacy, and free indicators so that
  * all license badge rendering flows through a single atom.
  *
  * @package StellarWP\Uplink
@@ -12,23 +12,23 @@ import { cn } from '@/lib/utils';
 
 type LicenseBadgeProps =
 	| { type: 'licensed';     tierName: string; className?: string; }
-	| { type: 'not-licensed' | 'legacy' | 'free'; tierName?: never; className?: string; };
+	| { type: 'unlicensed' | 'legacy' | 'free'; tierName?: never; className?: string; };
 
 const variantMap = {
-	licensed:       'gradient',
-	'not-licensed': 'outline',
-	legacy:         'warning',
-	free:           'secondary',
+	licensed:   'gradient',
+	unlicensed: 'outline',
+	legacy:     'warning',
+	free:       'secondary',
 } as const;
 
 const labelMap = {
-	'not-licensed': () => __( 'Not Licensed', '%TEXTDOMAIN%' ),
-	legacy:         () => __( 'Legacy',        '%TEXTDOMAIN%' ),
-	free:           () => __( 'Free',          '%TEXTDOMAIN%' ),
+	unlicensed: () => __( 'Unlicensed', '%TEXTDOMAIN%' ),
+	legacy:     () => __( 'Legacy',        '%TEXTDOMAIN%' ),
+	free:       () => __( 'Free',          '%TEXTDOMAIN%' ),
 } as const;
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function LicenseBadge( { type, tierName, className }: LicenseBadgeProps ) {
 	const label = type === 'licensed'

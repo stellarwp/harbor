@@ -15,7 +15,7 @@ export function isFreeFeature( tier: string | null ): boolean {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export function formatDate( dateStr: string ): string {
     return new Date( dateStr ).toLocaleDateString( 'en-US', {

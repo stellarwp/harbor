@@ -70,7 +70,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                 ) : hasActiveLegacy ? (
                     <LicenseBadge type="legacy" />
                 ) : (
-                    <LicenseBadge type="not-licensed" className="text-white border-white/40" />
+                    <LicenseBadge type="unlicensed" className="text-white border-white/40" />
                 ) }
                 <span className="ml-auto text-xs text-white/70">
                     { activeCount } { __( 'active', '%TEXTDOMAIN%' ) }
