@@ -1,6 +1,8 @@
 # LiquidWeb Harbor
 
-[![CI](https://github.com/stellarwp/harbor/workflows/CI/badge.svg)](https://github.com/stellarwp/harbor/actions?query=branch%3Amain) [![Static Analysis](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
+[![PHP Compatibility](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml)
+[![PHP Tests](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml)
+[![PHPStan](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
 
 ## Installation
 
