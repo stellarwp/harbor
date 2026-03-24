@@ -34,7 +34,8 @@ final class WordPress_View implements Contracts\View {
 	 * @param string $extension The file extension of view files.
 	 */
 	public function __construct( string $directory, string $extension = '.php' ) {
-		$this->directory = trailingslashit( realpath( $directory ) );
+		$real            = realpath( $directory );
+		$this->directory = trailingslashit( $real !== false ? $real : $directory );
 		$this->extension = $extension;
 	}
 

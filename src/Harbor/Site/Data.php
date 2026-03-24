@@ -2,6 +2,7 @@
 
 namespace LiquidWeb\Harbor\Site;
 
+use LiquidWeb\Harbor\Utils\Cast;
 use StellarWP\ContainerContract\ContainerInterface;
 use LiquidWeb\Harbor\Config;
 
@@ -34,7 +35,7 @@ class Data {
 	 */
 	public function get_domain(): string {
 		$cache_key = 'lw_harbor_domain';
-		$domain    = $this->container->has( $cache_key ) ? $this->container->get( $cache_key ) : null;
+		$domain    = $this->container->has( $cache_key ) ? Cast::to_string( $this->container->get( $cache_key ) ) : null;
 
 		if ( null === $domain ) {
 			$domain = is_multisite() ? $this->get_domain_multisite_option() : $this->get_site_domain();
@@ -55,7 +56,7 @@ class Data {
 		 */
 		$domain = apply_filters( 'lw-harbor/get_domain', $domain );
 
-		return sanitize_text_field( $domain );
+		return sanitize_text_field( Cast::to_string( $domain ) );
 	}
 
 	/**
@@ -86,7 +87,7 @@ class Data {
 	 *
 	 * @return string
 	 */
-	public function get_site_domain() {
+	public function get_site_domain(): string {
 		/** @var string */
 		$site_url = get_option( 'siteurl', '' );
 
@@ -94,7 +95,7 @@ class Data {
 		$site_url = wp_parse_url( $site_url );
 		if ( ! $site_url || ! isset( $site_url['host'] ) ) {
 			if ( isset( $_SERVER['SERVER_NAME'] ) ) {
-				return $_SERVER['SERVER_NAME'];
+				return Cast::to_string( $_SERVER['SERVER_NAME'] );
 			}
 
 			return '';

@@ -1,6 +1,6 @@
 # LiquidWeb Harbor
 
-[![CI](https://github.com/liquidweb/harbor/workflows/CI/badge.svg)](https://github.com/liquidweb/harbor/actions?query=branch%3Amain) [![Static Analysis](https://github.com/liquidweb/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/liquidweb/harbor/actions/workflows/static-analysis.yml)
+[![CI](https://github.com/stellarwp/harbor/workflows/CI/badge.svg)](https://github.com/stellarwp/harbor/actions?query=branch%3Amain) [![Static Analysis](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
 
 ## Installation
 
@@ -86,276 +86,33 @@ You can also add lines below to your composer file in order to run command autom
   }
 ```
 
-## Embedding a license in your plugin
-
-LiquidWeb Harbor plugins are downloaded with an embedded license key so that users do not need to manually enter the key when activating their plugin. There are two ways to embed a license key: using a **class constant** or using a **simple license file**.
-
-### Class constant (default)
-
-The class file can be placed anywhere in your plugin. The default convention is `src/Harbor/Helper.php`, but you can use any path as long as you pass the corresponding class as the `$license_class` parameter when registering.
-
-The file should match the following - keeping the `KEY` constant set to a blank string, or, if you want a default license key, set it to that.:
-
-```php
-<?php declare( strict_types=1 );
-
-namespace Whatever\Namespace\Harbor;
-
-final class Helper {
- public const KEY = '';
-}
-```
-
-The `DATA` constant is also supported as an alternative to `KEY`.
-
-### Simple license file
-
-Some products use a simple PHP file that returns the license key directly instead of a class constant. This is common for products that use files like `auth-token.php` or `PLUGIN_LICENSE.php`.
-
-The file should return the license key as a string:
-
-```php
-<?php return 'your-license-key-here';
-```
-
-When registering your plugin, pass the file path (relative to your plugin's root directory) as the `$license_class` parameter:
-
-```php
-Register::plugin(
- 'my-plugin',
- 'My Plugin',
- '1.0.0',
- 'my-plugin/my-plugin.php',
- MyPlugin::class,
- 'auth-token.php' // Relative to the plugin directory.
-);
-```
-
-Subdirectory paths are also supported (e.g. `config/license.php`).
-
 ## Registering a plugin
 
-Registers a plugin for licensing and updates.
+To register your plugin, you need to filter the `lw-harbor/product_registry` hook.
 
 ```php
-use LiquidWeb\Harbor\Register;
+add_filter('lw-harbor/product_registry', function (array $products): array {
+    $products[] = [
+        'product'      => 'your-product',          // Product (brand) slug — all plugins in the same product share a unified license
+        'slug'         => 'your-plugin',         // Unique slug for this specific plugin
+        'name'         => 'Your Plugin',         // Human-readable product name
+        'version'      => YOUR_PLUGIN_VERSION,   // Current plugin version
+        'embedded_key' => getBundledLicenseKey(), // Optional: pre-embedded license key
+    ];
 
-$plugin_slug    = 'my-plugin';
-$plugin_name    = 'My Plugin';
-$plugin_version = MyPlugin::VERSION;
-$plugin_path    = 'my-plugin/my-plugin.php';
-$plugin_class   = MyPlugin::class;
-$license_class  = MyPlugin\Harbor\Helper::class;
-
-Register::plugin(
- $plugin_slug,
- $plugin_name,
- $plugin_version,
- $plugin_path,
- $plugin_class,
- $license_class, // This is optional.
- false // Whether this is an oAuth plugin. Default false.
-);
+    return $products;
+});
 ```
 
-## Registering a service
+**Product array fields:**
 
-Registers a service for licensing. Since services require a plugin, we pull version and class information from the plugin.
-
-```php
-use LiquidWeb\Harbor\Register;
-
-$service_slug    = 'my-service';
-$service_name    = 'My Service';
-$service_version = MyPlugin::VERSION;
-$plugin_path     = 'my-plugin/my-plugin.php';
-$plugin_class    = MyPlugin::class;
-
-Register::service(
- $service_slug,
- $service_name,
- $service_version,
- $plugin_path,
- $plugin_class,
- null,
- false
-);
-```
-
-## Render license key form on your settings page
-
-In order to render license key form just add the following to your settings page, tab, etc.
-
-> ⚠️ This will render license key fields for all of your registered plugins/services in the same Harbor/Container instance.
-
-```php
-use LiquidWeb\Harbor as HarborNamespace;
-
-$form = HarborNamespace\get_form();
-$plugins = HarborNamespace\get_plugins();
-
-foreach ( $plugins as $plugin ) {
- $field = HarborNamespace\get_field( $plugin->get_slug() );
- // Tha name property of the input field.
- $field->set_field_name( 'field-' . $slug );
- $form->add_field( $field );
-}
-
-$form->render();
-// or echo $form->get_render_html();
-```
-
-To render a single product's license key, use the following:
-
-```php
-use LiquidWeb\Harbor as HarborNamespace;
-
-$field = HarborNamespace\get_field( 'my-test-plugin' );
-
-$field->render();
-// or echo $field->get_render_html();
-
-
-```
-
-### Example: Register settings page and render license fields
-
-Register a settings page for a plugin if you need it.
-
-```php
-add_action( 'admin_menu', function () {
-    add_menu_page(
-        'Sample',
-        'Sample',
-        'manage_options',
-        'sample-plugin-lib',
-        'render_settings_page',
-        '',
-        null
-    );
-
-}, 11 );
-```
-
-Add lines below to your settings page. This will render license key form with titles and a submit button.
-
-```php
-use LiquidWeb\Harbor as HarborNamespace;
-
-function render_settings_page() {
-    // ...
- $form = HarborNamespace\get_form();
- $plugins = HarborNamespace\get_plugins();
-
- foreach ( $plugins as $plugin ) {
-  $field = HarborNamespace\get_field( $plugin->get_slug() );
-  // Tha name property of the input field.
-  $field->set_field_name( 'field-' . $slug );
-  $form->add_field( $field );
- }
-
- $form->show_button( true, __( 'Submit', 'text-domain' ) );
-
- $form->render();
-
-    //....
-}
-```
-
-## License Authorization
-
-> ⚠️ Your `auth_url` is set on the Origins table on the [Stellar Licensing](https://github.com/stellarwp/licensing) server!
-> You must first request to have this added before proceeding.
-
-There may be certain functionality you wish to make available when you know a license is authorized.
-
-This library provides the tools to fetch and store unique tokens, working together with the Uplink Origin
-plugin.
-
-After following the instructions at the top to define a `Config::set_token_auth_prefix()`, this will enable the following
-functionality:
-
-1. The ability to render a "Connect" button anywhere in your plugin while the user is in wp-admin, using the provided function below.
-2. The button will display "Disconnect" once they are authorized, which deletes the locally stored Token.
-3. The ability for the customer's site to accept specific Query Variables in wp-admin, that will store the generated Token, and an optional new License Key for a Product Slug.
-4. Check if a license is authorized, either in the License Validation payload, or manually.
-
-> ⚠️ Generating a Token requires manual configuration on your Origin site using the [Uplink Origin Plugin](https://github.com/liquidweb/harbor-origin).
-
-### Render Authorize Button
-
-> 💡 Note: the button is only rendered if the following conditions are met:
-
-1. You have an `auth_url` set on the Licensing Server.
-2. The current user is a Super Admin (can be changed with a WP filter).
-3. This is not a multisite installation, or...
-4. If multisite and using subfolders, only on the root network dashboard.
-5. If multisite and NOT using subfolders and on a subsite AND a token doesn't already exist at the network level, in which case it needs to be managed at the network.
-
-```php
-// Call the namespaced function with your plugin slug.
-\LiquidWeb\Harbor\render_authorize_button( 'kadence-blocks-pro' );
-```
-
-You can also pass in a custom license domain, which can be fetched on the Uplink Origin side from the `uplink_domain` query variable:
-
-```php
-// Call the namespaced function with your plugin slug and license domain.
-\LiquidWeb\Harbor\render_authorize_button( 'kadence-blocks-pro', 'customer-site.com' );
-```
-
-> 💡 The button is very customizable with filters, see [Authorize_Button_Controller.php](src/Harbor/Components/Admin/Authorize_Button_Controller.php).
-
-### Manually Check if a License is Remotely Authorized
-
-This connects to the licensing server to check in real time if the license is authorized. Use sparingly.
-
-```php
-$token       = \LiquidWeb\Harbor\get_authorization_token( 'my-plugin-slug' );
-$license_key = \LiquidWeb\Harbor\get_license_key( 'my-plugin-slug' );
-$domain      = \LiquidWeb\Harbor\get_license_domain();
-
-if ( ! $token || ! $license_key || ! $domain ) {
- return; // or, log/show errors.
-}
-
-$is_authorized = \LiquidWeb\Harbor\is_authorized( $license_key, 'my-plugin-slug', $token, $domain );
-
-echo $is_authorized ? esc_html__( 'authorized' ) : esc_html__( 'not authorized' );
-```
-
-### Manually Fetch Auth URL
-
-If for some reason you need to fetch your `auth_url` manually, you can do so by:
-
-```php
-echo esc_url( \LiquidWeb\Harbor\get_auth_url( 'my-plugin-slug' ) );
-```
-
-> 💡 Auth URL connections are cached for one day using transients.
-
-### Callback Redirect
-
-The Callback Redirect generated by the Origin looks something like this, where `uplinksample.lndo.site` is your
-customer's website:
-
-```
-https://uplinksample.lndo.site/wp-admin/import.php?uplink_token=d9a407d0-0eb1-41cf-8cd0-e5da668143b4&_uplink_nonce=Oyj13TCvhaa12IJm
-```
-
-The Origin is responsible for asking StellarWP Licensing to generate a token and redirect back to where the customer originally
-clicked on the button.
-
-The following Query Variables are available for reference:
-
-> 💡 Note: This data automatically gets stored when detected, using the `admin_init` hook!
-
-1. `uplink_token` - The unique UUIDv4 token generated by StellarWP Licensing.
-2. `_uplink_nonce` - The original nonce sent with the callback URL, as part of the "Connect" button.
-3. `uplink_license` (optional) - Whether we should also update or set a License Key.
-4. `uplink_slug` (optional) - The Product or Service Slug that we're updating the license for.
-
-> ⚠️ `uplink_slug` MUST be supplied if `uplink_license` is!
+| Field          | Required | Description                                                                         |
+| -------------- | -------- | ----------------------------------------------------------------------------------- |
+| `product`      | Yes      | Product (brand) slug. All plugins in the same product share a unified license.      |
+| `slug`         | Yes      | Unique identifier for this plugin. Used in `lw_harbor_is_product_license_active()`. |
+| `name`         | Yes      | Human-readable name shown in the license UI.                                        |
+| `version`      | Yes      | Current plugin version.                                                             |
+| `embedded_key` | No       | A license key bundled with the plugin.                                              |
 
 ## Changelog
 
