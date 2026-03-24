@@ -442,24 +442,12 @@ class License_Manager {
 			return false;
 		}
 
-		$key = $this->discover_embedded_key();
+		$key = $this->registry->first_with_embedded_key();
 
 		if ( $key === null ) {
 			return false;
 		}
 
 		return $this->repository->store_key( $key );
-	}
-
-	/**
-	 * Finds the first embedded key from a bundled LWSW_KEY.php file.
-	 * Returns null if no active plugin ships such a file.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string|null
-	 */
-	private function discover_embedded_key(): ?string {
-		return $this->registry->first_with_embedded_key();
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Error_Code;
 use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
 use LiquidWeb\Harbor\Licensing\License_Manager;
