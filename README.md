@@ -9,7 +9,7 @@
 It's recommended that you install Harbor as a project dependency via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require liquidweb/harbor
+composer require stellarwp/harbor
 ```
 
 > We _actually_ recommend that this library gets included in your project using [Strauss](https://github.com/BrianHenryIE/strauss).
