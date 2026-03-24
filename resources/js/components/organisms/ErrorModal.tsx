@@ -21,13 +21,6 @@ export function ErrorModal() {
 
     if ( errors.length === 0 ) return null;
 
-    // Flatten the full error chain of every error (including cause/additionalErrors),
-    // then deduplicate by message so the same API message does not appear twice when
-    // multiple resolvers fail for the same root cause (e.g. an invalid license key).
-    const messages = Array.from(
-        new Set( errors.flatMap( ( e ) => e.toArray().map( ( entry ) => entry.message ) ) )
-    );
-
     return (
         <Dialog open onClose={ clearAll }>
             <DialogHeader
@@ -35,9 +28,9 @@ export function ErrorModal() {
                 onClose={ clearAll }
             />
             <DialogContent>
-                <ul className="space-y-2">
-                    { messages.map( ( message ) => (
-                        <ErrorItem key={ message } message={ message } />
+                <ul className="space-y-3">
+                    { errors.map( ( error ) => (
+                        <ErrorItem key={ error.code } error={ error } />
                     ) ) }
                 </ul>
             </DialogContent>
