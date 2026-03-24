@@ -46,9 +46,9 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 
 	const showLegacyBadge = useSelect(
 		( select ) => {
-			const activeLegacy = select( uplinkStore ).getActiveLegacyLicense( feature.slug );
+			const activeLegacy = select( harborStore ).getActiveLegacyLicense( feature.slug );
 			if ( ! activeLegacy ) return false;
-			return ! select( uplinkStore ).isProductUnifiedLicensed( feature.product );
+			return ! select( harborStore ).isProductUnifiedLicensed( feature.product );
 		},
 		[ feature.slug, feature.product ]
 	);
