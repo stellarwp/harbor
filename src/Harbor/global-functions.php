@@ -1,8 +1,8 @@
 <?php
 /**
- * Global (non-namespaced) Uplink helper functions.
+ * Global (non-namespaced) Harbor helper functions.
  *
- * These functions are registered by whichever vendor-prefixed Uplink instance
+ * These functions are registered by whichever vendor-prefixed Harbor instance
  * is the version leader. They delegate to version-keyed closures stored in a
  * static registry so that the highest version's logic always runs, regardless
  * of which instance's copy of this file was included first.
@@ -13,7 +13,7 @@
 
 if ( ! function_exists( '_lw_harbor_instance_registry' ) ) {
 	/**
-	 * Reads from or writes to the active Uplink instance registry.
+	 * Reads from or writes to the active Harbor instance registry.
 	 *
 	 * The static variable lives inside this single function so all
 	 * vendor-prefixed copies share the same registry. Only currently-active
@@ -33,7 +33,7 @@ if ( ! function_exists( '_lw_harbor_instance_registry' ) ) {
 		static $versions = [];
 
 		// Only accept registrations during the bootstrap window (before wp_loaded).
-		// All real Uplink instances initialize during plugins_loaded, so anything
+		// All real Harbor instances initialize during plugins_loaded, so anything
 		// arriving after wp_loaded is outside the expected lifecycle and is ignored
 		// to prevent external code from injecting fake versions into the registry.
 		if ( $version !== '' && ! did_action( 'wp_loaded' ) ) {

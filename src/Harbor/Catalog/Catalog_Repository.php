@@ -10,7 +10,7 @@ use WP_Error;
 /**
  * Option-backed repository for the product catalog.
  *
- * This is the public API that the rest of Uplink uses — it never
+ * This is the public API that the rest of Harbor uses — it never
  * exposes the client directly.
  *
  * Any call that would hit the remote API first checks whether a recent

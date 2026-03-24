@@ -90,15 +90,15 @@ These are non-namespaced functions that survive Strauss prefixing. They use a gl
 
 ### WP-CLI
 
-Parent command: `wp lw`
+Parent command: `wp harbor`
 
 ```
-wp lw feature list
-wp lw license validate
-wp lw catalog refresh
+wp harbor feature list
+wp harbor license validate
+wp harbor catalog refresh
 ```
 
-The `lw` parent command is shared. Other Liquid Web libraries can register additional subcommands.
+The `harbor` parent command is project-specific, following WP-CLI convention of namespacing under the project name.
 
 ### Cron Hooks
 
@@ -176,7 +176,7 @@ The library version starts at `0.0.1`. All `@since` tags for new code use `@sinc
 | Container keys          | `lw-harbor`        | `.`       | `lw-harbor.admin-views.path`        |
 | REST namespace          | `liquidweb`        | `/`       | `liquidweb/harbor/v1/features`             |
 | Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`    |
-| WP-CLI                  | `lw`               | ` `       | `wp lw feature list`                |
+| WP-CLI                  | `harbor`           | ` `       | `wp harbor feature list`            |
 | Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`       |
 | CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor`, `#lw-harbor-root`     |
 | Script handles          | `lw-harbor`        | `-`       | `lw-harbor-ui`                      |

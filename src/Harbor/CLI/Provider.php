@@ -16,7 +16,7 @@ use LiquidWeb\Harbor\Utils\Version;
 use WP_CLI;
 
 /**
- * Registers WP-CLI commands for the Uplink library.
+ * Registers WP-CLI commands for the Harbor library.
  *
  * Early-returns when WP-CLI is not present, so command classes are never
  * instantiated during normal web requests.
@@ -65,7 +65,7 @@ final class Provider extends Abstract_Provider {
 	 * Registers all WP-CLI commands.
 	 *
 	 * Uses Version::should_handle() to prevent duplicate registration
-	 * across vendor-prefixed copies of Uplink.
+	 * across vendor-prefixed copies of Harbor.
 	 *
 	 * @since 1.0.0
 	 *
@@ -76,8 +76,8 @@ final class Provider extends Abstract_Provider {
 			return;
 		}
 
-		WP_CLI::add_command( 'lw feature', $this->container->get( Feature::class ) );
-		WP_CLI::add_command( 'lw license', $this->container->get( License::class ) );
-		WP_CLI::add_command( 'lw catalog', $this->container->get( Catalog::class ) );
+		WP_CLI::add_command( 'harbor feature', $this->container->get( Feature::class ) );
+		WP_CLI::add_command( 'harbor license', $this->container->get( License::class ) );
+		WP_CLI::add_command( 'harbor catalog', $this->container->get( Catalog::class ) );
 	}
 }

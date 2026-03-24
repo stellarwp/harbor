@@ -83,10 +83,10 @@ class Feature_Manager_Page {
 	 * from build/ otherwise (minified, no source maps).
 	 *
 	 * Path resolution from this file:
-	 *   __DIR__                               → src/Uplink/Admin
-	 *   dirname(__DIR__)                      → src/Uplink
+	 *   __DIR__                               → src/Harbor/Admin
+	 *   dirname(__DIR__)                      → src/Harbor
 	 *   dirname(dirname(__DIR__))             → src
-	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (uplink/)
+	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
 	 *
 	 * @since 1.0.0
 	 *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Uplink Test - Deactivation Fatal
+ * Plugin Name: Harbor Test - Deactivation Fatal
  * Description: A test plugin that re-activates itself on deactivation. Used to test the DEACTIVATION_FAILED error path.
  * Version: 1.0.0
  * Author: StellarWP

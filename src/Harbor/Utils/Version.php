@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Harbor;
 /**
  * Cross-instance version leadership utility.
  *
- * When multiple vendor-prefixed copies of Uplink are active, only the
+ * When multiple vendor-prefixed copies of Harbor are active, only the
  * highest version should own shared responsibilities (admin page, REST
  * routes, etc.). This class centralizes that check using the global
  * _lw_harbor_instance_registry() function as the cross-copy registry.
@@ -30,7 +30,7 @@ class Version {
 	private static $claimed_leadership = false;
 
 	/**
-	 * Determines whether this Uplink instance is the highest active version.
+	 * Determines whether this Harbor instance is the highest active version.
 	 *
 	 * @since 1.0.0
 	 *
@@ -41,7 +41,7 @@ class Version {
 	}
 
 	/**
-	 * Determines whether this Uplink instance is the highest among the given versions.
+	 * Determines whether this Harbor instance is the highest among the given versions.
 	 *
 	 * @since 1.0.0
 	 *
@@ -62,7 +62,7 @@ class Version {
 	}
 
 	/**
-	 * Determines whether this Uplink instance should handle the given
+	 * Determines whether this Harbor instance should handle the given
 	 * action, and if so, claims it so no other instance can.
 	 *
 	 * @since 1.0.0

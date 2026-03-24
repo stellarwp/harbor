@@ -15,7 +15,7 @@ use WP_CLI;
 use WP_Error;
 
 /**
- * Tests for the WP-CLI `wp uplink license` command.
+ * Tests for the WP-CLI `wp harbor license` command.
  *
  * @since 1.0.0
  */

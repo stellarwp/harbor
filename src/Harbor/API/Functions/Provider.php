@@ -6,7 +6,7 @@ use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\Harbor\Harbor;
 
 /**
- * Registers global (non-namespaced) Uplink helper functions.
+ * Registers global (non-namespaced) Harbor helper functions.
  *
  * @since 1.0.0
  */

@@ -19,7 +19,7 @@ trait With_Debugging {
 	/**
 	 * Log a debug message when WP_DEBUG is enabled.
 	 *
-	 * All messages are prefixed with "Uplink:" for easy filtering in the debug log.
+	 * All messages are prefixed with "Harbor:" for easy filtering in the debug log.
 	 *
 	 * @since 1.0.0
 	 *
@@ -37,7 +37,7 @@ trait With_Debugging {
 		}
 
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentionally logging debug info.
-		error_log( 'Uplink: ' . $message );
+		error_log( 'Harbor: ' . $message );
 	}
 
 	/**

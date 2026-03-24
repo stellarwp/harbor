@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Uplink Test - High WP Requirement
+ * Plugin Name: Harbor Test - High WP Requirement
  * Description: A test plugin requiring an impossibly high WordPress version. Used to test the PREFLIGHT_REQUIREMENTS_NOT_MET error path.
  * Version: 1.0.0
  * Author: StellarWP

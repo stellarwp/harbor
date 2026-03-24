@@ -14,8 +14,8 @@ use LiquidWeb\Harbor\Utils\Version;
  * Displays consolidated admin notices for legacy licenses that are not
  * covered by a v3 unified license.
  *
- * Only fires on the leader Uplink instance to prevent duplicate notices
- * when multiple plugins bundle Uplink.
+ * Only fires on the leader Harbor instance to prevent duplicate notices
+ * when multiple plugins bundle Harbor.
  *
  * @since 1.0.0
  */

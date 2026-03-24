@@ -90,7 +90,7 @@ final class ProviderTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that hooks are not registered when a higher Uplink version exists.
+	 * Tests that hooks are not registered when a higher Harbor version exists.
 	 *
 	 * @return void
 	 */

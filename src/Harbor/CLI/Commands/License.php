@@ -20,22 +20,22 @@ use WP_CLI_Command;
  * ## EXAMPLES
  *
  *     # Show the current license key and products
- *     wp uplink license get
+ *     wp harbor license get
  *
  *     # Store a license key
- *     wp uplink license set LWSW-abcdef-123456
+ *     wp harbor license set LWSW-abcdef-123456
  *
  *     # Look up products for a key without storing
- *     wp uplink license lookup LWSW-abcdef-123456
+ *     wp harbor license lookup LWSW-abcdef-123456
  *
  *     # Validate a product on this domain
- *     wp uplink license validate kadence
+ *     wp harbor license validate kadence
  *
  *     # Delete the stored key
- *     wp uplink license delete
+ *     wp harbor license delete
  *
  *     # Show legacy per-plugin licenses
- *     wp uplink license legacy
+ *     wp harbor license legacy
  *
  * @since 1.0.0
  */
@@ -123,10 +123,10 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Show current license
-	 *     wp uplink license get
+	 *     wp harbor license get
 	 *
 	 *     # Show as JSON
-	 *     wp uplink license get --format=json
+	 *     wp harbor license get --format=json
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -186,10 +186,10 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Store a license key
-	 *     wp uplink license set LWSW-abcdef-123456
+	 *     wp harbor license set LWSW-abcdef-123456
 	 *
 	 *     # Store at network level
-	 *     wp uplink license set LWSW-abcdef-123456 --network
+	 *     wp harbor license set LWSW-abcdef-123456 --network
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -251,7 +251,7 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Look up a key
-	 *     wp uplink license lookup LWSW-abcdef-123456
+	 *     wp harbor license lookup LWSW-abcdef-123456
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -286,7 +286,7 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Validate a product
-	 *     wp uplink license validate kadence
+	 *     wp harbor license validate kadence
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -322,10 +322,10 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # Delete the stored key
-	 *     wp uplink license delete
+	 *     wp harbor license delete
 	 *
 	 *     # Delete network-level key
-	 *     wp uplink license delete --network
+	 *     wp harbor license delete --network
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
@@ -341,7 +341,7 @@ class License extends WP_CLI_Command {
 	}
 
 	/**
-	 * Lists legacy per-plugin licenses discovered across all Uplink instances.
+	 * Lists legacy per-plugin licenses discovered across all Harbor instances.
 	 *
 	 * These are old-style license keys stored individually by each plugin,
 	 * before the unified LWSW- key was adopted. This is a read-only view.
@@ -365,10 +365,10 @@ class License extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     # List legacy licenses
-	 *     wp uplink license legacy
+	 *     wp harbor license legacy
 	 *
 	 *     # Show as JSON
-	 *     wp uplink license legacy --format=json
+	 *     wp harbor license legacy --format=json
 	 *
 	 * @param array<int, string>    $args       Positional arguments.
 	 * @param array<string, string> $assoc_args Associative arguments.
