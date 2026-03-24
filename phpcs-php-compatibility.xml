@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="StellarWP Uplink" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
-	<description>The custom ruleset for the StellarWP Uplink plugin, especially for PHP Compatibility</description>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="StellarWP Harbor" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+	<description>The custom ruleset for the StellarWP Harbor plugin, especially for PHP Compatibility</description>
 	<file>.</file>
 
 	<!-- General exclusions -->
