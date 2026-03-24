@@ -24,10 +24,10 @@ class Sanitize {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $title     The title to be sanitized.
-	 * @param string $context   Optional. The operation for which the string is sanitized.
-	 *                          When set to 'save', additional entities are converted to hyphens
-	 *                          or stripped entirely. Default 'display'.
+	 * @param string           $title     The title to be sanitized.
+	 * @param 'display'|'save' $context   Optional. The operation for which the string is sanitized.
+	 *                                    When set to 'save', additional entities are converted to hyphens
+	 *                                    or stripped entirely. Default 'save'.
 	 * @return string The sanitized title.
 	 */
 	public static function sanitize_title_with_hyphens( string $title, string $context = 'save' ): string {

@@ -2,7 +2,6 @@
 # https://phpstan.org/config-reference
 
 includes:
-	- phpstan-baseline.neon
 	# @see https://github.com/phpstan/phpstan-src/blob/master/conf/bleedingEdge.neon
 	- phar://phpstan.phar/conf/bleedingEdge.neon
 	# Include this extension

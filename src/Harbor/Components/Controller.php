@@ -34,7 +34,7 @@ abstract class Controller {
 	/**
 	 * Format an array of CSS classes into a string.
 	 *
-	 * @param array $classes
+	 * @param string[] $classes The CSS classes to format.
 	 *
 	 * @return string
 	 */
@@ -43,7 +43,10 @@ abstract class Controller {
 			return '';
 		}
 
-		$classes = array_unique( array_map( 'sanitize_html_class', array_filter( $classes ) ) );
+		$sanitize = static function ( string $css_class ): string {
+			return sanitize_html_class( $css_class );
+		};
+		$classes  = array_unique( array_map( $sanitize, array_filter( $classes ) ) );
 
 		return implode( ' ', $classes );
 	}
