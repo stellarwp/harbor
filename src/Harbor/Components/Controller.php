@@ -34,7 +34,7 @@ abstract class Controller {
 	/**
 	 * Format an array of CSS classes into a string.
 	 *
-	 * @param string[] $classes
+	 * @param string[] $classes The CSS classes to format.
 	 *
 	 * @return string
 	 */
