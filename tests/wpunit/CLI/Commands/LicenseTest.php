@@ -409,7 +409,7 @@ final class LicenseTest extends HarborTestCase {
 		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
 		$command->legacy( [], [] );
 
-		$this->assertSame( 'No legacy licenses found.', $this->logger->last_info );
+		$this->assertSame( 'No legacy licenses were found. If you expect licenses to appear here, verify that your Harbor instance is properly configured and accessible within the CLI environment. Alternatively, you may retrieve this information via the REST API.', $this->logger->last_info );
 	}
 
 	// ------------------------------------------------------------------

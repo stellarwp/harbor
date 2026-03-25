@@ -341,7 +341,7 @@ class License extends WP_CLI_Command {
 		$licenses = $this->legacy_repository->all();
 
 		if ( count( $licenses ) === 0 ) {
-			WP_CLI::log( 'No legacy licenses found.' );
+			WP_CLI::log( 'No legacy licenses were found. If you expect licenses to appear here, verify that your Harbor instance is properly configured and accessible within the CLI environment. Alternatively, you may retrieve this information via the REST API.' );
 
 			return;
 		}
