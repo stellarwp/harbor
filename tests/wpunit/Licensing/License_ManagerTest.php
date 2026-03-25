@@ -2,7 +2,6 @@
 
 namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Error_Code;
 use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
 use LiquidWeb\Harbor\Licensing\License_Manager;
@@ -23,13 +22,16 @@ final class License_ManagerTest extends HarborTestCase {
 	private License_Manager $manager;
 	private License_Repository $repository;
 
+	/** @var string[] */
+	private array $temp_dirs = [];
+
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->repository = new License_Repository();
 		$this->manager    = new License_Manager(
 			$this->repository,
-			new Product_Registry(),
+			new Product_Registry( [] ),
 			new Fixture_Client( codecept_data_dir( 'licensing' ) )
 		);
 
@@ -37,10 +39,41 @@ final class License_ManagerTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		remove_all_filters( Product_Registry::FILTER );
+		foreach ( $this->temp_dirs as $dir ) {
+			$key_file = $dir . '/' . Product_Registry::KEY_FILE;
+			if ( file_exists( $key_file ) ) {
+				unlink( $key_file );
+			}
+			if ( is_dir( $dir ) ) {
+				rmdir( $dir );
+			}
+		}
+		$this->temp_dirs = [];
+
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
 		parent::tearDown();
+	}
+
+	/**
+	 * Creates a temporary plugin directory with an LWSW_KEY.php file and returns
+	 * a License_Manager wired to scan only that directory.
+	 *
+	 * @param string $key The license key the file should return.
+	 *
+	 * @return License_Manager
+	 */
+	private function make_manager_with_embedded_key( string $key ): License_Manager {
+		$dir = sys_get_temp_dir() . '/harbor_test_' . uniqid();
+		mkdir( $dir, 0755, true );
+		$this->temp_dirs[] = $dir;
+		file_put_contents( $dir . '/' . Product_Registry::KEY_FILE, '<?php return "' . $key . '";' );
+
+		return new License_Manager(
+			$this->repository,
+			new Product_Registry( [ $dir ] ),
+			new Fixture_Client( codecept_data_dir( 'licensing' ) )
+		);
 	}
 
 	// -------------------------------------------------------------------------
@@ -58,87 +91,66 @@ final class License_ManagerTest extends HarborTestCase {
 	}
 
 	public function test_get_falls_back_to_embedded_key_from_registry(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-EMBEDDED-KEY',
-					'name'         => 'GiveWP',
-					'version'      => '3.0.0',
-					'product'        => 'givewp',
-				];
-				return $products;
-			} 
-		);
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
 
-		$this->assertSame( 'LWSW-EMBEDDED-KEY', $this->manager->get_key() );
+		$this->assertSame( 'LWSW-EMBEDDED-KEY', $manager->get_key() );
 	}
 
 	public function test_get_auto_stores_embedded_key_on_discovery(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-EMBEDDED-KEY',
-				];
-				return $products;
-			} 
-		);
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
 
-		$this->manager->get_key();
+		$manager->get_key();
 
 		$this->assertSame( 'LWSW-EMBEDDED-KEY', get_option( License_Repository::KEY_OPTION_NAME ) );
 	}
 
 	public function test_stored_key_takes_precedence_over_registry(): void {
-		$this->manager->store_key( 'LWSW-STORED-KEY' );
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
+		$manager->store_key( 'LWSW-STORED-KEY' );
 
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-EMBEDDED-KEY',
-				];
-				return $products;
-			} 
-		);
-
-		$this->assertSame( 'LWSW-STORED-KEY', $this->manager->get_key() );
-	}
-
-	public function test_registry_filter_not_applied_when_stored_key_exists(): void {
-		$this->manager->store_key( 'LWSW-STORED-KEY' );
-
-		$filter_called = false;
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) use ( &$filter_called ) {
-				$filter_called = true;
-				return $products;
-			} 
-		);
-
-		$this->manager->get_key();
-
-		$this->assertFalse( $filter_called );
+		$this->assertSame( 'LWSW-STORED-KEY', $manager->get_key() );
 	}
 
 	public function test_get_returns_null_when_registry_has_no_embedded_keys(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug' => 'give',
-					'name' => 'GiveWP',
-				];
-				return $products;
-			} 
-		);
-
 		$this->assertNull( $this->manager->get_key() );
+	}
+
+	// -------------------------------------------------------------------------
+	// store_embedded_key_if_present()
+	// -------------------------------------------------------------------------
+
+	public function test_store_embedded_key_if_present_stores_key_when_none_exists(): void {
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
+
+		$manager->store_embedded_key_if_present();
+
+		$this->assertSame( 'LWSW-EMBEDDED-KEY', get_option( License_Repository::KEY_OPTION_NAME ) );
+	}
+
+	public function test_store_embedded_key_if_present_returns_true_on_success(): void {
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
+
+		$this->assertTrue( $manager->store_embedded_key_if_present() );
+	}
+
+	public function test_store_embedded_key_if_present_returns_false_when_no_key_file(): void {
+		$this->assertFalse( $this->manager->store_embedded_key_if_present() );
+	}
+
+	public function test_store_embedded_key_if_present_returns_false_when_key_already_stored(): void {
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
+		$manager->store_key( 'LWSW-STORED-KEY' );
+
+		$this->assertFalse( $manager->store_embedded_key_if_present() );
+	}
+
+	public function test_store_embedded_key_if_present_does_not_overwrite_stored_key(): void {
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
+		$manager->store_key( 'LWSW-STORED-KEY' );
+
+		$manager->store_embedded_key_if_present();
+
+		$this->assertSame( 'LWSW-STORED-KEY', get_option( License_Repository::KEY_OPTION_NAME ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -187,18 +199,9 @@ final class License_ManagerTest extends HarborTestCase {
 	}
 
 	public function test_exists_returns_true_when_registry_provides_embedded_key(): void {
-		add_filter(
-			Product_Registry::FILTER,
-			static function ( array $products ) {
-				$products[] = [
-					'slug'         => 'give',
-					'embedded_key' => 'LWSW-EMBEDDED-KEY',
-				];
-				return $products;
-			}
-		);
+		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
 
-		$this->assertTrue( $this->manager->key_exists() );
+		$this->assertTrue( $manager->key_exists() );
 	}
 
 	// -------------------------------------------------------------------------

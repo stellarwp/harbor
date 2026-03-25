@@ -47,5 +47,14 @@ final class Provider extends Abstract_Provider {
 				$license_repository->delete_products();
 			}
 		);
+
+		add_action(
+			'activated_plugin',
+			function () {
+				/** @var License_Manager $license_manager */
+				$license_manager = $this->container->get( License_Manager::class );
+				$license_manager->store_embedded_key_if_present();
+			}
+		);
 	}
 }

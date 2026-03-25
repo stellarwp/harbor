@@ -44,35 +44,19 @@ class HarborServiceProvider
 
 ---
 
-## 2. Registering Your Product
+## 2. Bundling a License Key
 
-**Filter:** `lw-harbor/product_registry`
+Harbor discovers your plugin's embedded key automatically by scanning active plugins for a file named `LWSW_KEY.php` in the plugin root. No filter registration is required.
 
-Add your plugin to the Harbor product registry so it participates in unified licensing.
+Create `LWSW_KEY.php` in your plugin root and have it return your `LWSW-`-prefixed key:
 
 ```php
-add_filter('lw-harbor/product_registry', function (array $products): array {
-    $products[] = [
-        'product'      => 'your-product',          // Product (brand) slug — all plugins in the same product share a unified license
-        'slug'         => 'your-plugin',         // Unique slug for this specific plugin
-        'name'         => 'Your Plugin',         // Human-readable product name
-        'version'      => YOUR_PLUGIN_VERSION,   // Current plugin version
-        'embedded_key' => getBundledLicenseKey(), // Optional: pre-embedded license key
-    ];
-
-    return $products;
-});
+<?php return 'LWSW-xxxx-xxxx-xxxx-xxxx';
 ```
 
-**Product array fields:**
+This file should be gitignored and injected at build or deploy time. Its presence signals to Harbor that your plugin belongs to the unified licensing system. Plugins managed by Uplink v2 do not ship this file.
 
-| Field          | Required | Description                                                                                             |
-| -------------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `product`      | Yes      | Product (brand) slug. All plugins in the same product share a unified license.                          |
-| `slug`         | Yes      | Unique identifier for this plugin. Used in `lw_harbor_is_product_license_active()`.                     |
-| `name`         | Yes      | Human-readable name shown in the license UI.                                                            |
-| `version`      | Yes      | Current plugin version.                                                                                 |
-| `embedded_key` | No       | A license key bundled with the plugin (see [Embedded License Keys](#5-embedded--bundled-license-keys)). |
+When Harbor scans active plugins and finds this file, it reads the key and auto-stores it if no key is already present on the site. If a key is already stored, the stored key takes precedence.
 
 ---
 
@@ -91,7 +75,7 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
             'key'        => $license['key'],         // The license key string
             'slug'       => $license['slug'],        // The product/add-on slug this key covers
             'name'       => $license['name'],        // Human-readable product name
-            'product'    => 'your-product',          // Must match the value used in product_registry
+            'product'    => 'your-product',          // Product brand slug
             'is_active'  => $license['is_active'],   // bool
             'page_url'   => admin_url('...'),        // Where the user can manage this license
             'expires_at' => $license['expires'],     // Optional: ISO date string e.g. "2026-01-01"
@@ -109,7 +93,7 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 | `key`        | Yes      | The license key string.                           |
 | `slug`       | Yes      | The product/add-on slug this key applies to.      |
 | `name`       | Yes      | Human-readable product name.                      |
-| `product`    | Yes      | Must match the value used in `product_registry`.  |
+| `product`    | Yes      | Product brand slug (e.g. `givewp`, `kadence`).    |
 | `is_active`  | Yes      | Whether the license is currently active (`bool`). |
 | `page_url`   | Yes      | Admin URL where the user can manage this license. |
 | `expires_at` | No       | Expiry date string (e.g. `"2026-01-01"`).         |
@@ -170,31 +154,7 @@ if (lw_harbor_is_feature_available('feature-slug')) {
 
 ## 5. Embedded / Bundled License Keys
 
-If your plugin ships with a pre-embedded license key (e.g. for white-labeling or bundled distribution), provide it via the `embedded_key` field in `product_registry`.
-
-The recommended pattern is to store the key in a dedicated PHP file excluded from version control:
-
-```php
-// PLUGIN_LICENSE.php (gitignored, injected at build/deploy time)
-<?php return 'your-embedded-license-key-here';
-```
-
-Load it at runtime:
-
-```php
-function getBundledLicenseKey(): ?string
-{
-    $filePath = PLUGIN_DIR . 'PLUGIN_LICENSE.php';
-
-    if (!is_readable($filePath)) {
-        return null;
-    }
-
-    return include $filePath;
-}
-```
-
-Pass the return value as `embedded_key` when registering your product (see [Section 2](#2-registering-your-product)).
+See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely through `LWSW_KEY.php` — no additional wiring is needed.
 
 ---
 
@@ -202,10 +162,9 @@ Pass the return value as `embedded_key` when registering your product (see [Sect
 
 ### Filters
 
-| Filter                       | Purpose                                                                         |
-| ---------------------------- | ------------------------------------------------------------------------------- |
-| `lw-harbor/product_registry` | Register your product with Harbor. Receives and returns `array $products`.      |
-| `lw-harbor/legacy_licenses`  | Report pre-existing licenses to Harbor. Receives and returns `array $licenses`. |
+| Filter                      | Purpose                                                                         |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `lw-harbor/legacy_licenses` | Report pre-existing licenses to Harbor. Receives and returns `array $licenses`. |
 
 ### Global Functions
 
