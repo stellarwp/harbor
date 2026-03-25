@@ -73,31 +73,7 @@ You can also add lines below to your composer file in order to run command autom
 
 ## Registering a plugin
 
-To register your plugin, you need to filter the `lw-harbor/product_registry` hook. See the [Harbor Integration Guide](/docs/harbor-integration-guide.md) for more details.
-
-```php
-add_filter('lw-harbor/product_registry', function (array $products): array {
-    $products[] = [
-        'product'      => 'your-product',          // Product (brand) slug — all plugins in the same product share a unified license
-        'slug'         => 'your-plugin',         // Unique slug for this specific plugin
-        'name'         => 'Your Plugin',         // Human-readable product name
-        'version'      => YOUR_PLUGIN_VERSION,   // Current plugin version
-        'embedded_key' => getBundledLicenseKey(), // Optional: pre-embedded license key
-    ];
-
-    return $products;
-});
-```
-
-**Product array fields:**
-
-| Field          | Required | Description                                                                         |
-| -------------- | -------- | ----------------------------------------------------------------------------------- |
-| `product`      | Yes      | Product (brand) slug. All plugins in the same product share a unified license.      |
-| `slug`         | Yes      | Unique identifier for this plugin. Used in `lw_harbor_is_product_license_active()`. |
-| `name`         | Yes      | Human-readable name shown in the license UI.                                        |
-| `version`      | Yes      | Current plugin version.                                                             |
-| `embedded_key` | No       | A license key bundled with the plugin.                                              |
+Harbor discovers your plugin's embedded key automatically by scanning active plugins for a file named `LWSW_KEY.php` in the plugin root. No filter registration is required. See the [Harbor Integration Guide](/docs/harbor-integration-guide.md) for more details.
 
 ## Changelog
 
