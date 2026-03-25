@@ -1,13 +1,15 @@
 # LiquidWeb Harbor
 
-[![CI](https://github.com/stellarwp/harbor/workflows/CI/badge.svg)](https://github.com/stellarwp/harbor/actions?query=branch%3Amain) [![Static Analysis](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
+[![PHP Compatibility](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml)
+[![PHP Tests](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml)
+[![PHPStan](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
 
 ## Installation
 
 It's recommended that you install Harbor as a project dependency via [Composer](https://getcomposer.org/):
 
 ```bash
-composer require liquidweb/harbor
+composer require stellarwp/harbor
 ```
 
 > We _actually_ recommend that this library gets included in your project using [Strauss](https://github.com/BrianHenryIE/strauss).
@@ -71,7 +73,7 @@ You can also add lines below to your composer file in order to run command autom
 
 ## Registering a plugin
 
-To register your plugin, you need to filter the `lw-harbor/product_registry` hook.
+To register your plugin, you need to filter the `lw-harbor/product_registry` hook. See the [Harbor Integration Guide](/docs/harbor-integration-guide.md) for more details.
 
 ```php
 add_filter('lw-harbor/product_registry', function (array $products): array {
@@ -123,6 +125,7 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 - [Features](/docs/features.md) — Feature types, resolution, strategies, Manager API, REST endpoints.
 - [Unified License Key](/docs/unified-license-key-system-design.md) — Key model, seat mechanics, system boundaries.
 - [Multi-Instance Architecture](/docs/harbor-fat-leader-thin-instance.md) — Leader election, cross-instance hooks, thin instances.
+- [Harbor Integration Guide](/docs/harbor-integration-guide.md) — How to integrate your plugin with Harbor.
 
 ### General
 
