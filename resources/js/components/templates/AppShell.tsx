@@ -15,29 +15,14 @@ import { LegacyLicenseBanner } from '@/components/molecules/LegacyLicenseBanner'
 import { ProductSection } from '@/components/organisms/ProductSection';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { PRODUCTS } from '@/data/products';
-import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
-import { useResolvableSelectWithError } from '@/hooks/use-resolvable-select';
+import { useHarborData } from '@/context/harbor-data-context';
 
 /**
  * @since 1.0.0
  */
 export function AppShell() {
-    // Trigger all three resolvers and wait for completion before rendering
-    // content, so we never flash stale tier badges or a "No license" state.
-    // If any resolver fails, the error is thrown during render and caught
-    // by the ErrorBoundary above this component.
-    const { license, features, catalog } = useResolvableSelectWithError(
-        ( resolve ) => ( {
-            license:  resolve( harborStore ).getLicenseKey(),
-            features: resolve( harborStore ).getFeatures(),
-            catalog:  resolve( harborStore ).getCatalog(),
-        } ),
-        [],
-    );
-
-    const isLoading =
-        license.isResolving || features.isResolving || catalog.isResolving;
+    const { isLoading } = useHarborData();
 
     const { productFilter } = useFilter();
 

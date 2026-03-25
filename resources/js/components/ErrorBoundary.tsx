@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, BState> {
         if ( this.state.hasError ) {
             return this.props.fallback ?? (
                 <p className="px-4 py-6 text-sm text-muted-foreground text-center">
-                    { __( 'Something went wrong.', '%TEXTDOMAIN%' ) }
+                    { __( 'An unexpected error occurred. Please reload the page.', '%TEXTDOMAIN%' ) }
                 </p>
             );
         }

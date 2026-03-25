@@ -1,4 +1,26 @@
 /**
+ * Strip !important from CSS custom property declarations.
+ *
+ * important: true in tailwind.config.js adds !important to every declaration,
+ * including --custom-property definitions inside :root. Browsers treat
+ * !important on custom properties as invalid, which breaks the entire variable.
+ * This plugin runs immediately after @tailwindcss/postcss and undoes that for
+ * any declaration whose property starts with --.
+ */
+function stripImportantFromCustomProps() {
+    const plugin = () => ( {
+        postcssPlugin: 'postcss-strip-important-from-custom-props',
+        Declaration( decl ) {
+            if ( decl.prop.startsWith( '--' ) && decl.important ) {
+                decl.important = false;
+            }
+        },
+    } );
+    plugin.postcss = true;
+    return plugin;
+}
+
+/**
  * Scope all Tailwind-generated CSS rules under .lw-harbor-ui.
  *
  * Tailwind v4's @config compatibility layer does not support the selector
@@ -35,6 +57,7 @@ function scopeToHarborUI() {
 module.exports = {
     plugins: [
         require( '@tailwindcss/postcss' ),
+        stripImportantFromCustomProps(),
         scopeToHarborUI(),
         require( 'autoprefixer' ),
     ],

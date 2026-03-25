@@ -7,6 +7,7 @@
  * @package LiquidWeb\Harbor
  */
 import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { __ } from '@wordpress/i18n';
@@ -48,7 +49,9 @@ export function Dialog( { open, onClose, children, maxWidth = 'max-w-lg' }: Dial
 
     if ( ! open ) return null;
 
-    return (
+    const portalTarget = document.getElementById( 'lw-harbor-root' ) ?? document.body;
+
+    return createPortal(
         <div
             className="fixed inset-0 z-[100000] flex items-center justify-center p-4"
             role="dialog"
@@ -71,7 +74,8 @@ export function Dialog( { open, onClose, children, maxWidth = 'max-w-lg' }: Dial
             >
                 { children }
             </div>
-        </div>
+        </div>,
+        portalTarget
     );
 }
 

@@ -2,6 +2,11 @@
  * Wrapper around useResolvableSelect that throws resolution errors
  * during render so they are caught by the nearest React ErrorBoundary.
  *
+ * This is a general-purpose hook. It has no knowledge of the error modal
+ * or any other error-display mechanism — that is the caller's concern.
+ * For the Harbor admin screen's core data loading, use HarborDataProvider
+ * which pipes resolver errors to the error modal while keeping the UI alive.
+ *
  * @package LiquidWeb\Harbor
  */
 import type { DependencyList } from 'react';
@@ -18,32 +23,28 @@ import type { MapResolvableSelect, ResolvableSelectResponse } from './types';
 type ResolvableRecord = Record<string, ResolvableSelectResponse<unknown>>;
 
 /**
- * Find the first error among a set of resolvable results and wrap it
- * as an HarborError.
+ * Find the first error among a set of resolvable results and normalize it
+ * as a HarborError.
  */
 function findError( results: ResolvableRecord ): HarborError | null {
-	for ( const key in results ) {
-		const entry = results[ key ];
-		if ( entry.status === 'ERROR' ) {
-			return HarborError.syncFrom(
-				entry.error,
-				ErrorCode.ResolutionFailed,
-				__( 'Liquid Web Software failed to load your data.', '%TEXTDOMAIN%' ),
-			);
-		}
-	}
-	return null;
+    for ( const key in results ) {
+        const entry = results[ key ];
+        if ( entry.status === 'ERROR' ) {
+            return HarborError.syncFrom(
+                entry.error,
+                ErrorCode.ResolutionFailed,
+                __( 'Liquid Web Software failed to load your data.', '%TEXTDOMAIN%' ),
+            );
+        }
+    }
+    return null;
 }
 
 /**
  * Like useResolvableSelect, but throws resolution errors during render
  * so they are caught by the nearest React ErrorBoundary.
  *
- * The consumer callback must return a flat object of resolvable results.
- *
- * @throws {HarborError} When any selector's resolution fails. If the resolver
- *   threw an HarborError, that exact instance is re-thrown. Otherwise a new
- *   HarborError with code {@link ErrorCode.ResolutionFailed} is created.
+ * @throws {HarborError} When any selector's resolution fails.
  *
  * @example
  * ```ts
@@ -57,17 +58,17 @@ function findError( results: ResolvableRecord ): HarborError | null {
  * ```
  */
 export default function useResolvableSelectWithError<
-	T extends ResolvableRecord,
+    T extends ResolvableRecord,
 >(
-	mapResolvableSelect: MapResolvableSelect<T>,
-	deps: DependencyList,
+    mapResolvableSelect: MapResolvableSelect<T>,
+    deps: DependencyList,
 ): T {
-	const result = useResolvableSelect( mapResolvableSelect, deps );
+    const result = useResolvableSelect( mapResolvableSelect, deps );
 
-	const found = findError( result );
-	if ( found ) {
-		throw found;
-	}
+    const found = findError( result );
+    if ( found ) {
+        throw found;
+    }
 
-	return result;
+    return result;
 }
