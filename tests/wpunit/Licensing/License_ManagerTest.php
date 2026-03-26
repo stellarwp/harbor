@@ -3,7 +3,7 @@
 namespace LiquidWeb\Harbor\Tests\Licensing;
 
 use LiquidWeb\Harbor\Licensing\Error_Code;
-use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;

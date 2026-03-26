@@ -1,6 +1,6 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Licensing\Clients;
+namespace LiquidWeb\Harbor\Tests\Licensing;
 
 use LiquidWeb\Harbor\Licensing\Error_Code;
 use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;

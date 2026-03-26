@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client;
 use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\LicensingApiClient\Exceptions\NotFoundException;
 use LiquidWeb\LicensingApiClient\Responses\Product\Catalog;

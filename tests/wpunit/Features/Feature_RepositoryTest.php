@@ -4,7 +4,7 @@ namespace LiquidWeb\Harbor\Tests\Features;
 
 use ReflectionMethod;
 use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Tests\Catalog\Fixture_Client as Catalog_Fixture;
 use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
 use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
@@ -15,7 +15,7 @@ use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Resolve_Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
-use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
+use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
