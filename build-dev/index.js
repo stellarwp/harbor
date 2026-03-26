@@ -758,12 +758,16 @@ const variantMap = {
   licensed: 'gradient',
   unlicensed: 'outline',
   legacy: 'warning',
-  free: 'secondary'
+  free: 'secondary',
+  bonus: 'warning',
+  revoked: 'destructive'
 };
 const labelMap = {
   unlicensed: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unlicensed', '%TEXTDOMAIN%'),
   legacy: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Legacy', '%TEXTDOMAIN%'),
-  free: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Free', '%TEXTDOMAIN%')
+  free: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Free', '%TEXTDOMAIN%'),
+  bonus: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Bonus', '%TEXTDOMAIN%'),
+  revoked: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unavailable', '%TEXTDOMAIN%')
 };
 
 /**
@@ -1119,14 +1123,15 @@ function FeatureRow({
     switchChecked,
     showLegacyBadge,
     showFreeBadge,
+    mismatch,
     handleToggle,
     handleUpdate
   } = (0,_hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_10__.useFeatureRow)(feature);
   const Chevron = expanded ? lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"] : lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"];
 
-  // Legacy-licensed features are not marked available by the API but should
-  // render identically to available features — full controls, no muted style.
-  const isVisuallyAvailable = feature.is_available || showLegacyBadge;
+  // Legacy-licensed and revoked features are not marked available by the API
+  // but should render with the full available layout — controls visible, no muted style.
+  const isVisuallyAvailable = feature.is_available || showLegacyBadge || mismatch === 'revoked';
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('border-b last:border-b-0', isVisuallyAvailable ? (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('bg-white', pendingAction && 'opacity-75') : 'bg-muted/30'),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
@@ -1145,6 +1150,8 @@ function FeatureRow({
           type: "free"
         }), showLegacyBadge && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
           type: "legacy"
+        }), mismatch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
+          type: mismatch
         })]
       }), isVisuallyAvailable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "flex items-center gap-3 ml-auto shrink-0",
@@ -1159,7 +1166,7 @@ function FeatureRow({
         }), showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_9__.Switch, {
           checked: switchChecked,
           onCheckedChange: handleToggle,
-          disabled: !!pendingAction || installableBusy,
+          disabled: !!pendingAction || installableBusy || mismatch === 'revoked',
           "aria-label": switchChecked ? /* translators: %s is the name of the feature to disable */
           (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
           (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
@@ -2151,7 +2158,8 @@ function ProductSection({
   const {
     availableFeatures,
     lockedByTier,
-    sortedCatalogTiers
+    sortedCatalogTiers,
+    upgradeCatalogTiers
   } = (0,_hooks_useProductFeatureGroups__WEBPACK_IMPORTED_MODULE_8__.useProductFeatureGroups)(product.slug);
 
   // Counts derived from the unfiltered set — unaffected by search.
@@ -2196,11 +2204,17 @@ function ProductSection({
         className: "px-4 py-6 text-sm text-muted-foreground text-center",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No features match your search.', '%TEXTDOMAIN%')
       })
+    }), hasLicense && !isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      className: "border border-t-0 rounded-b-lg",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+        className: "px-4 py-6 text-sm text-muted-foreground text-center",
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No features are available for this product.', '%TEXTDOMAIN%')
+      })
     }), hasLicense && hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "border border-t-0 rounded-b-lg overflow-hidden",
       children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_4__.FeatureRow, {
         feature: feature
-      }, feature.slug)), sortedCatalogTiers.map(tier => {
+      }, feature.slug)), upgradeCatalogTiers.map(tier => {
         const locked = lockedByTier[tier.slug] ?? [];
         if (locked.length === 0) return null;
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_5__.TierGroup, {
@@ -3791,7 +3805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
-/* harmony import */ var _lib_license_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/license-utils */ "./resources/js/lib/license-utils.ts");
+/* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
 /* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
 /**
@@ -3827,7 +3841,8 @@ function useFeatureRow(feature) {
     if (!activeLegacy) return false;
     return !select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductUnifiedLicensed(feature.product);
   }, [feature.slug, feature.product]);
-  const showFreeBadge = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_4__.isFreeFeature)(feature.tier);
+  const showFreeBadge = (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.isFreeFeature)(feature.tier);
+  const mismatch = (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.getFeatureMismatch)(feature);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const featureEnabled = feature.is_enabled;
   const featureInstalled = feature.installed_version !== null;
@@ -3863,7 +3878,7 @@ function useFeatureRow(feature) {
     }
     setPendingAction(null);
   };
-  const badgeStatus = pendingAction ?? (featureEnabled ? 'enabled' : 'available');
+  const badgeStatus = pendingAction ? pendingAction : mismatch === 'revoked' ? 'locked' : featureEnabled ? 'enabled' : 'available';
   const showSwitch = pendingAction !== 'installing' && pendingAction !== 'updating';
   const switchChecked = pendingAction === 'enabling' || pendingAction === 'installing' ? true : pendingAction === 'disabling' ? false : featureEnabled;
   return {
@@ -3874,6 +3889,7 @@ function useFeatureRow(feature) {
     switchChecked,
     showLegacyBadge,
     showFreeBadge,
+    mismatch,
     handleToggle,
     handleUpdate
   };
@@ -3945,7 +3961,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _hooks_useFilteredFeatures__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/hooks/useFilteredFeatures */ "./resources/js/hooks/useFilteredFeatures.ts");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
-/* harmony import */ var _lib_license_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/license-utils */ "./resources/js/lib/license-utils.ts");
+/* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /**
  * Partitions features for a product into available and locked groups,
  * and groups locked features by catalog tier.
@@ -3963,27 +3979,44 @@ function useProductFeatureGroups(productSlug) {
   const allFeatures = (0,_hooks_useFilteredFeatures__WEBPACK_IMPORTED_MODULE_1__.useFilteredFeatures)(productSlug);
   const {
     catalogTiers,
-    activeLegacySlugs
+    activeLegacySlugs,
+    userTierRank
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useSelect)(select => {
     const tiers = select(_store__WEBPACK_IMPORTED_MODULE_2__.store).getProductCatalog(productSlug)?.tiers ?? [];
+
+    // Derive the rank of the user's licensed tier for this product.
+    const licenseProducts = select(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLicenseProducts();
+    const licenseProduct = licenseProducts.find(lp => lp.product_slug === productSlug);
+    const userTier = licenseProduct?.tier ? tiers.find(t => t.slug === licenseProduct.tier) : null;
+    const rank = userTier?.rank ?? -1; // -1 = unlicensed (show all tier groups)
 
     // When the product is covered by a unified tier, legacy slugs are irrelevant.
     if (select(_store__WEBPACK_IMPORTED_MODULE_2__.store).isProductUnifiedLicensed(productSlug)) {
       return {
         catalogTiers: tiers,
-        activeLegacySlugs: new Set()
+        activeLegacySlugs: new Set(),
+        userTierRank: rank
       };
     }
     const slugs = new Set(select(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLegacyLicenses().filter(l => l.is_active).map(l => l.slug));
     return {
       catalogTiers: tiers,
-      activeLegacySlugs: slugs
+      activeLegacySlugs: slugs,
+      userTierRank: rank
     };
   }, [productSlug]);
   const isLegacyAvailable = f => activeLegacySlugs.has(f.slug);
-  const availableFeatures = allFeatures.filter(f => f.is_available || (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.isFreeFeature)(f.tier) || isLegacyAvailable(f));
-  const lockedFeatures = allFeatures.filter(f => !f.is_available && !(0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.isFreeFeature)(f.tier) && !isLegacyAvailable(f));
+
+  // Available: the standard set, PLUS revoked features.
+  // Revoked features are in the user's tier but have had their capability removed.
+  // They render as disabled rows in the available section (not in upgrade accordions),
+  // since the user does not need to upgrade — the tier already covers them.
+  const availableFeatures = allFeatures.filter(f => f.is_available || (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_3__.isFreeFeature)(f.tier) || isLegacyAvailable(f) || (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_3__.getFeatureMismatch)(f) === 'revoked');
+
+  // Locked: not available, not free, not legacy, and not revoked.
+  const lockedFeatures = allFeatures.filter(f => !f.is_available && !(0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_3__.isFreeFeature)(f.tier) && !isLegacyAvailable(f) && (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_3__.getFeatureMismatch)(f) !== 'revoked');
   const sortedCatalogTiers = catalogTiers.slice().sort((a, b) => a.rank - b.rank);
+  const upgradeCatalogTiers = sortedCatalogTiers.filter(t => t.rank > userTierRank);
   const lockedByTier = sortedCatalogTiers.reduce((acc, tier) => {
     acc[tier.slug] = lockedFeatures.filter(f => f.tier === tier.slug);
     return acc;
@@ -3991,8 +4024,50 @@ function useProductFeatureGroups(productSlug) {
   return {
     availableFeatures,
     lockedByTier,
-    sortedCatalogTiers
+    sortedCatalogTiers,
+    upgradeCatalogTiers
   };
+}
+
+/***/ },
+
+/***/ "./resources/js/lib/feature-utils.ts"
+/*!*******************************************!*\
+  !*** ./resources/js/lib/feature-utils.ts ***!
+  \*******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getFeatureMismatch: () => (/* binding */ getFeatureMismatch),
+/* harmony export */   isFreeFeature: () => (/* binding */ isFreeFeature)
+/* harmony export */ });
+/**
+ * True when a feature requires no paid tier — either it has no tier at all
+ * or its tier slug contains "free" (e.g. "give-free").
+ *
+ * @since 1.0.0
+ */
+function isFreeFeature(tier) {
+  return !tier || tier.toLowerCase().includes('free');
+}
+
+/**
+ * Returns the mismatch type for a feature, or null if there is no mismatch.
+ *
+ * Both fields are pre-computed by the backend resolution layer.
+ * No catalog or license cross-referencing is needed at call sites.
+ *
+ * @since 1.0.0
+ */
+function getFeatureMismatch(feature) {
+  if (feature.is_available && !feature.in_catalog_tier) {
+    return 'bonus';
+  }
+  if (!feature.is_available && feature.in_catalog_tier) {
+    return 'revoked';
+  }
+  return null;
 }
 
 /***/ },
@@ -4058,24 +4133,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   expiryCardClass: () => (/* binding */ expiryCardClass),
 /* harmony export */   expiryTextClass: () => (/* binding */ expiryTextClass),
 /* harmony export */   formatDate: () => (/* binding */ formatDate),
-/* harmony export */   getExpiryStatus: () => (/* binding */ getExpiryStatus),
-/* harmony export */   isFreeFeature: () => (/* binding */ isFreeFeature)
+/* harmony export */   getExpiryStatus: () => (/* binding */ getExpiryStatus)
 /* harmony export */ });
 /**
  * Pure utility functions for license expiry display.
  *
  * @package LiquidWeb\Harbor
  */
-
-/**
- * True when a feature requires no paid tier — either it has no tier at all
- * or its tier slug contains "free" (e.g. "give-free").
- *
- * @since 1.0.0
- */
-function isFreeFeature(tier) {
-  return !tier || tier.toLowerCase().includes('free');
-}
 
 /**
  * @since 1.0.0
@@ -4852,6 +4916,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getDeleteLicenseError: () => (/* binding */ getDeleteLicenseError),
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatureError: () => (/* binding */ getFeatureError),
+/* harmony export */   getFeatureMismatchType: () => (/* binding */ getFeatureMismatchType),
 /* harmony export */   getFeatures: () => (/* binding */ getFeatures),
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
 /* harmony export */   getLegacyLicenseBySlug: () => (/* binding */ getLegacyLicenseBySlug),
@@ -4875,11 +4940,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /**
  * Selectors for the lw @wordpress/data store.
  *
  * @package LiquidWeb\Harbor
  */
+
+
 
 // ---------------------------------------------------------------------------
 // Features
@@ -4891,6 +4959,18 @@ const getFeature = (state, slug) => state.features.bySlug[slug] ?? null;
 const isFeatureEnabled = (state, slug) => state.features.bySlug[slug]?.is_enabled ?? false;
 const isFeatureToggling = (state, slug) => state.features.toggling[slug] ?? false;
 const getFeatureError = (state, slug) => state.features.errorBySlug[slug] ?? null;
+
+/**
+ * Returns the capability mismatch type for a feature, or null if there is none.
+ *
+ * Wraps getFeatureMismatch() for consumers that only have access to the store.
+ * Hooks that already hold a Feature object should call getFeatureMismatch() directly.
+ */
+const getFeatureMismatchType = (state, slug) => {
+  const feature = state.features.bySlug[slug];
+  if (!feature) return null;
+  return (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_1__.getFeatureMismatch)(feature);
+};
 const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? false;
 
 /**
