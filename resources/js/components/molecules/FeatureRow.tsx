@@ -37,15 +37,16 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 		switchChecked,
 		showLegacyBadge,
 		showFreeBadge,
+		mismatch,
 		handleToggle,
 		handleUpdate,
 	} = useFeatureRow( feature );
 
 	const Chevron = expanded ? ChevronDown : ChevronRight;
 
-	// Legacy-licensed features are not marked available by the API but should
-	// render identically to available features — full controls, no muted style.
-	const isVisuallyAvailable = feature.is_available || showLegacyBadge;
+	// Legacy-licensed and revoked features are not marked available by the API
+	// but should render with the full available layout — controls visible, no muted style.
+	const isVisuallyAvailable = feature.is_available || showLegacyBadge || mismatch === 'revoked';
 
 	return (
 		<div className={ cn(
@@ -69,6 +70,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 					</span>
 					{ showFreeBadge   && <LicenseBadge type="free" /> }
 					{ showLegacyBadge && <LicenseBadge type="legacy" /> }
+					{ mismatch        && <LicenseBadge type={ mismatch } /> }
 				</div>
 
 				{ isVisuallyAvailable ? (
@@ -88,7 +90,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 							<Switch
 								checked={ switchChecked }
 								onCheckedChange={ handleToggle }
-								disabled={ !! pendingAction || installableBusy }
+								disabled={ !! pendingAction || installableBusy || mismatch === 'revoked' }
 								aria-label={
 									switchChecked
 										? /* translators: %s is the name of the feature to disable */
