@@ -453,7 +453,7 @@ class License_Manager {
 			return new WP_Error( $e->errorCode(), $e->getMessage(), array_merge( [ 'status' => $e->statusCode() ], $e->errorPayLoad() ?? [] ) );
 		} catch ( \Throwable $e ) {
 			static::debug_log( sprintf( 'Products API exception: %s', $e->getMessage() ) );
-			return new WP_Error( Error_Code::INVALID_RESPONSE, __( 'An unexpected error occurred.', 'harbor' ), [ 'status' => 500 ] );
+			return new WP_Error( Error_Code::INVALID_RESPONSE, __( 'An unexpected error occurred.', '%TEXTDOMAIN%' ), [ 'status' => 500 ] );
 		}
 	}
 
