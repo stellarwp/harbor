@@ -11,10 +11,11 @@ import { isFreeFeature } from '@/lib/license-utils';
 import { getFeatureMismatch } from '@/lib/feature-utils';
 import type { CatalogTier, Feature } from '@/types/api';
 
-interface FeatureGroups {
-    availableFeatures:  Feature[];
-    lockedByTier:       Record<string, Feature[]>;
-    sortedCatalogTiers: CatalogTier[];
+export interface FeatureGroups {
+    availableFeatures:   Feature[];
+    lockedByTier:        Record<string, Feature[]>;
+    sortedCatalogTiers:  CatalogTier[];  // All tiers — used for header tier name lookup
+    upgradeCatalogTiers: CatalogTier[];  // Tiers strictly above the user's rank — used for TierGroup rendering
 }
 
 /**
@@ -23,13 +24,21 @@ interface FeatureGroups {
 export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
     const allFeatures = useFilteredFeatures( productSlug );
 
-    const { catalogTiers, activeLegacySlugs } = useSelect(
+    const { catalogTiers, activeLegacySlugs, userTierRank } = useSelect(
         ( select ) => {
             const tiers = select( harborStore ).getProductCatalog( productSlug )?.tiers ?? [];
 
+            // Derive the rank of the user's licensed tier for this product.
+            const licenseProducts = select( harborStore ).getLicenseProducts();
+            const licenseProduct  = licenseProducts.find( ( lp ) => lp.product_slug === productSlug );
+            const userTier        = licenseProduct?.tier
+                ? tiers.find( ( t ) => t.slug === licenseProduct.tier )
+                : null;
+            const rank = userTier?.rank ?? -1;  // -1 = unlicensed (show all tier groups)
+
             // When the product is covered by a unified tier, legacy slugs are irrelevant.
             if ( select( harborStore ).isProductUnifiedLicensed( productSlug ) ) {
-                return { catalogTiers: tiers, activeLegacySlugs: new Set<string>() };
+                return { catalogTiers: tiers, activeLegacySlugs: new Set<string>(), userTierRank: rank };
             }
 
             const slugs = new Set(
@@ -38,7 +47,7 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
                     .map( ( l ) => l.slug )
             );
 
-            return { catalogTiers: tiers, activeLegacySlugs: slugs };
+            return { catalogTiers: tiers, activeLegacySlugs: slugs, userTierRank: rank };
         },
         [ productSlug ]
     );
@@ -64,7 +73,8 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
         getFeatureMismatch( f ) !== 'revoked'
     );
 
-    const sortedCatalogTiers = catalogTiers.slice().sort( ( a, b ) => a.rank - b.rank );
+    const sortedCatalogTiers  = catalogTiers.slice().sort( ( a, b ) => a.rank - b.rank );
+    const upgradeCatalogTiers = sortedCatalogTiers.filter( ( t ) => t.rank > userTierRank );
 
     const lockedByTier = sortedCatalogTiers.reduce<Record<string, Feature[]>>(
         ( acc, tier ) => {
@@ -74,5 +84,5 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
         {}
     );
 
-    return { availableFeatures, lockedByTier, sortedCatalogTiers };
+    return { availableFeatures, lockedByTier, sortedCatalogTiers, upgradeCatalogTiers };
 }
