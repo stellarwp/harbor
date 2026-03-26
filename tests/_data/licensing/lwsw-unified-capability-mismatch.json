@@ -22,7 +22,6 @@
         "give-pdf-receipts",
         "give-manual-donations",
         "give-stripe",
-        "give-paypal",
         "give-mailchimp",
         "give-constant-contact",
         "give-convertkit",

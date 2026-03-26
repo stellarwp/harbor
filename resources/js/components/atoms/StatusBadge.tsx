@@ -65,11 +65,10 @@ export function StatusBadge( { status, requiredTier }: StatusBadgeProps ) {
         );
     }
 
-    // unlicensed or locked without tier label
+    // unlicensed or locked without tier label — icon only
     return (
         <Badge variant="outline">
             <Lock className="w-3 h-3" />
-            { __( 'Unlicensed', '%TEXTDOMAIN%' ) }
         </Badge>
     );
 }
