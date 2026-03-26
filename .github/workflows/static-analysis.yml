@@ -27,6 +27,7 @@ jobs:
       - uses: ramsey/composer-install@v3
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader"
+          dependency-versions: highest
         env:
           COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.COMPOSER_TOKEN }}"}}'
 
