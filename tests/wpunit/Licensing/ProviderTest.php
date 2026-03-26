@@ -2,25 +2,25 @@
 
 namespace LiquidWeb\Harbor\Tests\Licensing;
 
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
-use LiquidWeb\Harbor\Licensing\Clients\Http_Client;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\LicensingApiClient\Api;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 
 final class ProviderTest extends HarborTestCase {
 
 	public function test_it_registers_licensing_client(): void {
 		$this->assertInstanceOf(
-			Http_Client::class,
-			$this->container->get( Licensing_Client::class )
+			Api::class,
+			$this->container->get( LicensingClientInterface::class )
 		);
 	}
 
 	public function test_client_is_singleton(): void {
-		$first  = $this->container->get( Licensing_Client::class );
-		$second = $this->container->get( Licensing_Client::class );
+		$first  = $this->container->get( LicensingClientInterface::class );
+		$second = $this->container->get( LicensingClientInterface::class );
 
 		$this->assertSame( $first, $second );
 	}

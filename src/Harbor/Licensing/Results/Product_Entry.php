@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\Licensing\Results;
 use DateTimeImmutable;
 use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Utils\Cast;
+use LiquidWeb\LicensingApiClient\Responses\Product\ValueObjects\CatalogEntry;
 
 /**
  * A single product entry from the v4 licensing catalog.
@@ -65,11 +66,37 @@ final class Product_Entry {
 	}
 
 	/**
-	 * Creates a Product_Entry from an API response array.
+	 * Creates a Product_Entry from a CatalogEntry returned by the licensing API client.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The product data from the API response.
+	 * @param CatalogEntry $entry The catalog entry from the API client.
+	 *
+	 * @return self
+	 */
+	public static function from_catalog_entry( CatalogEntry $entry ): self {
+		return new self(
+			[
+				'product_slug'       => $entry->productSlug,
+				'tier'               => $entry->tier,
+				'status'             => $entry->status,
+				'expires'            => $entry->expires->format( 'Y-m-d H:i:s' ),
+				'site_limit'         => $entry->activations->siteLimit,
+				'active_count'       => $entry->activations->activeCount,
+				'activation_domains' => $entry->activations->domains,
+				'activated_here'     => $entry->activatedHere,
+				'validation_status'  => $entry->validationStatus,
+				'capabilities'       => $entry->capabilities->toArray(),
+			]
+		);
+	}
+
+	/**
+	 * Creates a Product_Entry from a raw attribute array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<string, mixed> $data The product data.
 	 *
 	 * @return self
 	 */

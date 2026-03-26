@@ -15,7 +15,6 @@ use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Resolve_Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
 use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
@@ -102,10 +101,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 	 */
 	private function make_error_repository(): Feature_Repository {
 		$catalog_client   = new Catalog_Fixture( codecept_data_dir( 'catalog/default.json' ) );
-		$licensing_client = $this->makeEmpty(
-			Licensing_Client::class,
-			[ 'get_products' => new WP_Error( 'license_error', 'Licensing failed.' ) ]
-		);
+		$licensing_client = new Licensing_Fixture( codecept_data_dir( 'licensing' ) );
 
 		$catalog   = new Catalog_Repository( $catalog_client );
 		$licensing = new License_Manager( new License_Repository(), new Product_Registry(), $licensing_client );

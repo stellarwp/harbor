@@ -3,11 +3,9 @@
 namespace LiquidWeb\Harbor\Tests\Http;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
-use Symfony\Component\HttpClient\Psr18Client;
 
 final class ProviderTest extends HarborTestCase {
 
@@ -25,13 +23,6 @@ final class ProviderTest extends HarborTestCase {
 		);
 	}
 
-	public function test_it_registers_http_client(): void {
-		$this->assertInstanceOf(
-			Psr18Client::class,
-			$this->container->get( ClientInterface::class )
-		);
-	}
-
 	public function test_request_factory_is_singleton(): void {
 		$first  = $this->container->get( RequestFactoryInterface::class );
 		$second = $this->container->get( RequestFactoryInterface::class );
@@ -42,13 +33,6 @@ final class ProviderTest extends HarborTestCase {
 	public function test_stream_factory_is_singleton(): void {
 		$first  = $this->container->get( StreamFactoryInterface::class );
 		$second = $this->container->get( StreamFactoryInterface::class );
-
-		$this->assertSame( $first, $second );
-	}
-
-	public function test_http_client_is_singleton(): void {
-		$first  = $this->container->get( ClientInterface::class );
-		$second = $this->container->get( ClientInterface::class );
 
 		$this->assertSame( $first, $second );
 	}

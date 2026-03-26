@@ -141,14 +141,13 @@ The presence of this file is the signal that a product belongs to the Harbor uni
 
 ## API Client
 
-The `Licensing_Client` contract defines two operations:
+Harbor uses `stellarwp/licensing-api-client-wordpress` for all communication with the v4 licensing API. `License_Manager` depends on `LicensingClientInterface` from the package and calls `$client->products()->catalog($key, $domain)` to fetch the product catalog. The package handles HTTP transport (via WordPress's HTTP API), request building, response parsing, and error handling.
 
-- **`get_products(string $key, string $domain): Product_Entry[]|WP_Error`**: bulk fetch of all products on a key. Read-only, no seat consumption.
-- **`validate(string $key, string $domain, string $product_slug): Validation_Result|WP_Error`**: validate a single product. May consume a seat on first activation.
+`Licensing\Provider` wires the client using `WordPressApiFactory` with the base URL from `Config::get_api_base_url()`.
 
-The production implementation is `Clients\Http_Client`, which uses PSR-18 HTTP interfaces (see [HTTP Infrastructure](#http-infrastructure) below). The `Licensing_Client` contract exists so the backend can be swapped without affecting the rest of the system.
-During development, the `Clients\Fixture_Client` is wired in place of the real API client. It reads JSON fixture files from `tests/_data/licensing/`, mapping key values to filenames (e.g., `LWSW-unified-pro-2026` reads from `lwsw-unified-pro-2026.json`).
-Tests use a fixture PSR-18 client that routes requests to local JSON files in `tests/_data/licensing/`, mapping key values to filenames (e.g., `LWSW-unified-pro-2026` reads from `lwsw-unified-pro-2026.json`).
+The `Clients\Fixture_Client` implements `LicensingClientInterface` for use in tests. It reads JSON fixture files from `tests/_data/licensing/`, mapping key values to filenames (e.g., `LWSW-unified-pro-2026` reads from `lwsw-unified-pro-2026.json`), and returns `Catalog` objects. Unrecognized keys throw `NotFoundException`.
+
+`Product_Entry` remains Harbor's own DTO. It is hydrated from the package's `CatalogEntry` type via `Product_Entry::from_catalog_entry()`.
 
 The fixture set covers the common scenarios:
 
@@ -173,17 +172,9 @@ All errors use `WP_Error` with these codes:
 
 ## HTTP Infrastructure
 
-The `Clients\Http_Client` implements `Licensing_Client` using PSR-18 (`ClientInterface`) for HTTP transport and PSR-17 (`RequestFactoryInterface`, `StreamFactoryInterface`) for message creation. It does not call `wp_remote_get` or `wp_remote_post` directly.
+Both the Licensing and Catalog subsystems use `WordPressHttpClient` from `stellarwp/licensing-api-client-wordpress` as their HTTP transport. This wraps WordPress's `wp_remote_request()` and implements the PSR-18 interface, so no Symfony dependency is required.
 
-The default wiring (registered by `Http\Provider`) uses Symfony HttpClient as the PSR-18 adapter and Nyholm PSR-7 for message factories. These are standard, well-tested implementations that can be swapped by rebinding the PSR interfaces in the container.
-
-Using PSR-18 instead of the WordPress HTTP API is deliberate:
-
-- **Testability**: tests swap in a fixture PSR-18 client at the container level. No WordPress filter hacks (`pre_http_request`) needed.
-- **Portability**: the HTTP clients depend on standard interfaces, not WordPress internals. The same code works in any PHP environment.
-- **Swappability**: consumers can rebind `ClientInterface` to use Guzzle, a WordPress adapter, or any PSR-18 implementation without touching the licensing code.
-
-The base URL for all API requests comes from `Config::get_api_base_url()`, which defaults to `https://licensing.stellarwp.com`. It can be overridden via `Config::set_api_base_url()` — one setting shared by both the licensing and catalog subsystems.
+The base URL for all API requests comes from `Config::get_api_base_url()`, which defaults to `https://licensing.stellarwp.com`. It can be overridden via `Config::set_api_base_url()` — one setting shared by both subsystems.
 
 ## Workflows
 
@@ -208,7 +199,7 @@ License_Manager::get()
 ```
 License_Manager::validate_and_store($key, $domain)
 ├─ validate LWSW- prefix format
-├─ Licensing_Client::get_products($key, $domain)
+├─ LicensingClientInterface::products()->catalog($key, $domain)
 ├─ if API error → return WP_Error
 ├─ persist Product_Collection to license state option
 ├─ License_Repository::store_key($key)
@@ -222,7 +213,7 @@ Validation is separate from key storage. Storing a key verifies it and fetches i
 ```
 License_Manager::validate_product($domain, $product_slug)
 ├─ get stored key (return WP_Error if none)
-├─ Licensing_Client::validate($key, $domain, $product_slug)
+├─ LicensingClientInterface::licenses()->validate($key, $domain, $product_slug)
 ├─ if API error → return WP_Error
 ├─ delete cached products (so next read reflects new activation state)
 └─ return Validation_Result
@@ -237,7 +228,7 @@ License_Manager::get_products($domain)
 │  └─ read license state option
 ├─ if Product_Collection present → return it
 ├─ fetch_and_cache($key, $domain)
-│  ├─ Licensing_Client::get_products()
+│  ├─ LicensingClientInterface::products()->catalog()
 │  ├─ on success → persist Product_Collection, update last_active dates
 │  └─ on failure → persist WP_Error
 └─ return Product_Collection|WP_Error

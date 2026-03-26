@@ -36,7 +36,7 @@
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.1",
         "stellarwp/container-contract": "^1.0",
-        "symfony/http-client": "^5.4"
+        "stellarwp/licensing-api-client-wordpress": "^0.5.0"
     },
     "config": {
         "preferred-install": "dist",
@@ -45,6 +45,16 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:stellarwp/licensing-api-client.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:stellarwp/licensing-api-client-wordpress.git"
+        }
+    ],
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1",
         "dpanta94/phpstan-containers": "^0",

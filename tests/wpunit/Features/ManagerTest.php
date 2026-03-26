@@ -15,7 +15,7 @@ use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Licensing\Clients\Fixture_Client as Licensing_Fixture;
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -123,7 +123,7 @@ final class ManagerTest extends HarborTestCase {
 		);
 
 		$this->container->singleton(
-			Licensing_Client::class,
+			LicensingClientInterface::class,
 			static function () {
 				return new Licensing_Fixture( codecept_data_dir( 'licensing' ) );
 			}

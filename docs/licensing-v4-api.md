@@ -1,6 +1,6 @@
 # Licensing Service V4 API
 
-Reference for the two v4 endpoints that the `Licensing_Client` contract abstracts.
+Reference for the v4 endpoints consumed by `stellarwp/licensing-api-client` via `LicensingClientInterface`.
 
 ## GET /stellarwp/v4/products
 

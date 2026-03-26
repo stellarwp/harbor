@@ -22,10 +22,9 @@ The leader stores the site's unified key and the full product catalog response f
 
 ### Licensing Lifecycle
 
-The leader delegates to the v4 licensing client, an external Composer package consumed through the `Licensing_Client` contract (`src/Harbor/Licensing/Clients/Licensing_Client.php`). That contract exposes two operations. `get_products()` is a read-only bulk fetch — it sends the key and gets back the status of all products in a single response without consuming seats. `validate()` validates a single product against its key and may consume a seat as a side effect if the product hasn't been activated on this domain before.
+The leader delegates to the v4 licensing client via `LicensingClientInterface` from `stellarwp/licensing-api-client`. `products()->catalog($key, $domain)` is a read-only bulk fetch that returns the status of all products under the key without consuming seats.
 
-The production implementation (`src/Harbor/Licensing/Clients/Http_Client.php`) uses PSR-18 HTTP interfaces for transport (see [Licensing: HTTP Infrastructure](licensing.md#http-infrastructure)). The `License_Repository` wraps the client with option-based state storage so the rest of Harbor never touches the client directly.
-A mock implementation (`src/Harbor/Licensing/Clients/Fixture_Client.php`) is wired during development. The `Licensing_Repository` (`src/Harbor/Licensing/Repositories/Licensing_Repository.php`) wraps the client with transient caching so the rest of Harbor never touches the client directly.
+The production implementation uses `WordPressApiFactory` from `stellarwp/licensing-api-client-wordpress`, which routes requests through WordPress's HTTP API. `License_Repository` wraps the client with option-based state storage so the rest of Harbor never touches the client directly. `Fixture_Client` (`src/Harbor/Licensing/Clients/Fixture_Client.php`) implements `LicensingClientInterface` for testing by reading from JSON fixture files.
 
 ### Feature Catalog
 

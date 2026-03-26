@@ -3,12 +3,14 @@
 namespace LiquidWeb\Harbor\Licensing;
 
 use LiquidWeb\Harbor\Utils\License_Key;
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use LiquidWeb\Harbor\Traits\With_Error_Throttle;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
+use LiquidWeb\LicensingApiClient\Exceptions\Contracts\ApiErrorExceptionInterface;
+use LiquidWeb\LicensingApiClient\Exceptions\NotFoundException;
 use WP_Error;
 
 /**
@@ -53,23 +55,23 @@ class License_Manager {
 	/**
 	 * @since 1.0.0
 	 *
-	 * @var Licensing_Client
+	 * @var LicensingClientInterface
 	 */
-	private Licensing_Client $client;
+	private LicensingClientInterface $client;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param License_Repository $repository The license repository.
-	 * @param Product_Registry   $registry   The product registry.
-	 * @param Licensing_Client   $client     The licensing API client.
+	 * @param License_Repository       $repository The license repository.
+	 * @param Product_Registry         $registry   The product registry.
+	 * @param LicensingClientInterface $client     The licensing API client.
 	 */
 	public function __construct(
 		License_Repository $repository,
 		Product_Registry $registry,
-		Licensing_Client $client
+		LicensingClientInterface $client
 	) {
 		$this->repository = $repository;
 		$this->registry   = $registry;
@@ -173,7 +175,7 @@ class License_Manager {
 		}
 
 		/** @var Product_Entry[]|WP_Error $result */
-		$result = $this->client->get_products( $key, $domain );
+		$result = $this->call_products_api( $key, $domain );
 
 		if ( is_wp_error( $result ) ) {
 			static::debug_log(
@@ -342,7 +344,7 @@ class License_Manager {
 			);
 		}
 
-		$result = $this->client->get_products( $key, $domain );
+		$result = $this->call_products_api( $key, $domain );
 
 		if ( is_wp_error( $result ) ) {
 			$data = $result->get_error_data();
@@ -397,7 +399,7 @@ class License_Manager {
 	 */
 	private function fetch_and_cache( string $key, string $domain ) {
 		/** @var Product_Entry[]|WP_Error $result */
-		$result = $this->client->get_products( $key, $domain );
+		$result = $this->call_products_api( $key, $domain );
 
 		if ( is_wp_error( $result ) ) {
 			static::debug_log(
@@ -427,6 +429,32 @@ class License_Manager {
 		}
 
 		return $collection;
+	}
+
+	/**
+	 * Call the licensing API and return the product catalog as Product_Entry objects.
+	 *
+	 * Converts package exceptions to WP_Error so callers can use is_wp_error().
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key    License key.
+	 * @param string $domain Site domain.
+	 *
+	 * @return Product_Entry[]|WP_Error
+	 */
+	private function call_products_api( string $key, string $domain ) {
+		try {
+			$catalog = $this->client->products()->catalog( $key, $domain );
+			return array_map( [ Product_Entry::class, 'from_catalog_entry' ], $catalog->products );
+		} catch ( NotFoundException $e ) {
+			return new WP_Error( Error_Code::INVALID_KEY, $e->getMessage(), [ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ] );
+		} catch ( ApiErrorExceptionInterface $e ) {
+			return new WP_Error( $e->errorCode(), $e->getMessage(), [ 'status' => $e->statusCode() ] );
+		} catch ( \Exception $e ) {
+			static::debug_log( sprintf( 'Products API exception: %s', $e->getMessage() ) );
+			return new WP_Error( Error_Code::INVALID_RESPONSE, $e->getMessage(), [ 'status' => 500 ] );
+		}
 	}
 
 	/**

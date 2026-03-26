@@ -9,8 +9,8 @@ use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
 use LiquidWeb\Harbor\Cron\Jobs\Refresh_Catalog_Job;
 use LiquidWeb\Harbor\Cron\Jobs\Refresh_License_Job;
 use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 
 final class ProviderTest extends HarborTestCase {
 
@@ -44,8 +44,8 @@ final class ProviderTest extends HarborTestCase {
 		);
 
 		$this->container->singleton(
-			Licensing_Client::class,
-			$this->makeEmpty( Licensing_Client::class )
+			LicensingClientInterface::class,
+			$this->makeEmpty( LicensingClientInterface::class )
 		);
 	}
 

@@ -3,8 +3,14 @@
 namespace LiquidWeb\Harbor\Licensing\Clients;
 
 use LiquidWeb\Harbor\Licensing\Error_Code;
-use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use WP_Error;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
+use LiquidWeb\LicensingApiClient\Exceptions\NotFoundException;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\CreditsResourceInterface;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\EntitlementsResourceInterface;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\LicensesResourceInterface;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\ProductsResourceInterface;
+use LiquidWeb\LicensingApiClient\Responses\Product\Catalog;
+use Nyholm\Psr7\Response;
 
 /**
  * A fixture-based licensing client that reads from JSON files.
@@ -13,10 +19,8 @@ use WP_Error;
  * The filename is the kebab-case lowercase of the key.
  *
  * @since 1.0.0
- *
- * @phpstan-type FixtureData array{products: list<array<string, mixed>>}
  */
-final class Fixture_Client implements Licensing_Client {
+final class Fixture_Client implements LicensingClientInterface, ProductsResourceInterface {
 
 	/**
 	 * The directory containing fixture JSON files.
@@ -28,11 +32,11 @@ final class Fixture_Client implements Licensing_Client {
 	protected string $fixture_dir;
 
 	/**
-	 * In-memory cache of parsed products keyed by lowercase key.
+	 * In-memory cache of parsed catalogs keyed by lowercase key.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array<string, Product_Entry[]|WP_Error>
+	 * @var array<string, Catalog>
 	 */
 	protected array $cache = [];
 
@@ -48,18 +52,25 @@ final class Fixture_Client implements Licensing_Client {
 	}
 
 	/**
-	 * Fetch the product catalog for a license key.
-	 *
-	 * Resolves the key to a kebab-case JSON filename in the fixture directory.
+	 * @inheritDoc
+	 */
+	public function products(): ProductsResourceInterface {
+		return $this;
+	}
+
+	/**
+	 * Fetch the product catalog for a license key from a fixture file.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key    License key.
-	 * @param string $domain Site domain (accepted but ignored by fixture).
+	 * @param string      $key    License key.
+	 * @param string|null $domain Site domain (accepted but ignored by fixture).
 	 *
-	 * @return Product_Entry[]|WP_Error
+	 * @return Catalog
+	 *
+	 * @throws NotFoundException When no fixture file exists for the given key.
 	 */
-	public function get_products( string $key, string $domain ) {
+	public function catalog( string $key, ?string $domain = null ): Catalog {
 		$cache_key = strtolower( $key );
 
 		if ( isset( $this->cache[ $cache_key ] ) ) {
@@ -69,47 +80,63 @@ final class Fixture_Client implements Licensing_Client {
 		$file = $this->fixture_dir . '/' . $cache_key . '.json';
 
 		if ( ! file_exists( $file ) ) {
-			$this->cache[ $cache_key ] = new WP_Error(
-				Error_Code::INVALID_KEY,
+			throw new NotFoundException(
 				sprintf( 'License key not recognized: %s', $key ),
-				[ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ]
+				new Response( 404 ),
+				404,
+				Error_Code::INVALID_KEY
 			);
-
-			return $this->cache[ $cache_key ];
 		}
 
 		$json = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$data = json_decode( (string) $json, true );
 
-		if ( $json === false ) {
-			$this->cache[ $cache_key ] = new WP_Error(
-				Error_Code::INVALID_RESPONSE,
-				sprintf( 'License response could not be read: %s', $file ),
-				[ 'status' => Error_Code::http_status( Error_Code::INVALID_RESPONSE ) ]
-			);
+		$catalog = Catalog::from( $data );
 
-			return $this->cache[ $cache_key ];
-		}
+		$this->cache[ $cache_key ] = $catalog;
 
-		$data = json_decode( $json, true );
-
-		if ( ! is_array( $data ) || ! isset( $data['products'] ) || ! is_array( $data['products'] ) ) {
-			$this->cache[ $cache_key ] = new WP_Error(
-				Error_Code::INVALID_RESPONSE,
-				sprintf( 'License response could not be decoded: %s', $file ),
-				[ 'status' => Error_Code::http_status( Error_Code::INVALID_RESPONSE ) ]
-			);
-
-			return $this->cache[ $cache_key ];
-		}
-
-		/** @var FixtureData $data */
-
-		$this->cache[ $cache_key ] = array_map(
-			[ Product_Entry::class, 'from_array' ],
-			$data['products']
-		);
-
-		return $this->cache[ $cache_key ];
+		return $catalog;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function entitlements(): EntitlementsResourceInterface {
+		throw new \BadMethodCallException( 'Fixture_Client does not support entitlements().' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function licenses(): LicensesResourceInterface {
+		throw new \BadMethodCallException( 'Fixture_Client does not support licenses().' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function credits(): CreditsResourceInterface {
+		throw new \BadMethodCallException( 'Fixture_Client does not support credits().' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function withoutAuth(): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function withConfiguredToken(): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function withToken( string $token ): LicensingClientInterface {
+		return $this;
+	}
 }

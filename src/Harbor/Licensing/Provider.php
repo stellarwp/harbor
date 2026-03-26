@@ -2,15 +2,15 @@
 
 namespace LiquidWeb\Harbor\Licensing;
 
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
-use LiquidWeb\Harbor\Licensing\Clients\Http_Client;
-use LiquidWeb\Harbor\Licensing\Clients\Licensing_Client;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\LicensingApiClient\Config as LicensingConfig;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
+use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
+use LiquidWeb\LicensingApiClientWordPress\WordPressApiFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 /**
  * Registers the Licensing subsystem in the DI container.
@@ -24,14 +24,18 @@ final class Provider extends Abstract_Provider {
 	 */
 	public function register(): void {
 		$this->container->singleton(
-			Licensing_Client::class,
+			LicensingClientInterface::class,
 			function () {
-				return new Http_Client(
-					$this->container->get( ClientInterface::class ),
-					$this->container->get( RequestFactoryInterface::class ),
-					$this->container->get( StreamFactoryInterface::class ),
-					Config::get_api_base_url()
-				);
+				$psr17 = new Psr17Factory();
+				return ( new WordPressApiFactory(
+					new WordPressHttpClient(),
+					$psr17,
+					$psr17
+				) )->make( new LicensingConfig(
+					Config::get_api_base_url(),
+					null,
+					'lwsw-harbor/1.0'
+				) );
 			}
 		);
 
