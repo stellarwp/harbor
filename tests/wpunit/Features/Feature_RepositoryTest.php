@@ -415,6 +415,49 @@ final class Feature_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that a free-tier feature is available even when absent from the capabilities array.
+	 *
+	 * Commerce Portal may omit free features from capabilities for paid licenses.
+	 * The resolver must treat minimum rank 0 as unconditionally available, the same as dot.org.
+	 *
+	 * @return void
+	 */
+	public function test_free_tier_feature_available_for_licensed_user_regardless_of_capabilities(): void {
+		$resolver = $this->make_resolver(
+			new Catalog_Repository( new Catalog_Fixture( codecept_data_dir( 'catalog/default.json' ) ) ),
+			new License_Manager( new License_Repository(), new Product_Registry(), new Licensing_Fixture( codecept_data_dir( 'licensing' ) ) )
+		);
+
+		$catalog_feature = Catalog_Feature::from_array(
+			[
+				'feature_slug'      => 'test-free-flag',
+				'type'              => 'flag',
+				'minimum_tier'      => 'kadence-free',
+				'name'              => 'Test Free Flag',
+				'description'       => '',
+				'documentation_url' => '',
+			]
+		);
+
+		$tiers = new Tier_Collection();
+		$tiers->add( Catalog_Tier::from_array( [ 'tier_slug' => 'kadence-free',  'rank' => 0 ] ) );
+		$tiers->add( Catalog_Tier::from_array( [ 'tier_slug' => 'kadence-basic', 'rank' => 1 ] ) );
+
+		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+
+		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
+		$method->setAccessible( true ); // Required for PHP < 8.1.
+
+		// Omit the free feature from capabilities, simulating a Commerce Portal that only
+		// lists paid features. The resolver must still mark it available and in tier.
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'some-paid-feature' ], 1 );
+
+		$this->assertInstanceOf( Flag::class, $result );
+		$this->assertTrue( $result->is_available(), 'Free-tier feature must be available regardless of capabilities.' );
+		$this->assertTrue( $result->is_in_catalog_tier(), 'Free-tier feature must be in catalog tier regardless of capabilities.' );
+	}
+
+	/**
 	 * Tests that a bonus feature resolves as available but not in catalog tier.
 	 *
 	 * give-peer-to-peer (Pro tier) is granted in capabilities despite the give-basic license.
@@ -465,7 +508,9 @@ final class Feature_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that in_catalog_tier is true for free-tier features and false for paid-tier when unlicensed.
+	 * Tests that in_catalog_tier is true for free-tier features and false for paid-tier features when unlicensed.
+	 *
+	 * Free features (rank 0) are unconditionally in tier. Paid features require a license.
 	 *
 	 * @return void
 	 */

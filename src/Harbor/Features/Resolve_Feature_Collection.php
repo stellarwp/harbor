@@ -18,7 +18,7 @@ use WP_Error;
  *
  * For each catalog feature, computes is_available and in_catalog_tier by checking
  * the product entry's capabilities array and the user's licensed tier rank.
- * When no license exists, only free-tier features (minimum tier rank 0) are available.
+ * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
  *
  * @since 1.0.0
  */
@@ -212,8 +212,8 @@ class Resolve_Feature_Collection {
 	 * Maps catalog types (plugin, theme, flag) to Feature subclasses
 	 * (Plugin, Theme, Flag) and computes is_available and in_catalog_tier.
 	 *
-	 * dot.org features are unconditionally available regardless of tier or capabilities.
-	 * When capabilities is null (no license), only free-tier features (rank 0) are available.
+	 * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
+	 * When capabilities is null (no license), all paid-tier features are unavailable and not in tier.
 	 *
 	 * @since 1.0.0
 	 *
@@ -247,14 +247,14 @@ class Resolve_Feature_Collection {
 		$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
 		$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
 
-		if ( $catalog_feature->is_dot_org() ) {
-			// dot.org features are unconditionally available — tier is irrelevant.
+		if ( $catalog_feature->is_dot_org() || $minimum_rank === 0 ) {
+			// dot.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
 			$is_available    = true;
 			$in_catalog_tier = true;
 		} elseif ( $capabilities === null ) {
-			// No license: only free-tier (rank 0) features are available and in tier.
-			$is_available    = ( $minimum_rank === 0 );
-			$in_catalog_tier = ( $minimum_rank === 0 );
+			// No license: paid-tier features are neither available nor in tier.
+			$is_available    = false;
+			$in_catalog_tier = false;
 		} else {
 			$is_available    = in_array( $catalog_feature->get_feature_slug(), $capabilities, true );
 			$in_catalog_tier = ( $license_tier_rank >= $minimum_rank );
