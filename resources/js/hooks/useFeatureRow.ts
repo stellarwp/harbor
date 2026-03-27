@@ -19,6 +19,30 @@ import type { FeatureStatus } from '@/components/atoms/StatusBadge';
 
 export type PendingAction = 'enabling' | 'disabling' | 'installing' | 'updating' | null;
 
+function getBadgeStatus(
+    pendingAction:    PendingAction,
+    licenseBadgeType: LicenseBadgeType | null,
+    featureEnabled:   boolean
+): FeatureStatus {
+    if ( pendingAction ) {
+        return pendingAction as FeatureStatus;
+    }
+    if ( licenseBadgeType === 'revoked' && ! featureEnabled ) {
+        return 'locked';
+    }
+    return featureEnabled ? 'enabled' : 'available';
+}
+
+function getSwitchChecked( pendingAction: PendingAction, featureEnabled: boolean ): boolean {
+    if ( pendingAction === 'enabling' || pendingAction === 'installing' ) {
+        return true;
+    }
+    if ( pendingAction === 'disabling' ) {
+        return false;
+    }
+    return featureEnabled;
+}
+
 export interface FeatureRowState {
 	pendingAction:    PendingAction;
 	installableBusy:  boolean;
@@ -94,18 +118,9 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		setPendingAction( null );
 	};
 
-	const badgeStatus: FeatureStatus =
-		pendingAction                                            ? pendingAction as FeatureStatus :
-		licenseBadgeType === 'revoked' && ! featureEnabled      ? 'locked'                       :
-		featureEnabled                                          ? 'enabled'                      :
-		                                                          'available';
+	const badgeStatus   = getBadgeStatus( pendingAction, licenseBadgeType, featureEnabled );
 	const showSwitch    = pendingAction !== 'installing' && pendingAction !== 'updating';
-	const switchChecked =
-		pendingAction === 'enabling' || pendingAction === 'installing'
-			? true
-			: pendingAction === 'disabling'
-				? false
-				: featureEnabled;
+	const switchChecked = getSwitchChecked( pendingAction, featureEnabled );
 
 	return {
 		pendingAction,
