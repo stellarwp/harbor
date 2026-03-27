@@ -1,6 +1,33 @@
 *               text
 .*              export-ignore
 composer.lock   text -diff
-phpstan.*       export-ignore
-phpunit.*       export-ignore
-tests           export-ignore
+
+# Dev tooling & config
+phpstan.*                export-ignore
+phpunit.*                export-ignore
+phpcs*.xml               export-ignore
+codeception.*.yml        export-ignore
+composer.json            export-ignore
+composer.lock            export-ignore
+
+# JS build tooling
+bun.lock                 export-ignore
+package.json             export-ignore
+package-lock.json        export-ignore
+webpack.config.js        export-ignore
+tsconfig.json            export-ignore
+tailwind.config.js       export-ignore
+postcss.config.js        export-ignore
+components.json          export-ignore
+
+# Directories not needed at runtime
+tests/                   export-ignore
+bin/                     export-ignore
+build-dev/               export-ignore
+dev_scripts/             export-ignore
+docs/                    export-ignore
+resources/js/            export-ignore
+
+# AI & meta files
+CLAUDE.md                export-ignore
+AGENTS.md                export-ignore
