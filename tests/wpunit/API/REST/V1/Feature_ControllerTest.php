@@ -49,7 +49,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 			Plugin::from_array(
 				[
 					'slug'              => 'feature-alpha',
-					'product'             => 'GroupA',
+					'product'           => 'GroupA',
 					'tier'              => 'Tier 1',
 					'name'              => 'Feature Alpha',
 					'description'       => 'Alpha description',
@@ -62,7 +62,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 			Flag::from_array(
 				[
 					'slug'              => 'feature-beta',
-					'product'             => 'GroupB',
+					'product'           => 'GroupB',
 					'tier'              => 'Tier 2',
 					'name'              => 'Feature Beta',
 					'description'       => 'Beta description',

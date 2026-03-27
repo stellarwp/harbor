@@ -59,7 +59,7 @@ final class ManagerTest extends HarborTestCase {
 			Flag::from_array(
 				[
 					'slug'         => 'test-feature',
-					'product'        => 'TestGroup',
+					'product'      => 'TestGroup',
 					'tier'         => 'Tier 1',
 					'name'         => 'Test Feature',
 					'is_available' => true,
@@ -674,7 +674,7 @@ final class ManagerTest extends HarborTestCase {
 			Flag::from_array(
 				[
 					'slug'         => 'locked-feature',
-					'product'        => 'TestGroup',
+					'product'      => 'TestGroup',
 					'tier'         => 'Pro',
 					'name'         => 'Locked Feature',
 					'is_available' => false,

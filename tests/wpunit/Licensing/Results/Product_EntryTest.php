@@ -169,7 +169,7 @@ final class Product_EntryTest extends HarborTestCase {
 	}
 
 	public function test_activation_domains_extracted_from_activations(): void {
-		$data                        = $this->valid_data;
+		$data                           = $this->valid_data;
 		$data['activations']['domains'] = [ 'site1.com', 'site2.com' ];
 
 		$entry = Product_Entry::from_array( $data );

@@ -23,5 +23,4 @@ interface Licensing_Client {
 	 * @return Product_Entry[]|WP_Error
 	 */
 	public function get_products( string $key, string $domain );
-
 }

@@ -127,7 +127,7 @@ class Version {
 						],
 					];
 
-					echo '<script>console.log(' . json_encode( $data ) . ');</script>';
+					echo '<script>console.log(' . wp_json_encode( $data ) . ');</script>';
 				}
 			);
 		}

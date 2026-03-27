@@ -148,7 +148,7 @@ class License_Notice_Handler {
 	 * @return bool
 	 */
 	private function is_on_notice_page( string $page_url ): bool {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- reading current page slug, not processing a form.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- reading current page slug for display routing only; sanitize_key wraps the value.
 		$current_page = sanitize_key( Cast::to_string( $_GET['page'] ?? '' ) );
 
 		if ( $current_page === '' ) {

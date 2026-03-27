@@ -55,7 +55,7 @@ final class Fixture_Client implements Catalog_Client {
 			return $this->cache;
 		}
 
-		$json = @file_get_contents( $this->fixture_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$json = @file_get_contents( $this->fixture_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.PHP.NoSilencedErrors.Discouraged, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown -- local fixture file, error silenced intentionally.
 
 		if ( $json === false ) {
 			$this->cache = new WP_Error(

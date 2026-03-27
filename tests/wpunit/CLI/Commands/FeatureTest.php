@@ -66,7 +66,7 @@ final class FeatureTest extends HarborTestCase {
 					'slug'              => 'test-flag',
 					'name'              => 'Test Flag',
 					'description'       => 'A test flag feature.',
-					'product'             => 'TestGroup',
+					'product'           => 'TestGroup',
 					'tier'              => 'Tier 1',
 					'is_available'      => true,
 					'documentation_url' => 'https://example.com/docs/test-flag',
@@ -79,7 +79,7 @@ final class FeatureTest extends HarborTestCase {
 					'slug'              => 'test-plugin',
 					'name'              => 'Test Plugin',
 					'description'       => 'A test plugin feature.',
-					'product'             => 'OtherGroup',
+					'product'           => 'OtherGroup',
 					'tier'              => 'Tier 2',
 					'is_available'      => false,
 					'documentation_url' => 'https://example.com/docs/test-plugin',
@@ -184,7 +184,7 @@ final class FeatureTest extends HarborTestCase {
 	public function test_list_filters_combine(): void {
 		$items = $this->run_list_json(
 			[
-				'product'     => 'TestGroup',
+				'product'   => 'TestGroup',
 				'type'      => 'flag',
 				'available' => 'true',
 				'tier'      => 'Tier 1',
@@ -343,7 +343,7 @@ final class FeatureTest extends HarborTestCase {
 			[
 				'slug'         => 'test-plugin',
 				'name'         => 'Test Plugin',
-				'product'        => 'OtherGroup',
+				'product'      => 'OtherGroup',
 				'tier'         => 'Tier 2',
 				'is_available' => true,
 				'plugin_file'  => 'test-plugin/test-plugin.php',

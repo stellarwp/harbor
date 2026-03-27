@@ -130,7 +130,6 @@ final class License_Controller extends WP_REST_Controller {
 				'schema' => [ $this, 'get_public_item_schema' ],
 			]
 		);
-
 	}
 
 	/**

@@ -457,7 +457,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 		return new Theme(
 			[
 				'slug'         => $slug,
-				'product'        => 'Test',
+				'product'      => 'Test',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Theme Feature',
 				'description'  => 'A test theme for unit tests.',

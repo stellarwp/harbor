@@ -16,7 +16,7 @@ final class FlagTest extends HarborTestCase {
 		$feature = Flag::from_array(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -45,7 +45,7 @@ final class FlagTest extends HarborTestCase {
 		$feature = new Flag(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -57,7 +57,7 @@ final class FlagTest extends HarborTestCase {
 		$this->assertSame(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -77,7 +77,7 @@ final class FlagTest extends HarborTestCase {
 	public function test_to_array_round_trips_through_from_array(): void {
 		$data = [
 			'slug'              => 'test-feature',
-			'product'             => 'TEC',
+			'product'           => 'TEC',
 			'tier'              => 'Tier 1',
 			'name'              => 'Test Feature',
 			'description'       => 'Test feature description.',
@@ -102,7 +102,7 @@ final class FlagTest extends HarborTestCase {
 		$feature = Flag::from_array(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'TEC',
+				'product'      => 'TEC',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Feature',
 				'is_available' => true,
@@ -121,7 +121,7 @@ final class FlagTest extends HarborTestCase {
 		$feature = new Flag(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'TEC',
+				'product'      => 'TEC',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Feature',
 				'description'  => 'Test feature description.',

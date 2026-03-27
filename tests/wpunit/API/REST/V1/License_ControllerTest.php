@@ -348,5 +348,4 @@ final class License_ControllerTest extends HarborTestCase {
 		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
 		$this->assertSame( 'API failure', $response->get_data()['message'] );
 	}
-
 }

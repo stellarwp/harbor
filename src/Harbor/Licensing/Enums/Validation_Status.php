@@ -169,16 +169,16 @@ final class Validation_Status {
 	 */
 	public static function message( string $value ): string {
 		$messages = [
-			self::EXPIRED                => __( 'The entitlement has expired.', '%TEXTDOMAIN%' ),
-			self::SUSPENDED              => __( 'The entitlement is suspended.', '%TEXTDOMAIN%' ),
-			self::CANCELLED              => __( 'The entitlement is cancelled.', '%TEXTDOMAIN%' ),
-			self::LICENSE_SUSPENDED      => __( 'The license is suspended.', '%TEXTDOMAIN%' ),
-			self::LICENSE_BANNED         => __( 'The license is banned.', '%TEXTDOMAIN%' ),
-			self::NO_ENTITLEMENT         => __( 'No entitlement exists for this product.', '%TEXTDOMAIN%' ),
-			self::NOT_ACTIVATED          => __( 'The product is not activated on this domain.', '%TEXTDOMAIN%' ),
-			self::OUT_OF_ACTIVATIONS     => __( 'All activation seats are in use.', '%TEXTDOMAIN%' ),
-			self::INVALID_KEY            => __( 'The license key is not recognized.', '%TEXTDOMAIN%' ),
-			self::ACTIVATION_REQUIRED    => __( 'The product requires activation.', '%TEXTDOMAIN%' ),
+			self::EXPIRED                 => __( 'The entitlement has expired.', '%TEXTDOMAIN%' ),
+			self::SUSPENDED               => __( 'The entitlement is suspended.', '%TEXTDOMAIN%' ),
+			self::CANCELLED               => __( 'The entitlement is cancelled.', '%TEXTDOMAIN%' ),
+			self::LICENSE_SUSPENDED       => __( 'The license is suspended.', '%TEXTDOMAIN%' ),
+			self::LICENSE_BANNED          => __( 'The license is banned.', '%TEXTDOMAIN%' ),
+			self::NO_ENTITLEMENT          => __( 'No entitlement exists for this product.', '%TEXTDOMAIN%' ),
+			self::NOT_ACTIVATED           => __( 'The product is not activated on this domain.', '%TEXTDOMAIN%' ),
+			self::OUT_OF_ACTIVATIONS      => __( 'All activation seats are in use.', '%TEXTDOMAIN%' ),
+			self::INVALID_KEY             => __( 'The license key is not recognized.', '%TEXTDOMAIN%' ),
+			self::ACTIVATION_REQUIRED     => __( 'The product requires activation.', '%TEXTDOMAIN%' ),
 			self::TIER_SELECTION_REQUIRED => __( 'A tier selection is required for this product.', '%TEXTDOMAIN%' ),
 		];
 
@@ -196,15 +196,15 @@ final class Validation_Status {
 	 */
 	public static function error_code( string $value ): string {
 		$map = [
-			self::EXPIRED                => Error_Code::EXPIRED,
-			self::SUSPENDED              => Error_Code::SUSPENDED,
-			self::CANCELLED              => Error_Code::CANCELLED,
-			self::LICENSE_SUSPENDED      => Error_Code::LICENSE_SUSPENDED,
-			self::LICENSE_BANNED         => Error_Code::LICENSE_BANNED,
-			self::NO_ENTITLEMENT         => Error_Code::NO_ENTITLEMENT,
-			self::OUT_OF_ACTIVATIONS     => Error_Code::OUT_OF_ACTIVATIONS,
-			self::INVALID_KEY            => Error_Code::INVALID_KEY,
-			self::ACTIVATION_REQUIRED    => Error_Code::ACTIVATION_REQUIRED,
+			self::EXPIRED                 => Error_Code::EXPIRED,
+			self::SUSPENDED               => Error_Code::SUSPENDED,
+			self::CANCELLED               => Error_Code::CANCELLED,
+			self::LICENSE_SUSPENDED       => Error_Code::LICENSE_SUSPENDED,
+			self::LICENSE_BANNED          => Error_Code::LICENSE_BANNED,
+			self::NO_ENTITLEMENT          => Error_Code::NO_ENTITLEMENT,
+			self::OUT_OF_ACTIVATIONS      => Error_Code::OUT_OF_ACTIVATIONS,
+			self::INVALID_KEY             => Error_Code::INVALID_KEY,
+			self::ACTIVATION_REQUIRED     => Error_Code::ACTIVATION_REQUIRED,
 			self::TIER_SELECTION_REQUIRED => Error_Code::TIER_SELECTION_REQUIRED,
 		];
 

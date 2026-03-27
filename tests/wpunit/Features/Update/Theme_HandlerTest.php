@@ -126,7 +126,7 @@ final class Theme_HandlerTest extends HarborTestCase {
 		$feature = new Theme(
 			[
 				'slug'         => 'my-theme',
-				'product'        => 'test',
+				'product'      => 'test',
 				'tier'         => 'basic',
 				'name'         => 'My Theme',
 				'description'  => 'A test theme.',

@@ -8,7 +8,7 @@ class Sanitize {
 	 *
 	 * @since 1.2.2
 	 *
-	 * @param string $key
+	 * @param string $key The key to sanitize.
 	 *
 	 * @return string
 	 */

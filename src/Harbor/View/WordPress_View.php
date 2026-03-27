@@ -49,7 +49,7 @@ final class WordPress_View implements Contracts\View {
 	 *
 	 * @param mixed[] $args  Arguments to be extracted and passed to the view.
 	 *
-	 * @throws FileNotFoundException If the view file cannot be found.
+	 * @throws Throwable If the view file cannot be found or the template throws an exception.
 	 *
 	 * @return string
 	 */
@@ -103,7 +103,11 @@ final class WordPress_View implements Contracts\View {
 
 		if ( $path === false ) {
 			throw new FileNotFoundException(
-				sprintf( __( 'View file "%s" not found or not readable.', '%TEXTDOMAIN%' ), $file )
+				sprintf(
+					/* translators: %s: Absolute path to the missing view file. */
+					__( 'View file "%s" not found or not readable.', '%TEXTDOMAIN%' ),
+					$file
+				)
 			);
 		}
 

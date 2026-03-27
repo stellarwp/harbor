@@ -98,7 +98,7 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		$feature = new Plugin(
 			[
 				'slug'         => 'my-plugin',
-				'product'        => 'test',
+				'product'      => 'test',
 				'tier'         => 'basic',
 				'name'         => 'My Plugin',
 				'description'  => 'A test plugin.',
@@ -390,7 +390,7 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		// Remove the plugin from disk so get_plugins() no longer reports it as installed.
 		$this->remove_test_plugin();
 
-		$transient           = new stdClass();
+		$transient            = new stdClass();
 		$transient->response  = [];
 		$transient->no_update = [];
 

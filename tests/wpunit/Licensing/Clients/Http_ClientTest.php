@@ -163,5 +163,4 @@ final class Http_ClientTest extends HarborTestCase {
 			]
 		);
 	}
-
 }

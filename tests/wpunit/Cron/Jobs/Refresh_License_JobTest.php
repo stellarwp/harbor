@@ -31,8 +31,8 @@ final class Refresh_License_JobTest extends HarborTestCase {
 	}
 
 	public function test_run_refreshes_products_with_site_domain(): void {
-		$domain          = 'example.com';
-		$refreshed_with  = null;
+		$domain         = 'example.com';
+		$refreshed_with = null;
 
 		$license_manager = $this->makeEmpty(
 			License_Manager::class,

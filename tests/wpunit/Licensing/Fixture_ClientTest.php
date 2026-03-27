@@ -129,5 +129,4 @@ final class Fixture_ClientTest extends HarborTestCase {
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
 	}
-
 }

@@ -1060,7 +1060,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		return new Plugin(
 			[
 				'slug'         => $slug,
-				'product'        => 'Test',
+				'product'      => 'Test',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Feature',
 				'description'  => 'A test feature for unit tests.',

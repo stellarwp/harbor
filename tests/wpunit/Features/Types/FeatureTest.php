@@ -24,7 +24,7 @@ final class FeatureTest extends HarborTestCase {
 
 		$this->feature = new class( [
 			'slug'              => 'test-feature',
-			'product'             => 'TEC',
+			'product'           => 'TEC',
 			'tier'              => 'Tier 1',
 			'name'              => 'Test Feature',
 			'description'       => 'A test feature.',
@@ -45,7 +45,7 @@ final class FeatureTest extends HarborTestCase {
 				return new self(
 					[
 						'slug'              => $data['slug'],
-						'product'             => $data['product'],
+						'product'           => $data['product'],
 						'tier'              => $data['tier'],
 						'name'              => $data['name'],
 						'description'       => $data['description'] ?? '',
@@ -160,7 +160,7 @@ final class FeatureTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_is_enabled_round_trips_through_from_array(): void {
-		$data                = $this->feature->to_array();
+		$data               = $this->feature->to_array();
 		$data['is_enabled'] = true;
 
 		$rebuilt = $this->feature::from_array( $data );
@@ -190,7 +190,7 @@ final class FeatureTest extends HarborTestCase {
 		$this->assertSame(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'Test Feature',
 				'description'       => 'A test feature.',
@@ -214,7 +214,7 @@ final class FeatureTest extends HarborTestCase {
 		$feature = $this->feature::from_array(
 			[
 				'slug'              => 'from-array-feature',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 2',
 				'name'              => 'From Array',
 				'description'       => 'Hydrated from array.',

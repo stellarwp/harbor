@@ -36,7 +36,7 @@ final class ThemeTest extends HarborTestCase {
 		return new Theme(
 			[
 				'slug'         => $slug,
-				'product'        => self::GROUP,
+				'product'      => self::GROUP,
 				'tier'         => self::TIER,
 				'name'         => $name,
 				'description'  => $description,
@@ -59,7 +59,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'              => 'test-theme',
-				'product'             => 'Kadence',
+				'product'           => 'Kadence',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Theme',
 				'description'       => 'Test theme description.',
@@ -90,7 +90,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = new Theme(
 			[
 				'slug'              => 'test-theme',
-				'product'             => 'Kadence',
+				'product'           => 'Kadence',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Theme',
 				'description'       => 'Test theme description.',
@@ -105,7 +105,7 @@ final class ThemeTest extends HarborTestCase {
 		$this->assertSame(
 			[
 				'slug'              => 'test-theme',
-				'product'             => 'Kadence',
+				'product'           => 'Kadence',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Theme',
 				'description'       => 'Test theme description.',
@@ -132,7 +132,7 @@ final class ThemeTest extends HarborTestCase {
 	public function test_to_array_round_trips_through_from_array(): void {
 		$data = [
 			'slug'              => 'test-theme',
-			'product'             => 'Kadence',
+			'product'           => 'Kadence',
 			'tier'              => 'Tier 2',
 			'name'              => 'Test Theme',
 			'description'       => 'Test theme description.',
@@ -163,7 +163,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'test-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 2',
 				'name'         => 'Test Theme',
 				'is_available' => false,
@@ -182,7 +182,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'test-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Theme',
 				'is_available' => true,
@@ -205,7 +205,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = new Theme(
 			[
 				'slug'         => 'test-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 2',
 				'name'         => 'Test Theme',
 				'description'  => 'Test theme description.',
@@ -301,7 +301,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = new Theme(
 			[
 				'slug'         => self::SLUG,
-				'product'        => self::GROUP,
+				'product'      => self::GROUP,
 				'tier'         => self::TIER,
 				'name'         => self::NAME,
 				'is_available' => true,
@@ -319,7 +319,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'test-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Theme',
 				'is_available' => true,
@@ -343,7 +343,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'nonexistent-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 2',
 				'name'         => 'Nonexistent Theme',
 				'is_available' => true,
@@ -362,7 +362,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'nonexistent-theme',
-				'product'        => 'Kadence',
+				'product'      => 'Kadence',
 				'tier'         => 'Tier 2',
 				'name'         => 'Nonexistent Theme',
 				'is_available' => true,
@@ -383,7 +383,7 @@ final class ThemeTest extends HarborTestCase {
 		$feature = new Theme(
 			[
 				'slug'              => 'the-slug',
-				'product'             => 'Kadence',
+				'product'           => 'Kadence',
 				'tier'              => 'Tier 1',
 				'name'              => 'The Name',
 				'description'       => 'The description.',

@@ -189,7 +189,7 @@ final class FlagStrategyTest extends HarborTestCase {
 	 * affect the other.
 	 */
 	public function test_features_have_independent_state(): void {
-		$other         = $this->make_flag_feature( 'other-feature', 'Other', 'Another feature.' );
+		$other          = $this->make_flag_feature( 'other-feature', 'Other', 'Another feature.' );
 		$other_strategy = new Flag_Strategy( $other );
 
 		$this->strategy->enable();
@@ -222,7 +222,7 @@ final class FlagStrategyTest extends HarborTestCase {
 		return new Flag(
 			[
 				'slug'         => $slug,
-				'product'        => 'TEC',
+				'product'      => 'TEC',
 				'tier'         => 'Tier 1',
 				'name'         => $name,
 				'description'  => $description,

@@ -164,7 +164,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$flag   = Flag::from_array(
 			[
 				'slug'              => 'my-flag',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'My Flag',
 				'description'       => '',
@@ -175,7 +175,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$plugin = Plugin::from_array(
 			[
 				'slug'              => 'my-plugin',
-				'product'             => 'LD',
+				'product'           => 'LD',
 				'tier'              => 'Tier 2',
 				'name'              => 'My Plugin',
 				'description'       => '',
@@ -202,7 +202,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$data = [
 			[
 				'slug'              => 'my-flag',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'My Flag',
 				'description'       => '',
@@ -228,7 +228,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$data = [
 			[
 				'slug'              => 'my-plugin',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 2',
 				'name'              => 'My Plugin',
 				'description'       => '',
@@ -256,7 +256,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$data = [
 			[
 				'slug'              => 'unknown-feature',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'Unknown',
 				'description'       => '',
@@ -281,7 +281,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 		$data = [
 			[
 				'slug'              => 'my-flag',
-				'product'             => 'TEC',
+				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
 				'name'              => 'My Flag',
 				'description'       => '',

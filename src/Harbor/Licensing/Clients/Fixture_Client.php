@@ -78,7 +78,7 @@ final class Fixture_Client implements Licensing_Client {
 			return $this->cache[ $cache_key ];
 		}
 
-		$json = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$json = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown -- local fixture file.
 
 		if ( $json === false ) {
 			$this->cache[ $cache_key ] = new WP_Error(
@@ -111,5 +111,4 @@ final class Fixture_Client implements Licensing_Client {
 
 		return $this->cache[ $cache_key ];
 	}
-
 }

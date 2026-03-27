@@ -98,7 +98,7 @@ class Feature_Manager_Page {
 		$plugin_root_url = trailingslashit(
 			plugin_dir_url( $plugin_root_dir . '/index.php' )
 		);
-		$handle = 'lw-harbor-ui';
+		$handle          = 'lw-harbor-ui';
 
 		// Load asset file for dependencies and version.
 		$asset_file = $plugin_root_dir . '/' . $build_dir . '/index.asset.php';
@@ -130,7 +130,7 @@ class Feature_Manager_Page {
 			$handle,
 			$plugin_root_url . $build_dir . '/index.css',
 			[],
-			null
+			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- version is content-hashed into the asset filename by the build pipeline.
 		);
 
 		wp_enqueue_script( $handle );

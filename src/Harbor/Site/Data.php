@@ -95,7 +95,7 @@ class Data {
 		$site_url = wp_parse_url( $site_url );
 		if ( ! $site_url || ! isset( $site_url['host'] ) ) {
 			if ( isset( $_SERVER['SERVER_NAME'] ) ) {
-				return Cast::to_string( $_SERVER['SERVER_NAME'] );
+				return Cast::to_string( $_SERVER['SERVER_NAME'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- SERVER_NAME is set by the web server, not user input.
 			}
 
 			return '';

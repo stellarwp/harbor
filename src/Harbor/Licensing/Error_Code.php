@@ -148,29 +148,29 @@ final class Error_Code {
 		/** @var array<string, int> */
 		static $map = [
 			// 400 Bad Request — the key format is invalid.
-			self::INVALID_KEY          => 400,
+			self::INVALID_KEY             => 400,
 
 			// 422 Unprocessable Entity — the request was understood but the
 			// license state prevents the operation from completing.
-			self::PRODUCT_NOT_FOUND    => 422,
-			self::EXPIRED              => 422,
-			self::SUSPENDED            => 422,
-			self::CANCELLED            => 422,
-			self::LICENSE_SUSPENDED    => 422,
-			self::LICENSE_BANNED       => 422,
-			self::NO_ENTITLEMENT         => 422,
-			self::ACTIVATION_REQUIRED    => 422,
+			self::PRODUCT_NOT_FOUND       => 422,
+			self::EXPIRED                 => 422,
+			self::SUSPENDED               => 422,
+			self::CANCELLED               => 422,
+			self::LICENSE_SUSPENDED       => 422,
+			self::LICENSE_BANNED          => 422,
+			self::NO_ENTITLEMENT          => 422,
+			self::ACTIVATION_REQUIRED     => 422,
 			self::TIER_SELECTION_REQUIRED => 422,
-			self::OUT_OF_ACTIVATIONS   => 422,
+			self::OUT_OF_ACTIVATIONS      => 422,
 
 			// 500 Internal Server Error — storage failure.
-			self::STORE_FAILED         => 500,
+			self::STORE_FAILED            => 500,
 
 			// 500 Internal Server Error — unexpected or unrecognized error.
-			self::UNKNOWN_ERROR        => 500,
+			self::UNKNOWN_ERROR           => 500,
 
 			// 502 Bad Gateway — upstream service returned an invalid response.
-			self::INVALID_RESPONSE     => 502,
+			self::INVALID_RESPONSE        => 502,
 		];
 
 		return $map[ $code ] ?? 422;

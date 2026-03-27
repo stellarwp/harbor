@@ -39,7 +39,7 @@ final class PluginTest extends HarborTestCase {
 		return new Plugin(
 			[
 				'slug'         => $slug,
-				'product'        => self::GROUP,
+				'product'      => self::GROUP,
 				'tier'         => self::TIER,
 				'name'         => $name,
 				'description'  => $description,
@@ -63,7 +63,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -96,7 +96,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = new Plugin(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -112,7 +112,7 @@ final class PluginTest extends HarborTestCase {
 		$this->assertSame(
 			[
 				'slug'              => 'test-feature',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 2',
 				'name'              => 'Test Feature',
 				'description'       => 'Test feature description.',
@@ -140,7 +140,7 @@ final class PluginTest extends HarborTestCase {
 	public function test_to_array_round_trips_through_from_array(): void {
 		$data = [
 			'slug'              => 'test-feature',
-			'product'             => 'LearnDash',
+			'product'           => 'LearnDash',
 			'tier'              => 'Tier 2',
 			'name'              => 'Test Feature',
 			'description'       => 'Test feature description.',
@@ -172,7 +172,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 2',
 				'name'         => 'Test Feature',
 				'plugin_file'  => 'test-feature/test-feature.php',
@@ -192,7 +192,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Feature',
 				'plugin_file'  => 'test-feature/test-feature.php',
@@ -216,7 +216,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = new Plugin(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 2',
 				'name'         => 'Test Feature',
 				'description'  => 'Test feature description.',
@@ -271,7 +271,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = new Plugin(
 			[
 				'slug'         => self::SLUG,
-				'product'        => self::GROUP,
+				'product'      => self::GROUP,
 				'tier'         => self::TIER,
 				'name'         => self::NAME,
 				'plugin_file'  => self::PLUGIN_FILE,
@@ -290,7 +290,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'test-feature',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Feature',
 				'plugin_file'  => 'test-feature/test-feature.php',
@@ -407,7 +407,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'nonexistent-plugin',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 2',
 				'name'         => 'Nonexistent Plugin',
 				'plugin_file'  => 'nonexistent-plugin/nonexistent-plugin.php',
@@ -429,7 +429,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'no-file',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 2',
 				'name'         => 'No File',
 				'plugin_file'  => '',
@@ -449,7 +449,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'nonexistent-plugin',
-				'product'        => 'LearnDash',
+				'product'      => 'LearnDash',
 				'tier'         => 'Tier 2',
 				'name'         => 'Nonexistent Plugin',
 				'plugin_file'  => 'nonexistent-plugin/nonexistent-plugin.php',
@@ -471,7 +471,7 @@ final class PluginTest extends HarborTestCase {
 		$feature = new Plugin(
 			[
 				'slug'              => 'the-slug',
-				'product'             => 'LearnDash',
+				'product'           => 'LearnDash',
 				'tier'              => 'Tier 1',
 				'name'              => 'The Name',
 				'description'       => 'The description.',

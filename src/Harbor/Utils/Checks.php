@@ -12,7 +12,7 @@ class Checks {
 	 *
 	 * @return bool
 	 */
-	public static function is_truthy( $var ) {
+	public static function is_truthy( $var ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.varFound -- legacy parameter name, renaming would break call sites.
 		if ( is_bool( $var ) ) {
 			return $var;
 		}
@@ -33,25 +33,25 @@ class Checks {
 				'y',
 				'yes',
 				'true',
-			] 
+			]
 		);
 
-		// Makes sure we are dealing with lowercase for testing
+		// Makes sure we are dealing with lowercase for testing.
 		if ( is_string( $var ) ) {
 			$var = strtolower( $var );
 		}
 
-		// If $var is a string, it is only true if it is contained in the above array
+		// If $var is a string, it is only true if it is contained in the above array.
 		if ( in_array( $var, $truthy_strings, true ) ) {
 			return true;
 		}
 
-		// All other strings will be treated as false
+		// All other strings will be treated as false.
 		if ( is_string( $var ) ) {
 			return false;
 		}
 
-		// For other types (ints, floats etc) cast to bool
+		// For other types (ints, floats etc) cast to bool.
 		return (bool) $var;
 	}
 
