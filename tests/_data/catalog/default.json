@@ -594,7 +594,7 @@
           "LearnDash"
         ],
         "documentation_url": "https://www.learndash.com/support/",
-        "version": "2.1.0",
+        "version": "1.7.0",
         "released_at": "2025-11-08",
         "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>"
       },
