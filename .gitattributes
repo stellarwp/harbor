@@ -22,7 +22,6 @@ components.json          export-ignore
 
 # Directories not needed at runtime
 tests/                   export-ignore
-bin/                     export-ignore
 dev_scripts/             export-ignore
 docs/                    export-ignore
 resources/js/            export-ignore
