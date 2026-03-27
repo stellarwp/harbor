@@ -34,7 +34,7 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
         [ productSlug ]
     );
 
-    const { activeLegacySlugs, userTierRank, sortedCatalogTiers, upgradeCatalogTiers } = useMemo( () => {
+    return useMemo( () => {
         const sorted         = catalogTiers.slice().sort( ( a, b ) => a.rank - b.rank );
         const licenseProduct = licenseProducts.find( ( lp ) => lp.product_slug === productSlug );
         const userTier       = licenseProduct?.tier ? sorted.find( ( t ) => t.slug === licenseProduct.tier ) : null;
@@ -44,37 +44,40 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
             ? new Set<string>()
             : new Set( legacyLicenses.filter( ( l ) => l.is_active ).map( ( l ) => l.slug ) );
 
-        return { activeLegacySlugs: slugs, userTierRank: rank, sortedCatalogTiers: sorted, upgradeCatalogTiers: upgrade };
-    }, [ catalogTiers, licenseProducts, isUnifiedLicensed, legacyLicenses, productSlug ] );
+        const isLegacyAvailable = ( f: Feature ) => slugs.has( f.slug );
 
-    const isLegacyAvailable = ( f: Feature ) => activeLegacySlugs.has( f.slug );
+        // Available: the standard set, PLUS revoked features.
+        // Revoked features are in the user's tier but have had their capability removed.
+        // They render as disabled rows in the available section (not in upgrade accordions),
+        // since the user does not need to upgrade — the tier already covers them.
+        const availableFeatures = allFeatures.filter( ( f ) =>
+            f.is_available ||
+            isFreeFeature( f.tier ) ||
+            isLegacyAvailable( f ) ||
+            getFeatureMismatch( f ) === 'revoked'
+        );
 
-    // Available: the standard set, PLUS revoked features.
-    // Revoked features are in the user's tier but have had their capability removed.
-    // They render as disabled rows in the available section (not in upgrade accordions),
-    // since the user does not need to upgrade — the tier already covers them.
-    const availableFeatures = allFeatures.filter( ( f ) =>
-        f.is_available ||
-        isFreeFeature( f.tier ) ||
-        isLegacyAvailable( f ) ||
-        getFeatureMismatch( f ) === 'revoked'
-    );
+        // Locked: not available, not free, not legacy, and not revoked.
+        const lockedFeatures = allFeatures.filter( ( f ) =>
+            ! f.is_available &&
+            ! isFreeFeature( f.tier ) &&
+            ! isLegacyAvailable( f ) &&
+            getFeatureMismatch( f ) !== 'revoked'
+        );
 
-    // Locked: not available, not free, not legacy, and not revoked.
-    const lockedFeatures = allFeatures.filter( ( f ) =>
-        ! f.is_available &&
-        ! isFreeFeature( f.tier ) &&
-        ! isLegacyAvailable( f ) &&
-        getFeatureMismatch( f ) !== 'revoked'
-    );
+        const lockedByTier = sorted.reduce<Record<string, Feature[]>>(
+            ( acc, tier ) => {
+                acc[ tier.slug ] = lockedFeatures.filter( ( f ) => f.tier === tier.slug );
+                return acc;
+            },
+            {}
+        );
 
-    const lockedByTier = sortedCatalogTiers.reduce<Record<string, Feature[]>>(
-        ( acc, tier ) => {
-            acc[ tier.slug ] = lockedFeatures.filter( ( f ) => f.tier === tier.slug );
-            return acc;
-        },
-        {}
-    );
-
-    return { availableFeatures, lockedByTier, sortedCatalogTiers, upgradeCatalogTiers };
+        return {
+            availableFeatures,
+            lockedByTier,
+            sortedCatalogTiers:  sorted,
+            upgradeCatalogTiers: upgrade,
+        };
+    }, [ allFeatures, catalogTiers, licenseProducts, isUnifiedLicensed, legacyLicenses, productSlug ] );
 }
