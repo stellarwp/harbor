@@ -16,9 +16,9 @@ use WP_Error;
 /**
  * Joins catalog and licensing data to produce a resolved Feature_Collection.
  *
- * For each catalog feature, computes is_available by checking whether
- * the feature's slug appears in the product entry's capabilities array.
- * When no license exists, only free-tier features (minimum tier rank 0) are available.
+ * For each catalog feature, computes is_available and in_catalog_tier by checking
+ * the product entry's capabilities array and the user's licensed tier rank.
+ * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
  *
  * @since 1.0.0
  */
@@ -139,10 +139,11 @@ class Resolve_Feature_Collection {
 				continue;
 			}
 
-			$capabilities = $this->resolve_capabilities( $product, $products );
+			$capabilities      = $this->resolve_capabilities( $product, $products );
+			$license_tier_rank = $this->resolve_license_tier_rank( $product, $products );
 
 			foreach ( $product->get_features() as $catalog_feature ) {
-				$feature = $this->hydrate_feature( $catalog_feature, $product, $capabilities );
+				$feature = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank );
 
 				if ( is_wp_error( $feature ) ) {
 					static::debug_log( $feature->get_error_message() );
@@ -180,26 +181,54 @@ class Resolve_Feature_Collection {
 	}
 
 	/**
-	 * Hydrates a Feature object from a catalog feature entry.
+	 * Returns the rank of the user's licensed tier for a product, or -1 if unlicensed.
 	 *
-	 * Maps catalog types (plugin, theme, flag) to Feature subclasses
-	 * (Plugin, Theme, Flag) and computes is_available from the capabilities array.
-	 *
-	 * When capabilities is null (no license), only free-tier features
-	 * (minimum tier rank 0) are available.
+	 * Used alongside resolve_capabilities() to compute in_catalog_tier for each feature.
+	 * A rank of -1 means no license covers this product, so no paid-tier features are
+	 * considered "in tier".
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature $catalog_feature The catalog feature entry.
-	 * @param Product_Catalog $product         The parent catalog product.
-	 * @param string[]|null   $capabilities    The license capabilities, or null if unlicensed.
+	 * @param Product_Catalog    $product  The catalog product.
+	 * @param Product_Collection $products The licensing product collection.
+	 *
+	 * @return int The license tier rank, or -1 if no license covers this product.
+	 */
+	private function resolve_license_tier_rank( Product_Catalog $product, Product_Collection $products ): int {
+		$license = $products->get( $product->get_product_slug() );
+
+		if ( null === $license ) {
+			return -1;
+		}
+
+		$tier = $product->get_tier_by_slug( $license->get_tier() );
+
+		return $tier !== null ? $tier->get_rank() : -1;
+	}
+
+	/**
+	 * Hydrates a Feature object from a catalog feature entry.
+	 *
+	 * Maps catalog types (plugin, theme, flag) to Feature subclasses
+	 * (Plugin, Theme, Flag) and computes is_available and in_catalog_tier.
+	 *
+	 * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
+	 * When capabilities is null (no license), all paid-tier features are unavailable and not in tier.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Catalog_Feature $catalog_feature   The catalog feature entry.
+	 * @param Product_Catalog $product           The parent catalog product.
+	 * @param string[]|null   $capabilities      The license capabilities, or null if unlicensed.
+	 * @param int             $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
 	 *
 	 * @return Feature|WP_Error The hydrated feature, or WP_Error for unknown types.
 	 */
 	private function hydrate_feature(
 		Catalog_Feature $catalog_feature,
 		Product_Catalog $product,
-		?array $capabilities
+		?array $capabilities,
+		int $license_tier_rank
 	) {
 		$catalog_type = $catalog_feature->get_type();
 		$class        = $this->type_map[ $catalog_type ] ?? null;
@@ -215,14 +244,20 @@ class Resolve_Feature_Collection {
 			);
 		}
 
-		if ( $catalog_feature->is_dot_org() ) {
-			$is_available = true;
+		$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
+		$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
+
+		if ( $catalog_feature->is_dot_org() || $minimum_rank === 0 ) {
+			// dot.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
+			$is_available    = true;
+			$in_catalog_tier = true;
 		} elseif ( $capabilities === null ) {
-			$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
-			$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
-			$is_available = $minimum_rank === 0;
+			// No license: paid-tier features are neither available nor in tier.
+			$is_available    = false;
+			$in_catalog_tier = false;
 		} else {
-			$is_available = in_array( $catalog_feature->get_feature_slug(), $capabilities, true );
+			$is_available    = in_array( $catalog_feature->get_feature_slug(), $capabilities, true );
+			$in_catalog_tier = ( $license_tier_rank >= $minimum_rank );
 		}
 
 		$data = [
@@ -233,6 +268,7 @@ class Resolve_Feature_Collection {
 			'description'       => $catalog_feature->get_description(),
 			'type'              => $catalog_type,
 			'is_available'      => $is_available,
+			'in_catalog_tier'   => $in_catalog_tier,
 			'documentation_url' => $catalog_feature->get_documentation_url(),
 			'released_at'       => $catalog_feature->get_released_at(),
 			'plugin_file'       => $catalog_feature->get_plugin_file() ?? '',

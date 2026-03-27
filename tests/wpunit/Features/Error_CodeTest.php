@@ -15,6 +15,7 @@ final class Error_CodeTest extends HarborTestCase {
 	public function known_code_provider(): array {
 		return [
 			'FEATURE_TYPE_MISMATCH'          => [ Error_Code::FEATURE_TYPE_MISMATCH, 400 ],
+			'CAPABILITY_REVOKED'             => [ Error_Code::CAPABILITY_REVOKED, 403 ],
 			'FEATURE_NOT_FOUND'              => [ Error_Code::FEATURE_NOT_FOUND, 404 ],
 			'INSTALL_LOCKED'                 => [ Error_Code::INSTALL_LOCKED, 409 ],
 			'PLUGIN_OWNERSHIP_MISMATCH'      => [ Error_Code::PLUGIN_OWNERSHIP_MISMATCH, 409 ],

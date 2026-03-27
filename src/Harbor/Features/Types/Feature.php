@@ -163,6 +163,20 @@ abstract class Feature {
 	}
 
 	/**
+	 * Whether the user's licensed tier covers this feature's minimum tier.
+	 *
+	 * True when the license tier rank is >= the feature's minimum tier rank.
+	 * False when the user is unlicensed, or their tier rank is below the minimum.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_in_catalog_tier(): bool {
+		return Cast::to_bool( $this->attributes['in_catalog_tier'] ?? false );
+	}
+
+	/**
 	 * Checks whether the feature is currently enabled/active.
 	 *
 	 * @since 1.0.0
@@ -201,6 +215,7 @@ abstract class Feature {
 			'name'              => Cast::to_string( $data['name'] ?? '' ),
 			'description'       => Cast::to_string( $data['description'] ?? '' ),
 			'is_available'      => Cast::to_bool( $data['is_available'] ?? false ),
+			'in_catalog_tier'   => Cast::to_bool( $data['in_catalog_tier'] ?? false ),
 			'is_enabled'        => Cast::to_bool( $data['is_enabled'] ?? false ),
 			'documentation_url' => Cast::to_string( $data['documentation_url'] ?? '' ),
 		];

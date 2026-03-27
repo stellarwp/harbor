@@ -3,7 +3,7 @@
  */
 import { AppShell } from '@/components/templates/AppShell';
 import { Toaster } from '@/components/ui/toast';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/atoms/ErrorBoundary';
 import { ErrorModal } from '@/components/organisms/ErrorModal';
 import { ToastProvider } from '@/context/toast-context';
 import { FilterProvider } from '@/context/filter-context';

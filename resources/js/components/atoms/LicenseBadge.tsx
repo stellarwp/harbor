@@ -11,20 +11,24 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 type LicenseBadgeProps =
-	| { type: 'licensed';     tierName: string; className?: string; }
-	| { type: 'unlicensed' | 'legacy' | 'free'; tierName?: never; className?: string; };
+	| { type: 'licensed';                                              tierName: string; className?: string; }
+	| { type: 'unlicensed' | 'legacy' | 'free' | 'bonus' | 'revoked'; tierName?: never; className?: string; };
 
 const variantMap = {
 	licensed:   'gradient',
 	unlicensed: 'outline',
 	legacy:     'warning',
 	free:       'secondary',
+	bonus:      'warning',
+	revoked:    'destructive',
 } as const;
 
 const labelMap = {
-	unlicensed: () => __( 'Unlicensed', '%TEXTDOMAIN%' ),
-	legacy:     () => __( 'Legacy',        '%TEXTDOMAIN%' ),
-	free:       () => __( 'Free',          '%TEXTDOMAIN%' ),
+	unlicensed: () => __( 'Unlicensed',  '%TEXTDOMAIN%' ),
+	legacy:     () => __( 'Legacy',      '%TEXTDOMAIN%' ),
+	free:       () => __( 'Free',        '%TEXTDOMAIN%' ),
+	bonus:      () => __( 'Bonus',       '%TEXTDOMAIN%' ),
+	revoked:    () => __( 'Unavailable', '%TEXTDOMAIN%' ),
 } as const;
 
 /**

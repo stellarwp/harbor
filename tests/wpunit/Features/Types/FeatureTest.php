@@ -51,6 +51,7 @@ final class FeatureTest extends HarborTestCase {
 						'description'       => $data['description'] ?? '',
 						'type'              => $data['type'] ?? 'test-type',
 						'is_available'      => $data['is_available'],
+						'in_catalog_tier'   => $data['in_catalog_tier'] ?? false,
 						'is_enabled'        => $data['is_enabled'] ?? false,
 						'documentation_url' => $data['documentation_url'] ?? '',
 					]
@@ -120,6 +121,28 @@ final class FeatureTest extends HarborTestCase {
 	 */
 	public function test_is_available(): void {
 		$this->assertTrue( $this->feature->is_available() );
+	}
+
+	/**
+	 * Tests that is_in_catalog_tier defaults to false when not set.
+	 *
+	 * @return void
+	 */
+	public function test_is_in_catalog_tier_defaults_to_false(): void {
+		$this->assertFalse( $this->feature->is_in_catalog_tier() );
+	}
+
+	/**
+	 * Tests that is_in_catalog_tier returns true when explicitly set.
+	 *
+	 * @return void
+	 */
+	public function test_is_in_catalog_tier_returns_true_when_set(): void {
+		$feature = $this->feature::from_array(
+			array_merge( $this->feature->to_array(), [ 'in_catalog_tier' => true ] )
+		);
+
+		$this->assertTrue( $feature->is_in_catalog_tier() );
 	}
 
 	/**

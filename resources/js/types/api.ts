@@ -46,6 +46,10 @@ interface BaseFeature {
      */
     is_available: boolean;
     /**
+     * Whether the user's licensed tier covers this feature's minimum tier.
+     */
+    in_catalog_tier: boolean;
+    /**
      * URL to documentation or learn-more page.
      */
     documentation_url: string;
@@ -133,6 +137,22 @@ export type Feature = PluginFeature | ThemeFeature | FlagFeature;
  * @since 1.0.0
  */
 export type InstallableFeature = PluginFeature | ThemeFeature;
+
+/**
+ * Describes the relationship between a feature's catalog tier position
+ * and what the license's capabilities array actually grants.
+ *
+ * - `'bonus'`   — Available (is_available: true) but outside the user's catalog
+ *                 tier (in_catalog_tier: false). Grandfathered or promotional access.
+ *
+ * - `'revoked'` — In the user's catalog tier (in_catalog_tier: true) but not
+ *                 available (is_available: false). Access was removed or not provisioned.
+ *
+ * - `null`      — No mismatch. Feature state is consistent with the user's tier.
+ *
+ * @since 1.0.0
+ */
+export type FeatureMismatchType = 'bonus' | 'revoked' | null;
 
 // ---------------------------------------------------------------------------
 // Catalog types — GET /liquidweb/harbor/v1/catalog

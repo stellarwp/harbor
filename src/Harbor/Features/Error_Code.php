@@ -256,6 +256,16 @@ class Error_Code {
 	public const UNKNOWN_FEATURE_TYPE = 'lw-harbor-unknown-feature-type';
 
 	/**
+	 * A feature is within the user's licensed tier but has been individually
+	 * removed from the license capabilities — it cannot be enabled.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const CAPABILITY_REVOKED = 'lw-harbor-capability-revoked';
+
+	/**
 	 * Maps an error code to its recommended HTTP status code.
 	 *
 	 * @since 1.0.0
@@ -269,6 +279,10 @@ class Error_Code {
 		static $map = [
 			// 400 Bad Request — the feature type cannot be handled by the resolved strategy.
 			self::FEATURE_TYPE_MISMATCH          => 400,
+
+			// 403 Forbidden — the feature is within the user's tier but its capability
+			// has been individually removed from their license.
+			self::CAPABILITY_REVOKED             => 403,
 
 			// 404 Not Found — the requested feature slug does not exist in the catalog.
 			self::FEATURE_NOT_FOUND              => 404,

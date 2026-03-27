@@ -83,6 +83,7 @@ final class FlagTest extends HarborTestCase {
 			'description'       => 'Test feature description.',
 			'type'              => 'flag',
 			'is_available'      => true,
+			'in_catalog_tier'   => false,
 			'is_enabled'        => false,
 			'documentation_url' => 'https://example.com/docs',
 		];

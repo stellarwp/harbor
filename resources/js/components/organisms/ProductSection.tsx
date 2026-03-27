@@ -45,7 +45,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
         [ product.slug ],
     );
 
-    const { availableFeatures, lockedByTier, sortedCatalogTiers } = useProductFeatureGroups( product.slug );
+    const { availableFeatures, lockedByTier, sortedCatalogTiers, upgradeCatalogTiers } = useProductFeatureGroups( product.slug );
 
     // Counts derived from the unfiltered set — unaffected by search.
     const activeCount      = allFeaturesUnfiltered.filter( ( f ) => f.is_available && f.is_enabled ).length;
@@ -95,6 +95,14 @@ export function ProductSection( { product }: ProductSectionProps ) {
                 </div>
             ) }
 
+            { hasLicense && ! isSearching && ! hasContent && (
+                <div className="border border-t-0 rounded-b-lg">
+                    <p className="px-4 py-6 text-sm text-muted-foreground text-center">
+                        { __( 'No features are available for this product.', '%TEXTDOMAIN%' ) }
+                    </p>
+                </div>
+            ) }
+
             { hasLicense && hasContent && (
                 <div className="border border-t-0 rounded-b-lg overflow-hidden">
                     { availableFeatures.map( ( feature ) => (
@@ -104,7 +112,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                         />
                     ) ) }
 
-                    { sortedCatalogTiers.map( ( tier ) => {
+                    { upgradeCatalogTiers.map( ( tier ) => {
                         const locked = lockedByTier[ tier.slug ] ?? [];
                         if ( locked.length === 0 ) return null;
                         return (

@@ -13,7 +13,7 @@ import { FilterBar } from '@/components/molecules/FilterBar';
 import { LicensePanel } from '@/components/organisms/LicensePanel';
 import { LegacyLicenseBanner } from '@/components/molecules/LegacyLicenseBanner';
 import { ProductSection } from '@/components/organisms/ProductSection';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/atoms/ErrorBoundary';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
 import { useHarborData } from '@/context/harbor-data-context';

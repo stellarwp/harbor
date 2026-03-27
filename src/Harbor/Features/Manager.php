@@ -101,6 +101,20 @@ class Manager {
 			);
 		}
 
+		if ( $feature->is_in_catalog_tier() && ! $feature->is_available() ) {
+			static::debug_log(
+				sprintf(
+					'Cannot enable "%s": capability has been revoked.',
+					$slug
+				)
+			);
+
+			return new WP_Error(
+				Error_Code::CAPABILITY_REVOKED,
+				__( 'This feature has been removed from your license capabilities. Contact support.', '%TEXTDOMAIN%' )
+			);
+		}
+
 		/**
 		 * Fires before a feature is enabled.
 		 *

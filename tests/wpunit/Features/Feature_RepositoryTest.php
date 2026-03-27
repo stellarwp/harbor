@@ -363,7 +363,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
 
-		$result = $method->invoke( $resolver, $catalog_feature, $product, null );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, null, -1 );
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( Error_Code::UNKNOWN_FEATURE_TYPE, $result->get_error_code() );
@@ -408,10 +408,124 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
 
-		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-flag' ] );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-flag' ], 1 );
 
 		$this->assertInstanceOf( Flag::class, $result );
 		$this->assertSame( 'test-flag', $result->get_slug() );
+	}
+
+	/**
+	 * Tests that a free-tier feature is available even when absent from the capabilities array.
+	 *
+	 * Commerce Portal may omit free features from capabilities for paid licenses.
+	 * The resolver must treat minimum rank 0 as unconditionally available, the same as dot.org.
+	 *
+	 * @return void
+	 */
+	public function test_free_tier_feature_available_for_licensed_user_regardless_of_capabilities(): void {
+		$resolver = $this->make_resolver(
+			new Catalog_Repository( new Catalog_Fixture( codecept_data_dir( 'catalog/default.json' ) ) ),
+			new License_Manager( new License_Repository(), new Product_Registry(), new Licensing_Fixture( codecept_data_dir( 'licensing' ) ) )
+		);
+
+		$catalog_feature = Catalog_Feature::from_array(
+			[
+				'feature_slug'      => 'test-free-flag',
+				'type'              => 'flag',
+				'minimum_tier'      => 'kadence-free',
+				'name'              => 'Test Free Flag',
+				'description'       => '',
+				'documentation_url' => '',
+			]
+		);
+
+		$tiers = new Tier_Collection();
+		$tiers->add( Catalog_Tier::from_array( [ 'tier_slug' => 'kadence-free',  'rank' => 0 ] ) );
+		$tiers->add( Catalog_Tier::from_array( [ 'tier_slug' => 'kadence-basic', 'rank' => 1 ] ) );
+
+		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+
+		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
+		$method->setAccessible( true ); // Required for PHP < 8.1.
+
+		// Omit the free feature from capabilities, simulating a Commerce Portal that only
+		// lists paid features. The resolver must still mark it available and in tier.
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'some-paid-feature' ], 1 );
+
+		$this->assertInstanceOf( Flag::class, $result );
+		$this->assertTrue( $result->is_available(), 'Free-tier feature must be available regardless of capabilities.' );
+		$this->assertTrue( $result->is_in_catalog_tier(), 'Free-tier feature must be in catalog tier regardless of capabilities.' );
+	}
+
+	/**
+	 * Tests that a bonus feature resolves as available but not in catalog tier.
+	 *
+	 * give-peer-to-peer (Pro tier) is granted in capabilities despite the give-basic license.
+	 *
+	 * @return void
+	 */
+	public function test_bonus_feature_is_available_but_not_in_catalog_tier(): void {
+		$repository = $this->make_repository( 'lwsw-unified-capability-mismatch' );
+		$result     = $repository->get();
+		$feature    = $result->get( 'give-peer-to-peer' );
+
+		$this->assertNotNull( $feature, 'give-peer-to-peer must exist in the resolved collection.' );
+		$this->assertTrue( $feature->is_available(), 'Bonus feature must be available (it is in capabilities).' );
+		$this->assertFalse( $feature->is_in_catalog_tier(), 'Bonus feature must not be in catalog tier (Pro > Basic).' );
+	}
+
+	/**
+	 * Tests that a revoked feature resolves as in catalog tier but not available.
+	 *
+	 * give-fee-recovery (Basic tier) is omitted from capabilities in the give-basic fixture.
+	 *
+	 * @return void
+	 */
+	public function test_revoked_feature_is_in_catalog_tier_but_not_available(): void {
+		$repository = $this->make_repository( 'lwsw-unified-capability-mismatch' );
+		$result     = $repository->get();
+		$feature    = $result->get( 'give-fee-recovery' );
+
+		$this->assertNotNull( $feature, 'give-fee-recovery must exist in the resolved collection.' );
+		$this->assertFalse( $feature->is_available(), 'Revoked feature must not be available (not in capabilities).' );
+		$this->assertTrue( $feature->is_in_catalog_tier(), 'Revoked feature must be in catalog tier (Basic = Basic).' );
+	}
+
+	/**
+	 * Tests that a dot.org feature always resolves with in_catalog_tier true regardless of license.
+	 *
+	 * @return void
+	 */
+	public function test_dot_org_feature_always_has_in_catalog_tier_true(): void {
+		$repository = $this->make_repository();
+
+		$result  = $repository->get();
+		$feature = $result->get( 'kadence-blocks' );
+
+		$this->assertNotNull( $feature );
+		$this->assertTrue( $feature->is_available(), 'dot.org feature must always be available.' );
+		$this->assertTrue( $feature->is_in_catalog_tier(), 'dot.org feature must always be in catalog tier.' );
+	}
+
+	/**
+	 * Tests that in_catalog_tier is true for free-tier features and false for paid-tier features when unlicensed.
+	 *
+	 * Free features (rank 0) are unconditionally in tier. Paid features require a license.
+	 *
+	 * @return void
+	 */
+	public function test_in_catalog_tier_reflects_tier_rank_when_unlicensed(): void {
+		$repository = $this->make_repository();
+		$result     = $repository->get();
+
+		$this->assertTrue(
+			$result->get( 'kadence-blocks' )->is_in_catalog_tier(),
+			'Free-tier feature must have in_catalog_tier = true when unlicensed.'
+		);
+		$this->assertFalse(
+			$result->get( 'kad-blocks-pro' )->is_in_catalog_tier(),
+			'Paid-tier feature must have in_catalog_tier = false when unlicensed.'
+		);
 	}
 
 	/**

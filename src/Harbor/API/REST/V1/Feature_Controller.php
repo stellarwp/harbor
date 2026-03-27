@@ -350,6 +350,12 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
+			'in_catalog_tier'   => [
+				'description' => __( "True when the user's licensed tier covers this feature's minimum tier.", '%TEXTDOMAIN%' ),
+				'type'        => 'boolean',
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
 			'documentation_url' => [
 				'description' => __( 'The URL to the feature documentation.', '%TEXTDOMAIN%' ),
 				'type'        => 'string',

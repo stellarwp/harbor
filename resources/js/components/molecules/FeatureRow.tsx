@@ -35,17 +35,19 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 		badgeStatus,
 		showSwitch,
 		switchChecked,
-		showLegacyBadge,
-		showFreeBadge,
+		licenseBadgeType,
 		handleToggle,
 		handleUpdate,
 	} = useFeatureRow( feature );
 
 	const Chevron = expanded ? ChevronDown : ChevronRight;
 
-	// Legacy-licensed features are not marked available by the API but should
-	// render identically to available features — full controls, no muted style.
-	const isVisuallyAvailable = feature.is_available || showLegacyBadge;
+	// Legacy-licensed and revoked features are not marked available by the API
+	// but should render with the full available layout — controls visible, no muted style.
+	const isVisuallyAvailable =
+		feature.is_available ||
+		licenseBadgeType === 'legacy' ||
+		licenseBadgeType === 'revoked';
 
 	return (
 		<div className={ cn(
@@ -67,8 +69,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 					) }>
 						{ feature.name }
 					</span>
-					{ showFreeBadge   && <LicenseBadge type="free" /> }
-					{ showLegacyBadge && <LicenseBadge type="legacy" /> }
+					{ licenseBadgeType && <LicenseBadge type={ licenseBadgeType } /> }
 				</div>
 
 				{ isVisuallyAvailable ? (
@@ -77,18 +78,18 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 							feature={ feature }
 							pendingAction={ pendingAction }
 							installableBusy={ installableBusy }
-							upgradeLabel={ showLegacyBadge
+							upgradeLabel={ licenseBadgeType === 'legacy'
 								? __( 'Upgrade your license to receive updates and support.', '%TEXTDOMAIN%' )
 								: undefined
 							}
-							onUpdate={ showLegacyBadge ? undefined : handleUpdate }
+							onUpdate={ licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate }
 						/>
 						<StatusBadge status={ badgeStatus } />
 						{ showSwitch && (
 							<Switch
 								checked={ switchChecked }
 								onCheckedChange={ handleToggle }
-								disabled={ !! pendingAction || installableBusy }
+								disabled={ !! pendingAction || installableBusy || ( licenseBadgeType === 'revoked' && ! switchChecked ) }
 								aria-label={
 									switchChecked
 										? /* translators: %s is the name of the feature to disable */

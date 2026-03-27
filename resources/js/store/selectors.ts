@@ -8,11 +8,13 @@ import type { State } from './types';
 import type {
 	CatalogTier,
 	Feature,
+	FeatureMismatchType,
 	LegacyLicense,
 	LicenseProduct,
 	ProductCatalog,
 } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
+import { getFeatureMismatch } from '@/lib/feature-utils';
 
 // ---------------------------------------------------------------------------
 // Features
@@ -42,6 +44,21 @@ export const getFeatureError = (
 	state: State,
 	slug: string
 ): HarborError | null => state.features.errorBySlug[slug] ?? null;
+
+/**
+ * Returns the capability mismatch type for a feature, or null if there is none.
+ *
+ * Wraps getFeatureMismatch() for consumers that only have access to the store.
+ * Hooks that already hold a Feature object should call getFeatureMismatch() directly.
+ */
+export const getFeatureMismatchType = (
+	state: State,
+	slug:  string
+): FeatureMismatchType => {
+	const feature = state.features.bySlug[ slug ];
+	if ( ! feature ) return null;
+	return getFeatureMismatch( feature );
+};
 
 export const isFeatureUpdating = (state: State, slug: string): boolean =>
 	state.features.updating[slug] ?? false;

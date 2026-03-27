@@ -10,7 +10,8 @@ import { useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as harborStore } from '@/store';
-import { isFreeFeature } from '@/lib/license-utils';
+import { getLicenseBadgeType } from '@/lib/feature-utils';
+import type { LicenseBadgeType } from '@/lib/feature-utils';
 import { useToast } from '@/context/toast-context';
 import { HarborError } from '@/errors';
 import type { Feature } from '@/types/api';
@@ -18,16 +19,39 @@ import type { FeatureStatus } from '@/components/atoms/StatusBadge';
 
 export type PendingAction = 'enabling' | 'disabling' | 'installing' | 'updating' | null;
 
+function getBadgeStatus(
+    pendingAction:    PendingAction,
+    licenseBadgeType: LicenseBadgeType | null,
+    featureEnabled:   boolean
+): FeatureStatus {
+    if ( pendingAction ) {
+        return pendingAction as FeatureStatus;
+    }
+    if ( licenseBadgeType === 'revoked' && ! featureEnabled ) {
+        return 'locked';
+    }
+    return featureEnabled ? 'enabled' : 'available';
+}
+
+function getSwitchChecked( pendingAction: PendingAction, featureEnabled: boolean ): boolean {
+    if ( pendingAction === 'enabling' || pendingAction === 'installing' ) {
+        return true;
+    }
+    if ( pendingAction === 'disabling' ) {
+        return false;
+    }
+    return featureEnabled;
+}
+
 export interface FeatureRowState {
-	pendingAction:   PendingAction;
-	installableBusy: boolean;
-	badgeStatus:     FeatureStatus;
-	showSwitch:      boolean;
-	switchChecked:   boolean;
-	showLegacyBadge: boolean;
-	showFreeBadge:   boolean;
-	handleToggle:    ( checked: boolean ) => Promise<void>;
-	handleUpdate:    () => Promise<void>;
+	pendingAction:    PendingAction;
+	installableBusy:  boolean;
+	badgeStatus:      FeatureStatus;
+	showSwitch:       boolean;
+	switchChecked:    boolean;
+	licenseBadgeType: LicenseBadgeType | null;
+	handleToggle:     ( checked: boolean ) => Promise<void>;
+	handleUpdate:     () => Promise<void>;
 }
 
 /**
@@ -44,7 +68,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		[ feature.type ]
 	);
 
-	const showLegacyBadge = useSelect(
+	const isLegacy = useSelect(
 		( select ) => {
 			const activeLegacy = select( harborStore ).getActiveLegacyLicense( feature.slug );
 			if ( ! activeLegacy ) return false;
@@ -53,7 +77,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		[ feature.slug, feature.product ]
 	);
 
-	const showFreeBadge = isFreeFeature( feature.tier );
+	const licenseBadgeType = getLicenseBadgeType( feature, isLegacy );
 
 	const [ pendingAction, setPendingAction ] = useState<PendingAction>( null );
 
@@ -94,23 +118,17 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		setPendingAction( null );
 	};
 
-	const badgeStatus  = pendingAction ?? ( featureEnabled ? 'enabled' : 'available' );
-	const showSwitch   = pendingAction !== 'installing' && pendingAction !== 'updating';
-	const switchChecked =
-		pendingAction === 'enabling' || pendingAction === 'installing'
-			? true
-			: pendingAction === 'disabling'
-				? false
-				: featureEnabled;
+	const badgeStatus   = getBadgeStatus( pendingAction, licenseBadgeType, featureEnabled );
+	const showSwitch    = pendingAction !== 'installing' && pendingAction !== 'updating';
+	const switchChecked = getSwitchChecked( pendingAction, featureEnabled );
 
 	return {
 		pendingAction,
 		installableBusy,
-		badgeStatus:     badgeStatus as FeatureStatus,
+		badgeStatus,
 		showSwitch,
 		switchChecked,
-		showLegacyBadge,
-		showFreeBadge,
+		licenseBadgeType,
 		handleToggle,
 		handleUpdate,
 	};
