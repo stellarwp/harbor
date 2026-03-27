@@ -27,9 +27,9 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton(
 			LicensingClientInterface::class,
 			function () {
-				$psr17   = new Psr17Factory();
+				$psr17   = $this->container->get( Psr17Factory::class );
 				$factory = new WordPressApiFactory(
-					new WordPressHttpClient(),
+					$this->container->get( WordPressHttpClient::class ),
 					$psr17,
 					$psr17
 				);

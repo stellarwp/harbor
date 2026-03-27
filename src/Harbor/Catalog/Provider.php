@@ -23,10 +23,9 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton(
 			Catalog_Client::class,
 			function () {
-				$psr17 = new Psr17Factory();
 				return new Http_Client(
-					new WordPressHttpClient(),
-					$psr17,
+					$this->container->get( WordPressHttpClient::class ),
+					$this->container->get( Psr17Factory::class ),
 					Config::get_api_base_url()
 				);
 			}
