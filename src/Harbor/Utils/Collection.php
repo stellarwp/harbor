@@ -34,12 +34,13 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Traversable|array<string, TValue> $items An array or traversable of items.
+	 * @param Traversable<string, TValue>|array<string, TValue> $items An array or traversable of items.
 	 *
 	 * @return void
 	 */
 	public function __construct( $items = [] ) {
 		if ( $items instanceof Traversable ) {
+			/** @var array<string, TValue> $items */
 			$items = iterator_to_array( $items );
 		}
 
