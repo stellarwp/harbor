@@ -5,7 +5,6 @@ namespace LiquidWeb\Harbor\Features;
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
-use LiquidWeb\Harbor\Utils\Cast;
 
 /**
  * Decorates a resolved Feature with transient-sourced update information.
