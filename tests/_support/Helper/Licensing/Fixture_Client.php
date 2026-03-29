@@ -63,15 +63,15 @@ final class Fixture_Client implements LicensingClientInterface, ProductsResource
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string      $key    License key.
+	 * @param string      $licenseKey    License key.
 	 * @param string|null $domain Site domain (accepted but ignored by fixture).
 	 *
-	 * @return Catalog
-	 *
 	 * @throws NotFoundException When no fixture file exists for the given key.
+	 *
+	 * @return Catalog
 	 */
-	public function catalog( string $key, ?string $domain = null ): Catalog {
-		$cache_key = strtolower( $key );
+	public function catalog( string $licenseKey, ?string $domain = null ): Catalog {
+		$cache_key = strtolower( $licenseKey );
 
 		if ( isset( $this->cache[ $cache_key ] ) ) {
 			return $this->cache[ $cache_key ];
@@ -81,7 +81,7 @@ final class Fixture_Client implements LicensingClientInterface, ProductsResource
 
 		if ( ! file_exists( $file ) ) {
 			throw new NotFoundException(
-				sprintf( 'License key not recognized: %s', $key ),
+				sprintf( 'License key not recognized: %s', $licenseKey ),
 				new Response( 404 ),
 				404,
 				Error_Code::INVALID_KEY
