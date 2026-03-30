@@ -15,15 +15,16 @@ Returns the stored unified license key and its associated products. Products com
     {
       "product_slug": "give",
       "tier": "give-pro",
-      "pending_tier": null,
       "status": "active",
       "expires": "2026-12-31 00:00:00",
       "activations": {
         "site_limit": 0,
         "active_count": 1,
-        "over_limit": false
+        "over_limit": false,
+        "domains": ["example.com"]
       },
-      "installed_here": true,
+      "capabilities": ["give-recurring", "give-fee-recovery"],
+      "activated_here": true,
       "validation_status": "valid",
       "is_valid": true
     }
@@ -31,7 +32,25 @@ Returns the stored unified license key and its associated products. Products com
 }
 ```
 
+The `activated_here`, `validation_status`, and `is_valid` fields are only present when the product has been validated on this domain. The `capabilities` array contains the feature slugs granted by this entitlement.
+
 When no key exists, returns `{ "key": null, "products": [] }`.
+
+## GET /liquidweb/harbor/v1/license/{key}
+
+Looks up the products for a license key without storing it. Useful for previewing what a key covers before committing.
+
+### Response (200)
+
+Same shape as `GET /license` above, using the provided key instead of the stored one.
+
+### Errors
+
+| HTTP | Code                          | Meaning                            |
+| ---- | ----------------------------- | ---------------------------------- |
+| 400  | (validation)                  | Key format invalid (no `LWSW-`)    |
+| 400  | `lw-harbor-invalid-key`       | Key not recognized by API          |
+| 502  | `lw-harbor-invalid-response`  | Upstream API returned bad response |
 
 ## POST /liquidweb/harbor/v1/license
 
@@ -46,50 +65,16 @@ Validates a license key against the Licensing API and stores it. Verifies the ke
 
 ### Response (200)
 
-```json
-{
-  "key": "LWSW-..."
-}
-```
+Returns the same `{ key, products }` shape as `GET /license`.
 
 ### Errors
 
-| HTTP | Code                     | Meaning                       |
-| ---- | ------------------------ | ----------------------------- |
-| 400  | (validation)             | Missing key or invalid format |
-| 422  | `lw-harbor-invalid-key`  | Key not recognized by API     |
-| 500  | `lw-harbor-store-failed` | Key could not be persisted    |
-
-## POST /liquidweb/harbor/v1/license/validate
-
-Validates a product on this domain using the stored license key. Calls the Licensing API validate endpoint, which may consume an activation seat on first call for a new domain. On success, the cached product list is refreshed so the next GET reflects the new activation state.
-
-Non-valid statuses from the licensing API (`expired`, `out_of_activations`, `suspended`, etc.) are returned as errors. They do not consume a seat or change any state.
-
-### Parameters
-
-| Parameter      | Type   | Required | Description             |
-| -------------- | ------ | -------- | ----------------------- |
-| `product_slug` | string | yes      | The product to validate |
-
-### Response
-
-Returns `201 Created` with no body.
-
-### Errors
-
-| HTTP | Code                           | Meaning                          |
-| ---- | ------------------------------ | -------------------------------- |
-| 400  | (validation)                   | Missing product_slug             |
-| 422  | `lw-harbor-invalid-key`        | No license key is stored         |
-| 422  | `lw-harbor-product-not-found`  | Product not found under this key |
-| 422  | `lw-harbor-expired`            | Subscription has expired         |
-| 422  | `lw-harbor-suspended`          | Subscription is suspended        |
-| 422  | `lw-harbor-cancelled`          | Subscription is cancelled        |
-| 422  | `lw-harbor-out-of-activations` | All activation seats are in use  |
-| 422  | `lw-harbor-license-suspended`  | License is suspended             |
-| 422  | `lw-harbor-license-banned`     | License is banned                |
-| 422  | `lw-harbor-no-subscription`    | No subscription for this product |
+| HTTP | Code                          | Meaning                            |
+| ---- | ----------------------------- | ---------------------------------- |
+| 400  | (validation)                  | Missing key or invalid format      |
+| 400  | `lw-harbor-invalid-key`       | Key not recognized by API          |
+| 500  | `lw-harbor-store-failed`      | Key could not be persisted         |
+| 502  | `lw-harbor-invalid-response`  | Upstream API returned bad response |
 
 ## DELETE /liquidweb/harbor/v1/license
 
