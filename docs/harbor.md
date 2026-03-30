@@ -20,12 +20,12 @@ Each product has an **entry plugin**, a WordPress plugin that bootstraps Harbor 
 
 Most entry plugins are free and available on WordPress.org. This is deliberate. A customer can install the entry plugin for free, and the unified key unlocks the premium features within that product family.
 
-| Product             | Entry plugin          | On WordPress.org |
-| ------------------- | --------------------- | ---------------- |
-| GiveWP              | `give`                | Yes              |
-| Kadence             | `kadence-blocks`      | Yes              |
-| The Events Calendar | `the-events-calendar` | Yes              |
-| LearnDash           | `learndash`           | No               |
+| Product             | Entry plugins                          | On WordPress.org |
+| ------------------- | -------------------------------------- | ---------------- |
+| GiveWP              | `give`                                 | Yes              |
+| Kadence             | `kadence-blocks`                       | Yes              |
+| The Events Calendar | `the-events-calendar`, `event-tickets` | Yes              |
+| LearnDash           | `learndash`, `memberdash`              | No               |
 
 All entry plugins share the same unified `LWSW-` key. When an entry plugin activates and detects a unified key on the site, it registers itself with the leader and defers to it. If the entry plugin shipped with an embedded key and the site doesn't have one yet, the embedded key becomes the site's key.
 
