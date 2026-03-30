@@ -137,6 +137,8 @@ Five endpoints under `liquidweb/harbor/v1`. All require `manage_options`. See [R
 
 Each Feature object includes `is_enabled`, stamped with live state from its strategy by the Manager before any consumer receives it. Installable features (Plugin, Theme) additionally include `has_update` — a pre-computed boolean the frontend can read directly without doing any version parsing. The full field reference is in [Resolved Feature Shape](#resolved-feature-shape) above.
 
+For how the React frontend consumes these endpoints to render the feature list and handle enable/disable/update operations, see [Frontend](frontend.md).
+
 ## Error Codes
 
 | Constant                         | HTTP | Meaning                                            |

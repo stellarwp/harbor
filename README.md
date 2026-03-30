@@ -101,6 +101,7 @@ Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 - [Catalog](/docs/subsystems/catalog.md) — Product families, tiers, features, the Commerce Portal API.
 - [Features](/docs/subsystems/features.md) — Feature types, resolution, strategies, Manager API.
 - [Cron](/docs/subsystems/cron.md) — Scheduled refresh of catalog and licensing data.
+- [Frontend](/docs/subsystems/frontend.md) — React app, @wordpress/data store, component hierarchy, CSS scoping.
 - [Notices](/docs/subsystems/notices.md) — Admin notices, legacy license warnings, persistent dismissal.
 
 ### Architecture
