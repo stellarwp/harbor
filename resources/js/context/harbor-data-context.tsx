@@ -38,7 +38,7 @@ function findErrors( results: ResolvableRecord ): HarborError[] {
             errors.push( HarborError.syncFrom(
                 entry.error,
                 ErrorCode.ResolutionFailed,
-                __( 'Liquid Web Software failed to load your data.', '%TEXTDOMAIN%' ),
+                __( 'Liquid Web failed to load your data.', '%TEXTDOMAIN%' ),
             ) );
         }
     }

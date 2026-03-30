@@ -6,7 +6,7 @@ The Licensing subsystem is how a WordPress site learns what a unified license ke
 
 This document describes the data the site gets from Licensing, how it stores that data, and the workflows that drive key discovery and validation.
 
-> **Development status.** The architectural patterns here (key discovery, caching, repository structure) are stable. The upstream API is not. The current implementation targets a Liquid Web Software v1 Licensing API that is still in development. If it does not ship in time or does not meet our needs, we may fall back to the existing StellarWP v3 Licensing API. The StellarWP v3 API is already plugin/theme-aware and gives us most of the entitlement data we need, though it lacks some catalog-style information like upsell data. Specific data shapes, tier slugs, and response formats are all subject to change. Fixture data in `tests/_data/licensing/` reflects our current working assumptions, not a finalized spec.
+> **Development status.** The architectural patterns here (key discovery, caching, repository structure) are stable. The upstream API is not. The current implementation targets a Liquid Web v1 Licensing API that is still in development. If it does not ship in time or does not meet our needs, we may fall back to the existing StellarWP v3 Licensing API. The StellarWP v3 API is already plugin/theme-aware and gives us most of the entitlement data we need, though it lacks some catalog-style information like upsell data. Specific data shapes, tier slugs, and response formats are all subject to change. Fixture data in `tests/_data/licensing/` reflects our current working assumptions, not a finalized spec.
 
 ## The Unified Key
 
@@ -141,7 +141,7 @@ The presence of this file is the signal that a product belongs to the Harbor uni
 
 ## API Client
 
-Harbor uses `stellarwp/licensing-api-client-wordpress` for all communication with the Liquid Web Software v1 licensing API. `License_Manager` depends on `LicensingClientInterface` from the package and calls `$client->products()->catalog($key, $domain)` to fetch the product catalog. The package handles HTTP transport (via WordPress's HTTP API), request building, response parsing, and error handling.
+Harbor uses `stellarwp/licensing-api-client-wordpress` for all communication with the Liquid Web v1 licensing API. `License_Manager` depends on `LicensingClientInterface` from the package and calls `$client->products()->catalog($key, $domain)` to fetch the product catalog. The package handles HTTP transport (via WordPress's HTTP API), request building, response parsing, and error handling.
 
 `Licensing\Provider` wires the client using `WordPressApiFactory` with the base URL from `Config::get_api_base_url()`.
 

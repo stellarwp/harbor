@@ -4,7 +4,7 @@
 
 Liquid Web is moving from per-product license keys to a single unified license key per customer. A customer has one unified key (`LWSW-` prefix). That key is the site's identity to the licensing system. Licensing tells the site what products and tiers are associated with that key, and the site acts on that information.
 
-This document describes how the unified key relates to three systems: **Licensing** (the Liquid Web Software v1 API), **Portal** (customer-facing management), and **Plugins** (WordPress, via the Harbor library).
+This document describes how the unified key relates to three systems: **Licensing** (the Liquid Web v1 API), **Portal** (customer-facing management), and **Plugins** (WordPress, via the Harbor library).
 
 ## The Unified Key
 

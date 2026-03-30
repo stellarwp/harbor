@@ -43,8 +43,8 @@ class Feature_Manager_Page {
 		}
 
 		$this->page_hook = add_menu_page(
-			__( 'Liquid Web Software', '%TEXTDOMAIN%' ),
-			__( 'LW Software', '%TEXTDOMAIN%' ),
+			__( 'Liquid Web', '%TEXTDOMAIN%' ),
+			__( 'Liquid Web', '%TEXTDOMAIN%' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ $this, 'render' ],

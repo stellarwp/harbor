@@ -5,7 +5,7 @@ namespace LiquidWeb\Harbor\Licensing\Enums;
 use LiquidWeb\Harbor\Licensing\Error_Code;
 
 /**
- * Validation status constants mirroring the Liquid Web Software v1 licensing API.
+ * Validation status constants mirroring the Liquid Web v1 licensing API.
  *
  * @since 1.0.0
  *

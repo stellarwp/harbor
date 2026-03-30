@@ -30,7 +30,7 @@ export const getFeatures =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.FeaturesFetchFailed,
-				__('Liquid Web Software failed to load your features.', '%TEXTDOMAIN%')
+				__('Liquid Web failed to load your features.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -58,7 +58,7 @@ export const getLegacyLicenses =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.LegacyLicensesFetchFailed,
-				__('Liquid Web Software failed to load legacy licenses.', '%TEXTDOMAIN%')
+				__('Liquid Web failed to load legacy licenses.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -87,7 +87,7 @@ export const getCatalog =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.CatalogFetchFailed,
-				__('Liquid Web Software failed to load the product catalog.', '%TEXTDOMAIN%')
+				__('Liquid Web failed to load the product catalog.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -116,7 +116,7 @@ export const getLicenseKey =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.LicenseFetchFailed,
-				__('Liquid Web Software failed to load your license.', '%TEXTDOMAIN%')
+				__('Liquid Web failed to load your license.', '%TEXTDOMAIN%')
 			);
 		}
 	};
