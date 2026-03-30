@@ -125,7 +125,7 @@ All parameters optional. Returns a new collection without mutating the original.
 
 ## REST API
 
-Five endpoints under `liquidweb/harbor/v1`. All require `manage_options`.
+Five endpoints under `liquidweb/harbor/v1`. All require `manage_options`. See [REST: Features](../api/rest/features.md) for endpoint parameters, example responses, and per-endpoint error codes.
 
 | Route                      | Method | Purpose                                                         |
 | -------------------------- | ------ | --------------------------------------------------------------- |
@@ -135,7 +135,7 @@ Five endpoints under `liquidweb/harbor/v1`. All require `manage_options`.
 | `/features/{slug}/disable` | POST   | Disable a feature                                               |
 | `/features/{slug}/update`  | POST   | Update a feature to the latest available version                |
 
-Each Feature object includes `is_enabled`, stamped with live state from its strategy by the Manager before any consumer receives it. Installable features (Plugin, Theme) additionally include `has_update` — a pre-computed boolean the frontend can read directly without doing any version parsing.
+Each Feature object includes `is_enabled`, stamped with live state from its strategy by the Manager before any consumer receives it. Installable features (Plugin, Theme) additionally include `has_update` — a pre-computed boolean the frontend can read directly without doing any version parsing. The full field reference is in [Resolved Feature Shape](#resolved-feature-shape) above.
 
 ## Error Codes
 
@@ -170,6 +170,42 @@ Each Feature object includes `is_enabled`, stamped with live state from its stra
 | `THEME_DELETE_REQUIRED`          | 409  | Theme on disk; user must delete manually           |
 | `THEME_NOT_FOUND_AFTER_INSTALL`  | 422  | Theme directory missing after ZIP extraction       |
 | `THEMES_API_FAILED`              | 502  | `themes_api()` call failed                         |
+
+## Resolved Feature Shape
+
+Every resolved feature includes these fields:
+
+| Field               | Type    | Description                                                       |
+| ------------------- | ------- | ----------------------------------------------------------------- |
+| `slug`              | string  | Feature slug                                                      |
+| `name`              | string  | Display name                                                      |
+| `description`       | string  | Feature description                                               |
+| `product`           | string  | Product the feature belongs to                                    |
+| `tier`              | string  | Minimum tier required                                             |
+| `type`              | string  | `plugin`, `theme`, or `flag`                                      |
+| `is_available`      | boolean | Whether the current license covers this feature                   |
+| `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier |
+| `is_enabled`        | boolean | Whether the feature is currently enabled on this site             |
+| `documentation_url` | string  | URL to the feature's documentation                                |
+
+Installable features (`plugin` and `theme`) also include:
+
+| Field               | Type         | Description                                               |
+| ------------------- | ------------ | --------------------------------------------------------- |
+| `released_at`       | string\|null | Release date of the latest version (ISO 8601)             |
+| `version`           | string\|null | Latest available version from the catalog                 |
+| `changelog`         | string\|null | Changelog HTML for the latest version                     |
+| `authors`           | string[]     | Expected authors for ownership verification               |
+| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org         |
+| `installed_version` | string\|null | Currently installed version, or null if not installed     |
+| `update_version`    | string\|null | Version from the WordPress update transient, or null      |
+| `has_update`        | boolean      | Whether an update is available (pre-computed)             |
+
+Plugin features also include:
+
+| Field         | Type   | Description                                        |
+| ------------- | ------ | -------------------------------------------------- |
+| `plugin_file` | string | Plugin file path relative to the plugins directory |
 
 ## Data Sources
 

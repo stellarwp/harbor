@@ -2,42 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `flag`).
-
-## Common response fields
-
-Every feature includes:
-
-| Field               | Type    | Description                                                        |
-| ------------------- | ------- | ------------------------------------------------------------------ |
-| `slug`              | string  | Feature slug                                                       |
-| `name`              | string  | Display name                                                       |
-| `description`       | string  | Feature description                                                |
-| `product`           | string  | Product the feature belongs to                                     |
-| `tier`              | string  | Minimum tier required                                              |
-| `type`              | string  | `plugin`, `theme`, or `flag`                                       |
-| `is_available`      | boolean | Whether the current license covers this feature                    |
-| `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier  |
-| `is_enabled`        | boolean | Whether the feature is currently enabled on this site              |
-| `documentation_url` | string  | URL to the feature's documentation                                 |
-
-Installable features (`plugin` and `theme`) also include:
-
-| Field               | Type         | Description                                                   |
-| ------------------- | ------------ | ------------------------------------------------------------- |
-| `released_at`       | string\|null | Release date of the latest version (ISO 8601)                 |
-| `version`           | string\|null | Latest available version from the catalog                     |
-| `changelog`         | string\|null | Changelog HTML for the latest version                         |
-| `authors`           | string[]     | Expected authors for ownership verification                   |
-| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org             |
-| `installed_version` | string\|null | Currently installed version, or null if not installed         |
-| `update_version`    | string\|null | Version from the WordPress update transient, or null          |
-
-Plugin features also include:
-
-| Field         | Type   | Description                                        |
-| ------------- | ------ | -------------------------------------------------- |
-| `plugin_file` | string | Plugin file path relative to the plugins directory |
+Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `flag`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
 
 ## GET /liquidweb/harbor/v1/features
 

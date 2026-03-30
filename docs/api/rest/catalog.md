@@ -2,6 +2,8 @@
 
 All endpoints require the `manage_options` capability.
 
+See [Catalog](../../subsystems/catalog.md) for the product, tier, and feature data models and field definitions.
+
 ## GET /liquidweb/harbor/v1/catalog
 
 Returns the full product catalog. Each entry represents a product family with its tiers and features. The catalog is not license-specific — it describes everything available regardless of entitlements.

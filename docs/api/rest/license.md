@@ -2,6 +2,8 @@
 
 All endpoints require the `manage_options` capability.
 
+See [Licensing](../../subsystems/licensing.md) for the product entry data model, validation statuses, and key discovery workflows.
+
 ## GET /liquidweb/harbor/v1/license
 
 Returns the stored unified license key and its associated products. Products come from the cached `Product_Collection` (fetched from the Licensing API). When no key is stored, `products` is an empty array.
