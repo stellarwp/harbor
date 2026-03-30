@@ -236,7 +236,7 @@ License_Manager::get_products($domain)
 
 ## REST API
 
-See [rest/license.md](rest/license.md) for the endpoint reference.
+See [REST: License](../api/rest/license.md) for the endpoint reference.
 
 ## Relationship to Catalog and Features
 

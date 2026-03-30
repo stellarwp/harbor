@@ -39,7 +39,7 @@ The site presents its unified key to the Licensing API. The response is a list o
 
 Licensing is the authority on entitlements. It decides whether a key is valid, what tier the customer is on, and whether seats are available. It does not know what features exist within a product. That's the catalog's job.
 
-See [Licensing](licensing.md) for the full data shapes, caching, key discovery, and validation workflows.
+See [Licensing](subsystems/licensing.md) for the full data shapes, caching, key discovery, and validation workflows.
 
 ### Catalog: "What does each product offer?"
 
@@ -49,7 +49,7 @@ Each product defines a ranked set of tiers (Basic, Pro, Agency) and a set of fea
 
 The catalog defines the menu. It does not know what the customer ordered.
 
-See [Catalog](catalog.md) for the product/tier/feature structure, caching, and data shapes.
+See [Catalog](subsystems/catalog.md) for the product/tier/feature structure, caching, and data shapes.
 
 ### Features: "What can this customer actually use?"
 
@@ -59,7 +59,7 @@ Beyond availability, features track local state, specifically whether a feature 
 
 The two types have different behavior on license expiration. Plugin features require an active license to enable. If the license expires, the plugin stays installed but new Plugin features can't be added. Flag features follow a grandfathering rule: once enabled, a flag stays active even if the license expires or downgrades. The customer keeps what they turned on, but can't enable new flags or re-enable ones they disabled.
 
-See [Features](features.md) for the resolution algorithm, strategies, caching, and the REST API.
+See [Features](subsystems/features.md) for the resolution algorithm, strategies, caching, and the REST API.
 
 ### How They Relate
 
@@ -99,7 +99,7 @@ A site stores exactly one unified key. All Liquid Web products share it. The key
 
 The key is the site's identity to the licensing system. Without a key, the site is unlicensed and no API calls are made.
 
-See [Unified License Key: System Design](unified-license-key-system-design.md) for key change scenarios, seat mechanics, and system boundaries.
+See [Unified License Key: System Design](architecture/unified-license-key-system-design.md) for key change scenarios, seat mechanics, and system boundaries.
 
 ## Multi-Instance Architecture
 
@@ -107,7 +107,7 @@ Because each entry plugin bundles its own vendor-prefixed copy of Harbor, a site
 
 Non-leader instances (thin instances) declare themselves to the leader through the product registry and defer to it for everything else. They do not validate keys, talk to APIs, or render licensing UI.
 
-See [Multi-Instance Architecture](harbor-fat-leader-thin-instance.md) for leader election, cross-instance communication, and the product registry.
+See [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md) for leader election, cross-instance communication, and the product registry.
 
 ## The Admin Page
 
@@ -135,9 +135,9 @@ There is no automatic migration from per-resource keys to unified keys.
 
 | Document                                                          | Covers                                                             |
 | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
-| [This document](harbor.md)                                        | Architecture overview and how the layers relate                    |
-| [Licensing](licensing.md)                                         | Key discovery, API responses, validation workflows, caching        |
-| [Catalog](catalog.md)                                             | Product families, tiers, features, the Commerce Portal API         |
-| [Features](features.md)                                           | Feature types, resolution, strategies, Manager API, REST endpoints |
-| [Unified License Key](unified-license-key-system-design.md)       | Key model, seat mechanics, system boundaries                       |
-| [Multi-Instance Architecture](harbor-fat-leader-thin-instance.md) | Leader election, cross-instance hooks, thin instances              |
+| [This document](harbor.md)                                                            | Architecture overview and how the layers relate                    |
+| [Licensing](subsystems/licensing.md)                                                   | Key discovery, API responses, validation workflows, caching        |
+| [Catalog](subsystems/catalog.md)                                                       | Product families, tiers, features, the Commerce Portal API         |
+| [Features](subsystems/features.md)                                                     | Feature types, resolution, strategies, Manager API, REST endpoints |
+| [Unified License Key](architecture/unified-license-key-system-design.md)               | Key model, seat mechanics, system boundaries                       |
+| [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md)                | Leader election, cross-instance hooks, thin instances              |

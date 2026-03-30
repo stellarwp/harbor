@@ -14,7 +14,7 @@ The catalog data comes from the Commerce Portal API. It is not license-specific.
 
 The catalog is organized by product. Kadence, GiveWP, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins, themes, flags) that customers can enable based on their tier.
 
-Each product has an entry plugin that bootstraps Harbor on the site (see [Products and Entry Plugins](harbor.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
+Each product has an entry plugin that bootstraps Harbor on the site (see [Products and Entry Plugins](../harbor.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
 
 The product's own entry plugin is also returned as a feature within its catalog. For example, the `kadence` product includes a `kadence` feature of type `theme` representing Kadence itself. This means the update and feature management pipelines treat the product the same as any other feature — there is no special case for "the product itself" versus "add-on features."
 

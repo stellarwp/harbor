@@ -6,7 +6,7 @@ Legacy licenses are per-plugin license keys from the old StellarWP Uplink system
 
 ## GET /liquidweb/harbor/v1/legacy-licenses
 
-Returns all legacy per-plugin licenses discovered on the site. Plugins contribute their legacy license data via the `lw-harbor/legacy_licenses` filter (see [Integration Guide](../harbor-integration-guide.md)).
+Returns all legacy per-plugin licenses discovered on the site. Plugins contribute their legacy license data via the `lw-harbor/legacy_licenses` filter (see [Integration Guide](../../guides/integration.md)).
 
 ### Response (200)
 

@@ -73,7 +73,7 @@ You can also add lines below to your composer file in order to run command autom
 
 ## Registering a plugin
 
-Harbor discovers your plugin's embedded key automatically by scanning active plugins for a file named `LWSW_KEY.php` in the plugin root. No filter registration is required. See the [Harbor Integration Guide](/docs/harbor-integration-guide.md) for more details.
+Harbor discovers your plugin's embedded key automatically by scanning active plugins for a file named `LWSW_KEY.php` in the plugin root. No filter registration is required. See the [Harbor Integration Guide](/docs/guides/integration.md) for more details.
 
 ## Changelog
 
@@ -91,19 +91,33 @@ To compile changelog entries into `changelog.txt`:
 bunx @stellarwp/changelogger write --overwrite-version <version>
 ```
 
-## Additional documentation
+## Documentation
 
-### Harbor
+Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 
-- [Harbor](/docs/harbor.md) — Primary architecture document for v3 unified licensing.
-- [Licensing](/docs/licensing.md) — Key discovery, API responses, validation workflows, caching.
-- [Catalog](/docs/catalog.md) — Product families, tiers, features, the Commerce Portal API.
-- [Features](/docs/features.md) — Feature types, resolution, strategies, Manager API, REST endpoints.
-- [Unified License Key](/docs/unified-license-key-system-design.md) — Key model, seat mechanics, system boundaries.
-- [Multi-Instance Architecture](/docs/harbor-fat-leader-thin-instance.md) — Leader election, cross-instance hooks, thin instances.
-- [Harbor Integration Guide](/docs/harbor-integration-guide.md) — How to integrate your plugin with Harbor.
+### Subsystems
 
-### General
+- [Licensing](/docs/subsystems/licensing.md) — Key discovery, API responses, validation workflows, caching.
+- [Catalog](/docs/subsystems/catalog.md) — Product families, tiers, features, the Commerce Portal API.
+- [Features](/docs/subsystems/features.md) — Feature types, resolution, strategies, Manager API.
+- [Cron](/docs/subsystems/cron.md) — Scheduled refresh of catalog and licensing data.
 
-- [CLI Commands](/docs/cli.md) — WP-CLI commands for feature management.
-- [Testing](/docs/testing.md) — How to set up and run automated tests with Codeception and `slic`.
+### Architecture
+
+- [Unified License Key](/docs/architecture/unified-license-key-system-design.md) — Key model, seat mechanics, system boundaries.
+- [Fat Leader / Thin Instance](/docs/architecture/fat-leader-thin-instance.md) — Leader election, cross-instance hooks.
+- [Conventions](/docs/architecture/conventions.md) — Naming conventions for namespaces, packages, identifiers.
+
+### API Reference
+
+- [REST: License](/docs/api/rest/license.md) — License endpoints.
+- [REST: Catalog](/docs/api/rest/catalog.md) — Catalog endpoints.
+- [REST: Features](/docs/api/rest/features.md) — Feature endpoints.
+- [REST: Legacy Licenses](/docs/api/rest/legacy-licenses.md) — Legacy license endpoints.
+- [Liquid Web Software Licensing v1](/docs/api/liquid-web-software-licensing-v1.md) — External licensing API consumed by Harbor.
+
+### Guides
+
+- [Integration Guide](/docs/guides/integration.md) — How to integrate your plugin with Harbor.
+- [CLI Commands](/docs/guides/cli.md) — WP-CLI commands for feature management.
+- [Testing](/docs/guides/testing.md) — Running automated tests with Codeception and `slic`.

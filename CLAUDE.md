@@ -4,7 +4,7 @@ A PHP library bundled by Liquid Web WordPress plugins to handle licensing, updat
 
 We are developing version 1. It is not released. Do not worry about backward compatibility or breaking changes. When something needs to change, refactor to fit. Do not add shims, aliases, or deprecation layers.
 
-See `docs/harbor.md` for the full architecture overview and links to the subsystem docs (licensing, catalog, feature resolution).
+See `docs/harbor.md` for the architecture overview. Subsystem docs live in `docs/subsystems/`, architecture docs in `docs/architecture/`, API references in `docs/api/`, and guides in `docs/guides/`.
 
 ## Active code
 
@@ -31,7 +31,7 @@ The subsystems live in these directories. This is where active development happe
 
 ## Testing
 
-Tests use Codeception with `slic` for containerized WordPress test execution. See `docs/testing.md`.
+Tests use Codeception with `slic` for containerized WordPress test execution. See `docs/guides/testing.md`.
 
 Fixture data lives in `tests/_data/`. The catalog and licensing fixture files are working prototypes, not finalized API contracts.
 

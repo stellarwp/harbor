@@ -44,7 +44,7 @@ During development the [sample plugin](https://github.com/lw-harbor-sample-plugi
 - **Fixture Key** — select which fixture set to use.
 - **API Base URL** — override the real API endpoint (ignored when fixture mode is on).
 
-For how catalog and licensing data join to produce features, see [Data Sources in features.md](features.md#data-sources).
+For how catalog and licensing data join to produce features, see [Data Sources in features.md](../subsystems/features.md#data-sources).
 
 ### What happens when you switch the fixture key
 

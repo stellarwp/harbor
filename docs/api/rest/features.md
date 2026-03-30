@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-Features are the resolved join of [Catalog](../catalog.md) and [Licensing](../licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `flag`).
+Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `flag`).
 
 ## Common response fields
 
