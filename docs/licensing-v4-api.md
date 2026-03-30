@@ -1,6 +1,6 @@
-# Licensing Service V4 API
+# Liquid Web Software v1 Licensing API
 
-Reference for the v4 endpoints consumed by `stellarwp/licensing-api-client` via `LicensingClientInterface`.
+Reference for the Liquid Web Software v1 endpoints consumed by `stellarwp/licensing-api-client` via `LicensingClientInterface`.
 
 ## GET /stellarwp/v4/products
 

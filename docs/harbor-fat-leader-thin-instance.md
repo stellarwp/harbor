@@ -4,7 +4,7 @@
 
 Harbor introduces **unified licensing** with `LWSW-`-prefixed keys. This changes the relationship between Harbor instances: one instance becomes the **fat leader** (owns all unified licensing concerns) and every other instance becomes a **thin instance** (declares itself to the leader, then gets out of the way).
 
-In per-resource licensing (uplink v2/v3), every instance was self-sufficient. It stored its own key, validated against the licensing APIs, rendered admin fields, and managed its own state. The leader was just a tiebreaker for shared UI. Unified licensing inverts this: the leader takes over key storage, API delegation, feature catalogs, and the admin page. Individual instances become thin shells.
+In per-resource licensing (StellarWP Uplink v2/v3), every instance was self-sufficient. It stored its own key, validated against the licensing APIs, rendered admin fields, and managed its own state. The leader was just a tiebreaker for shared UI. Unified licensing inverts this: the leader takes over key storage, API delegation, feature catalogs, and the admin page. Individual instances become thin shells.
 
 For the unified key model itself: how the key relates to Licensing, Portal, and the WordPress site, how seats work, and what happens in various key change scenarios. See [Unified License Key: System Design](unified-license-key-system-design.md).
 
@@ -18,11 +18,11 @@ Multiple vendor-prefixed copies negotiate leadership through a shared global fun
 
 ### Key and License State
 
-The leader stores the site's unified key and the full product catalog response from the v4 licensing API. The key is the site's identity to Licensing; the catalog response is the source of truth for what products are entitled, what tiers they're on, and whether seats are available. See [Key Management](unified-license-key-system-design.md#the-unified-key) in the system design doc for how keys enter a site and the one-key-per-site rule.
+The leader stores the site's unified key and the full product catalog response from the Liquid Web Software v1 licensing API. The key is the site's identity to Licensing; the catalog response is the source of truth for what products are entitled, what tiers they're on, and whether seats are available. See [Key Management](unified-license-key-system-design.md#the-unified-key) in the system design doc for how keys enter a site and the one-key-per-site rule.
 
 ### Licensing Lifecycle
 
-The leader delegates to the v4 licensing client via `LicensingClientInterface` from `stellarwp/licensing-api-client`. `products()->catalog($key, $domain)` is a read-only bulk fetch that returns the status of all products under the key without consuming seats.
+The leader delegates to the Liquid Web Software v1 licensing client via `LicensingClientInterface` from `stellarwp/licensing-api-client`. `products()->catalog($key, $domain)` is a read-only bulk fetch that returns the status of all products under the key without consuming seats.
 
 The production implementation uses `WordPressApiFactory` from `stellarwp/licensing-api-client-wordpress`, which routes requests through WordPress's HTTP API. `License_Repository` wraps the client with option-based state storage so the rest of Harbor never touches the client directly. `Fixture_Client` (`src/Harbor/Licensing/Clients/Fixture_Client.php`) implements `LicensingClientInterface` for testing by reading from JSON fixture files.
 
@@ -36,7 +36,7 @@ The leader renders the unified licensing page (the "Software Manager"). It shows
 
 ## Thin Instance
 
-A thin instance is any Harbor copy operating under a unified `LWSW-` key. It still creates its resource and license objects — it needs to know what product it is — but when it detects a `LWSW-` key, it skips wiring into v2/v3: no per-resource validation hooks, no per-resource admin fields, no per-resource API calls. The v4 path short-circuits the v3 machinery.
+A thin instance is any Harbor copy operating under a unified `LWSW-` key. It still creates its resource and license objects — it needs to know what product it is — but when it detects a `LWSW-` key, it skips wiring into StellarWP v2/v3: no per-resource validation hooks, no per-resource admin fields, no per-resource API calls. The Liquid Web Software v1 path short-circuits the StellarWP v3 machinery.
 
 What a thin instance does: if it ships with an embedded key, it bundles an `LWSW_KEY.php` file that the leader discovers automatically on key-discovery. On plugin activation or key entry, it fires an action that the leader handles. And it queries the leader through global functions like `is_feature_enabled()`.
 
@@ -50,11 +50,11 @@ All communication between vendor-prefixed copies happens through non-prefixed Wo
 
 Products declare themselves to the leader through a cross-instance filter. Each instance contributes its slug, display name, product (`kadence`, `give`, `the-events-calendar`, `learndash`), and a contributed key if it has one. The leader reads this filter lazily, by the time it's consumed, all plugins have loaded and registered.
 
-A product does not provide its tier. Tiers come from the v4 licensing API response, they're a property of the license, not the product.
+A product does not provide its tier. Tiers come from the Liquid Web Software v1 licensing API response, they're a property of the license, not the product.
 
 ### Legacy Key Registry
 
-Products using per-resource v2/v3 keys register metadata so the leader can display informational cards in the unified admin UI. The leader does not validate legacy keys. It displays them as-is with a link to the product's own licensing page. Per-resource keys continue through the existing per-resource path unchanged.
+Products using per-resource StellarWP v2/v3 keys register metadata so the leader can display informational cards in the unified admin UI. The leader does not validate legacy keys. It displays them as-is with a link to the product's own licensing page. Per-resource keys continue through the existing per-resource path unchanged.
 
 ### Operation Delegation
 
@@ -62,8 +62,8 @@ The leader delegates license operations back to the owning instance through shar
 
 ## What Unified Licensing Does NOT Do
 
-- **Replace per-resource licensing** products that haven't adopted it continue to use v2/v3 as-is
+- **Replace per-resource licensing** products that haven't adopted it continue to use StellarWP v2/v3 as-is
 - **Validate legacy keys** the leader only displays them; validation stays in the per-resource path
-- **Build the v4 licensing client** that's an external package; Harbor delegates to it
+- **Build the Liquid Web Software v1 licensing client** that's an external package; Harbor delegates to it
 - **Migrate existing keys** no automatic conversion from per-resource to unified
-- **Assign tiers** tiers come from the v4 API response, not from product declarations
+- **Assign tiers** tiers come from the Liquid Web Software v1 API response, not from product declarations

@@ -14,7 +14,7 @@ use LiquidWeb\Harbor\Utils\License_Key;
  *   <?php return 'LWSW-xxxx-xxxx-xxxx-xxxx';
  *
  * The presence of this file signals that the product belongs to the unified
- * Harbor licensing system and is not managed by Uplink v2.
+ * Harbor licensing system and is not managed by StellarWP Uplink v2.
  *
  * @since 1.0.0
  */

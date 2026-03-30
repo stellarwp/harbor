@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Utils\Version;
 
 /**
  * Displays consolidated admin notices for legacy licenses that are not
- * covered by a v3 unified license.
+ * covered by a StellarWP v3 unified license.
  *
  * Only fires on the leader Harbor instance to prevent duplicate notices
  * when multiple plugins bundle Harbor.
@@ -57,7 +57,7 @@ class License_Notice_Handler {
 	}
 
 	/**
-	 * Display notices for inactive legacy licenses that are not covered by a v3 unified license.
+	 * Display notices for inactive legacy licenses that are not covered by a StellarWP v3 unified license.
 	 *
 	 * @action admin_notices
 	 *
@@ -78,7 +78,7 @@ class License_Notice_Handler {
 			return;
 		}
 
-		// Group by product, skipping any slug already covered by v3 or dismissed by the user.
+		// Group by product, skipping any slug already covered by StellarWP v3 or dismissed by the user.
 		$by_product = [];
 
 		foreach ( $licenses as $license ) {
