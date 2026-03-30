@@ -146,4 +146,5 @@ There is no automatic migration from per-resource keys to unified keys.
 | [REST API Reference](api/rest/)                                             | Endpoint specs, parameters, error codes                            |
 | [WP-CLI Reference](guides/cli.md)                                           | Command reference and scripting patterns                           |
 | [Integration Guide](guides/integration.md)                                  | Bootstrapping Harbor in a plugin, legacy license reporting         |
+| [Notices](subsystems/notices.md)                                            | Admin notices, legacy license warnings, persistent dismissal       |
 | [Testing Guide](guides/testing.md)                                          | Codeception setup, fixture data, debug logging                     |

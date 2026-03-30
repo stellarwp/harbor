@@ -219,6 +219,10 @@ Plugin features also include:
 | **Installed version** (`installed_version`)             | Read from disk during resolution via `Installable`. Null for flags and uninstalled extensions                                                                                       |
 | **Update available** (`has_update`)                     | Computed by `Installable::has_update()`: `version_compare( catalog_version, installed_version, '>' )`. False when not installed or catalog version is absent. Plugin and Theme only |
 
+## Related Subsystems
+
+- [Notices](notices.md) — the `License_Notice_Handler` checks features to suppress notices for products already covered by a unified license.
+
 ## What Features Does Not Do
 
 - **Fetch its own data** — resolved from catalog and licensing. No separate "features API."
