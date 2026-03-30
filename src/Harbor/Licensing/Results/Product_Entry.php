@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Utils\Cast;
 use LiquidWeb\LicensingApiClient\Responses\Product\ValueObjects\CatalogEntry;
 
 /**
- * A single product entry from the v4 licensing catalog.
+ * A single product entry from the Liquid Web Software v1 licensing catalog.
  *
  * Immutable value object hydrated from the GET /stellarwp/v4/products response.
  * Mirrors the licensing service's Catalog_Entry_Result API response shape.

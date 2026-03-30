@@ -1,6 +1,6 @@
 # Harbor Integration Guide
 
-This document explains how to integrate a WordPress plugin with LiquidWeb Harbor v3 for unified license management.
+This document explains how to integrate a WordPress plugin with LiquidWeb Harbor for unified license management.
 
 ---
 
@@ -102,7 +102,7 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 
 ### Admin notices for inactive legacy licenses
 
-Once you report licenses via this filter, Harbor automatically displays consolidated admin notices for any inactive licenses that are not already covered by a v3 unified license. Notices are grouped by product, shown only to administrators, and are dismissible per user for 7 days.
+Once you report licenses via this filter, Harbor automatically displays consolidated admin notices for any inactive licenses that are not already covered by a StellarWP v3 unified license. Notices are grouped by product, shown only to administrators, and are dismissible per user for 7 days.
 
 Because Harbor handles this, you should remove or suppress any existing license-related admin notices in your own plugin to avoid showing duplicate warnings. The leader Harbor instance (the highest version on the site) is the one that renders the notices, so there is no risk of duplicates across plugins that all bundle Harbor.
 

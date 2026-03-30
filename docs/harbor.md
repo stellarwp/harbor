@@ -2,7 +2,7 @@
 
 > **Development status.** This system is under active development. The architectural patterns described here (how the layers connect, how resolution works, how strategies operate) are stable. Specific data shapes are not. Tier slugs, tier names, catalog structure, and API response formats are all subject to change as we negotiate the final contracts with the Licensing and Portal teams.
 >
-> The v4 Licensing API that the current implementation targets is also still in development. If v4 is not ready or does not meet our needs, we may fall back to the existing v3 Licensing API, which is already plugin/theme-aware and provides most of the entitlement data we need.
+> The Liquid Web Software v1 Licensing API that the current implementation targets is also still in development. If it is not ready or does not meet our needs, we may fall back to the existing StellarWP v3 Licensing API, which is already plugin/theme-aware and provides most of the entitlement data we need.
 >
 > Fixture data in `tests/_data/` reflects our current best understanding, not a finalized spec.
 
@@ -64,10 +64,10 @@ See [Features](features.md) for the resolution algorithm, strategies, caching, a
 ### How They Relate
 
 ```
-                    ┌─────────────┐
-                    │  Licensing  │
-                    │  API (v4)   │
-                    └──────┬──────┘
+              ┌───────────────────────┐
+              │  Liquid Web Software  │
+              │  v1 Licensing API     │
+              └───────────┬───────────┘
                            │ product_slug, tier, status,
                            │ seats, validation_status,
                            │ capabilities[]
@@ -127,7 +127,7 @@ The unified key itself is stored in a WordPress option (`lw_harbor_unified_licen
 
 ## Legacy Compatibility
 
-Harbor does not replace per-resource licensing for products that haven't adopted unified keys. Products using v2/v3 per-resource keys continue through their existing path unchanged. The leader displays legacy key information in the admin UI but does not validate legacy keys. Validation stays in the per-resource path.
+Harbor does not replace per-resource licensing for products that haven't adopted unified keys. Products using StellarWP v2/v3 per-resource keys continue through their existing path unchanged. The leader displays legacy key information in the admin UI but does not validate legacy keys. Validation stays in the per-resource path.
 
 There is no automatic migration from per-resource keys to unified keys.
 
