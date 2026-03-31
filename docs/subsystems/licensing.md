@@ -17,11 +17,10 @@ A site has one unified license key. It reaches the site in one of two ways:
 
 The `License_Manager` resolves the key using a priority system: a stored key always wins. If no key is stored, it scans active plugins for a bundled `LWSW_KEY.php` file. If one is found, the key it returns is auto-stored so future lookups skip the discovery step.
 
-```
-get() priority:
-  1. Stored key (License_Repository) → always wins
-  2. First LWSW_KEY.php found in active plugins → auto-stored, then returned
-  3. null (site is unlicensed)
+```mermaid
+flowchart LR
+    1["1. Stored key\n(License_Repository)"] -->|not found| 2["2. First LWSW_KEY.php\nin active plugins\n→ auto-stored"]
+    2 -->|not found| 3["3. null\n(unlicensed)"]
 ```
 
 Keys are validated for format before storage. Only keys matching the `LWSW-` prefix are accepted. `validate_and_store()` goes further: it presents the key to the Licensing API first, and only persists it if the API recognizes it. This prevents invalid keys from entering storage.
@@ -180,58 +179,71 @@ The base URL for all API requests comes from `Config::get_api_base_url()`, which
 
 ### Key Discovery
 
-```
-License_Manager::get()
-├─ License_Repository::get()
-│  ├─ [multisite] check network option
-│  └─ check site option
-│  └─ return key or null
-├─ if key found → return it
-├─ Product_Registry::first_with_embedded_key()
-│  └─ scan active plugins for LWSW_KEY.php
-│  └─ return first valid LWSW- key found, or null
-├─ if key found → auto-store, return it
-└─ return null (unlicensed)
+```mermaid
+flowchart TD
+    Start["License_Manager::get()"]
+    Start --> Repo["License_Repository::get()"]
+
+    Repo --> Network{"Network option?\n(multisite)"}
+    Network -->|Yes| ReturnKey1(["Return key"])
+    Network -->|No| SiteOpt{"Site option?"}
+    SiteOpt -->|Yes| ReturnKey2(["Return key"])
+    SiteOpt -->|No| NoStored["No stored key"]
+
+    NoStored --> Registry["Product_Registry\n::first_with_embedded_key()"]
+
+    Registry --> Scan["Scan active plugins\nfor LWSW_KEY.php"]
+    Scan --> Validate{"Valid LWSW-\nprefix?"}
+    Validate -->|Yes| AutoStore["Auto-store key"] --> ReturnKey3(["Return key"])
+    Validate -->|No / none found| Null(["Return null\n(unlicensed)"])
 ```
 
 ### Key Validation and Storage
 
-```
-License_Manager::validate_and_store($key, $domain)
-├─ validate LWSW- prefix format
-├─ LicensingClientInterface::products()->catalog($key, $domain)
-├─ if API error → return WP_Error
-├─ persist Product_Collection to license state option
-├─ License_Repository::store_key($key)
-└─ return Product_Entry[] (the fetched product list)
+```mermaid
+flowchart TD
+    Start["License_Manager::validate_and_store($key, $domain)"]
+    Start --> Validate["Validate LWSW- prefix format"]
+    Validate --> API["LicensingClientInterface\n::products()->catalog($key, $domain)"]
+    API --> Check{"API error?"}
+    Check -->|Yes| Error(["Return WP_Error"])
+    Check -->|No| Persist["Persist Product_Collection\nto license state option"]
+    Persist --> Store["License_Repository::store_key($key)"]
+    Store --> Return(["Return Product_Entry[]\n(fetched product list)"])
 ```
 
 ### Product Validation
 
 Validation is separate from key storage. Storing a key verifies it and fetches its products, but does not consume any seats. Validation explicitly requests a seat for a specific product on this domain.
 
-```
-License_Manager::validate_product($domain, $product_slug)
-├─ get stored key (return WP_Error if none)
-├─ LicensingClientInterface::licenses()->validate($key, $domain, $product_slug)
-├─ if API error → return WP_Error
-├─ delete cached products (so next read reflects new activation state)
-└─ return Validation_Result
+```mermaid
+flowchart TD
+    Start["License_Manager::validate_product($domain, $product_slug)"]
+    Start --> GetKey{"Stored key?"}
+    GetKey -->|No| Error1(["Return WP_Error"])
+    GetKey -->|Yes| API["LicensingClientInterface\n::licenses()->validate($key, $domain, $product_slug)"]
+    API --> Check{"API error?"}
+    Check -->|Yes| Error2(["Return WP_Error"])
+    Check -->|No| Clear["Delete cached products\n(next read reflects new state)"]
+    Clear --> Return(["Return Validation_Result"])
 ```
 
 ### Periodic Status Check
 
-```
-License_Manager::get_products($domain)
-├─ get stored key (return WP_Error if none)
-├─ License_Repository::get_products()
-│  └─ read license state option
-├─ if Product_Collection present → return it
-├─ fetch_and_cache($key, $domain)
-│  ├─ LicensingClientInterface::products()->catalog()
-│  ├─ on success → persist Product_Collection, update last_active dates
-│  └─ on failure → persist WP_Error
-└─ return Product_Collection|WP_Error
+```mermaid
+flowchart TD
+    Start["License_Manager::get_products($domain)"]
+    Start --> GetKey{"Stored key?"}
+    GetKey -->|No| Error(["Return WP_Error"])
+    GetKey -->|Yes| Read["License_Repository::get_products()\nread license state option"]
+    Read --> Cached{"Product_Collection\npresent?"}
+    Cached -->|Yes| ReturnCached(["Return cached collection"])
+    Cached -->|No| Fetch["fetch_and_cache($key, $domain)\nLicensingClientInterface::products()->catalog()"]
+    Fetch --> Result{"Success?"}
+    Result -->|Yes| Persist["Persist Product_Collection\nupdate last_active dates"]
+    Result -->|No| PersistErr["Persist WP_Error"]
+    Persist --> Return(["Return Product_Collection"])
+    PersistErr --> ReturnErr(["Return WP_Error"])
 ```
 
 ## REST API

@@ -59,6 +59,34 @@ Plugin and Theme features share a global transient lock (`lw_harbor_install_lock
 
 ## Resolution
 
+```mermaid
+flowchart TD
+    Start["Catalog feature entry\n(slug, type, min_tier)"]
+    Start --> HasLicense{"Licensing entry\nexists for product?"}
+
+    HasLicense -->|Yes| InCaps{"Feature slug in\ncapabilities array?"}
+    HasLicense -->|No| FreeTier{"min_tier at\nrank 0 (free)?"}
+
+    InCaps -->|Yes| Available["Available"]
+    InCaps -->|No| Unavailable["Unavailable"]
+
+    FreeTier -->|Yes| AvailableFallback["Available\n(fallback)"]
+    FreeTier -->|No| UnavailableFallback["Unavailable"]
+
+    Available --> EnabledCheck
+    Unavailable --> EnabledCheck
+    AvailableFallback --> EnabledCheck
+    UnavailableFallback --> EnabledCheck
+
+    EnabledCheck{"Check local enabled state\n(per strategy)"}
+
+    EnabledCheck -->|Plugin / Theme| Installable["WP activation\nstate on disk"]
+    EnabledCheck -->|Flag| Flag["Option value\nlw_harbor_feature_ slug _active"]
+
+    Installable --> HasUpdate["has_update?\ncompare installed_version\nvs catalog version"]
+    Flag --> Grandfather["Grandfathered\nif enabled + license lost"]
+```
+
 `Resolve_Feature_Collection` joins catalog and licensing data to produce a `Feature_Collection`. Availability is determined by checking whether the feature's slug appears in the product entry's `capabilities` array from the licensing response.
 
 The catalog defines which features exist, their metadata (name, description, type, minimum tier for display), and which tier they belong to for UI purposes. The `capabilities` array is what decides access. This allows the licensing service to handle cases the catalog alone cannot: grandfathered access after a tier restructure, one-time promotional grants, or individual exceptions made for a specific license.

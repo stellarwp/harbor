@@ -124,20 +124,28 @@ Tests use a fixture PSR-18 client that serves local JSON from `tests/_data/catal
 
 The fixture data illustrates the structure. Each product in the current catalog follows a common pattern:
 
-```
-Product: kadence
-├─ Tiers
-│  ├─ kadence-free   (rank 0, "Free", purchase_url → kadence-basic upgrade)
-│  ├─ kadence-basic  (rank 1, "Basic")
-│  ├─ kadence-pro    (rank 2, "Pro")
-│  └─ kadence-agency (rank 3, "Agency")
-└─ Features (33)
-   ├─ kad-blocks        (plugin, minimum: kadence-free,  the free blocks library, dot-org)
-   ├─ kadence           (theme,  minimum: kadence-free,  the product itself, dot-org)
-   ├─ kad-blocks-pro    (plugin, minimum: kadence-basic, exclusive)
-   ├─ kad-shop-kit      (plugin, minimum: kadence-pro,   exclusive)
-   ├─ kad-pattern-hub   (flag,   minimum: kadence-basic)
-   └─ ...
+```mermaid
+graph LR
+    Product["Product: kadence"]
+
+    Product --> Tiers
+    Product --> Features["Features (33)"]
+
+    subgraph Tiers
+        T0["kadence-free\nrank 0, Free\npurchase_url → kadence-basic"]
+        T1["kadence-basic\nrank 1, Basic"]
+        T2["kadence-pro\nrank 2, Pro"]
+        T3["kadence-agency\nrank 3, Agency"]
+    end
+
+    subgraph Features["Features (33)"]
+        F1["kad-blocks\nplugin, min: kadence-free\ndot-org"]
+        F2["kadence\ntheme, min: kadence-free\ndot-org"]
+        F3["kad-blocks-pro\nplugin, min: kadence-basic\nexclusive"]
+        F4["kad-shop-kit\nplugin, min: kadence-pro\nexclusive"]
+        F5["kad-pattern-hub\nflag, min: kadence-basic"]
+        F6["..."]
+    end
 ```
 
 Note that `kadence` appears as both the product and as a feature within it. This is intentional — the product's entry point flows through the same update and feature management pipelines as any other feature.

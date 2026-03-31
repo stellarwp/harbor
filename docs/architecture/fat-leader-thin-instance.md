@@ -8,6 +8,25 @@ In per-resource licensing (StellarWP Uplink v2/v3), every instance was self-suff
 
 For the unified key model itself: how the key relates to Licensing, Portal, and the WordPress site, how seats work, and what happens in various key change scenarios. See [Unified License Key: System Design](unified-license-key-system-design.md).
 
+```mermaid
+flowchart TD
+    subgraph site["WordPress Site"]
+        Kadence["Kadence\n(entry plugin)"] -->|register version| Registry
+        GiveWP["GiveWP\n(entry plugin)"] -->|register version| Registry
+        TEC["TEC\n(entry plugin)"] -->|register version| Registry
+
+        Registry["_lw_harbor_instance_registry()\n\nkadence-blocks/vendor → Harbor 1.2.0\ngive/vendor → Harbor 1.3.0 ← highest\nthe-events-calendar/ → Harbor 1.1.0"]
+
+        Registry -->|"Version::is_highest()"| Leader
+
+        Leader["Fat Leader (GiveWP copy)\n\n✓ Key storage & validation\n✓ Licensing & Catalog API calls\n✓ Feature resolution\n✓ REST endpoints\n✓ Admin page (Software Manager)"]
+
+        Leader --> ThinKadence["Thin: Kadence\n\n✗ No API calls\n✗ No admin UI\n✓ Queries leader"]
+        Leader --> ThinGiveWP["Thin: GiveWP\n\n✗ No API calls\n✗ No admin UI\n✓ Queries leader"]
+        Leader --> ThinTEC["Thin: TEC\n\n✗ No API calls\n✗ No admin UI\n✓ Queries leader"]
+    end
+```
+
 ## Leader Election
 
 Multiple vendor-prefixed copies negotiate leadership through a shared global function, `_lw_harbor_instance_registry()`, defined in `src/Harbor/global-functions.php`. Because global functions are declared once (PHP's `function_exists` guard), the static variable inside that function is shared by all vendor-prefixed copies regardless of which one's file was included first. Each instance calls `_lw_harbor_instance_registry( Harbor::VERSION )` during bootstrap to register itself. Registrations are only accepted before `wp_loaded`, so all real instances (which initialize on `plugins_loaded`) can register, but nothing can inject fake versions after the bootstrap window closes.
