@@ -32,11 +32,10 @@ export function ProductSection( { product }: ProductSectionProps ) {
     const isSearching = searchQuery.trim().length > 0;
 
     // Full unfiltered set — used only for header counts so they stay stable.
-    const { hasLicense, licenseProduct, allFeaturesUnfiltered, hasActiveLegacy } = useSelect(
+    const { hasLicense, licenseProduct, hasActiveLegacy } = useSelect(
         ( select ) => {
             const licenseProducts = select( harborStore ).getLicenseProducts();
             return {
-                allFeaturesUnfiltered: select( harborStore ).getFeaturesByProduct( product.slug ),
                 hasLicense:            select( harborStore ).hasLicense(),
                 licenseProduct:        licenseProducts.find( ( lp ) => lp.product_slug === product.slug ) ?? null,
                 hasActiveLegacy:       select( harborStore ).hasActiveLegacyLicenseForProduct( product.slug ),
@@ -47,9 +46,8 @@ export function ProductSection( { product }: ProductSectionProps ) {
 
     const { availableFeatures, lockedByTier, sortedCatalogTiers, upgradeCatalogTiers } = useProductFeatureGroups( product.slug );
 
-    // Counts derived from the unfiltered set — unaffected by search.
-    const activeCount      = allFeaturesUnfiltered.filter( ( f ) => f.is_available && f.is_enabled ).length;
-    const deactivatedCount = allFeaturesUnfiltered.filter( ( f ) => f.is_available && ! f.is_enabled ).length;
+    const activeCount      = availableFeatures.filter( ( f ) => f.is_enabled ).length;
+    const deactivatedCount = availableFeatures.filter( ( f ) => ! f.is_enabled ).length;
 
     const tierName = licenseProduct
         ? ( sortedCatalogTiers.find( ( t ) => t.slug === licenseProduct.tier )?.name ?? licenseProduct.tier )
