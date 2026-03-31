@@ -19,15 +19,7 @@ class Provider extends Abstract_Provider {
 	public function register(): void {
 		$this->container->singleton( License_Repository::class, License_Repository::class );
 
-		$this->container->singleton(
-			License_Notice_Handler::class,
-			function (): License_Notice_Handler {
-				return new License_Notice_Handler(
-					$this->container->get( License_Repository::class ),
-					$this->container->get( Notice_Controller::class )
-				);
-			}
-		);
+		$this->container->singleton( License_Notice_Handler::class, License_Notice_Handler::class );
 
 		$this->register_dismissed_notices_meta();
 

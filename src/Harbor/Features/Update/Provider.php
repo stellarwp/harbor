@@ -3,8 +3,6 @@
 namespace LiquidWeb\Harbor\Features\Update;
 
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
-use LiquidWeb\Harbor\Features\Feature_Repository;
-use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -24,27 +22,8 @@ class Provider extends Abstract_Provider {
 	public function register(): void {
 		$this->container->singleton( Resolve_Update_Data::class, Resolve_Update_Data::class );
 
-		$this->container->singleton(
-			Plugin_Handler::class,
-			function () {
-				return new Plugin_Handler(
-					$this->container->get( Resolve_Update_Data::class ),
-					$this->container->get( Feature_Repository::class ),
-					$this->container->get( License_Manager::class )
-				);
-			}
-		);
-
-		$this->container->singleton(
-			Theme_Handler::class,
-			function () {
-				return new Theme_Handler(
-					$this->container->get( Resolve_Update_Data::class ),
-					$this->container->get( Feature_Repository::class ),
-					$this->container->get( License_Manager::class )
-				);
-			}
-		);
+		$this->container->singleton( Plugin_Handler::class, Plugin_Handler::class );
+		$this->container->singleton( Theme_Handler::class, Theme_Handler::class );
 
 		add_action( 'init', [ $this, 'register_hooks' ] );
 	}

@@ -2,15 +2,10 @@
 
 namespace LiquidWeb\Harbor\CLI;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
 use LiquidWeb\Harbor\CLI\Commands\Catalog;
 use LiquidWeb\Harbor\CLI\Commands\Feature;
 use LiquidWeb\Harbor\CLI\Commands\License;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
-use LiquidWeb\Harbor\Features\Manager;
-use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
-use LiquidWeb\Harbor\Licensing\License_Manager;
-use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\Version;
 use WP_CLI;
 
@@ -32,30 +27,9 @@ final class Provider extends Abstract_Provider {
 			return;
 		}
 
-		$this->container->singleton(
-			Feature::class,
-			function () {
-				return new Feature( $this->container->get( Manager::class ) );
-			}
-		);
-
-		$this->container->singleton(
-			License::class,
-			function () {
-				return new License(
-					$this->container->get( License_Manager::class ),
-					$this->container->get( Data::class ),
-					$this->container->get( Legacy_License_Repository::class )
-				);
-			}
-		);
-
-		$this->container->singleton(
-			Catalog::class,
-			function () {
-				return new Catalog( $this->container->get( Catalog_Repository::class ) );
-			}
-		);
+		$this->container->singleton( Feature::class, Feature::class );
+		$this->container->singleton( License::class, License::class );
+		$this->container->singleton( Catalog::class, Catalog::class );
 
 		WP_CLI::add_hook( 'after_wp_load', [ $this, 'register_commands' ] );
 	}
