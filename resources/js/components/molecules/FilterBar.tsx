@@ -31,7 +31,7 @@ export function FilterBar() {
         <div className="flex flex-wrap items-center gap-3">
             <img
                 src={ logoLW }
-                alt={ __( 'Liquid Web Software', '%TEXTDOMAIN%' ) }
+                alt={ __( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ) }
                 className="w-[240px] shrink-0"
             />
 
