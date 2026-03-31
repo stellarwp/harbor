@@ -44,26 +44,9 @@ class Provider extends Abstract_Provider {
 			}
 		);
 
-		$this->container->singleton(
-			Feature_Repository::class,
-			function () {
-				return new Feature_Repository(
-					$this->container->get( Resolve_Feature_Collection::class )
-				);
-			}
-		);
-
+		$this->container->singleton( Feature_Repository::class, Feature_Repository::class );
 		$this->container->singleton( Feature_Collection::class, Feature_Collection::class );
-
-		$this->container->singleton(
-			Manager::class,
-			function () {
-				return new Manager(
-					$this->container->get( Feature_Repository::class ),
-					$this->container->get( Strategy_Factory::class )
-				);
-			}
-		);
+		$this->container->singleton( Manager::class, Manager::class );
 
 		$this->container->singleton( Update\Provider::class, Update\Provider::class );
 		$this->container->get( Update\Provider::class )->register();
