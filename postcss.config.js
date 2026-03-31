@@ -21,6 +21,46 @@ function stripImportantFromCustomProps() {
 }
 
 /**
+ * Rename Tailwind's internal --tw-* variables to --lw-harbor-tw-* throughout
+ * Harbor's CSS output.
+ *
+ * WHY: External plugins built with Tailwind v3 (e.g. LearnDash) declare
+ * --tw-translate-x, --tw-shadow, etc. on the universal selector (*) without
+ * any CSS layer. Those unlayered declarations beat Harbor's layered utilities,
+ * which also set --tw-* vars to drive composable transforms, shadows, rings,
+ * etc. The result: the variable contains the wrong value and the utility
+ * appears to have no effect.
+ *
+ * Renaming to --lw-harbor-tw-* makes Harbor's internal variable namespace private.
+ * No external plugin knows about --lw-harbor-tw-*, so there is nothing to collide
+ * with. This runs before the scoping plugin so @property declarations and
+ * all var() references are consistently renamed in a single pass.
+ */
+function renameTailwindVars() {
+    const rename = ( str ) => str.replace( /--tw-/g, '--lw-harbor-tw-' );
+
+    const plugin = () => ( {
+        postcssPlugin: 'postcss-rename-tw-vars',
+        Declaration( decl ) {
+            if ( decl.prop.startsWith( '--tw-' ) ) {
+                decl.prop = rename( decl.prop );
+            }
+            if ( decl.value.includes( '--tw-' ) ) {
+                decl.value = rename( decl.value );
+            }
+        },
+        AtRule( atRule ) {
+            // @property --tw-translate-x { ... }
+            if ( atRule.name === 'property' && atRule.params.startsWith( '--tw-' ) ) {
+                atRule.params = rename( atRule.params );
+            }
+        },
+    } );
+    plugin.postcss = true;
+    return plugin;
+}
+
+/**
  * Scope all Tailwind-generated CSS rules under .lw-harbor-ui.
  *
  * Tailwind v4's @config compatibility layer does not support the selector
@@ -58,6 +98,7 @@ module.exports = {
     plugins: [
         require( '@tailwindcss/postcss' ),
         stripImportantFromCustomProps(),
+        renameTailwindVars(),
         scopeToHarborUI(),
         require( 'autoprefixer' ),
     ],
