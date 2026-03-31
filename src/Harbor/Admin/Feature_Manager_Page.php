@@ -56,7 +56,7 @@ class Feature_Manager_Page {
 	}
 
 	/**
-	 * Enqueues the React Feature Manager UI assets only on the lws-feature-manager page.
+	 * Enqueues the React Feature Manager UI assets only on the lw-software-manager page.
 	 *
 	 * Called on admin_enqueue_scripts. The hook suffix is compared against
 	 * $this->page_hook — the value returned by add_menu_page() — to ensure

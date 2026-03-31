@@ -29,7 +29,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$this->page->maybe_register_page();
 
 		$slugs = array_column( $menu, 2 );
-		$this->assertContains( 'lws-feature-manager', $slugs );
+		$this->assertContains( 'lw-software-manager', $slugs );
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$this->page->maybe_register_page();
 
 		$slugs = array_column( $menu, 2 );
-		$this->assertNotContains( 'lws-feature-manager', $slugs );
+		$this->assertNotContains( 'lw-software-manager', $slugs );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$this->page->maybe_register_page();
 
 		$slugs = array_column( $menu, 2 );
-		$this->assertNotContains( 'lws-feature-manager', $slugs );
+		$this->assertNotContains( 'lw-software-manager', $slugs );
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$this->page->maybe_register_page();
 
 		$slugs = array_column( $menu, 2 );
-		$this->assertContains( 'lws-feature-manager', $slugs );
+		$this->assertContains( 'lw-software-manager', $slugs );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$slugs = array_filter(
 			array_column( $menu, 2 ),
 			static function ( $s ) {
-				return $s === 'lws-feature-manager';
+				return $s === 'lw-software-manager';
 			}
 		);
 
