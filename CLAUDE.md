@@ -48,6 +48,7 @@ All debug logging goes through the `With_Debugging` trait (`src/Harbor/Traits/Wi
 Provider closures that need container services must close over `$this->container` rather than accepting a typed `ContainerInterface $c` parameter. DI52's `ClosureBuilder::build()` passes the raw `lucatume\DI52\Container` directly to closures — it does not resolve the parameter from the container. That inner class only implements PSR-11's `Psr\Container\ContainerInterface`, not `StellarWP\ContainerContract\ContainerInterface`, so a typed parameter causes a `TypeError` when the plugin uses a wrapper-pattern container (outer wrapper implements `StellarWP\ContainerContract\ContainerInterface`, inner DI52 does not).
 
 **Correct pattern** (used in `Licensing\Provider` and all providers after this fix):
+
 ```php
 $this->container->singleton(
     SomeService::class,
@@ -58,6 +59,7 @@ $this->container->singleton(
 ```
 
 **Wrong pattern** (do not use):
+
 ```php
 $this->container->singleton(
     SomeService::class,
