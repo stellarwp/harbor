@@ -36,18 +36,18 @@ class Harbor {
 		$container = Config::get_container();
 
 		$container->bind( ContainerInterface::class, $container );
-		$container->singleton( View\Provider::class, View\Provider::class );
-		$container->singleton( Site\Data::class, Site\Data::class );
-		$container->singleton( Admin\Provider::class, Admin\Provider::class );
-		$container->singleton( Legacy\Provider::class, Legacy\Provider::class );
-		$container->singleton( Features\Provider::class, Features\Provider::class );
-		$container->singleton( Http\Provider::class, Http\Provider::class );
-		$container->singleton( Licensing\Provider::class, Licensing\Provider::class );
-		$container->singleton( Catalog\Provider::class, Catalog\Provider::class );
-		$container->singleton( API\REST\V1\Provider::class, API\REST\V1\Provider::class );
-		$container->singleton( API\Functions\Provider::class, API\Functions\Provider::class );
-		$container->singleton( CLI\Provider::class, CLI\Provider::class );
-		$container->singleton( Cron\Provider::class, Cron\Provider::class );
+		$container->singleton( View\Provider::class );
+		$container->singleton( Site\Data::class );
+		$container->singleton( Admin\Provider::class );
+		$container->singleton( Legacy\Provider::class );
+		$container->singleton( Features\Provider::class );
+		$container->singleton( Http\Provider::class );
+		$container->singleton( Licensing\Provider::class );
+		$container->singleton( Catalog\Provider::class );
+		$container->singleton( API\REST\V1\Provider::class );
+		$container->singleton( API\Functions\Provider::class );
+		$container->singleton( CLI\Provider::class );
+		$container->singleton( Cron\Provider::class );
 
 		$container->get( View\Provider::class )->register();
 		$container->get( Admin\Provider::class )->register();

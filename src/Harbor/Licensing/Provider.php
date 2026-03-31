@@ -43,9 +43,9 @@ final class Provider extends Abstract_Provider {
 			}
 		);
 
-		$this->container->singleton( License_Repository::class, License_Repository::class );
-		$this->container->singleton( Product_Registry::class, Product_Registry::class );
-		$this->container->singleton( License_Manager::class, License_Manager::class );
+		$this->container->singleton( License_Repository::class );
+		$this->container->singleton( Product_Registry::class );
+		$this->container->singleton( License_Manager::class );
 
 		add_action(
 			'lw-harbor/unified_license_key_changed',

@@ -20,9 +20,9 @@ final class Provider extends Abstract_Provider {
 	 * @inheritDoc
 	 */
 	public function register(): void {
-		$this->container->singleton( Refresh_Catalog_Job::class, Refresh_Catalog_Job::class );
-		$this->container->singleton( Refresh_License_Job::class, Refresh_License_Job::class );
-		$this->container->singleton( Handle_Unschedule_Cron_Data_Refresh::class, Handle_Unschedule_Cron_Data_Refresh::class );
+		$this->container->singleton( Refresh_Catalog_Job::class );
+		$this->container->singleton( Refresh_License_Job::class );
+		$this->container->singleton( Handle_Unschedule_Cron_Data_Refresh::class );
 
 		if ( ! Version::should_handle( 'cron_data_refresh' ) ) {
 			return;

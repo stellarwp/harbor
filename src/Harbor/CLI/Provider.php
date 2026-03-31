@@ -2,16 +2,10 @@
 
 namespace LiquidWeb\Harbor\CLI;
 
-use StellarWP\ContainerContract\ContainerInterface;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
 use LiquidWeb\Harbor\CLI\Commands\Catalog;
 use LiquidWeb\Harbor\CLI\Commands\Feature;
 use LiquidWeb\Harbor\CLI\Commands\License;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
-use LiquidWeb\Harbor\Features\Manager;
-use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
-use LiquidWeb\Harbor\Licensing\License_Manager;
-use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\Version;
 use WP_CLI;
 
@@ -33,30 +27,9 @@ final class Provider extends Abstract_Provider {
 			return;
 		}
 
-		$this->container->singleton(
-			Feature::class,
-			static function ( ContainerInterface $c ) {
-				return new Feature( $c->get( Manager::class ) );
-			}
-		);
-
-		$this->container->singleton(
-			License::class,
-			static function ( ContainerInterface $c ) {
-				return new License(
-					$c->get( License_Manager::class ),
-					$c->get( Data::class ),
-					$c->get( Legacy_License_Repository::class )
-				);
-			}
-		);
-
-		$this->container->singleton(
-			Catalog::class,
-			static function ( ContainerInterface $c ) {
-				return new Catalog( $c->get( Catalog_Repository::class ) );
-			}
-		);
+		$this->container->singleton( Feature::class );
+		$this->container->singleton( License::class );
+		$this->container->singleton( Catalog::class );
 
 		WP_CLI::add_hook( 'after_wp_load', [ $this, 'register_commands' ] );
 	}

@@ -13,7 +13,7 @@ class Provider extends Abstract_Provider {
 	 * @return void
 	 */
 	public function register() {
-		$this->container->singleton( Feature_Manager_Page::class, Feature_Manager_Page::class );
+		$this->container->singleton( Feature_Manager_Page::class );
 
 		add_action( 'admin_menu', [ $this, 'register_unified_feature_manager_page' ], 20, 0 );
 	}
