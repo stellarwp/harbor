@@ -447,7 +447,7 @@ class License_Manager {
 	private function call_products_api( string $key, string $domain ) {
 		try {
 			$catalog = $this->client->products()->catalog( $key, $domain );
-			return array_map( [ Product_Entry::class, 'from_catalog_entry' ], $catalog->products );
+			return array_map( [ Product_Entry::class, 'from_catalog_entry' ], iterator_to_array( $catalog->products ) );
 		} catch ( NotFoundException $e ) {
 			return new WP_Error( Error_Code::INVALID_KEY, $e->getMessage(), [ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ] );
 		} catch ( ApiErrorExceptionInterface $e ) {
