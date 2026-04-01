@@ -25,6 +25,27 @@ interface LicenseSectionProps {
 }
 
 /**
+ * Pulse-skeleton that mirrors LicenseProductCard's layout while the license
+ * resolver is still in flight.
+ */
+function LicenseSectionSkeleton() {
+    return (
+        <div className="rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse">
+            <div className="flex items-center gap-2">
+                { /* logo */ }
+                <div className="w-6 h-6 rounded shrink-0 bg-muted" />
+                { /* product name */ }
+                <div className="h-3.5 flex-1 rounded bg-muted" />
+                { /* tier badge */ }
+                <div className="h-4 w-14 rounded-full shrink-0 bg-muted" />
+            </div>
+            { /* expiry */ }
+            <div className="h-3 w-24 rounded bg-muted" />
+        </div>
+    );
+}
+
+/**
  * @since 1.0.0
  */
 export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading }: LicenseSectionProps ) {
@@ -71,9 +92,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 ) }
             />
 
-            { isLoading && (
-                <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-            ) }
+            { isLoading && <LicenseSectionSkeleton /> }
 
             { ! isLoading && ! hasLicense && (
                 <div className="space-y-2">
