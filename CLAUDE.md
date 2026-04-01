@@ -81,4 +81,3 @@ $this->container->singleton(
 - A product is a brand family (Kadence, GiveWP, etc.), not a plugin
 - Features are the resolved join of catalog + licensing data, not a third data source
 - The `Licensing_Client` and `Catalog_Client` contracts exist so the backend can be swapped without affecting the rest of the system
-- Flag features are grandfathered on expiration. Once enabled, they stay enabled.

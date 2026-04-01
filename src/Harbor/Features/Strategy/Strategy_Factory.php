@@ -39,8 +39,6 @@ class Strategy_Factory {
 				}
 
 				return new Plugin_Strategy( $feature );
-			case Feature::TYPE_FLAG:
-				return new Flag_Strategy( $feature );
 			case Feature::TYPE_THEME:
 				if ( ! $feature instanceof Theme ) {
 					throw new InvalidArgumentException(

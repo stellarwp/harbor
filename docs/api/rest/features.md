@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `flag`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
+Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
 
 ## GET /liquidweb/harbor/v1/features
 
@@ -15,7 +15,7 @@ Lists all resolved features with optional filters.
 | `product`   | string  | no       | Filter by product slug                           |
 | `tier`      | string  | no       | Filter by tier slug                              |
 | `available` | boolean | no       | Filter by availability                           |
-| `type`      | string  | no       | Filter by feature type (`plugin`/`theme`/`flag`) |
+| `type`      | string  | no       | Filter by feature type (`plugin`/`theme`)        |
 
 ### Response (200)
 
@@ -40,18 +40,6 @@ Lists all resolved features with optional filters.
     "is_dot_org": false,
     "installed_version": "2.6.0",
     "update_version": "2.6.1"
-  },
-  {
-    "slug": "kadence-ai",
-    "name": "Kadence AI",
-    "description": "AI-powered design assistant.",
-    "product": "kadence",
-    "tier": "kadence-pro",
-    "type": "flag",
-    "is_available": false,
-    "in_catalog_tier": false,
-    "is_enabled": false,
-    "documentation_url": "https://..."
   }
 ]
 ```
@@ -72,7 +60,7 @@ Returns the feature object (same shape as the list items above).
 
 ## POST /liquidweb/harbor/v1/features/{slug}/enable
 
-Enables a feature. For plugins and themes, this installs (if needed) and activates. For flags, it toggles the capability on.
+Enables a feature. For plugins and themes, this installs (if needed) and activates.
 
 ### Response (200)
 
@@ -102,7 +90,7 @@ Returns the updated feature object.
 
 ## POST /liquidweb/harbor/v1/features/{slug}/disable
 
-Disables a feature. For plugins, deactivates the plugin. For themes, returns an error if the theme is active. For flags, toggles the capability off.
+Disables a feature. For plugins, deactivates the plugin. For themes, returns an error if the theme is active.
 
 ### Response (200)
 
@@ -119,7 +107,7 @@ Returns the updated feature object.
 
 ## POST /liquidweb/harbor/v1/features/{slug}/update
 
-Triggers an update for an installable feature. Flag features do not support updates.
+Triggers an update for an installable feature.
 
 ### Response (200)
 

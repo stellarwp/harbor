@@ -44,22 +44,6 @@ Returns the full product catalog. Each entry represents a product family with it
         "category": "design",
         "authors": ["Suspended Starter Fish"],
         "documentation_url": "https://..."
-      },
-      {
-        "feature_slug": "kadence-ai",
-        "type": "flag",
-        "minimum_tier": "kadence-pro",
-        "plugin_file": null,
-        "is_dot_org": false,
-        "download_url": null,
-        "version": null,
-        "released_at": null,
-        "changelog": null,
-        "name": "Kadence AI",
-        "description": "AI-powered design assistant.",
-        "category": "ai",
-        "authors": null,
-        "documentation_url": "https://..."
       }
     ]
   }

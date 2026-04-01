@@ -136,7 +136,7 @@ if (lw_harbor_has_unified_license_key()) {
 $key = lw_harbor_get_unified_license_key(); // string|null
 ```
 
-### Check feature flags
+### Check feature availability
 
 ```php
 // Feature must be in the catalog AND enabled

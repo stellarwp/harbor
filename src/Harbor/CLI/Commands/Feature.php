@@ -19,8 +19,8 @@ use WP_CLI_Command;
  *     # List all features
  *     wp harbor feature list
  *
- *     # List available flag features as JSON
- *     wp harbor feature list --type=flag --available=true --format=json
+ *     # List available features as JSON
+ *     wp harbor feature list --available=true --format=json
  *
  *     # Count features for a product
  *     wp harbor feature list --product=Kadence --format=count
@@ -88,7 +88,7 @@ class Feature extends WP_CLI_Command {
 	 * : Filter by availability (true or false).
 	 *
 	 * [--type=<type>]
-	 * : Filter by feature type (flag, plugin, theme).
+	 * : Filter by feature type (plugin, theme).
 	 *
 	 * [--fields=<fields>]
 	 * : Comma-separated list of fields to display.
@@ -129,8 +129,8 @@ class Feature extends WP_CLI_Command {
 	 *     # List all features in a table
 	 *     wp harbor feature list
 	 *
-	 *     # List available flag features as JSON
-	 *     wp harbor feature list --type=flag --available=true --format=json
+	 *     # List available features as JSON
+	 *     wp harbor feature list --available=true --format=json
 	 *
 	 *     # Count features for a product
 	 *     wp harbor feature list --product=Kadence --format=count
@@ -332,7 +332,7 @@ class Feature extends WP_CLI_Command {
 	 * Updates a feature to the latest version.
 	 *
 	 * For plugin and theme features, this upgrades the installed version to the
-	 * latest available from the catalog. Flag features do not support updates.
+	 * latest available from the catalog.
 	 *
 	 * ## OPTIONS
 	 *

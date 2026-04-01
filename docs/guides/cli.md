@@ -264,7 +264,7 @@ wp harbor feature list [--product=<product>] [--tier=<tier>] [--available=<bool>
 | `--product=<product>` | Filter by product (e.g. `kadence`)                               |
 | `--tier=<tier>`       | Filter by tier (e.g. `Tier 1`)                                   |
 | `--available=<bool>`  | Filter by availability (`true` or `false`)                       |
-| `--type=<type>`       | Filter by type (`flag`, `plugin`, `theme`)                       |
+| `--type=<type>`       | Filter by type (`plugin`, `theme`)                               |
 | `--fields=<fields>`   | Comma-separated field list                                       |
 | `--format=<format>`   | Output format: `table` (default), `json`, `csv`, `yaml`, `count` |
 
@@ -284,9 +284,6 @@ wp harbor feature list
 
 # JSON for scripting
 wp harbor feature list --format=json
-
-# Available flag features only
-wp harbor feature list --type=flag --available=true
 
 # Count features in a product
 wp harbor feature list --product=kadence --format=count
@@ -357,7 +354,7 @@ wp harbor feature disable my-feature
 
 ### update
 
-Updates a feature to the latest available version. Only applies to plugin and theme features — flag features do not support updates.
+Updates a feature to the latest available version.
 
 ```bash
 wp harbor feature update <slug>
@@ -397,8 +394,8 @@ fi
 ### Batch operations
 
 ```bash
-# Enable all available flag features
-for slug in $(wp harbor feature list --type=flag --available=true --format=json | jq -r '.[].slug'); do
+# Enable all available plugin features
+for slug in $(wp harbor feature list --type=plugin --available=true --format=json | jq -r '.[].slug'); do
   wp harbor feature enable "$slug"
 done
 ```

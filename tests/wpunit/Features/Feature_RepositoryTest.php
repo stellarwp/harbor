@@ -13,7 +13,6 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Resolve_Feature_Collection;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\Harbor\Licensing\License_Manager;
@@ -64,7 +63,6 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$resolver  = new Resolve_Feature_Collection( $catalog, $licensing, $site_data );
 
 		$resolver->register_type( 'plugin', Plugin::class );
-		$resolver->register_type( 'flag', Flag::class );
 		$resolver->register_type( 'theme', Plugin::class );
 
 		return $resolver;
@@ -141,23 +139,9 @@ final class Feature_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that catalog flag type maps to the Flag Feature subclass.
-	 *
-	 * @return void
-	 */
-	public function test_it_maps_flag_type_to_flag(): void {
-		$repository = $this->make_repository( 'lwsw-unified-kad-pro-2026' );
-		$result     = $repository->get();
-		$feature    = $result->get( 'kad-pattern-hub' );
-
-		$this->assertInstanceOf( Flag::class, $feature );
-		$this->assertSame( 'flag', $feature->get_type() );
-	}
-
-	/**
 	 * Tests is_available is true when the feature slug is in the license capabilities.
 	 *
-	 * kadence-pro capabilities include kad-blocks-pro and kad-pattern-hub.
+	 * kadence-pro capabilities include kad-blocks-pro.
 	 *
 	 * @return void
 	 */
@@ -168,10 +152,6 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$this->assertTrue(
 			$result->get( 'kad-blocks-pro' )->is_available(),
 			'kad-blocks-pro should be available — it is in the kadence-pro capabilities.'
-		);
-		$this->assertTrue(
-			$result->get( 'kad-pattern-hub' )->is_available(),
-			'kad-pattern-hub should be available — it is in the kadence-pro capabilities.'
 		);
 	}
 
@@ -332,7 +312,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			new License_Manager( new License_Repository(), new Product_Registry(), new Licensing_Fixture( codecept_data_dir( 'licensing' ) ) )
 		);
 
-		// Do NOT register 'unknown_type' — only plugin/flag/theme are registered.
+		// Do NOT register 'unknown_type' — only plugin/theme are registered.
 		$catalog_feature = Catalog_Feature::from_array(
 			[
 				'feature_slug'      => 'test-feature',
@@ -380,12 +360,13 @@ final class Feature_RepositoryTest extends HarborTestCase {
 
 		$catalog_feature = Catalog_Feature::from_array(
 			[
-				'feature_slug'      => 'test-flag',
-				'type'              => 'flag',
+				'feature_slug'      => 'test-plugin',
+				'type'              => 'plugin',
 				'minimum_tier'      => 'kadence-basic',
-				'name'              => 'Test Flag',
-				'description'       => 'A flag feature.',
+				'name'              => 'Test Plugin',
+				'description'       => 'A plugin feature.',
 				'documentation_url' => '',
+				'plugin_file'       => 'test-plugin/test-plugin.php',
 			]
 		);
 
@@ -404,10 +385,10 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
 
-		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-flag' ], 1 );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-plugin' ], 1 );
 
-		$this->assertInstanceOf( Flag::class, $result );
-		$this->assertSame( 'test-flag', $result->get_slug() );
+		$this->assertInstanceOf( Plugin::class, $result );
+		$this->assertSame( 'test-plugin', $result->get_slug() );
 	}
 
 	/**
@@ -426,12 +407,13 @@ final class Feature_RepositoryTest extends HarborTestCase {
 
 		$catalog_feature = Catalog_Feature::from_array(
 			[
-				'feature_slug'      => 'test-free-flag',
-				'type'              => 'flag',
+				'feature_slug'      => 'test-free-plugin',
+				'type'              => 'plugin',
 				'minimum_tier'      => 'kadence-free',
-				'name'              => 'Test Free Flag',
+				'name'              => 'Test Free Plugin',
 				'description'       => '',
 				'documentation_url' => '',
+				'plugin_file'       => 'test-free-plugin/test-free-plugin.php',
 			]
 		);
 
@@ -462,7 +444,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		// lists paid features. The resolver must still mark it available and in tier.
 		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'some-paid-feature' ], 1 );
 
-		$this->assertInstanceOf( Flag::class, $result );
+		$this->assertInstanceOf( Plugin::class, $result );
 		$this->assertTrue( $result->is_available(), 'Free-tier feature must be available regardless of capabilities.' );
 		$this->assertTrue( $result->is_in_catalog_tier(), 'Free-tier feature must be in catalog tier regardless of capabilities.' );
 	}

@@ -8,8 +8,8 @@ use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Contracts\Strategy;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -61,15 +61,17 @@ final class FeatureTest extends HarborTestCase {
 
 		$this->collection = new Feature_Collection();
 		$this->collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
-					'slug'              => 'test-flag',
-					'name'              => 'Test Flag',
-					'description'       => 'A test flag feature.',
+					'slug'              => 'test-theme',
+					'name'              => 'Test Theme',
+					'description'       => 'A test theme feature.',
 					'product'           => 'TestGroup',
 					'tier'              => 'Tier 1',
 					'is_available'      => true,
-					'documentation_url' => 'https://example.com/docs/test-flag',
+					'documentation_url' => 'https://example.com/docs/test-theme',
+					'authors'           => [ 'StellarWP' ],
+					'is_dot_org'        => false,
 				]
 			)
 		);
@@ -133,7 +135,7 @@ final class FeatureTest extends HarborTestCase {
 		$items = $this->run_list_json( [] );
 
 		$this->assertCount( 2, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 		$this->assertSame( 'test-plugin', $items[1]['slug'] );
 	}
 
@@ -157,42 +159,42 @@ final class FeatureTest extends HarborTestCase {
 		$items = $this->run_list_json( [ 'product' => 'TestGroup' ] );
 
 		$this->assertCount( 1, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 	}
 
 	public function test_list_filters_by_type(): void {
-		$items = $this->run_list_json( [ 'type' => 'flag' ] );
+		$items = $this->run_list_json( [ 'type' => 'theme' ] );
 
 		$this->assertCount( 1, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 	}
 
 	public function test_list_filters_by_available(): void {
 		$items = $this->run_list_json( [ 'available' => 'true' ] );
 
 		$this->assertCount( 1, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 	}
 
 	public function test_list_filters_by_tier(): void {
 		$items = $this->run_list_json( [ 'tier' => 'Tier 1' ] );
 
 		$this->assertCount( 1, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 	}
 
 	public function test_list_filters_combine(): void {
 		$items = $this->run_list_json(
 			[
 				'product'   => 'TestGroup',
-				'type'      => 'flag',
+				'type'      => 'theme',
 				'available' => 'true',
 				'tier'      => 'Tier 1',
 			]
 		);
 
 		$this->assertCount( 1, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 	}
 
 	public function test_list_filters_return_empty_when_nothing_matches(): void {
@@ -206,10 +208,10 @@ final class FeatureTest extends HarborTestCase {
 	// ------------------------------------------------------------------
 
 	public function test_get_outputs_feature_as_json(): void {
-		$item = $this->run_get_json( 'test-flag' );
+		$item = $this->run_get_json( 'test-theme' );
 
-		$this->assertSame( 'test-flag', $item['slug'] );
-		$this->assertSame( 'Test Flag', $item['name'] );
+		$this->assertSame( 'test-theme', $item['slug'] );
+		$this->assertSame( 'Test Theme', $item['name'] );
 		$this->assertSame( 'true', $item['is_available'] );
 		$this->assertSame( 'true', $item['is_enabled'] );
 	}
@@ -221,7 +223,7 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	public function test_get_respects_fields_parameter(): void {
-		$item = $this->run_get_json( 'test-flag', 'slug,name' );
+		$item = $this->run_get_json( 'test-theme', 'slug,name' );
 
 		$this->assertArrayHasKey( 'slug', $item );
 		$this->assertArrayHasKey( 'name', $item );
@@ -242,9 +244,9 @@ final class FeatureTest extends HarborTestCase {
 	// ------------------------------------------------------------------
 
 	public function test_enable_calls_success_on_valid_feature(): void {
-		$this->command->enable( [ 'test-flag' ], [] );
+		$this->command->enable( [ 'test-theme' ], [] );
 
-		$this->assertSame( 'Feature "test-flag" enabled.', $this->logger->last_success );
+		$this->assertSame( 'Feature "test-theme" enabled.', $this->logger->last_success );
 		$this->assertNull( $this->logger->last_error );
 	}
 
@@ -257,7 +259,7 @@ final class FeatureTest extends HarborTestCase {
 	public function test_enable_calls_error_on_strategy_failure(): void {
 		$command = $this->make_command_with_strategy( [ 'enable' => new WP_Error( 'fail', 'Could not enable feature.' ) ] );
 
-		$command->enable( [ 'test-flag' ], [] );
+		$command->enable( [ 'test-theme' ], [] );
 
 		$this->assertSame( 'Could not enable feature.', $this->logger->last_error );
 	}
@@ -267,9 +269,9 @@ final class FeatureTest extends HarborTestCase {
 	// ------------------------------------------------------------------
 
 	public function test_disable_calls_success_on_valid_feature(): void {
-		$this->command->disable( [ 'test-flag' ], [] );
+		$this->command->disable( [ 'test-theme' ], [] );
 
-		$this->assertSame( 'Feature "test-flag" disabled.', $this->logger->last_success );
+		$this->assertSame( 'Feature "test-theme" disabled.', $this->logger->last_success );
 		$this->assertNull( $this->logger->last_error );
 	}
 
@@ -282,7 +284,7 @@ final class FeatureTest extends HarborTestCase {
 	public function test_disable_calls_error_on_strategy_failure(): void {
 		$command = $this->make_command_with_strategy( [ 'disable' => new WP_Error( 'fail', 'Could not disable feature.' ) ] );
 
-		$command->disable( [ 'test-flag' ], [] );
+		$command->disable( [ 'test-theme' ], [] );
 
 		$this->assertSame( 'Could not disable feature.', $this->logger->last_error );
 	}
@@ -292,17 +294,17 @@ final class FeatureTest extends HarborTestCase {
 	// ------------------------------------------------------------------
 
 	public function test_is_enabled_logs_enabled_for_active_feature(): void {
-		$this->command->is_enabled( [ 'test-flag' ], [] );
+		$this->command->is_enabled( [ 'test-theme' ], [] );
 
-		$this->assertSame( 'Feature "test-flag" is enabled.', $this->logger->last_info );
+		$this->assertSame( 'Feature "test-theme" is enabled.', $this->logger->last_info );
 	}
 
 	public function test_is_enabled_calls_error_when_strategy_inactive(): void {
 		$command = $this->make_command_with_strategy( [ 'is_active' => false ] );
 
-		$command->is_enabled( [ 'test-flag' ], [] );
+		$command->is_enabled( [ 'test-theme' ], [] );
 
-		$this->assertSame( 'Feature "test-flag" is not enabled.', $this->logger->last_error );
+		$this->assertSame( 'Feature "test-theme" is not enabled.', $this->logger->last_error );
 	}
 
 	public function test_is_enabled_calls_error_for_nonexistent_feature(): void {
@@ -316,7 +318,7 @@ final class FeatureTest extends HarborTestCase {
 	// ------------------------------------------------------------------
 
 	public function test_feature_to_display_item_converts_booleans(): void {
-		$feature = $this->manager->get( 'test-flag' );
+		$feature = $this->manager->get( 'test-theme' );
 		$this->assertNotNull( $feature );
 
 		/** @var array<string, mixed> $item */
@@ -325,7 +327,7 @@ final class FeatureTest extends HarborTestCase {
 		$this->assertSame( 'true', $item['is_available'] );
 		$this->assertSame( 'true', $item['is_enabled'] );
 		$this->assertSame( 'false', $item['is_dot_org'] );
-		$this->assertSame( 'test-flag', $item['slug'] );
+		$this->assertSame( 'test-theme', $item['slug'] );
 	}
 
 	public function test_feature_to_display_item_unavailable_feature(): void {
@@ -369,7 +371,7 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	public function test_feature_to_display_item_reads_enabled_from_feature(): void {
-		$feature = $this->manager->get( 'test-flag' );
+		$feature = $this->manager->get( 'test-theme' );
 		$this->assertNotNull( $feature );
 
 		/** @var array<string, mixed> $item */
@@ -385,7 +387,7 @@ final class FeatureTest extends HarborTestCase {
 		$manager    = new Manager( $repository, $factory );
 		$command    = new Feature_Command( $manager );
 
-		$feature = $manager->get( 'test-flag' );
+		$feature = $manager->get( 'test-theme' );
 		$this->assertNotNull( $feature );
 
 		/** @var array<string, mixed> $item */
@@ -403,7 +405,7 @@ final class FeatureTest extends HarborTestCase {
 		$items = $this->invoke_collection_to_display_items( $this->command, $this->collection );
 
 		$this->assertCount( 2, $items );
-		$this->assertSame( 'test-flag', $items[0]['slug'] );
+		$this->assertSame( 'test-theme', $items[0]['slug'] );
 		$this->assertSame( 'test-plugin', $items[1]['slug'] );
 	}
 

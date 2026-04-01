@@ -7,7 +7,8 @@ use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Contracts\Strategy;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
-use LiquidWeb\Harbor\Features\Types\Flag;
+use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
@@ -23,7 +24,7 @@ final class FunctionsTest extends HarborTestCase {
 
 		$collection = new Feature_Collection();
 		$collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
 					'slug'         => 'test-feature',
 					'name'         => 'Test Feature',
@@ -103,7 +104,7 @@ final class FunctionsTest extends HarborTestCase {
 	public function test_is_feature_available_returns_false_for_unavailable_feature(): void {
 		$collection = new Feature_Collection();
 		$collection->add(
-			Flag::from_array(
+			Plugin::from_array(
 				[
 					'slug'         => 'locked-feature',
 					'name'         => 'Locked Feature',
@@ -111,6 +112,7 @@ final class FunctionsTest extends HarborTestCase {
 					'product'      => 'test',
 					'tier'         => 'pro',
 					'is_available' => false,
+					'plugin_file'  => 'locked-feature/locked-feature.php',
 				]
 			)
 		);

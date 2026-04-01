@@ -13,7 +13,7 @@
  *
  * @since 1.0.0
  */
-export type FeatureType = 'plugin' | 'theme' | 'flag';
+export type FeatureType = 'plugin' | 'theme';
 
 /**
  * Base properties shared by all feature types.
@@ -115,24 +115,14 @@ export interface ThemeFeature extends BaseFeature {
 }
 
 /**
- * A feature gated by a database option flag.
- *
- * @since 1.0.0
- */
-export interface FlagFeature extends BaseFeature {
-    type: 'flag';
-}
-
-/**
  * Discriminated union of all feature types as returned by the REST API.
  *
  * @since 1.0.0
  */
-export type Feature = PluginFeature | ThemeFeature | FlagFeature;
+export type Feature = PluginFeature | ThemeFeature;
 
 /**
- * Plugin and theme features that trigger WordPress install/activate/deactivate
- * operations. Flag features are excluded because they only flip a DB option.
+ * Features that trigger WordPress install/activate/deactivate operations.
  *
  * @since 1.0.0
  */
@@ -143,7 +133,7 @@ export type InstallableFeature = PluginFeature | ThemeFeature;
  * and what the license's capabilities array actually grants.
  *
  * - `'bonus'`   — Available (is_available: true) but outside the user's catalog
- *                 tier (in_catalog_tier: false). Grandfathered or promotional access.
+ *                 tier (in_catalog_tier: false). Promotional access.
  *
  * - `'revoked'` — In the user's catalog tier (in_catalog_tier: true) but not
  *                 available (is_available: false). Access was removed or not provisioned.

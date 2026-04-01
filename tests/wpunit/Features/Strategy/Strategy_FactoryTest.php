@@ -3,11 +3,9 @@
 namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
 use InvalidArgumentException;
-use LiquidWeb\Harbor\Features\Strategy\Flag_Strategy;
 use LiquidWeb\Harbor\Features\Strategy\Plugin_Strategy;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
 use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -48,23 +46,6 @@ final class Strategy_FactoryTest extends HarborTestCase {
 		);
 
 		$this->assertInstanceOf( Plugin_Strategy::class, $this->factory->make( $feature ) );
-	}
-
-	/**
-	 * Tests that the factory creates a Flag_Strategy for flag features.
-	 *
-	 * @return void
-	 */
-	public function test_it_creates_flag_strategy(): void {
-		$feature = Flag::from_array(
-			[
-				'slug' => 'test-flag',
-				'type' => 'flag',
-				'name' => 'Test Flag',
-			]
-		);
-
-		$this->assertInstanceOf( Flag_Strategy::class, $this->factory->make( $feature ) );
 	}
 
 	/**
