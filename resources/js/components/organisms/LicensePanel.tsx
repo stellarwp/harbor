@@ -89,10 +89,12 @@ export function LicensePanel() {
                 isRefreshing={ isRefreshing }
                 isLoading={ isLicenseLoading }
             />
-            <UpsellSection
-                products={ upsellProducts }
-                upsellUrlMap={ upsellUrlMap }
-            />
+            { ! isLicenseLoading && (
+                <UpsellSection
+                    products={ upsellProducts }
+                    upsellUrlMap={ upsellUrlMap }
+                />
+            ) }
         </div>
     );
 }
