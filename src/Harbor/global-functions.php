@@ -173,6 +173,27 @@ if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_register_submenu' ) ) {
+	/**
+	 * Registers a submenu item under a plugin's existing menu that links to the Harbor feature manager.
+	 *
+	 * Call this during or after plugins_loaded, before the admin_menu hook fires.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $parent_slug The slug of the parent top-level menu item.
+	 *
+	 * @return void
+	 */
+	function lw_harbor_register_submenu( string $parent_slug ): void {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_register_submenu' );
+
+		if ( $callback ) {
+			$callback( $parent_slug );
+		}
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	/**
 	 * Returns the admin URL for the unified Feature Manager page.
