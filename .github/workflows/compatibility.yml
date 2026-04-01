@@ -43,8 +43,6 @@ jobs:
         with:
           composer-options: "--ignore-platform-reqs"
           dependency-versions: highest
-        env:
-          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GH_BOT_TOKEN }}"}}'
 
       - name: Run PHP Compatibility
         run: composer compatibility:php-${{ matrix.php-version }}

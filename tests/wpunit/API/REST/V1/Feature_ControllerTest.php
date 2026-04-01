@@ -975,7 +975,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$schema     = $controller->get_item_schema();
 
 		$this->assertArrayHasKey( 'oneOf', $schema );
-		$this->assertCount( 3, $schema['oneOf'] );
+		$this->assertCount( 2, $schema['oneOf'] );
 	}
 
 	/**

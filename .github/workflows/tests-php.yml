@@ -92,7 +92,6 @@ jobs:
         run: |
           ${SLIC_BIN} use harbor
           ${SLIC_BIN} composer set-version 2
-          ${SLIC_BIN} composer config --global github-oauth.github.com ${{ secrets.GH_BOT_TOKEN }}
           ${SLIC_BIN} composer validate
           ${SLIC_BIN} composer install
 
