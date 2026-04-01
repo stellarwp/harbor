@@ -201,11 +201,12 @@ if ( ! function_exists( 'lw_harbor_display_legacy_license_page_notice' ) ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $product_name The human-readable product name (e.g. "GiveWP", "Kadence").
+	 * @param string $product_name Optional human-readable product name (e.g. "GiveWP", "Kadence").
+	 *                            When omitted, a generic message is displayed.
 	 *
 	 * @return void
 	 */
-	function lw_harbor_display_legacy_license_page_notice( string $product_name ): void {
+	function lw_harbor_display_legacy_license_page_notice( string $product_name = '' ): void {
 		$callback = _lw_harbor_global_function_registry( 'lw_harbor_display_legacy_license_page_notice' );
 
 		if ( $callback ) {
