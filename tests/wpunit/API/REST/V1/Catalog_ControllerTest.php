@@ -105,6 +105,41 @@ final class Catalog_ControllerTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// POST /catalog/refresh
+	// -------------------------------------------------------------------------
+
+	public function test_refresh_returns_refreshed_catalog(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/catalog/refresh' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertCount( 4, $response->get_data() );
+	}
+
+	public function test_refresh_requires_manage_options(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/catalog/refresh' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 403, $response->get_status() );
+	}
+
+	public function test_refresh_forwards_client_error(): void {
+		$error      = new WP_Error( Error_Code::INVALID_RESPONSE, 'API unavailable.' );
+		$client     = $this->make_client( $error );
+		$repository = new Catalog_Repository( $client );
+		$controller = new Catalog_Controller( $repository );
+
+		$response = $controller->refresh_items( new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/catalog/refresh' ) );
+
+		$this->assertInstanceOf( WP_Error::class, $response );
+		$this->assertSame( Error_Code::INVALID_RESPONSE, $response->get_error_code() );
+	}
+
+	// -------------------------------------------------------------------------
 	// Error throttling
 	// -------------------------------------------------------------------------
 

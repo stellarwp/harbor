@@ -110,6 +110,19 @@ final class License_Controller extends WP_REST_Controller {
 
 		register_rest_route(
 			$this->namespace,
+			'/' . $this->rest_base . '/refresh',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'refresh_item' ],
+					'permission_callback' => [ $this, 'check_permissions' ],
+				],
+				'schema' => [ $this, 'get_public_item_schema' ],
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
 			'/' . $this->rest_base . '/(?P<key>[A-Za-z0-9-]+)',
 			[
 				[
@@ -175,6 +188,34 @@ final class License_Controller extends WP_REST_Controller {
 
 		return new WP_REST_Response(
 			License_Response::make( $key, $products )
+		);
+	}
+
+	/**
+	 * Refreshes the license data from the upstream API.
+	 *
+	 * Flushes cached products and re-fetches from the licensing service.
+	 * Returns the refreshed key + products in the same shape as GET /license.
+	 *
+	 * The With_Error_Throttle trait on License_Manager prevents hammering the
+	 * upstream API after a recent failure (60-second TTL).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function refresh_item( $request ) {
+		$domain   = $this->site_data->get_domain();
+		$products = $this->manager->refresh_products( $domain );
+
+		if ( is_wp_error( $products ) ) {
+			return $products;
+		}
+
+		return new WP_REST_Response(
+			License_Response::make( $this->manager->get_key(), $products )
 		);
 	}
 

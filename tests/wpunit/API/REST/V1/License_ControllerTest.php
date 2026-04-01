@@ -184,6 +184,44 @@ final class License_ControllerTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// POST /license/refresh
+	// -------------------------------------------------------------------------
+
+	public function test_refresh_returns_refreshed_products(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
+		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
+		$this->assertIsArray( $data['products'] );
+		$this->assertNotEmpty( $data['products'] );
+	}
+
+	public function test_refresh_returns_error_when_no_key_stored(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 422, $response->get_status() );
+		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
+	}
+
+	public function test_refresh_requires_manage_options(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 403, $response->get_status() );
+	}
+
+	// -------------------------------------------------------------------------
 	// DELETE
 	// -------------------------------------------------------------------------
 
