@@ -23,12 +23,13 @@ export function LicensePanel() {
     const { addToast }      = useToast();
     const { deleteLicense, refreshLicense } = useDispatch( harborStore );
 
-    const { licenseKey, licenseProducts, catalogs, isRefreshing } = useSelect(
+    const { licenseKey, licenseProducts, catalogs, isRefreshing, isLicenseLoading } = useSelect(
         ( select ) => ({
-            licenseKey:      select( harborStore ).getLicenseKey(),
-            licenseProducts: select( harborStore ).getLicenseProducts(),
-            catalogs:        select( harborStore ).getCatalog(),
-            isRefreshing:    select( harborStore ).isLicenseRefreshing(),
+            licenseKey:       select( harborStore ).getLicenseKey(),
+            licenseProducts:  select( harborStore ).getLicenseProducts(),
+            catalogs:         select( harborStore ).getCatalog(),
+            isRefreshing:     select( harborStore ).isLicenseRefreshing(),
+            isLicenseLoading: ! select( harborStore ).hasFinishedResolution( 'getLicenseKey', [] ),
         }),
         []
     );
@@ -86,6 +87,7 @@ export function LicensePanel() {
                 onRemove={ handleRemove }
                 onRefresh={ handleRefresh }
                 isRefreshing={ isRefreshing }
+                isLoading={ isLicenseLoading }
             />
             <UpsellSection
                 products={ upsellProducts }

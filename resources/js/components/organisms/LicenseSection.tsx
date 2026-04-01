@@ -21,12 +21,13 @@ interface LicenseSectionProps {
     onRemove:        () => Promise<void>;
     onRefresh:       () => Promise<void>;
     isRefreshing:    boolean;
+    isLoading:       boolean;
 }
 
 /**
  * @since 1.0.0
  */
-export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing }: LicenseSectionProps ) {
+export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading }: LicenseSectionProps ) {
     const [ editingOpen, setEditingOpen ] = useState( false );
 
     const hasLicense = licenseKey !== null;
@@ -42,7 +43,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'License', '%TEXTDOMAIN%' ) }
                 action={ hasLicense && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-4">
                         <button
                             type="button"
                             onClick={ onRefresh }
@@ -70,7 +71,11 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 ) }
             />
 
-            { ! hasLicense && (
+            { isLoading && (
+                <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+            ) }
+
+            { ! isLoading && ! hasLicense && (
                 <div className="space-y-2">
                     <LicenseKeyInput />
                     <p className="text-xs text-muted-foreground leading-relaxed mt-0 mb-0">
