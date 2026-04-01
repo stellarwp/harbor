@@ -208,16 +208,16 @@ Every resolved feature includes these fields:
 
 Installable features (`plugin` and `theme`) also include:
 
-| Field               | Type         | Description                                               |
-| ------------------- | ------------ | --------------------------------------------------------- |
-| `released_at`       | string\|null | Release date of the latest version (ISO 8601)             |
-| `version`           | string\|null | Latest available version from the catalog                 |
-| `changelog`         | string\|null | Changelog HTML for the latest version                     |
-| `authors`           | string[]     | Expected authors for ownership verification               |
-| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org         |
-| `installed_version` | string\|null | Currently installed version, or null if not installed     |
-| `update_version`    | string\|null | Version from the WordPress update transient, or null      |
-| `has_update`        | boolean      | Whether an update is available (pre-computed)             |
+| Field               | Type         | Description                                           |
+| ------------------- | ------------ | ----------------------------------------------------- |
+| `released_at`       | string\|null | Release date of the latest version (ISO 8601)         |
+| `version`           | string\|null | Latest available version from the catalog             |
+| `changelog`         | string\|null | Changelog HTML for the latest version                 |
+| `authors`           | string[]     | Expected authors for ownership verification           |
+| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org     |
+| `installed_version` | string\|null | Currently installed version, or null if not installed |
+| `update_version`    | string\|null | Version from the WordPress update transient, or null  |
+| `has_update`        | boolean      | Whether an update is available (pre-computed)         |
 
 Plugin features also include:
 

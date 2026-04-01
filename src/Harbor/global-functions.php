@@ -141,8 +141,7 @@ if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 	/**
-	 * Checks if a feature is available in the catalog AND enabled/active.
-	 * Returns false if the feature is not in the catalog at all.
+	 * Whether a feature is currently active/enabled locally on this site.
 	 *
 	 * @since 1.0.0
 	 *
@@ -159,7 +158,7 @@ if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	/**
-	 * Checks if a feature is available in the catalog, regardless of enabled state.
+	 * Whether the customer's license/tier includes this feature.
 	 *
 	 * @since 1.0.0
 	 *
