@@ -2,7 +2,6 @@
 
 namespace LiquidWeb\Harbor\API\Functions\Actions;
 
-use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Notice\Notice;
 use LiquidWeb\Harbor\Notice\Notice_Controller;
@@ -31,7 +30,7 @@ class Display_Legacy_License_Page_Notice {
 	 */
 	public function __invoke( string $product_name = '' ): void {
 		try {
-			$url = admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG );
+			$url = lw_harbor_get_license_page_url();
 
 			if ( $product_name !== '' ) {
 				$message = sprintf(
