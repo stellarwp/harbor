@@ -72,24 +72,6 @@ flowchart TD
     Resolution -->|Feature_Collection| REST["REST API\n/features, /license"]
     REST -->|JSON over HTTP| UI["React UI\n(Software Manager)\n\nis_available, is_enabled,\nenable / disable"]
 ```
-              ┌──────────────────────┐
-              │      Liquid Web      │
-              │  v1 Licensing API    │
-              └──────────┬───────────┘
-                           │ product_slug, tier, status,
-                           │ seats, validation_status,
-                           │ capabilities[]
-                           ▼
-┌─────────────┐    ┌──────────────┐    ┌───────────────┐
-│  Commerce   │    │   Feature    │    │   WordPress   │
-│  Portal     │───▶│  Resolution  │───▶│   Site        │
-│  (Catalog)  │    │              │    │               │
-└─────────────┘    └──────────────┘    └───────────────┘
-  product families,   joins by           is_available,
-  tiers + ranks,      product_slug,      is_enabled,
-  features + types,   checks slug in     enable/disable
-  minimum_tier        capabilities[]     via strategies
-```
 
 The catalog provides structure (what features exist, their metadata, and which tier they belong to for display). Licensing provides entitlements (what the key covers and, critically, which feature slugs the license grants via the `capabilities` array). Feature resolution checks the capabilities array and produces a collection where each feature knows its availability. Strategies then handle the local mechanics of enabling and disabling.
 
