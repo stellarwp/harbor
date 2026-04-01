@@ -48,9 +48,10 @@ final class Product_CatalogTest extends HarborTestCase {
 			],
 			[
 				'feature_slug'      => 'kad-pattern-hub',
-				'type'              => 'flag',
+				'type'              => 'plugin',
 				'minimum_tier'      => 'kadence-basic',
 				'is_dot_org'        => false,
+				'plugin_file'       => 'kad-pattern-hub/kad-pattern-hub.php',
 				'name'              => 'Pattern Hub',
 				'description'       => 'Access to premium design patterns and starter templates.',
 				'category'          => 'design',
@@ -100,7 +101,7 @@ final class Product_CatalogTest extends HarborTestCase {
 		$this->assertSame( 'kad-blocks-pro', $features[0]->get_feature_slug() );
 		$this->assertSame( 'plugin', $features[0]->get_type() );
 		$this->assertSame( 'kad-pattern-hub', $features[1]->get_feature_slug() );
-		$this->assertSame( 'flag', $features[1]->get_type() );
+		$this->assertSame( 'plugin', $features[1]->get_type() );
 	}
 
 	public function test_to_array_produces_expected_shape(): void {

@@ -5,8 +5,8 @@ namespace LiquidWeb\Harbor\Tests\Features;
 use ArrayIterator;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Feature_CollectionTest extends HarborTestCase {
@@ -161,16 +161,16 @@ final class Feature_CollectionTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_from_array_creates_collection_from_objects(): void {
-		$flag   = Flag::from_array(
+		$theme  = Theme::from_array(
 			[
-				'slug'              => 'my-flag',
+				'slug'              => 'my-theme',
 				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
-				'name'              => 'My Flag',
+				'name'              => 'My Theme',
 				'description'       => '',
 				'is_available'      => true,
 				'documentation_url' => '',
-			] 
+			]
 		);
 		$plugin = Plugin::from_array(
 			[
@@ -183,40 +183,14 @@ final class Feature_CollectionTest extends HarborTestCase {
 				'documentation_url' => '',
 				'plugin_file'       => '',
 				'authors'           => [],
-			] 
+			]
 		);
 
-		$collection = Feature_Collection::from_array( [ $flag, $plugin ] );
+		$collection = Feature_Collection::from_array( [ $theme, $plugin ] );
 
 		$this->assertSame( 2, $collection->count() );
-		$this->assertSame( $flag, $collection->get( 'my-flag' ) );
+		$this->assertSame( $theme, $collection->get( 'my-theme' ) );
 		$this->assertSame( $plugin, $collection->get( 'my-plugin' ) );
-	}
-
-	/**
-	 * Tests from_array creates Flag instances for type=flag.
-	 *
-	 * @return void
-	 */
-	public function test_from_array_creates_flag_features(): void {
-		$data = [
-			[
-				'slug'              => 'my-flag',
-				'product'           => 'TEC',
-				'tier'              => 'Tier 1',
-				'name'              => 'My Flag',
-				'description'       => '',
-				'type'              => 'flag',
-				'is_available'      => true,
-				'documentation_url' => '',
-			],
-		];
-
-		$collection = Feature_Collection::from_array( $data );
-
-		$this->assertSame( 1, $collection->count() );
-		$this->assertInstanceOf( Flag::class, $collection->get( 'my-flag' ) );
-		$this->assertSame( 'flag', $collection->get( 'my-flag' )->get_type() );
 	}
 
 	/**
@@ -248,11 +222,11 @@ final class Feature_CollectionTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests from_array defaults unknown types to Flag.
+	 * Tests from_array skips unknown types.
 	 *
 	 * @return void
 	 */
-	public function test_from_array_defaults_unknown_type_to_flag(): void {
+	public function test_from_array_skips_unknown_type(): void {
 		$data = [
 			[
 				'slug'              => 'unknown-feature',
@@ -268,8 +242,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 
 		$collection = Feature_Collection::from_array( $data );
 
-		$this->assertSame( 1, $collection->count() );
-		$this->assertInstanceOf( Flag::class, $collection->get( 'unknown-feature' ) );
+		$this->assertSame( 0, $collection->count() );
 	}
 
 	/**
@@ -280,12 +253,12 @@ final class Feature_CollectionTest extends HarborTestCase {
 	public function test_from_array_skips_non_array_items(): void {
 		$data = [
 			[
-				'slug'              => 'my-flag',
+				'slug'              => 'my-plugin',
 				'product'           => 'TEC',
 				'tier'              => 'Tier 1',
-				'name'              => 'My Flag',
+				'name'              => 'My Plugin',
 				'description'       => '',
-				'type'              => 'flag',
+				'type'              => 'plugin',
 				'is_available'      => true,
 				'documentation_url' => '',
 			],
@@ -341,7 +314,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests filtering by availability returns only features matching the flag.
+	 * Tests filtering by availability returns only available features.
 	 *
 	 * @return void
 	 */
@@ -439,8 +412,8 @@ final class Feature_CollectionTest extends HarborTestCase {
 	/**
 	 * Builds a Feature_Collection with a known set of features for filter tests.
 	 *
-	 * - tec-feature-1: group=TEC, tier=Tier 1, available=true, type=flag
-	 * - tec-feature-2: group=TEC, tier=Tier 2, available=false, type=flag
+	 * - tec-feature-1: group=TEC, tier=Tier 1, available=true, type=theme
+	 * - tec-feature-2: group=TEC, tier=Tier 2, available=false, type=theme
 	 * - ld-feature-1:  group=LearnDash, tier=Tier 1, available=true, type=plugin
 	 *
 	 * @return Feature_Collection
@@ -455,10 +428,10 @@ final class Feature_CollectionTest extends HarborTestCase {
 					'get_slug'     => 'tec-feature-1',
 					'get_product'  => 'TEC',
 					'get_tier'     => 'Tier 1',
-					'get_type'     => 'flag',
+					'get_type'     => 'theme',
 					'is_available' => true,
-				] 
-			) 
+				]
+			)
 		);
 
 		$collection->add(
@@ -468,7 +441,7 @@ final class Feature_CollectionTest extends HarborTestCase {
 					'get_slug'     => 'tec-feature-2',
 					'get_product'  => 'TEC',
 					'get_tier'     => 'Tier 2',
-					'get_type'     => 'flag',
+					'get_type'     => 'theme',
 					'is_available' => false,
 				] 
 			) 

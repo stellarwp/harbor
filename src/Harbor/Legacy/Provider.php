@@ -4,7 +4,6 @@ namespace LiquidWeb\Harbor\Legacy;
 
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\Harbor\Legacy\Notices\License_Notice_Handler;
-use LiquidWeb\Harbor\Notice\Notice_Controller;
 
 /**
  * Registers services for legacy license discovery.

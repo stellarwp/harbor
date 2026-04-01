@@ -15,6 +15,7 @@ import type { LicenseBadgeType } from '@/lib/feature-utils';
 import { useToast } from '@/context/toast-context';
 import { HarborError } from '@/errors';
 import type { Feature } from '@/types/api';
+import { isInstallableFeature } from '@/types/utils';
 import type { FeatureStatus } from '@/components/atoms/StatusBadge';
 
 export type PendingAction = 'enabling' | 'disabling' | 'installing' | 'updating' | null;
@@ -63,7 +64,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 
 	const installableBusy = useSelect(
 		( select ) =>
-			feature.type !== 'flag' &&
+			isInstallableFeature( feature ) &&
 			select( harborStore ).isAnyInstallableBusy(),
 		[ feature.type ]
 	);

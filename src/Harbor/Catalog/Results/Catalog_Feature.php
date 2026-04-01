@@ -124,7 +124,7 @@ final class Catalog_Feature {
 	}
 
 	/**
-	 * Gets the feature type (flag, plugin, or theme).
+	 * Gets the feature type (plugin or theme).
 	 *
 	 * @since 1.0.0
 	 *

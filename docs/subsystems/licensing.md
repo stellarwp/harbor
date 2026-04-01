@@ -262,7 +262,7 @@ Both Licensing and the Catalog use the same product-prefixed tier slug conventio
 
 The `Resolve_Feature_Collection` class consumes the `Product_Collection` from the licensing `License_Repository` alongside the `Catalog_Collection` from the catalog `Catalog_Repository`. For each product in the catalog, it looks up the matching licensing entry to determine `is_available` for each feature:
 
-- **If a product entry exists**: a feature is available if its slug appears in the entry's `capabilities` array. This is the source of truth for access — it handles grandfathered tiers, promotional grants, and individual exceptions that the catalog's tier structure alone cannot express.
+- **If a product entry exists**: a feature is available if its slug appears in the entry's `capabilities` array. This is the source of truth for access — it handles promotional grants and individual exceptions that the catalog's tier structure alone cannot express.
 - **If no product entry exists** (unlicensed): the resolver falls back to the catalog's tier rank structure, making only free-tier features (minimum tier rank 0) available.
 
 ### Cache Invalidation

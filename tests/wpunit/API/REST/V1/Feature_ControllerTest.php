@@ -10,8 +10,8 @@ use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\API\REST\V1\Feature_Controller;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -59,7 +59,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 			)
 		);
 		$collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
 					'slug'              => 'feature-beta',
 					'product'           => 'GroupB',
@@ -237,7 +237,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		$request = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/features' );
-		$request->set_param( 'type', 'flag' );
+		$request->set_param( 'type', 'theme' );
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -1025,27 +1025,16 @@ final class Feature_ControllerTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that the flag variant has only base properties.
+	 * Tests that the schema has exactly two variants (plugin, theme).
 	 *
 	 * @return void
 	 */
-	public function test_schema_flag_variant_has_only_base_properties(): void {
+	public function test_schema_has_two_variants(): void {
 		$controller = new Feature_Controller( $this->manager );
 		$schema     = $controller->get_item_schema();
-		$flag       = $schema['oneOf'][2];
 
-		$this->assertSame( 'flag', $flag['title'] );
-		$this->assertSame( [ Feature::TYPE_FLAG ], $flag['properties']['type']['enum'] );
-
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'in_catalog_tier', 'documentation_url', 'is_enabled' ];
-
-		foreach ( $expected as $property ) {
-			$this->assertArrayHasKey( $property, $flag['properties'], "Missing flag schema property: {$property}" );
-		}
-
-		$this->assertArrayNotHasKey( 'plugin_file', $flag['properties'] );
-		$this->assertArrayNotHasKey( 'authors', $flag['properties'] );
-		$this->assertArrayNotHasKey( 'is_dot_org', $flag['properties'] );
-		$this->assertCount( count( $expected ), $flag['properties'] );
+		$this->assertCount( 2, $schema['oneOf'] );
+		$this->assertSame( 'plugin', $schema['oneOf'][0]['title'] );
+		$this->assertSame( 'theme', $schema['oneOf'][1]['title'] );
 	}
 }

@@ -49,7 +49,7 @@ The `installed_here`, `validation_status`, and `is_valid` fields are only presen
 
 `site_limit: 0` means unlimited activations (`over_limit` is always false).
 
-`capabilities` is an array of feature slugs that this license grants access to. It is the source of truth for feature availability — the `Resolve_Feature_Collection` class checks whether a feature slug appears in this array rather than comparing tier ranks. This allows the licensing service to handle cases the catalog tier structure cannot express: grandfathered access after a tier restructure, promotional grants, or individual per-license exceptions.
+`capabilities` is an array of feature slugs that this license grants access to. It is the source of truth for feature availability — the `Resolve_Feature_Collection` class checks whether a feature slug appears in this array rather than comparing tier ranks. This allows the licensing service to handle cases the catalog tier structure cannot express: promotional grants or individual per-license exceptions.
 
 ### Error responses
 

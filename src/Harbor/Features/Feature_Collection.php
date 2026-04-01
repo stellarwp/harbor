@@ -3,7 +3,6 @@
 namespace LiquidWeb\Harbor\Features;
 
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Utils\Collection;
@@ -68,7 +67,7 @@ class Feature_Collection extends Collection {
 	 * Creates a Feature_Collection from an array of Feature objects or raw data arrays.
 	 *
 	 * When given raw arrays, dispatches to the correct subclass based on the 'type' field.
-	 * Unknown types default to Flag.
+	 * Unknown types are skipped.
 	 *
 	 * @since 1.0.0
 	 *
@@ -90,7 +89,7 @@ class Feature_Collection extends Collection {
 				} elseif ( $type === Feature::TYPE_THEME ) {
 					$feature = Theme::from_array( $item );
 				} else {
-					$feature = Flag::from_array( $item );
+					continue;
 				}
 
 				$collection->add( $feature );

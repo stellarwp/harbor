@@ -153,7 +153,7 @@
       },
       {
         "feature_slug": "kad-pattern-hub",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-basic",
         "is_dot_org": false,
         "name": "Pattern Hub",
@@ -162,7 +162,8 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "kad-pattern-hub/kad-pattern-hub.php"
       },
       {
         "feature_slug": "kad-conversions",
@@ -202,7 +203,7 @@
       },
       {
         "feature_slug": "kad-captcha",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-basic",
         "is_dot_org": false,
         "name": "Captcha",
@@ -211,11 +212,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "kad-captcha/kad-captcha.php"
       },
       {
         "feature_slug": "kad-simple-share",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-basic",
         "is_dot_org": false,
         "name": "Simple Share",
@@ -224,11 +226,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "kad-simple-share/kad-simple-share.php"
       },
       {
         "feature_slug": "kad-custom-fonts",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-basic",
         "is_dot_org": false,
         "name": "Custom Fonts",
@@ -237,11 +240,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "kad-custom-fonts/kad-custom-fonts.php"
       },
       {
         "feature_slug": "kad-reading-time",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-basic",
         "is_dot_org": false,
         "name": "Reading Time",
@@ -250,7 +254,8 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "kad-reading-time/kad-reading-time.php"
       },
       {
         "feature_slug": "ithemes-security-pro",
@@ -344,7 +349,7 @@
       },
       {
         "feature_slug": "iconic-flux",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "is_dot_org": false,
         "name": "Flux Checkout",
@@ -353,11 +358,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-flux/iconic-flux.php"
       },
       {
         "feature_slug": "iconic-delivery-slots",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "is_dot_org": false,
         "name": "WooCommerce Delivery Slots",
@@ -366,7 +372,8 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-delivery-slots/iconic-delivery-slots.php"
       },
       {
         "feature_slug": "iconic-woothumbs",
@@ -406,7 +413,7 @@
       },
       {
         "feature_slug": "iconic-single-variations",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "is_dot_org": false,
         "name": "Show Single Variations",
@@ -415,11 +422,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-single-variations/iconic-single-variations.php"
       },
       {
         "feature_slug": "iconic-sales-booster",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-agency",
         "is_dot_org": false,
         "name": "Iconic Sales Booster",
@@ -428,11 +436,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-sales-booster/iconic-sales-booster.php"
       },
       {
         "feature_slug": "iconic-image-swap",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "is_dot_org": false,
         "name": "Image Swap for WooCommerce",
@@ -441,11 +450,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-image-swap/iconic-image-swap.php"
       },
       {
         "feature_slug": "iconic-linked-variations",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-agency",
         "is_dot_org": false,
         "name": "Linked Variations",
@@ -454,11 +464,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-linked-variations/iconic-linked-variations.php"
       },
       {
         "feature_slug": "iconic-configurator",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-agency",
         "is_dot_org": false,
         "name": "Product Configurator",
@@ -467,7 +478,8 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-configurator/iconic-configurator.php"
       },
       {
         "feature_slug": "iconic-quickview",
@@ -489,7 +501,7 @@
       },
       {
         "feature_slug": "iconic-wishlist",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "name": "Wishlist for WooCommerce",
         "description": "Let customers save products to wishlists.",
@@ -497,11 +509,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-wishlist/iconic-wishlist.php"
       },
       {
         "feature_slug": "iconic-account-pages",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-pro",
         "is_dot_org": false,
         "name": "Account Pages",
@@ -510,11 +523,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-account-pages/iconic-account-pages.php"
       },
       {
         "feature_slug": "iconic-custom-fields",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-agency",
         "is_dot_org": false,
         "name": "Custom Fields for Variations",
@@ -523,11 +537,12 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-custom-fields/iconic-custom-fields.php"
       },
       {
         "feature_slug": "iconic-bundled",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "kadence-agency",
         "is_dot_org": false,
         "name": "Bundled Products",
@@ -536,7 +551,8 @@
         "authors": [
           "KadenceWP"
         ],
-        "documentation_url": "https://www.kadencewp.com/help-center/"
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "plugin_file": "iconic-bundled/iconic-bundled.php"
       }
     ]
   },
@@ -1722,7 +1738,7 @@
       },
       {
         "feature_slug": "tec-calendar",
-        "type": "flag",
+        "type": "plugin",
         "minimum_tier": "the-events-calendar-basic",
         "is_dot_org": false,
         "name": "Calendar",
@@ -1731,7 +1747,8 @@
         "authors": [
           "StellarWP"
         ],
-        "documentation_url": "https://theeventscalendar.com/knowledgebase/"
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "plugin_file": "tec-calendar/tec-calendar.php"
       },
       {
         "feature_slug": "tec-tickets-rsvp",
