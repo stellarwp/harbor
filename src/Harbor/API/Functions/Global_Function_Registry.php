@@ -6,6 +6,7 @@ use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use Throwable;
 
@@ -124,6 +125,20 @@ class Global_Function_Registry {
 			$version,
 			static function (): string {
 				return admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG );
+			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_get_licensed_domain',
+			$version,
+			static function (): string {
+				try {
+					return Config::get_container()->get( Data::class )->get_domain();
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error getting site domain' );
+
+					return '';
+				}
 			}
 		);
 	}
