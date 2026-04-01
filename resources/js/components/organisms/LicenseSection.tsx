@@ -42,14 +42,31 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'License', '%TEXTDOMAIN%' ) }
                 action={ hasLicense && (
-                    <button
-                        type="button"
-                        onClick={ () => setEditingOpen( true ) }
-                        className="flex items-center gap-1 text-[11px] text-emerald-600 transition-colors hover:opacity-75"
-                    >
-                        <Pencil className="w-3 h-3" />
-                        { __( 'Edit', '%TEXTDOMAIN%' ) }
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={ onRefresh }
+                            disabled={ isRefreshing }
+                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            { isRefreshing
+                                ? <Loader2 className="w-3 h-3 animate-spin" />
+                                : <RefreshCw className="w-3 h-3" />
+                            }
+                            { isRefreshing
+                                ? __( 'Refreshing...', '%TEXTDOMAIN%' )
+                                : __( 'Refresh', '%TEXTDOMAIN%' )
+                            }
+                        </button>
+                        <button
+                            type="button"
+                            onClick={ () => setEditingOpen( true ) }
+                            className="flex cursor-pointer items-center gap-1 text-[11px] text-emerald-600 transition-colors hover:opacity-75"
+                        >
+                            <Pencil className="w-3 h-3" />
+                            { __( 'Edit', '%TEXTDOMAIN%' ) }
+                        </button>
+                    </div>
                 ) }
             />
 
@@ -73,24 +90,6 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                         />
                     ) ) }
                 </div>
-            ) }
-
-            { hasLicense && (
-                <button
-                    type="button"
-                    onClick={ onRefresh }
-                    disabled={ isRefreshing }
-                    className="flex items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    { isRefreshing
-                        ? <Loader2 className="w-3 h-3 animate-spin" />
-                        : <RefreshCw className="w-3 h-3" />
-                    }
-                    { isRefreshing
-                        ? __( 'Refreshing...', '%TEXTDOMAIN%' )
-                        : __( 'Refresh', '%TEXTDOMAIN%' )
-                    }
-                </button>
             ) }
 
             <Dialog
