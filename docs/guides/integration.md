@@ -106,6 +106,24 @@ Once you report licenses via this filter, Harbor automatically displays consolid
 
 Because Harbor handles this, you should remove or suppress any existing license-related admin notices in your own plugin to avoid showing duplicate warnings. The leader Harbor instance (the highest version on the site) is the one that renders the notices, so there is no risk of duplicates across plugins that all bundle Harbor.
 
+### Notifying users on the legacy license page
+
+If your plugin has its own license settings page, display a notice on that page to inform users that licensing has moved to Liquid Web's unified system:
+
+```php
+// With a product name (recommended)
+lw_harbor_display_legacy_license_page_notice('GiveWP');
+
+// Without a product name (generic fallback)
+lw_harbor_display_legacy_license_page_notice();
+```
+
+This outputs a standard WordPress info notice:
+
+> GiveWP iss now part of Liquid Web\'s software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
+
+Call this function directly in the render callback for your legacy license page. Because it echoes immediately when called, no hook registration is needed — it renders wherever you place it.
+
 ---
 
 ## 4. Checking License Status
@@ -196,13 +214,14 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 
 ### Global Functions
 
-| Function                              | Signature                     | Purpose                                                                    |
-| ------------------------------------- | ----------------------------- |----------------------------------------------------------------------------|
-| `lw_harbor_is_product_license_active` | `(string $slug): bool`        | Check if a specific product slug has an active license.                    |
-| `lw_harbor_has_unified_license_key`   | `(): bool`                    | Check if a unified key is stored locally (no remote call).                 |
-| `lw_harbor_get_unified_license_key`   | `(): ?string`                 | Retrieve the stored unified license key.                                   |
-| `lw_harbor_is_feature_enabled`        | `(string $slug): bool`        | Check if a feature is currently active locally on this site.               |
-| `lw_harbor_is_feature_available`      | `(string $slug): bool`        | Check if the customer's license/tier includes this feature.                |
-| `lw_harbor_get_license_page_url`      | `(): string`                  | Get the admin URL for the Feature Manager page (empty string if inactive). |
-| `lw_harbor_get_licensed_domain`       | `(): string`                  | Get the domain used for licensing.                                         |
-| `lw_harbor_register_submenu`          | `(string $parent_slug): void` | Append a Licensing submenu item to a plugin's top-level admin menu.        |
+| Function                                       | Signature                           | Purpose                                                                         |
+| ---------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------- |
+| `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Check if a specific product slug has an active license.                         |
+| `lw_harbor_has_unified_license_key`            | `(): bool`                          | Check if a unified key is stored locally (no remote call).                      |
+| `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                        |
+| `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                    |
+| `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                     |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Feature Manager page (empty string if inactive).      |
+| `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                          |
+| `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu.             |
+| `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system. |

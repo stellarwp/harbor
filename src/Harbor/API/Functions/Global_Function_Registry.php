@@ -3,6 +3,7 @@
 namespace LiquidWeb\Harbor\API\Functions;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
+use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
@@ -127,6 +128,12 @@ class Global_Function_Registry {
 			static function (): string {
 				return admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG );
 			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_display_legacy_license_page_notice',
+			$version,
+			new Display_Legacy_License_Page_Notice()
 		);
 
 		\_lw_harbor_global_function_registry(
