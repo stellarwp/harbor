@@ -7,7 +7,6 @@ use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Licensing\License_Manager;
@@ -65,7 +64,6 @@ class Resolve_Feature_Collection {
 	 */
 	private array $type_map = [
 		Feature::TYPE_PLUGIN => Plugin::class,
-		Feature::TYPE_FLAG   => Flag::class,
 		Feature::TYPE_THEME  => Theme::class,
 	];
 
@@ -216,8 +214,8 @@ class Resolve_Feature_Collection {
 	/**
 	 * Hydrates a Feature object from a catalog feature entry.
 	 *
-	 * Maps catalog types (plugin, theme, flag) to Feature subclasses
-	 * (Plugin, Theme, Flag) and computes is_available and in_catalog_tier.
+	 * Maps catalog types (plugin, theme) to Feature subclasses
+	 * and computes is_available and in_catalog_tier.
 	 *
 	 * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
 	 * When capabilities is null (no license), all paid-tier features are unavailable and not in tier.

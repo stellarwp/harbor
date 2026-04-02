@@ -12,8 +12,8 @@ use LiquidWeb\Harbor\Features\Contracts\Strategy;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Flag;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
@@ -56,7 +56,7 @@ final class ManagerTest extends HarborTestCase {
 
 		$this->collection = new Feature_Collection();
 		$this->collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
 					'slug'         => 'test-feature',
 					'product'      => 'TestGroup',
@@ -100,7 +100,6 @@ final class ManagerTest extends HarborTestCase {
 	 * @return void
 	 */
 	protected function tearDown(): void {
-		delete_option( 'lw_harbor_feature_kad-pattern-hub_active' );
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( Catalog_Repository::CATALOG_STATE_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
@@ -160,7 +159,7 @@ final class ManagerTest extends HarborTestCase {
 	 */
 	public function test_it_returns_wp_error_when_enabling_revoked_feature(): void {
 		$this->collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
 					'slug'            => 'revoked-feature',
 					'product'         => 'TestGroup',
@@ -385,40 +384,9 @@ final class ManagerTest extends HarborTestCase {
 		$this->bind_fixture_clients();
 		$manager = $this->container->get( Manager::class );
 
-		$flag = $manager->get( 'kad-pattern-hub' );
-		$this->assertInstanceOf( Flag::class, $flag );
-		$this->assertSame( 'kad-pattern-hub', $flag->get_slug() );
-
 		$plugin = $manager->get( 'kad-blocks-pro' );
 		$this->assertInstanceOf( Plugin::class, $plugin );
 		$this->assertSame( 'kad-blocks-pro', $plugin->get_slug() );
-	}
-
-	/**
-	 * Tests enable and disable write and clear the DB flag.
-	 *
-	 * @return void
-	 */
-	public function test_enable_and_disable_write_db_flags(): void {
-		update_option( License_Repository::KEY_OPTION_NAME, 'lwsw-unified-kad-pro-2026' );
-
-		$this->bind_fixture_clients();
-		$manager    = $this->container->get( Manager::class );
-		$option_key = 'lw_harbor_feature_kad-pattern-hub_active';
-
-		// Enable — DB flag set, returned feature and is_enabled agree.
-		$enabled = $manager->enable( 'kad-pattern-hub' );
-		$this->assertInstanceOf( Feature::class, $enabled );
-		$this->assertTrue( $enabled->is_enabled() );
-		$this->assertSame( '1', get_option( $option_key ) );
-		$this->assertTrue( $manager->is_enabled( 'kad-pattern-hub' ) );
-
-		// Disable — DB flag cleared, returned feature and is_enabled agree.
-		$disabled = $manager->disable( 'kad-pattern-hub' );
-		$this->assertInstanceOf( Feature::class, $disabled );
-		$this->assertFalse( $disabled->is_enabled() );
-		$this->assertSame( '0', get_option( $option_key ) );
-		$this->assertFalse( $manager->is_enabled( 'kad-pattern-hub' ) );
 	}
 
 	/**
@@ -671,7 +639,7 @@ final class ManagerTest extends HarborTestCase {
 	public function test_is_available_returns_false_for_unavailable_feature(): void {
 		$collection = new Feature_Collection();
 		$collection->add(
-			Flag::from_array(
+			Theme::from_array(
 				[
 					'slug'         => 'locked-feature',
 					'product'      => 'TestGroup',

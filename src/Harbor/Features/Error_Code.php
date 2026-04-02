@@ -202,7 +202,7 @@ class Error_Code {
 	public const FEATURE_NOT_ACTIVE = 'lw-harbor-feature-not-active';
 
 	/**
-	 * The feature type does not support updates (e.g. flag features).
+	 * The feature type does not support updates.
 	 *
 	 * @since 1.0.0
 	 *

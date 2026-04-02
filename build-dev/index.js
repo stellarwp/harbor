@@ -3797,6 +3797,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
 /* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
 /**
  * Behavior hook for FeatureRow.
  *
@@ -3805,6 +3806,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -3842,7 +3844,7 @@ function useFeatureRow(feature) {
     disableFeature,
     updateFeature
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
-  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => feature.type !== 'flag' && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
+  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => (0,_types_utils__WEBPACK_IMPORTED_MODULE_7__.isInstallableFeature)(feature) && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
   const isLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
@@ -4951,11 +4953,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
 /**
  * Selectors for the lw @wordpress/data store.
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -4984,11 +4988,10 @@ const getFeatureMismatchType = (state, slug) => {
 const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? false;
 
 /**
- * True when any plugin or theme feature is being toggled or updated.
+ * True when any feature is being toggled or updated.
  *
  * Both toggle and update operations trigger WordPress install/activate/deactivate
- * operations that should not run concurrently. Flag features are exempt
- * because they only flip a database option.
+ * operations that should not run concurrently.
  *
  * Memoized via createSelector so the loops only re-run when
  * the relevant sub-trees actually change.
@@ -4999,11 +5002,11 @@ const isAnyInstallableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.cre
     updating,
     bySlug
   } = state.features;
-  const isNonFlag = slug => {
+  const isInstallable = slug => {
     const feature = bySlug[slug];
-    return feature !== undefined && feature.type !== 'flag';
+    return feature !== undefined && (0,_types_utils__WEBPACK_IMPORTED_MODULE_2__.isInstallableFeature)(feature);
   };
-  return Object.keys(toggling).some(isNonFlag) || Object.keys(updating).some(isNonFlag);
+  return Object.keys(toggling).some(isInstallable) || Object.keys(updating).some(isInstallable);
 }, state => [state.features.toggling, state.features.updating, state.features.bySlug]);
 
 // ---------------------------------------------------------------------------
@@ -5066,6 +5069,36 @@ const isLicenseDeleting = state => state.license.isDeleting;
 const canModifyLicense = state => !state.license.isStoring && !state.license.isDeleting;
 const getStoreLicenseError = state => state.license.storeError;
 const getDeleteLicenseError = state => state.license.deleteError;
+
+/***/ },
+
+/***/ "./resources/js/types/utils.ts"
+/*!*************************************!*\
+  !*** ./resources/js/types/utils.ts ***!
+  \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isInstallableFeature: () => (/* binding */ isInstallableFeature),
+/* harmony export */   isPluginFeature: () => (/* binding */ isPluginFeature),
+/* harmony export */   isThemeFeature: () => (/* binding */ isThemeFeature)
+/* harmony export */ });
+/**
+ * Type guard utilities for narrowing Feature union types.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+function isPluginFeature(feature) {
+  return feature.type === 'plugin';
+}
+function isThemeFeature(feature) {
+  return feature.type === 'theme';
+}
+function isInstallableFeature(feature) {
+  return feature.type === 'plugin' || feature.type === 'theme';
+}
 
 /***/ },
 

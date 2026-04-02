@@ -141,8 +141,7 @@ if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 	/**
-	 * Checks if a feature is available in the catalog AND enabled/active.
-	 * Returns false if the feature is not in the catalog at all.
+	 * Whether a feature is currently active/enabled locally on this site.
 	 *
 	 * @since 1.0.0
 	 *
@@ -159,7 +158,7 @@ if ( ! function_exists( 'lw_harbor_is_feature_enabled' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	/**
-	 * Checks if a feature is available in the catalog, regardless of enabled state.
+	 * Whether the customer's license/tier includes this feature.
 	 *
 	 * @since 1.0.0
 	 *
@@ -171,6 +170,27 @@ if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_feature_available' );
 
 		return $callback ? (bool) $callback( $slug ) : false;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_register_submenu' ) ) {
+	/**
+	 * Registers a submenu item under a plugin's existing menu that links to the Harbor feature manager.
+	 *
+	 * Call this during or after plugins_loaded, before the admin_menu hook fires.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $parent_slug The slug of the parent top-level menu item.
+	 *
+	 * @return void
+	 */
+	function lw_harbor_register_submenu( string $parent_slug ): void {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_register_submenu' );
+
+		if ( $callback ) {
+			$callback( $parent_slug );
+		}
 	}
 }
 

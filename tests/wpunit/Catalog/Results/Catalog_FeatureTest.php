@@ -65,7 +65,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 	public function test_nullable_fields_default_when_missing(): void {
 		$data = [
 			'feature_slug' => 'patchstack',
-			'type'         => 'flag',
+			'type'         => 'plugin',
 			'minimum_tier' => 'kadence-pro',
 			'is_dot_org'   => false,
 			'name'         => 'PatchStack Firewall',

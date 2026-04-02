@@ -15,6 +15,7 @@ import type {
 } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
 import { getFeatureMismatch } from '@/lib/feature-utils';
+import { isInstallableFeature } from '@/types/utils';
 
 // ---------------------------------------------------------------------------
 // Features
@@ -64,11 +65,10 @@ export const isFeatureUpdating = (state: State, slug: string): boolean =>
 	state.features.updating[slug] ?? false;
 
 /**
- * True when any plugin or theme feature is being toggled or updated.
+ * True when any feature is being toggled or updated.
  *
  * Both toggle and update operations trigger WordPress install/activate/deactivate
- * operations that should not run concurrently. Flag features are exempt
- * because they only flip a database option.
+ * operations that should not run concurrently.
  *
  * Memoized via createSelector so the loops only re-run when
  * the relevant sub-trees actually change.
@@ -76,13 +76,13 @@ export const isFeatureUpdating = (state: State, slug: string): boolean =>
 export const isAnyInstallableBusy = createSelector(
 	(state: State): boolean => {
 		const { toggling, updating, bySlug } = state.features;
-		const isNonFlag = (slug: string): boolean => {
+		const isInstallable = (slug: string): boolean => {
 			const feature = bySlug[slug];
-			return feature !== undefined && feature.type !== 'flag';
+			return feature !== undefined && isInstallableFeature(feature);
 		};
 		return (
-			Object.keys(toggling).some(isNonFlag) ||
-			Object.keys(updating).some(isNonFlag)
+			Object.keys(toggling).some(isInstallable) ||
+			Object.keys(updating).some(isInstallable)
 		);
 	},
 	(state: State) => [

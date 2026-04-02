@@ -84,7 +84,6 @@ final class Fixture_ClientTest extends HarborTestCase {
 			}
 		}
 
-		$this->assertArrayHasKey( 'flag', $types );
 		$this->assertArrayHasKey( 'plugin', $types );
 		$this->assertArrayHasKey( 'theme', $types );
 	}
@@ -96,18 +95,6 @@ final class Fixture_ClientTest extends HarborTestCase {
 			foreach ( $catalog->get_features() as $feature ) {
 				if ( $feature->get_type() === 'plugin' ) {
 					$this->assertNotNull( $feature->get_plugin_file(), sprintf( '%s should have plugin_file', $feature->get_feature_slug() ) );
-				}
-			}
-		}
-	}
-
-	public function test_flag_features_have_no_plugin_file(): void {
-		$result = $this->client->get_catalog();
-
-		foreach ( $result as $catalog ) {
-			foreach ( $catalog->get_features() as $feature ) {
-				if ( $feature->get_type() === 'flag' ) {
-					$this->assertNull( $feature->get_plugin_file(), sprintf( '%s should not have plugin_file', $feature->get_feature_slug() ) );
 				}
 			}
 		}

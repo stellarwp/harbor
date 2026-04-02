@@ -13,7 +13,7 @@ Features are not a third data source. They are the computed intersection of what
 Every feature has two independent states:
 
 - **Available**: the feature's slug appears in the capabilities array returned by the licensing API for this product. Computed from the licensing response — the catalog defines what features exist and their metadata, but capabilities are the source of truth for access.
-- **Enabled**: the feature is actively turned on for this site. A feature cannot be enabled without being available, with one exception: grandfathered flags.
+- **Enabled**: the feature is actively turned on for this site. A feature cannot be enabled without being available.
 
 ## Feature Types
 
@@ -41,21 +41,9 @@ An installable WordPress theme. The theme's `feature_slug` is its WordPress slug
 | **Disable**         | Does **not** delete files. Returns success if already absent; returns `THEME_DELETE_REQUIRED` if still on disk. Programmatic deletion is intentionally unsupported — it's destructive and irreversible |
 | **Ownership**       | Author header checked via `wp_get_theme()`                                                                                                                                                             |
 
-### Flag
-
-A capability toggle within an existing plugin, not a separate installable. The owning plugin checks a WordPress option to unlock functionality.
-
-| Aspect              | Behavior                                                                         |
-| ------------------- | -------------------------------------------------------------------------------- |
-| **Source of truth** | WordPress option `lw_harbor_feature_{slug}_active` (autoloaded)                  |
-| **Enable**          | Sets option to `'1'`. Requires a qualifying tier                                 |
-| **Disable**         | Sets option to `'0'`. Always allowed, but re-enabling requires a qualifying tier |
-
-**Grandfathering:** Once a flag is enabled, it stays enabled even if the license expires or the customer downgrades. The stored option is never cleared by the system. New flags cannot be enabled without a qualifying license, and a disabled grandfathered flag cannot be re-enabled without one.
-
 ### Install Lock
 
-Plugin and Theme features share a global transient lock (`lw_harbor_install_lock`, 120s TTL). Only one installable feature can install at a time. Flags are unaffected.
+Plugin and Theme features share a global transient lock (`lw_harbor_install_lock`, 120s TTL). Only one installable feature can install at a time.
 
 ## Resolution
 
@@ -80,18 +68,18 @@ flowchart TD
 
     EnabledCheck{"Check local enabled state\n(per strategy)"}
 
-    EnabledCheck -->|Plugin / Theme| Installable["WP activation\nstate on disk"]
-    EnabledCheck -->|Flag| Flag["Option value\nlw_harbor_feature_ slug _active"]
+    EnabledCheck -->|Plugin| PluginState["WP plugin\nactivation state"]
+    EnabledCheck -->|Theme| ThemeState["Theme disk\npresence"]
 
-    Installable --> HasUpdate["has_update?\ncompare installed_version\nvs catalog version"]
-    Flag --> Grandfather["Grandfathered\nif enabled + license lost"]
+    PluginState --> HasUpdate["has_update?\ncompare installed_version\nvs catalog version"]
+    ThemeState --> HasUpdate
 ```
 
 `Resolve_Feature_Collection` joins catalog and licensing data to produce a `Feature_Collection`. Availability is determined by checking whether the feature's slug appears in the product entry's `capabilities` array from the licensing response.
 
-The catalog defines which features exist, their metadata (name, description, type, minimum tier for display), and which tier they belong to for UI purposes. The `capabilities` array is what decides access. This allows the licensing service to handle cases the catalog alone cannot: grandfathered access after a tier restructure, one-time promotional grants, or individual exceptions made for a specific license.
+The catalog defines which features exist, their metadata (name, description, type, minimum tier for display), and which tier they belong to for UI purposes. The `capabilities` array is what decides access. This allows the licensing service to handle cases the catalog alone cannot: one-time promotional grants or individual exceptions made for a specific license.
 
-For `Installable` features (Plugin, Theme), the resolver also reads `installed_version` from disk and stores it on the resolved Feature. This is the version currently on the site, distinct from the catalog's `version` which is the latest available. Flag features always have `installed_version: null`.
+For `Installable` features (Plugin, Theme), the resolver also reads `installed_version` from disk and stores it on the resolved Feature. This is the version currently on the site, distinct from the catalog's `version` which is the latest available.
 
 `has_update()` is a computed method on the `Installable` interface that centralizes the update-available check. It returns `true` when the feature is installed on disk and `version_compare( catalog_version, installed_version, '>' )`. Both Plugin and Theme implement this method. The update handlers (`Plugin_Handler`, `Theme_Handler`) delegate to this result (via the `has_update` field in the update data array) rather than performing their own inline comparison.
 
@@ -178,7 +166,7 @@ For how the React frontend consumes these endpoints to render the feature list a
 | `FEATURE_ENABLE_FAILED`          | 422  | Strategy threw an exception during enable          |
 | `FEATURE_DISABLE_FAILED`         | 422  | Strategy threw an exception during disable         |
 | `FEATURE_NOT_ACTIVE`             | 422  | Feature is not installed or active                 |
-| `UPDATE_NOT_SUPPORTED`           | 422  | Feature type does not support updates (e.g. flags) |
+| `UPDATE_NOT_SUPPORTED`           | 422  | Feature type does not support updates              |
 | `NO_UPDATE_AVAILABLE`            | 422  | No update available for the feature                |
 | `UPDATE_FAILED`                  | 422  | The update operation failed                        |
 | `INVALID_RESPONSE`               | 502  | Catalog response couldn't be parsed                |
@@ -212,7 +200,7 @@ Every resolved feature includes these fields:
 | `description`       | string  | Feature description                                               |
 | `product`           | string  | Product the feature belongs to                                    |
 | `tier`              | string  | Minimum tier required                                             |
-| `type`              | string  | `plugin`, `theme`, or `flag`                                      |
+| `type`              | string  | `plugin` or `theme`                                               |
 | `is_available`      | boolean | Whether the current license covers this feature                   |
 | `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier |
 | `is_enabled`        | boolean | Whether the feature is currently enabled on this site             |
@@ -220,16 +208,16 @@ Every resolved feature includes these fields:
 
 Installable features (`plugin` and `theme`) also include:
 
-| Field               | Type         | Description                                               |
-| ------------------- | ------------ | --------------------------------------------------------- |
-| `released_at`       | string\|null | Release date of the latest version (ISO 8601)             |
-| `version`           | string\|null | Latest available version from the catalog                 |
-| `changelog`         | string\|null | Changelog HTML for the latest version                     |
-| `authors`           | string[]     | Expected authors for ownership verification               |
-| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org         |
-| `installed_version` | string\|null | Currently installed version, or null if not installed     |
-| `update_version`    | string\|null | Version from the WordPress update transient, or null      |
-| `has_update`        | boolean      | Whether an update is available (pre-computed)             |
+| Field               | Type         | Description                                           |
+| ------------------- | ------------ | ----------------------------------------------------- |
+| `released_at`       | string\|null | Release date of the latest version (ISO 8601)         |
+| `version`           | string\|null | Latest available version from the catalog             |
+| `changelog`         | string\|null | Changelog HTML for the latest version                 |
+| `authors`           | string[]     | Expected authors for ownership verification           |
+| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org     |
+| `installed_version` | string\|null | Currently installed version, or null if not installed |
+| `update_version`    | string\|null | Version from the WordPress update transient, or null  |
+| `has_update`        | boolean      | Whether an update is available (pre-computed)         |
 
 Plugin features also include:
 
@@ -245,8 +233,8 @@ Plugin features also include:
 | Latest version, release date, changelog                 | Catalog (`version`, `released_at`, `changelog`)                                                                                                                                     |
 | Customer's tier, key validity                           | Licensing                                                                                                                                                                           |
 | **Whether available** (`is_available`)                  | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                  |
-| **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk / flag option), stamped by Manager                                                                                             |
-| **Installed version** (`installed_version`)             | Read from disk during resolution via `Installable`. Null for flags and uninstalled extensions                                                                                       |
+| **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                           |
+| **Installed version** (`installed_version`)             | Read from disk during resolution via `Installable`. Null for uninstalled extensions                                                                                                 |
 | **Update available** (`has_update`)                     | Computed by `Installable::has_update()`: `version_compare( catalog_version, installed_version, '>' )`. False when not installed or catalog version is absent. Plugin and Theme only |
 
 ## Related Subsystems

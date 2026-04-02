@@ -354,15 +354,16 @@ final class CatalogTest extends HarborTestCase {
 			),
 			Catalog_Feature::from_array(
 				[
-					'feature_slug'      => 'kadence-pro-flag',
-					'type'              => 'flag',
+					'feature_slug'      => 'kadence-pro-addon',
+					'type'              => 'plugin',
 					'minimum_tier'      => 'pro',
-					'name'              => 'Pro Flag',
-					'description'       => 'A pro-only flag.',
+					'name'              => 'Pro Addon',
+					'description'       => 'A pro-only addon.',
 					'category'          => 'Design',
 					'is_dot_org'        => false,
-					'documentation_url' => 'https://example.com/docs/flag',
-				] 
+					'plugin_file'       => 'kadence-pro-addon/kadence-pro-addon.php',
+					'documentation_url' => 'https://example.com/docs/addon',
+				]
 			),
 		];
 

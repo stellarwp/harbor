@@ -12,7 +12,7 @@ The catalog data comes from the Commerce Portal API. It is not license-specific.
 
 ### Products
 
-The catalog is organized by product. Kadence, GiveWP, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins, themes, flags) that customers can enable based on their tier.
+The catalog is organized by product. Kadence, GiveWP, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins and themes) that customers can enable based on their tier.
 
 Each product has an entry plugin that bootstraps Harbor on the site (see [Products and Entry Plugins](../harbor.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
 
@@ -37,19 +37,19 @@ A product's tiers are its own. Tier slugs are namespaced to the product (`kadenc
 
 ### Features
 
-Features are the individual capabilities, plugins, themes, and flags that make up a product family. Each feature belongs to one product and has a minimum tier requirement.
+Features are the individual plugins and themes that make up a product family. Each feature belongs to one product and has a minimum tier requirement.
 
 | Field               | Type           | Description                                                                                                                        |
 | ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `feature_slug`      | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                                          |
-| `type`              | string         | One of `plugin`, `theme`, or `flag`                                                                                                |
+| `type`              | string         | One of `plugin` or `theme`                                                                                                         |
 | `minimum_tier`      | string         | Tier slug required to access this feature                                                                                          |
-| `plugin_file`       | string\|null   | Plugin file path relative to the plugins directory (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes and flags. |
+| `plugin_file`       | string\|null   | Plugin file path relative to the plugins directory (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes.           |
 | `is_dot_org`        | bool           | Whether the feature is available on WordPress.org                                                                                  |
 | `download_url`      | string\|null   | Download URL for features not on WordPress.org                                                                                     |
-| `version`           | string\|null   | Latest available version from the Commerce Portal. Null for flags.                                                                 |
-| `released_at`       | string\|null   | Release date of the latest version (ISO 8601). Null for flags.                                                                     |
-| `changelog`         | string\|null   | Changelog HTML for the latest version, consistent with `plugins_api()` sections. Null for flags.                                   |
+| `version`           | string\|null   | Latest available version from the Commerce Portal                                                                                  |
+| `released_at`       | string\|null   | Release date of the latest version (ISO 8601)                                                                                      |
+| `changelog`         | string\|null   | Changelog HTML for the latest version, consistent with `plugins_api()` sections                                                    |
 | `name`              | string         | Display name                                                                                                                       |
 | `description`       | string         | Short description of what the feature does                                                                                         |
 | `category`          | string         | Grouping category (e.g., `blocks`, `theme`, `security`, `woocommerce`)                                                             |
@@ -58,13 +58,11 @@ Features are the individual capabilities, plugins, themes, and flags that make u
 
 #### Feature Types
 
-Features come in three types, each representing a different kind of deliverable:
+Features come in two types, each representing a different kind of deliverable:
 
 **`plugin`**: an installable WordPress plugin. Has a `plugin_file` (plugin file path) and either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`). These are features that need to be downloaded, installed, and activated.
 
 **`theme`**: an installable WordPress theme. The `feature_slug` doubles as the theme stylesheet (directory name). Has either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`).
-
-**`flag`**: a capability toggle. Not a separate installable; it unlocks functionality within an existing plugin. Has no `plugin_file` or `download_url`. Think of these as feature flags that are gated by tier.
 
 #### Tier Gating
 
@@ -143,7 +141,7 @@ graph LR
         F2["kadence\ntheme, min: kadence-free\ndot-org"]
         F3["kad-blocks-pro\nplugin, min: kadence-basic\nexclusive"]
         F4["kad-shop-kit\nplugin, min: kadence-pro\nexclusive"]
-        F5["kad-pattern-hub\nflag, min: kadence-basic"]
+        F5["kad-pattern-hub\nplugin, min: kadence-basic"]
         F6["..."]
     end
 ```
@@ -174,13 +172,12 @@ Tier slugs are product-prefixed (`kadence-pro`, `give-basic`) and are consistent
 
 ### Feature Type Mapping
 
-The catalog uses delivery-oriented type names (`plugin`, `theme`, `flag`). The Features subsystem maps these to its own type hierarchy during resolution:
+The catalog uses delivery-oriented type names (`plugin`, `theme`). The Features subsystem maps these to its own type hierarchy during resolution:
 
-| Catalog type | Feature class | Meaning                                     |
-| ------------ | ------------- | ------------------------------------------- |
-| `plugin`     | `Plugin`      | Installable WordPress plugin                |
-| `theme`      | `Theme`       | Installable WordPress theme                 |
-| `flag`       | `Flag`        | Capability toggle within an existing plugin |
+| Catalog type | Feature class | Meaning                      |
+| ------------ | ------------- | ---------------------------- |
+| `plugin`     | `Plugin`      | Installable WordPress plugin |
+| `theme`      | `Theme`       | Installable WordPress theme  |
 
 ### What the Catalog Does Not Know
 

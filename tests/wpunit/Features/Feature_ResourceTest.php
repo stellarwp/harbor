@@ -229,9 +229,9 @@ final class Feature_ResourceTest extends HarborTestCase {
 			$transient->response = [];
 		}
 
-		$item                                  = new \stdClass();
-		$item->new_version                     = $version;
-		$transient->response[ $plugin_file ]   = $item;
+		$item                                = new \stdClass();
+		$item->new_version                   = $version;
+		$transient->response[ $plugin_file ] = $item;
 
 		set_site_transient( 'update_plugins', $transient );
 	}

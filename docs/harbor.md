@@ -14,7 +14,7 @@ Harbor introduces **unified licensing**. Instead of each plugin managing its own
 
 ## Products and Entry Plugins
 
-A product is a brand family, like Kadence, GiveWP, The Events Calendar, or LearnDash. Each product encompasses many features: plugins, themes, and capability flags that the customer can enable based on their tier.
+A product is a brand family, like Kadence, GiveWP, The Events Calendar, or LearnDash. Each product encompasses many features: plugins and themes that the customer can enable based on their tier.
 
 Each product has an **entry plugin**, a WordPress plugin that bootstraps Harbor on the site. The entry plugin bundles a vendor-prefixed copy of the Harbor library, registers the product with the leader via the product registry, and may contribute an embedded license key. The entry plugin is how a product gets on the site, but it is not the product itself.
 
@@ -45,7 +45,7 @@ See [Licensing](subsystems/licensing.md) for the full data shapes, caching, key 
 
 The Commerce Portal API provides the product catalog, the complete definition of every product family, its tiers, and its features. The catalog is not personalized. Every site sees the same catalog regardless of what key it has.
 
-Each product defines a ranked set of tiers (Basic, Pro, Agency) and a set of features. Each feature has a minimum tier requirement and a delivery type: `plugin` (installable WordPress plugin), `theme` (installable WordPress theme), or `flag` (capability toggle within an existing plugin).
+Each product defines a ranked set of tiers (Basic, Pro, Agency) and a set of features. Each feature has a minimum tier requirement and a delivery type: `plugin` (installable WordPress plugin) or `theme` (installable WordPress theme).
 
 The catalog defines the menu. It does not know what the customer ordered.
 
@@ -55,9 +55,7 @@ See [Catalog](subsystems/catalog.md) for the product/tier/feature structure, cac
 
 Features are not a third data source. They are the computed join of catalog and licensing data. The resolution process walks every feature in the catalog, checks whether the feature's slug appears in the licensing product entry's capabilities array, and produces a resolved collection where each feature knows whether it's available to this customer.
 
-Beyond availability, features track local state, specifically whether a feature is currently enabled on this site. A Plugin feature is enabled by installing and activating the plugin. A Flag feature is enabled by setting a WordPress option that unlocks functionality within an already-installed plugin. Strategies handle the mechanics of each type.
-
-The two types have different behavior on license expiration. Plugin features require an active license to enable. If the license expires, the plugin stays installed but new Plugin features can't be added. Flag features follow a grandfathering rule: once enabled, a flag stays active even if the license expires or downgrades. The customer keeps what they turned on, but can't enable new flags or re-enable ones they disabled.
+Beyond availability, features track local state, specifically whether a feature is currently enabled on this site. A Plugin feature is enabled by installing and activating the plugin. A Theme feature is enabled by installing the theme. Strategies handle the mechanics of each type. Plugin/Theme features require an active license to enable.
 
 See [Features](subsystems/features.md) for the resolution algorithm, strategies, caching, and the REST API.
 
@@ -81,7 +79,7 @@ Both Licensing and the Catalog use the same product-prefixed tier slug conventio
 
 Feature availability is **not** determined by comparing tier ranks. Instead, the licensing response includes a `capabilities` array — a list of feature slugs that the license actually grants. A feature is available if and only if its slug appears in this array. The catalog's tier structure is used for display (e.g., showing which tier a feature belongs to in the UI) but has no bearing on the availability decision.
 
-This design allows the licensing service to handle cases that tier rank comparison cannot: access grandfathered after a tier restructure, promotional grants, or individual per-license exceptions. The actual tier slug format, tier names, and number of tiers per product are subject to change as the catalog and licensing contracts are finalized.
+This design allows the licensing service to handle cases that tier rank comparison cannot: promotional grants or individual per-license exceptions. The actual tier slug format, tier names, and number of tiers per product are subject to change as the catalog and licensing contracts are finalized.
 
 ## One Key Per Site
 
