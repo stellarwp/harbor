@@ -32,7 +32,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 			static function ( $entry ): string {
 				return $entry->productSlug;
 			},
-			iterator_to_array( $catalog->products )
+			$catalog->products->all()
 		);
 
 		$this->assertSame( [ 'give', 'the-events-calendar', 'learndash', 'kadence' ], $slugs );
@@ -97,7 +97,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 			static function ( $entry ): string {
 				return $entry->productSlug;
 			},
-			iterator_to_array( $catalog->products )
+			$catalog->products->all()
 		);
 
 		$this->assertContains( 'kadence', $slugs );
