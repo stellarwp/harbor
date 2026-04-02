@@ -537,11 +537,11 @@
   .lw-harbor-ui .w-36 {
     width: calc(var(--spacing) * 36) !important;
   }
+  .lw-harbor-ui .w-\[130px\] {
+    width: 130px !important;
+  }
   .lw-harbor-ui .w-\[168px\] {
     width: 168px !important;
-  }
-  .lw-harbor-ui .w-\[240px\] {
-    width: 240px !important;
   }
   .lw-harbor-ui .w-\[260px\] {
     width: 260px !important;

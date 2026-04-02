@@ -7,6 +7,7 @@ use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use Throwable;
 
@@ -132,6 +133,20 @@ class Global_Function_Registry {
 			'lw_harbor_register_submenu',
 			$version,
 			new Register_Submenu()
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_get_licensed_domain',
+			$version,
+			static function (): string {
+				try {
+					return Config::get_container()->get( Data::class )->get_domain();
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error getting site domain' );
+
+					return '';
+				}
+			}
 		);
 	}
 }

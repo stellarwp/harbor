@@ -136,6 +136,14 @@ if (lw_harbor_has_unified_license_key()) {
 $key = lw_harbor_get_unified_license_key(); // string|null
 ```
 
+### Get the licensed domain
+
+```php
+$domain = lw_harbor_get_licensed_domain(); // string
+```
+
+This returns the domain that Harbor uses for licensing on the current site (the host portion of the WordPress `siteurl`, lowercased). Useful when your plugin needs to display or transmit the licensed domain to an external service.
+
 ### Check feature availability
 
 ```php
@@ -189,11 +197,12 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 ### Global Functions
 
 | Function                              | Signature                     | Purpose                                                                    |
-| ------------------------------------- | ----------------------------- | -------------------------------------------------------------------------- |
+| ------------------------------------- | ----------------------------- |----------------------------------------------------------------------------|
 | `lw_harbor_is_product_license_active` | `(string $slug): bool`        | Check if a specific product slug has an active license.                    |
 | `lw_harbor_has_unified_license_key`   | `(): bool`                    | Check if a unified key is stored locally (no remote call).                 |
 | `lw_harbor_get_unified_license_key`   | `(): ?string`                 | Retrieve the stored unified license key.                                   |
 | `lw_harbor_is_feature_enabled`        | `(string $slug): bool`        | Check if a feature is currently active locally on this site.               |
 | `lw_harbor_is_feature_available`      | `(string $slug): bool`        | Check if the customer's license/tier includes this feature.                |
 | `lw_harbor_get_license_page_url`      | `(): string`                  | Get the admin URL for the Feature Manager page (empty string if inactive). |
+| `lw_harbor_get_licensed_domain`       | `(): string`                  | Get the domain used for licensing.                                         |
 | `lw_harbor_register_submenu`          | `(string $parent_slug): void` | Append a Licensing submenu item to a plugin's top-level admin menu.        |

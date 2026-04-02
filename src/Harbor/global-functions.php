@@ -194,6 +194,23 @@ if ( ! function_exists( 'lw_harbor_register_submenu' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_get_licensed_domain' ) ) {
+	/**
+	 * Returns the domain used for licensing on the current site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The site domain, or an empty string if no instance is active.
+	 */
+	function lw_harbor_get_licensed_domain(): string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_licensed_domain' );
+
+		$result = $callback ? $callback() : '';
+
+		return is_string( $result ) ? $result : '';
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	/**
 	 * Returns the admin URL for the unified Feature Manager page.

@@ -218,4 +218,18 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		$this->assertNull( lw_harbor_get_unified_license_key() );
 	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_get_licensed_domain()
+	// -------------------------------------------------------------------------
+
+	public function test_get_licensed_domain_matches_site_url_host(): void {
+		$parsed = wp_parse_url( get_option( 'siteurl', '' ) );
+		$expected = strtolower( $parsed['host'] ?? '' );
+
+		$domain = lw_harbor_get_licensed_domain();
+
+		$this->assertNotEmpty( $domain );
+		$this->assertSame( $expected, $domain );
+	}
 }

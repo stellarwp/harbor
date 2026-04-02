@@ -61,6 +61,20 @@ When the catalog has not been fetched yet, returns an empty array `[]`.
 
 ### Errors
 
-| HTTP | Code                                  | Meaning                          |
-| ---- | ------------------------------------- | -------------------------------- |
-| 502  | `lw-harbor-catalog-invalid-response`  | Catalog API response was invalid |
+| HTTP | Code                                 | Meaning                          |
+| ---- | ------------------------------------ | -------------------------------- |
+| 502  | `lw-harbor-catalog-invalid-response` | Catalog API response was invalid |
+
+## POST /liquidweb/harbor/v1/catalog/refresh
+
+Force-refreshes the catalog from the upstream Commerce Portal API, bypassing any cached data. Returns the freshly fetched catalog in the same shape as `GET /catalog`.
+
+### Response (200)
+
+Same shape as `GET /catalog`.
+
+### Errors
+
+| HTTP | Code                                 | Meaning                          |
+| ---- | ------------------------------------ | -------------------------------- |
+| 502  | `lw-harbor-catalog-invalid-response` | Catalog API response was invalid |

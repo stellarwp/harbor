@@ -75,6 +75,19 @@ final class Catalog_Controller extends WP_REST_Controller {
 				'schema' => [ $this, 'get_public_item_schema' ],
 			]
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/refresh',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'refresh_items' ],
+					'permission_callback' => [ $this, 'check_permissions' ],
+				],
+				'schema' => [ $this, 'get_public_item_schema' ],
+			]
+		);
 	}
 
 	/**
@@ -99,6 +112,25 @@ final class Catalog_Controller extends WP_REST_Controller {
 	 */
 	public function get_items( $request ) {
 		$catalog = $this->repository->get();
+
+		if ( is_wp_error( $catalog ) ) {
+			return $catalog;
+		}
+
+		return new WP_REST_Response( $catalog->to_array() );
+	}
+
+	/**
+	 * Force refreshes the catalog from the upstream API and returns the result.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 *
+	 * @return WP_REST_Response|\WP_Error
+	 */
+	public function refresh_items( $request ) {
+		$catalog = $this->repository->refresh();
 
 		if ( is_wp_error( $catalog ) ) {
 			return $catalog;

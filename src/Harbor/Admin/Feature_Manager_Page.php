@@ -18,7 +18,7 @@ class Feature_Manager_Page {
 	 *
 	 * @since 1.0.0
 	 */
-	public const PAGE_SLUG = 'lws-feature-manager';
+	public const PAGE_SLUG = 'lw-software-manager';
 
 	/**
 	 * Hook suffix returned by add_menu_page().
@@ -43,8 +43,8 @@ class Feature_Manager_Page {
 		}
 
 		$this->page_hook = add_menu_page(
-			__( 'Liquid Web Software', '%TEXTDOMAIN%' ),
-			__( 'LW Software', '%TEXTDOMAIN%' ),
+			__( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ),
+			__( 'Liquid Web', '%TEXTDOMAIN%' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ $this, 'render' ],
@@ -56,7 +56,7 @@ class Feature_Manager_Page {
 	}
 
 	/**
-	 * Enqueues the React Feature Manager UI assets only on the lws-feature-manager page.
+	 * Enqueues the React Feature Manager UI assets only on the lw-software-manager page.
 	 *
 	 * Called on admin_enqueue_scripts. The hook suffix is compared against
 	 * $this->page_hook — the value returned by add_menu_page() — to ensure

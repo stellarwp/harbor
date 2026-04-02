@@ -4,6 +4,7 @@ namespace LiquidWeb\Harbor\Http;
 
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
@@ -20,6 +21,7 @@ final class Provider extends Abstract_Provider {
 	 */
 	public function register(): void {
 		$this->container->singleton( WordPressHttpClient::class );
+		$this->container->singleton( ClientInterface::class, WordPressHttpClient::class );
 		$this->container->singleton( Psr17Factory::class );
 		$this->container->singleton( RequestFactoryInterface::class, Psr17Factory::class );
 		$this->container->singleton( StreamFactoryInterface::class, Psr17Factory::class );

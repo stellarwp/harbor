@@ -116,7 +116,7 @@ Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 - [REST: Catalog](/docs/api/rest/catalog.md) — Catalog endpoints.
 - [REST: Features](/docs/api/rest/features.md) — Feature endpoints.
 - [REST: Legacy Licenses](/docs/api/rest/legacy-licenses.md) — Legacy license endpoints.
-- [Liquid Web Software Licensing v1](/docs/api/liquid-web-software-licensing-v1.md) — External licensing API consumed by Harbor.
+- [Liquid Web Licensing v1](/docs/api/liquid-web-software-licensing-v1.md) — External licensing API consumed by Harbor.
 
 ### Guides
 
