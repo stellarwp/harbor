@@ -92,9 +92,9 @@ export interface PluginFeature extends BaseFeature {
      */
     authors: string[];
     /**
-     * Whether the plugin is hosted on WordPress.org.
+     * WordPress.org slug for plugins_api() lookups, or null if not on WordPress.org.
      */
-    is_dot_org: boolean;
+    wporg_slug: string | null;
 }
 
 /**
@@ -109,9 +109,9 @@ export interface ThemeFeature extends BaseFeature {
      */
     authors: string[];
     /**
-     * Whether the theme is hosted on WordPress.org.
+     * WordPress.org slug for themes_api() lookups, or null if not on WordPress.org.
      */
-    is_dot_org: boolean;
+    wporg_slug: string | null;
 }
 
 /**
@@ -153,7 +153,7 @@ export type FeatureMismatchType = 'bonus' | 'revoked' | null;
  *
  * Field names match the Catalog_Feature PHP class and the catalog REST
  * endpoint response. These differ from the resolved Feature types above
- * (e.g. feature_slug vs slug, minimum_tier vs tier).
+ * (e.g. slug + kind vs slug + type, minimum_tier vs tier).
  *
  * @since 1.0.0
  */
@@ -161,23 +161,23 @@ export interface CatalogFeature {
     /**
      * Unique feature slug.
      */
-    feature_slug: string;
+    slug: string;
     /**
-     * Feature delivery type.
+     * Feature delivery kind (plugin or theme).
      */
-    type: FeatureType;
+    kind: FeatureType;
     /**
      * Minimum tier slug required for this feature.
      */
     minimum_tier: string;
     /**
-     * Plugin file path (plugin type only), or null for non-plugin features.
+     * Plugin file path (plugin kind only), or null for non-plugin features.
      */
     plugin_file: string | null;
     /**
-     * Whether the feature is hosted on WordPress.org.
+     * WordPress.org slug, or null if not on WordPress.org.
      */
-    is_dot_org: boolean;
+    wporg_slug: string | null;
     /**
      * Download URL for the feature archive, or null when unavailable.
      */
@@ -186,6 +186,10 @@ export interface CatalogFeature {
      * Latest version string, or null when unavailable.
      */
     version: string | null;
+    /**
+     * Release date, or null when unavailable.
+     */
+    release_date: string | null;
     /**
      * Human-readable feature name.
      */
@@ -206,6 +210,10 @@ export interface CatalogFeature {
      * URL to documentation or learn-more page.
      */
     documentation_url: string;
+    /**
+     * Homepage URL, or null when not available.
+     */
+    homepage: string | null;
 }
 
 /**
@@ -227,7 +235,23 @@ export interface CatalogTier {
      */
     rank: number;
     /**
-     * URL to purchase this tier.
+     * Tier price.
+     */
+    price: number;
+    /**
+     * Currency code (e.g. "USD").
+     */
+    currency: string;
+    /**
+     * Marketing feature descriptions for this tier.
+     */
+    features: string[];
+    /**
+     * Herald slugs associated with this tier.
+     */
+    herald_slugs: string[];
+    /**
+     * Checkout URL to purchase or upgrade to this tier.
      */
     purchase_url: string;
 }
@@ -239,9 +263,17 @@ export interface CatalogTier {
  */
 export interface ProductCatalog {
     /**
+     * Product ID from the Commerce Portal.
+     */
+    product_id: string;
+    /**
      * Product slug identifier.
      */
     product_slug: string;
+    /**
+     * Product display name.
+     */
+    product_name: string;
     /**
      * Available tiers ordered by rank.
      */

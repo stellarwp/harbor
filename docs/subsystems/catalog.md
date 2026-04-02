@@ -22,12 +22,16 @@ The product's own entry plugin is also returned as a feature within its catalog.
 
 Each product defines an ordered set of tiers that represent subscription levels. Tiers are ranked, and a higher rank means a higher tier with more entitlements.
 
-| Field          | Type   | Description                                                                 |
-| -------------- | ------ | --------------------------------------------------------------------------- |
-| `slug`         | string | Unique identifier within the product (e.g., `kadence-basic`, `kadence-pro`) |
-| `name`         | string | Display name (e.g., "Basic", "Pro", "Agency")                               |
-| `rank`         | int    | Numeric ordering value. Higher rank = higher tier                           |
-| `purchase_url` | string | URL where users can purchase or upgrade to this tier                        |
+| Field           | Type     | Description                                                                 |
+| --------------- | -------- | --------------------------------------------------------------------------- |
+| `slug`          | string   | Unique identifier within the product (e.g., `kadence-basic`, `kadence-pro`) |
+| `name`          | string   | Display name (e.g., "Basic", "Pro", "Agency")                               |
+| `rank`          | int      | Numeric ordering value. Higher rank = higher tier                           |
+| `price`         | int      | Price in the smallest currency unit (e.g., cents)                           |
+| `currency`      | string   | Currency code (e.g., `USD`)                                                 |
+| `features`      | string[] | Marketing feature strings for this tier                                     |
+| `herald_slugs`  | string[] | Herald slugs associated with this tier                                      |
+| `purchase_url`  | string   | Checkout URL to purchase or upgrade to this tier                            |
 
 Tiers are always sorted by rank. This ordering drives feature availability. A feature that requires `kadence-pro` (rank 2) is available to anyone on `kadence-pro` or `kadence-agency` (rank 3), but not to someone on `kadence-basic` (rank 1).
 
@@ -41,28 +45,29 @@ Features are the individual plugins and themes that make up a product family. Ea
 
 | Field               | Type           | Description                                                                                                                        |
 | ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `feature_slug`      | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                                          |
-| `type`              | string         | One of `plugin` or `theme`                                                                                                         |
+| `slug`              | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                                          |
+| `kind`              | string         | One of `plugin` or `theme`                                                                                                         |
 | `minimum_tier`      | string         | Tier slug required to access this feature                                                                                          |
-| `plugin_file`       | string\|null   | Plugin file path relative to the plugins directory (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes.           |
-| `is_dot_org`        | bool           | Whether the feature is available on WordPress.org                                                                                  |
+| `plugin_file`       | string\|null   | Plugin file path relative to plugins dir (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes                      |
+| `wporg_slug`        | string\|null   | WordPress.org slug for `plugins_api()`. Non-null means the feature is on WordPress.org                                             |
 | `download_url`      | string\|null   | Download URL for features not on WordPress.org                                                                                     |
 | `version`           | string\|null   | Latest available version from the Commerce Portal                                                                                  |
-| `released_at`       | string\|null   | Release date of the latest version (ISO 8601)                                                                                      |
+| `release_date`      | string\|null   | Release date of the latest version (ISO 8601)                                                                                      |
 | `changelog`         | string\|null   | Changelog HTML for the latest version, consistent with `plugins_api()` sections                                                    |
 | `name`              | string         | Display name                                                                                                                       |
 | `description`       | string         | Short description of what the feature does                                                                                         |
 | `category`          | string         | Grouping category (e.g., `blocks`, `theme`, `security`, `woocommerce`)                                                             |
 | `authors`           | string[]\|null | Product/author names. Null if not applicable.                                                                                      |
 | `documentation_url` | string         | Link to the feature's documentation                                                                                                |
+| `homepage`          | string\|null   | URL to the feature's homepage                                                                                                      |
 
 #### Feature Types
 
 Features come in two types, each representing a different kind of deliverable:
 
-**`plugin`**: an installable WordPress plugin. Has a `plugin_file` (plugin file path) and either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`). These are features that need to be downloaded, installed, and activated.
+**`plugin`**: an installable WordPress plugin. Has a `plugin_file` (plugin file path) and either a `download_url` (for exclusive features) or is available on WordPress.org (`wporg_slug` is non-null). These are features that need to be downloaded, installed, and activated.
 
-**`theme`**: an installable WordPress theme. The `feature_slug` doubles as the theme stylesheet (directory name). Has either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`).
+**`theme`**: an installable WordPress theme. The `slug` doubles as the theme stylesheet (directory name). Has either a `download_url` (for exclusive features) or is available on WordPress.org (`wporg_slug` is non-null).
 
 #### Tier Gating
 
@@ -107,7 +112,7 @@ The `Catalog_Client` contract defines a single operation:
 
 Unlike the licensing client, this is not parameterized by key or domain. The catalog describes the full product universe. It is the same regardless of who is asking.
 
-The production implementation is `Clients\Http_Client`, which uses the same PSR-18 HTTP infrastructure as the licensing client (see [Licensing: HTTP Infrastructure](licensing.md#http-infrastructure)). The base URL comes from `Config::get_api_base_url()`.
+The production implementation is `Clients\Http_Client`, which uses the same PSR-18 HTTP infrastructure as the licensing client (see [Licensing: HTTP Infrastructure](licensing.md#http-infrastructure)). The base URL comes from `Config::get_portal_base_url()`.
 During development, the `Clients\Fixture_Client` is wired in. It reads a single JSON fixture file (`tests/_data/catalog.json`) containing all products.
 Tests use a fixture PSR-18 client that serves local JSON from `tests/_data/catalog/`.
 
@@ -172,9 +177,9 @@ Tier slugs are product-prefixed (`kadence-pro`, `give-basic`) and are consistent
 
 ### Feature Type Mapping
 
-The catalog uses delivery-oriented type names (`plugin`, `theme`). The Features subsystem maps these to its own type hierarchy during resolution:
+The catalog uses delivery-oriented kind names (`plugin`, `theme`). The Features subsystem maps these to its own type hierarchy during resolution:
 
-| Catalog type | Feature class | Meaning                      |
+| Catalog kind | Feature class | Meaning                      |
 | ------------ | ------------- | ---------------------------- |
 | `plugin`     | `Plugin`      | Installable WordPress plugin |
 | `theme`      | `Theme`       | Installable WordPress theme  |

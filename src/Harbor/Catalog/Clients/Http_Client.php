@@ -70,7 +70,7 @@ final class Http_Client implements Catalog_Client {
 	 * @inheritDoc
 	 */
 	public function get_catalog() {
-		$url = $this->base_url . '/stellarwp/v4/catalog';
+		$url = $this->base_url . '/wp-json/slw/v1/catalog';
 
 		self::debug_log(
 			sprintf( 'Catalog HTTP request: GET %s', $url )

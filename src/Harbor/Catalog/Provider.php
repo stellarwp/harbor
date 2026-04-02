@@ -26,7 +26,7 @@ final class Provider extends Abstract_Provider {
 				return new Http_Client(
 					$this->container->get( WordPressHttpClient::class ),
 					$this->container->get( Psr17Factory::class ),
-					Config::get_api_base_url()
+					Config::get_portal_base_url()
 				);
 			}
 		);

@@ -80,7 +80,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 
 		foreach ( $result as $catalog ) {
 			foreach ( $catalog->get_features() as $feature ) {
-				$types[ $feature->get_type() ] = true;
+				$types[ $feature->get_kind() ] = true;
 			}
 		}
 
@@ -93,8 +93,8 @@ final class Fixture_ClientTest extends HarborTestCase {
 
 		foreach ( $result as $catalog ) {
 			foreach ( $catalog->get_features() as $feature ) {
-				if ( $feature->get_type() === 'plugin' ) {
-					$this->assertNotNull( $feature->get_plugin_file(), sprintf( '%s should have plugin_file', $feature->get_feature_slug() ) );
+				if ( $feature->get_kind() === 'plugin' ) {
+					$this->assertNotNull( $feature->get_plugin_file(), sprintf( '%s should have plugin_file', $feature->get_slug() ) );
 				}
 			}
 		}

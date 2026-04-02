@@ -373,8 +373,8 @@ class Feature_Controller extends WP_REST_Controller {
 		];
 
 		$installable_properties = [
-			'released_at'       => [
-				'description' => __( 'Release date of the latest version (ISO 8601), or null if not applicable.', '%TEXTDOMAIN%' ),
+			'release_date'      => [
+				'description' => __( 'Release date of the latest version, or null if not applicable.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
@@ -391,9 +391,9 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'is_dot_org'        => [
-				'description' => __( 'Whether the feature is available on WordPress.org.', '%TEXTDOMAIN%' ),
-				'type'        => 'boolean',
+			'wporg_slug'        => [
+				'description' => __( 'The WordPress.org slug for plugins_api() lookups, or null if not on WordPress.org.', '%TEXTDOMAIN%' ),
+				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],

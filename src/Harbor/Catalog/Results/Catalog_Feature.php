@@ -7,25 +7,26 @@ use LiquidWeb\Harbor\Utils\Cast;
 /**
  * A single feature entry from the product catalog.
  *
- * Immutable value object hydrated from the catalog API response.
+ * Immutable value object hydrated from the Commerce Portal catalog API response.
  *
  * @since 1.0.0
  *
  * @phpstan-type FeatureAttributes array{
- *     feature_slug: string,
- *     type: string,
+ *     slug: string,
+ *     kind: string,
  *     minimum_tier: string,
  *     plugin_file: ?string,
- *     is_dot_org: bool,
+ *     wporg_slug: ?string,
  *     download_url: ?string,
  *     version: ?string,
- *     released_at: ?string,
+ *     release_date: ?string,
  *     changelog: ?string,
  *     name: string,
  *     description: string,
  *     category: string,
  *     authors: ?list<string>,
  *     documentation_url: string,
+ *     homepage: ?string,
  * }
  */
 final class Catalog_Feature {
@@ -38,20 +39,21 @@ final class Catalog_Feature {
 	 * @var FeatureAttributes
 	 */
 	protected array $attributes = [
-		'feature_slug'      => '',
-		'type'              => '',
+		'slug'              => '',
+		'kind'              => '',
 		'minimum_tier'      => '',
 		'plugin_file'       => null,
-		'is_dot_org'        => false,
+		'wporg_slug'        => null,
 		'download_url'      => null,
 		'version'           => null,
-		'released_at'       => null,
+		'release_date'      => null,
 		'changelog'         => null,
 		'name'              => '',
 		'description'       => '',
 		'category'          => '',
 		'authors'           => null,
 		'documentation_url' => '',
+		'homepage'          => null,
 	];
 
 	/**
@@ -72,6 +74,9 @@ final class Catalog_Feature {
 	/**
 	 * Creates a Catalog_Feature from a raw data array.
 	 *
+	 * The API sends `main_file` which is stored internally as `plugin_file`
+	 * (the standard WordPress term for plugin file paths).
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<string, mixed> $data The feature data.
@@ -81,14 +86,14 @@ final class Catalog_Feature {
 	public static function from_array( array $data ): self {
 		return new self(
 			[
-				'feature_slug'      => Cast::to_string( $data['feature_slug'] ?? '' ),
-				'type'              => Cast::to_string( $data['type'] ?? '' ),
+				'slug'              => Cast::to_string( $data['slug'] ?? '' ),
+				'kind'              => Cast::to_string( $data['kind'] ?? '' ),
 				'minimum_tier'      => Cast::to_string( $data['minimum_tier'] ?? '' ),
-				'plugin_file'       => isset( $data['plugin_file'] ) ? Cast::to_string( $data['plugin_file'] ) : null,
-				'is_dot_org'        => Cast::to_bool( $data['is_dot_org'] ?? false ),
+				'plugin_file'       => isset( $data['main_file'] ) ? Cast::to_string( $data['main_file'] ) : ( isset( $data['plugin_file'] ) ? Cast::to_string( $data['plugin_file'] ) : null ),
+				'wporg_slug'        => isset( $data['wporg_slug'] ) ? Cast::to_string( $data['wporg_slug'] ) : null,
 				'download_url'      => isset( $data['download_url'] ) ? Cast::to_string( $data['download_url'] ) : null,
 				'version'           => isset( $data['version'] ) ? Cast::to_string( $data['version'] ) : null,
-				'released_at'       => isset( $data['released_at'] ) ? Cast::to_string( $data['released_at'] ) : null,
+				'release_date'      => isset( $data['release_date'] ) ? Cast::to_string( $data['release_date'] ) : null,
 				'changelog'         => isset( $data['changelog'] ) ? Cast::to_string( $data['changelog'] ) : null,
 				'name'              => Cast::to_string( $data['name'] ?? '' ),
 				'description'       => Cast::to_string( $data['description'] ?? '' ),
@@ -97,6 +102,7 @@ final class Catalog_Feature {
 					? array_map( [ Cast::class, 'to_string' ], array_values( $data['authors'] ) )
 					: null,
 				'documentation_url' => Cast::to_string( $data['documentation_url'] ?? '' ),
+				'homepage'          => isset( $data['homepage'] ) ? Cast::to_string( $data['homepage'] ) : null,
 			]
 		);
 	}
@@ -119,19 +125,19 @@ final class Catalog_Feature {
 	 *
 	 * @return string
 	 */
-	public function get_feature_slug(): string {
-		return $this->attributes['feature_slug'];
+	public function get_slug(): string {
+		return $this->attributes['slug'];
 	}
 
 	/**
-	 * Gets the feature type (plugin or theme).
+	 * Gets the feature kind (plugin or theme).
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_type(): string {
-		return $this->attributes['type'];
+	public function get_kind(): string {
+		return $this->attributes['kind'];
 	}
 
 	/**
@@ -148,7 +154,7 @@ final class Catalog_Feature {
 	/**
 	 * Gets the plugin file path relative to the plugins directory, or null if not applicable.
 	 *
-	 * Only present for plugin features.
+	 * Only present for plugin features. The API sends this as `main_file`.
 	 *
 	 * @since 1.0.0
 	 *
@@ -159,18 +165,32 @@ final class Catalog_Feature {
 	}
 
 	/**
+	 * Gets the WordPress.org slug used for plugins_api() lookups, or null if not on WordPress.org.
+	 *
+	 * When non-null, this feature is available on WordPress.org and the value
+	 * is the slug passed to plugins_api() for install/update operations.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string|null
+	 */
+	public function get_wporg_slug(): ?string {
+		return $this->attributes['wporg_slug'];
+	}
+
+	/**
 	 * Whether the feature is available on WordPress.org.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
-	public function is_dot_org(): bool {
-		return $this->attributes['is_dot_org'];
+	public function is_wporg(): bool {
+		return $this->attributes['wporg_slug'] !== null;
 	}
 
 	/**
-	 * Gets the download URL, or null if is_dot_org is true.
+	 * Gets the download URL, or null if the feature is on WordPress.org.
 	 *
 	 * @since 1.0.0
 	 *
@@ -192,14 +212,14 @@ final class Catalog_Feature {
 	}
 
 	/**
-	 * Gets the release date (ISO 8601), or null if not provided.
+	 * Gets the release date, or null if not provided.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
-	public function get_released_at(): ?string {
-		return $this->attributes['released_at'];
+	public function get_release_date(): ?string {
+		return $this->attributes['release_date'];
 	}
 
 	/**
@@ -266,5 +286,16 @@ final class Catalog_Feature {
 	 */
 	public function get_documentation_url(): string {
 		return $this->attributes['documentation_url'];
+	}
+
+	/**
+	 * Gets the homepage URL, or null if not provided.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string|null
+	 */
+	public function get_homepage(): ?string {
+		return $this->attributes['homepage'];
 	}
 }
