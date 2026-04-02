@@ -28,6 +28,9 @@ use WP_CLI_Command;
  *     # Look up products for a key without storing
  *     wp harbor license lookup LWSW-abcdef-123456
  *
+ *     # Refresh license data from the upstream API
+ *     wp harbor license refresh
+ *
  *     # Delete the stored key
  *     wp harbor license delete
  *
@@ -268,6 +271,56 @@ class License extends WP_CLI_Command {
 		}
 
 		$this->display_products( $result, $assoc_args );
+	}
+
+	/**
+	 * Refreshes license data from the upstream API.
+	 *
+	 * Flushes cached products and re-fetches from the licensing service.
+	 * Requires a stored license key.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--fields=<fields>]
+	 * : Comma-separated list of product fields to display.
+	 *
+	 * [--format=<format>]
+	 * : Output format.
+	 * ---
+	 * default: table
+	 * options:
+	 *   - table
+	 *   - json
+	 *   - csv
+	 *   - yaml
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     # Refresh license data
+	 *     wp harbor license refresh
+	 *
+	 *     # Refresh and show as JSON
+	 *     wp harbor license refresh --format=json
+	 *
+	 * @param array<int, string>    $args       Positional arguments.
+	 * @param array<string, string> $assoc_args Associative arguments.
+	 *
+	 * @return void
+	 */
+	public function refresh( array $args, array $assoc_args ): void {
+		$domain   = $this->site_data->get_domain();
+		$products = $this->manager->refresh_products( $domain );
+
+		if ( is_wp_error( $products ) ) {
+			WP_CLI::error( $products->get_error_message() );
+
+			return; // WP_CLI::error() exits, but PHPStan needs this for type narrowing.
+		}
+
+		WP_CLI::success( 'License data refreshed.' );
+
+		$this->display_products( $products, $assoc_args );
 	}
 
 	/**
