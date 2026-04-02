@@ -78,6 +78,22 @@ Returns the same `{ key, products }` shape as `GET /license`.
 | 500  | `lw-harbor-store-failed`      | Key could not be persisted         |
 | 502  | `lw-harbor-invalid-response`  | Upstream API returned bad response |
 
+## POST /liquidweb/harbor/v1/license/refresh
+
+Flushes cached product data and re-fetches from the upstream Licensing API using the stored key. Returns the refreshed key and products in the same shape as `GET /license`. Requires a stored key.
+
+A 60-second error throttle prevents hammering the upstream API after a recent failure.
+
+### Response (200)
+
+Same shape as `GET /license`.
+
+### Errors
+
+| HTTP | Code                         | Meaning                            |
+| ---- | ---------------------------- | ---------------------------------- |
+| 502  | `lw-harbor-invalid-response` | Upstream API returned bad response |
+
 ## DELETE /liquidweb/harbor/v1/license
 
 Removes the locally stored license key. Does not free any activation seats on the licensing service.
