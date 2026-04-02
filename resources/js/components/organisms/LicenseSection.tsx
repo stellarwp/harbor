@@ -87,7 +87,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                         <button
                             type="button"
                             onClick={ () => setEditingOpen( true ) }
-                            className="flex cursor-pointer items-center gap-1 text-[11px] text-emerald-600 transition-colors hover:opacity-75"
+                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75"
                         >
                             <Pencil className="w-3 h-3" />
                             { __( 'Edit', '%TEXTDOMAIN%' ) }
