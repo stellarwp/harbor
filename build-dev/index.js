@@ -1549,13 +1549,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/chevron-down.js");
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/chevron-right.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/external-link.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/lock.js");
-/* harmony import */ var _components_ui_badge__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/badge */ "./resources/js/components/ui/badge.tsx");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/FeatureRow */ "./resources/js/components/molecules/FeatureRow.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/lock.js");
+/* harmony import */ var _components_ui_badge__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/ui/badge */ "./resources/js/components/ui/badge.tsx");
+/* harmony import */ var _components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/molecules/FeatureRow */ "./resources/js/components/molecules/FeatureRow.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 /**
  * Collapsible accordion grouping locked features under a tier header.
  *
@@ -1564,7 +1562,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
-
 
 
 
@@ -1582,34 +1579,30 @@ function TierGroup({
   const [expanded, setExpanded] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const isOpen = expanded || forceOpen;
   const Chevron = isOpen ? lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"] : lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "w-full flex items-center gap-2 px-4 py-3 bg-muted/50 border-b",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         onClick: () => setExpanded(!expanded),
         className: "flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(Chevron, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Chevron, {
           className: "w-4 h-4 shrink-0 text-muted-foreground"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
           className: "font-medium text-sm",
           children: [tier.name, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Features', '%TEXTDOMAIN%')]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_ui_badge__WEBPACK_IMPORTED_MODULE_6__.Badge, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_badge__WEBPACK_IMPORTED_MODULE_5__.Badge, {
           variant: "secondary",
           className: "text-xs",
           children: features.length
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
           className: "w-3.5 h-3.5 text-muted-foreground ml-1"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_ui_badge__WEBPACK_IMPORTED_MODULE_5__.Badge, {
         variant: "outline",
-        size: "sm",
-        className: "gap-1 text-xs h-7 ml-auto shrink-0",
-        onClick: () => window.open(tier.purchase_url, '_blank', 'noopener,noreferrer'),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          className: "w-3 h-3"
-        }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade to', '%TEXTDOMAIN%'), ' ', tier.name]
+        className: "text-xs ml-auto shrink-0",
+        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade to', '%TEXTDOMAIN%'), ' ', tier.name]
       })]
-    }), isOpen && features.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_8__.FeatureRow, {
+    }), isOpen && features.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_6__.FeatureRow, {
       feature: feature,
       upgradeTierName: tier.name
     }, feature.slug))]
@@ -1922,17 +1915,9 @@ function LicensePanel() {
     return map;
   }, [catalogs]);
 
-  // Product slug → lowest-tier purchase URL map from the catalog.
-  const upsellUrlMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    const map = {};
-    catalogs.forEach(catalog => {
-      const sorted = catalog.tiers.slice().sort((a, b) => a.rank - b.rank);
-      if (sorted[0]?.purchase_url) {
-        map[catalog.product_slug] = sorted[0].purchase_url;
-      }
-    });
-    return map;
-  }, [catalogs]);
+  // Product slug → purchase URL map.
+  // TODO: Source purchase URLs once the Commerce Portal provides them.
+  const upsellUrlMap = {};
   const licensedSlugs = new Set(licenseProducts.map(lp => lp.product_slug));
   const upsellProducts = _data_products__WEBPACK_IMPORTED_MODULE_6__.PRODUCTS.filter(p => !licensedSlugs.has(p.slug));
   const handleRemove = async () => {
@@ -5049,8 +5034,7 @@ const getProductTiers = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSe
 /**
  * Returns a single CatalogTier by product slug and tier slug, or null.
  *
- * CatalogTier.purchase_url is the authoritative source for upgrade links —
- * prefer it over the static Tier.upgradeUrl fixture when available.
+ * Returns the full tier object so callers can read price, currency, etc.
  */
 const getCatalogTier = (state, productSlug, tierSlug) => state.catalog.byProductSlug[productSlug]?.tiers.find(t => t.slug === tierSlug) ?? null;
 
