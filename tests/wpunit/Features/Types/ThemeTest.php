@@ -20,18 +20,16 @@ final class ThemeTest extends HarborTestCase {
 	/**
 	 * Create a Theme feature with configurable values.
 	 *
-	 * @param string   $slug        Feature slug.
-	 * @param string   $name        Display name.
-	 * @param string   $description Description.
-	 * @param string[] $authors     Expected theme authors.
+	 * @param string $slug        Feature slug.
+	 * @param string $name        Display name.
+	 * @param string $description Description.
 	 *
 	 * @return Theme
 	 */
 	private function make_feature(
 		string $slug = self::SLUG,
 		string $name = self::NAME,
-		string $description = self::DESCRIPTION,
-		array $authors = [ 'StellarWP' ]
+		string $description = self::DESCRIPTION
 	): Theme {
 		return new Theme(
 			[
@@ -41,7 +39,6 @@ final class ThemeTest extends HarborTestCase {
 				'name'         => $name,
 				'description'  => $description,
 				'is_available' => true,
-				'authors'      => $authors,
 			]
 		);
 	}
@@ -65,7 +62,6 @@ final class ThemeTest extends HarborTestCase {
 				'description'       => 'Test theme description.',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
 			]
 		);
 
@@ -78,7 +74,6 @@ final class ThemeTest extends HarborTestCase {
 		$this->assertSame( 'theme', $feature->get_type() );
 		$this->assertTrue( $feature->is_available() );
 		$this->assertSame( 'https://example.com/docs', $feature->get_documentation_url() );
-		$this->assertSame( [ 'StellarWP' ], $feature->get_authors() );
 	}
 
 	/**
@@ -96,8 +91,7 @@ final class ThemeTest extends HarborTestCase {
 				'description'       => 'Test theme description.',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
-				'release_date'      => '2025-11-15',
+				'release_date'       => '2025-11-15',
 				'installed_version' => '2.0.0',
 			]
 		);
@@ -111,8 +105,7 @@ final class ThemeTest extends HarborTestCase {
 				'description'       => 'Test theme description.',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
-				'release_date'      => '2025-11-15',
+				'release_date'       => '2025-11-15',
 				'installed_version' => '2.0.0',
 				'type'              => 'theme',
 				'wporg_slug'        => null,
@@ -139,7 +132,6 @@ final class ThemeTest extends HarborTestCase {
 			'is_available'      => true,
 			'is_enabled'        => false,
 			'documentation_url' => 'https://example.com/docs',
-			'authors'           => [ 'StellarWP' ],
 			'wporg_slug'        => null,
 			'release_date'      => '2025-11-15',
 			'installed_version' => '2.0.0',
@@ -171,25 +163,6 @@ final class ThemeTest extends HarborTestCase {
 		$this->assertSame( '', $feature->get_description() );
 	}
 
-	/**
-	 * Tests that authors defaults to an empty array when omitted.
-	 *
-	 * @return void
-	 */
-	public function test_it_defaults_authors_to_empty_array(): void {
-		$feature = Theme::from_array(
-			[
-				'slug'         => 'test-theme',
-				'product'      => 'Kadence',
-				'tier'         => 'Tier 1',
-				'name'         => 'Test Theme',
-				'is_available' => true,
-			]
-		);
-
-		$this->assertSame( [], $feature->get_authors() );
-	}
-
 	// -------------------------------------------------------------------------
 	// Hard-coded type
 	// -------------------------------------------------------------------------
@@ -212,53 +185,6 @@ final class ThemeTest extends HarborTestCase {
 		);
 
 		$this->assertSame( 'theme', $feature->get_type() );
-	}
-
-	// -------------------------------------------------------------------------
-	// get_authors() — ownership verification field
-	// -------------------------------------------------------------------------
-
-	/**
-	 * get_authors() returns the array passed to the constructor.
-	 */
-	public function test_get_authors_returns_constructor_value(): void {
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			[ 'StellarWP' ]
-		);
-
-		$this->assertSame( [ 'StellarWP' ], $feature->get_authors() );
-	}
-
-	/**
-	 * get_authors() allows an empty array (strategy skips verification).
-	 */
-	public function test_get_authors_allows_empty_array(): void {
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			[]
-		);
-
-		$this->assertSame( [], $feature->get_authors() );
-	}
-
-	/**
-	 * get_authors() supports multiple author values.
-	 */
-	public function test_get_authors_supports_multiple_values(): void {
-		$authors = [ 'StellarWP', 'Starter Sites' ];
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			$authors
-		);
-
-		$this->assertSame( $authors, $feature->get_authors() );
 	}
 
 	// -------------------------------------------------------------------------
@@ -389,7 +315,6 @@ final class ThemeTest extends HarborTestCase {
 				'description'       => 'The description.',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP', 'Starter Sites' ],
 			]
 		);
 
@@ -401,6 +326,5 @@ final class ThemeTest extends HarborTestCase {
 		$this->assertSame( 'theme', $feature->get_type() );
 		$this->assertTrue( $feature->is_available() );
 		$this->assertSame( 'https://example.com/docs', $feature->get_documentation_url() );
-		$this->assertSame( [ 'StellarWP', 'Starter Sites' ], $feature->get_authors() );
 	}
 }

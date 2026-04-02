@@ -278,7 +278,6 @@ class Resolve_Feature_Collection {
 			'release_date'      => $catalog_feature->get_release_date(),
 			'plugin_file'       => $catalog_feature->get_plugin_file() ?? '',
 			'wporg_slug'        => $catalog_feature->get_wporg_slug(),
-			'authors'           => $catalog_feature->get_authors() ?? [],
 			'version'           => $catalog_feature->get_version(),
 			'changelog'         => $catalog_feature->get_changelog(),
 		];

@@ -32,7 +32,6 @@ final class Plugin extends Feature implements Installable {
 			$attributes,
 			[
 				'plugin_file'       => $attributes['plugin_file'] ?? '',
-				'authors'           => $attributes['authors'] ?? [],
 				'wporg_slug'        => $attributes['wporg_slug'] ?? null,
 				'release_date'      => $attributes['release_date'] ?? null,
 				'installed_version' => $attributes['installed_version'] ?? null,
@@ -67,23 +66,6 @@ final class Plugin extends Feature implements Installable {
 	 */
 	public function get_plugin_file(): string {
 		return Cast::to_string( $this->attributes['plugin_file'] ?? '' );
-	}
-
-	/**
-	 * Gets the expected plugin authors for ownership verification.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string[]
-	 */
-	public function get_authors(): array {
-		$authors = $this->attributes['authors'] ?? [];
-
-		if ( ! is_array( $authors ) ) {
-			return [];
-		}
-
-		return array_values( array_filter( $authors, 'is_string' ) );
 	}
 
 	/**
@@ -129,7 +111,7 @@ final class Plugin extends Feature implements Installable {
 			'version'           => $catalog_version,
 			'package'           => $catalog_feature->get_download_url() ?? '',
 			'url'               => $this->get_documentation_url(),
-			'author'            => implode( ', ', $this->get_authors() ),
+			'author'            => '',
 			'sections'          => [
 				'description' => $this->get_description(),
 			],
@@ -143,7 +125,7 @@ final class Plugin extends Feature implements Installable {
 	 * Gets the plugin directory name derived from the plugin file path.
 	 *
 	 * For "stellar-export/stellar-export.php" this returns "stellar-export".
-	 * Used for filesystem operations and ownership checks.
+	 * Used for filesystem operations.
 	 *
 	 * @since 1.0.0
 	 *

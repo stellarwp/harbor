@@ -121,7 +121,6 @@ class Feature extends WP_CLI_Command {
 	 * * installed_version (plugin, theme)
 	 * * release_date (plugin, theme)
 	 * * plugin_file (plugin)
-	 * * authors (plugin, theme)
 	 * * wporg_slug (plugin, theme)
 	 *
 	 * ## EXAMPLES

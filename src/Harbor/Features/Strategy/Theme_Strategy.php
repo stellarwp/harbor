@@ -24,7 +24,6 @@ use function wp_get_theme;
  * - do_activate()    → no-op (theme is already installed)
  * - do_deactivate()  → returns error (theme files are never deleted)
  * - do_update()      → Theme_Upgrader::upgrade()
- * - verify_ownership → Author header check via wp_get_theme()
  *
  * A theme feature is active when the theme is installed on disk.
  * No DB option is stored — disk presence is the sole source of truth.
@@ -214,48 +213,6 @@ class Theme_Strategy extends Installable_Strategy {
 			$skin,
 			Error_Code::UPDATE_FAILED,
 			true
-		);
-	}
-
-	/**
-	 * Verify that the installed theme belongs to an expected author.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return true|WP_Error True if ownership matches or no theme on disk, WP_Error on mismatch.
-	 */
-	protected function verify_ownership() {
-		$expected_authors = $this->feature->get_authors();
-
-		if ( $expected_authors === [] ) {
-			return true;
-		}
-
-		$stylesheet = $this->feature->get_slug();
-		$theme      = wp_get_theme( $stylesheet );
-
-		// Theme is not installed — no conflict.
-		if ( ! $theme->exists() ) {
-			return true;
-		}
-
-		$actual_author = trim( Cast::to_string( $theme->get( 'Author' ) ) );
-
-		foreach ( $expected_authors as $expected ) {
-			if ( strcasecmp( trim( $expected ), $actual_author ) === 0 ) {
-				return true;
-			}
-		}
-
-		return new WP_Error(
-			Error_Code::THEME_OWNERSHIP_MISMATCH,
-			sprintf(
-				/* translators: %1$s: theme stylesheet, %2$s: expected author(s), %3$s: actual author */
-				__( 'The installed theme "%1$s" appears to belong to a different developer (expected "%2$s", found "%3$s") and cannot be managed as a feature.', '%TEXTDOMAIN%' ),
-				$stylesheet,
-				implode( '" or "', $expected_authors ),
-				$actual_author
-			)
 		);
 	}
 

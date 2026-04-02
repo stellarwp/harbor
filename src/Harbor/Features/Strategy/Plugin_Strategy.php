@@ -13,7 +13,6 @@ use Plugin_Upgrader;
 
 use function activate_plugin;
 use function deactivate_plugins;
-use function get_plugin_data;
 use function is_plugin_active;
 use function is_plugin_active_for_network;
 use function plugins_api;
@@ -32,7 +31,6 @@ use function wp_json_encode;
  * - do_activate()    → activate_plugin() with fatal error protection
  * - do_deactivate()  → deactivate_plugins() + verification
  * - do_update()      → Plugin_Upgrader::upgrade()
- * - verify_ownership → Author header checks (3 cases)
  *
  * A plugin feature is active when WordPress reports the plugin as active.
  * A plugin feature is disabled if the plugin is deactivated or uninstalled.
@@ -396,53 +394,6 @@ class Plugin_Strategy extends Installable_Strategy {
 	}
 
 	/**
-	 * Verify that the plugin directory is not occupied by a different developer.
-	 *
-	 * Handles three cases:
-	 * 1. The exact plugin file exists — checks its Author header.
-	 * 2. The folder exists but the expected file doesn't — scans for other
-	 *    plugin files in the folder and checks their Author headers.
-	 * 3. Neither exists — no conflict, returns true (fresh install).
-	 *
-	 * This prevents both activating a different developer's plugin that shares
-	 * the same file path AND installing over a different developer's plugin
-	 * that occupies the same directory with a different main file.
-	 *
-	 * @since 1.0.0
-	 *
-	 * TODO: We probably should move it to another place so we can use it during the WP plugins update setup as well.
-	 *
-	 * @return true|WP_Error True if ownership matches, WP_Error on mismatch.
-	 */
-	protected function verify_ownership() {
-		$expected_authors = $this->feature->get_authors();
-
-		if ( $expected_authors === [] ) {
-			return true;
-		}
-
-		$plugin_file = $this->feature->get_plugin_file();
-		$full_path   = WP_PLUGIN_DIR . '/' . $plugin_file;
-
-		// Case 1: the exact file exists — check its author directly.
-		if ( file_exists( $full_path ) ) {
-			return $this->check_file_author( $full_path, $plugin_file, $expected_authors );
-		}
-
-		// Case 2: the folder exists but our specific file doesn't.
-		// Another developer's plugin may occupy the same directory.
-		$plugin_dirname = dirname( $plugin_file );
-		$plugin_dir     = WP_PLUGIN_DIR . '/' . $plugin_dirname;
-
-		if ( is_dir( $plugin_dir ) ) {
-			return $this->check_folder_for_foreign_plugins( $plugin_dir, $plugin_dirname, $expected_authors );
-		}
-
-		// Case 3: neither the file nor the folder exists — no conflict.
-		return true;
-	}
-
-	/**
 	 * @inheritDoc
 	 */
 	protected function get_not_found_after_install_error_code(): string {
@@ -471,98 +422,6 @@ class Plugin_Strategy extends Installable_Strategy {
 		}
 
 		return isset( $update_plugins->response[ $this->feature->get_plugin_file() ] );
-	}
-
-	// ── Private helpers ─────────────────────────────────────────────────
-
-	/**
-	 * Check whether a specific plugin file's Author header matches expected authors.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string   $full_path        Absolute path to the plugin file.
-	 * @param string   $plugin_file      Plugin file path relative to plugins directory.
-	 * @param string[] $expected_authors  Expected author names.
-	 *
-	 * @return true|WP_Error True if author matches, WP_Error on mismatch.
-	 */
-	private function check_file_author( string $full_path, string $plugin_file, array $expected_authors ) {
-		$plugin_data   = get_plugin_data( $full_path, false, false );
-		$actual_author = trim( $plugin_data['Author'] );
-
-		foreach ( $expected_authors as $expected ) {
-			if ( strcasecmp( trim( $expected ), $actual_author ) === 0 ) {
-				return true;
-			}
-		}
-
-		return new WP_Error(
-			Error_Code::PLUGIN_OWNERSHIP_MISMATCH,
-			sprintf(
-				/* translators: %1$s: plugin file path, %2$s: expected author(s), %3$s: actual author */
-				__( 'The installed plugin at "%1$s" appears to belong to a different developer (expected "%2$s", found "%3$s") and cannot be managed as a feature.', '%TEXTDOMAIN%' ),
-				$plugin_file,
-				implode( '" or "', $expected_authors ),
-				$actual_author
-			)
-		);
-	}
-
-	/**
-	 * Scan a plugin directory for plugin files from a different developer.
-	 *
-	 * Used when the expected plugin file doesn't exist but the folder does,
-	 * indicating another plugin may occupy the directory.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string   $plugin_dir       Absolute path to the plugin directory.
-	 * @param string   $plugin_slug      The plugin directory slug (e.g. "test-feature").
-	 * @param string[] $expected_authors  Expected author names.
-	 *
-	 * @return true|WP_Error True if no foreign plugins found, WP_Error on conflict.
-	 */
-	private function check_folder_for_foreign_plugins( string $plugin_dir, string $plugin_slug, array $expected_authors ) {
-		$php_files = glob( $plugin_dir . '/*.php' );
-
-		if ( $php_files === false ) {
-			return true;
-		}
-
-		foreach ( $php_files as $php_file ) {
-			$data = get_plugin_data( $php_file, false, false );
-
-			// Skip files without a Plugin Name header — they aren't plugins.
-			if ( empty( $data['Name'] ) ) {
-				continue;
-			}
-
-			$actual_author = trim( $data['Author'] );
-			$is_owned      = false;
-
-			foreach ( $expected_authors as $expected ) {
-				if ( strcasecmp( trim( $expected ), $actual_author ) === 0 ) {
-					$is_owned = true;
-					break;
-				}
-			}
-
-			if ( ! $is_owned ) {
-				return new WP_Error(
-					Error_Code::PLUGIN_OWNERSHIP_MISMATCH,
-					sprintf(
-						/* translators: %1$s: plugin folder, %2$s: found plugin name, %3$s: found author, %4$s: expected author(s) */
-						__( 'The folder "%1$s" is already occupied by a plugin from a different developer (found "%2$s" by "%3$s", expected author "%4$s"). The feature cannot be installed here.', '%TEXTDOMAIN%' ),
-						$plugin_slug,
-						$data['Name'],
-						$actual_author,
-						implode( '" or "', $expected_authors )
-					)
-				);
-			}
-		}
-
-		return true;
 	}
 
 	/**

@@ -273,7 +273,7 @@ wp harbor feature list [--product=<product>] [--tier=<tier>] [--available=<bool>
 **Available fields:**
 
 - All types: `slug`, `name`, `description`, `type`, `product`, `tier`, `is_available`, `is_enabled`, `documentation_url`
-- Plugin and Theme: `installed_version`, `release_date`, `authors`, `wporg_slug`
+- Plugin and Theme: `installed_version`, `release_date`, `wporg_slug`
 - Plugin only: `plugin_file`
 
 **Examples:**
@@ -289,7 +289,7 @@ wp harbor feature list --format=json
 wp harbor feature list --product=kadence --format=count
 
 # Show plugin-specific fields
-wp harbor feature list --type=plugin --fields=slug,plugin_file,authors,wporg_slug
+wp harbor feature list --type=plugin --fields=slug,plugin_file,wporg_slug
 ```
 
 ### get

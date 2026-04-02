@@ -182,7 +182,6 @@ final class Feature_CollectionTest extends HarborTestCase {
 				'is_available'      => false,
 				'documentation_url' => '',
 				'plugin_file'       => '',
-				'authors'           => [],
 			]
 		);
 
@@ -210,7 +209,6 @@ final class Feature_CollectionTest extends HarborTestCase {
 				'plugin_file'       => 'my-plugin/my-plugin.php',
 				'is_available'      => false,
 				'documentation_url' => '',
-				'authors'           => [],
 			],
 		];
 

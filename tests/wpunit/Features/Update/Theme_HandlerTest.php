@@ -131,7 +131,6 @@ final class Theme_HandlerTest extends HarborTestCase {
 				'name'         => 'My Theme',
 				'description'  => 'A test theme.',
 				'is_available' => true,
-				'authors'      => [ 'TestAuthor' ],
 			]
 		);
 

@@ -391,15 +391,6 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'authors'           => [
-				'description' => __( 'Expected authors for ownership verification.', '%TEXTDOMAIN%' ),
-				'type'        => 'array',
-				'items'       => [
-					'type' => 'string',
-				],
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
 			'wporg_slug'        => [
 				'description' => __( 'The WordPress.org slug for plugins_api() lookups, or null if not on WordPress.org.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],

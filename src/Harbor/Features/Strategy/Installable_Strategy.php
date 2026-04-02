@@ -13,7 +13,7 @@ use WP_Upgrader;
  *
  * Templates the shared enable/disable/is_active/ensure_installed control flow.
  * Subclasses provide WP-specific behavior via abstract hook methods (do_install,
- * do_activate, do_deactivate, verify_ownership, etc.).
+ * do_activate, do_deactivate, etc.).
  *
  * @since 1.0.0
  */
@@ -87,7 +87,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Deactivate the extension.
 	 *
 	 * The subclass owns the full deactivation flow after the common prefix
-	 * (type-guard, includes, ownership) handled by the template's disable().
+	 * (type-guard, includes) handled by the template's disable().
 	 *
 	 * @since 1.0.0
 	 *
@@ -95,14 +95,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 */
 	abstract protected function do_deactivate();
 
-	/**
-	 * Verify that the installed extension belongs to an expected author.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return true|WP_Error True if ownership matches, WP_Error on mismatch.
-	 */
-	abstract protected function verify_ownership();
 
 	/**
 	 * Error code for "extension not found after install".
@@ -160,42 +152,16 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		// loaded when called from REST API or AJAX contexts.
 		$this->load_wp_admin_includes();
 
-		// Idempotent: if the extension is already active, verify ownership and bail.
+		// Idempotent: if the extension is already active, bail.
 		if ( $this->check_active() ) {
 			static::debug_log(
 				sprintf(
-					'Feature "%s" already active, verifying ownership.',
+					'Feature "%s" already active.',
 					$this->feature->get_slug()
 				)
 			);
 
-			$ownership = $this->verify_ownership();
-
-			if ( is_wp_error( $ownership ) ) {
-				static::debug_log_wp_error(
-					$ownership,
-					sprintf( 'Ownership check failed for active "%s"', $this->feature->get_slug() )
-				);
-
-				return $ownership;
-			}
-
 			return true;
-		}
-
-		// Verify ownership before attempting installation. This catches
-		// cases where the extension folder is already occupied by a different
-		// developer's extension. If nothing is on disk yet, this returns true
-		// (no conflict) and we proceed to install.
-		$ownership = $this->verify_ownership();
-
-		if ( is_wp_error( $ownership ) ) {
-			static::debug_log_wp_error(
-				$ownership,
-				sprintf( 'Pre-install ownership check failed for "%s"', $this->feature->get_slug() )
-			);
-
-			return $ownership;
 		}
 
 		// Ensure the extension is on disk — install from ZIP if needed.
@@ -210,19 +176,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 			return $ensure_result;
 		}
 
-		// Verify ownership after installation. A fresh download may contain
-		// an extension from an unexpected author.
-		$ownership = $this->verify_ownership();
-
-		if ( is_wp_error( $ownership ) ) {
-			static::debug_log_wp_error(
-				$ownership,
-				sprintf( 'Post-install ownership check failed for "%s"', $this->feature->get_slug() )
-			);
-
-			return $ownership;
-		}
-
 		// Activate — subclass owns state update.
 		return $this->do_activate();
 	}
@@ -230,9 +183,8 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	/**
 	 * Disable the feature: deactivate the extension.
 	 *
-	 * The common prefix (load includes, ownership verification) is handled
-	 * here. The subclass's do_deactivate() owns the rest because plugin and
-	 * theme disable flows diverge fundamentally.
+	 * Loads includes and delegates to the subclass's do_deactivate() because
+	 * plugin and theme disable flows diverge fundamentally.
 	 *
 	 * @since 1.0.0
 	 *
@@ -240,18 +192,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 */
 	final public function disable() {
 		$this->load_wp_admin_includes();
-
-		// Refuse to touch an extension that belongs to a different developer.
-		$ownership = $this->verify_ownership();
-
-		if ( is_wp_error( $ownership ) ) {
-			static::debug_log_wp_error(
-				$ownership,
-				sprintf( 'Ownership check failed when disabling "%s"', $this->feature->get_slug() )
-			);
-
-			return $ownership;
-		}
 
 		// Subclass owns the full deactivation flow.
 		return $this->do_deactivate();
@@ -287,17 +227,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 					$this->feature->get_name()
 				)
 			);
-		}
-
-		$ownership = $this->verify_ownership();
-
-		if ( is_wp_error( $ownership ) ) {
-			static::debug_log_wp_error(
-				$ownership,
-				sprintf( 'Ownership check failed when updating "%s"', $this->feature->get_slug() )
-			);
-
-			return $ownership;
 		}
 
 		if ( ! $this->check_update_available() ) {
@@ -380,7 +309,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * @return true|WP_Error True if installed (or already was), WP_Error on failure.
 	 */
 	final protected function ensure_installed() {
-		// Already on disk — ready for activation. Ownership is verified
+		// Already on disk — ready for activation. Requirements are verified
 		// by the caller (enable()) after this method returns.
 		if ( $this->check_installed() ) {
 			static::debug_log(

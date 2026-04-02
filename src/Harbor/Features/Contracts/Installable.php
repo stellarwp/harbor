@@ -15,15 +15,6 @@ use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
 interface Installable {
 
 	/**
-	 * Gets the expected extension authors for ownership verification.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string[]
-	 */
-	public function get_authors(): array;
-
-	/**
 	 * Whether this extension is available on WordPress.org.
 	 *
 	 * @since 1.0.0
