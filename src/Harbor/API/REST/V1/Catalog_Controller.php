@@ -125,8 +125,20 @@ final class Catalog_Controller extends WP_REST_Controller {
 			'title'      => 'catalog',
 			'type'       => 'object',
 			'properties' => [
+				'product_id'   => [
+					'description' => __( 'The product ID from the Commerce Portal.', '%TEXTDOMAIN%' ),
+					'type'        => 'string',
+					'readonly'    => true,
+					'context'     => [ 'view' ],
+				],
 				'product_slug' => [
 					'description' => __( 'The product slug.', '%TEXTDOMAIN%' ),
+					'type'        => 'string',
+					'readonly'    => true,
+					'context'     => [ 'view' ],
+				],
+				'product_name' => [
+					'description' => __( 'The product display name.', '%TEXTDOMAIN%' ),
 					'type'        => 'string',
 					'readonly'    => true,
 					'context'     => [ 'view' ],
@@ -148,9 +160,23 @@ final class Catalog_Controller extends WP_REST_Controller {
 							'rank'         => [
 								'type' => 'integer',
 							],
-							'purchase_url' => [
-								'type'   => 'string',
-								'format' => 'uri',
+							'price'        => [
+								'type' => 'integer',
+							],
+							'currency'     => [
+								'type' => 'string',
+							],
+							'features'     => [
+								'type'  => 'array',
+								'items' => [
+									'type' => 'string',
+								],
+							],
+							'herald_slugs' => [
+								'type'  => 'array',
+								'items' => [
+									'type' => 'string',
+								],
 							],
 						],
 					],
@@ -163,10 +189,10 @@ final class Catalog_Controller extends WP_REST_Controller {
 					'items'       => [
 						'type'       => 'object',
 						'properties' => [
-							'feature_slug'      => [
+							'slug'              => [
 								'type' => 'string',
 							],
-							'type'              => [
+							'kind'              => [
 								'type' => 'string',
 							],
 							'minimum_tier'      => [
@@ -175,8 +201,8 @@ final class Catalog_Controller extends WP_REST_Controller {
 							'plugin_file'       => [
 								'type' => [ 'string', 'null' ],
 							],
-							'is_dot_org'        => [
-								'type' => 'boolean',
+							'wporg_slug'        => [
+								'type' => [ 'string', 'null' ],
 							],
 							'download_url'      => [
 								'type' => [ 'string', 'null' ],
@@ -184,7 +210,7 @@ final class Catalog_Controller extends WP_REST_Controller {
 							'version'           => [
 								'type' => [ 'string', 'null' ],
 							],
-							'released_at'       => [
+							'release_date'      => [
 								'type' => [ 'string', 'null' ],
 							],
 							'changelog'         => [
@@ -207,6 +233,9 @@ final class Catalog_Controller extends WP_REST_Controller {
 							],
 							'documentation_url' => [
 								'type' => 'string',
+							],
+							'homepage'          => [
+								'type' => [ 'string', 'null' ],
 							],
 						],
 					],

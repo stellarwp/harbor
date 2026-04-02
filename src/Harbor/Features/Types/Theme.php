@@ -32,8 +32,8 @@ final class Theme extends Feature implements Installable {
 			$attributes,
 			[
 				'authors'           => $attributes['authors'] ?? [],
-				'is_dot_org'        => $attributes['is_dot_org'] ?? false,
-				'released_at'       => $attributes['released_at'] ?? null,
+				'wporg_slug'        => $attributes['wporg_slug'] ?? null,
+				'release_date'      => $attributes['release_date'] ?? null,
 				'installed_version' => $attributes['installed_version'] ?? null,
 				'version'           => $attributes['version'] ?? null,
 				'changelog'         => $attributes['changelog'] ?? null,
@@ -80,8 +80,21 @@ final class Theme extends Feature implements Installable {
 	 *
 	 * @return bool
 	 */
-	public function is_dot_org(): bool {
-		return Cast::to_bool( $this->attributes['is_dot_org'] ?? false );
+	public function is_wporg(): bool {
+		return ( $this->attributes['wporg_slug'] ?? null ) !== null;
+	}
+
+	/**
+	 * Gets the WordPress.org slug used for themes_api() lookups, or null if not on WordPress.org.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string|null
+	 */
+	public function get_wporg_slug(): ?string {
+		$slug = $this->attributes['wporg_slug'] ?? null;
+
+		return $slug !== null ? Cast::to_string( $slug ) : null;
 	}
 
 	/**

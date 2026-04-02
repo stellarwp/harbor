@@ -97,7 +97,7 @@ final class ThemeTest extends HarborTestCase {
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
 				'authors'           => [ 'StellarWP' ],
-				'released_at'       => '2025-11-15',
+				'release_date'      => '2025-11-15',
 				'installed_version' => '2.0.0',
 			]
 		);
@@ -112,10 +112,10 @@ final class ThemeTest extends HarborTestCase {
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
 				'authors'           => [ 'StellarWP' ],
-				'released_at'       => '2025-11-15',
+				'release_date'      => '2025-11-15',
 				'installed_version' => '2.0.0',
 				'type'              => 'theme',
-				'is_dot_org'        => false,
+				'wporg_slug'        => null,
 				'version'           => null,
 				'changelog'         => null,
 			],
@@ -140,8 +140,8 @@ final class ThemeTest extends HarborTestCase {
 			'is_enabled'        => false,
 			'documentation_url' => 'https://example.com/docs',
 			'authors'           => [ 'StellarWP' ],
-			'is_dot_org'        => false,
-			'released_at'       => '2025-11-15',
+			'wporg_slug'        => null,
+			'release_date'      => '2025-11-15',
 			'installed_version' => '2.0.0',
 			'version'           => null,
 			'changelog'         => null,
@@ -284,18 +284,18 @@ final class ThemeTest extends HarborTestCase {
 	}
 
 	/**
-	 * is_dot_org() defaults to false.
+	 * is_wporg() defaults to false when wporg_slug is null.
 	 */
-	public function test_is_dot_org_defaults_to_false(): void {
+	public function test_is_wporg_defaults_to_false(): void {
 		$feature = $this->make_feature();
 
-		$this->assertFalse( $feature->is_dot_org() );
+		$this->assertFalse( $feature->is_wporg() );
 	}
 
 	/**
-	 * is_dot_org() returns true when set.
+	 * is_wporg() returns true when wporg_slug is set.
 	 */
-	public function test_is_dot_org_returns_true_when_set(): void {
+	public function test_is_wporg_returns_true_when_set(): void {
 		$feature = new Theme(
 			[
 				'slug'         => self::SLUG,
@@ -303,17 +303,18 @@ final class ThemeTest extends HarborTestCase {
 				'tier'         => self::TIER,
 				'name'         => self::NAME,
 				'is_available' => true,
-				'is_dot_org'   => true,
+				'wporg_slug'   => 'kadence',
 			]
 		);
 
-		$this->assertTrue( $feature->is_dot_org() );
+		$this->assertTrue( $feature->is_wporg() );
+		$this->assertSame( 'kadence', $feature->get_wporg_slug() );
 	}
 
 	/**
-	 * from_array() populates is_dot_org when provided.
+	 * from_array() populates wporg_slug when provided.
 	 */
-	public function test_from_array_includes_is_dot_org(): void {
+	public function test_from_array_includes_wporg_slug(): void {
 		$feature = Theme::from_array(
 			[
 				'slug'         => 'test-theme',
@@ -321,11 +322,12 @@ final class ThemeTest extends HarborTestCase {
 				'tier'         => 'Tier 1',
 				'name'         => 'Test Theme',
 				'is_available' => true,
-				'is_dot_org'   => true,
+				'wporg_slug'   => 'test-theme',
 			]
 		);
 
-		$this->assertTrue( $feature->is_dot_org() );
+		$this->assertTrue( $feature->is_wporg() );
+		$this->assertSame( 'test-theme', $feature->get_wporg_slug() );
 	}
 
 	// -------------------------------------------------------------------------

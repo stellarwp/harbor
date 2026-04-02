@@ -71,7 +71,7 @@ final class FeatureTest extends HarborTestCase {
 					'is_available'      => true,
 					'documentation_url' => 'https://example.com/docs/test-theme',
 					'authors'           => [ 'StellarWP' ],
-					'is_dot_org'        => false,
+					'wporg_slug'        => null,
 				]
 			)
 		);
@@ -87,7 +87,7 @@ final class FeatureTest extends HarborTestCase {
 					'documentation_url' => 'https://example.com/docs/test-plugin',
 					'plugin_file'       => 'test-plugin/test-plugin.php',
 					'authors'           => [ 'StellarWP' ],
-					'is_dot_org'        => true,
+					'wporg_slug'        => 'test-plugin',
 				]
 			)
 		);
@@ -236,7 +236,7 @@ final class FeatureTest extends HarborTestCase {
 
 		$this->assertSame( 'test-plugin/test-plugin.php', $item['plugin_file'] );
 		$this->assertSame( 'StellarWP', $item['authors'] );
-		$this->assertSame( 'true', $item['is_dot_org'] );
+		$this->assertSame( 'test-plugin', $item['wporg_slug'] );
 	}
 
 	// ------------------------------------------------------------------
@@ -326,7 +326,7 @@ final class FeatureTest extends HarborTestCase {
 
 		$this->assertSame( 'true', $item['is_available'] );
 		$this->assertSame( 'true', $item['is_enabled'] );
-		$this->assertSame( 'false', $item['is_dot_org'] );
+		$this->assertSame( '', $item['wporg_slug'] );
 		$this->assertSame( 'test-theme', $item['slug'] );
 	}
 
@@ -350,7 +350,7 @@ final class FeatureTest extends HarborTestCase {
 				'is_available' => true,
 				'plugin_file'  => 'test-plugin/test-plugin.php',
 				'authors'      => [ 'Alice', 'Bob' ],
-				'is_dot_org'   => false,
+				'wporg_slug'   => null,
 			]
 		);
 
@@ -360,14 +360,14 @@ final class FeatureTest extends HarborTestCase {
 		$this->assertSame( 'Alice, Bob', $item['authors'] );
 	}
 
-	public function test_feature_to_display_item_dot_org_true(): void {
+	public function test_feature_to_display_item_wporg_slug(): void {
 		$feature = $this->collection->get( 'test-plugin' );
 		$this->assertNotNull( $feature );
 
 		/** @var array<string, mixed> $item */
 		$item = $this->invoke_feature_to_display_item( $this->command, $feature );
 
-		$this->assertSame( 'true', $item['is_dot_org'] );
+		$this->assertSame( 'test-plugin', $item['wporg_slug'] );
 	}
 
 	public function test_feature_to_display_item_reads_enabled_from_feature(): void {

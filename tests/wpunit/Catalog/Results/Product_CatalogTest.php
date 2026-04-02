@@ -11,34 +11,45 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 final class Product_CatalogTest extends HarborTestCase {
 
 	private array $valid_data = [
+		'product_id'   => 'kadence-001',
 		'product_slug' => 'kadence',
+		'product_name' => 'Kadence',
 		'tiers'        => [
 			[
 				'slug'         => 'kadence-basic',
 				'name'         => 'Basic',
 				'rank'         => 1,
-				'purchase_url' => 'https://software.liquidweb.com/kadence?tier=basic',
+				'price'        => 0,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			],
 			[
 				'slug'         => 'kadence-pro',
 				'name'         => 'Pro',
 				'rank'         => 2,
-				'purchase_url' => 'https://software.liquidweb.com/kadence?tier=pro',
+				'price'        => 14900,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			],
 			[
 				'slug'         => 'kadence-agency',
 				'name'         => 'Agency',
 				'rank'         => 3,
-				'purchase_url' => 'https://software.liquidweb.com/kadence?tier=agency',
+				'price'        => 29900,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			],
 		],
 		'features'     => [
 			[
-				'feature_slug'      => 'kad-blocks-pro',
-				'type'              => 'plugin',
+				'slug'              => 'kad-blocks-pro',
+				'kind'              => 'plugin',
 				'minimum_tier'      => 'kadence-basic',
-				'plugin_file'       => 'kadence-blocks-pro/kadence-blocks-pro.php',
-				'is_dot_org'        => false,
+				'main_file'         => 'kadence-blocks-pro/kadence-blocks-pro.php',
+				'wporg_slug'        => null,
 				'download_url'      => 'https://licensing.stellarwp.com/api/plugins/kad-blocks-pro',
 				'name'              => 'Blocks Pro',
 				'description'       => 'Premium Gutenberg blocks for advanced page building.',
@@ -47,11 +58,11 @@ final class Product_CatalogTest extends HarborTestCase {
 				'documentation_url' => 'https://www.kadencewp.com/help-center/',
 			],
 			[
-				'feature_slug'      => 'kad-pattern-hub',
-				'type'              => 'plugin',
+				'slug'              => 'kad-pattern-hub',
+				'kind'              => 'plugin',
 				'minimum_tier'      => 'kadence-basic',
-				'is_dot_org'        => false,
-				'plugin_file'       => 'kad-pattern-hub/kad-pattern-hub.php',
+				'wporg_slug'        => null,
+				'main_file'         => 'kad-pattern-hub/kad-pattern-hub.php',
 				'name'              => 'Pattern Hub',
 				'description'       => 'Access to premium design patterns and starter templates.',
 				'category'          => 'design',
@@ -98,24 +109,27 @@ final class Product_CatalogTest extends HarborTestCase {
 			$this->assertInstanceOf( Catalog_Feature::class, $feature );
 		}
 
-		$this->assertSame( 'kad-blocks-pro', $features[0]->get_feature_slug() );
-		$this->assertSame( 'plugin', $features[0]->get_type() );
-		$this->assertSame( 'kad-pattern-hub', $features[1]->get_feature_slug() );
-		$this->assertSame( 'plugin', $features[1]->get_type() );
+		$this->assertSame( 'kad-blocks-pro', $features[0]->get_slug() );
+		$this->assertSame( 'plugin', $features[0]->get_kind() );
+		$this->assertSame( 'kad-pattern-hub', $features[1]->get_slug() );
+		$this->assertSame( 'plugin', $features[1]->get_kind() );
 	}
 
 	public function test_to_array_produces_expected_shape(): void {
 		$catalog = Product_Catalog::from_array( $this->valid_data );
 		$result  = $catalog->to_array();
 
+		$this->assertSame( 'kadence-001', $result['product_id'] );
 		$this->assertSame( 'kadence', $result['product_slug'] );
+		$this->assertSame( 'Kadence', $result['product_name'] );
 		$this->assertCount( 3, $result['tiers'] );
 		$this->assertSame( 'kadence-basic', $result['tiers'][0]['slug'] );
 		$this->assertSame( 'Basic', $result['tiers'][0]['name'] );
 		$this->assertSame( 1, $result['tiers'][0]['rank'] );
-		$this->assertSame( 'https://software.liquidweb.com/kadence?tier=basic', $result['tiers'][0]['purchase_url'] );
+		$this->assertSame( 0, $result['tiers'][0]['price'] );
+		$this->assertSame( 'USD', $result['tiers'][0]['currency'] );
 		$this->assertCount( 2, $result['features'] );
-		$this->assertSame( 'kad-blocks-pro', $result['features'][0]['feature_slug'] );
+		$this->assertSame( 'kad-blocks-pro', $result['features'][0]['slug'] );
 	}
 
 	public function test_round_trip(): void {
@@ -143,25 +157,36 @@ final class Product_CatalogTest extends HarborTestCase {
 	public function test_get_tiers_sorts_by_rank(): void {
 		$catalog = Product_Catalog::from_array(
 			[
+				'product_id'   => '',
 				'product_slug' => 'test',
+				'product_name' => 'Test',
 				'tiers'        => [
 					[
 						'slug'         => 'agency',
 						'name'         => 'Agency',
 						'rank'         => 3,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 					[
 						'slug'         => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 					[
 						'slug'         => 'pro',
 						'name'         => 'Pro',
 						'rank'         => 2,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 				],
 				'features'     => [],
@@ -176,19 +201,27 @@ final class Product_CatalogTest extends HarborTestCase {
 	public function test_get_tier_by_slug_returns_tier(): void {
 		$catalog = Product_Catalog::from_array(
 			[
+				'product_id'   => '',
 				'product_slug' => 'test',
+				'product_name' => 'Test',
 				'tiers'        => [
 					[
 						'slug'         => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 					[
 						'slug'         => 'pro',
 						'name'         => 'Pro',
 						'rank'         => 2,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 				],
 				'features'     => [],
@@ -205,13 +238,18 @@ final class Product_CatalogTest extends HarborTestCase {
 	public function test_get_tier_by_slug_returns_null_for_unknown(): void {
 		$catalog = Product_Catalog::from_array(
 			[
+				'product_id'   => '',
 				'product_slug' => 'test',
+				'product_name' => 'Test',
 				'tiers'        => [
 					[
 						'slug'         => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
-						'purchase_url' => '',
+						'price'        => 0,
+						'currency'     => 'USD',
+						'features'     => [],
+						'herald_slugs' => [],
 					],
 				],
 				'features'     => [],

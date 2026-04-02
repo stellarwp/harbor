@@ -116,7 +116,7 @@ class Theme_Handler {
 
 		if (
 			$feature instanceof Installable
-			&& $feature->is_dot_org()
+			&& $feature->is_wporg()
 		) {
 			return $result;
 		}

@@ -8,11 +8,18 @@ use StellarWP\ContainerContract\ContainerInterface;
 class Config {
 
 	/**
-	 * The default base URL for the StellarWP licensing and catalog API.
+	 * The default base URL for the StellarWP licensing service.
 	 *
 	 * @since 1.0.0
 	 */
-	public const DEFAULT_API_BASE_URL = 'https://licensing.stellarwp.com';
+	public const DEFAULT_LICENSING_BASE_URL = 'https://licensing.stellarwp.com';
+
+	/**
+	 * The default base URL for the Commerce Portal (catalog API).
+	 *
+	 * @since 1.0.0
+	 */
+	public const DEFAULT_PORTAL_BASE_URL = 'https://my.software.stellarwp.com';
 
 	/**
 	 * Container object.
@@ -24,13 +31,22 @@ class Config {
 	protected static $container;
 
 	/**
-	 * The base URL for the StellarWP licensing and catalog API.
+	 * The base URL for the StellarWP licensing service.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	protected static $api_base_url = self::DEFAULT_API_BASE_URL;
+	protected static $licensing_base_url = self::DEFAULT_LICENSING_BASE_URL;
+
+	/**
+	 * The base URL for the Commerce Portal (catalog API).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	protected static $portal_base_url = self::DEFAULT_PORTAL_BASE_URL;
 
 	/**
 	 * Get the container.
@@ -70,7 +86,8 @@ class Config {
 	 * @return void
 	 */
 	public static function reset(): void {
-		static::$api_base_url = self::DEFAULT_API_BASE_URL;
+		static::$licensing_base_url = self::DEFAULT_LICENSING_BASE_URL;
+		static::$portal_base_url   = self::DEFAULT_PORTAL_BASE_URL;
 	}
 
 	/**
@@ -87,7 +104,7 @@ class Config {
 	}
 
 	/**
-	 * Set the base URL for the StellarWP licensing and catalog API.
+	 * Set the base URL for the StellarWP licensing service.
 	 *
 	 * @since 1.0.0
 	 *
@@ -95,18 +112,50 @@ class Config {
 	 *
 	 * @return void
 	 */
-	public static function set_api_base_url( string $url ): void {
-		static::$api_base_url = rtrim( $url, '/' );
+	public static function set_licensing_base_url( string $url ): void {
+		static::$licensing_base_url = rtrim( $url, '/' );
 	}
 
 	/**
-	 * Get the base URL for the StellarWP licensing and catalog API.
+	 * Get the base URL for the StellarWP licensing service.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public static function get_api_base_url(): string {
-		return static::$api_base_url;
+	public static function get_licensing_base_url(): string {
+		if ( defined( 'LW_HARBOR_LICENSING_BASE_URL' ) ) {
+			return rtrim( (string) LW_HARBOR_LICENSING_BASE_URL, '/' );
+		}
+
+		return static::$licensing_base_url;
+	}
+
+	/**
+	 * Set the base URL for the Commerce Portal (catalog API).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url The portal base URL (no trailing slash).
+	 *
+	 * @return void
+	 */
+	public static function set_portal_base_url( string $url ): void {
+		static::$portal_base_url = rtrim( $url, '/' );
+	}
+
+	/**
+	 * Get the base URL for the Commerce Portal (catalog API).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public static function get_portal_base_url(): string {
+		if ( defined( 'LW_HARBOR_PORTAL_BASE_URL' ) ) {
+			return rtrim( (string) LW_HARBOR_PORTAL_BASE_URL, '/' );
+		}
+
+		return static::$portal_base_url;
 	}
 }

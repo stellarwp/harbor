@@ -119,10 +119,10 @@ class Feature extends WP_CLI_Command {
 	 * * is_enabled
 	 * * documentation_url
 	 * * installed_version (plugin, theme)
-	 * * released_at (plugin, theme)
+	 * * release_date (plugin, theme)
 	 * * plugin_file (plugin)
 	 * * authors (plugin, theme)
-	 * * is_dot_org (plugin, theme)
+	 * * wporg_slug (plugin, theme)
 	 *
 	 * ## EXAMPLES
 	 *
@@ -396,7 +396,7 @@ class Feature extends WP_CLI_Command {
 
 		$item['is_available'] = Display::bool( ! empty( $item['is_available'] ) );
 		$item['is_enabled']   = Display::bool( ! empty( $item['is_enabled'] ) );
-		$item['is_dot_org']   = Display::bool( ! empty( $item['is_dot_org'] ) );
+		$item['wporg_slug']   = $item['wporg_slug'] ?? '';
 
 		foreach ( $item as $key => $value ) {
 			if ( is_array( $value ) ) {

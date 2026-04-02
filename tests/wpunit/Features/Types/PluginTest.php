@@ -104,7 +104,7 @@ final class PluginTest extends HarborTestCase {
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
 				'authors'           => [ 'StellarWP' ],
-				'released_at'       => '2025-11-15',
+				'release_date'      => '2025-11-15',
 				'installed_version' => '1.0.0',
 			]
 		);
@@ -120,10 +120,10 @@ final class PluginTest extends HarborTestCase {
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
 				'authors'           => [ 'StellarWP' ],
-				'released_at'       => '2025-11-15',
+				'release_date'      => '2025-11-15',
 				'installed_version' => '1.0.0',
 				'type'              => 'plugin',
-				'is_dot_org'        => false,
+				'wporg_slug'        => null,
 				'version'           => null,
 				'changelog'         => null,
 			],
@@ -149,8 +149,8 @@ final class PluginTest extends HarborTestCase {
 			'documentation_url' => 'https://example.com/docs',
 			'plugin_file'       => 'test-feature/test-feature.php',
 			'authors'           => [ 'StellarWP' ],
-			'is_dot_org'        => false,
-			'released_at'       => '2025-11-15',
+			'wporg_slug'        => null,
+			'release_date'      => '2025-11-15',
 			'installed_version' => '1.2.3',
 			'version'           => null,
 			'changelog'         => null,
@@ -254,18 +254,18 @@ final class PluginTest extends HarborTestCase {
 	}
 
 	/**
-	 * is_dot_org() defaults to false.
+	 * is_wporg() defaults to false when wporg_slug is null.
 	 */
-	public function test_is_dot_org_defaults_to_false(): void {
+	public function test_is_wporg_defaults_to_false(): void {
 		$feature = $this->make_feature();
 
-		$this->assertFalse( $feature->is_dot_org() );
+		$this->assertFalse( $feature->is_wporg() );
 	}
 
 	/**
-	 * is_dot_org() returns true when set.
+	 * is_wporg() returns true when wporg_slug is set.
 	 */
-	public function test_is_dot_org_returns_true_when_set(): void {
+	public function test_is_wporg_returns_true_when_set(): void {
 		$feature = new Plugin(
 			[
 				'slug'         => self::SLUG,
@@ -274,17 +274,18 @@ final class PluginTest extends HarborTestCase {
 				'name'         => self::NAME,
 				'plugin_file'  => self::PLUGIN_FILE,
 				'is_available' => true,
-				'is_dot_org'   => true,
+				'wporg_slug'   => 'stellar-export',
 			]
 		);
 
-		$this->assertTrue( $feature->is_dot_org() );
+		$this->assertTrue( $feature->is_wporg() );
+		$this->assertSame( 'stellar-export', $feature->get_wporg_slug() );
 	}
 
 	/**
-	 * from_array() populates is_dot_org when provided.
+	 * from_array() populates wporg_slug when provided.
 	 */
-	public function test_from_array_includes_is_dot_org(): void {
+	public function test_from_array_includes_wporg_slug(): void {
 		$feature = Plugin::from_array(
 			[
 				'slug'         => 'test-feature',
@@ -293,11 +294,12 @@ final class PluginTest extends HarborTestCase {
 				'name'         => 'Test Feature',
 				'plugin_file'  => 'test-feature/test-feature.php',
 				'is_available' => true,
-				'is_dot_org'   => true,
+				'wporg_slug'   => 'test-feature',
 			]
 		);
 
-		$this->assertTrue( $feature->is_dot_org() );
+		$this->assertTrue( $feature->is_wporg() );
+		$this->assertSame( 'test-feature', $feature->get_wporg_slug() );
 	}
 
 	// -------------------------------------------------------------------------

@@ -33,11 +33,11 @@ Lists all resolved features with optional filters.
     "is_enabled": true,
     "documentation_url": "https://...",
     "plugin_file": "kadence-blocks-pro/kadence-blocks-pro.php",
-    "released_at": "2026-01-15T00:00:00Z",
+    "release_date": "2026-01-15T00:00:00Z",
     "version": "2.6.1",
     "changelog": "<p>Bug fixes and improvements.</p>",
     "authors": ["Suspended Starter Fish"],
-    "is_dot_org": false,
+    "wporg_slug": null,
     "installed_version": "2.6.0",
     "update_version": "2.6.1"
   }

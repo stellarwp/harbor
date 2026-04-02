@@ -177,7 +177,7 @@ Shows tiers for a specific product.
 wp harbor catalog tiers <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
-**Default fields:** `slug, name, rank, purchase_url`
+**Default fields:** `slug, name, rank, price, currency`
 
 **Examples:**
 
@@ -194,9 +194,9 @@ Shows features for a specific product.
 wp harbor catalog features <product_slug> [--fields=<fields>] [--format=<format>]
 ```
 
-**Default fields:** `feature_slug, type, minimum_tier, name, category`
+**Default fields:** `slug, kind, minimum_tier, name, category`
 
-**Available fields:** `feature_slug`, `type`, `minimum_tier`, `name`, `description`, `category`, `plugin_file`, `is_dot_org`, `download_url`, `version`, `authors`, `documentation_url`
+**Available fields:** `slug`, `kind`, `minimum_tier`, `name`, `description`, `category`, `plugin_file`, `wporg_slug`, `download_url`, `version`, `authors`, `documentation_url`
 
 **Examples:**
 
@@ -273,7 +273,7 @@ wp harbor feature list [--product=<product>] [--tier=<tier>] [--available=<bool>
 **Available fields:**
 
 - All types: `slug`, `name`, `description`, `type`, `product`, `tier`, `is_available`, `is_enabled`, `documentation_url`
-- Plugin and Theme: `installed_version`, `released_at`, `authors`, `is_dot_org`
+- Plugin and Theme: `installed_version`, `release_date`, `authors`, `wporg_slug`
 - Plugin only: `plugin_file`
 
 **Examples:**
@@ -289,7 +289,7 @@ wp harbor feature list --format=json
 wp harbor feature list --product=kadence --format=count
 
 # Show plugin-specific fields
-wp harbor feature list --type=plugin --fields=slug,plugin_file,authors,is_dot_org
+wp harbor feature list --type=plugin --fields=slug,plugin_file,authors,wporg_slug
 ```
 
 ### get

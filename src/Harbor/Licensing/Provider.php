@@ -35,7 +35,7 @@ final class Provider extends Abstract_Provider {
 				);
 				return $factory->make(
 					new LicensingConfig(
-						Config::get_api_base_url(),
+						Config::get_licensing_base_url(),
 						null,
 						'lw-harbor/' . Harbor::VERSION
 					)

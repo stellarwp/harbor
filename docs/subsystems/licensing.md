@@ -142,7 +142,7 @@ The presence of this file is the signal that a product belongs to the Harbor uni
 
 Harbor uses `stellarwp/licensing-api-client-wordpress` for all communication with the Liquid Web Software v1 licensing API. `License_Manager` depends on `LicensingClientInterface` from the package and calls `$client->products()->catalog($key, $domain)` to fetch the product catalog. The package handles HTTP transport (via WordPress's HTTP API), request building, response parsing, and error handling.
 
-`Licensing\Provider` wires the client using `WordPressApiFactory` with the base URL from `Config::get_api_base_url()`.
+`Licensing\Provider` wires the client using `WordPressApiFactory` with the base URL from `Config::get_licensing_base_url()`.
 
 The `Clients\Fixture_Client` implements `LicensingClientInterface` for use in tests. It reads JSON fixture files from `tests/_data/licensing/`, mapping key values to filenames (e.g., `LWSW-unified-pro-2026` reads from `lwsw-unified-pro-2026.json`), and returns `Catalog` objects. Unrecognized keys throw `NotFoundException`.
 
@@ -173,7 +173,7 @@ All errors use `WP_Error` with these codes:
 
 Both the Licensing and Catalog subsystems use `WordPressHttpClient` from `stellarwp/licensing-api-client-wordpress` as their HTTP transport. This wraps WordPress's `wp_remote_request()` and implements the PSR-18 interface, so no Symfony dependency is required.
 
-The base URL for all API requests comes from `Config::get_api_base_url()`, which defaults to `https://licensing.stellarwp.com`. It can be overridden via `Config::set_api_base_url()` — one setting shared by both subsystems.
+The base URL for licensing API requests comes from `Config::get_licensing_base_url()`, which defaults to `https://licensing.stellarwp.com`. It can be overridden via `Config::set_licensing_base_url()`. The catalog uses `Config::get_portal_base_url()` separately.
 
 ## Workflows
 

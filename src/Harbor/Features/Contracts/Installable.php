@@ -26,13 +26,20 @@ interface Installable {
 	/**
 	 * Whether this extension is available on WordPress.org.
 	 *
-	 * Prepares for future install-path branching (download_url vs .org repository).
-	 *
 	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
-	public function is_dot_org(): bool;
+	public function is_wporg(): bool;
+
+	/**
+	 * Gets the WordPress.org slug used for plugins_api() lookups, or null if not on WordPress.org.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string|null
+	 */
+	public function get_wporg_slug(): ?string;
 
 	/**
 	 * Whether this extension is currently installed on disk.

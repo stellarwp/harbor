@@ -7,7 +7,7 @@ use LiquidWeb\Harbor\Utils\Cast;
 /**
  * A single tier definition from the product catalog.
  *
- * Immutable value object hydrated from the catalog API response.
+ * Immutable value object hydrated from the Commerce Portal catalog API response.
  *
  * @since 1.0.0
  *
@@ -15,7 +15,10 @@ use LiquidWeb\Harbor\Utils\Cast;
  *     slug: string,
  *     name: string,
  *     rank: int,
- *     purchase_url: string,
+ *     price: int,
+ *     currency: string,
+ *     features: list<string>,
+ *     herald_slugs: list<string>,
  * }
  */
 final class Catalog_Tier {
@@ -28,10 +31,13 @@ final class Catalog_Tier {
 	 * @var TierAttributes
 	 */
 	protected array $attributes = [
-		'slug'         => '',
-		'name'         => '',
-		'rank'         => 0,
-		'purchase_url' => '',
+		'slug'          => '',
+		'name'          => '',
+		'rank'          => 0,
+		'price'         => 0,
+		'currency'      => '',
+		'features'      => [],
+		'herald_slugs'  => [],
 	];
 
 	/**
@@ -46,7 +52,7 @@ final class Catalog_Tier {
 	 * @return void
 	 */
 	public function __construct( array $attributes ) {
-		$this->attributes = $attributes;
+		$this->attributes = array_merge( $this->attributes, $attributes );
 	}
 
 	/**
@@ -64,7 +70,14 @@ final class Catalog_Tier {
 				'slug'         => Cast::to_string( $data['slug'] ?? '' ),
 				'name'         => Cast::to_string( $data['name'] ?? '' ),
 				'rank'         => Cast::to_int( $data['rank'] ?? 0 ),
-				'purchase_url' => Cast::to_string( $data['purchase_url'] ?? '' ),
+				'price'        => Cast::to_int( $data['price'] ?? 0 ),
+				'currency'     => Cast::to_string( $data['currency'] ?? '' ),
+				'features'     => isset( $data['features'] ) && is_array( $data['features'] )
+					? array_map( [ Cast::class, 'to_string' ], array_values( $data['features'] ) )
+					: [],
+				'herald_slugs' => isset( $data['herald_slugs'] ) && is_array( $data['herald_slugs'] )
+					? array_map( [ Cast::class, 'to_string' ], array_values( $data['herald_slugs'] ) )
+					: [],
 			]
 		);
 	}
@@ -114,13 +127,49 @@ final class Catalog_Tier {
 	}
 
 	/**
-	 * Gets the purchase URL for this tier.
+	 * Gets the tier price in the smallest currency unit (e.g. cents for USD).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int
+	 */
+	public function get_price(): int {
+		return $this->attributes['price'];
+	}
+
+	/**
+	 * Gets the currency code (e.g. "USD").
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_purchase_url(): string {
-		return $this->attributes['purchase_url'];
+	public function get_currency(): string {
+		return $this->attributes['currency'];
+	}
+
+	/**
+	 * Gets the marketing feature descriptions for this tier.
+	 *
+	 * These are human-readable selling points (e.g. "Priority support"),
+	 * not to be confused with Catalog_Feature objects.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string[]
+	 */
+	public function get_features(): array {
+		return $this->attributes['features'];
+	}
+
+	/**
+	 * Gets the herald slugs associated with this tier.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string[]
+	 */
+	public function get_herald_slugs(): array {
+		return $this->attributes['herald_slugs'];
 	}
 }

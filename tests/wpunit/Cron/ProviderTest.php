@@ -138,11 +138,11 @@ final class ProviderTest extends HarborTestCase {
 					'tiers'        => [],
 					'features'     => [
 						[
-							'feature_slug'      => 'test-feature',
-							'type'              => 'plugin',
+							'slug'              => 'test-feature',
+							'kind'              => 'plugin',
 							'minimum_tier'      => '',
-							'plugin_file'       => $plugin_file,
-							'is_dot_org'        => false,
+							'main_file'         => $plugin_file,
+							'wporg_slug'        => null,
 							'name'              => 'Test Feature',
 							'description'       => '',
 							'category'          => '',
