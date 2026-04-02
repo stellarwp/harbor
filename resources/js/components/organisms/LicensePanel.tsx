@@ -43,9 +43,17 @@ export function LicensePanel() {
         return map;
     }, [ catalogs ] );
 
-    // Product slug → purchase URL map.
-    // TODO: Source purchase URLs once the Commerce Portal provides them.
-    const upsellUrlMap: Record<string, string> = {};
+    // Product slug → lowest-tier purchase URL map from the catalog.
+    const upsellUrlMap = useMemo( () => {
+        const map: Record<string, string> = {};
+        catalogs.forEach( ( catalog ) => {
+            const sorted = catalog.tiers.slice().sort( ( a, b ) => a.rank - b.rank );
+            if ( sorted[ 0 ]?.purchase_url ) {
+                map[ catalog.product_slug ] = sorted[ 0 ].purchase_url;
+            }
+        } );
+        return map;
+    }, [ catalogs ] );
 
     const licensedSlugs  = new Set( licenseProducts.map( ( lp ) => lp.product_slug ) );
     const upsellProducts = PRODUCTS.filter( ( p ) => ! licensedSlugs.has( p.slug ) );

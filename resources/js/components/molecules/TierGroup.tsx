@@ -8,8 +8,9 @@
  */
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { ChevronRight, ChevronDown, Lock } from 'lucide-react';
+import { ChevronRight, ChevronDown, Lock, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
 import type { CatalogTier, Feature } from '@/types/api';
 
@@ -43,9 +44,15 @@ export function TierGroup( { tier, features, forceOpen = false }: TierGroupProps
                     </Badge>
                     <Lock className="w-3.5 h-3.5 text-muted-foreground ml-1" />
                 </div>
-                <Badge variant="outline" className="text-xs ml-auto shrink-0">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1 text-xs h-7 ml-auto shrink-0"
+                    onClick={ () => window.open( tier.purchase_url, '_blank', 'noopener,noreferrer' ) }
+                >
+                    <ExternalLink className="w-3 h-3" />
                     { __( 'Upgrade to', '%TEXTDOMAIN%' ) }{ ' ' }{ tier.name }
-                </Badge>
+                </Button>
             </div>
 
             { isOpen && features.map( ( feature ) => (

@@ -250,6 +250,10 @@ export interface CatalogTier {
      * Herald slugs associated with this tier.
      */
     herald_slugs: string[];
+    /**
+     * Checkout URL to purchase or upgrade to this tier.
+     */
+    purchase_url: string;
 }
 
 /**
