@@ -1874,7 +1874,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * License sidebar panel.
  *
- * Always visible. Fetches license and catalog data from the store and passes
+ * Always visible. Fetches license and portal data from the store and passes
  * it to LicenseSection and UpsellSection.
  *
  * @package LiquidWeb\Harbor
@@ -1903,35 +1903,35 @@ function LicensePanel() {
   const {
     licenseKey,
     licenseProducts,
-    catalogs
+    portals
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => ({
     licenseKey: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getLicenseKey(),
     licenseProducts: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getLicenseProducts(),
-    catalogs: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getCatalog()
+    portals: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getPortal()
   }), []);
 
-  // Flat tier slug → display name lookup from all catalog tiers.
+  // Flat tier slug → display name lookup from all portal tiers.
   const tierNameMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const map = {};
-    catalogs.forEach(catalog => {
-      catalog.tiers.forEach(t => {
+    portals.forEach(portal => {
+      portal.tiers.forEach(t => {
         map[t.slug] = t.name;
       });
     });
     return map;
-  }, [catalogs]);
+  }, [portals]);
 
-  // Product slug → lowest-tier purchase URL map from the catalog.
+  // Product slug → lowest-tier purchase URL map from the portal.
   const upsellUrlMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const map = {};
-    catalogs.forEach(catalog => {
-      const sorted = catalog.tiers.slice().sort((a, b) => a.rank - b.rank);
+    portals.forEach(portal => {
+      const sorted = portal.tiers.slice().sort((a, b) => a.rank - b.rank);
       if (sorted[0]?.purchase_url) {
-        map[catalog.product_slug] = sorted[0].purchase_url;
+        map[portal.product_slug] = sorted[0].purchase_url;
       }
     });
     return map;
-  }, [catalogs]);
+  }, [portals]);
   const licensedSlugs = new Set(licenseProducts.map(lp => lp.product_slug));
   const upsellProducts = _data_products__WEBPACK_IMPORTED_MODULE_6__.PRODUCTS.filter(p => !licensedSlugs.has(p.slug));
   const handleRemove = async () => {
@@ -2149,12 +2149,12 @@ function ProductSection({
   const {
     availableFeatures,
     lockedByTier,
-    sortedCatalogTiers,
-    upgradeCatalogTiers
+    sortedPortalTiers,
+    upgradePortalTiers
   } = (0,_hooks_useProductFeatureGroups__WEBPACK_IMPORTED_MODULE_8__.useProductFeatureGroups)(product.slug);
   const activeCount = availableFeatures.filter(f => f.is_enabled).length;
   const deactivatedCount = availableFeatures.filter(f => !f.is_enabled).length;
-  const tierName = licenseProduct ? sortedCatalogTiers.find(t => t.slug === licenseProduct.tier)?.name ?? licenseProduct.tier : null;
+  const tierName = licenseProduct ? sortedPortalTiers.find(t => t.slug === licenseProduct.tier)?.name ?? licenseProduct.tier : null;
   const hasContent = availableFeatures.length > 0 || Object.values(lockedByTier).some(f => f.length > 0);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
     id: product.slug,
@@ -2203,7 +2203,7 @@ function ProductSection({
       className: "border border-t-0 rounded-b-lg overflow-hidden",
       children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_4__.FeatureRow, {
         feature: feature
-      }, feature.slug)), upgradeCatalogTiers.map(tier => {
+      }, feature.slug)), upgradePortalTiers.map(tier => {
         const locked = lockedByTier[tier.slug] ?? [];
         if (locked.length === 0) return null;
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_5__.TierGroup, {
@@ -3198,7 +3198,7 @@ __webpack_require__.r(__webpack_exports__);
  * Harbor admin screen data context.
  *
  * Owns the four core resolvers for the Harbor admin screen (license, features,
- * catalog, legacy licenses). Errors from any resolver are pushed to the
+ * portal, legacy licenses). Errors from any resolver are pushed to the
  * ErrorModalContext so the error modal opens while the full UI stays rendered.
  * Errors are automatically cleared when all resolvers recover.
  *
@@ -3243,10 +3243,10 @@ function HarborDataProvider({
   const result = (0,_hooks_use_resolvable_select_use_resolvable_select__WEBPACK_IMPORTED_MODULE_3__["default"])(resolve => ({
     license: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLicenseKey(),
     features: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getFeatures(),
-    catalog: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getCatalog(),
+    portal: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getPortal(),
     legacyLicenses: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLegacyLicenses()
   }), []);
-  const isLoading = result.license.isResolving || result.features.isResolving || result.catalog.isResolving || result.legacyLicenses.isResolving;
+  const isLoading = result.license.isResolving || result.features.isResolving || result.portal.isResolving || result.legacyLicenses.isResolving;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const found = findErrors(result);
     if (found.length > 0) {
@@ -3351,10 +3351,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getProduct: () => (/* binding */ getProduct)
 /* harmony export */ });
 /**
- * Product catalog data.
+ * Product portal data.
  *
  * Product metadata. Tier definitions and feature lists come from the
- * liquidweb/harbor/v1/catalog and liquidweb/harbor/v1/features REST
+ * liquidweb/harbor/v1/portal and liquidweb/harbor/v1/features REST
  * endpoints — not stored here.
  *
  * @package LiquidWeb\Harbor
@@ -3410,7 +3410,7 @@ let ErrorCode = /*#__PURE__*/function (ErrorCode) {
   ErrorCode["LicenseStoreFailed"] = "license-store-failed";
   ErrorCode["LicenseDeleteFailed"] = "license-delete-failed";
   ErrorCode["LicenseValidateFailed"] = "license-validate-failed";
-  ErrorCode["CatalogFetchFailed"] = "catalog-fetch-failed";
+  ErrorCode["PortalFetchFailed"] = "portal-fetch-failed";
   ErrorCode["LegacyLicensesFetchFailed"] = "legacy-licenses-fetch-failed";
   ErrorCode["ResolutionFailed"] = "resolution-failed";
   return ErrorCode;
@@ -3972,7 +3972,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /**
  * Partitions features for a product into available and locked groups,
- * and groups locked features by catalog tier.
+ * and groups locked features by portal tier.
  *
  * @package LiquidWeb\Harbor
  */
@@ -3987,18 +3987,18 @@ __webpack_require__.r(__webpack_exports__);
 function useProductFeatureGroups(productSlug) {
   const allFeatures = (0,_hooks_useFilteredFeatures__WEBPACK_IMPORTED_MODULE_2__.useFilteredFeatures)(productSlug);
   const {
-    catalogTiers,
+    portalTiers,
     licenseProducts,
     isUnifiedLicensed,
     legacyLicenses
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => ({
-    catalogTiers: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getProductCatalog(productSlug)?.tiers ?? [],
+    portalTiers: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getProductPortal(productSlug)?.tiers ?? [],
     licenseProducts: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLicenseProducts(),
     isUnifiedLicensed: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductUnifiedLicensed(productSlug),
     legacyLicenses: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLegacyLicenses()
   }), [productSlug]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    const sorted = catalogTiers.slice().sort((a, b) => a.rank - b.rank);
+    const sorted = portalTiers.slice().sort((a, b) => a.rank - b.rank);
     const licenseProduct = licenseProducts.find(lp => lp.product_slug === productSlug);
     const userTier = licenseProduct?.tier ? sorted.find(t => t.slug === licenseProduct.tier) : null;
     const rank = userTier?.rank ?? -1; // -1 = unlicensed (show all tier groups)
@@ -4021,10 +4021,10 @@ function useProductFeatureGroups(productSlug) {
     return {
       availableFeatures,
       lockedByTier,
-      sortedCatalogTiers: sorted,
-      upgradeCatalogTiers: upgrade
+      sortedPortalTiers: sorted,
+      upgradePortalTiers: upgrade
     };
-  }, [allFeatures, catalogTiers, licenseProducts, isUnifiedLicensed, legacyLicenses, productSlug]);
+  }, [allFeatures, portalTiers, licenseProducts, isUnifiedLicensed, legacyLicenses, productSlug]);
 }
 
 /***/ },
@@ -4068,15 +4068,15 @@ function getLicenseBadgeType(feature, isLegacy) {
  * Returns the mismatch type for a feature, or null if there is no mismatch.
  *
  * Both fields are pre-computed by the backend resolution layer.
- * No catalog or license cross-referencing is needed at call sites.
+ * No portal or license cross-referencing is needed at call sites.
  *
  * @since 1.0.0
  */
 function getFeatureMismatch(feature) {
-  if (feature.is_available && !feature.in_catalog_tier) {
+  if (feature.is_available && !feature.in_portal_tier) {
     return 'bonus';
   }
-  if (!feature.is_available && feature.in_catalog_tier) {
+  if (!feature.is_available && feature.in_portal_tier) {
     return 'revoked';
   }
   return null;
@@ -4217,10 +4217,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   deleteLicense: () => (/* binding */ deleteLicense),
 /* harmony export */   disableFeature: () => (/* binding */ disableFeature),
 /* harmony export */   enableFeature: () => (/* binding */ enableFeature),
-/* harmony export */   receiveCatalog: () => (/* binding */ receiveCatalog),
 /* harmony export */   receiveFeatures: () => (/* binding */ receiveFeatures),
 /* harmony export */   receiveLegacyLicenses: () => (/* binding */ receiveLegacyLicenses),
 /* harmony export */   receiveLicense: () => (/* binding */ receiveLicense),
+/* harmony export */   receivePortal: () => (/* binding */ receivePortal),
 /* harmony export */   storeLicense: () => (/* binding */ storeLicense),
 /* harmony export */   updateFeature: () => (/* binding */ updateFeature)
 /* harmony export */ });
@@ -4250,9 +4250,9 @@ const receiveLicense = license => ({
   type: 'RECEIVE_LICENSE',
   license
 });
-const receiveCatalog = catalogs => ({
-  type: 'RECEIVE_CATALOG',
-  catalogs
+const receivePortal = portals => ({
+  type: 'RECEIVE_PORTAL',
+  portals
 });
 const receiveLegacyLicenses = licenses => ({
   type: 'RECEIVE_LEGACY_LICENSES',
@@ -4530,24 +4530,24 @@ __webpack_require__.r(__webpack_exports__);
 const reducer = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.combineReducers)({
   features,
   license,
-  catalog,
+  portal,
   legacyLicenses
 });
 
 // ---------------------------------------------------------------------------
-// Catalog
+// Portal
 // ---------------------------------------------------------------------------
 
-const CATALOG_DEFAULT = {
+const PORTAL_DEFAULT = {
   byProductSlug: {}
 };
-function catalog(state = CATALOG_DEFAULT, action) {
+function portal(state = PORTAL_DEFAULT, action) {
   switch (action.type) {
-    case 'RECEIVE_CATALOG':
+    case 'RECEIVE_PORTAL':
       {
         return {
           ...state,
-          byProductSlug: Object.fromEntries(action.catalogs.map(c => [c.product_slug, c]))
+          byProductSlug: Object.fromEntries(action.portals.map(c => [c.product_slug, c]))
         };
       }
     default:
@@ -4785,8 +4785,6 @@ function license(state = LICENSE_DEFAULT, action) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getCatalog: () => (/* binding */ getCatalog),
-/* harmony export */   getCatalogTier: () => (/* binding */ getCatalogTier),
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatures: () => (/* binding */ getFeatures),
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
@@ -4794,7 +4792,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
 /* harmony export */   getLicenseKey: () => (/* binding */ getLicenseKey),
 /* harmony export */   getLicenseProducts: () => (/* binding */ getLicenseProducts),
-/* harmony export */   getProductCatalog: () => (/* binding */ getProductCatalog),
+/* harmony export */   getPortal: () => (/* binding */ getPortal),
+/* harmony export */   getPortalTier: () => (/* binding */ getPortalTier),
+/* harmony export */   getProductPortal: () => (/* binding */ getProductPortal),
 /* harmony export */   getProductTiers: () => (/* binding */ getProductTiers),
 /* harmony export */   hasLegacyLicense: () => (/* binding */ hasLegacyLicense),
 /* harmony export */   hasLegacyLicenses: () => (/* binding */ hasLegacyLicenses),
@@ -4865,28 +4865,28 @@ const hasLegacyLicense = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.f
 const hasLegacyLicenses = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolver)('getLegacyLicenses');
 
 // ---------------------------------------------------------------------------
-// Catalog
+// Portal
 // ---------------------------------------------------------------------------
 
 /**
- * Fetches all product catalogs from the REST API and stores them.
- * Triggered automatically when getCatalog is first called.
+ * Fetches all product portals from the REST API and stores them.
+ * Triggered automatically when getPortal is first called.
  */
-const getCatalog = () => async ({
+const getPortal = () => async ({
   dispatch
 }) => {
   try {
-    const catalogs = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
-      path: '/liquidweb/harbor/v1/catalog'
+    const portals = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/liquidweb/harbor/v1/portal'
     });
-    dispatch.receiveCatalog(catalogs);
+    dispatch.receivePortal(portals);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load the product catalog.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.PortalFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load the product portal.', '%TEXTDOMAIN%'));
   }
 };
-const getProductCatalog = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
-const getProductTiers = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
-const getCatalogTier = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
+const getProductPortal = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getPortal');
+const getProductTiers = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getPortal');
+const getPortalTier = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getPortal');
 
 // ---------------------------------------------------------------------------
 // License
@@ -4923,8 +4923,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   canModifyLicense: () => (/* binding */ canModifyLicense),
 /* harmony export */   getActiveLegacyLicense: () => (/* binding */ getActiveLegacyLicense),
-/* harmony export */   getCatalog: () => (/* binding */ getCatalog),
-/* harmony export */   getCatalogTier: () => (/* binding */ getCatalogTier),
 /* harmony export */   getDeleteLicenseError: () => (/* binding */ getDeleteLicenseError),
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatureError: () => (/* binding */ getFeatureError),
@@ -4935,7 +4933,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
 /* harmony export */   getLicenseKey: () => (/* binding */ getLicenseKey),
 /* harmony export */   getLicenseProducts: () => (/* binding */ getLicenseProducts),
-/* harmony export */   getProductCatalog: () => (/* binding */ getProductCatalog),
+/* harmony export */   getPortal: () => (/* binding */ getPortal),
+/* harmony export */   getPortalTier: () => (/* binding */ getPortalTier),
+/* harmony export */   getProductPortal: () => (/* binding */ getProductPortal),
 /* harmony export */   getProductTiers: () => (/* binding */ getProductTiers),
 /* harmony export */   getStoreLicenseError: () => (/* binding */ getStoreLicenseError),
 /* harmony export */   hasActiveLegacyLicenseForProduct: () => (/* binding */ hasActiveLegacyLicenseForProduct),
@@ -5038,19 +5038,19 @@ const isProductUnifiedLicensed = (state, productSlug) => state.license.license.p
 const hasActiveLegacyLicenseForProduct = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)((state, productSlug) => Object.values(state.features.bySlug).filter(f => f.product === productSlug).some(f => state.legacyLicenses.bySlug[f.slug]?.is_active === true), (state, productSlug) => [state.features.bySlug, state.legacyLicenses.bySlug, productSlug]);
 
 // ---------------------------------------------------------------------------
-// Catalog
+// Portal
 // ---------------------------------------------------------------------------
 
-const getCatalog = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.catalog.byProductSlug), state => [state.catalog.byProductSlug]);
-const getProductCatalog = (state, slug) => state.catalog.byProductSlug[slug] ?? null;
-const getProductTiers = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)((state, slug) => state.catalog.byProductSlug[slug]?.tiers ?? [], (state, slug) => [state.catalog.byProductSlug, slug]);
+const getPortal = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.portal.byProductSlug), state => [state.portal.byProductSlug]);
+const getProductPortal = (state, slug) => state.portal.byProductSlug[slug] ?? null;
+const getProductTiers = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)((state, slug) => state.portal.byProductSlug[slug]?.tiers ?? [], (state, slug) => [state.portal.byProductSlug, slug]);
 
 /**
- * Returns a single CatalogTier by product slug and tier slug, or null.
+ * Returns a single PortalTier by product slug and tier slug, or null.
  *
  * Returns the full tier object so callers can read price, currency, etc.
  */
-const getCatalogTier = (state, productSlug, tierSlug) => state.catalog.byProductSlug[productSlug]?.tiers.find(t => t.slug === tierSlug) ?? null;
+const getPortalTier = (state, productSlug, tierSlug) => state.portal.byProductSlug[productSlug]?.tiers.find(t => t.slug === tierSlug) ?? null;
 
 // ---------------------------------------------------------------------------
 // License
