@@ -47,7 +47,7 @@ final class Http_ClientTest extends HarborTestCase {
 
 		$this->assertSame( 'GET', $request->getMethod() );
 		$this->assertSame(
-			'https://api.example.com/stellarwp/v4/catalog',
+			'https://api.example.com/wp-json/slw/v1/catalog',
 			(string) $request->getUri()
 		);
 	}

@@ -16,9 +16,9 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'name'         => 'Basic',
 				'rank'         => 1,
 				'price'        => 0,
-					'currency'     => 'USD',
-					'features'     => [],
-					'herald_slugs' => [],
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 		$pro        = Catalog_Tier::from_array(
@@ -27,9 +27,9 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'name'         => 'Pro',
 				'rank'         => 2,
 				'price'        => 0,
-					'currency'     => 'USD',
-					'features'     => [],
-					'herald_slugs' => [],
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 
@@ -49,9 +49,9 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'name'         => 'First',
 				'rank'         => 1,
 				'price'        => 0,
-					'currency'     => 'USD',
-					'features'     => [],
-					'herald_slugs' => [],
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 		$second     = Catalog_Tier::from_array(
@@ -60,9 +60,9 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'name'         => 'Second',
 				'rank'         => 1,
 				'price'        => 0,
-					'currency'     => 'USD',
-					'features'     => [],
-					'herald_slugs' => [],
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 

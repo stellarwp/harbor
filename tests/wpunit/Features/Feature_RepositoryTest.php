@@ -334,7 +334,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
@@ -380,7 +380,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
@@ -435,7 +435,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			) 
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.

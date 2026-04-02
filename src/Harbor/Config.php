@@ -2,6 +2,7 @@
 
 namespace LiquidWeb\Harbor;
 
+use LiquidWeb\Harbor\Utils\Cast;
 use RuntimeException;
 use StellarWP\ContainerContract\ContainerInterface;
 
@@ -125,7 +126,9 @@ class Config {
 	 */
 	public static function get_licensing_base_url(): string {
 		if ( defined( 'LW_HARBOR_LICENSING_BASE_URL' ) ) {
-			return rtrim( (string) LW_HARBOR_LICENSING_BASE_URL, '/' );
+			$url = Cast::to_string( LW_HARBOR_LICENSING_BASE_URL );
+
+			return rtrim( $url, '/' );
 		}
 
 		return static::$licensing_base_url;
@@ -153,7 +156,9 @@ class Config {
 	 */
 	public static function get_portal_base_url(): string {
 		if ( defined( 'LW_HARBOR_PORTAL_BASE_URL' ) ) {
-			return rtrim( (string) LW_HARBOR_PORTAL_BASE_URL, '/' );
+			$url = Cast::to_string( LW_HARBOR_PORTAL_BASE_URL );
+
+			return rtrim( $url, '/' );
 		}
 
 		return static::$portal_base_url;

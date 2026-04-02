@@ -47,7 +47,7 @@ Features are the individual plugins and themes that make up a product family. Ea
 | `slug`              | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                                          |
 | `kind`              | string         | One of `plugin` or `theme`                                                                                                         |
 | `minimum_tier`      | string         | Tier slug required to access this feature                                                                                          |
-| `plugin_file`       | string\|null   | Plugin file path relative to the plugins directory (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). API sends as `main_file`. Null for themes. |
+| `plugin_file`       | string\|null   | Plugin file path relative to plugins dir (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes                      |
 | `wporg_slug`        | string\|null   | WordPress.org slug for `plugins_api()`. Non-null means the feature is on WordPress.org                                             |
 | `download_url`      | string\|null   | Download URL for features not on WordPress.org                                                                                     |
 | `version`           | string\|null   | Latest available version from the Commerce Portal                                                                                  |

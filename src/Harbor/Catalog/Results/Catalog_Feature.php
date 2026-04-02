@@ -90,7 +90,7 @@ final class Catalog_Feature {
 				'kind'              => Cast::to_string( $data['kind'] ?? '' ),
 				'minimum_tier'      => Cast::to_string( $data['minimum_tier'] ?? '' ),
 				'plugin_file'       => isset( $data['main_file'] ) ? Cast::to_string( $data['main_file'] ) : ( isset( $data['plugin_file'] ) ? Cast::to_string( $data['plugin_file'] ) : null ),
-				'wporg_slug'        => isset( $data['wporg_slug'] ) && $data['wporg_slug'] !== null ? Cast::to_string( $data['wporg_slug'] ) : null,
+				'wporg_slug'        => isset( $data['wporg_slug'] ) ? Cast::to_string( $data['wporg_slug'] ) : null,
 				'download_url'      => isset( $data['download_url'] ) ? Cast::to_string( $data['download_url'] ) : null,
 				'version'           => isset( $data['version'] ) ? Cast::to_string( $data['version'] ) : null,
 				'release_date'      => isset( $data['release_date'] ) ? Cast::to_string( $data['release_date'] ) : null,
@@ -102,7 +102,7 @@ final class Catalog_Feature {
 					? array_map( [ Cast::class, 'to_string' ], array_values( $data['authors'] ) )
 					: null,
 				'documentation_url' => Cast::to_string( $data['documentation_url'] ?? '' ),
-				'homepage'          => isset( $data['homepage'] ) && $data['homepage'] !== null ? Cast::to_string( $data['homepage'] ) : null,
+				'homepage'          => isset( $data['homepage'] ) ? Cast::to_string( $data['homepage'] ) : null,
 			]
 		);
 	}

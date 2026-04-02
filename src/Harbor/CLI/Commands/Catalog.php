@@ -246,7 +246,7 @@ class Catalog extends WP_CLI_Command {
 		foreach ( $features as $feature ) {
 			$item = $feature->to_array();
 
-			$item['wporg_slug'] = $item['wporg_slug'] ?? '';
+			$item['wporg_slug'] ??= '';
 
 			if ( is_array( $item['authors'] ) ) {
 				$item['authors'] = implode( ', ', array_map( [ Cast::class, 'to_string' ], $item['authors'] ) );
