@@ -391,15 +391,6 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'authors'           => [
-				'description' => __( 'Expected authors for ownership verification.', '%TEXTDOMAIN%' ),
-				'type'        => 'array',
-				'items'       => [
-					'type' => 'string',
-				],
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
 			'is_dot_org'        => [
 				'description' => __( 'Whether the feature is available on WordPress.org.', '%TEXTDOMAIN%' ),
 				'type'        => 'boolean',

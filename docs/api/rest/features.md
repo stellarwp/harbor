@@ -36,7 +36,6 @@ Lists all resolved features with optional filters.
     "released_at": "2026-01-15T00:00:00Z",
     "version": "2.6.1",
     "changelog": "<p>Bug fixes and improvements.</p>",
-    "authors": ["Suspended Starter Fish"],
     "is_dot_org": false,
     "installed_version": "2.6.0",
     "update_version": "2.6.1"
@@ -73,8 +72,6 @@ Returns the updated feature object.
 | 400  | `lw-harbor-feature-type-mismatch`          | Feature type not supported by the resolved strategy |
 | 403  | `lw-harbor-capability-revoked`             | Feature capability individually revoked on license  |
 | 409  | `lw-harbor-install-locked`                 | Concurrent install already in progress              |
-| 409  | `lw-harbor-plugin-ownership-mismatch`      | Installed plugin author doesn't match expected      |
-| 409  | `lw-harbor-theme-ownership-mismatch`       | Installed theme author doesn't match expected       |
 | 422  | `lw-harbor-requirements-not-met`           | PHP or WordPress version too low                    |
 | 422  | `lw-harbor-install-failed`                 | Installation failed                                 |
 | 422  | `lw-harbor-activation-fatal`               | Fatal PHP error during activation                   |

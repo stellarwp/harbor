@@ -53,7 +53,7 @@ Features are the individual plugins and themes that make up a product family. Ea
 | `name`              | string         | Display name                                                                                                                       |
 | `description`       | string         | Short description of what the feature does                                                                                         |
 | `category`          | string         | Grouping category (e.g., `blocks`, `theme`, `security`, `woocommerce`)                                                             |
-| `authors`           | string[]\|null | Product/author names for ownership verification. Null if not applicable.                                                           |
+| `authors`           | string[]\|null | Product/author names. Null if not applicable.                                                                                      |
 | `documentation_url` | string         | Link to the feature's documentation                                                                                                |
 
 #### Feature Types

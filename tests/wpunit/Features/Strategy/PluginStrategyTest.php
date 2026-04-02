@@ -360,326 +360,6 @@ final class PluginStrategyTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ownership verification tests
-	// -------------------------------------------------------------------------
-
-	/**
-	 * enable() returns a plugin_ownership_mismatch error when an installed-but-
-	 * inactive plugin on disk has a different Author header than expected.
-	 */
-	public function test_enable_returns_ownership_mismatch_for_installed_plugin_with_wrong_author(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: Foreign Developer\n */\n" );
-
-		try {
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertWPError( $result );
-			$this->assertSame( Error_Code::PLUGIN_OWNERSHIP_MISMATCH, $result->get_error_code() );
-			$this->assertStringContainsString( 'Foreign Developer', $result->get_error_message() );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() returns a plugin_ownership_mismatch error when an already-active
-	 * plugin has a different Author header. Stored state should NOT be updated.
-	 */
-	public function test_enable_returns_ownership_mismatch_for_active_plugin_with_wrong_author(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: Foreign Developer\n */\n" );
-
-		try {
-			$this->mock_activate_plugin( self::PLUGIN_FILE );
-
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertWPError( $result );
-			$this->assertSame( Error_Code::PLUGIN_OWNERSHIP_MISMATCH, $result->get_error_code() );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() returns a plugin_ownership_mismatch error when the folder exists
-	 * with a different developer's plugin under a different file name.
-	 *
-	 * Example: folder "test-feature/" exists with "other-plugin.php" by
-	 * "Foreign Developer", but the feature expects "test-feature/test-feature.php".
-	 */
-	public function test_enable_returns_ownership_mismatch_for_folder_occupied_by_different_file(): void {
-		$plugin_dir   = WP_PLUGIN_DIR . '/test-feature';
-		$foreign_file = $plugin_dir . '/other-plugin.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		// A different plugin by a different developer in the same folder.
-		file_put_contents( $foreign_file, "<?php\n/**\n * Plugin Name: Other Plugin\n * Author: Foreign Developer\n */\n" );
-
-		try {
-			// Our feature expects test-feature/test-feature.php, which doesn't exist.
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertWPError( $result );
-			$this->assertSame( Error_Code::PLUGIN_OWNERSHIP_MISMATCH, $result->get_error_code() );
-			$this->assertStringContainsString( 'Foreign Developer', $result->get_error_message() );
-			$this->assertStringContainsString( 'Other Plugin', $result->get_error_message() );
-		} finally {
-			if ( file_exists( $foreign_file ) ) {
-				unlink( $foreign_file );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() succeeds when the folder exists with a different file name but
-	 * the plugin belongs to an expected author — no ownership conflict.
-	 */
-	public function test_enable_no_conflict_when_folder_has_same_author_different_file(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$other_file  = $plugin_dir . '/other-plugin.php';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		// Another plugin by the SAME developer in the folder.
-		file_put_contents( $other_file, "<?php\n/**\n * Plugin Name: Other Plugin\n * Author: StellarWP\n */\n" );
-
-		// Make plugins_api() return a download link so it reaches the install step,
-		// but the install will fail. The key assertion is that the ownership check passes.
-		$filter = static function ( $result, $action, $args ) {
-			if ( 'plugin_information' === $action && $args->slug === 'test-feature' ) {
-				return (object) [
-					'slug'          => 'test-feature',
-					'download_link' => 'https://example.com/test-feature.zip',
-				];
-			}
-			return $result;
-		};
-		add_filter( 'plugins_api', $filter, 10, 3 );
-
-		try {
-			$ob_level = ob_get_level();
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			while ( ob_get_level() > $ob_level ) {
-				ob_end_clean();
-			}
-
-			// The ownership check should pass (same author). The result will be
-			// an install error because the download URL is fake — but NOT an
-			// ownership mismatch.
-			if ( is_wp_error( $result ) ) {
-				$this->assertNotSame( Error_Code::PLUGIN_OWNERSHIP_MISMATCH, $result->get_error_code() );
-			}
-		} finally {
-			remove_filter( 'plugins_api', $filter, 10 );
-			if ( file_exists( $other_file ) ) {
-				unlink( $other_file );
-			}
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() succeeds when the installed plugin's Author header matches
-	 * one of the expected authors on the feature.
-	 */
-	public function test_enable_succeeds_when_installed_plugin_has_matching_author(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: StellarWP\n */\n" );
-
-		try {
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertTrue( $result );
-			$this->assertTrue( is_plugin_active( self::PLUGIN_FILE ) );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() succeeds when the installed plugin's Author header matches
-	 * the second entry in the authors array (e.g. a rebrand).
-	 */
-	public function test_enable_succeeds_when_author_matches_alternate_entry(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: The Events Calendar\n */\n" );
-
-		try {
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP', 'The Events Calendar' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertTrue( $result );
-			$this->assertTrue( is_plugin_active( self::PLUGIN_FILE ) );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() skips the ownership check when the feature has an empty
-	 * authors array, even if the installed plugin belongs to a different
-	 * developer.
-	 */
-	public function test_enable_skips_ownership_check_when_authors_is_empty(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: Foreign Developer\n */\n" );
-
-		try {
-			// Empty authors array — ownership check should be skipped.
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertTrue( $result );
-			$this->assertTrue( is_plugin_active( self::PLUGIN_FILE ) );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * enable() normalizes author comparison: case differences and whitespace
-	 * should still match.
-	 *
-	 * @dataProvider author_normalization_provider
-	 *
-	 * @param string $expected_author Author value on the Plugin feature.
-	 * @param string $actual_author   Author header in the plugin file.
-	 */
-	public function test_enable_normalizes_author_comparison(
-		string $expected_author,
-		string $actual_author
-	): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: {$actual_author}\n */\n" );
-
-		try {
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ $expected_author ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->enable();
-
-			$this->assertTrue(
-				$result,
-				sprintf(
-					'Expected author "%s" should match actual author "%s".',
-					$expected_author,
-					$actual_author
-				)
-			);
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
-	/**
-	 * Data provider for author normalization tests.
-	 *
-	 * @return array<string, array{string, string}>
-	 */
-	public function author_normalization_provider(): array {
-		return [
-			'exact match'          => [ 'StellarWP', 'StellarWP' ],
-			'case difference'      => [ 'stellarwp', 'StellarWP' ],
-			'uppercase expected'   => [ 'STELLARWP', 'StellarWP' ],
-			'leading whitespace'   => [ ' StellarWP', 'StellarWP' ],
-			'trailing whitespace'  => [ 'StellarWP ', 'StellarWP' ],
-			'both have whitespace' => [ ' StellarWP ', ' StellarWP ' ],
-		];
-	}
-
-	// -------------------------------------------------------------------------
 	// Requirements tests
 	// -------------------------------------------------------------------------
 
@@ -700,7 +380,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		copy( $source_dir . '/' . $plugin_slug . '.php', $plugin_dir . '/' . $plugin_slug . '.php' );
 
 		try {
-			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file, [ 'StellarWP' ] );
+			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
 			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
@@ -735,7 +415,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		copy( $source_dir . '/' . $plugin_slug . '.php', $plugin_dir . '/' . $plugin_slug . '.php' );
 
 		try {
-			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file, [ 'StellarWP' ] );
+			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
 			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
@@ -779,7 +459,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		copy( $source_dir . '/' . $plugin_slug . '.php', $plugin_dir . '/' . $plugin_slug . '.php' );
 
 		try {
-			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file, [ 'StellarWP' ] );
+			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
 			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
@@ -821,7 +501,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		copy( $source_dir . '/' . $plugin_slug . '.php', $plugin_dir . '/' . $plugin_slug . '.php' );
 
 		try {
-			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file, [ 'StellarWP' ] );
+			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
 			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
@@ -854,7 +534,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		copy( $source_dir . '/' . $plugin_slug . '.php', $plugin_dir . '/' . $plugin_slug . '.php' );
 
 		try {
-			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file, [ 'StellarWP' ] );
+			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
 			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
@@ -1006,39 +686,6 @@ final class PluginStrategyTest extends HarborTestCase {
 		}
 	}
 
-	/**
-	 * update() returns PLUGIN_OWNERSHIP_MISMATCH when the plugin belongs to
-	 * a different developer.
-	 */
-	public function test_update_returns_ownership_mismatch(): void {
-		$plugin_dir  = WP_PLUGIN_DIR . '/test-feature';
-		$plugin_path = $plugin_dir . '/test-feature.php';
-
-		if ( ! is_dir( $plugin_dir ) ) {
-			mkdir( $plugin_dir, 0755, true );
-		}
-		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: Test Feature\n * Author: Foreign Developer\n */\n" );
-
-		try {
-			$this->mock_activate_plugin( self::PLUGIN_FILE );
-
-			$feature  = $this->make_plugin_feature( 'test-feature', self::PLUGIN_FILE, [ 'StellarWP' ] );
-			$strategy = new Plugin_Strategy( $feature );
-			$result   = $strategy->update();
-
-			$this->assertWPError( $result );
-			$this->assertSame( Error_Code::PLUGIN_OWNERSHIP_MISMATCH, $result->get_error_code() );
-		} finally {
-			deactivate_plugins( self::PLUGIN_FILE );
-			if ( file_exists( $plugin_path ) ) {
-				unlink( $plugin_path );
-			}
-			if ( is_dir( $plugin_dir ) ) {
-				rmdir( $plugin_dir );
-			}
-		}
-	}
-
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
@@ -1046,16 +693,14 @@ final class PluginStrategyTest extends HarborTestCase {
 	/**
 	 * Create a standard Plugin feature for testing.
 	 *
-	 * @param string   $slug         Feature slug.
-	 * @param string   $plugin_file  Plugin file path.
-	 * @param string[] $authors      Expected plugin authors.
+	 * @param string $slug        Feature slug.
+	 * @param string $plugin_file Plugin file path.
 	 *
 	 * @return Plugin
 	 */
 	private function make_plugin_feature(
 		string $slug = 'test-feature',
-		string $plugin_file = self::PLUGIN_FILE,
-		array $authors = [ 'StellarWP' ]
+		string $plugin_file = self::PLUGIN_FILE
 	): Plugin {
 		return new Plugin(
 			[
@@ -1066,7 +711,6 @@ final class PluginStrategyTest extends HarborTestCase {
 				'description'  => 'A test feature for unit tests.',
 				'plugin_file'  => $plugin_file,
 				'is_available' => true,
-				'authors'      => $authors,
 			]
 		);
 	}

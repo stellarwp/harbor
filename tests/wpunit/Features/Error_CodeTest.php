@@ -18,8 +18,6 @@ final class Error_CodeTest extends HarborTestCase {
 			'CAPABILITY_REVOKED'             => [ Error_Code::CAPABILITY_REVOKED, 403 ],
 			'FEATURE_NOT_FOUND'              => [ Error_Code::FEATURE_NOT_FOUND, 404 ],
 			'INSTALL_LOCKED'                 => [ Error_Code::INSTALL_LOCKED, 409 ],
-			'PLUGIN_OWNERSHIP_MISMATCH'      => [ Error_Code::PLUGIN_OWNERSHIP_MISMATCH, 409 ],
-			'THEME_OWNERSHIP_MISMATCH'       => [ Error_Code::THEME_OWNERSHIP_MISMATCH, 409 ],
 			'THEME_IS_ACTIVE'                => [ Error_Code::THEME_IS_ACTIVE, 409 ],
 			'THEME_DELETE_REQUIRED'          => [ Error_Code::THEME_DELETE_REQUIRED, 409 ],
 			'DEACTIVATION_FAILED'            => [ Error_Code::DEACTIVATION_FAILED, 409 ],

@@ -130,15 +130,6 @@ class Error_Code {
 	public const ACTIVATION_FAILED = 'lw-harbor-activation-failed';
 
 	/**
-	 * An installed plugin's author does not match the expected author(s).
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	public const PLUGIN_OWNERSHIP_MISMATCH = 'lw-harbor-plugin-ownership-mismatch';
-
-	/**
 	 * The server's PHP or WordPress version does not meet the plugin's requirements.
 	 *
 	 * @since 1.0.0
@@ -182,15 +173,6 @@ class Error_Code {
 	 * @var string
 	 */
 	public const THEMES_API_FAILED = 'lw-harbor-themes-api-failed';
-
-	/**
-	 * An installed theme's author does not match the expected author(s).
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	public const THEME_OWNERSHIP_MISMATCH = 'lw-harbor-theme-ownership-mismatch';
 
 	/**
 	 * The feature is not currently active (installed and enabled).
@@ -287,12 +269,9 @@ class Error_Code {
 			// 404 Not Found — the requested feature slug does not exist in the catalog.
 			self::FEATURE_NOT_FOUND              => 404,
 
-			// 409 Conflict — a concurrent install is in progress, an ownership
-			// check failed, a deactivation was undone by another process,
-			// or the active theme cannot be disabled.
+			// 409 Conflict — a concurrent install is in progress, a deactivation
+			// was undone by another process, or the active theme cannot be disabled.
 			self::INSTALL_LOCKED                 => 409,
-			self::PLUGIN_OWNERSHIP_MISMATCH      => 409,
-			self::THEME_OWNERSHIP_MISMATCH       => 409,
 			self::THEME_IS_ACTIVE                => 409,
 			self::THEME_DELETE_REQUIRED          => 409,
 			self::DEACTIVATION_FAILED            => 409,

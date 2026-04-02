@@ -21,11 +21,10 @@ final class PluginTest extends HarborTestCase {
 	/**
 	 * Create a Plugin feature with configurable values.
 	 *
-	 * @param string   $slug          Feature slug.
-	 * @param string   $name          Display name.
-	 * @param string   $description   Description.
-	 * @param string   $plugin_file WordPress identifier (plugin file path).
-	 * @param string[] $authors       Expected plugin authors.
+	 * @param string $slug        Feature slug.
+	 * @param string $name        Display name.
+	 * @param string $description Description.
+	 * @param string $plugin_file WordPress identifier (plugin file path).
 	 *
 	 * @return Plugin
 	 */
@@ -33,8 +32,7 @@ final class PluginTest extends HarborTestCase {
 		string $slug = self::SLUG,
 		string $name = self::NAME,
 		string $description = self::DESCRIPTION,
-		string $plugin_file = self::PLUGIN_FILE,
-		array $authors = [ 'StellarWP' ]
+		string $plugin_file = self::PLUGIN_FILE
 	): Plugin {
 		return new Plugin(
 			[
@@ -45,7 +43,6 @@ final class PluginTest extends HarborTestCase {
 				'description'  => $description,
 				'plugin_file'  => $plugin_file,
 				'is_available' => true,
-				'authors'      => $authors,
 			]
 		);
 	}
@@ -70,7 +67,6 @@ final class PluginTest extends HarborTestCase {
 				'plugin_file'       => 'test-feature/test-feature.php',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
 			]
 		);
 
@@ -84,7 +80,6 @@ final class PluginTest extends HarborTestCase {
 		$this->assertSame( 'test-feature/test-feature.php', $feature->get_plugin_file() );
 		$this->assertTrue( $feature->is_available() );
 		$this->assertSame( 'https://example.com/docs', $feature->get_documentation_url() );
-		$this->assertSame( [ 'StellarWP' ], $feature->get_authors() );
 	}
 
 	/**
@@ -103,7 +98,6 @@ final class PluginTest extends HarborTestCase {
 				'plugin_file'       => 'test-feature/test-feature.php',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
 				'released_at'       => '2025-11-15',
 				'installed_version' => '1.0.0',
 			]
@@ -119,7 +113,6 @@ final class PluginTest extends HarborTestCase {
 				'plugin_file'       => 'test-feature/test-feature.php',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP' ],
 				'released_at'       => '2025-11-15',
 				'installed_version' => '1.0.0',
 				'type'              => 'plugin',
@@ -148,7 +141,6 @@ final class PluginTest extends HarborTestCase {
 			'is_enabled'        => false,
 			'documentation_url' => 'https://example.com/docs',
 			'plugin_file'       => 'test-feature/test-feature.php',
-			'authors'           => [ 'StellarWP' ],
 			'is_dot_org'        => false,
 			'released_at'       => '2025-11-15',
 			'installed_version' => '1.2.3',
@@ -179,26 +171,6 @@ final class PluginTest extends HarborTestCase {
 		);
 
 		$this->assertSame( '', $feature->get_description() );
-	}
-
-	/**
-	 * Tests that authors defaults to an empty array when omitted from the array.
-	 *
-	 * @return void
-	 */
-	public function test_it_defaults_authors_to_empty_array(): void {
-		$feature = Plugin::from_array(
-			[
-				'slug'         => 'test-feature',
-				'product'      => 'LearnDash',
-				'tier'         => 'Tier 1',
-				'name'         => 'Test Feature',
-				'plugin_file'  => 'test-feature/test-feature.php',
-				'is_available' => true,
-			]
-		);
-
-		$this->assertSame( [], $feature->get_authors() );
 	}
 
 	// -------------------------------------------------------------------------
@@ -298,56 +270,6 @@ final class PluginTest extends HarborTestCase {
 		);
 
 		$this->assertTrue( $feature->is_dot_org() );
-	}
-
-	// -------------------------------------------------------------------------
-	// get_authors() — ownership verification field
-	// -------------------------------------------------------------------------
-
-	/**
-	 * get_authors() returns the array passed to the constructor.
-	 */
-	public function test_get_authors_returns_constructor_value(): void {
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			self::PLUGIN_FILE,
-			[ 'StellarWP' ]
-		);
-
-		$this->assertSame( [ 'StellarWP' ], $feature->get_authors() );
-	}
-
-	/**
-	 * get_authors() allows an empty array (strategy skips verification).
-	 */
-	public function test_get_authors_allows_empty_array(): void {
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			self::PLUGIN_FILE,
-			[]
-		);
-
-		$this->assertSame( [], $feature->get_authors() );
-	}
-
-	/**
-	 * get_authors() supports multiple author values.
-	 */
-	public function test_get_authors_supports_multiple_values(): void {
-		$authors = [ 'StellarWP', 'The Events Calendar' ];
-		$feature = $this->make_feature(
-			self::SLUG,
-			self::NAME,
-			self::DESCRIPTION,
-			self::PLUGIN_FILE,
-			$authors
-		);
-
-		$this->assertSame( $authors, $feature->get_authors() );
 	}
 
 	// -------------------------------------------------------------------------
@@ -476,7 +398,6 @@ final class PluginTest extends HarborTestCase {
 				'plugin_file'       => 'the-directory/the-directory.php',
 				'is_available'      => true,
 				'documentation_url' => 'https://example.com/docs',
-				'authors'           => [ 'StellarWP', 'The Events Calendar' ],
 			]
 		);
 
@@ -489,7 +410,6 @@ final class PluginTest extends HarborTestCase {
 		$this->assertTrue( $feature->is_available() );
 		$this->assertSame( 'https://example.com/docs', $feature->get_documentation_url() );
 		$this->assertSame( 'the-directory/the-directory.php', $feature->get_plugin_file() );
-		$this->assertSame( [ 'StellarWP', 'The Events Calendar' ], $feature->get_authors() );
 		$this->assertSame( 'the-directory', $feature->get_plugin_directory() );
 	}
 }

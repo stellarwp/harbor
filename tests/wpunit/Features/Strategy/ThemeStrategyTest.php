@@ -273,58 +273,6 @@ final class ThemeStrategyTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ownership verification tests
-	// -------------------------------------------------------------------------
-
-	/**
-	 * enable() returns a theme_ownership_mismatch error when an installed
-	 * theme has a different Author header than expected.
-	 */
-	public function test_enable_returns_ownership_mismatch_for_installed_theme_with_wrong_author(): void {
-		$this->install_test_theme( self::STYLESHEET, 'Foreign Developer' );
-
-		$feature  = $this->make_theme_feature( self::STYLESHEET, [ 'StellarWP' ] );
-		$strategy = new Theme_Strategy( $feature );
-		$result   = $strategy->enable();
-
-		$this->assertWPError( $result );
-		$this->assertSame( Error_Code::THEME_OWNERSHIP_MISMATCH, $result->get_error_code() );
-		$this->assertStringContainsString( 'Foreign Developer', $result->get_error_message() );
-	}
-
-	/**
-	 * enable() succeeds when the installed theme's Author header matches.
-	 * Theme should be installed but NOT switched to.
-	 */
-	public function test_enable_succeeds_when_installed_theme_has_matching_author(): void {
-		$this->install_test_theme( self::STYLESHEET, 'StellarWP' );
-
-		$feature  = $this->make_theme_feature( self::STYLESHEET, [ 'StellarWP' ] );
-		$strategy = new Theme_Strategy( $feature );
-		$result   = $strategy->enable();
-
-		$this->assertTrue( $result );
-		// The active theme should NOT have changed.
-		$this->assertSame( $this->original_stylesheet, get_option( 'stylesheet' ) );
-	}
-
-	/**
-	 * enable() skips the ownership check when the feature has an empty
-	 * authors array.
-	 */
-	public function test_enable_skips_ownership_check_when_authors_is_empty(): void {
-		$this->install_test_theme( self::STYLESHEET, 'Foreign Developer' );
-
-		$feature  = $this->make_theme_feature( self::STYLESHEET, [] );
-		$strategy = new Theme_Strategy( $feature );
-		$result   = $strategy->enable();
-
-		$this->assertTrue( $result );
-		// The active theme should NOT have changed.
-		$this->assertSame( $this->original_stylesheet, get_option( 'stylesheet' ) );
-	}
-
-	// -------------------------------------------------------------------------
 	// Install fatal error tests
 	// -------------------------------------------------------------------------
 
@@ -421,21 +369,6 @@ final class ThemeStrategyTest extends HarborTestCase {
 		$this->assertSame( Error_Code::INSTALL_LOCKED, $result->get_error_code() );
 	}
 
-	/**
-	 * update() returns THEME_OWNERSHIP_MISMATCH when the theme belongs to
-	 * a different developer.
-	 */
-	public function test_update_returns_ownership_mismatch(): void {
-		$this->install_test_theme( self::STYLESHEET, 'Foreign Developer' );
-
-		$feature  = $this->make_theme_feature( self::STYLESHEET, [ 'StellarWP' ] );
-		$strategy = new Theme_Strategy( $feature );
-		$result   = $strategy->update();
-
-		$this->assertWPError( $result );
-		$this->assertSame( Error_Code::THEME_OWNERSHIP_MISMATCH, $result->get_error_code() );
-	}
-
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
@@ -445,14 +378,12 @@ final class ThemeStrategyTest extends HarborTestCase {
 	 *
 	 * For themes, the slug is what WordPress uses for installation and activation.
 	 *
-	 * @param string   $slug    Feature slug (also the theme stylesheet).
-	 * @param string[] $authors Expected theme authors.
+	 * @param string $slug Feature slug (also the theme stylesheet).
 	 *
 	 * @return Theme
 	 */
 	private function make_theme_feature(
-		string $slug = self::STYLESHEET,
-		array $authors = [ 'StellarWP' ]
+		string $slug = self::STYLESHEET
 	): Theme {
 		return new Theme(
 			[
@@ -462,7 +393,6 @@ final class ThemeStrategyTest extends HarborTestCase {
 				'name'         => 'Test Theme Feature',
 				'description'  => 'A test theme for unit tests.',
 				'is_available' => true,
-				'authors'      => $authors,
 			]
 		);
 	}

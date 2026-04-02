@@ -278,7 +278,6 @@ class Resolve_Feature_Collection {
 			'released_at'       => $catalog_feature->get_released_at(),
 			'plugin_file'       => $catalog_feature->get_plugin_file() ?? '',
 			'is_dot_org'        => $catalog_feature->is_dot_org(),
-			'authors'           => $catalog_feature->get_authors() ?? [],
 			'version'           => $catalog_feature->get_version(),
 			'changelog'         => $catalog_feature->get_changelog(),
 		];

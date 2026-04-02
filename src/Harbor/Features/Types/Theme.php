@@ -31,7 +31,6 @@ final class Theme extends Feature implements Installable {
 		$attributes = array_merge(
 			$attributes,
 			[
-				'authors'           => $attributes['authors'] ?? [],
 				'is_dot_org'        => $attributes['is_dot_org'] ?? false,
 				'released_at'       => $attributes['released_at'] ?? null,
 				'installed_version' => $attributes['installed_version'] ?? null,
@@ -54,23 +53,6 @@ final class Theme extends Feature implements Installable {
 	 */
 	public static function from_array( array $data ) {
 		return new self( $data );
-	}
-
-	/**
-	 * Gets the expected theme authors for ownership verification.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string[]
-	 */
-	public function get_authors(): array {
-		$authors = $this->attributes['authors'] ?? [];
-
-		if ( ! is_array( $authors ) ) {
-			return [];
-		}
-
-		return array_values( array_filter( $authors, 'is_string' ) );
 	}
 
 	/**
@@ -103,7 +85,7 @@ final class Theme extends Feature implements Installable {
 			'version'           => $catalog_version,
 			'package'           => $catalog_feature->get_download_url() ?? '',
 			'url'               => $this->get_documentation_url(),
-			'author'            => implode( ', ', $this->get_authors() ),
+			'author'            => '',
 			'sections'          => [
 				'description' => $this->get_description(),
 			],

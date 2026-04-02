@@ -28,7 +28,6 @@ An installable WordPress plugin. The catalog provides `plugin_file`, `download_u
 | **Source of truth** | Live WordPress plugin activation state — no DB option stored                           |
 | **Enable**          | Installs (if needed) and activates the plugin                                          |
 | **Disable**         | Deactivates the plugin but never deletes files                                         |
-| **Ownership**       | Author header checked against expected authors to prevent managing third-party plugins |
 
 ### Theme
 
@@ -39,7 +38,6 @@ An installable WordPress theme. The theme's `feature_slug` is its WordPress slug
 | **Source of truth** | Theme disk presence — no DB option stored                                                                                                                                                              |
 | **Enable**          | Installs the theme but does not switch to it. Users activate themes via Appearance > Themes                                                                                                            |
 | **Disable**         | Does **not** delete files. Returns success if already absent; returns `THEME_DELETE_REQUIRED` if still on disk. Programmatic deletion is intentionally unsupported — it's destructive and irreversible |
-| **Ownership**       | Author header checked via `wp_get_theme()`                                                                                                                                                             |
 
 ### Install Lock
 
@@ -174,7 +172,6 @@ For how the React frontend consumes these endpoints to render the feature list a
 | `INSTALL_LOCKED`                 | 409  | Another install already in progress                |
 | `REQUIREMENTS_NOT_MET`           | 422  | PHP or WordPress version requirements not met      |
 | **Plugin-specific**              |      |                                                    |
-| `PLUGIN_OWNERSHIP_MISMATCH`      | 409  | Different developer's plugin in the directory      |
 | `DEACTIVATION_FAILED`            | 409  | Plugin stayed active after deactivation            |
 | `INSTALL_FAILED`                 | 422  | `Plugin_Upgrader::install()` failed                |
 | `ACTIVATION_FATAL`               | 422  | Fatal error during plugin activation               |
@@ -183,7 +180,6 @@ For how the React frontend consumes these endpoints to render the feature list a
 | `DOWNLOAD_LINK_MISSING`          | 422  | `plugins_api()` returned no download link          |
 | `PLUGINS_API_FAILED`             | 502  | `plugins_api()` call failed                        |
 | **Theme-specific**               |      |                                                    |
-| `THEME_OWNERSHIP_MISMATCH`       | 409  | Different developer's theme in the directory       |
 | `THEME_IS_ACTIVE`                | 409  | Active theme cannot be disabled                    |
 | `THEME_DELETE_REQUIRED`          | 409  | Theme on disk; user must delete manually           |
 | `THEME_NOT_FOUND_AFTER_INSTALL`  | 422  | Theme directory missing after ZIP extraction       |
@@ -213,7 +209,6 @@ Installable features (`plugin` and `theme`) also include:
 | `released_at`       | string\|null | Release date of the latest version (ISO 8601)         |
 | `version`           | string\|null | Latest available version from the catalog             |
 | `changelog`         | string\|null | Changelog HTML for the latest version                 |
-| `authors`           | string[]     | Expected authors for ownership verification           |
 | `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org     |
 | `installed_version` | string\|null | Currently installed version, or null if not installed |
 | `update_version`    | string\|null | Version from the WordPress update transient, or null  |

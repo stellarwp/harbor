@@ -70,7 +70,6 @@ final class FeatureTest extends HarborTestCase {
 					'tier'              => 'Tier 1',
 					'is_available'      => true,
 					'documentation_url' => 'https://example.com/docs/test-theme',
-					'authors'           => [ 'StellarWP' ],
 					'is_dot_org'        => false,
 				]
 			)
@@ -86,7 +85,6 @@ final class FeatureTest extends HarborTestCase {
 					'is_available'      => false,
 					'documentation_url' => 'https://example.com/docs/test-plugin',
 					'plugin_file'       => 'test-plugin/test-plugin.php',
-					'authors'           => [ 'StellarWP' ],
 					'is_dot_org'        => true,
 				]
 			)
@@ -235,7 +233,6 @@ final class FeatureTest extends HarborTestCase {
 		$item = $this->run_get_json( 'test-plugin' );
 
 		$this->assertSame( 'test-plugin/test-plugin.php', $item['plugin_file'] );
-		$this->assertSame( 'StellarWP', $item['authors'] );
 		$this->assertSame( 'true', $item['is_dot_org'] );
 	}
 
@@ -338,26 +335,6 @@ final class FeatureTest extends HarborTestCase {
 		$item = $this->invoke_feature_to_display_item( $this->command, $feature );
 
 		$this->assertSame( 'false', $item['is_available'] );
-	}
-
-	public function test_feature_to_display_item_joins_authors(): void {
-		$plugin = Plugin::from_array(
-			[
-				'slug'         => 'test-plugin',
-				'name'         => 'Test Plugin',
-				'product'      => 'OtherGroup',
-				'tier'         => 'Tier 2',
-				'is_available' => true,
-				'plugin_file'  => 'test-plugin/test-plugin.php',
-				'authors'      => [ 'Alice', 'Bob' ],
-				'is_dot_org'   => false,
-			]
-		);
-
-		/** @var array<string, mixed> $item */
-		$item = $this->invoke_feature_to_display_item( $this->command, $plugin );
-
-		$this->assertSame( 'Alice, Bob', $item['authors'] );
 	}
 
 	public function test_feature_to_display_item_dot_org_true(): void {
