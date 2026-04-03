@@ -77,6 +77,6 @@ final class Herald_Url_Builder {
 			. rawurlencode( $license_key )
 			. '/zip';
 
-		return add_query_arg( 'site', $domain, $url );
+		return $url . '?site=' . rawurlencode( $domain );
 	}
 }
