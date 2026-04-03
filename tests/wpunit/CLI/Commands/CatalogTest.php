@@ -2,12 +2,12 @@
 
 namespace LiquidWeb\Harbor\Tests\CLI\Commands;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\CLI\Commands\Catalog as Catalog_Command;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;

@@ -4,9 +4,9 @@ namespace LiquidWeb\Harbor\Tests\Catalog\Clients;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Clients\Http_Client;
-use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Clients\Http_Client;
+use LiquidWeb\Harbor\Portal\Error_Code;
 use LiquidWeb\Harbor\Tests\Http\Mock_Client;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;

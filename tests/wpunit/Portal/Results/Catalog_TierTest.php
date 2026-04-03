@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Catalog_TierTest extends HarborTestCase {

@@ -1,6 +1,6 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog;
+namespace LiquidWeb\Harbor\Portal;
 
 /**
  * WP_Error codes for the Catalog system.

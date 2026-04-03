@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Features\Contracts;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 
 /**
  * Contract for feature types that can be installed as WordPress extensions.

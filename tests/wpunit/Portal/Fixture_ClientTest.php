@@ -2,10 +2,10 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Fixture_ClientTest extends HarborTestCase {

@@ -2,12 +2,12 @@
 
 namespace LiquidWeb\Harbor\Tests\API\REST\V1;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
-use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
+use LiquidWeb\Harbor\Portal\Error_Code;
 use LiquidWeb\Harbor\API\REST\V1\Catalog_Controller;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -200,9 +200,9 @@ final class Catalog_ControllerTest extends HarborTestCase {
 		return $collection;
 	}
 
-	private function make_client( $result ): Catalog_Client {
+	private function make_client( $result ): Portal_Client {
 		return $this->makeEmpty(
-			Catalog_Client::class,
+			Portal_Client::class,
 			[
 				'get_catalog' => $result,
 			]

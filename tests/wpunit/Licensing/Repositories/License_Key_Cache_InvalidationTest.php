@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\Licensing\Repositories;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client as Catalog_Fixture;
 use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;

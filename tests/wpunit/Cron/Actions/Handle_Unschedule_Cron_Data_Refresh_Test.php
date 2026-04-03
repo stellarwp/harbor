@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\Cron\Actions;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
 use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
 use LiquidWeb\Harbor\Tests\HarborTestCase;

@@ -1,8 +1,8 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog\Clients;
+namespace LiquidWeb\Harbor\Portal\Clients;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use WP_Error;
 
 /**
@@ -10,7 +10,7 @@ use WP_Error;
  *
  * @since 1.0.0
  */
-interface Catalog_Client {
+interface Portal_Client {
 
 	/**
 	 * Fetch the full catalog for all products.

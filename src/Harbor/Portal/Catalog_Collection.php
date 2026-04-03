@@ -1,8 +1,8 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog;
+namespace LiquidWeb\Harbor\Portal;
 
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Utils\Collection;
 
 /**

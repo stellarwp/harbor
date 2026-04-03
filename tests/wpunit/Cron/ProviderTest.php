@@ -2,9 +2,9 @@
 
 namespace LiquidWeb\Harbor\Tests\Cron;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
 use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
 use LiquidWeb\Harbor\Cron\Jobs\Refresh_Catalog_Job;
 use LiquidWeb\Harbor\Cron\Jobs\Refresh_License_Job;
@@ -39,8 +39,8 @@ final class ProviderTest extends HarborTestCase {
 		wp_clear_scheduled_hook( CronHook::DATA_REFRESH );
 
 		$this->container->singleton(
-			Catalog_Client::class,
-			$this->makeEmpty( Catalog_Client::class )
+			Portal_Client::class,
+			$this->makeEmpty( Portal_Client::class )
 		);
 
 		$this->container->singleton(

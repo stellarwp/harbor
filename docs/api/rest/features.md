@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-Features are the resolved join of [Catalog](../../subsystems/catalog.md) and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
+Features are the resolved join of [Portal](../../subsystems/portal.md) catalog data and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
 
 ## GET /liquidweb/harbor/v1/features
 

@@ -1,8 +1,8 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog;
+namespace LiquidWeb\Harbor\Portal;
 
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use LiquidWeb\Harbor\Traits\With_Error_Throttle;
 use WP_Error;
@@ -84,9 +84,9 @@ class Catalog_Repository {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var Catalog_Client
+	 * @var Portal_Client
 	 */
-	protected Catalog_Client $client;
+	protected Portal_Client $client;
 
 	/**
 	 * In-memory cache of the deserialized catalog collection for the current request.
@@ -102,9 +102,9 @@ class Catalog_Repository {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Client $client The catalog client to fetch from.
+	 * @param Portal_Client $client The catalog client to fetch from.
 	 */
-	public function __construct( Catalog_Client $client ) {
+	public function __construct( Portal_Client $client ) {
 		$this->client = $client;
 	}
 

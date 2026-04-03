@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Tier_CollectionTest extends HarborTestCase {

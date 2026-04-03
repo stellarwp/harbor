@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-See [Catalog](../../subsystems/catalog.md) for the product, tier, and feature data models and field definitions.
+See [Portal](../../subsystems/portal.md) for the product, tier, and feature data models and field definitions.
 
 ## GET /liquidweb/harbor/v1/catalog
 

@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Cron\Jobs;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 
 /**

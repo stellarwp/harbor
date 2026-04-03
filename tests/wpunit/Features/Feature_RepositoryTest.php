@@ -3,12 +3,12 @@
 namespace LiquidWeb\Harbor\Tests\Features;
 
 use ReflectionMethod;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Feature_Repository;

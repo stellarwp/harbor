@@ -2,12 +2,12 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Error_Code;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -112,7 +112,7 @@ final class Catalog_RepositoryTest extends HarborTestCase {
 
 		// Simulate an API failure using a mock client — refresh writes to the shared option.
 		$error      = new WP_Error( 'catalog_error', 'API unavailable.' );
-		$bad_client = $this->makeEmpty( Catalog_Client::class, [ 'get_catalog' => $error ] );
+		$bad_client = $this->makeEmpty( Portal_Client::class, [ 'get_catalog' => $error ] );
 		( new Catalog_Repository( $bad_client ) )->refresh();
 
 		// get() should still return the previously stored collection.
@@ -150,7 +150,7 @@ final class Catalog_RepositoryTest extends HarborTestCase {
 
 	public function test_get_cached_does_not_trigger_api_fetch(): void {
 		$client = $this->makeEmpty(
-			Catalog_Client::class,
+			Portal_Client::class,
 			[
 				'get_catalog' => function () {
 					$this->fail( 'get_catalog() should not be called from get_cached().' );

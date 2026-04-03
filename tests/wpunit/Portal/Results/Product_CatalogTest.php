@@ -2,10 +2,10 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Product_CatalogTest extends HarborTestCase {
