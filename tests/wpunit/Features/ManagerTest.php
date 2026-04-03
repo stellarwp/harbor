@@ -2,9 +2,9 @@
 
 namespace LiquidWeb\Harbor\Tests\Features;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client as Catalog_Fixture;
 use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Feature_Repository;
@@ -115,7 +115,7 @@ final class ManagerTest extends HarborTestCase {
 	 */
 	private function bind_fixture_clients(): void {
 		$this->container->singleton(
-			Catalog_Client::class,
+			Portal_Client::class,
 			static function () {
 				return new Catalog_Fixture( codecept_data_dir( 'catalog/default.json' ) );
 			}

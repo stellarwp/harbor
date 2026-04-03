@@ -1,13 +1,13 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog\Clients;
+namespace LiquidWeb\Harbor\Portal\Clients;
 
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Error_Code;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Error_Code;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use WP_Error;
 
@@ -16,7 +16,7 @@ use WP_Error;
  *
  * @since 1.0.0
  */
-final class Http_Client implements Catalog_Client {
+final class Http_Client implements Portal_Client {
 
 	use With_Debugging;
 
@@ -70,7 +70,7 @@ final class Http_Client implements Catalog_Client {
 	 * @inheritDoc
 	 */
 	public function get_catalog() {
-		$url = $this->base_url . '/stellarwp/v4/catalog';
+		$url = $this->base_url . '/wp-json/slw/v1/catalog';
 
 		self::debug_log(
 			sprintf( 'Catalog HTTP request: GET %s', $url )

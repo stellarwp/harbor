@@ -2,9 +2,9 @@
 
 namespace LiquidWeb\Harbor\Features\Update;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Traits\With_Debugging;
@@ -111,7 +111,7 @@ class Resolve_Update_Data {
 			$slug            = $feature->get_slug();
 			$catalog_feature = $catalog_features[ $slug ] ?? null;
 
-			if ( $catalog_feature === null || $catalog_feature->is_dot_org() ) {
+			if ( $catalog_feature === null || $catalog_feature->is_wporg() ) {
 				continue;
 			}
 
@@ -135,7 +135,7 @@ class Resolve_Update_Data {
 
 		foreach ( $catalog as $product ) {
 			foreach ( $product->get_features() as $catalog_feature ) {
-				$map[ $catalog_feature->get_feature_slug() ] = $catalog_feature;
+				$map[ $catalog_feature->get_slug() ] = $catalog_feature;
 			}
 		}
 

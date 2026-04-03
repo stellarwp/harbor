@@ -2,10 +2,10 @@
 
 namespace LiquidWeb\Harbor\CLI\Commands;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
 use LiquidWeb\Harbor\CLI\Display;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_CLI;
 use WP_CLI\Formatter;
@@ -169,7 +169,7 @@ class Catalog extends WP_CLI_Command {
 
 		$formatter = new Formatter(
 			$assoc_args,
-			[ 'slug', 'name', 'rank', 'purchase_url' ]
+			[ 'slug', 'name', 'rank', 'price', 'currency' ]
 		);
 
 		$formatter->display_items( $items );
@@ -199,18 +199,19 @@ class Catalog extends WP_CLI_Command {
 	 *
 	 * ## AVAILABLE FIELDS
 	 *
-	 * * feature_slug
-	 * * type
+	 * * slug
+	 * * kind
 	 * * minimum_tier
 	 * * name
 	 * * description
 	 * * category
 	 * * plugin_file
-	 * * is_dot_org
+	 * * wporg_slug
 	 * * download_url
 	 * * version
 	 * * authors
 	 * * documentation_url
+	 * * homepage
 	 *
 	 * ## EXAMPLES
 	 *
@@ -245,7 +246,7 @@ class Catalog extends WP_CLI_Command {
 		foreach ( $features as $feature ) {
 			$item = $feature->to_array();
 
-			$item['is_dot_org'] = Display::bool( ! empty( $item['is_dot_org'] ) );
+			$item['wporg_slug'] ??= '';
 
 			if ( is_array( $item['authors'] ) ) {
 				$item['authors'] = implode( ', ', array_map( [ Cast::class, 'to_string' ], $item['authors'] ) );
@@ -258,7 +259,7 @@ class Catalog extends WP_CLI_Command {
 
 		$formatter = new Formatter(
 			$assoc_args,
-			[ 'feature_slug', 'type', 'minimum_tier', 'name', 'category' ]
+			[ 'slug', 'kind', 'minimum_tier', 'name', 'category' ]
 		);
 
 		$formatter->display_items( $items );

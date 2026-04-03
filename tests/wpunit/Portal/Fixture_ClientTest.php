@@ -2,10 +2,10 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Fixture_ClientTest extends HarborTestCase {
@@ -80,7 +80,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 
 		foreach ( $result as $catalog ) {
 			foreach ( $catalog->get_features() as $feature ) {
-				$types[ $feature->get_type() ] = true;
+				$types[ $feature->get_kind() ] = true;
 			}
 		}
 
@@ -93,8 +93,8 @@ final class Fixture_ClientTest extends HarborTestCase {
 
 		foreach ( $result as $catalog ) {
 			foreach ( $catalog->get_features() as $feature ) {
-				if ( $feature->get_type() === 'plugin' ) {
-					$this->assertNotNull( $feature->get_plugin_file(), sprintf( '%s should have plugin_file', $feature->get_feature_slug() ) );
+				if ( $feature->get_kind() === 'plugin' ) {
+					$this->assertNotNull( $feature->get_plugin_file(), sprintf( '%s should have plugin_file', $feature->get_slug() ) );
 				}
 			}
 		}

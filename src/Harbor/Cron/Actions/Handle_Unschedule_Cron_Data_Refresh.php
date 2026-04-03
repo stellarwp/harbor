@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Cron\Actions;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
 use LiquidWeb\Harbor\Features\Types\Feature;
 
@@ -75,7 +75,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 
 		foreach ( $catalog as $product_catalog ) {
 			foreach ( $product_catalog->get_features() as $catalog_feature ) {
-				$type = $catalog_feature->get_type();
+				$type = $catalog_feature->get_kind();
 
 				if ( $type === Feature::TYPE_PLUGIN ) {
 					$plugin_file = $catalog_feature->get_plugin_file();
@@ -91,7 +91,7 @@ class Handle_Unschedule_Cron_Data_Refresh {
 					}
 				} elseif ( $type === Feature::TYPE_THEME ) {
 					$found_catalog_feature = true;
-					$slug                  = $catalog_feature->get_feature_slug();
+					$slug                  = $catalog_feature->get_slug();
 
 					if ( get_stylesheet() === $slug || get_template() === $slug ) {
 						return true;

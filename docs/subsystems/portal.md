@@ -1,8 +1,8 @@
-# Catalog
+# Portal
 
 ## Summary
 
-The Catalog subsystem is how a WordPress site learns the full shape of a product family: what tiers exist, what features are available at each tier, and how to acquire or install those features. Where Licensing tells the site "what does this key cover?", the Catalog tells the site "what does this product offer?"
+The Portal subsystem is how a WordPress site learns the full shape of a product family: what tiers exist, what features are available at each tier, and how to acquire or install those features. Where Licensing tells the site "what does this key cover?", the Portal catalog tells the site "what does this product offer?"
 
 The catalog data comes from the Commerce Portal API. It is not license-specific. It describes the complete product catalog regardless of what a particular key is entitled to. The intersection of catalog data and licensing data is what determines what a site can actually use.
 
@@ -22,12 +22,16 @@ The product's own entry plugin is also returned as a feature within its catalog.
 
 Each product defines an ordered set of tiers that represent subscription levels. Tiers are ranked, and a higher rank means a higher tier with more entitlements.
 
-| Field          | Type   | Description                                                                 |
-| -------------- | ------ | --------------------------------------------------------------------------- |
-| `slug`         | string | Unique identifier within the product (e.g., `kadence-basic`, `kadence-pro`) |
-| `name`         | string | Display name (e.g., "Basic", "Pro", "Agency")                               |
-| `rank`         | int    | Numeric ordering value. Higher rank = higher tier                           |
-| `purchase_url` | string | URL where users can purchase or upgrade to this tier                        |
+| Field          | Type     | Description                                                                 |
+| -------------- | -------- | --------------------------------------------------------------------------- |
+| `slug`         | string   | Unique identifier within the product (e.g., `kadence-basic`, `kadence-pro`) |
+| `name`         | string   | Display name (e.g., "Basic", "Pro", "Agency")                               |
+| `rank`         | int      | Numeric ordering value. Higher rank = higher tier                           |
+| `price`        | int      | Price in the smallest currency unit (e.g., cents)                           |
+| `currency`     | string   | Currency code (e.g., `USD`)                                                 |
+| `features`     | string[] | Marketing feature strings for this tier                                     |
+| `herald_slugs` | string[] | Herald slugs associated with this tier                                      |
+| `purchase_url` | string   | Checkout URL to purchase or upgrade to this tier                            |
 
 Tiers are always sorted by rank. This ordering drives feature availability. A feature that requires `kadence-pro` (rank 2) is available to anyone on `kadence-pro` or `kadence-agency` (rank 3), but not to someone on `kadence-basic` (rank 1).
 
@@ -39,30 +43,31 @@ A product's tiers are its own. Tier slugs are namespaced to the product (`kadenc
 
 Features are the individual plugins and themes that make up a product family. Each feature belongs to one product and has a minimum tier requirement.
 
-| Field               | Type           | Description                                                                                                                        |
-| ------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `feature_slug`      | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                                          |
-| `type`              | string         | One of `plugin` or `theme`                                                                                                         |
-| `minimum_tier`      | string         | Tier slug required to access this feature                                                                                          |
-| `plugin_file`       | string\|null   | Plugin file path relative to the plugins directory (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes.           |
-| `is_dot_org`        | bool           | Whether the feature is available on WordPress.org                                                                                  |
-| `download_url`      | string\|null   | Download URL for features not on WordPress.org                                                                                     |
-| `version`           | string\|null   | Latest available version from the Commerce Portal                                                                                  |
-| `released_at`       | string\|null   | Release date of the latest version (ISO 8601)                                                                                      |
-| `changelog`         | string\|null   | Changelog HTML for the latest version, consistent with `plugins_api()` sections                                                    |
-| `name`              | string         | Display name                                                                                                                       |
-| `description`       | string         | Short description of what the feature does                                                                                         |
-| `category`          | string         | Grouping category (e.g., `blocks`, `theme`, `security`, `woocommerce`)                                                             |
-| `authors`           | string[]\|null | Product/author names. Null if not applicable.                                                                                      |
-| `documentation_url` | string         | Link to the feature's documentation                                                                                                |
+| Field               | Type           | Description                                                                                                   |
+| ------------------- | -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `slug`              | string         | Unique identifier (e.g., `kad-blocks-pro`, `ld-propanel`)                                                     |
+| `kind`              | string         | One of `plugin` or `theme`                                                                                    |
+| `minimum_tier`      | string         | Tier slug required to access this feature                                                                     |
+| `plugin_file`       | string\|null   | Plugin file path relative to plugins dir (e.g., `kadence-blocks-pro/kadence-blocks-pro.php`). Null for themes |
+| `wporg_slug`        | string\|null   | WordPress.org slug for `plugins_api()`. Non-null means the feature is on WordPress.org                        |
+| `download_url`      | string\|null   | Download URL for features not on WordPress.org                                                                |
+| `version`           | string\|null   | Latest available version from the Commerce Portal                                                             |
+| `release_date`      | string\|null   | Release date of the latest version (ISO 8601)                                                                 |
+| `changelog`         | string\|null   | Changelog HTML for the latest version, consistent with `plugins_api()` sections                               |
+| `name`              | string         | Display name                                                                                                  |
+| `description`       | string         | Short description of what the feature does                                                                    |
+| `category`          | string         | Grouping category (e.g., `blocks`, `theme`, `security`, `woocommerce`)                                        |
+| `authors`           | string[]\|null | Product/author names. Null if not applicable.                                                                 |
+| `documentation_url` | string         | Link to the feature's documentation                                                                           |
+| `homepage`          | string\|null   | URL to the feature's homepage                                                                                 |
 
 #### Feature Types
 
 Features come in two types, each representing a different kind of deliverable:
 
-**`plugin`**: an installable WordPress plugin. Has a `plugin_file` (plugin file path) and either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`). These are features that need to be downloaded, installed, and activated.
+**`plugin`**: an installable WordPress plugin. Has a `plugin_file` (plugin file path) and either a `download_url` (for exclusive features) or is available on WordPress.org (`wporg_slug` is non-null). These are features that need to be downloaded, installed, and activated.
 
-**`theme`**: an installable WordPress theme. The `feature_slug` doubles as the theme stylesheet (directory name). Has either a `download_url` (for exclusive features) or is available on WordPress.org (`is_dot_org: true`).
+**`theme`**: an installable WordPress theme. The `slug` doubles as the theme stylesheet (directory name). Has either a `download_url` (for exclusive features) or is available on WordPress.org (`wporg_slug` is non-null).
 
 #### Tier Gating
 
@@ -74,24 +79,24 @@ The catalog defines what tier a feature requires. Licensing defines what tier th
 
 ### Catalog Repository
 
-The `Catalog_Repository` wraps the catalog client with transient caching. The cache uses a 12-hour TTL (`lw_harbor_catalog`), the same duration as the licensing cache.
+The `Catalog_Repository` wraps the portal client with option-backed caching. The cache persists until explicitly invalidated. It is cleared automatically when the unified license key changes (`lw-harbor/unified_license_key_changed`), and can be force-refreshed via `refresh()`.
 
 ```
 Catalog_Repository::get()
-├─ check transient cache
+├─ check option cache
 ├─ if hit → return cached Catalog_Collection
-├─ if miss → Catalog_Client::get_catalog()
-├─ cache result (success or error, 12hr TTL)
+├─ if miss → Portal_Client::get_catalog()
+├─ cache result (success or error, persisted)
 └─ return Catalog_Collection|WP_Error
 ```
 
 `refresh()` explicitly clears the cache and re-fetches. This is used when stale data needs to be invalidated immediately.
 
-Both successful responses and errors are cached. An API error is stored for the full TTL to avoid hammering the API on repeated failures.
+Both successful responses and errors are cached. An API error is stored to avoid hammering the API on repeated failures. The error throttle resets automatically on the next successful fetch.
 
 ### Collections
 
-The catalog uses two typed collection classes:
+The portal subsystem uses two typed collection classes:
 
 **`Catalog_Collection`** holds `Product_Catalog` objects, keyed by product slug. This is what the repository returns. Lookups are by slug: `$collection->get('kadence')` returns the Kadence product catalog or `null`.
 
@@ -99,15 +104,24 @@ The catalog uses two typed collection classes:
 
 Both collections prevent duplicate keys. Adding an item with an existing key returns the existing item without overwriting.
 
+## Naming Conventions
+
+Class names in this subsystem follow a two-layer split:
+
+- **`Portal_*`** names belong to the transport layer — classes that represent the external service boundary (`Portal_Client`, `Http_Client`, `Fixture_Client`). Named for where the data comes from.
+- **`Catalog_*`** names belong to the data layer — classes that represent or store catalog data (`Catalog_Repository`, `Catalog_Collection`, `Catalog_Feature`, `Catalog_Tier`). Named for what the data is.
+
 ## API Client
 
-The `Catalog_Client` contract defines a single operation:
+The `Portal_Client` contract defines the integration with the Commerce Portal API. Currently it exposes a single operation:
 
 - **`get_catalog(): Catalog_Collection|WP_Error`**: fetch the full product catalog.
 
 Unlike the licensing client, this is not parameterized by key or domain. The catalog describes the full product universe. It is the same regardless of who is asking.
 
-The production implementation is `Clients\Http_Client`, which uses the same PSR-18 HTTP infrastructure as the licensing client (see [Licensing: HTTP Infrastructure](licensing.md#http-infrastructure)). The base URL comes from `Config::get_api_base_url()`.
+The `Portal_Client` interface is designed to accommodate future portal integrations beyond the catalog. Additional methods may be added as the portal exposes new data.
+
+The production implementation is `Clients\Http_Client`, which uses the same PSR-18 HTTP infrastructure as the licensing client (see [Licensing: HTTP Infrastructure](licensing.md#http-infrastructure)). The base URL comes from `Config::get_portal_base_url()`.
 During development, the `Clients\Fixture_Client` is wired in. It reads a single JSON fixture file (`tests/_data/catalog.json`) containing all products.
 Tests use a fixture PSR-18 client that serves local JSON from `tests/_data/catalog/`.
 
@@ -159,9 +173,9 @@ The current fixture covers four product families:
 
 ## Relationship to Licensing and Features
 
-### What the Catalog Provides to Feature Resolution
+### What the Portal Provides to Feature Resolution
 
-The catalog is one of two inputs to the [Features](features.md) layer. It contributes:
+The portal catalog is one of two inputs to the [Features](features.md) layer. It contributes:
 
 1. **The feature definitions**, meaning every feature that exists within a product, with its type, minimum tier, installation metadata, and display information.
 2. **The tier hierarchy**, the ranked set of tiers that determines which features a given tier unlocks. The `Resolve_Feature_Collection` class looks up each feature's `minimum_tier` in the product's tier collection to get its rank, then compares against the customer's tier rank from [Licensing](licensing.md).
@@ -172,14 +186,14 @@ Tier slugs are product-prefixed (`kadence-pro`, `give-basic`) and are consistent
 
 ### Feature Type Mapping
 
-The catalog uses delivery-oriented type names (`plugin`, `theme`). The Features subsystem maps these to its own type hierarchy during resolution:
+The catalog uses delivery-oriented kind names (`plugin`, `theme`). The Features subsystem maps these to its own type hierarchy during resolution:
 
-| Catalog type | Feature class | Meaning                      |
+| Catalog kind | Feature class | Meaning                      |
 | ------------ | ------------- | ---------------------------- |
 | `plugin`     | `Plugin`      | Installable WordPress plugin |
 | `theme`      | `Theme`       | Installable WordPress theme  |
 
-### What the Catalog Does Not Know
+### What the Portal Does Not Know
 
 The catalog describes what exists. It does not know:
 
@@ -193,8 +207,8 @@ The catalog describes what exists. It does not know:
 
 The catalog is the menu. Licensing is the receipt. Feature resolution is the waiter who checks both before serving.
 
-## What the Catalog Does Not Do
+## What the Portal Does Not Do
 
 - **Know about license keys**: the catalog is not parameterized by key. It describes what exists, not what a customer owns.
-- **Track activation state**: whether a feature is installed or active on a site is not a catalog concern.
+- **Track activation state**: whether a feature is installed or active on a site is not a portal concern.
 - **Change based on customer**: every site sees the same catalog. Personalization happens by combining catalog data with licensing data.

@@ -41,7 +41,7 @@ Licensing is the authority on entitlements. It decides whether a key is valid, w
 
 See [Licensing](subsystems/licensing.md) for the full data shapes, caching, key discovery, and validation workflows.
 
-### Catalog: "What does each product offer?"
+### Portal: "What does each product offer?"
 
 The Commerce Portal API provides the product catalog, the complete definition of every product family, its tiers, and its features. The catalog is not personalized. Every site sees the same catalog regardless of what key it has.
 
@@ -49,7 +49,7 @@ Each product defines a ranked set of tiers (Basic, Pro, Agency) and a set of fea
 
 The catalog defines the menu. It does not know what the customer ordered.
 
-See [Catalog](subsystems/catalog.md) for the product/tier/feature structure, caching, and data shapes.
+See [Portal](subsystems/portal.md) for the product/tier/feature structure, caching, and data shapes.
 
 ### Features: "What can this customer actually use?"
 
@@ -63,7 +63,7 @@ See [Features](subsystems/features.md) for the resolution algorithm, strategies,
 
 ```mermaid
 flowchart TD
-    CatalogAPI["Commerce Portal\n(Catalog API)"] -->|"product families,\ntiers + ranks,\nfeatures + types,\nminimum_tier"| CatalogCache["Catalog Cache\n(wp_option)"]
+    CatalogAPI["Commerce Portal\n(Portal API)"] -->|"product families,\ntiers + ranks,\nfeatures + types,\nminimum_tier"| CatalogCache["Catalog Cache\n(wp_option)"]
     LicensingAPI["Liquid Web Software\nv1 Licensing API"] -->|"product_slug, tier, status,\nseats, validation_status,\ncapabilities[]"| LicensingCache["Licensing Cache\n(wp_option)"]
     CatalogCache --> Resolution["Feature Resolution\n\njoins by slug,\nchecks slug in capabilities[]"]
     LicensingCache --> Resolution
@@ -108,7 +108,7 @@ The data layers use different caching strategies:
 | Cache             | Type      | TTL             | Key / Location                 | Invalidation                    |
 | ----------------- | --------- | --------------- | ------------------------------ | ------------------------------- |
 | Licensed products | Option    | None (persist)  | `lw_harbor_licensing_products` | `License_Repository::refresh()` |
-| Product catalog   | Option    | None (persist)  | `lw_harbor_catalog_state`      | `Catalog_Repository::refresh()` |
+| Portal catalog    | Option    | None (persist)  | `lw_harbor_catalog_state`      | `Catalog_Repository::refresh()` |
 | Resolved features | In-memory | Current request | —                              | `Feature_Repository::refresh()` |
 
 The unified key itself is stored in a WordPress option (`lw_harbor_unified_license_key`), not a transient.
@@ -121,19 +121,19 @@ There is no automatic migration from per-resource keys to unified keys.
 
 ## Documentation Map
 
-| Document                                                                    | Covers                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| [This document](harbor.md)                                                  | Architecture overview and how the layers relate                    |
-| [Licensing](subsystems/licensing.md)                                        | Key discovery, API responses, validation workflows, caching        |
-| [Catalog](subsystems/catalog.md)                                            | Product families, tiers, features, the Commerce Portal API         |
-| [Features](subsystems/features.md)                                          | Feature types, resolution, strategies, Manager API, data shapes    |
-| [Cron](subsystems/cron.md)                                                  | Periodic refresh schedule, cleanup on deactivation                 |
-| [Unified License Key](architecture/unified-license-key-system-design.md)    | Key model, seat mechanics, system boundaries                       |
-| [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md)     | Leader election, cross-instance hooks, thin instances              |
-| [Naming Conventions](architecture/conventions.md)                           | Prefixes, separators, and identifier patterns across all scopes    |
-| [REST API Reference](api/rest/)                                             | Endpoint specs, parameters, error codes                            |
-| [WP-CLI Reference](guides/cli.md)                                           | Command reference and scripting patterns                           |
-| [Integration Guide](guides/integration.md)                                  | Bootstrapping Harbor in a plugin, legacy license reporting         |
-| [Frontend](subsystems/frontend.md)                                          | React app, @wordpress/data store, component hierarchy, CSS scoping |
-| [Notices](subsystems/notices.md)                                            | Admin notices, legacy license warnings, persistent dismissal       |
-| [Testing Guide](guides/testing.md)                                          | Codeception setup, fixture data, debug logging                     |
+| Document                                                                 | Covers                                                             |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| [This document](harbor.md)                                               | Architecture overview and how the layers relate                    |
+| [Licensing](subsystems/licensing.md)                                     | Key discovery, API responses, validation workflows, caching        |
+| [Portal](subsystems/portal.md)                                           | Product families, tiers, features, the Commerce Portal API         |
+| [Features](subsystems/features.md)                                       | Feature types, resolution, strategies, Manager API, data shapes    |
+| [Cron](subsystems/cron.md)                                               | Periodic refresh schedule, cleanup on deactivation                 |
+| [Unified License Key](architecture/unified-license-key-system-design.md) | Key model, seat mechanics, system boundaries                       |
+| [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md)  | Leader election, cross-instance hooks, thin instances              |
+| [Naming Conventions](architecture/conventions.md)                        | Prefixes, separators, and identifier patterns across all scopes    |
+| [REST API Reference](api/rest/)                                          | Endpoint specs, parameters, error codes                            |
+| [WP-CLI Reference](guides/cli.md)                                        | Command reference and scripting patterns                           |
+| [Integration Guide](guides/integration.md)                               | Bootstrapping Harbor in a plugin, legacy license reporting         |
+| [Frontend](subsystems/frontend.md)                                       | React app, @wordpress/data store, component hierarchy, CSS scoping |
+| [Notices](subsystems/notices.md)                                         | Admin notices, legacy license warnings, persistent dismissal       |
+| [Testing Guide](guides/testing.md)                                       | Codeception setup, fixture data, debug logging                     |

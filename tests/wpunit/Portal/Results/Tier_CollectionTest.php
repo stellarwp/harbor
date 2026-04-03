@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Tier_CollectionTest extends HarborTestCase {
@@ -15,7 +15,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'slug'         => 'basic',
 				'name'         => 'Basic',
 				'rank'         => 1,
-				'purchase_url' => '',
+				'price'        => 0,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 		$pro        = Catalog_Tier::from_array(
@@ -23,7 +26,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'slug'         => 'pro',
 				'name'         => 'Pro',
 				'rank'         => 2,
-				'purchase_url' => '',
+				'price'        => 0,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 
@@ -42,7 +48,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'slug'         => 'basic',
 				'name'         => 'First',
 				'rank'         => 1,
-				'purchase_url' => '',
+				'price'        => 0,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 		$second     = Catalog_Tier::from_array(
@@ -50,7 +59,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 				'slug'         => 'basic',
 				'name'         => 'Second',
 				'rank'         => 1,
-				'purchase_url' => '',
+				'price'        => 0,
+				'currency'     => 'USD',
+				'features'     => [],
+				'herald_slugs' => [],
 			]
 		);
 
@@ -75,7 +87,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 					'slug'         => 'basic',
 					'name'         => 'Basic',
 					'rank'         => 1,
-					'purchase_url' => '',
+					'price'        => 0,
+					'currency'     => 'USD',
+					'features'     => [],
+					'herald_slugs' => [],
 				]
 			)
 		);
@@ -85,7 +100,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 					'slug'         => 'pro',
 					'name'         => 'Pro',
 					'rank'         => 2,
-					'purchase_url' => '',
+					'price'        => 0,
+					'currency'     => 'USD',
+					'features'     => [],
+					'herald_slugs' => [],
 				]
 			)
 		);
@@ -110,7 +128,10 @@ final class Tier_CollectionTest extends HarborTestCase {
 					'slug'         => 'basic',
 					'name'         => 'Basic',
 					'rank'         => 1,
-					'purchase_url' => '',
+					'price'        => 0,
+					'currency'     => 'USD',
+					'features'     => [],
+					'herald_slugs' => [],
 				]
 			)
 		);

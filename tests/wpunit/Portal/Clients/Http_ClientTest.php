@@ -4,9 +4,9 @@ namespace LiquidWeb\Harbor\Tests\Catalog\Clients;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Clients\Http_Client;
-use LiquidWeb\Harbor\Catalog\Error_Code;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Clients\Http_Client;
+use LiquidWeb\Harbor\Portal\Error_Code;
 use LiquidWeb\Harbor\Tests\Http\Mock_Client;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
@@ -47,7 +47,7 @@ final class Http_ClientTest extends HarborTestCase {
 
 		$this->assertSame( 'GET', $request->getMethod() );
 		$this->assertSame(
-			'https://api.example.com/stellarwp/v4/catalog',
+			'https://api.example.com/wp-json/slw/v1/catalog',
 			(string) $request->getUri()
 		);
 	}
@@ -129,37 +129,54 @@ final class Http_ClientTest extends HarborTestCase {
 		return (string) wp_json_encode(
 			[
 				[
+					'product_id'   => 'kadence-001',
 					'product_slug' => 'kadence',
+					'product_name' => 'Kadence',
 					'tiers'        => [
 						[
-							'slug' => 'kadence-basic',
-							'name' => 'Basic',
-							'rank' => 1,
+							'slug'         => 'kadence-basic',
+							'name'         => 'Basic',
+							'rank'         => 1,
+							'price'        => 0,
+							'currency'     => 'USD',
+							'features'     => [],
+							'herald_slugs' => [],
 						],
 						[
-							'slug' => 'kadence-pro',
-							'name' => 'Pro',
-							'rank' => 2,
+							'slug'         => 'kadence-pro',
+							'name'         => 'Pro',
+							'rank'         => 2,
+							'price'        => 14900,
+							'currency'     => 'USD',
+							'features'     => [],
+							'herald_slugs' => [],
 						],
 					],
 					'features'     => [
 						[
-							'feature_slug' => 'kad-blocks-pro',
-							'type'         => 'plugin',
+							'slug'         => 'kad-blocks-pro',
+							'kind'         => 'plugin',
 							'minimum_tier' => 'kadence-basic',
-							'plugin_file'  => 'kadence-blocks-pro/kadence-blocks-pro.php',
+							'main_file'    => 'kadence-blocks-pro/kadence-blocks-pro.php',
+							'wporg_slug'   => null,
 							'name'         => 'Blocks Pro',
 							'description'  => 'Premium blocks.',
 						],
 					],
 				],
 				[
+					'product_id'   => 'give-001',
 					'product_slug' => 'give',
+					'product_name' => 'GiveWP',
 					'tiers'        => [
 						[
-							'slug' => 'give-basic',
-							'name' => 'Basic',
-							'rank' => 1,
+							'slug'         => 'give-basic',
+							'name'         => 'Basic',
+							'rank'         => 1,
+							'price'        => 0,
+							'currency'     => 'USD',
+							'features'     => [],
+							'herald_slugs' => [],
 						],
 					],
 					'features'     => [],

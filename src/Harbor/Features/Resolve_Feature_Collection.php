@@ -2,9 +2,9 @@
 
 namespace LiquidWeb\Harbor\Features;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
@@ -235,16 +235,16 @@ class Resolve_Feature_Collection {
 		?array $capabilities,
 		int $license_tier_rank
 	) {
-		$catalog_type = $catalog_feature->get_type();
-		$class        = $this->type_map[ $catalog_type ] ?? null;
+		$catalog_kind = $catalog_feature->get_kind();
+		$class        = $this->type_map[ $catalog_kind ] ?? null;
 
 		if ( $class === null ) {
 			return new WP_Error(
 				Error_Code::UNKNOWN_FEATURE_TYPE,
 				sprintf(
-					'No Feature subclass registered for catalog type "%s" (feature: %s).',
-					$catalog_type,
-					$catalog_feature->get_feature_slug()
+					'No Feature subclass registered for catalog kind "%s" (feature: %s).',
+					$catalog_kind,
+					$catalog_feature->get_slug()
 				)
 			);
 		}
@@ -252,8 +252,8 @@ class Resolve_Feature_Collection {
 		$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
 		$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
 
-		if ( $catalog_feature->is_dot_org() || $minimum_rank === 0 ) {
-			// dot.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
+		if ( $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
+			// WordPress.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
 			$is_available    = true;
 			$in_catalog_tier = true;
 		} elseif ( $capabilities === null ) {
@@ -261,23 +261,23 @@ class Resolve_Feature_Collection {
 			$is_available    = false;
 			$in_catalog_tier = false;
 		} else {
-			$is_available    = in_array( $catalog_feature->get_feature_slug(), $capabilities, true );
+			$is_available    = in_array( $catalog_feature->get_slug(), $capabilities, true );
 			$in_catalog_tier = ( $license_tier_rank >= $minimum_rank );
 		}
 
 		$data = [
-			'slug'              => $catalog_feature->get_feature_slug(),
+			'slug'              => $catalog_feature->get_slug(),
 			'product'           => $product->get_product_slug(),
 			'tier'              => $catalog_feature->get_minimum_tier(),
 			'name'              => $catalog_feature->get_name(),
 			'description'       => $catalog_feature->get_description(),
-			'type'              => $catalog_type,
+			'type'              => $catalog_kind,
 			'is_available'      => $is_available,
 			'in_catalog_tier'   => $in_catalog_tier,
 			'documentation_url' => $catalog_feature->get_documentation_url(),
-			'released_at'       => $catalog_feature->get_released_at(),
+			'release_date'      => $catalog_feature->get_release_date(),
 			'plugin_file'       => $catalog_feature->get_plugin_file() ?? '',
-			'is_dot_org'        => $catalog_feature->is_dot_org(),
+			'wporg_slug'        => $catalog_feature->get_wporg_slug(),
 			'version'           => $catalog_feature->get_version(),
 			'changelog'         => $catalog_feature->get_changelog(),
 		];

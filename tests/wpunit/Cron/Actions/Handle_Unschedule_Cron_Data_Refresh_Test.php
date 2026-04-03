@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\Cron\Actions;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Cron\Actions\Handle_Unschedule_Cron_Data_Refresh;
 use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -162,11 +162,11 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 					'tiers'        => [],
 					'features'     => [
 						[
-							'feature_slug'      => 'test-feature',
-							'type'              => 'plugin',
+							'slug'              => 'test-feature',
+							'kind'              => 'plugin',
 							'minimum_tier'      => '',
-							'plugin_file'       => $plugin_file,
-							'is_dot_org'        => false,
+							'main_file'         => $plugin_file,
+							'wporg_slug'        => null,
 							'name'              => 'Test Feature',
 							'description'       => '',
 							'category'          => '',
@@ -195,11 +195,11 @@ final class Handle_Unschedule_Cron_Data_Refresh_Test extends HarborTestCase {
 					'tiers'        => [],
 					'features'     => [
 						[
-							'feature_slug'      => $theme_slug,
-							'type'              => 'theme',
+							'slug'              => $theme_slug,
+							'kind'              => 'theme',
 							'minimum_tier'      => '',
-							'plugin_file'       => null,
-							'is_dot_org'        => false,
+							'main_file'         => null,
+							'wporg_slug'        => null,
 							'name'              => 'Test Theme',
 							'description'       => '',
 							'category'          => '',

@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Tests\Cron\Jobs;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Cron\Jobs\Refresh_Catalog_Job;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 

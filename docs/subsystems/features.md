@@ -2,9 +2,9 @@
 
 ## Summary
 
-The Features subsystem is the resolved output of combining [Catalog](catalog.md) data with [Licensing](licensing.md) data. The catalog says "Kadence includes Blocks Pro at the Basic tier." Licensing says "this key has Kadence at the Pro tier." Features joins the two and concludes: "Blocks Pro is available, and here's how to install it."
+The Features subsystem is the resolved output of combining [Portal](portal.md) catalog data with [Licensing](licensing.md) data. The catalog says "Kadence includes Blocks Pro at the Basic tier." Licensing says "this key has Kadence at the Pro tier." Features joins the two and concludes: "Blocks Pro is available, and here's how to install it."
 
-Features are not a third data source. They are the computed intersection of what exists (catalog) and what's entitled (licensing), plus local state tracking for what's actually enabled on the site.
+Features are not a third data source. They are the computed intersection of what exists (portal catalog) and what's entitled (licensing), plus local state tracking for what's actually enabled on the site.
 
 > **Development status.** The resolution algorithm, strategy pattern, and caching approach are stable. The specific data shapes that feed into resolution (catalog features, tier slugs, licensing responses) are still being finalized.
 
@@ -21,17 +21,17 @@ Each feature type has a strategy that defines how enable, disable, and active-st
 
 ### Plugin
 
-An installable WordPress plugin. The catalog provides `plugin_file`, `download_url`/`is_dot_org`.
+An installable WordPress plugin. The catalog provides `plugin_file`, `download_url`/`wporg_slug`.
 
-| Aspect              | Behavior                                                                               |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| **Source of truth** | Live WordPress plugin activation state — no DB option stored                           |
-| **Enable**          | Installs (if needed) and activates the plugin                                          |
-| **Disable**         | Deactivates the plugin but never deletes files                                         |
+| Aspect              | Behavior                                                     |
+| ------------------- | ------------------------------------------------------------ |
+| **Source of truth** | Live WordPress plugin activation state — no DB option stored |
+| **Enable**          | Installs (if needed) and activates the plugin                |
+| **Disable**         | Deactivates the plugin but never deletes files               |
 
 ### Theme
 
-An installable WordPress theme. The theme's `feature_slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `download_url`/`is_dot_org`.
+An installable WordPress theme. The theme's `slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `download_url`/`wporg_slug`.
 
 | Aspect              | Behavior                                                                                                                                                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -206,10 +206,10 @@ Installable features (`plugin` and `theme`) also include:
 
 | Field               | Type         | Description                                           |
 | ------------------- | ------------ | ----------------------------------------------------- |
-| `released_at`       | string\|null | Release date of the latest version (ISO 8601)         |
+| `release_date`      | string\|null | Release date of the latest version (ISO 8601)         |
 | `version`           | string\|null | Latest available version from the catalog             |
 | `changelog`         | string\|null | Changelog HTML for the latest version                 |
-| `is_dot_org`        | boolean      | Whether the feature is available on WordPress.org     |
+| `wporg_slug`        | string\|null | WordPress.org slug, or null if not on WordPress.org   |
 | `installed_version` | string\|null | Currently installed version, or null if not installed |
 | `update_version`    | string\|null | Version from the WordPress update transient, or null  |
 | `has_update`        | boolean      | Whether an update is available (pre-computed)         |
@@ -225,7 +225,7 @@ Plugin features also include:
 | Data                                                    | Source                                                                                                                                                                              |
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Feature exists, minimum tier, delivery type, tier ranks | Catalog                                                                                                                                                                             |
-| Latest version, release date, changelog                 | Catalog (`version`, `released_at`, `changelog`)                                                                                                                                     |
+| Latest version, release date, changelog                 | Catalog (`version`, `release_date`, `changelog`)                                                                                                                                    |
 | Customer's tier, key validity                           | Licensing                                                                                                                                                                           |
 | **Whether available** (`is_available`)                  | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                  |
 | **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                           |

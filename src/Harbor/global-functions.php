@@ -227,3 +227,27 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 		return is_string( $result ) ? $result : '';
 	}
 }
+
+if ( ! function_exists( 'lw_harbor_display_legacy_license_page_notice' ) ) {
+	/**
+	 * Displays an informational admin notice on legacy plugin license pages.
+	 *
+	 * Intended to be called by consuming plugins on their own license settings
+	 * pages to inform users that licensing is now managed centrally through
+	 * Liquid Web's unified system.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $product_name Optional human-readable product name (e.g. "GiveWP", "Kadence").
+	 *                            When omitted, a generic message is displayed.
+	 *
+	 * @return void
+	 */
+	function lw_harbor_display_legacy_license_page_notice( string $product_name = '' ): void {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_display_legacy_license_page_notice' );
+
+		if ( $callback ) {
+			$callback( $product_name );
+		}
+	}
+}

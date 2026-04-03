@@ -115,17 +115,19 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 
 ### 4. The Public Functions
 
-`src/Harbor/global-functions.php` exposes public functions. Plugin consumers call these:
+`src/Harbor/global-functions.php` exposes the public functions. Plugin consumers call these:
 
-| Function                                          | What it does                                                                |
-| ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `lw_harbor_has_unified_license_key()`             | Whether any unified license key is stored locally (no API call)             |
-| `lw_harbor_get_unified_license_key()`             | Returns the unified license key string, or null if not found                |
-| `lw_harbor_is_product_license_active( $product )` | Whether a product slug has `validation_status: valid` in the cached catalog |
-| `lw_harbor_is_feature_enabled( $slug )`           | Whether a feature is in the catalog AND currently enabled/active            |
-| `lw_harbor_is_feature_available( $slug )`         | Whether a feature exists in the catalog, regardless of enabled state        |
-| `lw_harbor_get_license_page_url()`                | Returns the admin URL for the Harbor Feature Manager page                   |
-| `lw_harbor_register_submenu( $parent_slug )`      | Appends a Licensing submenu item under a plugin's top-level admin menu      |
+| Function                                                             | What it does                                                                                  |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `lw_harbor_has_unified_license_key()`                                | Whether any unified license key is stored locally (no API call)                               |
+| `lw_harbor_get_unified_license_key()`                                | Returns the unified license key string, or null if not found                                  |
+| `lw_harbor_is_product_license_active( $product )`                    | Whether a product slug has `validation_status: valid` in the cached catalog                   |
+| `lw_harbor_is_feature_enabled( $slug )`                              | Whether a feature is in the catalog AND currently enabled/active                              |
+| `lw_harbor_is_feature_available( $slug )`                            | Whether a feature exists in the catalog, regardless of enabled state                          |
+| `lw_harbor_get_license_page_url()`                                   | Returns the admin URL for the Harbor Feature Manager page                                     |
+| `lw_harbor_get_licensed_domain()`                                    | Returns the domain Harbor uses for licensing on the current site                              |
+| `lw_harbor_register_submenu( $parent_slug )`                         | Appends a Licensing submenu item under a plugin's top-level admin menu                        |
+| `lw_harbor_display_legacy_license_page_notice( $product_name = '' )` | Renders an info notice on a plugin's legacy license page pointing users to the unified system |
 
 Each function looks up the registered callback and delegates, returning `false` if no callback is registered yet:
 
@@ -164,7 +166,7 @@ The callbacks are stored in a PHP `static` variable inside `_lw_harbor_global_fu
 
 ## Adding a New Global Function
 
-1. If the implementation is non-trivial, create an invokable class in `Actions/` and implement the logic in `__invoke()`. For simple one-liners a closure directly in `Global_Function_Registry` is fine.
+1. If the implementation is non-trivial, create an invokable class in `API/Functions/Actions/` and implement the logic in `__invoke()`. For simple one-liners a closure directly in `Global_Function_Registry::register()` is fine.
 2. Register the callable in `Global_Function_Registry::register()` under a new key.
 3. Add a public wrapper function in `global-functions.php` inside a `function_exists` guard that delegates to `_lw_harbor_global_function_registry`.
-4. Add tests in `tests/wpunit/API/Functions/GlobalFunctionsTest.php`.
+4. Add tests in `tests/wpunit/API/Functions/GlobalFunctionsTest.php`. If you added an Actions class, add a dedicated test in `tests/wpunit/API/Functions/Actions/`.

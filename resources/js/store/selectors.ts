@@ -160,8 +160,7 @@ export const getProductTiers = createSelector(
 /**
  * Returns a single CatalogTier by product slug and tier slug, or null.
  *
- * CatalogTier.purchase_url is the authoritative source for upgrade links —
- * prefer it over the static Tier.upgradeUrl fixture when available.
+ * Returns the full tier object so callers can read price, currency, etc.
  */
 export const getCatalogTier = (
 	state: State,

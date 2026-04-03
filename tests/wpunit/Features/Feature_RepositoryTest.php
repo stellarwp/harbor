@@ -3,12 +3,12 @@
 namespace LiquidWeb\Harbor\Tests\Features;
 
 use ReflectionMethod;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Clients\Fixture_Client as Catalog_Fixture;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Clients\Fixture_Client as Catalog_Fixture;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Feature_Repository;
@@ -315,8 +315,8 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		// Do NOT register 'unknown_type' — only plugin/theme are registered.
 		$catalog_feature = Catalog_Feature::from_array(
 			[
-				'feature_slug'      => 'test-feature',
-				'type'              => 'unknown_type',
+				'slug'              => 'test-feature',
+				'kind'              => 'unknown_type',
 				'minimum_tier'      => 'kadence-basic',
 				'name'              => 'Test Feature',
 				'description'       => 'A feature with an unknown type.',
@@ -334,7 +334,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
@@ -360,13 +360,13 @@ final class Feature_RepositoryTest extends HarborTestCase {
 
 		$catalog_feature = Catalog_Feature::from_array(
 			[
-				'feature_slug'      => 'test-plugin',
-				'type'              => 'plugin',
+				'slug'              => 'test-plugin',
+				'kind'              => 'plugin',
 				'minimum_tier'      => 'kadence-basic',
 				'name'              => 'Test Plugin',
 				'description'       => 'A plugin feature.',
 				'documentation_url' => '',
-				'plugin_file'       => 'test-plugin/test-plugin.php',
+				'main_file'         => 'test-plugin/test-plugin.php',
 			]
 		);
 
@@ -380,7 +380,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
@@ -407,13 +407,13 @@ final class Feature_RepositoryTest extends HarborTestCase {
 
 		$catalog_feature = Catalog_Feature::from_array(
 			[
-				'feature_slug'      => 'test-free-plugin',
-				'type'              => 'plugin',
+				'slug'              => 'test-free-plugin',
+				'kind'              => 'plugin',
 				'minimum_tier'      => 'kadence-free',
 				'name'              => 'Test Free Plugin',
 				'description'       => '',
 				'documentation_url' => '',
-				'plugin_file'       => 'test-free-plugin/test-free-plugin.php',
+				'main_file'         => 'test-free-plugin/test-free-plugin.php',
 			]
 		);
 
@@ -435,7 +435,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 			) 
 		);
 
-		$product = new Product_Catalog( 'kadence', $tiers, [ $catalog_feature ] );
+		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );
 
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.

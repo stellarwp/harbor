@@ -2,12 +2,12 @@
 
 namespace LiquidWeb\Harbor\Tests\CLI\Commands;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
-use LiquidWeb\Harbor\Catalog\Results\Tier_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\CLI\Commands\Catalog as Catalog_Command;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
@@ -121,7 +121,7 @@ final class CatalogTest extends HarborTestCase {
 	}
 
 	public function test_tiers_logs_no_tiers_for_empty_tier_collection(): void {
-		$catalog  = new Product_Catalog( 'empty-product', new Tier_Collection(), [] );
+		$catalog  = new Product_Catalog( 'empty-id', 'empty-product', 'Empty Product', new Tier_Collection(), [] );
 		$catalogs = new Catalog_Collection();
 		$catalogs->add( $catalog );
 
@@ -141,18 +141,18 @@ final class CatalogTest extends HarborTestCase {
 		$items = $this->run_features_json( $command, 'kadence' );
 
 		$this->assertCount( 2, $items );
-		$this->assertSame( 'kadence-blocks-pro', $items[0]['feature_slug'] );
-		$this->assertSame( 'plugin', $items[0]['type'] );
+		$this->assertSame( 'kadence-blocks-pro', $items[0]['slug'] );
+		$this->assertSame( 'plugin', $items[0]['kind'] );
 		$this->assertSame( 'starter', $items[0]['minimum_tier'] );
 	}
 
-	public function test_features_converts_booleans_to_strings(): void {
+	public function test_features_shows_wporg_slug(): void {
 		$command = $this->make_command( $this->catalogs );
 
 		$items = $this->run_features_json( $command, 'kadence' );
 
-		$this->assertSame( 'true', $items[0]['is_dot_org'] );
-		$this->assertSame( 'false', $items[1]['is_dot_org'] );
+		$this->assertSame( 'kadence-blocks', $items[0]['wporg_slug'] );
+		$this->assertSame( '', $items[1]['wporg_slug'] );
 	}
 
 	public function test_features_joins_authors_array(): void {
@@ -182,7 +182,7 @@ final class CatalogTest extends HarborTestCase {
 				] 
 			) 
 		);
-		$catalog  = new Product_Catalog( 'empty-product', $tiers, [] );
+		$catalog  = new Product_Catalog( 'empty-id', 'empty-product', 'Empty Product', $tiers, [] );
 		$catalogs = new Catalog_Collection();
 		$catalogs->add( $catalog );
 
@@ -320,84 +320,87 @@ final class CatalogTest extends HarborTestCase {
 		$kadence_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'starter',
-					'name'         => 'Starter',
-					'rank'         => 1,
-					'purchase_url' => 'https://example.com/buy/starter',
-				] 
-			) 
+					'slug'     => 'starter',
+					'name'     => 'Starter',
+					'rank'     => 1,
+					'price'    => 4900,
+					'currency' => 'USD',
+				]
+			)
 		);
 		$kadence_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'pro',
-					'name'         => 'Pro',
-					'rank'         => 2,
-					'purchase_url' => 'https://example.com/buy/pro',
-				] 
-			) 
+					'slug'     => 'pro',
+					'name'     => 'Pro',
+					'rank'     => 2,
+					'price'    => 9900,
+					'currency' => 'USD',
+				]
+			)
 		);
 
 		$kadence_features = [
 			Catalog_Feature::from_array(
 				[
-					'feature_slug'      => 'kadence-blocks-pro',
-					'type'              => 'plugin',
+					'slug'              => 'kadence-blocks-pro',
+					'kind'              => 'plugin',
 					'minimum_tier'      => 'starter',
 					'name'              => 'Starter Templates',
 					'description'       => 'Pro blocks for Kadence.',
 					'category'          => 'Design',
-					'plugin_file'       => 'kadence-blocks-pro/kadence-blocks-pro.php',
-					'is_dot_org'        => true,
+					'main_file'         => 'kadence-blocks-pro/kadence-blocks-pro.php',
+					'wporg_slug'        => 'kadence-blocks',
 					'documentation_url' => 'https://example.com/docs',
-				] 
+				]
 			),
 			Catalog_Feature::from_array(
 				[
-					'feature_slug'      => 'kadence-pro-addon',
-					'type'              => 'plugin',
+					'slug'              => 'kadence-pro-addon',
+					'kind'              => 'plugin',
 					'minimum_tier'      => 'pro',
 					'name'              => 'Pro Addon',
 					'description'       => 'A pro-only addon.',
 					'category'          => 'Design',
-					'is_dot_org'        => false,
-					'plugin_file'       => 'kadence-pro-addon/kadence-pro-addon.php',
+					'wporg_slug'        => null,
+					'main_file'         => 'kadence-pro-addon/kadence-pro-addon.php',
 					'documentation_url' => 'https://example.com/docs/addon',
 				]
 			),
 		];
 
-		$kadence = new Product_Catalog( 'kadence', $kadence_tiers, $kadence_features );
+		$kadence = new Product_Catalog( 'kadence-id', 'kadence', 'Kadence', $kadence_tiers, $kadence_features );
 
 		$givewp_tiers = new Tier_Collection();
 		$givewp_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'basic',
-					'name'         => 'Basic',
-					'rank'         => 1,
-					'purchase_url' => 'https://example.com/buy/basic',
-				] 
-			) 
+					'slug'     => 'basic',
+					'name'     => 'Basic',
+					'rank'     => 1,
+					'price'    => 2900,
+					'currency' => 'USD',
+				]
+			)
 		);
 
 		$givewp_features = [
 			Catalog_Feature::from_array(
 				[
-					'feature_slug'      => 'give-recurring',
-					'type'              => 'plugin',
+					'slug'              => 'give-recurring',
+					'kind'              => 'plugin',
 					'minimum_tier'      => 'basic',
 					'name'              => 'Recurring Donations',
 					'description'       => 'Accept recurring donations.',
 					'category'          => 'Fundraising',
-					'plugin_file'       => 'give-recurring/give-recurring.php',
-					'is_dot_org'        => false,
+					'main_file'         => 'give-recurring/give-recurring.php',
+					'wporg_slug'        => null,
 					'documentation_url' => 'https://example.com/docs/recurring',
-				] 
+				]
 			),
 		];
 
-		$givewp = new Product_Catalog( 'givewp', $givewp_tiers, $givewp_features );
+		$givewp = new Product_Catalog( 'givewp-id', 'givewp', 'GiveWP', $givewp_tiers, $givewp_features );
 
 		$collection = new Catalog_Collection();
 		$collection->add( $kadence );
@@ -473,7 +476,7 @@ final class CatalogTest extends HarborTestCase {
 			[ $product_slug ],
 			[
 				'format' => 'json',
-				'fields' => 'feature_slug,type,minimum_tier,name,description,category,plugin_file,is_dot_org,documentation_url',
+				'fields' => 'slug,kind,minimum_tier,name,description,category,plugin_file,wporg_slug,documentation_url',
 			] 
 		);
 		$output = ob_get_clean();

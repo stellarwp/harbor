@@ -2,20 +2,20 @@
 
 namespace LiquidWeb\Harbor\Tests\Catalog\Results;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class Catalog_FeatureTest extends HarborTestCase {
 
 	private array $plugin_data = [
-		'feature_slug'      => 'kadence-security',
-		'type'              => 'plugin',
+		'slug'              => 'kadence-security',
+		'kind'              => 'plugin',
 		'minimum_tier'      => 'kadence-pro',
-		'plugin_file'       => 'kadence-security-pro/kadence-security-pro.php',
-		'is_dot_org'        => false,
+		'main_file'         => 'kadence-security-pro/kadence-security-pro.php',
+		'wporg_slug'        => null,
 		'download_url'      => 'https://licensing.stellarwp.com/api/plugins/kadence-security',
 		'version'           => '2.1.0',
-		'released_at'       => '2025-11-15',
+		'release_date'      => '2025-11-15',
 		'changelog'         => '<h4>2.1.0</h4><ul><li>Bug fixes.</li></ul>',
 		'name'              => 'Kadence Security Pro',
 		'description'       => 'WordPress security hardening and monitoring.',
@@ -27,11 +27,12 @@ final class Catalog_FeatureTest extends HarborTestCase {
 	public function test_from_array_hydrates_all_fields(): void {
 		$feature = Catalog_Feature::from_array( $this->plugin_data );
 
-		$this->assertSame( 'kadence-security', $feature->get_feature_slug() );
-		$this->assertSame( 'plugin', $feature->get_type() );
+		$this->assertSame( 'kadence-security', $feature->get_slug() );
+		$this->assertSame( 'plugin', $feature->get_kind() );
 		$this->assertSame( 'kadence-pro', $feature->get_minimum_tier() );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $feature->get_plugin_file() );
-		$this->assertFalse( $feature->is_dot_org() );
+		$this->assertFalse( $feature->is_wporg() );
+		$this->assertNull( $feature->get_wporg_slug() );
 		$this->assertSame( 'https://licensing.stellarwp.com/api/plugins/kadence-security', $feature->get_download_url() );
 		$this->assertSame( 'Kadence Security Pro', $feature->get_name() );
 		$this->assertSame( 'WordPress security hardening and monitoring.', $feature->get_description() );
@@ -39,7 +40,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertSame( [ 'KadenceWP' ], $feature->get_authors() );
 		$this->assertSame( 'https://www.kadencewp.com/help-center/', $feature->get_documentation_url() );
 		$this->assertSame( '2.1.0', $feature->get_version() );
-		$this->assertSame( '2025-11-15', $feature->get_released_at() );
+		$this->assertSame( '2025-11-15', $feature->get_release_date() );
 		$this->assertSame( '<h4>2.1.0</h4><ul><li>Bug fixes.</li></ul>', $feature->get_changelog() );
 	}
 
@@ -47,11 +48,11 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$feature = Catalog_Feature::from_array( $this->plugin_data );
 		$result  = $feature->to_array();
 
-		$this->assertSame( 'kadence-security', $result['feature_slug'] );
-		$this->assertSame( 'plugin', $result['type'] );
+		$this->assertSame( 'kadence-security', $result['slug'] );
+		$this->assertSame( 'plugin', $result['kind'] );
 		$this->assertSame( 'kadence-pro', $result['minimum_tier'] );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $result['plugin_file'] );
-		$this->assertFalse( $result['is_dot_org'] );
+		$this->assertNull( $result['wporg_slug'] );
 		$this->assertSame( 'https://licensing.stellarwp.com/api/plugins/kadence-security', $result['download_url'] );
 	}
 
@@ -64,10 +65,9 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 	public function test_nullable_fields_default_when_missing(): void {
 		$data = [
-			'feature_slug' => 'patchstack',
-			'type'         => 'plugin',
+			'slug'         => 'patchstack',
+			'kind'         => 'plugin',
 			'minimum_tier' => 'kadence-pro',
-			'is_dot_org'   => false,
 			'name'         => 'PatchStack Firewall',
 			'description'  => 'Virtual patching.',
 			'category'     => 'security',
@@ -76,19 +76,20 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$feature = Catalog_Feature::from_array( $data );
 
 		$this->assertNull( $feature->get_plugin_file() );
+		$this->assertNull( $feature->get_wporg_slug() );
 		$this->assertNull( $feature->get_download_url() );
 		$this->assertNull( $feature->get_authors() );
 		$this->assertNull( $feature->get_version() );
-		$this->assertNull( $feature->get_released_at() );
+		$this->assertNull( $feature->get_release_date() );
 		$this->assertNull( $feature->get_changelog() );
 	}
 
 	public function test_dot_org_theme(): void {
 		$data = [
-			'feature_slug' => 'kadence-theme',
-			'type'         => 'theme',
+			'slug'         => 'kadence-theme',
+			'kind'         => 'theme',
 			'minimum_tier' => 'kadence-basic',
-			'is_dot_org'   => true,
+			'wporg_slug'   => 'kadence-theme',
 			'download_url' => null,
 			'name'         => 'Kadence Theme',
 			'description'  => 'Starter theme for Kadence.',
@@ -97,7 +98,8 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 		$feature = Catalog_Feature::from_array( $data );
 
-		$this->assertTrue( $feature->is_dot_org() );
+		$this->assertTrue( $feature->is_wporg() );
+		$this->assertSame( 'kadence-theme', $feature->get_wporg_slug() );
 		$this->assertNull( $feature->get_download_url() );
 		$this->assertNull( $feature->get_plugin_file() );
 	}
