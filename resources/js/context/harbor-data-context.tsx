@@ -30,6 +30,9 @@ const HarborDataContext = createContext<HarborDataContextValue>( {
 
 type ResolvableRecord = Record<string, ResolvableSelectResponse<unknown>>;
 
+const RESOLVER_KEYS = [ 'license', 'features', 'catalog', 'legacyLicenses' ] as const;
+type ResolverKey = typeof RESOLVER_KEYS[ number ];
+
 function findErrors( results: ResolvableRecord ): HarborError[] {
     const errors: HarborError[] = [];
     for ( const key in results ) {
@@ -62,27 +65,20 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
         [],
     );
 
-    // Track which resolvers have ever completed so that background re-fetches
-    // (e.g. after invalidateResolution following a license refresh) don't
-    // re-trigger the loading state. Once a resolver has resolved, subsequent
-    // re-fetches are treated as stale-while-revalidate.
-    const hasEverResolvedRef = useRef( {
+    const hasEverResolvedRef = useRef<Record<ResolverKey, boolean>>( {
         license:        false,
         features:       false,
         catalog:        false,
         legacyLicenses: false,
     } );
 
-    if ( result.license.hasResolved )        hasEverResolvedRef.current.license = true;
-    if ( result.features.hasResolved )       hasEverResolvedRef.current.features = true;
-    if ( result.catalog.hasResolved )        hasEverResolvedRef.current.catalog = true;
-    if ( result.legacyLicenses.hasResolved ) hasEverResolvedRef.current.legacyLicenses = true;
+    for ( const key of RESOLVER_KEYS ) {
+        if ( result[ key ].hasResolved ) {
+			hasEverResolvedRef.current[ key ] = true;
+		}
+    }
 
-    const isLoading =
-        ( result.license.isResolving        && ! hasEverResolvedRef.current.license ) ||
-        ( result.features.isResolving       && ! hasEverResolvedRef.current.features ) ||
-        ( result.catalog.isResolving        && ! hasEverResolvedRef.current.catalog ) ||
-        ( result.legacyLicenses.isResolving && ! hasEverResolvedRef.current.legacyLicenses );
+    const isLoading = RESOLVER_KEYS.some( ( key ) => result[ key ].isResolving && ! hasEverResolvedRef.current[ key ] );
 
     useEffect( () => {
         const found = findErrors( result );
