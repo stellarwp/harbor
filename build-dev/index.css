@@ -528,14 +528,29 @@
   .lw-harbor-ui .w-4 {
     width: calc(var(--spacing) * 4) !important;
   }
-  .lw-harbor-ui .w-5 {
-    width: calc(var(--spacing) * 5) !important;
+  .lw-harbor-ui .w-6 {
+    width: calc(var(--spacing) * 6) !important;
   }
   .lw-harbor-ui .w-8 {
     width: calc(var(--spacing) * 8) !important;
   }
+  .lw-harbor-ui .w-9 {
+    width: calc(var(--spacing) * 9) !important;
+  }
+  .lw-harbor-ui .w-12 {
+    width: calc(var(--spacing) * 12) !important;
+  }
+  .lw-harbor-ui .w-14 {
+    width: calc(var(--spacing) * 14) !important;
+  }
+  .lw-harbor-ui .w-24 {
+    width: calc(var(--spacing) * 24) !important;
+  }
   .lw-harbor-ui .w-25 {
     width: calc(var(--spacing) * 25) !important;
+  }
+  .lw-harbor-ui .w-32 {
+    width: calc(var(--spacing) * 32) !important;
   }
   .lw-harbor-ui .w-36 {
     width: calc(var(--spacing) * 36) !important;
@@ -665,6 +680,9 @@
   }
   .lw-harbor-ui .gap-3 {
     gap: calc(var(--spacing) * 3) !important;
+  }
+  .lw-harbor-ui .gap-4 {
+    gap: calc(var(--spacing) * 4) !important;
   }
   .lw-harbor-ui .gap-6 {
     gap: calc(var(--spacing) * 6) !important;
@@ -970,9 +988,6 @@
   .lw-harbor-ui .py-6 {
     padding-block: calc(var(--spacing) * 6) !important;
   }
-  .lw-harbor-ui .py-16 {
-    padding-block: calc(var(--spacing) * 16) !important;
-  }
   .lw-harbor-ui .pt-0 {
     padding-top: calc(var(--spacing) * 0) !important;
   }
@@ -1080,9 +1095,6 @@
   }
   .lw-harbor-ui .text-destructive {
     color: oklch(0.577 0.245 27.325) !important;
-  }
-  .lw-harbor-ui .text-emerald-600 {
-    color: var(--color-emerald-600) !important;
   }
   .lw-harbor-ui .text-emerald-800 {
     color: var(--color-emerald-800) !important;
