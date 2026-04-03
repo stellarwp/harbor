@@ -157,5 +157,4 @@ class Resolve_Update_Data {
 
 		return $map;
 	}
-
 }
