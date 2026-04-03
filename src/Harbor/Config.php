@@ -23,6 +23,13 @@ class Config {
 	public const DEFAULT_PORTAL_BASE_URL = 'https://my.software.stellarwp.com';
 
 	/**
+	 * The default base URL for the Herald download service.
+	 *
+	 * @since 1.0.0
+	 */
+	public const DEFAULT_HERALD_BASE_URL = 'https://herald.stellarwp.com';
+
+	/**
 	 * Container object.
 	 *
 	 * @since 1.0.0
@@ -48,6 +55,15 @@ class Config {
 	 * @var string
 	 */
 	protected static $portal_base_url = self::DEFAULT_PORTAL_BASE_URL;
+
+	/**
+	 * The base URL for the Herald download service.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	protected static $herald_base_url = self::DEFAULT_HERALD_BASE_URL;
 
 	/**
 	 * Get the container.
@@ -88,7 +104,8 @@ class Config {
 	 */
 	public static function reset(): void {
 		static::$licensing_base_url = self::DEFAULT_LICENSING_BASE_URL;
-		static::$portal_base_url   = self::DEFAULT_PORTAL_BASE_URL;
+		static::$portal_base_url    = self::DEFAULT_PORTAL_BASE_URL;
+		static::$herald_base_url    = self::DEFAULT_HERALD_BASE_URL;
 	}
 
 	/**
@@ -162,5 +179,35 @@ class Config {
 		}
 
 		return static::$portal_base_url;
+	}
+
+	/**
+	 * Set the base URL for the Herald download service.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url The Herald base URL (no trailing slash).
+	 *
+	 * @return void
+	 */
+	public static function set_herald_base_url( string $url ): void {
+		static::$herald_base_url = rtrim( $url, '/' );
+	}
+
+	/**
+	 * Get the base URL for the Herald download service.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public static function get_herald_base_url(): string {
+		if ( defined( 'LW_HARBOR_HERALD_BASE_URL' ) ) {
+			$url = Cast::to_string( LW_HARBOR_HERALD_BASE_URL );
+
+			return rtrim( $url, '/' );
+		}
+
+		return static::$herald_base_url;
 	}
 }

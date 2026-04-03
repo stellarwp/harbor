@@ -55,10 +55,12 @@ interface Installable {
 	 *
 	 * Each type includes common fields plus type-specific fields (e.g. plugin_file,
 	 * installed_version) so the handler does not need an extra feature lookup.
+	 * The `package` field is set to an empty string — Resolve_Update_Data overwrites
+	 * it with the Herald download URL after calling this method.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature $catalog_feature The catalog entry providing version and download URL.
+	 * @param Catalog_Feature $catalog_feature The catalog entry providing version metadata.
 	 *
 	 * @return array<string, mixed>
 	 */

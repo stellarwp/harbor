@@ -179,10 +179,6 @@ export interface CatalogFeature {
      */
     wporg_slug: string | null;
     /**
-     * Download URL for the feature archive, or null when unavailable.
-     */
-    download_url: string | null;
-    /**
      * Latest version string, or null when unavailable.
      */
     version: string | null;

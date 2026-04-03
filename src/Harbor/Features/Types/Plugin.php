@@ -95,9 +95,13 @@ final class Plugin extends Feature implements Installable {
 	/**
 	 * Builds the complete update data array for this Plugin feature.
 	 *
+	 * The `package` field is intentionally left empty — the Herald download URL
+	 * is constructed by Resolve_Update_Data, which has access to the license key
+	 * and site domain required to build it.
+	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature $catalog_feature The catalog entry providing version and download URL.
+	 * @param Catalog_Feature $catalog_feature The catalog entry providing version metadata.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -109,7 +113,7 @@ final class Plugin extends Feature implements Installable {
 			'name'              => $this->get_name(),
 			'slug'              => $this->get_slug(),
 			'version'           => $catalog_version,
-			'package'           => $catalog_feature->get_download_url() ?? '',
+			'package'           => '',
 			'url'               => $this->get_documentation_url(),
 			'author'            => '',
 			'sections'          => [

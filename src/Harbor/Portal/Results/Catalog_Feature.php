@@ -17,7 +17,6 @@ use LiquidWeb\Harbor\Utils\Cast;
  *     minimum_tier: string,
  *     plugin_file: ?string,
  *     wporg_slug: ?string,
- *     download_url: ?string,
  *     version: ?string,
  *     release_date: ?string,
  *     changelog: ?string,
@@ -44,7 +43,6 @@ final class Catalog_Feature {
 		'minimum_tier'      => '',
 		'plugin_file'       => null,
 		'wporg_slug'        => null,
-		'download_url'      => null,
 		'version'           => null,
 		'release_date'      => null,
 		'changelog'         => null,
@@ -91,7 +89,6 @@ final class Catalog_Feature {
 				'minimum_tier'      => Cast::to_string( $data['minimum_tier'] ?? '' ),
 				'plugin_file'       => isset( $data['main_file'] ) ? Cast::to_string( $data['main_file'] ) : ( isset( $data['plugin_file'] ) ? Cast::to_string( $data['plugin_file'] ) : null ),
 				'wporg_slug'        => isset( $data['wporg_slug'] ) ? Cast::to_string( $data['wporg_slug'] ) : null,
-				'download_url'      => isset( $data['download_url'] ) ? Cast::to_string( $data['download_url'] ) : null,
 				'version'           => isset( $data['version'] ) ? Cast::to_string( $data['version'] ) : null,
 				'release_date'      => isset( $data['release_date'] ) ? Cast::to_string( $data['release_date'] ) : null,
 				'changelog'         => isset( $data['changelog'] ) ? Cast::to_string( $data['changelog'] ) : null,
@@ -187,17 +184,6 @@ final class Catalog_Feature {
 	 */
 	public function is_wporg(): bool {
 		return $this->attributes['wporg_slug'] !== null;
-	}
-
-	/**
-	 * Gets the download URL, or null if the feature is on WordPress.org.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string|null
-	 */
-	public function get_download_url(): ?string {
-		return $this->attributes['download_url'];
 	}
 
 	/**
