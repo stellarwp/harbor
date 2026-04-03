@@ -29,6 +29,7 @@ export function LicensePanel() {
             licenseProducts:  select( harborStore ).getLicenseProducts(),
             catalogs:         select( harborStore ).getCatalog(),
             isRefreshing:     select( harborStore ).isLicenseRefreshing(),
+            // @ts-expect-error -- hasFinishedResolution is injected at runtime by @wordpress/data but absent from the store's TypeScript surface.
             isLicenseLoading: ! select( harborStore ).hasFinishedResolution( 'getLicenseKey', [] ),
         }),
         []
