@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\API\REST\V1;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;

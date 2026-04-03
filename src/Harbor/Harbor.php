@@ -43,7 +43,7 @@ class Harbor {
 		$container->singleton( Features\Provider::class );
 		$container->singleton( Http\Provider::class );
 		$container->singleton( Licensing\Provider::class );
-		$container->singleton( Catalog\Provider::class );
+		$container->singleton( Portal\Provider::class );
 		$container->singleton( API\REST\V1\Provider::class );
 		$container->singleton( API\Functions\Provider::class );
 		$container->singleton( CLI\Provider::class );
@@ -55,7 +55,7 @@ class Harbor {
 		$container->get( Features\Provider::class )->register();
 		$container->get( Http\Provider::class )->register();
 		$container->get( Licensing\Provider::class )->register();
-		$container->get( Catalog\Provider::class )->register();
+		$container->get( Portal\Provider::class )->register();
 		$container->get( API\REST\V1\Provider::class )->register();
 		$container->get( API\Functions\Provider::class )->register();
 		$container->get( CLI\Provider::class )->register();

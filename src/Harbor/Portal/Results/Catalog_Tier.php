@@ -1,6 +1,6 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog\Results;
+namespace LiquidWeb\Harbor\Portal\Results;
 
 use LiquidWeb\Harbor\Utils\Cast;
 

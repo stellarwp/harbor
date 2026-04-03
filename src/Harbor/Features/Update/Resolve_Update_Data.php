@@ -2,9 +2,9 @@
 
 namespace LiquidWeb\Harbor\Features\Update;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Collection;
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Traits\With_Debugging;

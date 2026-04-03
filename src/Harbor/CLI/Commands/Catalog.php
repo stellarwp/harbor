@@ -2,10 +2,10 @@
 
 namespace LiquidWeb\Harbor\CLI\Commands;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Tier;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
 use LiquidWeb\Harbor\CLI\Display;
-use LiquidWeb\Harbor\Catalog\Results\Product_Catalog;
+use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_CLI;
 use WP_CLI\Formatter;

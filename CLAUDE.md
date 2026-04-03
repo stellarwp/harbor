@@ -10,7 +10,7 @@ See `docs/harbor.md` for the architecture overview. Subsystem docs live in `docs
 
 The subsystems live in these directories. This is where active development happens:
 
-- `src/Harbor/Catalog/` - Product catalog from the Commerce Portal (products, tiers, features)
+- `src/Harbor/Portal/` - Commerce Portal integration (catalog client, catalog data, products, tiers, features)
 - `src/Harbor/Features/` - Feature resolution (joins catalog + licensing), strategies, Manager
 - `src/Harbor/Licensing/` - Unified license key management, validation, product registry
 - `src/Harbor/API/REST/V1/` - WordPress REST endpoints for the above

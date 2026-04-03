@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Features\Types;
 
-use LiquidWeb\Harbor\Catalog\Results\Catalog_Feature;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Utils\Cast;
 

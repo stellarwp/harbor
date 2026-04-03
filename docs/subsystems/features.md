@@ -2,7 +2,7 @@
 
 ## Summary
 
-The Features subsystem is the resolved output of combining [Catalog](catalog.md) data with [Licensing](licensing.md) data. The catalog says "Kadence includes Blocks Pro at the Basic tier." Licensing says "this key has Kadence at the Pro tier." Features joins the two and concludes: "Blocks Pro is available, and here's how to install it."
+The Features subsystem is the resolved output of combining [Portal](portal.md) data with [Licensing](licensing.md) data. The catalog says "Kadence includes Blocks Pro at the Basic tier." Licensing says "this key has Kadence at the Pro tier." Features joins the two and concludes: "Blocks Pro is available, and here's how to install it."
 
 Features are not a third data source. They are the computed intersection of what exists (catalog) and what's entitled (licensing), plus local state tracking for what's actually enabled on the site.
 
@@ -23,11 +23,11 @@ Each feature type has a strategy that defines how enable, disable, and active-st
 
 An installable WordPress plugin. The catalog provides `plugin_file`, `download_url`/`wporg_slug`.
 
-| Aspect              | Behavior                                                                               |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| **Source of truth** | Live WordPress plugin activation state — no DB option stored                           |
-| **Enable**          | Installs (if needed) and activates the plugin                                          |
-| **Disable**         | Deactivates the plugin but never deletes files                                         |
+| Aspect              | Behavior                                                     |
+| ------------------- | ------------------------------------------------------------ |
+| **Source of truth** | Live WordPress plugin activation state — no DB option stored |
+| **Enable**          | Installs (if needed) and activates the plugin                |
+| **Disable**         | Deactivates the plugin but never deletes files               |
 
 ### Theme
 

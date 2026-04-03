@@ -250,9 +250,9 @@ flowchart TD
 
 See [REST: License](../api/rest/license.md) for the endpoint reference.
 
-## Relationship to Catalog and Features
+## Relationship to Portal and Features
 
-Licensing answers "what does this key cover?" but not "what can the customer do with it?" That second question requires the [Catalog](catalog.md) and the [Features](features.md) layer.
+Licensing answers "what does this key cover?" but not "what can the customer do with it?" That second question requires the [Portal](portal.md) catalog and the [Features](features.md) layer.
 
 ### Tier Slugs
 

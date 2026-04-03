@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Cron\Actions;
 
-use LiquidWeb\Harbor\Catalog\Catalog_Repository;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Cron\ValueObjects\CronHook;
 use LiquidWeb\Harbor\Features\Types\Feature;
 

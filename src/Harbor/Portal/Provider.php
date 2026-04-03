@@ -1,9 +1,9 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Catalog;
+namespace LiquidWeb\Harbor\Portal;
 
-use LiquidWeb\Harbor\Catalog\Clients\Catalog_Client;
-use LiquidWeb\Harbor\Catalog\Clients\Http_Client;
+use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
+use LiquidWeb\Harbor\Portal\Clients\Http_Client;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
@@ -21,7 +21,7 @@ final class Provider extends Abstract_Provider {
 	 */
 	public function register(): void {
 		$this->container->singleton(
-			Catalog_Client::class,
+			Portal_Client::class,
 			function () {
 				return new Http_Client(
 					$this->container->get( WordPressHttpClient::class ),
