@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { KeyRound, Loader2, RefreshCw } from 'lucide-react';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
+import { LicenseKeyInputSkeleton } from '@/components/atoms/LicenseKeyInputSkeleton';
 import { LicenseKeyInput } from '@/components/molecules/LicenseKeyInput';
 import { LicenseProductCard } from '@/components/molecules/LicenseProductCard';
 import { PRODUCTS } from '@/data/products';
@@ -89,7 +90,10 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
             />
 
             { isLoading ? (
-                <LicenseSectionSkeleton />
+                <>
+                    <LicenseKeyInputSkeleton />
+                    <LicenseSectionSkeleton />
+                </>
             ) : (
                 <>
                     <LicenseKeyInput
