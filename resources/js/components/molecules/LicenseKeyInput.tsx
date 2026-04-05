@@ -14,7 +14,7 @@
 import { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { KeyRound, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { store as harborStore } from '@/store';
@@ -109,25 +109,22 @@ export function LicenseKeyInput( {
 
 	const inputWithActivate = (
 		<div className="flex gap-2">
-			<div className="relative flex-1">
-				<KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-				<Input
-					id="license-key-input"
-					placeholder={ __( 'e.g. LWSW-UNIFIED-PRO-2025', '%TEXTDOMAIN%' ) }
-					value={ key }
-					onChange={ ( e ) => {
-						setKey( e.target.value.toUpperCase() );
-						if ( localError ) setLocalError( null );
-					} }
-					onKeyDown={ ( e ) => e.key === 'Enter' && canModifyLicense && handleActivate() }
-					className="pl-10 font-mono uppercase"
-					aria-invalid={ !! localError }
-					aria-describedby={ localError ? 'license-key-error' : undefined }
-					disabled={ ! canModifyLicense }
-					// eslint-disable-next-line jsx-a11y/no-autofocus
-					autoFocus={ isEditing }
-				/>
-			</div>
+			<Input
+				id="license-key-input"
+				placeholder={ __( 'e.g. LWSW-UNIFIED-PRO-2025', '%TEXTDOMAIN%' ) }
+				value={ key }
+				onChange={ ( e ) => {
+					setKey( e.target.value.toUpperCase() );
+					if ( localError ) setLocalError( null );
+				} }
+				onKeyDown={ ( e ) => e.key === 'Enter' && canModifyLicense && handleActivate() }
+				className="flex-1 font-mono uppercase"
+				aria-invalid={ !! localError }
+				aria-describedby={ localError ? 'license-key-error' : undefined }
+				disabled={ ! canModifyLicense }
+				// eslint-disable-next-line jsx-a11y/no-autofocus
+				autoFocus={ isEditing }
+			/>
 			<Button
 				onClick={ handleActivate }
 				disabled={ ! canModifyLicense || ! key.trim() }
@@ -148,15 +145,12 @@ export function LicenseKeyInput( {
 	if ( currentKey !== null && ! isEditing ) {
 		return (
 			<div className="flex items-center gap-2">
-				<div className="relative flex-1">
-					<KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-					<Input
-						readOnly
-						value={ currentKey }
-						className="pl-10 font-mono bg-muted/40 cursor-default select-all"
-						tabIndex={ -1 }
-					/>
-				</div>
+				<Input
+					readOnly
+					value={ currentKey }
+					className="flex-1 font-mono uppercase bg-muted/40 cursor-default select-all"
+					tabIndex={ -1 }
+				/>
 				<button
 					type="button"
 					onClick={ onEdit }
