@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 export type FeatureStatus =
     | 'enabled'
     | 'available'
+    | 'included'
     | 'locked'
     | 'unlicensed'
     | 'installing'
@@ -41,6 +42,14 @@ export function StatusBadge( { status, requiredTier }: StatusBadgeProps ) {
                 </div>
                 <span className="text-[10px] text-muted-foreground">{ label }</span>
             </div>
+        );
+    }
+
+    if ( status === 'included' ) {
+        return (
+            <Badge variant="success">
+                { __( 'Included', '%TEXTDOMAIN%' ) }
+            </Badge>
         );
     }
 

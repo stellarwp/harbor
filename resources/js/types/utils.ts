@@ -7,6 +7,7 @@ import type {
 	Feature,
 	PluginFeature,
 	ThemeFeature,
+	ServiceFeature,
 	InstallableFeature,
 } from '@/types/api';
 
@@ -16,6 +17,10 @@ export function isPluginFeature( feature: Feature ): feature is PluginFeature {
 
 export function isThemeFeature( feature: Feature ): feature is ThemeFeature {
 	return feature.type === 'theme';
+}
+
+export function isServiceFeature( feature: Feature ): feature is ServiceFeature {
+	return feature.type === 'service';
 }
 
 export function isInstallableFeature( feature: Feature ): feature is InstallableFeature {
