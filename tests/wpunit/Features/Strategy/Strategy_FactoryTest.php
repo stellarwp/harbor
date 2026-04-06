@@ -4,9 +4,11 @@ namespace LiquidWeb\Harbor\Tests\Features\Strategy;
 
 use InvalidArgumentException;
 use LiquidWeb\Harbor\Features\Strategy\Plugin_Strategy;
+use LiquidWeb\Harbor\Features\Strategy\Service_Strategy;
 use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
 use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
@@ -63,6 +65,22 @@ final class Strategy_FactoryTest extends HarborTestCase {
 		);
 
 		$this->assertInstanceOf( Theme_Strategy::class, $this->factory->make( $feature ) );
+	}
+
+	/**
+	 * Tests that the factory creates a Service_Strategy for service features.
+	 *
+	 * @return void
+	 */
+	public function test_it_creates_service_strategy(): void {
+		$feature = Service::from_array(
+			[
+				'slug' => 'test-service',
+				'name' => 'Test Service',
+			]
+		);
+
+		$this->assertInstanceOf( Service_Strategy::class, $this->factory->make( $feature ) );
 	}
 
 	/**

@@ -39,6 +39,18 @@ An installable WordPress theme. The theme's `slug` is its WordPress slug (used f
 | **Enable**          | Installs the theme but does not switch to it. Users activate themes via Appearance > Themes                                                                                                            |
 | **Disable**         | Does **not** delete files. Returns success if already absent; returns `THEME_DELETE_REQUIRED` if still on disk. Programmatic deletion is intentionally unsupported — it's destructive and irreversible |
 
+### Service
+
+An externally managed service (e.g. Promoter). The catalog provides no `plugin_file`, version, or installable fields — there is nothing to install or activate on the WordPress side.
+
+| Aspect              | Behavior                                                                      |
+| ------------------- | ----------------------------------------------------------------------------- |
+| **Source of truth** | Commerce Portal — no WordPress-side state                                     |
+| **Enable**          | Always returns `FEATURE_NOT_MODIFIABLE` (manage via the Commerce Portal)      |
+| **Disable**         | Always returns `FEATURE_NOT_MODIFIABLE` (manage via the Commerce Portal)      |
+| **Update**          | Always returns `FEATURE_NOT_MODIFIABLE` (no updates — managed by the Portal)  |
+| **is_active**       | Mirrors `is_available` — active when the site's license includes this feature |
+
 ### Install Lock
 
 Plugin and Theme features share a global transient lock (`lw_harbor_install_lock`, 120s TTL). Only one installable feature can install at a time.
@@ -68,6 +80,7 @@ flowchart TD
 
     EnabledCheck -->|Plugin| PluginState["WP plugin\nactivation state"]
     EnabledCheck -->|Theme| ThemeState["Theme disk\npresence"]
+    EnabledCheck -->|Service| ServiceState["Mirrors is_available\n(no WP-side state)"]
 
     PluginState --> HasUpdate["has_update?\ncompare installed_version\nvs catalog version"]
     ThemeState --> HasUpdate
@@ -168,6 +181,7 @@ For how the React frontend consumes these endpoints to render the feature list a
 | `NO_UPDATE_AVAILABLE`            | 422  | No update available for the feature                |
 | `UPDATE_FAILED`                  | 422  | The update operation failed                        |
 | `INVALID_RESPONSE`               | 502  | Catalog response couldn't be parsed                |
+| `FEATURE_NOT_MODIFIABLE`         | 422  | Service feature — must be managed via the Portal   |
 | `UNKNOWN_FEATURE_TYPE`           | 422  | No Feature subclass for the catalog type           |
 | `INSTALL_LOCKED`                 | 409  | Another install already in progress                |
 | `REQUIREMENTS_NOT_MET`           | 422  | PHP or WordPress version requirements not met      |
@@ -196,7 +210,7 @@ Every resolved feature includes these fields:
 | `description`       | string  | Feature description                                               |
 | `product`           | string  | Product the feature belongs to                                    |
 | `tier`              | string  | Minimum tier required                                             |
-| `type`              | string  | `plugin` or `theme`                                               |
+| `type`              | string  | `plugin`, `theme`, or `service`                                   |
 | `is_available`      | boolean | Whether the current license covers this feature                   |
 | `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier |
 | `is_enabled`        | boolean | Whether the feature is currently enabled on this site             |
