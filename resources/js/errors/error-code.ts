@@ -12,8 +12,10 @@ export enum ErrorCode {
 	LicenseActionInProgress = 'license-action-in-progress',
 	LicenseStoreFailed = 'license-store-failed',
 	LicenseDeleteFailed = 'license-delete-failed',
+	LicenseRefreshFailed = 'license-refresh-failed',
 	LicenseValidateFailed = 'license-validate-failed',
 	CatalogFetchFailed = 'catalog-fetch-failed',
+	CatalogRefreshFailed = 'catalog-refresh-failed',
 	LegacyLicensesFetchFailed = 'legacy-licenses-fetch-failed',
 	ResolutionFailed = 'resolution-failed',
 }

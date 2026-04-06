@@ -194,12 +194,19 @@ export const isLicenseStoring = (state: State): boolean =>
 export const isLicenseDeleting = (state: State): boolean =>
 	state.license.isDeleting;
 
+export const isLicenseRefreshing = (state: State): boolean =>
+	state.license.isRefreshing;
+
 export const canModifyLicense = (state: State): boolean =>
 	!state.license.isStoring &&
-	!state.license.isDeleting;
+	!state.license.isDeleting &&
+	!state.license.isRefreshing;
 
 export const getStoreLicenseError = (state: State): HarborError | null =>
 	state.license.storeError;
 
 export const getDeleteLicenseError = (state: State): HarborError | null =>
 	state.license.deleteError;
+
+export const getRefreshLicenseError = (state: State): HarborError | null =>
+	state.license.refreshError;

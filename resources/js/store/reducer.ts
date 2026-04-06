@@ -171,11 +171,13 @@ function features(
 // ---------------------------------------------------------------------------
 
 const LICENSE_DEFAULT: LicenseState = {
-	license: { key: null, products: [] },
-	isStoring: false,
-	isDeleting: false,
-	storeError: null,
-	deleteError: null,
+	license:      { key: null, products: [] },
+	isStoring:    false,
+	isDeleting:   false,
+	isRefreshing: false,
+	storeError:   null,
+	deleteError:  null,
+	refreshError: null,
 };
 
 function license(
@@ -235,6 +237,30 @@ function license(
 				...state,
 				isDeleting: false,
 				deleteError: action.error,
+			};
+		}
+
+		case 'REFRESH_LICENSE_START': {
+			return {
+				...state,
+				isRefreshing: true,
+				refreshError: null,
+			};
+		}
+
+		case 'REFRESH_LICENSE_FINISHED': {
+			return {
+				...state,
+				isRefreshing: false,
+				license: action.license,
+			};
+		}
+
+		case 'REFRESH_LICENSE_FAILED': {
+			return {
+				...state,
+				isRefreshing: false,
+				refreshError: action.error,
 			};
 		}
 

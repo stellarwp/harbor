@@ -30,6 +30,9 @@ const HarborDataContext = createContext<HarborDataContextValue>( {
 
 type ResolvableRecord = Record<string, ResolvableSelectResponse<unknown>>;
 
+const RESOLVER_KEYS = [ 'license', 'features', 'catalog', 'legacyLicenses' ] as const;
+type ResolverKey = typeof RESOLVER_KEYS[ number ];
+
 function findErrors( results: ResolvableRecord ): HarborError[] {
     const errors: HarborError[] = [];
     for ( const key in results ) {
@@ -62,11 +65,20 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
         [],
     );
 
-    const isLoading =
-        result.license.isResolving ||
-        result.features.isResolving ||
-        result.catalog.isResolving ||
-        result.legacyLicenses.isResolving;
+    const hasEverResolvedRef = useRef<Record<ResolverKey, boolean>>( {
+        license:        false,
+        features:       false,
+        catalog:        false,
+        legacyLicenses: false,
+    } );
+
+    for ( const key of RESOLVER_KEYS ) {
+        if ( result[ key ].hasResolved ) {
+			hasEverResolvedRef.current[ key ] = true;
+		}
+    }
+
+    const isLoading = RESOLVER_KEYS.some( ( key ) => result[ key ].isResolving && ! hasEverResolvedRef.current[ key ] );
 
     useEffect( () => {
         const found = findErrors( result );

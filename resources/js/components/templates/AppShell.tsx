@@ -7,12 +7,12 @@
  * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
-import { Loader2 } from 'lucide-react';
 import { Shell } from '@/components/templates/Shell';
 import { FilterBar } from '@/components/molecules/FilterBar';
 import { LicensePanel } from '@/components/organisms/LicensePanel';
 import { LegacyLicenseBanner } from '@/components/molecules/LegacyLicenseBanner';
 import { ProductSection } from '@/components/organisms/ProductSection';
+import { ProductSectionSkeleton } from '@/components/organisms/ProductSectionSkeleton';
 import { ErrorBoundary } from '@/components/atoms/ErrorBoundary';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
@@ -35,29 +35,27 @@ export function AppShell() {
             header={ <FilterBar /> }
             sideContent={ <LicensePanel /> }
         >
-            { isLoading ? (
-                <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    { __( 'Loading…', '%TEXTDOMAIN%' ) }
-                </div>
-            ) : (
-                <ErrorBoundary>
-                    <div className="space-y-8">
-                        <LegacyLicenseBanner />
+            <ErrorBoundary>
+                <div className="space-y-8">
+                    <LegacyLicenseBanner />
 
-						<div className="flex items-center !mt-8 !mb-6">
-							<h2 className="!text-2xl !font-normal !m-0 !p-0">{ __( 'Your Features', '%TEXTDOMAIN%' ) }</h2>
-						</div>
+                    <div className="flex items-center !mt-8 !mb-6">
+                        <h2 className="!text-2xl !font-normal !m-0 !p-0">{ __( 'Your Features', '%TEXTDOMAIN%' ) }</h2>
+                    </div>
 
-                        { visibleProducts.map( ( product ) => (
+                    { isLoading
+                        ? PRODUCTS.map( ( product ) => (
+                            <ProductSectionSkeleton key={ product.slug } product={ product } />
+                        ) )
+                        : visibleProducts.map( ( product ) => (
                             <ProductSection
                                 key={ product.slug }
                                 product={ product }
                             />
-                        ) ) }
-                    </div>
-                </ErrorBoundary>
-            ) }
+                        ) )
+                    }
+                </div>
+            </ErrorBoundary>
         </Shell>
     );
 }

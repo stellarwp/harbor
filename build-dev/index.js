@@ -897,7 +897,7 @@ function SectionHeader({
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
     className: "flex items-center gap-2.5",
     children: [icon, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      className: "text-xs font-semibold text-muted-foreground uppercase tracking-wider",
+      className: "flex-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider",
       children: label
     }), action]
   });
@@ -1898,16 +1898,23 @@ function LicensePanel() {
     addToast
   } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_7__.useToast)();
   const {
-    deleteLicense
+    deleteLicense,
+    refreshLicense,
+    refreshCatalog
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_5__.store);
   const {
     licenseKey,
     licenseProducts,
-    catalogs
+    catalogs,
+    isRefreshing,
+    isLicenseLoading
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => ({
     licenseKey: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getLicenseKey(),
     licenseProducts: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getLicenseProducts(),
-    catalogs: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getCatalog()
+    catalogs: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).getCatalog(),
+    isRefreshing: select(_store__WEBPACK_IMPORTED_MODULE_5__.store).isLicenseRefreshing(),
+    // @ts-expect-error -- hasFinishedResolution is injected at runtime by @wordpress/data but absent from the store's TypeScript surface.
+    isLicenseLoading: !select(_store__WEBPACK_IMPORTED_MODULE_5__.store).hasFinishedResolution('getLicenseKey', [])
   }), []);
 
   // Flat tier slug → display name lookup from all catalog tiers.
@@ -1942,14 +1949,26 @@ function LicensePanel() {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License removed.', '%TEXTDOMAIN%'), 'default');
     }
   };
+  const handleRefresh = async () => {
+    const [licenseResult, catalogResult] = await Promise.all([refreshLicense(), refreshCatalog()]);
+    const error = licenseResult ?? catalogResult;
+    if (error instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.HarborError) {
+      addToast(error.message, 'error');
+    } else {
+      addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License refreshed.', '%TEXTDOMAIN%'), 'success');
+    }
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "sticky top-4 w-[280px] shrink-0 space-y-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_organisms_LicenseSection__WEBPACK_IMPORTED_MODULE_3__.LicenseSection, {
       licenseKey: licenseKey,
       licenseProducts: licenseProducts,
       tierNameMap: tierNameMap,
-      onRemove: handleRemove
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
+      onRemove: handleRemove,
+      onRefresh: handleRefresh,
+      isRefreshing: isRefreshing,
+      isLoading: isLicenseLoading
+    }), !isLicenseLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
       products: upsellProducts,
       upsellUrlMap: upsellUrlMap
     })]
@@ -1972,17 +1991,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/key-round.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/pencil.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/trash-2.js");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
-/* harmony import */ var _components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/atoms/SectionHeader */ "./resources/js/components/atoms/SectionHeader.tsx");
-/* harmony import */ var _components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/LicenseKeyInput */ "./resources/js/components/molecules/LicenseKeyInput.tsx");
-/* harmony import */ var _components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/molecules/LicenseProductCard */ "./resources/js/components/molecules/LicenseProductCard.tsx");
-/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/key-round.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/pencil.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/refresh-cw.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/trash-2.js");
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
+/* harmony import */ var _components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/atoms/SectionHeader */ "./resources/js/components/atoms/SectionHeader.tsx");
+/* harmony import */ var _components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/components/molecules/LicenseKeyInput */ "./resources/js/components/molecules/LicenseKeyInput.tsx");
+/* harmony import */ var _components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/components/molecules/LicenseProductCard */ "./resources/js/components/molecules/LicenseProductCard.tsx");
+/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__);
 /**
  * License section: header, key input, licensed-product cards, and edit dialog.
  *
@@ -1999,13 +2020,41 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * Pulse-skeleton that mirrors LicenseProductCard's layout while the license
+ * resolver is still in flight.
+ */
+function LicenseSectionSkeleton() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+    className: "space-y-3",
+    children: _data_products__WEBPACK_IMPORTED_MODULE_12__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+      className: "rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+        className: "flex items-center gap-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+          className: "w-6 h-6 rounded shrink-0 bg-muted"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+          className: "h-3.5 flex-1 rounded bg-muted"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+          className: "h-4 w-14 rounded-full shrink-0 bg-muted"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        className: "h-3 w-24 rounded bg-muted"
+      })]
+    }, p.slug))
+  });
+}
+
+/**
  * @since 1.0.0
  */
 function LicenseSection({
   licenseKey,
   licenseProducts,
   tierNameMap,
-  onRemove
+  onRemove,
+  onRefresh,
+  isRefreshing,
+  isLoading
 }) {
   const [editingOpen, setEditingOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const hasLicense = licenseKey !== null;
@@ -2013,59 +2062,72 @@ function LicenseSection({
     await onRemove();
     setEditingOpen(false);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
     className: "space-y-3",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_7__.SectionHeader, {
-      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_9__.SectionHeader, {
+      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
         className: "w-4 h-4 text-muted-foreground"
       }),
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License', '%TEXTDOMAIN%'),
-      action: hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("button", {
-        type: "button",
-        onClick: () => setEditingOpen(true),
-        className: "flex items-center gap-1 text-[11px] text-emerald-600 transition-colors hover:opacity-75",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          className: "w-3 h-3"
-        }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit', '%TEXTDOMAIN%')]
+      action: hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+        className: "flex items-center gap-4",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
+          type: "button",
+          onClick: onRefresh,
+          disabled: isRefreshing,
+          className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed",
+          children: [isRefreshing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            className: "w-3 h-3 animate-spin"
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            className: "w-3 h-3"
+          }), isRefreshing ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refreshing...', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refresh', '%TEXTDOMAIN%')]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
+          type: "button",
+          onClick: () => setEditingOpen(true),
+          className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            className: "w-3 h-3"
+          }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit', '%TEXTDOMAIN%')]
+        })]
       })
-    }), !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(LicenseSectionSkeleton, {}), !isLoading && !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
       className: "space-y-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_8__.LicenseKeyInput, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_10__.LicenseKeyInput, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("p", {
         className: "text-xs text-muted-foreground leading-relaxed mt-0 mb-0",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter your license key to unlock features.', '%TEXTDOMAIN%')
       })]
-    }), hasLicense && licenseProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+    }), hasLicense && licenseProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
       className: "space-y-3",
-      children: licenseProducts.map(lp => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_9__.LicenseProductCard, {
+      children: licenseProducts.map(lp => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_11__.LicenseProductCard, {
         lp: lp,
-        productName: _data_products__WEBPACK_IMPORTED_MODULE_10__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
+        productName: _data_products__WEBPACK_IMPORTED_MODULE_12__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
         tierName: tierNameMap[lp.tier] ?? lp.tier
       }, lp.product_slug))
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_6__.Dialog, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.Dialog, {
       open: editingOpen,
       onClose: () => setEditingOpen(false),
       maxWidth: "max-w-sm",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_6__.DialogHeader, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogHeader, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit License', '%TEXTDOMAIN%'),
         description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View or remove your license key.', '%TEXTDOMAIN%'),
         onClose: () => setEditingOpen(false)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_6__.DialogContent, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("input", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogContent, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("input", {
           readOnly: true,
           value: licenseKey ?? '',
           className: "w-full rounded-md border bg-muted/40 px-3 py-2 text-sm font-mono text-foreground focus:outline-none select-all"
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_6__.DialogFooter, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogFooter, {
         className: "justify-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_5__.Button, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
           variant: "destructive",
           size: "sm",
           className: "gap-1.5",
           onClick: handleRemove,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
             className: "w-3.5 h-3.5"
           }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove License', '%TEXTDOMAIN%')]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_5__.Button, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
           variant: "outline",
           size: "sm",
           onClick: () => setEditingOpen(false),
@@ -2218,6 +2280,89 @@ function ProductSection({
 
 /***/ },
 
+/***/ "./resources/js/components/organisms/ProductSectionSkeleton.tsx"
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/organisms/ProductSectionSkeleton.tsx ***!
+  \**********************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ProductSectionSkeleton: () => (/* binding */ ProductSectionSkeleton)
+/* harmony export */ });
+/* harmony import */ var _components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/components/atoms/ProductLogo */ "./resources/js/components/atoms/ProductLogo.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * Pulse-skeleton for a single product section, shown while the Harbor data
+ * resolvers are in flight on the first page load.
+ *
+ * Mirrors ProductSection's DOM structure: same sticky header (with real logo
+ * and product name but no badge or counters) followed by a fixed number of
+ * skeleton feature rows.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+
+const SKELETON_ROW_COUNT = 3;
+function SkeletonFeatureRow({
+  isLast
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    className: `bg-white animate-pulse${isLast ? '' : ' border-b'}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      className: "flex items-center gap-3 py-3 px-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        className: "w-4 h-4 rounded shrink-0 bg-muted"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        className: "w-8 h-8 rounded shrink-0 bg-muted"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        className: "h-3.5 w-32 rounded bg-muted"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        className: "ml-auto flex items-center gap-3 shrink-0",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "h-4 w-12 rounded bg-muted"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "h-5 w-9 rounded-full bg-muted"
+        })]
+      })]
+    })
+  });
+}
+/**
+ * @since 1.0.0
+ */
+function ProductSectionSkeleton({
+  product
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("section", {
+    id: product.slug,
+    className: "scroll-mt-20",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "h-0"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      className: "flex items-center gap-3 px-4 py-3 bg-neutral-800 text-white sticky top-0 z-10 border-x border-neutral-800 transition-[border-radius] rounded-t-lg border-t",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_0__.ProductLogo, {
+        slug: product.slug,
+        size: 28
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+        className: "text-base font-semibold m-0 p-0 text-white",
+        children: product.name
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "border border-t-0 rounded-b-lg overflow-hidden",
+      children: Array.from({
+        length: SKELETON_ROW_COUNT
+      }, (_, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(SkeletonFeatureRow, {
+        isLast: i === SKELETON_ROW_COUNT - 1
+      }, i))
+    })]
+  });
+}
+
+/***/ },
+
 /***/ "./resources/js/components/organisms/UpsellSection.tsx"
 /*!*************************************************************!*\
   !*** ./resources/js/components/organisms/UpsellSection.tsx ***!
@@ -2288,12 +2433,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js");
-/* harmony import */ var _components_templates_Shell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/components/templates/Shell */ "./resources/js/components/templates/Shell.tsx");
-/* harmony import */ var _components_molecules_FilterBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/components/molecules/FilterBar */ "./resources/js/components/molecules/FilterBar.tsx");
-/* harmony import */ var _components_organisms_LicensePanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/components/organisms/LicensePanel */ "./resources/js/components/organisms/LicensePanel.tsx");
-/* harmony import */ var _components_molecules_LegacyLicenseBanner__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/molecules/LegacyLicenseBanner */ "./resources/js/components/molecules/LegacyLicenseBanner.tsx");
-/* harmony import */ var _components_organisms_ProductSection__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/organisms/ProductSection */ "./resources/js/components/organisms/ProductSection.tsx");
+/* harmony import */ var _components_templates_Shell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/templates/Shell */ "./resources/js/components/templates/Shell.tsx");
+/* harmony import */ var _components_molecules_FilterBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/components/molecules/FilterBar */ "./resources/js/components/molecules/FilterBar.tsx");
+/* harmony import */ var _components_organisms_LicensePanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/components/organisms/LicensePanel */ "./resources/js/components/organisms/LicensePanel.tsx");
+/* harmony import */ var _components_molecules_LegacyLicenseBanner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/components/molecules/LegacyLicenseBanner */ "./resources/js/components/molecules/LegacyLicenseBanner.tsx");
+/* harmony import */ var _components_organisms_ProductSection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/organisms/ProductSection */ "./resources/js/components/organisms/ProductSection.tsx");
+/* harmony import */ var _components_organisms_ProductSectionSkeleton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/organisms/ProductSectionSkeleton */ "./resources/js/components/organisms/ProductSectionSkeleton.tsx");
 /* harmony import */ var _components_atoms_ErrorBoundary__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/atoms/ErrorBoundary */ "./resources/js/components/atoms/ErrorBoundary.tsx");
 /* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
 /* harmony import */ var _context_filter_context__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/context/filter-context */ "./resources/js/context/filter-context.tsx");
@@ -2332,24 +2477,21 @@ function AppShell() {
     productFilter
   } = (0,_context_filter_context__WEBPACK_IMPORTED_MODULE_9__.useFilter)();
   const visibleProducts = productFilter === 'all' ? _data_products__WEBPACK_IMPORTED_MODULE_8__.PRODUCTS : _data_products__WEBPACK_IMPORTED_MODULE_8__.PRODUCTS.filter(p => p.slug === productFilter);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_templates_Shell__WEBPACK_IMPORTED_MODULE_2__.Shell, {
-    header: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_FilterBar__WEBPACK_IMPORTED_MODULE_3__.FilterBar, {}),
-    sideContent: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_LicensePanel__WEBPACK_IMPORTED_MODULE_4__.LicensePanel, {}),
-    children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-      className: "flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "w-5 h-5 animate-spin"
-      }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Loading…', '%TEXTDOMAIN%')]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_ErrorBoundary__WEBPACK_IMPORTED_MODULE_7__.ErrorBoundary, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_templates_Shell__WEBPACK_IMPORTED_MODULE_1__.Shell, {
+    header: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_FilterBar__WEBPACK_IMPORTED_MODULE_2__.FilterBar, {}),
+    sideContent: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_LicensePanel__WEBPACK_IMPORTED_MODULE_3__.LicensePanel, {}),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_ErrorBoundary__WEBPACK_IMPORTED_MODULE_7__.ErrorBoundary, {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "space-y-8",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LegacyLicenseBanner__WEBPACK_IMPORTED_MODULE_5__.LegacyLicenseBanner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LegacyLicenseBanner__WEBPACK_IMPORTED_MODULE_4__.LegacyLicenseBanner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "flex items-center !mt-8 !mb-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h2", {
             className: "!text-2xl !font-normal !m-0 !p-0",
             children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Your Features', '%TEXTDOMAIN%')
           })
-        }), visibleProducts.map(product => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_ProductSection__WEBPACK_IMPORTED_MODULE_6__.ProductSection, {
+        }), isLoading ? _data_products__WEBPACK_IMPORTED_MODULE_8__.PRODUCTS.map(product => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_ProductSectionSkeleton__WEBPACK_IMPORTED_MODULE_6__.ProductSectionSkeleton, {
+          product: product
+        }, product.slug)) : visibleProducts.map(product => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_ProductSection__WEBPACK_IMPORTED_MODULE_5__.ProductSection, {
           product: product
         }, product.slug))]
       })
@@ -3218,6 +3360,7 @@ __webpack_require__.r(__webpack_exports__);
 const HarborDataContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   isLoading: true
 });
+const RESOLVER_KEYS = ['license', 'features', 'catalog', 'legacyLicenses'];
 function findErrors(results) {
   const errors = [];
   for (const key in results) {
@@ -3246,7 +3389,18 @@ function HarborDataProvider({
     catalog: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getCatalog(),
     legacyLicenses: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLegacyLicenses()
   }), []);
-  const isLoading = result.license.isResolving || result.features.isResolving || result.catalog.isResolving || result.legacyLicenses.isResolving;
+  const hasEverResolvedRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
+    license: false,
+    features: false,
+    catalog: false,
+    legacyLicenses: false
+  });
+  for (const key of RESOLVER_KEYS) {
+    if (result[key].hasResolved) {
+      hasEverResolvedRef.current[key] = true;
+    }
+  }
+  const isLoading = RESOLVER_KEYS.some(key => result[key].isResolving && !hasEverResolvedRef.current[key]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const found = findErrors(result);
     if (found.length > 0) {
@@ -3409,8 +3563,10 @@ let ErrorCode = /*#__PURE__*/function (ErrorCode) {
   ErrorCode["LicenseActionInProgress"] = "license-action-in-progress";
   ErrorCode["LicenseStoreFailed"] = "license-store-failed";
   ErrorCode["LicenseDeleteFailed"] = "license-delete-failed";
+  ErrorCode["LicenseRefreshFailed"] = "license-refresh-failed";
   ErrorCode["LicenseValidateFailed"] = "license-validate-failed";
   ErrorCode["CatalogFetchFailed"] = "catalog-fetch-failed";
+  ErrorCode["CatalogRefreshFailed"] = "catalog-refresh-failed";
   ErrorCode["LegacyLicensesFetchFailed"] = "legacy-licenses-fetch-failed";
   ErrorCode["ResolutionFailed"] = "resolution-failed";
   return ErrorCode;
@@ -4221,6 +4377,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   receiveFeatures: () => (/* binding */ receiveFeatures),
 /* harmony export */   receiveLegacyLicenses: () => (/* binding */ receiveLegacyLicenses),
 /* harmony export */   receiveLicense: () => (/* binding */ receiveLicense),
+/* harmony export */   refreshCatalog: () => (/* binding */ refreshCatalog),
+/* harmony export */   refreshLicense: () => (/* binding */ refreshLicense),
 /* harmony export */   storeLicense: () => (/* binding */ storeLicense),
 /* harmony export */   updateFeature: () => (/* binding */ updateFeature)
 /* harmony export */ });
@@ -4402,6 +4560,64 @@ const storeLicense = key => async ({
       type: 'STORE_LICENSE_FAILED',
       error
     });
+    return error;
+  }
+};
+
+/**
+ * Refresh the license from the upstream service via the REST API, then
+ * invalidate the features resolver so the UI reflects any plan changes.
+ *
+ * @since 1.0.0
+ */
+const refreshLicense = () => async ({
+  dispatch,
+  select
+}) => {
+  if (!select.canModifyLicense()) {
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh your license, another action is in progress.', '%TEXTDOMAIN%'));
+  }
+  dispatch({
+    type: 'REFRESH_LICENSE_START'
+  });
+  try {
+    const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/liquidweb/harbor/v1/license/refresh',
+      method: 'POST'
+    });
+    dispatch({
+      type: 'REFRESH_LICENSE_FINISHED',
+      license: result
+    });
+    dispatch.invalidateResolution('getFeatures', []);
+    return null;
+  } catch (err) {
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh your license.', '%TEXTDOMAIN%'));
+    dispatch({
+      type: 'REFRESH_LICENSE_FAILED',
+      error
+    });
+    return error;
+  }
+};
+
+/**
+ * Refresh the product catalog from the upstream service via the REST API.
+ *
+ * @since 1.0.0
+ */
+const refreshCatalog = () => async ({
+  dispatch
+}) => {
+  try {
+    const result = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/liquidweb/harbor/v1/catalog/refresh',
+      method: 'POST'
+    });
+    dispatch.receiveCatalog(result);
+    return null;
+  } catch (err) {
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh the product catalog.', '%TEXTDOMAIN%'));
     return error;
   }
 };
@@ -4707,8 +4923,10 @@ const LICENSE_DEFAULT = {
   },
   isStoring: false,
   isDeleting: false,
+  isRefreshing: false,
   storeError: null,
-  deleteError: null
+  deleteError: null,
+  refreshError: null
 };
 function license(state = LICENSE_DEFAULT, action) {
   switch (action.type) {
@@ -4768,6 +4986,30 @@ function license(state = LICENSE_DEFAULT, action) {
           ...state,
           isDeleting: false,
           deleteError: action.error
+        };
+      }
+    case 'REFRESH_LICENSE_START':
+      {
+        return {
+          ...state,
+          isRefreshing: true,
+          refreshError: null
+        };
+      }
+    case 'REFRESH_LICENSE_FINISHED':
+      {
+        return {
+          ...state,
+          isRefreshing: false,
+          license: action.license
+        };
+      }
+    case 'REFRESH_LICENSE_FAILED':
+      {
+        return {
+          ...state,
+          isRefreshing: false,
+          refreshError: action.error
         };
       }
     default:
@@ -4937,6 +5179,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getLicenseProducts: () => (/* binding */ getLicenseProducts),
 /* harmony export */   getProductCatalog: () => (/* binding */ getProductCatalog),
 /* harmony export */   getProductTiers: () => (/* binding */ getProductTiers),
+/* harmony export */   getRefreshLicenseError: () => (/* binding */ getRefreshLicenseError),
 /* harmony export */   getStoreLicenseError: () => (/* binding */ getStoreLicenseError),
 /* harmony export */   hasActiveLegacyLicenseForProduct: () => (/* binding */ hasActiveLegacyLicenseForProduct),
 /* harmony export */   hasLegacyLicense: () => (/* binding */ hasLegacyLicense),
@@ -4947,6 +5190,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isFeatureToggling: () => (/* binding */ isFeatureToggling),
 /* harmony export */   isFeatureUpdating: () => (/* binding */ isFeatureUpdating),
 /* harmony export */   isLicenseDeleting: () => (/* binding */ isLicenseDeleting),
+/* harmony export */   isLicenseRefreshing: () => (/* binding */ isLicenseRefreshing),
 /* harmony export */   isLicenseStoring: () => (/* binding */ isLicenseStoring),
 /* harmony export */   isProductUnifiedLicensed: () => (/* binding */ isProductUnifiedLicensed)
 /* harmony export */ });
@@ -5065,9 +5309,11 @@ const hasLicense = state => state.license.license.key !== null;
 const getLicenseProducts = state => state.license.license.products;
 const isLicenseStoring = state => state.license.isStoring;
 const isLicenseDeleting = state => state.license.isDeleting;
-const canModifyLicense = state => !state.license.isStoring && !state.license.isDeleting;
+const isLicenseRefreshing = state => state.license.isRefreshing;
+const canModifyLicense = state => !state.license.isStoring && !state.license.isDeleting && !state.license.isRefreshing;
 const getStoreLicenseError = state => state.license.storeError;
 const getDeleteLicenseError = state => state.license.deleteError;
+const getRefreshLicenseError = state => state.license.refreshError;
 
 /***/ },
 
@@ -5705,6 +5951,41 @@ const Pencil = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
 
 
 //# sourceMappingURL=pencil.js.map
+
+
+/***/ },
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/refresh-cw.js"
+/*!****************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/refresh-cw.js ***!
+  \****************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ RefreshCw)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.575.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("refresh-cw", __iconNode);
+
+
+//# sourceMappingURL=refresh-cw.js.map
 
 
 /***/ },

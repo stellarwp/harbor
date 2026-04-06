@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { KeyRound, Pencil, Trash2 } from 'lucide-react';
+import { KeyRound, Loader2, Pencil, RefreshCw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogHeader, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
@@ -19,12 +19,40 @@ interface LicenseSectionProps {
     licenseProducts: LicenseProduct[];
     tierNameMap:     Record<string, string>;
     onRemove:        () => Promise<void>;
+    onRefresh:       () => Promise<void>;
+    isRefreshing:    boolean;
+    isLoading:       boolean;
+}
+
+/**
+ * Pulse-skeleton that mirrors LicenseProductCard's layout while the license
+ * resolver is still in flight.
+ */
+function LicenseSectionSkeleton() {
+    return (
+        <div className="space-y-3">
+            { PRODUCTS.map( ( p ) => (
+                <div key={ p.slug } className="rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse">
+                    <div className="flex items-center gap-2">
+                        { /* logo */ }
+                        <div className="w-6 h-6 rounded shrink-0 bg-muted" />
+                        { /* product name */ }
+                        <div className="h-3.5 flex-1 rounded bg-muted" />
+                        { /* tier badge */ }
+                        <div className="h-4 w-14 rounded-full shrink-0 bg-muted" />
+                    </div>
+                    { /* expiry */ }
+                    <div className="h-3 w-24 rounded bg-muted" />
+                </div>
+            ) ) }
+        </div>
+    );
 }
 
 /**
  * @since 1.0.0
  */
-export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove }: LicenseSectionProps ) {
+export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading }: LicenseSectionProps ) {
     const [ editingOpen, setEditingOpen ] = useState( false );
 
     const hasLicense = licenseKey !== null;
@@ -40,18 +68,37 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'License', '%TEXTDOMAIN%' ) }
                 action={ hasLicense && (
-                    <button
-                        type="button"
-                        onClick={ () => setEditingOpen( true ) }
-                        className="flex items-center gap-1 text-[11px] text-emerald-600 transition-colors hover:opacity-75"
-                    >
-                        <Pencil className="w-3 h-3" />
-                        { __( 'Edit', '%TEXTDOMAIN%' ) }
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button
+                            type="button"
+                            onClick={ onRefresh }
+                            disabled={ isRefreshing }
+                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            { isRefreshing
+                                ? <Loader2 className="w-3 h-3 animate-spin" />
+                                : <RefreshCw className="w-3 h-3" />
+                            }
+                            { isRefreshing
+                                ? __( 'Refreshing...', '%TEXTDOMAIN%' )
+                                : __( 'Refresh', '%TEXTDOMAIN%' )
+                            }
+                        </button>
+                        <button
+                            type="button"
+                            onClick={ () => setEditingOpen( true ) }
+                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75"
+                        >
+                            <Pencil className="w-3 h-3" />
+                            { __( 'Edit', '%TEXTDOMAIN%' ) }
+                        </button>
+                    </div>
                 ) }
             />
 
-            { ! hasLicense && (
+            { isLoading && <LicenseSectionSkeleton /> }
+
+            { ! isLoading && ! hasLicense && (
                 <div className="space-y-2">
                     <LicenseKeyInput />
                     <p className="text-xs text-muted-foreground leading-relaxed mt-0 mb-0">

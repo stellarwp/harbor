@@ -21,13 +21,16 @@ import { HarborError } from '@/errors';
  */
 export function LicensePanel() {
     const { addToast }      = useToast();
-    const { deleteLicense } = useDispatch( harborStore );
+    const { deleteLicense, refreshLicense, refreshCatalog } = useDispatch( harborStore );
 
-    const { licenseKey, licenseProducts, catalogs } = useSelect(
+    const { licenseKey, licenseProducts, catalogs, isRefreshing, isLicenseLoading } = useSelect(
         ( select ) => ({
-            licenseKey:      select( harborStore ).getLicenseKey(),
-            licenseProducts: select( harborStore ).getLicenseProducts(),
-            catalogs:        select( harborStore ).getCatalog(),
+            licenseKey:       select( harborStore ).getLicenseKey(),
+            licenseProducts:  select( harborStore ).getLicenseProducts(),
+            catalogs:         select( harborStore ).getCatalog(),
+            isRefreshing:     select( harborStore ).isLicenseRefreshing(),
+            // @ts-expect-error -- hasFinishedResolution is injected at runtime by @wordpress/data but absent from the store's TypeScript surface.
+            isLicenseLoading: ! select( harborStore ).hasFinishedResolution( 'getLicenseKey', [] ),
         }),
         []
     );
@@ -67,6 +70,19 @@ export function LicensePanel() {
         }
     };
 
+    const handleRefresh = async () => {
+        const [ licenseResult, catalogResult ] = await Promise.all( [
+            refreshLicense(),
+            refreshCatalog(),
+        ] );
+        const error = licenseResult ?? catalogResult;
+        if ( error instanceof HarborError ) {
+            addToast( error.message, 'error' );
+        } else {
+            addToast( __( 'License refreshed.', '%TEXTDOMAIN%' ), 'success' );
+        }
+    };
+
     return (
         <div className="sticky top-4 w-[280px] shrink-0 space-y-6">
             <LicenseSection
@@ -74,11 +90,16 @@ export function LicensePanel() {
                 licenseProducts={ licenseProducts }
                 tierNameMap={ tierNameMap }
                 onRemove={ handleRemove }
+                onRefresh={ handleRefresh }
+                isRefreshing={ isRefreshing }
+                isLoading={ isLicenseLoading }
             />
-            <UpsellSection
-                products={ upsellProducts }
-                upsellUrlMap={ upsellUrlMap }
-            />
+            { ! isLicenseLoading && (
+                <UpsellSection
+                    products={ upsellProducts }
+                    upsellUrlMap={ upsellUrlMap }
+                />
+            ) }
         </div>
     );
 }

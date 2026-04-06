@@ -65,6 +65,15 @@ export interface LicenseState {
 	 * Cleared when a new deletion starts.
 	 */
 	deleteError: HarborError | null;
+	/**
+	 * Whether a license refresh is in progress.
+	 */
+	isRefreshing: boolean;
+	/**
+	 * The error from the last failed license refresh.
+	 * Cleared when a new refresh starts.
+	 */
+	refreshError: HarborError | null;
 }
 
 export interface LegacyLicensesState {
@@ -98,7 +107,10 @@ export type Action =
 	| { type: 'STORE_LICENSE_FAILED'; error: HarborError }
 	| { type: 'DELETE_LICENSE_START' }
 	| { type: 'DELETE_LICENSE_FINISHED' }
-	| { type: 'DELETE_LICENSE_FAILED'; error: HarborError };
+	| { type: 'DELETE_LICENSE_FAILED'; error: HarborError }
+	| { type: 'REFRESH_LICENSE_START' }
+	| { type: 'REFRESH_LICENSE_FINISHED'; license: License }
+	| { type: 'REFRESH_LICENSE_FAILED'; error: HarborError };
 
 // ---------------------------------------------------------------------------
 // Thunk
