@@ -206,17 +206,21 @@ The catalog describes what exists. It does not know:
 
 The catalog is the menu. Licensing is the receipt. Feature resolution is the waiter who checks both before serving.
 
-## Herald URL Builder
+## Download URL Builder
 
-Download URLs for exclusive (non-WordPress.org) features are not stored in the catalog response. Instead, `Herald_Url_Builder` constructs them at runtime using local data:
+Download URLs for exclusive (non-WordPress.org) features are not stored in the catalog response. They are built at runtime by an implementation of the `Download_Url_Builder` contract (`Portal\Contracts\Download_Url_Builder`). The contract is intentionally minimal — a single `build( string $slug ): string` method — so the download backend can be swapped without touching consumers.
+
+The default implementation is `Herald_Url_Builder`, which constructs Herald download URLs using local data:
 
 ```
 {herald_base_url}/download/{slug}/latest/{license_key}/zip?site={domain}
 ```
 
-The builder reads the license key via the `License_Key_Provider` contract (satisfied by `License_Repository`) and the site domain from `Site\Data`. If either is unavailable (no key stored, or empty domain), it returns an empty string. The Herald base URL defaults to `https://herald.stellarwp.com` and is configurable via `Config::set_herald_base_url()`.
+It reads the license key via the `License_Key_Provider` contract (satisfied by `License_Repository`) and the site domain from `Site\Data`. If either is unavailable (no key stored, or empty domain), it returns an empty string. The Herald base URL defaults to `https://herald.stellarwp.com` and is configurable via `Config::set_herald_base_url()`.
 
-`Resolve_Update_Data` passes the `Herald_Url_Builder` instance into `Plugin::get_update_data()` and `Theme::get_update_data()`, which call `build()` internally to populate the `package` field.
+The Portal `Provider` binds `Download_Url_Builder` to `Herald_Url_Builder` in the container. To swap implementations (for example, to point at a different download service or to inject a test double), register a different binding for `Download_Url_Builder::class`.
+
+`Resolve_Update_Data` depends on the contract and passes the resolved instance into `Plugin::get_update_data()` and `Theme::get_update_data()`, which call `build()` internally to populate the `package` field.
 
 ## What the Portal Does Not Do
 

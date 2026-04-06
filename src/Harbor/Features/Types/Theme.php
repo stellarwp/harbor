@@ -2,7 +2,7 @@
 
 namespace LiquidWeb\Harbor\Features\Types;
 
-use LiquidWeb\Harbor\Portal\Herald_Url_Builder;
+use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Utils\Cast;
@@ -83,17 +83,17 @@ final class Theme extends Feature implements Installable {
 	/**
 	 * Builds the complete update data array for this Theme feature.
 	 *
-	 * The `package` field is populated by the Herald_Url_Builder using the feature
-	 * slug, license key, and site domain.
+	 * The `package` field is populated by the URL builder using the feature
+	 * slug (and any data the implementation needs, e.g. license key and site domain).
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature    $catalog_feature The catalog entry providing version metadata.
-	 * @param Herald_Url_Builder $url_builder     Builder for Herald download URLs.
+	 * @param Catalog_Feature      $catalog_feature The catalog entry providing version metadata.
+	 * @param Download_Url_Builder $url_builder     Builder for download URLs.
 	 *
 	 * @return array<string, mixed>
 	 */
-	public function get_update_data( Catalog_Feature $catalog_feature, Herald_Url_Builder $url_builder ): array {
+	public function get_update_data( Catalog_Feature $catalog_feature, Download_Url_Builder $url_builder ): array {
 		$installed_version = $this->get_installed_version() ?? '';
 		$catalog_version   = $catalog_feature->get_version() ?? '';
 

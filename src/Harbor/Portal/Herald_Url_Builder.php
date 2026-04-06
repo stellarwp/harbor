@@ -4,6 +4,7 @@ namespace LiquidWeb\Harbor\Portal;
 
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Licensing\Contracts\License_Key_Provider;
+use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\Harbor\Site\Data;
 
 /**
@@ -18,7 +19,7 @@ use LiquidWeb\Harbor\Site\Data;
  *
  * @since 1.0.0
  */
-final class Herald_Url_Builder {
+final class Herald_Url_Builder implements Download_Url_Builder {
 
 	/**
 	 * The license key provider.

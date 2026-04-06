@@ -21,7 +21,7 @@ Each feature type has a strategy that defines how enable, disable, and active-st
 
 ### Plugin
 
-An installable WordPress plugin. The catalog provides `plugin_file` and `wporg_slug`. For exclusive (non-WordPress.org) plugins, `Resolve_Update_Data` constructs the download URL via `Herald_Url_Builder`.
+An installable WordPress plugin. The catalog provides `plugin_file` and `wporg_slug`. For exclusive (non-WordPress.org) plugins, `Resolve_Update_Data` constructs the download URL via the `Download_Url_Builder` contract (default implementation: `Herald_Url_Builder`).
 
 | Aspect              | Behavior                                                     |
 | ------------------- | ------------------------------------------------------------ |
@@ -31,7 +31,7 @@ An installable WordPress plugin. The catalog provides `plugin_file` and `wporg_s
 
 ### Theme
 
-An installable WordPress theme. The theme's `slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `wporg_slug`. For exclusive themes, `Resolve_Update_Data` constructs the download URL via `Herald_Url_Builder`.
+An installable WordPress theme. The theme's `slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `wporg_slug`. For exclusive themes, `Resolve_Update_Data` constructs the download URL via the `Download_Url_Builder` contract (default implementation: `Herald_Url_Builder`).
 
 | Aspect              | Behavior                                                                                                                                                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -226,7 +226,7 @@ Plugin features also include:
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Feature exists, minimum tier, delivery type, tier ranks | Catalog                                                                                                                                                                             |
 | Latest version, release date, changelog                 | Catalog (`version`, `release_date`, `changelog`)                                                                                                                                    |
-| **Download URL** (`package`)                            | **`Herald_Url_Builder`** — constructed at runtime from the feature slug, license key, and site domain. Empty string for WordPress.org features (handled via `wporg_slug` instead)   |
+| **Download URL** (`package`)                            | **`Download_Url_Builder`** (default `Herald_Url_Builder`) — built at runtime from feature slug, license key, and site domain. Empty for WordPress.org features (use `wporg_slug`)   |
 | Customer's tier, key validity                           | Licensing                                                                                                                                                                           |
 | **Whether available** (`is_available`)                  | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                  |
 | **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                           |

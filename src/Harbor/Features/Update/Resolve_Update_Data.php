@@ -4,7 +4,7 @@ namespace LiquidWeb\Harbor\Features\Update;
 
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
-use LiquidWeb\Harbor\Portal\Herald_Url_Builder;
+use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Feature_Repository;
@@ -15,7 +15,7 @@ use WP_Error;
  * Resolves update data by joining the Feature_Repository and Catalog.
  *
  * The Feature_Repository determines which features the site is licensed for
- * (availability). The Catalog provides version metadata. The Herald_Url_Builder
+ * (availability). The Catalog provides version metadata. A Download_Url_Builder
  * is passed through to each feature's get_update_data() so the package URL is
  * built there, keeping the responsibility with the feature type.
  *
@@ -52,38 +52,38 @@ class Resolve_Update_Data {
 	private Catalog_Repository $catalog_repository;
 
 	/**
-	 * The Herald URL builder.
+	 * The download URL builder.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var Herald_Url_Builder
+	 * @var Download_Url_Builder
 	 */
-	private Herald_Url_Builder $herald_url_builder;
+	private Download_Url_Builder $url_builder;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Feature_Repository $feature_repository The feature repository.
-	 * @param Catalog_Repository $catalog_repository The catalog repository.
-	 * @param Herald_Url_Builder $herald_url_builder The Herald URL builder.
+	 * @param Feature_Repository   $feature_repository The feature repository.
+	 * @param Catalog_Repository   $catalog_repository The catalog repository.
+	 * @param Download_Url_Builder $url_builder        The download URL builder.
 	 */
 	public function __construct(
 		Feature_Repository $feature_repository,
 		Catalog_Repository $catalog_repository,
-		Herald_Url_Builder $herald_url_builder
+		Download_Url_Builder $url_builder
 	) {
 		$this->feature_repository = $feature_repository;
 		$this->catalog_repository = $catalog_repository;
-		$this->herald_url_builder = $herald_url_builder;
+		$this->url_builder        = $url_builder;
 	}
 
 	/**
 	 * Fetches available Installable features of the given type and transforms them into update data.
 	 *
 	 * Joins feature availability from the Feature_Repository with version metadata
-	 * from the Catalog_Repository. The Herald_Url_Builder is passed to each feature's
+	 * from the Catalog_Repository. The Download_Url_Builder is passed to each feature's
 	 * get_update_data() so the package URL is built there.
 	 *
 	 * @since 1.0.0
@@ -131,7 +131,7 @@ class Resolve_Update_Data {
 				continue;
 			}
 
-			$updates[ $slug ] = $feature->get_update_data( $catalog_feature, $this->herald_url_builder );
+			$updates[ $slug ] = $feature->get_update_data( $catalog_feature, $this->url_builder );
 		}
 
 		return $updates;
