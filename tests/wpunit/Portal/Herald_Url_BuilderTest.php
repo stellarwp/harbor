@@ -3,7 +3,7 @@
 namespace LiquidWeb\Harbor\Tests\Portal;
 
 use LiquidWeb\Harbor\Config;
-use LiquidWeb\Harbor\Licensing\Contracts\License_Key_Provider;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Herald_Url_Builder;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -20,22 +20,24 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
+		delete_option( License_Repository::KEY_OPTION_NAME );
 		Config::reset();
 		parent::tearDown();
 	}
 
 	private function make_builder( ?string $license_key, string $domain ): Herald_Url_Builder {
-		$license_repository = $this->makeEmpty(
-			License_Key_Provider::class,
-			[ 'get_key' => $license_key ]
-		);
+		if ( $license_key !== null ) {
+			update_option( License_Repository::KEY_OPTION_NAME, $license_key );
+		} else {
+			delete_option( License_Repository::KEY_OPTION_NAME );
+		}
 
 		$site_data = $this->makeEmpty(
 			Data::class,
 			[ 'get_domain' => $domain ]
 		);
 
-		return new Herald_Url_Builder( $license_repository, $site_data );
+		return new Herald_Url_Builder( new License_Repository(), $site_data );
 	}
 
 	public function test_build_returns_correct_url(): void {

@@ -3,7 +3,7 @@
 namespace LiquidWeb\Harbor\Portal;
 
 use LiquidWeb\Harbor\Config;
-use LiquidWeb\Harbor\Licensing\Contracts\License_Key_Provider;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\Harbor\Site\Data;
 
@@ -26,9 +26,9 @@ final class Herald_Url_Builder implements Download_Url_Builder {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var License_Key_Provider
+	 * @var License_Repository
 	 */
-	private License_Key_Provider $license_repository;
+	private License_Repository $license_repository;
 
 	/**
 	 * Site data provider.
@@ -44,10 +44,10 @@ final class Herald_Url_Builder implements Download_Url_Builder {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param License_Key_Provider $license_repository The license key provider.
-	 * @param Data                 $site_data          Site data provider.
+	 * @param License_Repository $license_repository The license key provider.
+	 * @param Data               $site_data          Site data provider.
 	 */
-	public function __construct( License_Key_Provider $license_repository, Data $site_data ) {
+	public function __construct( License_Repository $license_repository, Data $site_data ) {
 		$this->license_repository = $license_repository;
 		$this->site_data          = $site_data;
 	}

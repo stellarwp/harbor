@@ -6,8 +6,6 @@ use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
 use LiquidWeb\Harbor\Portal\Clients\Http_Client;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
-use LiquidWeb\Harbor\Licensing\Contracts\License_Key_Provider;
-use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -35,7 +33,6 @@ final class Provider extends Abstract_Provider {
 		);
 
 		$this->container->singleton( Catalog_Repository::class );
-		$this->container->singleton( License_Key_Provider::class, License_Repository::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Download_Url_Builder::class, Herald_Url_Builder::class );
 

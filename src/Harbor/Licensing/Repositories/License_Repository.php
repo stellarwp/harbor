@@ -2,7 +2,6 @@
 
 namespace LiquidWeb\Harbor\Licensing\Repositories;
 
-use LiquidWeb\Harbor\Licensing\Contracts\License_Key_Provider;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Utils\Sanitize;
@@ -27,7 +26,7 @@ use WP_Error;
  *
  * @since 1.0.0
  */
-final class License_Repository implements License_Key_Provider {
+final class License_Repository {
 
 	/**
 	 * The option name used to store the unified license key.
