@@ -113,7 +113,7 @@
         "slug": "kad-theme-kit-pro",
         "kind": "plugin",
         "wporg_slug": null,
-        "main_file": "kadence-pro-addon/kadence-pro-addon.php",
+        "main_file": "kadence-pro/kadence-pro.php",
         "release_date": "2025-10-30",
         "homepage": null
       },
