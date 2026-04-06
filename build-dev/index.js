@@ -787,6 +787,42 @@ function LicenseBadge({
 
 /***/ },
 
+/***/ "./resources/js/components/atoms/LicenseKeyInputSkeleton.tsx"
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/atoms/LicenseKeyInputSkeleton.tsx ***!
+  \*******************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LicenseKeyInputSkeleton: () => (/* binding */ LicenseKeyInputSkeleton)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * Pulse-skeleton that mirrors the LicenseKeyInput locked state while the
+ * license resolver is still in flight.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+/**
+ * @since 1.0.0
+ */
+function LicenseKeyInputSkeleton() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+    className: "flex items-center gap-2 animate-pulse",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      className: "h-9 flex-1 rounded-md bg-muted"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+      className: "h-3.5 w-8 rounded bg-muted shrink-0"
+    })]
+  });
+}
+
+/***/ },
+
 /***/ "./resources/js/components/atoms/ProductLogo.tsx"
 /*!*******************************************************!*\
   !*** ./resources/js/components/atoms/ProductLogo.tsx ***!
@@ -1345,19 +1381,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/key-round.js");
-/* harmony import */ var _components_ui_input__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/ui/input */ "./resources/js/components/ui/input.tsx");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
-/* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
-/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/pencil.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/trash-2.js");
+/* harmony import */ var _components_ui_input__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/input */ "./resources/js/components/ui/input.tsx");
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
+/* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
+/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
 /**
- * License key input form.
+ * License key input.
  *
- * Wires activation to the lw @wordpress/data store.
- * Success toast on completion.
+ * Renders in three states controlled by the parent:
+ *   - Empty    (currentKey === null): editable input with Activate button.
+ *   - Locked   (currentKey set, !isEditing): read-only display with inline Edit button.
+ *   - Editing  (currentKey set, isEditing): editable input pre-filled with the stored key,
+ *              plus Activate, Cancel, and Remove buttons.
+ *
+ * Wires activation to the @wordpress/data store.
  *
  * @package LiquidWeb\Harbor
  */
@@ -1375,6 +1417,11 @@ __webpack_require__.r(__webpack_exports__);
  * @since 1.0.0
  */
 function LicenseKeyInput({
+  currentKey,
+  isEditing,
+  onEdit,
+  onCancel,
+  onRemove,
   onSuccess,
   prefillKey
 }) {
@@ -1382,22 +1429,28 @@ function LicenseKeyInput({
   const [localError, setLocalError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const {
     storeLicense
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_7__.store);
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_8__.store);
   const {
     addToast
-  } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_8__.useToast)();
-
-  // TODO: Refactor error display to use an error modal instead of inline
-  // text. The modal will show safe, user-facing messages from the HarborError
-  // chain.
-
+  } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_9__.useToast)();
   const {
     isStoring,
     canModifyLicense
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => ({
-    isStoring: select(_store__WEBPACK_IMPORTED_MODULE_7__.store).isLicenseStoring(),
-    canModifyLicense: select(_store__WEBPACK_IMPORTED_MODULE_7__.store).canModifyLicense()
+    isStoring: select(_store__WEBPACK_IMPORTED_MODULE_8__.store).isLicenseStoring(),
+    canModifyLicense: select(_store__WEBPACK_IMPORTED_MODULE_8__.store).canModifyLicense()
   }), []);
+
+  // Seed the editable value from the stored key when entering edit mode.
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (isEditing && currentKey) {
+      setKey(currentKey);
+    }
+    if (!isEditing) {
+      setKey('');
+      setLocalError(null);
+    }
+  }, [isEditing, currentKey]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (prefillKey) {
       setKey(prefillKey);
@@ -1412,7 +1465,7 @@ function LicenseKeyInput({
     }
     setLocalError(null);
     const result = await storeLicense(trimmedKey);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError) {
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_10__.HarborError) {
       addToast(result.message, 'error');
     } else {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License activated successfully.', '%TEXTDOMAIN%'), 'success');
@@ -1420,47 +1473,105 @@ function LicenseKeyInput({
       onSuccess?.();
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+  const handleRemove = async () => {
+    const error = await onRemove();
+    if (!error) {
+      setKey('');
+      setLocalError(null);
+    }
+  };
+  const inputWithActivate = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    className: "flex gap-2",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_6__.Input, {
+      id: "license-key-input",
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('e.g. LWSW-UNIFIED-PRO-2025', '%TEXTDOMAIN%'),
+      value: key,
+      onChange: e => {
+        setKey(e.target.value.toUpperCase());
+        if (localError) setLocalError(null);
+      },
+      onKeyDown: e => e.key === 'Enter' && canModifyLicense && handleActivate(),
+      className: "flex-1 font-mono uppercase",
+      "aria-invalid": !!localError,
+      "aria-describedby": localError ? 'license-key-error' : undefined,
+      disabled: !canModifyLicense
+      // eslint-disable-next-line jsx-a11y/no-autofocus
+      ,
+      autoFocus: isEditing
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
+      onClick: handleActivate,
+      disabled: !canModifyLicense || !key.trim(),
+      children: isStoring ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          className: "w-4 h-4 animate-spin"
+        }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Verifying\u2026', '%TEXTDOMAIN%')]
+      }) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate', '%TEXTDOMAIN%')
+    })]
+  });
+
+  // ----- Locked state -----
+  if (currentKey !== null && !isEditing) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      className: "flex items-center gap-2",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_6__.Input, {
+        readOnly: true,
+        value: currentKey,
+        className: "flex-1 font-mono uppercase bg-muted/40 cursor-default select-all",
+        tabIndex: -1
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("button", {
+        type: "button",
+        onClick: onEdit,
+        className: "flex shrink-0 items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          className: "w-3 h-3"
+        }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit', '%TEXTDOMAIN%')]
+      })]
+    });
+  }
+
+  // ----- Editing state -----
+  if (currentKey !== null && isEditing) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      className: "space-y-2",
+      children: [inputWithActivate, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        className: "flex items-center justify-between",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("button", {
+          type: "button",
+          onClick: handleRemove,
+          disabled: !canModifyLicense,
+          className: "flex items-center gap-1 text-[11px] text-destructive transition-colors hover:opacity-75 disabled:opacity-50",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            className: "w-3 h-3"
+          }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove license', '%TEXTDOMAIN%')]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("button", {
+          type: "button",
+          onClick: onCancel,
+          disabled: !canModifyLicense,
+          className: "text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cancel', '%TEXTDOMAIN%')
+        })]
+      }), localError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+        id: "license-key-error",
+        className: "text-sm text-destructive",
+        role: "alert",
+        children: localError
+      })]
+    });
+  }
+
+  // ----- Empty state -----
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: "space-y-3",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("label", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("label", {
       className: "text-sm font-medium",
       htmlFor: "license-key-input",
       children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter License Key', '%TEXTDOMAIN%')
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
-      className: "flex gap-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
-        className: "relative flex-1",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_5__.Input, {
-          id: "license-key-input",
-          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('e.g. LWSW-UNIFIED-PRO-2025', '%TEXTDOMAIN%'),
-          value: key,
-          onChange: e => {
-            setKey(e.target.value.toUpperCase());
-            if (localError) setLocalError(null);
-          },
-          onKeyDown: e => e.key === 'Enter' && canModifyLicense && handleActivate(),
-          className: "pl-10 font-mono uppercase",
-          "aria-invalid": !!localError,
-          "aria-describedby": localError ? 'license-key-error' : undefined,
-          disabled: !canModifyLicense
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_6__.Button, {
-        onClick: handleActivate,
-        disabled: !canModifyLicense || !key.trim(),
-        children: isStoring ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-            className: "w-4 h-4 animate-spin"
-          }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Verifying\u2026', '%TEXTDOMAIN%')]
-        }) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate', '%TEXTDOMAIN%')
-      })]
-    }), isStoring && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("p", {
+    }), inputWithActivate, isStoring && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("p", {
       className: "text-sm text-muted-foreground flex items-center gap-1.5",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
         className: "w-3.5 h-3.5 animate-spin"
       }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Checking license with server\u2026', '%TEXTDOMAIN%')]
-    }), localError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
+    }), localError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
       id: "license-key-error",
       className: "text-sm text-destructive",
       role: "alert",
@@ -1945,9 +2056,10 @@ function LicensePanel() {
     const result = await deleteLicense();
     if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.HarborError) {
       addToast(result.message, 'error');
-    } else {
-      addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License removed.', '%TEXTDOMAIN%'), 'default');
+      return result;
     }
+    addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License removed.', '%TEXTDOMAIN%'), 'default');
+    return null;
   };
   const handleRefresh = async () => {
     const [licenseResult, catalogResult] = await Promise.all([refreshLicense(), refreshCatalog()]);
@@ -1993,23 +2105,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js");
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/key-round.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/pencil.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/refresh-cw.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/trash-2.js");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
-/* harmony import */ var _components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/atoms/SectionHeader */ "./resources/js/components/atoms/SectionHeader.tsx");
-/* harmony import */ var _components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/components/molecules/LicenseKeyInput */ "./resources/js/components/molecules/LicenseKeyInput.tsx");
-/* harmony import */ var _components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/components/molecules/LicenseProductCard */ "./resources/js/components/molecules/LicenseProductCard.tsx");
-/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/refresh-cw.js");
+/* harmony import */ var _components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/atoms/SectionHeader */ "./resources/js/components/atoms/SectionHeader.tsx");
+/* harmony import */ var _components_atoms_LicenseKeyInputSkeleton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/atoms/LicenseKeyInputSkeleton */ "./resources/js/components/atoms/LicenseKeyInputSkeleton.tsx");
+/* harmony import */ var _components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/molecules/LicenseKeyInput */ "./resources/js/components/molecules/LicenseKeyInput.tsx");
+/* harmony import */ var _components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/LicenseProductCard */ "./resources/js/components/molecules/LicenseProductCard.tsx");
+/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
 /**
- * License section: header, key input, licensed-product cards, and edit dialog.
+ * License section: header, key input, and licensed-product cards.
  *
  * @package LiquidWeb\Harbor
  */
-
 
 
 
@@ -2024,20 +2132,20 @@ __webpack_require__.r(__webpack_exports__);
  * resolver is still in flight.
  */
 function LicenseSectionSkeleton() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
     className: "space-y-3",
-    children: _data_products__WEBPACK_IMPORTED_MODULE_12__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+    children: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "flex items-center gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "w-6 h-6 rounded shrink-0 bg-muted"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "h-3.5 flex-1 rounded bg-muted"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "h-4 w-14 rounded-full shrink-0 bg-muted"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "h-3 w-24 rounded bg-muted"
       })]
     }, p.slug))
@@ -2056,84 +2164,53 @@ function LicenseSection({
   isRefreshing,
   isLoading
 }) {
-  const [editingOpen, setEditingOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [isEditing, setIsEditing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const hasLicense = licenseKey !== null;
   const handleRemove = async () => {
-    await onRemove();
-    setEditingOpen(false);
+    const error = await onRemove();
+    if (!error) {
+      setIsEditing(false);
+    }
+    return error;
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "space-y-3",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_9__.SectionHeader, {
-      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__.SectionHeader, {
+      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
         className: "w-4 h-4 text-muted-foreground"
       }),
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License', '%TEXTDOMAIN%'),
-      action: hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
-        className: "flex items-center gap-4",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
-          type: "button",
-          onClick: onRefresh,
-          disabled: isRefreshing,
-          className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed",
-          children: [isRefreshing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
-            className: "w-3 h-3 animate-spin"
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            className: "w-3 h-3"
-          }), isRefreshing ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refreshing...', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refresh', '%TEXTDOMAIN%')]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
-          type: "button",
-          onClick: () => setEditingOpen(true),
-          className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
-            className: "w-3 h-3"
-          }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit', '%TEXTDOMAIN%')]
-        })]
+      action: hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("button", {
+        type: "button",
+        onClick: onRefresh,
+        disabled: isRefreshing,
+        className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed",
+        children: [isRefreshing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          className: "w-3 h-3 animate-spin"
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          className: "w-3 h-3"
+        }), isRefreshing ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refreshing...', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refresh', '%TEXTDOMAIN%')]
       })
-    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(LicenseSectionSkeleton, {}), !isLoading && !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
-      className: "space-y-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_10__.LicenseKeyInput, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("p", {
+    }), isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_atoms_LicenseKeyInputSkeleton__WEBPACK_IMPORTED_MODULE_6__.LicenseKeyInputSkeleton, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(LicenseSectionSkeleton, {})]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_7__.LicenseKeyInput, {
+        currentKey: licenseKey,
+        isEditing: isEditing,
+        onEdit: () => setIsEditing(true),
+        onCancel: () => setIsEditing(false),
+        onRemove: handleRemove
+      }), !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
         className: "text-xs text-muted-foreground leading-relaxed mt-0 mb-0",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter your license key to unlock features.', '%TEXTDOMAIN%')
       })]
-    }), hasLicense && licenseProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+    }), !isLoading && hasLicense && licenseProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
       className: "space-y-3",
-      children: licenseProducts.map(lp => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_11__.LicenseProductCard, {
+      children: licenseProducts.map(lp => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__.LicenseProductCard, {
         lp: lp,
-        productName: _data_products__WEBPACK_IMPORTED_MODULE_12__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
+        productName: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
         tierName: tierNameMap[lp.tier] ?? lp.tier
       }, lp.product_slug))
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.Dialog, {
-      open: editingOpen,
-      onClose: () => setEditingOpen(false),
-      maxWidth: "max-w-sm",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogHeader, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Edit License', '%TEXTDOMAIN%'),
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View or remove your license key.', '%TEXTDOMAIN%'),
-        onClose: () => setEditingOpen(false)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogContent, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("input", {
-          readOnly: true,
-          value: licenseKey ?? '',
-          className: "w-full rounded-md border bg-muted/40 px-3 py-2 text-sm font-mono text-foreground focus:outline-none select-all"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_8__.DialogFooter, {
-        className: "justify-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
-          variant: "destructive",
-          size: "sm",
-          className: "gap-1.5",
-          onClick: handleRemove,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            className: "w-3.5 h-3.5"
-          }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove License', '%TEXTDOMAIN%')]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_7__.Button, {
-          variant: "outline",
-          size: "sm",
-          onClick: () => setEditingOpen(false),
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Close', '%TEXTDOMAIN%')
-        })]
-      })]
     })]
   });
 }

@@ -36,7 +36,6 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-xs: 20rem;
-    --container-sm: 24rem;
     --container-lg: 32rem;
     --container-xl: 36rem;
     --text-xs: 0.75rem;
@@ -577,9 +576,6 @@
   .lw-harbor-ui .max-w-lg {
     max-width: var(--container-lg) !important;
   }
-  .lw-harbor-ui .max-w-sm {
-    max-width: var(--container-sm) !important;
-  }
   .lw-harbor-ui .max-w-xl {
     max-width: var(--container-xl) !important;
   }
@@ -680,9 +676,6 @@
   }
   .lw-harbor-ui .gap-3 {
     gap: calc(var(--spacing) * 3) !important;
-  }
-  .lw-harbor-ui .gap-4 {
-    gap: calc(var(--spacing) * 4) !important;
   }
   .lw-harbor-ui .gap-6 {
     gap: calc(var(--spacing) * 6) !important;
@@ -1440,12 +1433,6 @@
   .lw-harbor-ui .focus\:text-accent-foreground {
     .lw-harbor-ui &:focus {
       color: oklch(0.205 0 0) !important;
-    }
-  }
-  .lw-harbor-ui .focus\:outline-none {
-    .lw-harbor-ui &:focus {
-      --lw-harbor-tw-outline-style: none;
-      outline-style: none !important;
     }
   }
   .lw-harbor-ui .focus-visible\:border-ring {
