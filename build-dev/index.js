@@ -2219,13 +2219,11 @@ function ProductSection({
 
   // Full unfiltered set — used only for header counts so they stay stable.
   const {
-    hasLicense,
     licenseProduct,
     hasActiveLegacy
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
     const licenseProducts = select(_store__WEBPACK_IMPORTED_MODULE_6__.store).getLicenseProducts();
     return {
-      hasLicense: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).hasLicense(),
       licenseProduct: licenseProducts.find(lp => lp.product_slug === product.slug) ?? null,
       hasActiveLegacy: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).hasActiveLegacyLicenseForProduct(product.slug)
     };
@@ -2265,25 +2263,19 @@ function ProductSection({
         className: "ml-auto text-xs text-white/70",
         children: [activeCount, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('active', '%TEXTDOMAIN%'), ' · ', deactivatedCount, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('deactivated', '%TEXTDOMAIN%')]
       })]
-    }), !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-      className: "border border-t-0 rounded-b-lg",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
-        className: "px-4 py-6 text-sm text-muted-foreground text-center",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add a license to unlock features.', '%TEXTDOMAIN%')
-      })
-    }), hasLicense && isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+    }), isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "border border-t-0 rounded-b-lg",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
         className: "px-4 py-6 text-sm text-muted-foreground text-center",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No features match your search.', '%TEXTDOMAIN%')
       })
-    }), hasLicense && !isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+    }), !isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "border border-t-0 rounded-b-lg",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
         className: "px-4 py-6 text-sm text-muted-foreground text-center",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No features are available for this product.', '%TEXTDOMAIN%')
       })
-    }), hasLicense && hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "border border-t-0 rounded-b-lg overflow-hidden",
       children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_4__.FeatureRow, {
         feature: feature
@@ -4484,6 +4476,7 @@ const enableFeature = slug => async ({
       type: 'TOGGLE_FEATURE_FINISHED',
       feature
     });
+    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
@@ -4518,6 +4511,7 @@ const disableFeature = slug => async ({
       type: 'TOGGLE_FEATURE_FINISHED',
       feature
     });
+    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to disable your feature.', '%TEXTDOMAIN%'));
@@ -4552,6 +4546,7 @@ const updateFeature = slug => async ({
       type: 'UPDATE_FEATURE_FINISHED',
       feature
     });
+    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to update your feature.', '%TEXTDOMAIN%'));
