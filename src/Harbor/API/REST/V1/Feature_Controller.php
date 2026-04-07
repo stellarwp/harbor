@@ -445,6 +445,15 @@ class Feature_Controller extends WP_REST_Controller {
 						$installable_properties
 					),
 				],
+				[
+					'title'                => 'service',
+					'type'                 => 'object',
+					'additionalProperties' => true,
+					'properties'           => array_merge(
+						$base_properties,
+						[ 'type' => array_merge( $base_properties['type'], [ 'enum' => [ Feature::TYPE_SERVICE ] ] ) ]
+					),
+				],
 			],
 		];
 

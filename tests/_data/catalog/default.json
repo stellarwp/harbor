@@ -1983,6 +1983,38 @@
         "main_file": "events-schedule-manager/events-schedule-manager.php",
         "release_date": "2025-10-14",
         "homepage": null
+      },
+      {
+        "slug": "promoter",
+        "kind": "service",
+        "minimum_tier": "the-events-calendar:elite",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Promoter",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
+      },
+      {
+        "slug": "assigned-seating",
+        "kind": "service",
+        "minimum_tier": "the-events-calendar:elite",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Assigned Seating",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
       }
     ]
   }

@@ -238,6 +238,16 @@ class Error_Code {
 	public const UNKNOWN_FEATURE_TYPE = 'lw-harbor-unknown-feature-type';
 
 	/**
+	 * An attempt was made to enable, disable, or update a feature that does not
+	 * support that operation from within WordPress.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const FEATURE_NOT_MODIFIABLE = 'lw-harbor-feature-not-modifiable';
+
+	/**
 	 * A feature is within the user's licensed tier but has been individually
 	 * removed from the license capabilities — it cannot be enabled.
 	 *
@@ -293,6 +303,7 @@ class Error_Code {
 			self::THEME_NOT_FOUND_AFTER_INSTALL  => 422,
 			self::DOWNLOAD_LINK_MISSING          => 422,
 			self::UNKNOWN_FEATURE_TYPE           => 422,
+			self::FEATURE_NOT_MODIFIABLE         => 422,
 
 			// 502 Bad Gateway — an upstream service (feature API, plugins_api) returned an error.
 			self::INVALID_RESPONSE               => 502,
