@@ -31,13 +31,22 @@ The investigation should determine whether the error is:
 
 `enableFeature`, `disableFeature`, and `updateFeature` in `store/actions.ts` should call `dispatch.invalidateResolution('getFeatures', [])` after a successful action. This matches the pattern already used by `storeLicense` (line 164), `refreshLicense` (line 205), and `deleteLicense` (line 274). The invalidation clears stale resolver error state and ensures the feature list reflects the current server state.
 
-### 3. Verify catalog and legacy license resolvers are license-independent
+### 3. Remove license gating from ProductSection feature rendering
+
+`ProductSection.tsx` gated the entire feature list behind `hasLicense`. When no license key was present, the component showed only "Add a license to unlock features" and hid all features. This prevented free-tier and WordPress.org features from rendering even though the backend marks them as available regardless of license state.
+
+The `useProductFeatureGroups` hook already handles the no-license case correctly: when there is no license product, `rank` defaults to `-1`, so all catalog tiers become upgrade tiers. Free features land in `availableFeatures` (rendered as normal `FeatureRow` entries) and paid features land in `lockedByTier` (rendered inside `TierGroup` accordions). The only thing blocking this from working was the `hasLicense` condition in the template.
+
+Remove the `hasLicense` gate and the "Add a license to unlock features" empty state so features always render. The unlicensed state is already communicated by the `LicenseBadge` in the product header.
+
+### 4. Verify catalog and legacy license resolvers are license-independent
 
 Confirm that `getCatalog` and `getLegacyLicenses` resolvers have no implicit dependency on a valid license key. Based on code review they appear independent, but this should be verified with a manual test (load the page with no license key and confirm both resolve successfully).
 
 ## Key files
 
 - `resources/js/store/actions.ts` - Add invalidation to feature actions
+- `resources/js/components/organisms/ProductSection.tsx` - Remove license gating from feature rendering
 - `resources/js/store/resolvers.ts` - Resolvers (no change expected unless investigation reveals frontend issue)
 - `resources/js/context/harbor-data-context.tsx` - Error detection and auto-clear logic
 - `src/Harbor/Features/Resolve_Feature_Collection.php` - Backend feature resolution (lines 115-165)
