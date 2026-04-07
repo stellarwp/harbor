@@ -1899,18 +1899,9 @@
         "name": "Promoter",
         "description": "Automated email marketing for events and attendees.",
         "category": "marketing",
-        "authors": [
-          "StellarWP"
-        ],
         "documentation_url": "https://theeventscalendar.com/knowledgebase/",
-        "version": "3.4.1",
-        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
         "slug": "tec-promoter",
-        "kind": "plugin",
-        "wporg_slug": null,
-        "main_file": "events-promoter/events-promoter.php",
-        "release_date": "2025-10-07",
-        "homepage": null
+        "kind": "service"
       },
       {
         "minimum_tier": "the-events-calendar-agency",

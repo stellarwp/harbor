@@ -17,6 +17,7 @@ import { VersionDisplay } from '@/components/molecules/VersionDisplay';
 import { Switch } from '@/components/ui/switch';
 import { useFeatureRow } from '@/hooks/useFeatureRow';
 import type { Feature } from '@/types/api';
+import { isInstallableFeature } from '@/types/utils';
 
 interface FeatureRowProps {
 	feature:          Feature;
@@ -44,10 +45,11 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 
 	// Legacy-licensed and revoked features are not marked available by the API
 	// but should render with the full available layout — controls visible, no muted style.
+	// This override only applies to installable features (plugins/themes) since
+	// non-installable features (services) have no controls to show.
 	const isVisuallyAvailable =
 		feature.is_available ||
-		licenseBadgeType === 'legacy' ||
-		licenseBadgeType === 'revoked';
+		( isInstallableFeature( feature ) && ( licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ) );
 
 	return (
 		<div className={ cn(
@@ -74,30 +76,36 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 
 				{ isVisuallyAvailable ? (
 					<div className="flex items-center gap-3 ml-auto shrink-0">
-						<VersionDisplay
-							feature={ feature }
-							pendingAction={ pendingAction }
-							installableBusy={ installableBusy }
-							upgradeLabel={ licenseBadgeType === 'legacy'
-								? __( 'Upgrade your license to receive updates and support.', '%TEXTDOMAIN%' )
-								: undefined
-							}
-							onUpdate={ licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate }
-						/>
-						<StatusBadge status={ badgeStatus } />
-						{ showSwitch && (
-							<Switch
-								checked={ switchChecked }
-								onCheckedChange={ handleToggle }
-								disabled={ !! pendingAction || installableBusy || ( licenseBadgeType === 'revoked' && ! switchChecked ) }
-								aria-label={
-									switchChecked
-										? /* translators: %s is the name of the feature to disable */
-										  sprintf( __( 'Disable %s', '%TEXTDOMAIN%' ), feature.name )
-										: /* translators: %s is the name of the feature to enable */
-										  sprintf( __( 'Enable %s', '%TEXTDOMAIN%' ), feature.name )
-								}
-							/>
+						{ isInstallableFeature( feature ) ? (
+							<>
+								<VersionDisplay
+									feature={ feature }
+									pendingAction={ pendingAction }
+									installableBusy={ installableBusy }
+									upgradeLabel={ licenseBadgeType === 'legacy'
+										? __( 'Upgrade your license to receive updates and support.', '%TEXTDOMAIN%' )
+										: undefined
+									}
+									onUpdate={ licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate }
+								/>
+								<StatusBadge status={ badgeStatus } />
+								{ showSwitch && (
+									<Switch
+										checked={ switchChecked }
+										onCheckedChange={ handleToggle }
+										disabled={ !! pendingAction || installableBusy || ( licenseBadgeType === 'revoked' && ! switchChecked ) }
+										aria-label={
+											switchChecked
+												? /* translators: %s is the name of the feature to disable */
+												  sprintf( __( 'Disable %s', '%TEXTDOMAIN%' ), feature.name )
+												: /* translators: %s is the name of the feature to enable */
+												  sprintf( __( 'Enable %s', '%TEXTDOMAIN%' ), feature.name )
+										}
+									/>
+								) }
+							</>
+						) : (
+							<StatusBadge status={ badgeStatus } />
 						) }
 					</div>
 				) : (

@@ -84,6 +84,20 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 
 	const [ pendingAction, setPendingAction ] = useState<PendingAction>( null );
 
+	// Non-installable features (services) have no install/toggle/update lifecycle.
+	if ( ! isInstallableFeature( feature ) ) {
+		return {
+			pendingAction:    null,
+			installableBusy:  false,
+			badgeStatus:      'included' as FeatureStatus,
+			showSwitch:       false,
+			switchChecked:    false,
+			licenseBadgeType,
+			handleToggle:     async () => {},
+			handleUpdate:     async () => {},
+		};
+	}
+
 	const featureEnabled   = feature.is_enabled;
 	const featureInstalled = feature.installed_version !== null;
 
