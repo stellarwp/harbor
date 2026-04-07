@@ -54,6 +54,7 @@ export const enableFeature =
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
+			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
@@ -85,6 +86,7 @@ export const disableFeature =
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
+			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
@@ -116,6 +118,7 @@ export const updateFeature =
 				method: 'POST',
 			});
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
+			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
