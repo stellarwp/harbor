@@ -4037,7 +4037,7 @@ function useFeatureRow(feature) {
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
 
   // Non-installable features (services) have no install/toggle/update lifecycle.
-  if (!(0,_types_utils__WEBPACK_IMPORTED_MODULE_7__.isInstallableFeature)(feature)) {
+  if (!(0,_types_utils__WEBPACK_IMPORTED_MODULE_8__.isInstallableFeature)(feature)) {
     return {
       pendingAction: null,
       installableBusy: false,
