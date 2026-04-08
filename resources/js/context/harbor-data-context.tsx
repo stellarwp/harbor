@@ -13,6 +13,7 @@
  */
 import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
 import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
 import { store as harborStore } from '@/store';
 import useResolvableSelect from '@/hooks/use-resolvable-select/use-resolvable-select';
 import HarborError from '@/errors/harbor-error';
@@ -91,6 +92,24 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
             lastErrorCodesRef.current = [];
         }
     }, [ result, addError, removeError ] );
+
+    const licenseError = useSelect(
+        ( select ) => select( harborStore ).getLicenseError(),
+        []
+    );
+
+    const lastLicenseErrorCodeRef = useRef<string | null>( null );
+
+    useEffect( () => {
+        if ( licenseError !== null ) {
+            const error = new HarborError( ErrorCode.LicenseValidateFailed, licenseError.message );
+            lastLicenseErrorCodeRef.current = error.code;
+            addError( error );
+        } else if ( lastLicenseErrorCodeRef.current !== null ) {
+            removeError( lastLicenseErrorCodeRef.current );
+            lastLicenseErrorCodeRef.current = null;
+        }
+    }, [ licenseError, addError, removeError ] );
 
     return (
         <HarborDataContext.Provider value={ { isLoading } }>

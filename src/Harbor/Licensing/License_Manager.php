@@ -81,22 +81,11 @@ class License_Manager {
 	/**
 	 * Get the unified license key.
 	 *
-	 * Checks the repository first. If no key is stored, checks the product
-	 * registry for an embedded key and auto-stores the first one found.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @return string|null The license key, or null if none exists.
 	 */
 	public function get_key(): ?string {
-		$key = $this->repository->get_key();
-
-		if ( $key !== null ) {
-			return $key;
-		}
-
-		$this->store_embedded_key_if_present();
-
 		return $this->repository->get_key();
 	}
 
@@ -453,7 +442,16 @@ class License_Manager {
 			$catalog = $this->client->products()->catalog( $key, $domain );
 			return array_map( [ Product_Entry::class, 'from_catalog_entry' ], $catalog->products->all() );
 		} catch ( NotFoundException $e ) {
-			return new WP_Error( Error_Code::INVALID_KEY, $e->getMessage(), [ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ] );
+			return new WP_Error(
+				Error_Code::INVALID_KEY,
+				sprintf(
+					/* translators: 1: the license key, 2: the error message from the licensing server */
+					__( 'License key "%1$s": %2$s', '%TEXTDOMAIN%' ),
+					$key,
+					$e->getMessage()
+				),
+				[ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ]
+			);
 		} catch ( ApiErrorExceptionInterface $e ) {
 			return new WP_Error( $e->errorCode(), $e->getMessage(), array_merge( [ 'status' => $e->statusCode() ], $e->errorPayLoad() ?? [] ) );
 		} catch ( \Throwable $e ) {

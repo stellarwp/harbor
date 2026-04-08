@@ -202,14 +202,31 @@ final class License_ControllerTest extends HarborTestCase {
 		$this->assertNotEmpty( $data['products'] );
 	}
 
-	public function test_refresh_returns_error_when_no_key_stored(): void {
+	public function test_refresh_returns_empty_response_when_no_key_stored(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
 		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
 
-		$this->assertSame( 422, $response->get_status() );
-		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertNull( $data['key'] );
+		$this->assertSame( [], $data['products'] );
+	}
+
+	public function test_refresh_returns_key_with_empty_products_when_key_invalid(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ) );
+
+		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
+		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
+		$this->assertSame( [], $data['products'] );
 	}
 
 	public function test_refresh_requires_manage_options(): void {
@@ -351,22 +368,23 @@ final class License_ControllerTest extends HarborTestCase {
 	// Error throttling
 	// -------------------------------------------------------------------------
 
-	public function test_get_returns_error_when_throttled(): void {
+	public function test_get_returns_key_with_empty_products_when_key_invalid(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
 		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
 
-		// Write error state at a fixed time, then advance within the TTL.
+		// Simulate a stored INVALID_KEY failure (e.g. from a previous failed API call).
 		$this->set_fn_return( 'time', 1000000 );
 		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ) );
 		$this->set_fn_return( 'time', 1000030 );
 
 		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/license' );
 		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
 
-		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
-		$this->assertSame( 'API failure', $response->get_data()['message'] );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
+		$this->assertSame( [], $data['products'] );
 	}
 
 	public function test_store_returns_error_when_throttled(): void {

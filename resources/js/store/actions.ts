@@ -206,6 +206,9 @@ export const refreshLicense =
 			});
 			dispatch({ type: 'REFRESH_LICENSE_FINISHED', license: result });
 			dispatch.invalidateResolution('getFeatures', []);
+			if ( result.error ) {
+				return new HarborError( ErrorCode.LicenseValidateFailed, result.error.message );
+			}
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(

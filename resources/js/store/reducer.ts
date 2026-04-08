@@ -171,7 +171,7 @@ function features(
 // ---------------------------------------------------------------------------
 
 const LICENSE_DEFAULT: LicenseState = {
-	license:      { key: null, products: [] },
+	license:      { key: null, products: [], error: null },
 	isStoring:    false,
 	isDeleting:   false,
 	isRefreshing: false,
@@ -228,7 +228,7 @@ function license(
 			return {
 				...state,
 				isDeleting: false,
-				license: { key: null, products: [] },
+				license: { key: null, products: [], error: null },
 			};
 		}
 

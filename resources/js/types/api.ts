@@ -375,6 +375,11 @@ export interface LicenseProduct {
  *
  * @since 1.0.0
  */
+export interface LicenseError {
+    code: string;
+    message: string;
+}
+
 export interface License {
     /**
      * The stored unified license key, or null if none is set.
@@ -384,4 +389,8 @@ export interface License {
      * Licensed products associated with this key.
      */
     products: LicenseProduct[];
+    /**
+     * An error encountered while fetching the license, or null if none.
+     */
+    error: LicenseError | null;
 }
