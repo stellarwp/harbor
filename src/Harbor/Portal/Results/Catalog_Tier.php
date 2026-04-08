@@ -69,7 +69,7 @@ final class Catalog_Tier {
 	public static function from_array( array $data ): self {
 		return new self(
 			[
-				'slug'         => Cast::to_string( $data['tier_slug'] ?? '' ),
+				'slug'         => Cast::to_string( $data['tier_slug'] ?? $data['slug'] ?? '' ),
 				'name'         => Cast::to_string( $data['name'] ?? '' ),
 				'rank'         => Cast::to_int( $data['rank'] ?? 0 ),
 				'price'        => Cast::to_int( $data['price'] ?? 0 ),

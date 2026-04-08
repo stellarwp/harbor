@@ -132,6 +132,13 @@ final class Product_CatalogTest extends HarborTestCase {
 		$this->assertSame( 'kad-blocks-pro', $result['features'][0]['slug'] );
 	}
 
+	public function test_round_trip(): void {
+		$catalog = Product_Catalog::from_array( $this->valid_data );
+		$second  = Product_Catalog::from_array( $catalog->to_array() );
+
+		$this->assertSame( $catalog->to_array(), $second->to_array() );
+	}
+
 	public function test_tier_rank_ordering(): void {
 		$catalog = Product_Catalog::from_array( $this->valid_data );
 		$tiers   = $catalog->get_tiers();

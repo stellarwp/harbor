@@ -1978,7 +1978,7 @@
       {
         "slug": "promoter",
         "kind": "service",
-        "minimum_tier": "the-events-calendar:elite",
+        "minimum_tier": "the-events-calendar-agency",
         "plugin_file": null,
         "wporg_slug": null,
         "version": "",
@@ -1994,7 +1994,7 @@
       {
         "slug": "assigned-seating",
         "kind": "service",
-        "minimum_tier": "the-events-calendar:elite",
+        "minimum_tier": "the-events-calendar-agency",
         "plugin_file": null,
         "wporg_slug": null,
         "version": "",

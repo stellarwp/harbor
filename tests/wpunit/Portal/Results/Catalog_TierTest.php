@@ -45,6 +45,13 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( 'https://example.com/checkout/?add-to-cart=123', $result['purchase_url'] );
 	}
 
+	public function test_round_trip(): void {
+		$tier   = Catalog_Tier::from_array( $this->valid_data );
+		$second = Catalog_Tier::from_array( $tier->to_array() );
+
+		$this->assertSame( $tier->to_array(), $second->to_array() );
+	}
+
 	public function test_missing_fields_default(): void {
 		$tier = Catalog_Tier::from_array( [] );
 
