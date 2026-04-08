@@ -118,7 +118,7 @@ export function LicenseKeyInput( {
 					if ( localError ) setLocalError( null );
 				} }
 				onKeyDown={ ( e ) => e.key === 'Enter' && canModifyLicense && handleActivate() }
-				className="flex-1 font-mono uppercase"
+				className="flex-1 text-xs font-mono uppercase"
 				aria-invalid={ !! localError }
 				aria-describedby={ localError ? 'license-key-error' : undefined }
 				disabled={ ! canModifyLicense }
@@ -148,7 +148,7 @@ export function LicenseKeyInput( {
 				<Input
 					readOnly
 					value={ currentKey }
-					className="flex-1 font-mono uppercase bg-muted/40 cursor-default select-all"
+					className="flex-1 text-xs font-mono uppercase bg-muted/40 cursor-default select-all"
 					tabIndex={ -1 }
 				/>
 				<button
