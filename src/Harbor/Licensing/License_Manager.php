@@ -205,8 +205,10 @@ class License_Manager {
 
 		$collection = Product_Collection::from_array( $result );
 
-		$this->repository->set_products( $collection );
-
+		// Store the key before the products. store_key() fires the
+		// unified_license_key_changed action, which deletes cached
+		// products and catalog data. Storing products after ensures
+		// the fresh collection is not immediately wiped.
 		if ( ! $this->repository->store_key( $key, $network ) ) {
 			static::debug_log( 'Failed to persist license key to repository.' );
 
@@ -216,6 +218,8 @@ class License_Manager {
 				[ 'status' => 500 ]
 			);
 		}
+
+		$this->repository->set_products( $collection );
 
 		static::debug_log( 'License key validated and stored successfully.' );
 
