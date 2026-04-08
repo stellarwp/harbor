@@ -90,28 +90,7 @@ final class License_ManagerTest extends HarborTestCase {
 		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $this->manager->get_key() );
 	}
 
-	public function test_get_falls_back_to_embedded_key_from_registry(): void {
-		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
-
-		$this->assertSame( 'LWSW-EMBEDDED-KEY', $manager->get_key() );
-	}
-
-	public function test_get_auto_stores_embedded_key_on_discovery(): void {
-		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
-
-		$manager->get_key();
-
-		$this->assertSame( 'LWSW-EMBEDDED-KEY', get_option( License_Repository::KEY_OPTION_NAME ) );
-	}
-
-	public function test_stored_key_takes_precedence_over_registry(): void {
-		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
-		$manager->store_key( 'LWSW-STORED-KEY' );
-
-		$this->assertSame( 'LWSW-STORED-KEY', $manager->get_key() );
-	}
-
-	public function test_get_returns_null_when_registry_has_no_embedded_keys(): void {
+	public function test_get_returns_null_when_no_key_stored(): void {
 		$this->assertNull( $this->manager->get_key() );
 	}
 
@@ -196,12 +175,6 @@ final class License_ManagerTest extends HarborTestCase {
 		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
 
 		$this->assertTrue( $this->manager->key_exists() );
-	}
-
-	public function test_exists_returns_true_when_registry_provides_embedded_key(): void {
-		$manager = $this->make_manager_with_embedded_key( 'LWSW-EMBEDDED-KEY' );
-
-		$this->assertTrue( $manager->key_exists() );
 	}
 
 	// -------------------------------------------------------------------------

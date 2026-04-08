@@ -3343,13 +3343,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
-/* harmony import */ var _hooks_use_resolvable_select_use_resolvable_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/hooks/use-resolvable-select/use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
-/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
-/* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
-/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
+/* harmony import */ var _hooks_use_resolvable_select_use_resolvable_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/hooks/use-resolvable-select/use-resolvable-select */ "./resources/js/hooks/use-resolvable-select/use-resolvable-select.ts");
+/* harmony import */ var _errors_harbor_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/errors/harbor-error */ "./resources/js/errors/harbor-error.ts");
+/* harmony import */ var _errors_error_code__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/errors/error-code */ "./resources/js/errors/error-code.ts");
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
 /**
  * Harbor admin screen data context.
  *
@@ -3371,6 +3373,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 const HarborDataContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   isLoading: true
 });
@@ -3380,7 +3383,7 @@ function findErrors(results) {
   for (const key in results) {
     const entry = results[key];
     if (entry.status === 'ERROR') {
-      errors.push(_errors_harbor_error__WEBPACK_IMPORTED_MODULE_4__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_5__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your data.', '%TEXTDOMAIN%')));
+      errors.push(_errors_harbor_error__WEBPACK_IMPORTED_MODULE_5__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_6__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your data.', '%TEXTDOMAIN%')));
     }
   }
   return errors;
@@ -3395,13 +3398,13 @@ function HarborDataProvider({
   const {
     addError,
     removeError
-  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__.useErrorModal)();
+  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_7__.useErrorModal)();
   const lastErrorCodesRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)([]);
-  const result = (0,_hooks_use_resolvable_select_use_resolvable_select__WEBPACK_IMPORTED_MODULE_3__["default"])(resolve => ({
-    license: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLicenseKey(),
-    features: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getFeatures(),
-    catalog: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getCatalog(),
-    legacyLicenses: resolve(_store__WEBPACK_IMPORTED_MODULE_2__.store).getLegacyLicenses()
+  const result = (0,_hooks_use_resolvable_select_use_resolvable_select__WEBPACK_IMPORTED_MODULE_4__["default"])(resolve => ({
+    license: resolve(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLicenseKey(),
+    features: resolve(_store__WEBPACK_IMPORTED_MODULE_3__.store).getFeatures(),
+    catalog: resolve(_store__WEBPACK_IMPORTED_MODULE_3__.store).getCatalog(),
+    legacyLicenses: resolve(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLegacyLicenses()
   }), []);
   const hasEverResolvedRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
     license: false,
@@ -3425,7 +3428,19 @@ function HarborDataProvider({
       lastErrorCodesRef.current = [];
     }
   }, [result, addError, removeError]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HarborDataContext.Provider, {
+  const licenseError = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLicenseError(), []);
+  const lastLicenseErrorCodeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (licenseError !== null) {
+      const error = new _errors_harbor_error__WEBPACK_IMPORTED_MODULE_5__["default"](_errors_error_code__WEBPACK_IMPORTED_MODULE_6__.ErrorCode.LicenseValidateFailed, licenseError.message);
+      lastLicenseErrorCodeRef.current = error.code;
+      addError(error);
+    } else if (lastLicenseErrorCodeRef.current !== null) {
+      removeError(lastLicenseErrorCodeRef.current);
+      lastLicenseErrorCodeRef.current = null;
+    }
+  }, [licenseError, addError, removeError]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HarborDataContext.Provider, {
     value: {
       isLoading
     },
@@ -4626,6 +4641,9 @@ const refreshLicense = () => async ({
       license: result
     });
     dispatch.invalidateResolution('getFeatures', []);
+    if (result.error) {
+      return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseValidateFailed, result.error.message);
+    }
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh your license.', '%TEXTDOMAIN%'));
@@ -4955,7 +4973,8 @@ function features(state = FEATURES_DEFAULT, action) {
 const LICENSE_DEFAULT = {
   license: {
     key: null,
-    products: []
+    products: [],
+    error: null
   },
   isStoring: false,
   isDeleting: false,
@@ -5012,7 +5031,8 @@ function license(state = LICENSE_DEFAULT, action) {
           isDeleting: false,
           license: {
             key: null,
-            products: []
+            products: [],
+            error: null
           }
         };
       }
@@ -5211,6 +5231,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
 /* harmony export */   getLegacyLicenseBySlug: () => (/* binding */ getLegacyLicenseBySlug),
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
+/* harmony export */   getLicenseError: () => (/* binding */ getLicenseError),
 /* harmony export */   getLicenseKey: () => (/* binding */ getLicenseKey),
 /* harmony export */   getLicenseProducts: () => (/* binding */ getLicenseProducts),
 /* harmony export */   getProductCatalog: () => (/* binding */ getProductCatalog),
@@ -5343,6 +5364,7 @@ const getCatalogTier = (state, productSlug, tierSlug) => state.catalog.byProduct
 const getLicenseKey = state => state.license.license.key;
 const hasLicense = state => state.license.license.key !== null;
 const getLicenseProducts = state => state.license.license.products;
+const getLicenseError = state => state.license.license.error;
 const isLicenseStoring = state => state.license.isStoring;
 const isLicenseDeleting = state => state.license.isDeleting;
 const isLicenseRefreshing = state => state.license.isRefreshing;

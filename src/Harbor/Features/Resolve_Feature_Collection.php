@@ -10,6 +10,7 @@ use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Licensing\Error_Code as Licensing_Error_Code;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Site\Data;
@@ -127,7 +128,7 @@ class Resolve_Feature_Collection {
 		$products = $this->licensing->get_products( $this->site_data->get_domain() );
 
 		if ( is_wp_error( $products ) ) {
-			if ( $this->licensing->get_key() === null ) {
+			if ( $products->get_error_code() === Licensing_Error_Code::INVALID_KEY ) {
 				$products = new Product_Collection();
 			} else {
 				static::debug_log_wp_error(

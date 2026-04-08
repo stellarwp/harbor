@@ -10,6 +10,7 @@ import type {
 	Feature,
 	FeatureMismatchType,
 	LegacyLicense,
+	LicenseError,
 	LicenseProduct,
 	ProductCatalog,
 } from '@/types/api';
@@ -187,6 +188,9 @@ export const hasLicense = (state: State): boolean =>
 
 export const getLicenseProducts = (state: State): LicenseProduct[] =>
 	state.license.license.products;
+
+export const getLicenseError = (state: State): LicenseError | null =>
+	state.license.license.error;
 
 export const isLicenseStoring = (state: State): boolean =>
 	state.license.isStoring;

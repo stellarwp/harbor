@@ -2,6 +2,7 @@
 
 namespace LiquidWeb\Harbor\API\REST\V1;
 
+use LiquidWeb\Harbor\Licensing\Error_Code;
 use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
@@ -183,6 +184,12 @@ final class License_Controller extends WP_REST_Controller {
 		$products = $this->manager->get_products( $domain );
 
 		if ( is_wp_error( $products ) ) {
+			if ( $products->get_error_code() === Error_Code::INVALID_KEY ) {
+				return new WP_REST_Response(
+					License_Response::make( $key, new Product_Collection(), $products )
+				);
+			}
+
 			return $products;
 		}
 
@@ -207,15 +214,29 @@ final class License_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function refresh_item( $request ) {
+		$key = $this->manager->get_key();
+
+		if ( $key === null ) {
+			return new WP_REST_Response(
+				License_Response::make( null, new Product_Collection() )
+			);
+		}
+
 		$domain   = $this->site_data->get_domain();
 		$products = $this->manager->refresh_products( $domain );
 
 		if ( is_wp_error( $products ) ) {
+			if ( $products->get_error_code() === Error_Code::INVALID_KEY ) {
+				return new WP_REST_Response(
+					License_Response::make( $key, new Product_Collection(), $products )
+				);
+			}
+
 			return $products;
 		}
 
 		return new WP_REST_Response(
-			License_Response::make( $this->manager->get_key(), $products )
+			License_Response::make( $key, $products )
 		);
 	}
 
@@ -391,6 +412,21 @@ final class License_Controller extends WP_REST_Controller {
 								'description' => __( 'Whether the product has a valid license.', '%TEXTDOMAIN%' ),
 								'type'        => 'boolean',
 							],
+						],
+					],
+				],
+				'error'    => [
+					'description' => __( 'An error encountered while fetching the license, or null if none.', '%TEXTDOMAIN%' ),
+					'type'        => [ 'object', 'null' ],
+					'context'     => [ 'view' ],
+					'properties'  => [
+						'code'    => [
+							'description' => __( 'The error code.', '%TEXTDOMAIN%' ),
+							'type'        => 'string',
+						],
+						'message' => [
+							'description' => __( 'The error message.', '%TEXTDOMAIN%' ),
+							'type'        => 'string',
 						],
 					],
 				],
