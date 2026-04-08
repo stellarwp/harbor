@@ -1,24 +1,24 @@
 /**
- * License section: header, key input, licensed-product cards, and edit dialog.
+ * License section: header, key input, and licensed-product cards.
  *
  * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { KeyRound, Loader2, Pencil, RefreshCw, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogHeader, DialogContent, DialogFooter } from '@/components/ui/dialog';
+import { KeyRound, Loader2, RefreshCw } from 'lucide-react';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
+import { LicenseKeyInputSkeleton } from '@/components/atoms/LicenseKeyInputSkeleton';
 import { LicenseKeyInput } from '@/components/molecules/LicenseKeyInput';
 import { LicenseProductCard } from '@/components/molecules/LicenseProductCard';
 import { PRODUCTS } from '@/data/products';
 import type { LicenseProduct } from '@/types/api';
+import type HarborError from '@/errors/harbor-error';
 
 interface LicenseSectionProps {
     licenseKey:      string | null;
     licenseProducts: LicenseProduct[];
     tierNameMap:     Record<string, string>;
-    onRemove:        () => Promise<void>;
+    onRemove:        () => Promise<HarborError | null>;
     onRefresh:       () => Promise<void>;
     isRefreshing:    boolean;
     isLoading:       boolean;
@@ -53,13 +53,16 @@ function LicenseSectionSkeleton() {
  * @since 1.0.0
  */
 export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading }: LicenseSectionProps ) {
-    const [ editingOpen, setEditingOpen ] = useState( false );
+    const [ isEditing, setIsEditing ] = useState( false );
 
     const hasLicense = licenseKey !== null;
 
-    const handleRemove = async () => {
-        await onRemove();
-        setEditingOpen( false );
+    const handleRemove = async (): Promise<HarborError | null> => {
+        const error = await onRemove();
+        if ( ! error ) {
+            setIsEditing( false );
+        }
+        return error;
     };
 
     return (
@@ -68,46 +71,48 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'License', '%TEXTDOMAIN%' ) }
                 action={ hasLicense && (
-                    <div className="flex items-center gap-4">
-                        <button
-                            type="button"
-                            onClick={ onRefresh }
-                            disabled={ isRefreshing }
-                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            { isRefreshing
-                                ? <Loader2 className="w-3 h-3 animate-spin" />
-                                : <RefreshCw className="w-3 h-3" />
-                            }
-                            { isRefreshing
-                                ? __( 'Refreshing...', '%TEXTDOMAIN%' )
-                                : __( 'Refresh', '%TEXTDOMAIN%' )
-                            }
-                        </button>
-                        <button
-                            type="button"
-                            onClick={ () => setEditingOpen( true ) }
-                            className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75"
-                        >
-                            <Pencil className="w-3 h-3" />
-                            { __( 'Edit', '%TEXTDOMAIN%' ) }
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={ onRefresh }
+                        disabled={ isRefreshing }
+                        className="flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        { isRefreshing
+                            ? <Loader2 className="w-3 h-3 animate-spin" />
+                            : <RefreshCw className="w-3 h-3" />
+                        }
+                        { isRefreshing
+                            ? __( 'Refreshing...', '%TEXTDOMAIN%' )
+                            : __( 'Refresh', '%TEXTDOMAIN%' )
+                        }
+                    </button>
                 ) }
             />
 
-            { isLoading && <LicenseSectionSkeleton /> }
-
-            { ! isLoading && ! hasLicense && (
-                <div className="space-y-2">
-                    <LicenseKeyInput />
-                    <p className="text-xs text-muted-foreground leading-relaxed mt-0 mb-0">
-                        { __( 'Enter your license key to unlock features.', '%TEXTDOMAIN%' ) }
-                    </p>
-                </div>
+            { isLoading ? (
+                <>
+                    <LicenseKeyInputSkeleton />
+                    <LicenseSectionSkeleton />
+                </>
+            ) : (
+                <>
+                    <LicenseKeyInput
+                        currentKey={ licenseKey }
+                        isEditing={ isEditing }
+                        onEdit={ () => setIsEditing( true ) }
+                        onCancel={ () => setIsEditing( false ) }
+                        onRemove={ handleRemove }
+                        onSuccess={ () => setIsEditing( false ) }
+                    />
+                    { ! hasLicense && (
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-0 mb-0">
+                            { __( 'Enter your license key to unlock features.', '%TEXTDOMAIN%' ) }
+                        </p>
+                    ) }
+                </>
             ) }
 
-            { hasLicense && licenseProducts.length > 0 && (
+            { ! isLoading && hasLicense && licenseProducts.length > 0 && (
                 <div className="space-y-3">
                     { licenseProducts.map( ( lp ) => (
                         <LicenseProductCard
@@ -119,43 +124,6 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                     ) ) }
                 </div>
             ) }
-
-            <Dialog
-                open={ editingOpen }
-                onClose={ () => setEditingOpen( false ) }
-                maxWidth="max-w-sm"
-            >
-                <DialogHeader
-                    title={ __( 'Edit License', '%TEXTDOMAIN%' ) }
-                    description={ __( 'View or remove your license key.', '%TEXTDOMAIN%' ) }
-                    onClose={ () => setEditingOpen( false ) }
-                />
-                <DialogContent>
-                    <input
-                        readOnly
-                        value={ licenseKey ?? '' }
-                        className="w-full rounded-md border bg-muted/40 px-3 py-2 text-sm font-mono text-foreground focus:outline-none select-all"
-                    />
-                </DialogContent>
-                <DialogFooter className="justify-between">
-                    <Button
-                        variant="destructive"
-                        size="sm"
-                        className="gap-1.5"
-                        onClick={ handleRemove }
-                    >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        { __( 'Remove License', '%TEXTDOMAIN%' ) }
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={ () => setEditingOpen( false ) }
-                    >
-                        { __( 'Close', '%TEXTDOMAIN%' ) }
-                    </Button>
-                </DialogFooter>
-            </Dialog>
         </div>
     );
 }
