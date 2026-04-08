@@ -34,7 +34,7 @@ interface LicenseKeyInputProps {
 	/** Called when the user confirms Remove. Returns null on success, HarborError on failure. */
 	onRemove:    () => Promise<HarborError | null>;
 	/** Called on successful activation so the parent can respond (e.g. exit edit mode). */
-	onSuccess?:  () => void;
+	onSuccess:   () => void;
 	/** When set, fills the input with this value (e.g. from a test-key cheat-sheet). */
 	prefillKey?: string;
 }
@@ -97,7 +97,7 @@ export function LicenseKeyInput( {
 		} else {
 			addToast( __( 'License activated successfully.', '%TEXTDOMAIN%' ), 'success' );
 			setKey( '' );
-			onSuccess?.();
+			onSuccess();
 		}
 	};
 

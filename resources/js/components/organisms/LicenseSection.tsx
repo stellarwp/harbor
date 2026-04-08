@@ -102,6 +102,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                         onEdit={ () => setIsEditing( true ) }
                         onCancel={ () => setIsEditing( false ) }
                         onRemove={ handleRemove }
+                        onSuccess={ () => setIsEditing( false ) }
                     />
                     { ! hasLicense && (
                         <p className="text-xs text-muted-foreground leading-relaxed mt-0 mb-0">
