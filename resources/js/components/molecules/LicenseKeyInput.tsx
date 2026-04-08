@@ -113,7 +113,7 @@ export function LicenseKeyInput( {
 		<div className="flex gap-2">
 			<Input
 				id="license-key-input"
-				placeholder={ __( 'e.g. LWSW-UNIFIED-PRO-2025', '%TEXTDOMAIN%' ) }
+				placeholder="LWSW-****-****-****-****-****"
 				value={ key }
 				onChange={ ( e ) => {
 					setKey( e.target.value.toUpperCase() );
