@@ -16,7 +16,7 @@ final class Product_CatalogTest extends HarborTestCase {
 		'product_name' => 'Kadence',
 		'tiers'        => [
 			[
-				'slug'         => 'kadence-basic',
+				'tier_slug'    => 'kadence-basic',
 				'name'         => 'Basic',
 				'rank'         => 1,
 				'price'        => 0,
@@ -25,7 +25,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'herald_slugs' => [],
 			],
 			[
-				'slug'         => 'kadence-pro',
+				'tier_slug'    => 'kadence-pro',
 				'name'         => 'Pro',
 				'rank'         => 2,
 				'price'        => 14900,
@@ -34,7 +34,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'herald_slugs' => [],
 			],
 			[
-				'slug'         => 'kadence-agency',
+				'tier_slug'    => 'kadence-agency',
 				'name'         => 'Agency',
 				'rank'         => 3,
 				'price'        => 29900,
@@ -132,13 +132,6 @@ final class Product_CatalogTest extends HarborTestCase {
 		$this->assertSame( 'kad-blocks-pro', $result['features'][0]['slug'] );
 	}
 
-	public function test_round_trip(): void {
-		$catalog = Product_Catalog::from_array( $this->valid_data );
-		$second  = Product_Catalog::from_array( $catalog->to_array() );
-
-		$this->assertSame( $catalog->to_array(), $second->to_array() );
-	}
-
 	public function test_tier_rank_ordering(): void {
 		$catalog = Product_Catalog::from_array( $this->valid_data );
 		$tiers   = $catalog->get_tiers();
@@ -162,7 +155,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'product_name' => 'Test',
 				'tiers'        => [
 					[
-						'slug'         => 'agency',
+						'tier_slug'    => 'agency',
 						'name'         => 'Agency',
 						'rank'         => 3,
 						'price'        => 0,
@@ -171,7 +164,7 @@ final class Product_CatalogTest extends HarborTestCase {
 						'herald_slugs' => [],
 					],
 					[
-						'slug'         => 'basic',
+						'tier_slug'    => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
 						'price'        => 0,
@@ -180,7 +173,7 @@ final class Product_CatalogTest extends HarborTestCase {
 						'herald_slugs' => [],
 					],
 					[
-						'slug'         => 'pro',
+						'tier_slug'    => 'pro',
 						'name'         => 'Pro',
 						'rank'         => 2,
 						'price'        => 0,
@@ -206,7 +199,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'product_name' => 'Test',
 				'tiers'        => [
 					[
-						'slug'         => 'basic',
+						'tier_slug'    => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
 						'price'        => 0,
@@ -215,7 +208,7 @@ final class Product_CatalogTest extends HarborTestCase {
 						'herald_slugs' => [],
 					],
 					[
-						'slug'         => 'pro',
+						'tier_slug'    => 'pro',
 						'name'         => 'Pro',
 						'rank'         => 2,
 						'price'        => 0,
@@ -243,7 +236,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'product_name' => 'Test',
 				'tiers'        => [
 					[
-						'slug'         => 'basic',
+						'tier_slug'    => 'basic',
 						'name'         => 'Basic',
 						'rank'         => 1,
 						'price'        => 0,

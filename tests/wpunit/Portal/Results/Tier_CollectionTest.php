@@ -12,7 +12,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		$collection = new Tier_Collection();
 		$basic      = Catalog_Tier::from_array(
 			[
-				'slug'         => 'basic',
+				'tier_slug'    => 'basic',
 				'name'         => 'Basic',
 				'rank'         => 1,
 				'price'        => 0,
@@ -23,7 +23,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		);
 		$pro        = Catalog_Tier::from_array(
 			[
-				'slug'         => 'pro',
+				'tier_slug'    => 'pro',
 				'name'         => 'Pro',
 				'rank'         => 2,
 				'price'        => 0,
@@ -45,7 +45,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		$collection = new Tier_Collection();
 		$first      = Catalog_Tier::from_array(
 			[
-				'slug'         => 'basic',
+				'tier_slug'    => 'basic',
 				'name'         => 'First',
 				'rank'         => 1,
 				'price'        => 0,
@@ -56,7 +56,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		);
 		$second     = Catalog_Tier::from_array(
 			[
-				'slug'         => 'basic',
+				'tier_slug'    => 'basic',
 				'name'         => 'Second',
 				'rank'         => 1,
 				'price'        => 0,
@@ -84,7 +84,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		$collection->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'basic',
+					'tier_slug'    => 'basic',
 					'name'         => 'Basic',
 					'rank'         => 1,
 					'price'        => 0,
@@ -97,7 +97,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		$collection->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'pro',
+					'tier_slug'    => 'pro',
 					'name'         => 'Pro',
 					'rank'         => 2,
 					'price'        => 0,
@@ -125,7 +125,7 @@ final class Tier_CollectionTest extends HarborTestCase {
 		$collection->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'         => 'basic',
+					'tier_slug'    => 'basic',
 					'name'         => 'Basic',
 					'rank'         => 1,
 					'price'        => 0,

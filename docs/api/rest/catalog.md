@@ -16,7 +16,8 @@ Returns the full product catalog. Each entry represents a product family with it
     "product_slug": "kadence",
     "tiers": [
       {
-        "slug": "kadence-basic",
+        "slug": "kadence:basic",
+        "tier_slug": "basic",
         "name": "Basic",
         "rank": 1,
         "price": 14900,
@@ -26,7 +27,8 @@ Returns the full product catalog. Each entry represents a product family with it
         "purchase_url": "https://example.com/checkout/?add-to-cart=123"
       },
       {
-        "slug": "kadence-pro",
+        "slug": "kadence:pro",
+        "tier_slug": "pro",
         "name": "Pro",
         "rank": 2,
         "price": 19900,

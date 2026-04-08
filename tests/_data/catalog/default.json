@@ -5,44 +5,44 @@
     "product_name": "Kadence",
     "tiers": [
       {
-        "slug": "kadence-free",
         "name": "Free",
         "rank": 0,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "kadence-free"
       },
       {
-        "slug": "kadence-basic",
         "name": "Basic",
         "rank": 1,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "kadence-basic"
       },
       {
-        "slug": "kadence-pro",
         "name": "Pro",
         "rank": 2,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "kadence-pro"
       },
       {
-        "slug": "kadence-agency",
         "name": "Agency",
         "rank": 3,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "kadence-agency"
       }
     ],
     "features": [
@@ -120,7 +120,7 @@
       {
         "minimum_tier": "kadence-pro",
         "name": "Shop Kit",
-        "description": "WooCommerce enhancements — product galleries, swatches, quick view, and more.",
+        "description": "WooCommerce enhancements \u2014 product galleries, swatches, quick view, and more.",
         "category": "woocommerce",
         "authors": [
           "KadenceWP"
@@ -598,34 +598,34 @@
     "product_name": "Learndash",
     "tiers": [
       {
-        "slug": "learndash-basic",
         "name": "Essentials",
         "rank": 1,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "learndash-basic"
       },
       {
-        "slug": "learndash-pro",
         "name": "Pro",
         "rank": 2,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "learndash-pro"
       },
       {
-        "slug": "learndash-elite",
         "name": "Elite",
         "rank": 3,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "learndash-elite"
       }
     ],
     "features": [
@@ -1159,44 +1159,44 @@
     "product_name": "Give",
     "tiers": [
       {
-        "slug": "give-free",
         "name": "Free",
         "rank": 0,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "give-free"
       },
       {
-        "slug": "give-basic",
         "name": "Basic",
         "rank": 1,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "give-basic"
       },
       {
-        "slug": "give-pro",
         "name": "Pro",
         "rank": 2,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "give-pro"
       },
       {
-        "slug": "give-agency",
         "name": "Agency",
         "rank": 3,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "give-agency"
       }
     ],
     "features": [
@@ -1766,44 +1766,44 @@
     "product_name": "The Events Calendar",
     "tiers": [
       {
-        "slug": "the-events-calendar-free",
         "name": "Free",
         "rank": 0,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "the-events-calendar-free"
       },
       {
-        "slug": "the-events-calendar-basic",
         "name": "Basic",
         "rank": 1,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "the-events-calendar-basic"
       },
       {
-        "slug": "the-events-calendar-pro",
         "name": "Pro",
         "rank": 2,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "the-events-calendar-pro"
       },
       {
-        "slug": "the-events-calendar-agency",
         "name": "Agency",
         "rank": 3,
         "price": 0,
         "currency": "USD",
         "features": [],
         "herald_slugs": [],
-        "purchase_url": ""
+        "purchase_url": "",
+        "tier_slug": "the-events-calendar-agency"
       }
     ],
     "features": [
