@@ -13,7 +13,7 @@
  *
  * @since 1.0.0
  */
-export type FeatureType = 'plugin' | 'theme';
+export type FeatureType = 'plugin' | 'theme' | 'service';
 
 /**
  * Base properties shared by all feature types.
@@ -115,11 +115,30 @@ export interface ThemeFeature extends BaseFeature {
 }
 
 /**
+ * A non-installable service feature.
+ *
+ * Services are present-or-not: they have no artifact to install, no
+ * version to track, and no toggle. The backend sets is_enabled = is_available.
+ *
+ * @since 1.0.0
+ */
+export interface ServiceFeature extends BaseFeature {
+    type: 'service';
+    /**
+     * Services have no installable artifact. These fields are marked `never`
+     * so TypeScript catches accidental access after narrowing.
+     */
+    version?: never;
+    installed_version?: never;
+    update_version?: never;
+}
+
+/**
  * Discriminated union of all feature types as returned by the REST API.
  *
  * @since 1.0.0
  */
-export type Feature = PluginFeature | ThemeFeature;
+export type Feature = PluginFeature | ThemeFeature | ServiceFeature;
 
 /**
  * Features that trigger WordPress install/activate/deactivate operations.
@@ -178,10 +197,6 @@ export interface CatalogFeature {
      * WordPress.org slug, or null if not on WordPress.org.
      */
     wporg_slug: string | null;
-    /**
-     * Download URL for the feature archive, or null when unavailable.
-     */
-    download_url: string | null;
     /**
      * Latest version string, or null when unavailable.
      */

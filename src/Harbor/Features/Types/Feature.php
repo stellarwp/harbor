@@ -33,6 +33,18 @@ abstract class Feature {
 	public const TYPE_THEME = 'theme';
 
 	/**
+	 * A feature delivered as an externally managed service (e.g. Promoter).
+	 *
+	 * Service features have no WordPress-side installation or activation.
+	 * They are enabled or disabled exclusively through the Commerce Portal.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const TYPE_SERVICE = 'service';
+
+	/**
 	 * The feature attributes.
 	 *
 	 * @since 1.0.0

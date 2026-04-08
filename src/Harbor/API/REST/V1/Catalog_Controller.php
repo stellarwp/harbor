@@ -236,9 +236,6 @@ final class Catalog_Controller extends WP_REST_Controller {
 							'wporg_slug'        => [
 								'type' => [ 'string', 'null' ],
 							],
-							'download_url'      => [
-								'type' => [ 'string', 'null' ],
-							],
 							'version'           => [
 								'type' => [ 'string', 'null' ],
 							],

@@ -14,6 +14,7 @@ import { UpsellSection } from '@/components/organisms/UpsellSection';
 import { store as harborStore } from '@/store';
 import { PRODUCTS } from '@/data/products';
 import { useToast } from '@/context/toast-context';
+import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
 
 /**
@@ -21,6 +22,7 @@ import { HarborError } from '@/errors';
  */
 export function LicensePanel() {
     const { addToast }      = useToast();
+    const { addError }      = useErrorModal();
     const { deleteLicense, refreshLicense, refreshCatalog } = useDispatch( harborStore );
 
     const { licenseKey, licenseProducts, catalogs, isRefreshing, isLicenseLoading } = useSelect(
@@ -64,7 +66,7 @@ export function LicensePanel() {
     const handleRemove = async (): Promise<HarborError | null> => {
         const result = await deleteLicense();
         if ( result instanceof HarborError ) {
-            addToast( result.message, 'error' );
+            addError( result );
             return result;
         }
         addToast( __( 'License removed.', '%TEXTDOMAIN%' ), 'default' );
@@ -76,10 +78,13 @@ export function LicensePanel() {
             refreshLicense(),
             refreshCatalog(),
         ] );
-        const error = licenseResult ?? catalogResult;
-        if ( error instanceof HarborError ) {
-            addToast( error.message, 'error' );
-        } else {
+        if ( licenseResult instanceof HarborError ) {
+            addError( licenseResult );
+        }
+        if ( catalogResult instanceof HarborError ) {
+            addError( catalogResult );
+        }
+        if ( ! ( licenseResult instanceof HarborError ) && ! ( catalogResult instanceof HarborError ) ) {
             addToast( __( 'License refreshed.', '%TEXTDOMAIN%' ), 'success' );
         }
     };

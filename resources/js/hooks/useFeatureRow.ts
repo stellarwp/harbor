@@ -13,6 +13,7 @@ import { store as harborStore } from '@/store';
 import { getLicenseBadgeType } from '@/lib/feature-utils';
 import type { LicenseBadgeType } from '@/lib/feature-utils';
 import { useToast } from '@/context/toast-context';
+import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
 import type { Feature } from '@/types/api';
 import { isInstallableFeature } from '@/types/utils';
@@ -60,6 +61,7 @@ export interface FeatureRowState {
  */
 export function useFeatureRow( feature: Feature ): FeatureRowState {
 	const { addToast } = useToast();
+	const { addError } = useErrorModal();
 	const { enableFeature, disableFeature, updateFeature } = useDispatch( harborStore );
 
 	const installableBusy = useSelect(
@@ -82,6 +84,20 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 
 	const [ pendingAction, setPendingAction ] = useState<PendingAction>( null );
 
+	// Non-installable features (services) have no install/toggle/update lifecycle.
+	if ( ! isInstallableFeature( feature ) ) {
+		return {
+			pendingAction:    null,
+			installableBusy:  false,
+			badgeStatus:      'included' as FeatureStatus,
+			showSwitch:       false,
+			switchChecked:    false,
+			licenseBadgeType,
+			handleToggle:     async () => {},
+			handleUpdate:     async () => {},
+		};
+	}
+
 	const featureEnabled   = feature.is_enabled;
 	const featureInstalled = feature.installed_version !== null;
 
@@ -90,7 +106,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		if ( checked ) {
 			const result = await enableFeature( feature.slug );
 			if ( result instanceof HarborError ) {
-				addToast( result.message, 'error' );
+				addError( result );
 			} else {
 				/* translators: %s is the name of the feature being enabled */
 				addToast( sprintf( __( '%s enabled', '%TEXTDOMAIN%' ), feature.name ), 'success' );
@@ -98,7 +114,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		} else {
 			const result = await disableFeature( feature.slug );
 			if ( result instanceof HarborError ) {
-				addToast( result.message, 'error' );
+				addError( result );
 			} else {
 				/* translators: %s is the name of the feature being disabled */
 				addToast( sprintf( __( '%s disabled', '%TEXTDOMAIN%' ), feature.name ), 'default' );
@@ -111,7 +127,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		setPendingAction( 'updating' );
 		const result = await updateFeature( feature.slug );
 		if ( result instanceof HarborError ) {
-			addToast( result.message, 'error' );
+			addError( result );
 		} else {
 			/* translators: %s is the name of the feature being updated */
 			addToast( sprintf( __( '%s updated.', '%TEXTDOMAIN%' ), feature.name ), 'success' );

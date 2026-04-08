@@ -40,6 +40,7 @@ final class Error_CodeTest extends HarborTestCase {
 			'UPDATE_NOT_SUPPORTED'           => [ Error_Code::UPDATE_NOT_SUPPORTED, 422 ],
 			'NO_UPDATE_AVAILABLE'            => [ Error_Code::NO_UPDATE_AVAILABLE, 422 ],
 			'UPDATE_FAILED'                  => [ Error_Code::UPDATE_FAILED, 422 ],
+			'FEATURE_NOT_MODIFIABLE'         => [ Error_Code::FEATURE_NOT_MODIFIABLE, 422 ],
 		];
 	}
 

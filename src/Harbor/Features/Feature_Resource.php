@@ -4,6 +4,7 @@ namespace LiquidWeb\Harbor\Features;
 
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 
 /**
@@ -79,13 +80,17 @@ final class Feature_Resource {
 	/**
 	 * Returns the data array for use in REST API responses.
 	 *
-	 * Merges all feature attributes with the transient-sourced update_version.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @return array<string, mixed>
 	 */
 	public function to_array(): array {
+		// Services do not support update_version.
+
+		if ( $this->feature instanceof Service ) {
+			return $this->feature->to_array();
+		}
+
 		return array_merge(
 			$this->feature->to_array(),
 			[ 'update_version' => $this->update_version ]

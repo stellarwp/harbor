@@ -1009,6 +1009,12 @@ function StatusBadge({
       })]
     });
   }
+  if (status === 'included') {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_ui_badge__WEBPACK_IMPORTED_MODULE_5__.Badge, {
+      variant: "success",
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Included', '%TEXTDOMAIN%')
+    });
+  }
   const config = SPAN_CONFIG[status];
   if (config) {
     const showSpinner = status === 'enabling' || status === 'disabling';
@@ -1121,8 +1127,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/VersionDisplay */ "./resources/js/components/molecules/VersionDisplay.tsx");
 /* harmony import */ var _components_ui_switch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/ui/switch */ "./resources/js/components/ui/switch.tsx");
 /* harmony import */ var _hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/hooks/useFeatureRow */ "./resources/js/hooks/useFeatureRow.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
 /**
  * A single feature row in the product feature list.
  *
@@ -1131,6 +1138,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -1164,53 +1172,59 @@ function FeatureRow({
 
   // Legacy-licensed and revoked features are not marked available by the API
   // but should render with the full available layout — controls visible, no muted style.
-  const isVisuallyAvailable = feature.is_available || licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  // This override only applies to installable features (plugins/themes) since
+  // non-installable features (services) have no controls to show.
+  const isVisuallyAvailable = feature.is_available || (0,_types_utils__WEBPACK_IMPORTED_MODULE_11__.isInstallableFeature)(feature) && (licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked');
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
     className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('border-b last:border-b-0', isVisuallyAvailable ? (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('bg-white', pendingAction && 'opacity-75') : 'bg-muted/30'),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "flex items-center gap-3 py-3 px-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         onClick: () => setExpanded(!expanded),
         className: "flex items-center gap-3 min-w-0 cursor-pointer",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Chevron, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Chevron, {
           className: "w-4 h-4 text-muted-foreground shrink-0"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
           slug: feature.slug
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
           className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('font-medium min-w-0 text-sm truncate', !isVisuallyAvailable && 'text-muted-foreground'),
           children: feature.name
-        }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
+        }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
           type: licenseBadgeType
         })]
-      }), isVisuallyAvailable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      }), isVisuallyAvailable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: "flex items-center gap-3 ml-auto shrink-0",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
-          feature: feature,
-          pendingAction: pendingAction,
-          installableBusy: installableBusy,
-          upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to receive updates and support.', '%TEXTDOMAIN%') : undefined,
-          onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
+        children: (0,_types_utils__WEBPACK_IMPORTED_MODULE_11__.isInstallableFeature)(feature) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
+            feature: feature,
+            pendingAction: pendingAction,
+            installableBusy: installableBusy,
+            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to receive updates and support.', '%TEXTDOMAIN%') : undefined,
+            onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
+            status: badgeStatus
+          }), showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_9__.Switch, {
+            checked: switchChecked,
+            onCheckedChange: handleToggle,
+            disabled: !!pendingAction || installableBusy || licenseBadgeType === 'revoked' && !switchChecked,
+            "aria-label": switchChecked ? /* translators: %s is the name of the feature to disable */
+            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
+            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
           status: badgeStatus
-        }), showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_9__.Switch, {
-          checked: switchChecked,
-          onCheckedChange: handleToggle,
-          disabled: !!pendingAction || installableBusy || licenseBadgeType === 'revoked' && !switchChecked,
-          "aria-label": switchChecked ? /* translators: %s is the name of the feature to disable */
-          (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
-          (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
-        })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: "ml-auto shrink-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
           feature: feature,
           upgradeLabel: upgradeTierName ? /* translators: %s is the name of the tier required to receive updates */
           (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade to %s to receive updates and support.', '%TEXTDOMAIN%'), upgradeTierName) : undefined
         })
       })]
-    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
       className: "px-4 pb-3 pl-[2.75rem]",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
         className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('text-sm text-muted-foreground leading-relaxed', isVisuallyAvailable ? '!mt-[0.75em] !mb-0' : 'mt-2 mb-0'),
         children: feature.description
       })
@@ -1403,6 +1417,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -1979,9 +1994,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
 /* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
 /* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
-/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
+/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
 /**
  * License sidebar panel.
  *
@@ -2000,6 +2016,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * @since 1.0.0
  */
@@ -2008,6 +2025,9 @@ function LicensePanel() {
   const {
     addToast
   } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_7__.useToast)();
+  const {
+    addError
+  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_8__.useErrorModal)();
   const {
     deleteLicense,
     refreshLicense,
@@ -2063,16 +2083,19 @@ function LicensePanel() {
   };
   const handleRefresh = async () => {
     const [licenseResult, catalogResult] = await Promise.all([refreshLicense(), refreshCatalog()]);
-    const error = licenseResult ?? catalogResult;
-    if (error instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.HarborError) {
-      addToast(error.message, 'error');
-    } else {
+    if (licenseResult instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError) {
+      addError(licenseResult);
+    }
+    if (catalogResult instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError) {
+      addError(catalogResult);
+    }
+    if (!(licenseResult instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError) && !(catalogResult instanceof _errors__WEBPACK_IMPORTED_MODULE_9__.HarborError)) {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License refreshed.', '%TEXTDOMAIN%'), 'success');
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "sticky top-4 w-[280px] shrink-0 space-y-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_organisms_LicenseSection__WEBPACK_IMPORTED_MODULE_3__.LicenseSection, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_organisms_LicenseSection__WEBPACK_IMPORTED_MODULE_3__.LicenseSection, {
       licenseKey: licenseKey,
       licenseProducts: licenseProducts,
       tierNameMap: tierNameMap,
@@ -2080,7 +2103,7 @@ function LicensePanel() {
       onRefresh: handleRefresh,
       isRefreshing: isRefreshing,
       isLoading: isLicenseLoading
-    }), !isLicenseLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
+    }), !isLicenseLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
       products: upsellProducts,
       upsellUrlMap: upsellUrlMap
     })]
@@ -4029,8 +4052,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
 /* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
-/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
-/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
+/* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
+/* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
 /**
  * Behavior hook for FeatureRow.
  *
@@ -4039,6 +4063,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -4073,11 +4098,14 @@ function useFeatureRow(feature) {
     addToast
   } = (0,_context_toast_context__WEBPACK_IMPORTED_MODULE_5__.useToast)();
   const {
+    addError
+  } = (0,_context_error_modal_context__WEBPACK_IMPORTED_MODULE_6__.useErrorModal)();
+  const {
     enableFeature,
     disableFeature,
     updateFeature
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
-  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => (0,_types_utils__WEBPACK_IMPORTED_MODULE_7__.isInstallableFeature)(feature) && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
+  const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => (0,_types_utils__WEBPACK_IMPORTED_MODULE_8__.isInstallableFeature)(feature) && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
   const isLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
@@ -4085,22 +4113,36 @@ function useFeatureRow(feature) {
   }, [feature.slug, feature.product]);
   const licenseBadgeType = (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.getLicenseBadgeType)(feature, isLegacy);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+
+  // Non-installable features (services) have no install/toggle/update lifecycle.
+  if (!(0,_types_utils__WEBPACK_IMPORTED_MODULE_8__.isInstallableFeature)(feature)) {
+    return {
+      pendingAction: null,
+      installableBusy: false,
+      badgeStatus: 'included',
+      showSwitch: false,
+      switchChecked: false,
+      licenseBadgeType,
+      handleToggle: async () => {},
+      handleUpdate: async () => {}
+    };
+  }
   const featureEnabled = feature.is_enabled;
   const featureInstalled = feature.installed_version !== null;
   const handleToggle = async checked => {
     setPendingAction(checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling');
     if (checked) {
       const result = await enableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_6__.HarborError) {
-        addToast(result.message, 'error');
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_7__.HarborError) {
+        addError(result);
       } else {
         /* translators: %s is the name of the feature being enabled */
         addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('%s enabled', '%TEXTDOMAIN%'), feature.name), 'success');
       }
     } else {
       const result = await disableFeature(feature.slug);
-      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_6__.HarborError) {
-        addToast(result.message, 'error');
+      if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_7__.HarborError) {
+        addError(result);
       } else {
         /* translators: %s is the name of the feature being disabled */
         addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('%s disabled', '%TEXTDOMAIN%'), feature.name), 'default');
@@ -4111,8 +4153,8 @@ function useFeatureRow(feature) {
   const handleUpdate = async () => {
     setPendingAction('updating');
     const result = await updateFeature(feature.slug);
-    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_6__.HarborError) {
-      addToast(result.message, 'error');
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_7__.HarborError) {
+      addError(result);
     } else {
       /* translators: %s is the name of the feature being updated */
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('%s updated.', '%TEXTDOMAIN%'), feature.name), 'success');
@@ -5404,6 +5446,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   isInstallableFeature: () => (/* binding */ isInstallableFeature),
 /* harmony export */   isPluginFeature: () => (/* binding */ isPluginFeature),
+/* harmony export */   isServiceFeature: () => (/* binding */ isServiceFeature),
 /* harmony export */   isThemeFeature: () => (/* binding */ isThemeFeature)
 /* harmony export */ });
 /**
@@ -5417,6 +5460,9 @@ function isPluginFeature(feature) {
 }
 function isThemeFeature(feature) {
   return feature.type === 'theme';
+}
+function isServiceFeature(feature) {
+  return feature.type === 'service';
 }
 function isInstallableFeature(feature) {
   return feature.type === 'plugin' || feature.type === 'theme';

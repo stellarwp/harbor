@@ -13,7 +13,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		'minimum_tier'      => 'kadence-pro',
 		'main_file'         => 'kadence-security-pro/kadence-security-pro.php',
 		'wporg_slug'        => null,
-		'download_url'      => 'https://licensing.stellarwp.com/api/plugins/kadence-security',
 		'version'           => '2.1.0',
 		'release_date'      => '2025-11-15',
 		'changelog'         => '<h4>2.1.0</h4><ul><li>Bug fixes.</li></ul>',
@@ -33,7 +32,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $feature->get_plugin_file() );
 		$this->assertFalse( $feature->is_wporg() );
 		$this->assertNull( $feature->get_wporg_slug() );
-		$this->assertSame( 'https://licensing.stellarwp.com/api/plugins/kadence-security', $feature->get_download_url() );
 		$this->assertSame( 'Kadence Security Pro', $feature->get_name() );
 		$this->assertSame( 'WordPress security hardening and monitoring.', $feature->get_description() );
 		$this->assertSame( 'security', $feature->get_category() );
@@ -53,7 +51,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertSame( 'kadence-pro', $result['minimum_tier'] );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $result['plugin_file'] );
 		$this->assertNull( $result['wporg_slug'] );
-		$this->assertSame( 'https://licensing.stellarwp.com/api/plugins/kadence-security', $result['download_url'] );
 	}
 
 	public function test_round_trip(): void {
@@ -77,7 +74,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 		$this->assertNull( $feature->get_plugin_file() );
 		$this->assertNull( $feature->get_wporg_slug() );
-		$this->assertNull( $feature->get_download_url() );
 		$this->assertNull( $feature->get_authors() );
 		$this->assertNull( $feature->get_version() );
 		$this->assertNull( $feature->get_release_date() );
@@ -90,7 +86,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 			'kind'         => 'theme',
 			'minimum_tier' => 'kadence-basic',
 			'wporg_slug'   => 'kadence-theme',
-			'download_url' => null,
 			'name'         => 'Kadence Theme',
 			'description'  => 'Starter theme for Kadence.',
 			'category'     => 'core',
@@ -100,7 +95,6 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 		$this->assertTrue( $feature->is_wporg() );
 		$this->assertSame( 'kadence-theme', $feature->get_wporg_slug() );
-		$this->assertNull( $feature->get_download_url() );
 		$this->assertNull( $feature->get_plugin_file() );
 	}
 }

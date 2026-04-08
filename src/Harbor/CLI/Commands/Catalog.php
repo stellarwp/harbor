@@ -4,7 +4,6 @@ namespace LiquidWeb\Harbor\CLI\Commands;
 
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Portal\Results\Catalog_Tier;
-use LiquidWeb\Harbor\CLI\Display;
 use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_CLI;
@@ -207,7 +206,6 @@ class Catalog extends WP_CLI_Command {
 	 * * category
 	 * * plugin_file
 	 * * wporg_slug
-	 * * download_url
 	 * * version
 	 * * authors
 	 * * documentation_url

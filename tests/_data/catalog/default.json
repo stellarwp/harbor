@@ -83,7 +83,6 @@
       },
       {
         "minimum_tier": "kadence-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-blocks-pro",
         "name": "Blocks Pro",
         "description": "Premium Gutenberg blocks for advanced page building.",
         "category": "blocks",
@@ -102,7 +101,6 @@
       },
       {
         "minimum_tier": "kadence-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-theme-kit-pro",
         "name": "Theme Kit Pro",
         "description": "Advanced theme customization options and header/footer builder.",
         "category": "theme",
@@ -115,13 +113,12 @@
         "slug": "kad-theme-kit-pro",
         "kind": "plugin",
         "wporg_slug": null,
-        "main_file": "kadence-pro-addon/kadence-pro-addon.php",
+        "main_file": "kadence-pro/kadence-pro.php",
         "release_date": "2025-10-30",
         "homepage": null
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-shop-kit",
         "name": "Shop Kit",
         "description": "WooCommerce enhancements — product galleries, swatches, quick view, and more.",
         "category": "woocommerce",
@@ -140,7 +137,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-creative-kit",
         "name": "Creative Kit",
         "description": "Advanced design tools including animations and effects.",
         "category": "design",
@@ -159,7 +155,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-insights",
         "name": "Insights (A/B Testing)",
         "description": "Run A/B tests on your content to optimize conversions.",
         "category": "analytics",
@@ -193,7 +188,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-conversions",
         "name": "Conversions",
         "description": "Popups, slide-ins, and banners for conversion optimization.",
         "category": "marketing",
@@ -212,7 +206,6 @@
       },
       {
         "minimum_tier": "kadence-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/kad-galleries",
         "name": "Galleries",
         "description": "Advanced image and video gallery blocks.",
         "category": "blocks",
@@ -291,7 +284,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/ithemes-security-pro",
         "name": "Solid Security Pro",
         "description": "Comprehensive WordPress security with malware scanning, 2FA, and brute force protection.",
         "category": "security",
@@ -310,7 +302,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/solid-backups",
         "name": "Solid Backups",
         "description": "Automated WordPress backups with cloud storage and one-click restore.",
         "category": "security",
@@ -329,7 +320,6 @@
       },
       {
         "minimum_tier": "kadence-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/solid-central",
         "name": "Solid Central",
         "description": "Manage multiple WordPress sites from one dashboard.",
         "category": "management",
@@ -348,7 +338,6 @@
       },
       {
         "minimum_tier": "kadence-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/solid-performance",
         "name": "Solid Performance",
         "description": "Caching and performance optimization for WordPress.",
         "category": "performance",
@@ -367,7 +356,6 @@
       },
       {
         "minimum_tier": "kadence-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/solid-mail",
         "name": "Solid Mail",
         "description": "Reliable email delivery with SMTP and email logging.",
         "category": "email",
@@ -416,7 +404,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/iconic-woothumbs",
         "name": "WooThumbs",
         "description": "Advanced product image gallery with zoom and video support.",
         "category": "woocommerce",
@@ -435,7 +422,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/iconic-swatches",
         "name": "Attribute Swatches",
         "description": "Visual color and image swatches for product variations.",
         "category": "woocommerce",
@@ -529,7 +515,6 @@
       },
       {
         "minimum_tier": "kadence-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/iconic-quickview",
         "name": "Quickview",
         "description": "Quick product preview popup without leaving the shop page.",
         "category": "woocommerce",
@@ -664,7 +649,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/memberdash",
         "name": "MemberDash",
         "description": "Membership and content restriction functionality.",
         "category": "membership",
@@ -683,7 +667,6 @@
       },
       {
         "minimum_tier": "learndash-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-gradebook",
         "name": "Gradebook",
         "description": "Easily customize, track, and share scores with Gradebook. Explore student progression and scores in simple, flexible gradebook tables, and share individual scores and progress with students and their parents.",
         "category": "reporting",
@@ -702,7 +685,6 @@
       },
       {
         "minimum_tier": "learndash-elite",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-groups-plus",
         "name": "Groups Plus",
         "description": "Groups Plus modifies LearnDash Groups Hierarchy to create Organizations. Using WooCommerce, you can create and sell entire Organizations and allow your customers to purchase individual course seats within their Organization.",
         "category": "management",
@@ -721,7 +703,6 @@
       },
       {
         "minimum_tier": "learndash-elite",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/instructor-role",
         "name": "Instructor Role",
         "description": "Add multiple course authors without compromising site security by creating roles with restricted back-end access to Course Authors.",
         "category": "core",
@@ -740,7 +721,6 @@
       },
       {
         "minimum_tier": "learndash-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-notes",
         "name": "Notes",
         "description": "The Notes add-on makes note-taking simple and facilitates instructor communication during study time with an intuitive and flexible toolset.",
         "category": "core",
@@ -759,7 +739,6 @@
       },
       {
         "minimum_tier": "learndash-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/ld-propanel",
         "name": "ProPanel",
         "description": "Real-time reporting dashboard for course activity and student progress.",
         "category": "reporting",
@@ -778,7 +757,6 @@
       },
       {
         "minimum_tier": "learndash-elite",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/wdm-course-review",
         "name": "Ratings, Reviews & Feedback",
         "description": "Full control over the display of ratings and reviews, set custom templates, and make your courses better with student feedback.",
         "category": "core",
@@ -797,7 +775,6 @@
       },
       {
         "minimum_tier": "learndash-elite",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/ld-group-registration",
         "name": "Group Registration",
         "description": "Group registration and seat management for LearnDash courses.",
         "category": "management",
@@ -816,7 +793,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-achievements",
         "name": "Achievements",
         "description": "Award badges and points for learner milestones and accomplishments through gamification.",
         "category": "core",
@@ -835,7 +811,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-certificate-builder",
         "name": "Certificate Builder",
         "description": "Build certificates using a drag and drop builder through the standard WordPress Gutenberg editor.",
         "category": "core",
@@ -854,7 +829,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-elementor",
         "name": "Elementor",
         "description": "Use the powerful editing capabilities of Elementor to build your course exactly how you want it.",
         "category": "integration",
@@ -873,7 +847,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-notifications",
         "name": "Notifications",
         "description": "Configure various notifications to be sent out automatically based on what learners do and do not do in a course.",
         "category": "core",
@@ -892,7 +865,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-woocommerce",
         "name": "WooCommerce",
         "description": "Sell your LearnDash courses with the WooCommerce shopping cart.",
         "category": "integration",
@@ -911,7 +883,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-integrity",
         "name": "Integrity",
         "description": "Protect your course and website from spam, abuse and the copying of your content by students.",
         "category": "core",
@@ -930,7 +901,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/ld-tec",
         "name": "Events Calendar",
         "description": "Connect an event with a course or group and automatically enroll the user using The Events Calendar.",
         "category": "integration",
@@ -949,7 +919,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-zapier",
         "name": "Zapier",
         "description": "Create Zaps that include LearnDash activities, connecting with over 300 applications.",
         "category": "integration",
@@ -968,7 +937,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-migrations",
         "name": "Migrations",
         "description": "Bring your course content over from other learning management systems like LearnPress, Tutor LMS, Sensei LMS, or Lifter LMS.",
         "category": "core",
@@ -987,7 +955,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-paidmemberships",
         "name": "Paid Memberships Pro",
         "description": "Create membership level access and associate the access levels to LearnDash courses with Paid Memberships Pro.",
         "category": "integration",
@@ -1006,7 +973,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-edd",
         "name": "Easy Digital Downloads",
         "description": "Sell LearnDash courses using the Easy Digital Downloads shopping cart.",
         "category": "integration",
@@ -1025,7 +991,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-memberpress",
         "name": "MemberPress",
         "description": "Create membership levels in MemberPress and associate them to LearnDash courses with auto-enrollment.",
         "category": "integration",
@@ -1044,7 +1009,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-gravity-forms",
         "name": "Gravity Forms",
         "description": "Create custom course registration forms and auto-enroll users with Gravity Forms.",
         "category": "integration",
@@ -1063,7 +1027,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-bbpress",
         "name": "bbPress",
         "description": "Add forums to your courses with bbPress, protecting them so only enrolled users can view and post.",
         "category": "integration",
@@ -1082,7 +1045,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-thrivecart",
         "name": "ThriveCart",
         "description": "Sell your courses with ThriveCart, a premium eCommerce solution with subscriptions, analytics, and more.",
         "category": "integration",
@@ -1101,7 +1063,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-2checkout",
         "name": "2Checkout",
         "description": "Sell courses using the 2Checkout payment gateway.",
         "category": "integration",
@@ -1120,7 +1081,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-event-espresso",
         "name": "Event Espresso",
         "description": "Associate online courses to live events so that when users register, they are auto-enrolled.",
         "category": "integration",
@@ -1139,7 +1099,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-samcart",
         "name": "SamCart",
         "description": "Sell LearnDash courses with SamCart, a high-converting hosted shopping cart.",
         "category": "integration",
@@ -1158,7 +1117,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/ld-multilingual",
         "name": "Multilingual",
         "description": "Greater compatibility between LearnDash and multilingual sites using 3rd party translation plugins.",
         "category": "integration",
@@ -1177,7 +1135,6 @@
       },
       {
         "minimum_tier": "learndash-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/learndash-restrict-content-pro",
         "name": "Restrict Content Pro",
         "description": "Create membership levels in Restrict Content Pro and associate them to LearnDash courses with auto-enrollment.",
         "category": "integration",
@@ -1263,7 +1220,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-recurring",
         "name": "Recurring Donations",
         "description": "Accept recurring donations on a schedule.",
         "category": "core",
@@ -1282,7 +1238,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-fee-recovery",
         "name": "Fee Recovery",
         "description": "Optionally pass processing fees to donors.",
         "category": "core",
@@ -1301,7 +1256,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-form-field-manager",
         "name": "Form Field Manager",
         "description": "Add custom fields to donation forms.",
         "category": "core",
@@ -1320,7 +1274,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-annual-receipts",
         "name": "Annual Receipts",
         "description": "Generate annual tax-deductible receipts for donors.",
         "category": "core",
@@ -1339,7 +1292,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-funds",
         "name": "Funds & Designations",
         "description": "Allow donors to designate gifts to specific funds.",
         "category": "core",
@@ -1358,7 +1310,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-tributes",
         "name": "Tributes",
         "description": "Allow donors to make tribute donations in honor of someone.",
         "category": "core",
@@ -1377,7 +1328,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-pdf-receipts",
         "name": "PDF Receipts",
         "description": "Generate downloadable PDF donation receipts.",
         "category": "core",
@@ -1396,7 +1346,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-manual-donations",
         "name": "Manual Donations",
         "description": "Record offline or manual donations in the system.",
         "category": "core",
@@ -1415,7 +1364,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-peer-to-peer",
         "name": "Peer-to-Peer",
         "description": "Enable supporters to create their own fundraising pages.",
         "category": "campaigns",
@@ -1434,7 +1382,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-text-to-give",
         "name": "Text to Give",
         "description": "Accept donations via SMS text messages.",
         "category": "campaigns",
@@ -1453,7 +1400,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-stripe",
         "name": "Stripe Gateway",
         "description": "Accept donations through Stripe.",
         "category": "gateway",
@@ -1472,7 +1418,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-authorize",
         "name": "Authorize.net",
         "description": "Accept donations through Authorize.net.",
         "category": "gateway",
@@ -1491,7 +1436,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-square",
         "name": "Square",
         "description": "Accept donations through Square.",
         "category": "gateway",
@@ -1510,7 +1454,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-paypal",
         "name": "PayPal Commerce",
         "description": "Accept donations through PayPal Commerce.",
         "category": "gateway",
@@ -1529,7 +1472,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-mollie",
         "name": "Mollie",
         "description": "Accept donations through Mollie.",
         "category": "gateway",
@@ -1548,7 +1490,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-razorpay",
         "name": "RazorPay",
         "description": "Accept donations through RazorPay.",
         "category": "gateway",
@@ -1567,7 +1508,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-gocardless",
         "name": "GoCardless",
         "description": "Accept donations through GoCardless direct debit.",
         "category": "gateway",
@@ -1586,7 +1526,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-braintree",
         "name": "Braintree",
         "description": "Accept donations through Braintree.",
         "category": "gateway",
@@ -1605,7 +1544,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-currency-switcher",
         "name": "Currency Switcher",
         "description": "Allow donors to give in their local currency.",
         "category": "integration",
@@ -1624,7 +1562,6 @@
       },
       {
         "minimum_tier": "give-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-salesforce",
         "name": "Salesforce",
         "description": "Sync donation data with Salesforce CRM.",
         "category": "integration",
@@ -1643,7 +1580,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-gift-aid",
         "name": "Gift Aid",
         "description": "UK Gift Aid declarations for tax-efficient giving.",
         "category": "integration",
@@ -1662,7 +1598,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-webhooks",
         "name": "Webhooks",
         "description": "Send donation events to external services via webhooks.",
         "category": "integration",
@@ -1681,7 +1616,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-mailchimp",
         "name": "MailChimp",
         "description": "Sync donors with MailChimp email lists.",
         "category": "integration",
@@ -1700,7 +1634,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-activecampaign",
         "name": "ActiveCampaign",
         "description": "Sync donors with ActiveCampaign.",
         "category": "integration",
@@ -1719,7 +1652,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-zapier",
         "name": "Zapier",
         "description": "Connect donations to 5000+ apps via Zapier.",
         "category": "integration",
@@ -1738,7 +1670,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-constant-contact",
         "name": "Constant Contact",
         "description": "Sync donors with Constant Contact.",
         "category": "integration",
@@ -1757,7 +1688,6 @@
       },
       {
         "minimum_tier": "give-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-convertkit",
         "name": "ConvertKit",
         "description": "Sync donors with ConvertKit.",
         "category": "integration",
@@ -1776,7 +1706,6 @@
       },
       {
         "minimum_tier": "give-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-ga-tracking",
         "name": "Google Analytics Tracking",
         "description": "Track donation events in Google Analytics.",
         "category": "integration",
@@ -1795,7 +1724,6 @@
       },
       {
         "minimum_tier": "give-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-woo-upsells",
         "name": "WooCommerce Upsells",
         "description": "Offer products as upsells during donations.",
         "category": "integration",
@@ -1814,7 +1742,6 @@
       },
       {
         "minimum_tier": "give-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/give-double-the-donations",
         "name": "Double the Donations",
         "description": "Corporate gift matching integration.",
         "category": "integration",
@@ -1915,7 +1842,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-tickets-rsvp",
         "name": "Tickets & RSVP",
         "description": "Sell tickets and collect RSVPs for events.",
         "category": "core",
@@ -1934,7 +1860,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-event-aggregator",
         "name": "Event Aggregator",
         "description": "Import events from other calendars, Meetup, and more.",
         "category": "import",
@@ -1953,7 +1878,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-community",
         "name": "Community",
         "description": "Allow community members to submit events from the frontend.",
         "category": "community",
@@ -1972,26 +1896,15 @@
       },
       {
         "minimum_tier": "the-events-calendar-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-promoter",
         "name": "Promoter",
         "description": "Automated email marketing for events and attendees.",
         "category": "marketing",
-        "authors": [
-          "StellarWP"
-        ],
         "documentation_url": "https://theeventscalendar.com/knowledgebase/",
-        "version": "3.4.1",
-        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
         "slug": "tec-promoter",
-        "kind": "plugin",
-        "wporg_slug": null,
-        "main_file": "events-promoter/events-promoter.php",
-        "release_date": "2025-10-07",
-        "homepage": null
+        "kind": "service"
       },
       {
         "minimum_tier": "the-events-calendar-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-seating",
         "name": "Seating",
         "description": "Assigned seating charts and seat selection for events.",
         "category": "ticketing",
@@ -2010,7 +1923,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-basic",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-filter-bar",
         "name": "Filter Bar",
         "description": "Advanced filtering for event calendars by category, venue, and more.",
         "category": "core",
@@ -2029,7 +1941,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-pro",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-eventbrite",
         "name": "Eventbrite Tickets",
         "description": "Sync events and tickets with Eventbrite.",
         "category": "integration",
@@ -2048,7 +1959,6 @@
       },
       {
         "minimum_tier": "the-events-calendar-agency",
-        "download_url": "https://licensing.stellarwp.com/api/plugins/tec-schedule-manager",
         "name": "Event Schedule Manager",
         "description": "Create multi-track schedules for conferences and multi-day events.",
         "category": "management",
@@ -2064,6 +1974,38 @@
         "main_file": "events-schedule-manager/events-schedule-manager.php",
         "release_date": "2025-10-14",
         "homepage": null
+      },
+      {
+        "slug": "promoter",
+        "kind": "service",
+        "minimum_tier": "the-events-calendar:elite",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Promoter",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
+      },
+      {
+        "slug": "assigned-seating",
+        "kind": "service",
+        "minimum_tier": "the-events-calendar:elite",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Assigned Seating",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
       }
     ]
   }

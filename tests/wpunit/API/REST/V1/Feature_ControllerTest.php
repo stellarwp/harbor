@@ -975,7 +975,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$schema     = $controller->get_item_schema();
 
 		$this->assertArrayHasKey( 'oneOf', $schema );
-		$this->assertCount( 2, $schema['oneOf'] );
+		$this->assertCount( 3, $schema['oneOf'] );
 	}
 
 	/**
@@ -1025,7 +1025,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that the schema has exactly two variants (plugin, theme).
+	 * Tests that the schema has exactly three variants (plugin, theme, service).
 	 *
 	 * @return void
 	 */
@@ -1033,8 +1033,9 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$controller = new Feature_Controller( $this->manager );
 		$schema     = $controller->get_item_schema();
 
-		$this->assertCount( 2, $schema['oneOf'] );
+		$this->assertCount( 3, $schema['oneOf'] );
 		$this->assertSame( 'plugin', $schema['oneOf'][0]['title'] );
 		$this->assertSame( 'theme', $schema['oneOf'][1]['title'] );
+		$this->assertSame( 'service', $schema['oneOf'][2]['title'] );
 	}
 }

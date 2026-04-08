@@ -21,7 +21,7 @@ Each feature type has a strategy that defines how enable, disable, and active-st
 
 ### Plugin
 
-An installable WordPress plugin. The catalog provides `plugin_file`, `download_url`/`wporg_slug`.
+An installable WordPress plugin. The catalog provides `plugin_file` and `wporg_slug`. For exclusive (non-WordPress.org) plugins, `Resolve_Update_Data` constructs the download URL via the `Download_Url_Builder` contract (default implementation: `Herald_Url_Builder`).
 
 | Aspect              | Behavior                                                     |
 | ------------------- | ------------------------------------------------------------ |
@@ -31,13 +31,25 @@ An installable WordPress plugin. The catalog provides `plugin_file`, `download_u
 
 ### Theme
 
-An installable WordPress theme. The theme's `slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `download_url`/`wporg_slug`.
+An installable WordPress theme. The theme's `slug` is its WordPress slug (used for installation, `get_stylesheet()`, etc.). The catalog provides `wporg_slug`. For exclusive themes, `Resolve_Update_Data` constructs the download URL via the `Download_Url_Builder` contract (default implementation: `Herald_Url_Builder`).
 
 | Aspect              | Behavior                                                                                                                                                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Source of truth** | Theme disk presence — no DB option stored                                                                                                                                                              |
 | **Enable**          | Installs the theme but does not switch to it. Users activate themes via Appearance > Themes                                                                                                            |
 | **Disable**         | Does **not** delete files. Returns success if already absent; returns `THEME_DELETE_REQUIRED` if still on disk. Programmatic deletion is intentionally unsupported — it's destructive and irreversible |
+
+### Service
+
+An externally managed service (e.g. Promoter). The catalog provides no `plugin_file`, version, or installable fields — there is nothing to install or activate on the WordPress side.
+
+| Aspect              | Behavior                                                                      |
+| ------------------- | ----------------------------------------------------------------------------- |
+| **Source of truth** | Commerce Portal — no WordPress-side state                                     |
+| **Enable**          | Always returns `FEATURE_NOT_MODIFIABLE` (manage via the Commerce Portal)      |
+| **Disable**         | Always returns `FEATURE_NOT_MODIFIABLE` (manage via the Commerce Portal)      |
+| **Update**          | Always returns `FEATURE_NOT_MODIFIABLE` (no updates — managed by the Portal)  |
+| **is_active**       | Mirrors `is_available` — active when the site's license includes this feature |
 
 ### Install Lock
 
@@ -68,6 +80,7 @@ flowchart TD
 
     EnabledCheck -->|Plugin| PluginState["WP plugin\nactivation state"]
     EnabledCheck -->|Theme| ThemeState["Theme disk\npresence"]
+    EnabledCheck -->|Service| ServiceState["Mirrors is_available\n(no WP-side state)"]
 
     PluginState --> HasUpdate["has_update?\ncompare installed_version\nvs catalog version"]
     ThemeState --> HasUpdate
@@ -168,6 +181,7 @@ For how the React frontend consumes these endpoints to render the feature list a
 | `NO_UPDATE_AVAILABLE`            | 422  | No update available for the feature                |
 | `UPDATE_FAILED`                  | 422  | The update operation failed                        |
 | `INVALID_RESPONSE`               | 502  | Catalog response couldn't be parsed                |
+| `FEATURE_NOT_MODIFIABLE`         | 422  | Service feature — must be managed via the Portal   |
 | `UNKNOWN_FEATURE_TYPE`           | 422  | No Feature subclass for the catalog type           |
 | `INSTALL_LOCKED`                 | 409  | Another install already in progress                |
 | `REQUIREMENTS_NOT_MET`           | 422  | PHP or WordPress version requirements not met      |
@@ -196,7 +210,7 @@ Every resolved feature includes these fields:
 | `description`       | string  | Feature description                                               |
 | `product`           | string  | Product the feature belongs to                                    |
 | `tier`              | string  | Minimum tier required                                             |
-| `type`              | string  | `plugin` or `theme`                                               |
+| `type`              | string  | `plugin`, `theme`, or `service`                                   |
 | `is_available`      | boolean | Whether the current license covers this feature                   |
 | `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier |
 | `is_enabled`        | boolean | Whether the feature is currently enabled on this site             |
@@ -226,6 +240,7 @@ Plugin features also include:
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Feature exists, minimum tier, delivery type, tier ranks | Catalog                                                                                                                                                                             |
 | Latest version, release date, changelog                 | Catalog (`version`, `release_date`, `changelog`)                                                                                                                                    |
+| **Download URL** (`package`)                            | **`Download_Url_Builder`** (default `Herald_Url_Builder`) — built at runtime from feature slug, license key, and site domain. Empty for WordPress.org features (use `wporg_slug`)   |
 | Customer's tier, key validity                           | Licensing                                                                                                                                                                           |
 | **Whether available** (`is_available`)                  | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                  |
 | **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                           |

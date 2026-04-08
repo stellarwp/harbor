@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
+import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
 
 interface LicenseKeyInputProps {
@@ -55,6 +56,7 @@ export function LicenseKeyInput( {
 
 	const { storeLicense } = useDispatch( harborStore );
 	const { addToast }     = useToast();
+	const { addError }     = useErrorModal();
 
 	const { isStoring, canModifyLicense } = useSelect(
 		( select ) => ( {
@@ -91,7 +93,7 @@ export function LicenseKeyInput( {
 		setLocalError( null );
 		const result = await storeLicense( trimmedKey );
 		if ( result instanceof HarborError ) {
-			addToast( result.message, 'error' );
+			addError( result );
 		} else {
 			addToast( __( 'License activated successfully.', '%TEXTDOMAIN%' ), 'success' );
 			setKey( '' );

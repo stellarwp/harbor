@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use LiquidWeb\Harbor\Features\Contracts\Strategy;
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 
 /**
@@ -47,6 +48,14 @@ class Strategy_Factory {
 				}
 
 				return new Theme_Strategy( $feature );
+			case Feature::TYPE_SERVICE:
+				if ( ! $feature instanceof Service ) {
+					throw new InvalidArgumentException(
+						sprintf( 'Feature type "%s" requires a Service instance.', Feature::TYPE_SERVICE )
+					);
+				}
+
+				return new Service_Strategy( $feature );
 			default:
 				throw new InvalidArgumentException(
 					sprintf( 'No strategy for feature type "%s".', $feature->get_type() )

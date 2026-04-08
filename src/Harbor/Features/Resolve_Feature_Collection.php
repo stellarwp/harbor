@@ -8,6 +8,7 @@ use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
@@ -63,8 +64,9 @@ class Resolve_Feature_Collection {
 	 * @var array<string, class-string<Feature>>
 	 */
 	private array $type_map = [
-		Feature::TYPE_PLUGIN => Plugin::class,
-		Feature::TYPE_THEME  => Theme::class,
+		Feature::TYPE_PLUGIN  => Plugin::class,
+		Feature::TYPE_THEME   => Theme::class,
+		Feature::TYPE_SERVICE => Service::class,
 	];
 
 	/**

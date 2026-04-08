@@ -2,7 +2,7 @@
 
 All endpoints require the `manage_options` capability.
 
-Features are the resolved join of [Portal](../../subsystems/portal.md) catalog data and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
+Features are the resolved join of [Portal](../../subsystems/portal.md) catalog data and [Licensing](../../subsystems/licensing.md) data. The response shape varies by feature type (`plugin`, `theme`, `service`). See [Features: Resolved Feature Shape](../../subsystems/features.md#resolved-feature-shape) for the complete field reference.
 
 ## GET /liquidweb/harbor/v1/features
 
@@ -10,12 +10,12 @@ Lists all resolved features with optional filters.
 
 ### Parameters
 
-| Parameter   | Type    | Required | Description                                      |
-| ----------- | ------- | -------- | ------------------------------------------------ |
-| `product`   | string  | no       | Filter by product slug                           |
-| `tier`      | string  | no       | Filter by tier slug                              |
-| `available` | boolean | no       | Filter by availability                           |
-| `type`      | string  | no       | Filter by feature type (`plugin`/`theme`)        |
+| Parameter   | Type    | Required | Description                                         |
+| ----------- | ------- | -------- | --------------------------------------------------- |
+| `product`   | string  | no       | Filter by product slug                              |
+| `tier`      | string  | no       | Filter by tier slug                                 |
+| `available` | boolean | no       | Filter by availability                              |
+| `type`      | string  | no       | Filter by feature type (`plugin`/`theme`/`service`) |
 
 ### Response (200)
 
@@ -80,6 +80,7 @@ Returns the updated feature object.
 | 422  | `lw-harbor-theme-not-found-after-install`  | Theme missing after install                         |
 | 422  | `lw-harbor-download-link-missing`          | No download URL from plugins_api/themes_api         |
 | 422  | `lw-harbor-feature-enable-failed`          | Enable failed (strategy exception)                  |
+| 422  | `lw-harbor-feature-not-modifiable`         | Service feature — must be managed via the Portal    |
 | 422  | `lw-harbor-unknown-feature-type`           | No registered strategy for this feature type        |
 | 502  | `lw-harbor-plugins-api-failed`             | WordPress plugins_api() returned an error           |
 | 502  | `lw-harbor-themes-api-failed`              | WordPress themes_api() returned an error            |
@@ -95,12 +96,13 @@ Returns the updated feature object.
 
 ### Errors
 
-| HTTP | Code                               | Meaning                             |
-| ---- | ---------------------------------- | ----------------------------------- |
-| 409  | `lw-harbor-theme-is-active`        | Cannot disable the active theme     |
-| 409  | `lw-harbor-theme-delete-required`  | Theme must be deleted manually      |
-| 409  | `lw-harbor-deactivation-failed`    | Deactivation did not take effect    |
-| 422  | `lw-harbor-feature-disable-failed` | Disable failed (strategy exception) |
+| HTTP | Code                               | Meaning                                          |
+| ---- | ---------------------------------- | ------------------------------------------------ |
+| 409  | `lw-harbor-theme-is-active`        | Cannot disable the active theme                  |
+| 409  | `lw-harbor-theme-delete-required`  | Theme must be deleted manually                   |
+| 409  | `lw-harbor-deactivation-failed`    | Deactivation did not take effect                 |
+| 422  | `lw-harbor-feature-not-modifiable` | Service feature — must be managed via the Portal |
+| 422  | `lw-harbor-feature-disable-failed` | Disable failed (strategy exception)              |
 
 ## POST /liquidweb/harbor/v1/features/{slug}/update
 
@@ -112,9 +114,10 @@ Returns the updated feature object.
 
 ### Errors
 
-| HTTP | Code                              | Meaning                              |
-| ---- | --------------------------------- | ------------------------------------ |
-| 422  | `lw-harbor-feature-not-active`    | Feature is not currently installed   |
-| 422  | `lw-harbor-update-not-supported`  | Feature type doesn't support updates |
-| 422  | `lw-harbor-no-update-available`   | No pending update for this feature   |
-| 422  | `lw-harbor-update-failed`         | Update failed                        |
+| HTTP | Code                               | Meaning                                          |
+| ---- | ---------------------------------- | ------------------------------------------------ |
+| 422  | `lw-harbor-feature-not-active`     | Feature is not currently installed               |
+| 422  | `lw-harbor-feature-not-modifiable` | Service feature — must be managed via the Portal |
+| 422  | `lw-harbor-update-not-supported`   | Feature type doesn't support updates             |
+| 422  | `lw-harbor-no-update-available`    | No pending update for this feature               |
+| 422  | `lw-harbor-update-failed`          | Update failed                                    |
