@@ -328,8 +328,8 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug' => 'kadence-basic',
-					'rank' => 1,
+					'tier_slug' => 'kadence-basic',
+					'rank'      => 1,
 				]
 			)
 		);
@@ -374,8 +374,8 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug' => 'kadence-basic',
-					'rank' => 1,
+					'tier_slug' => 'kadence-basic',
+					'rank'      => 1,
 				]
 			)
 		);
@@ -421,18 +421,18 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug' => 'kadence-free',
-					'rank' => 0,
-				] 
-			) 
+					'tier_slug' => 'kadence-free',
+					'rank'      => 0,
+				]
+			)
 		);
 		$tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug' => 'kadence-basic',
-					'rank' => 1,
-				] 
-			) 
+					'tier_slug' => 'kadence-basic',
+					'rank'      => 1,
+				]
+			)
 		);
 
 		$product = new Product_Catalog( 'kadence', 'kadence', 'Kadence', $tiers, [ $catalog_feature ] );

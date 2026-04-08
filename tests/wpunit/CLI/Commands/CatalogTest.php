@@ -176,11 +176,11 @@ final class CatalogTest extends HarborTestCase {
 		$tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug' => 'starter',
-					'name' => 'Starter',
-					'rank' => 1,
-				] 
-			) 
+					'tier_slug' => 'starter',
+					'name'      => 'Starter',
+					'rank'      => 1,
+				]
+			)
 		);
 		$catalog  = new Product_Catalog( 'empty-id', 'empty-product', 'Empty Product', $tiers, [] );
 		$catalogs = new Catalog_Collection();
@@ -320,22 +320,22 @@ final class CatalogTest extends HarborTestCase {
 		$kadence_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'     => 'starter',
-					'name'     => 'Starter',
-					'rank'     => 1,
-					'price'    => 4900,
-					'currency' => 'USD',
+					'tier_slug' => 'starter',
+					'name'      => 'Starter',
+					'rank'      => 1,
+					'price'     => 4900,
+					'currency'  => 'USD',
 				]
 			)
 		);
 		$kadence_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'     => 'pro',
-					'name'     => 'Pro',
-					'rank'     => 2,
-					'price'    => 9900,
-					'currency' => 'USD',
+					'tier_slug' => 'pro',
+					'name'      => 'Pro',
+					'rank'      => 2,
+					'price'     => 9900,
+					'currency'  => 'USD',
 				]
 			)
 		);
@@ -375,11 +375,11 @@ final class CatalogTest extends HarborTestCase {
 		$givewp_tiers->add(
 			Catalog_Tier::from_array(
 				[
-					'slug'     => 'basic',
-					'name'     => 'Basic',
-					'rank'     => 1,
-					'price'    => 2900,
-					'currency' => 'USD',
+					'tier_slug' => 'basic',
+					'name'      => 'Basic',
+					'rank'      => 1,
+					'price'     => 2900,
+					'currency'  => 'USD',
 				]
 			)
 		);

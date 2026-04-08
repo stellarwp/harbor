@@ -134,7 +134,7 @@ final class Http_ClientTest extends HarborTestCase {
 					'product_name' => 'Kadence',
 					'tiers'        => [
 						[
-							'slug'         => 'kadence-basic',
+							'tier_slug'    => 'kadence-basic',
 							'name'         => 'Basic',
 							'rank'         => 1,
 							'price'        => 0,
@@ -143,7 +143,7 @@ final class Http_ClientTest extends HarborTestCase {
 							'herald_slugs' => [],
 						],
 						[
-							'slug'         => 'kadence-pro',
+							'tier_slug'    => 'kadence-pro',
 							'name'         => 'Pro',
 							'rank'         => 2,
 							'price'        => 14900,
@@ -170,7 +170,7 @@ final class Http_ClientTest extends HarborTestCase {
 					'product_name' => 'GiveWP',
 					'tiers'        => [
 						[
-							'slug'         => 'give-basic',
+							'tier_slug'    => 'give-basic',
 							'name'         => 'Basic',
 							'rank'         => 1,
 							'price'        => 0,

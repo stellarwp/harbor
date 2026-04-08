@@ -62,7 +62,7 @@ final class Catalog_RepositoryTest extends HarborTestCase {
 					'product_slug' => 'cached-product',
 					'tiers'        => [
 						[
-							'slug'         => 'basic',
+							'tier_slug'    => 'basic',
 							'name'         => 'Basic',
 							'rank'         => 1,
 							'price'        => 0,
