@@ -2053,7 +2053,7 @@ function LicensePanel() {
     const map = {};
     catalogs.forEach(catalog => {
       catalog.tiers.forEach(t => {
-        map[t.slug] = t.name;
+        map[t.tier_slug] = t.name;
       });
     });
     return map;
@@ -2315,7 +2315,7 @@ function ProductSection({
   } = (0,_hooks_useProductFeatureGroups__WEBPACK_IMPORTED_MODULE_8__.useProductFeatureGroups)(product.slug);
   const activeCount = availableFeatures.filter(f => f.is_enabled).length;
   const deactivatedCount = availableFeatures.filter(f => !f.is_enabled).length;
-  const tierName = licenseProduct ? sortedCatalogTiers.find(t => t.slug === licenseProduct.tier)?.name ?? licenseProduct.tier : null;
+  const tierName = licenseProduct ? sortedCatalogTiers.find(t => t.tier_slug === licenseProduct.tier)?.name ?? licenseProduct.tier : null;
   const hasContent = availableFeatures.length > 0 || Object.values(lockedByTier).some(f => f.length > 0);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
     id: product.slug,
@@ -2360,13 +2360,13 @@ function ProductSection({
       children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_4__.FeatureRow, {
         feature: feature
       }, feature.slug)), upgradeCatalogTiers.map(tier => {
-        const locked = lockedByTier[tier.slug] ?? [];
+        const locked = lockedByTier[tier.tier_slug] ?? [];
         if (locked.length === 0) return null;
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_5__.TierGroup, {
           tier: tier,
           features: locked,
           forceOpen: isSearching
-        }, tier.slug);
+        }, tier.tier_slug);
       })]
     })]
   });
@@ -4285,7 +4285,7 @@ function useProductFeatureGroups(productSlug) {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const sorted = catalogTiers.slice().sort((a, b) => a.rank - b.rank);
     const licenseProduct = licenseProducts.find(lp => lp.product_slug === productSlug);
-    const userTier = licenseProduct?.tier ? sorted.find(t => t.slug === licenseProduct.tier) : null;
+    const userTier = licenseProduct?.tier ? sorted.find(t => t.tier_slug === licenseProduct.tier) : null;
     const rank = userTier?.rank ?? -1; // -1 = unlicensed (show all tier groups)
     const upgrade = sorted.filter(t => t.rank > rank);
     const slugs = isUnifiedLicensed ? new Set() : new Set(legacyLicenses.filter(l => l.is_active).map(l => l.slug));
@@ -4300,7 +4300,7 @@ function useProductFeatureGroups(productSlug) {
     // Locked: not available, not free, not legacy, and not revoked.
     const lockedFeatures = allFeatures.filter(f => !f.is_available && !(0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.isFreeFeature)(f.tier) && !isLegacyAvailable(f) && (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.getFeatureMismatch)(f) !== 'revoked');
     const lockedByTier = sorted.reduce((acc, tier) => {
-      acc[tier.slug] = lockedFeatures.filter(f => f.tier === tier.slug);
+      acc[tier.tier_slug] = lockedFeatures.filter(f => f.tier === tier.tier_slug);
       return acc;
     }, {});
     return {
@@ -5432,7 +5432,7 @@ const getProductTiers = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSe
  *
  * Returns the full tier object so callers can read price, currency, etc.
  */
-const getCatalogTier = (state, productSlug, tierSlug) => state.catalog.byProductSlug[productSlug]?.tiers.find(t => t.slug === tierSlug) ?? null;
+const getCatalogTier = (state, productSlug, tierSlug) => state.catalog.byProductSlug[productSlug]?.tiers.find(t => t.tier_slug === tierSlug) ?? null;
 
 // ---------------------------------------------------------------------------
 // License
