@@ -697,9 +697,7 @@ function FeatureIcon({
 }) {
   const src = FEATURE_LOGOS[slug];
   if (!src) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-      className: "rounded bg-muted shrink-0 w-8 h-8"
-    });
+    return null;
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", {
     src: src,

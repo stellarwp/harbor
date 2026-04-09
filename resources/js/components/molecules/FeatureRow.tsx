@@ -61,7 +61,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 			<div className="flex items-center gap-3 py-3 px-4">
 				<div
 					onClick={ () => setExpanded( ! expanded ) }
-					className="flex items-center gap-3 min-w-0 cursor-pointer"
+					className="flex items-center gap-2 min-w-0 cursor-pointer"
 				>
 					<Chevron className="w-4 h-4 text-muted-foreground shrink-0" />
 					<FeatureIcon slug={ feature.slug } />
