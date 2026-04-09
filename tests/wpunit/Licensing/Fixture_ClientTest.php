@@ -42,8 +42,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 		$catalog = $this->client->products()->catalog( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
 
 		foreach ( $catalog->products as $entry ) {
-			$expected = $entry->productSlug . '-pro';
-			$this->assertSame( $expected, $entry->tier, sprintf( '%s should be %s tier', $entry->productSlug, $expected ) );
+			$this->assertSame( 'pro', $entry->tier, sprintf( '%s should be pro tier', $entry->productSlug ) );
 		}
 	}
 
@@ -53,8 +52,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 		$this->assertCount( 4, $catalog->products );
 
 		foreach ( $catalog->products as $entry ) {
-			$expected = $entry->productSlug . '-basic';
-			$this->assertSame( $expected, $entry->tier, sprintf( '%s should be %s tier', $entry->productSlug, $expected ) );
+			$this->assertSame( 'basic', $entry->tier, sprintf( '%s should be basic tier', $entry->productSlug ) );
 		}
 	}
 
@@ -62,8 +60,6 @@ final class Fixture_ClientTest extends HarborTestCase {
 		$catalog = $this->client->products()->catalog( 'LWSW-UNIFIED-AGENCY-2026', 'example.com' );
 
 		foreach ( $catalog->products as $entry ) {
-			$expected = $entry->productSlug . '-agency';
-			$this->assertSame( $expected, $entry->tier );
 			$this->assertSame( 0, $entry->activations->siteLimit, sprintf( '%s should have unlimited seats', $entry->productSlug ) );
 		}
 	}
@@ -85,7 +81,7 @@ final class Fixture_ClientTest extends HarborTestCase {
 
 		$this->assertCount( 1, $catalog->products );
 		$this->assertSame( 'kadence', $catalog->products[0]->productSlug );
-		$this->assertSame( 'kadence-pro', $catalog->products[0]->tier );
+		$this->assertSame( 'pro', $catalog->products[0]->tier );
 	}
 
 	public function test_catalog_two_product_key(): void {

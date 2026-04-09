@@ -121,7 +121,7 @@ final class License_RepositoryTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug' => 'give',
-						'tier'         => 'give-pro',
+						'tier'         => 'pro',
 						'status'       => 'active',
 						'expires'      => '2026-12-31 23:59:59',
 					]
@@ -141,7 +141,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$raw = [
 			[
 				'product_slug' => 'give',
-				'tier'         => 'give-pro',
+				'tier'         => 'pro',
 				'status'       => 'active',
 				'expires'      => '2026-12-31 23:59:59',
 				'activations'  => [
@@ -172,7 +172,7 @@ final class License_RepositoryTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug' => 'give',
-						'tier'         => 'give-pro',
+						'tier'         => 'pro',
 						'status'       => 'active',
 						'expires'      => '2026-12-31 23:59:59',
 					]
@@ -209,7 +209,7 @@ final class License_RepositoryTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug' => 'give',
-						'tier'         => 'give-pro',
+						'tier'         => 'pro',
 						'status'       => 'active',
 						'expires'      => '2026-12-31 23:59:59',
 					]
@@ -240,7 +240,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 						]
@@ -262,7 +262,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 						]
@@ -304,7 +304,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 							'activations'  => [
@@ -343,7 +343,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 						]
@@ -361,7 +361,7 @@ final class License_RepositoryTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug' => 'give',
-						'tier'         => 'give-pro',
+						'tier'         => 'pro',
 						'status'       => 'active',
 						'expires'      => '2026-12-31 23:59:59',
 					]
@@ -390,7 +390,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',
@@ -410,7 +410,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',
@@ -447,7 +447,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 						]
@@ -466,7 +466,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug' => 'give',
-							'tier'         => 'give-pro',
+							'tier'         => 'pro',
 							'status'       => 'active',
 							'expires'      => '2026-12-31 23:59:59',
 						]
@@ -493,7 +493,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',
@@ -513,7 +513,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',
@@ -533,7 +533,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'not_activated',
@@ -684,7 +684,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',
@@ -725,7 +725,7 @@ final class License_RepositoryTest extends HarborTestCase {
 					Product_Entry::from_array(
 						[
 							'product_slug'      => 'give',
-							'tier'              => 'give-pro',
+							'tier'              => 'pro',
 							'status'            => 'active',
 							'expires'           => '2026-12-31 23:59:59',
 							'validation_status' => 'valid',

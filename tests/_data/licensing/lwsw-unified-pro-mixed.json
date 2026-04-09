@@ -2,7 +2,7 @@
   "products": [
     {
       "product_slug": "give",
-      "tier": "give-pro",
+      "tier": "pro",
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
@@ -46,7 +46,7 @@
     },
     {
       "product_slug": "the-events-calendar",
-      "tier": "the-events-calendar-pro",
+      "tier": "pro",
       "status": "suspended",
       "expires": "2026-12-31 23:59:59",
       "activations": {
@@ -70,7 +70,7 @@
     },
     {
       "product_slug": "learndash",
-      "tier": "learndash-pro",
+      "tier": "pro",
       "status": "cancelled",
       "expires": "2026-12-31 23:59:59",
       "activations": {
@@ -112,7 +112,7 @@
     },
     {
       "product_slug": "kadence",
-      "tier": "kadence-pro",
+      "tier": "pro",
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {

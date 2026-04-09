@@ -10,7 +10,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 	private array $plugin_data = [
 		'slug'              => 'kadence-security',
 		'kind'              => 'plugin',
-		'minimum_tier'      => 'kadence-pro',
+		'minimum_tier'      => 'pro',
 		'main_file'         => 'kadence-security-pro/kadence-security-pro.php',
 		'wporg_slug'        => null,
 		'version'           => '2.1.0',
@@ -28,7 +28,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 		$this->assertSame( 'kadence-security', $feature->get_slug() );
 		$this->assertSame( 'plugin', $feature->get_kind() );
-		$this->assertSame( 'kadence-pro', $feature->get_minimum_tier() );
+		$this->assertSame( 'pro', $feature->get_minimum_tier() );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $feature->get_plugin_file() );
 		$this->assertFalse( $feature->is_wporg() );
 		$this->assertNull( $feature->get_wporg_slug() );
@@ -48,7 +48,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 
 		$this->assertSame( 'kadence-security', $result['slug'] );
 		$this->assertSame( 'plugin', $result['kind'] );
-		$this->assertSame( 'kadence-pro', $result['minimum_tier'] );
+		$this->assertSame( 'pro', $result['minimum_tier'] );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $result['plugin_file'] );
 		$this->assertNull( $result['wporg_slug'] );
 	}
@@ -64,7 +64,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$data = [
 			'slug'         => 'patchstack',
 			'kind'         => 'plugin',
-			'minimum_tier' => 'kadence-pro',
+			'minimum_tier' => 'pro',
 			'name'         => 'PatchStack Firewall',
 			'description'  => 'Virtual patching.',
 			'category'     => 'security',
@@ -84,7 +84,7 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$data = [
 			'slug'         => 'kadence-theme',
 			'kind'         => 'theme',
-			'minimum_tier' => 'kadence-basic',
+			'minimum_tier' => 'basic',
 			'wporg_slug'   => 'kadence-theme',
 			'name'         => 'Kadence Theme',
 			'description'  => 'Starter theme for Kadence.',

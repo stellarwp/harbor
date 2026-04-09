@@ -2,7 +2,7 @@
   "products": [
     {
       "product_slug": "kadence",
-      "tier": "kadence-pro",
+      "tier": "pro",
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {
@@ -44,7 +44,7 @@
     },
     {
       "product_slug": "give",
-      "tier": "give-pro",
+      "tier": "pro",
       "status": "active",
       "expires": "2026-12-31 23:59:59",
       "activations": {

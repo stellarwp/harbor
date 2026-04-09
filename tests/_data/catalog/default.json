@@ -12,7 +12,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "kadence-free"
+        "tier_slug": "free"
       },
       {
         "name": "Basic",
@@ -22,7 +22,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "kadence-basic"
+        "tier_slug": "basic"
       },
       {
         "name": "Pro",
@@ -32,7 +32,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "kadence-pro"
+        "tier_slug": "pro"
       },
       {
         "name": "Agency",
@@ -42,12 +42,12 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "kadence-agency"
+        "tier_slug": "agency"
       }
     ],
     "features": [
       {
-        "minimum_tier": "kadence-free",
+        "minimum_tier": "free",
         "name": "Kadence Blocks",
         "description": "A free Gutenberg block library for building pages with Kadence.",
         "category": "blocks",
@@ -65,7 +65,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-free",
+        "minimum_tier": "free",
         "name": "Kadence Theme",
         "description": "A lightweight, performant WordPress theme for site building.",
         "category": "theme",
@@ -82,7 +82,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Blocks Pro",
         "description": "Premium Gutenberg blocks for advanced page building.",
         "category": "blocks",
@@ -100,7 +100,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Theme Kit Pro",
         "description": "Advanced theme customization options and header/footer builder.",
         "category": "theme",
@@ -118,7 +118,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Shop Kit",
         "description": "WooCommerce enhancements \u2014 product galleries, swatches, quick view, and more.",
         "category": "woocommerce",
@@ -136,7 +136,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Creative Kit",
         "description": "Advanced design tools including animations and effects.",
         "category": "design",
@@ -154,7 +154,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Insights (A/B Testing)",
         "description": "Run A/B tests on your content to optimize conversions.",
         "category": "analytics",
@@ -172,7 +172,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Pattern Hub",
         "description": "Access to premium design patterns and starter templates.",
         "category": "design",
@@ -187,7 +187,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Conversions",
         "description": "Popups, slide-ins, and banners for conversion optimization.",
         "category": "marketing",
@@ -205,7 +205,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Galleries",
         "description": "Advanced image and video gallery blocks.",
         "category": "blocks",
@@ -223,7 +223,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Captcha",
         "description": "Spam protection for forms with reCAPTCHA and hCaptcha.",
         "category": "forms",
@@ -238,7 +238,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Simple Share",
         "description": "Social sharing buttons for posts and pages.",
         "category": "social",
@@ -253,7 +253,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Custom Fonts",
         "description": "Upload and use custom fonts across your site.",
         "category": "design",
@@ -268,7 +268,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Reading Time",
         "description": "Display estimated reading time on posts.",
         "category": "content",
@@ -283,7 +283,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Solid Security Pro",
         "description": "Comprehensive WordPress security with malware scanning, 2FA, and brute force protection.",
         "category": "security",
@@ -301,7 +301,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Solid Backups",
         "description": "Automated WordPress backups with cloud storage and one-click restore.",
         "category": "security",
@@ -319,7 +319,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Solid Central",
         "description": "Manage multiple WordPress sites from one dashboard.",
         "category": "management",
@@ -337,7 +337,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Solid Performance",
         "description": "Caching and performance optimization for WordPress.",
         "category": "performance",
@@ -355,7 +355,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-basic",
+        "minimum_tier": "basic",
         "name": "Solid Mail",
         "description": "Reliable email delivery with SMTP and email logging.",
         "category": "email",
@@ -373,7 +373,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Flux Checkout",
         "description": "Streamlined, fast WooCommerce checkout experience.",
         "category": "woocommerce",
@@ -388,7 +388,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "WooCommerce Delivery Slots",
         "description": "Let customers choose delivery dates and time slots.",
         "category": "woocommerce",
@@ -403,7 +403,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "WooThumbs",
         "description": "Advanced product image gallery with zoom and video support.",
         "category": "woocommerce",
@@ -421,7 +421,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Attribute Swatches",
         "description": "Visual color and image swatches for product variations.",
         "category": "woocommerce",
@@ -439,7 +439,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Show Single Variations",
         "description": "Display product variations as individual products in shop listings.",
         "category": "woocommerce",
@@ -454,7 +454,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Iconic Sales Booster",
         "description": "Cross-sells, upsells, and order bumps to increase average order value.",
         "category": "woocommerce",
@@ -469,7 +469,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Image Swap for WooCommerce",
         "description": "Swap product images on hover in shop listings.",
         "category": "woocommerce",
@@ -484,7 +484,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Linked Variations",
         "description": "Link product variations across different products.",
         "category": "woocommerce",
@@ -499,7 +499,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Product Configurator",
         "description": "Visual step-by-step product builder for complex products.",
         "category": "woocommerce",
@@ -514,7 +514,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Quickview",
         "description": "Quick product preview popup without leaving the shop page.",
         "category": "woocommerce",
@@ -532,7 +532,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Wishlist for WooCommerce",
         "description": "Let customers save products to wishlists.",
         "category": "woocommerce",
@@ -546,7 +546,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-pro",
+        "minimum_tier": "pro",
         "name": "Account Pages",
         "description": "Customize WooCommerce My Account pages.",
         "category": "woocommerce",
@@ -561,7 +561,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Custom Fields for Variations",
         "description": "Add custom data fields to product variations.",
         "category": "woocommerce",
@@ -576,7 +576,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "kadence-agency",
+        "minimum_tier": "agency",
         "name": "Bundled Products",
         "description": "Create product bundles and kits with flexible pricing.",
         "category": "woocommerce",
@@ -605,7 +605,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "learndash-basic"
+        "tier_slug": "basic"
       },
       {
         "name": "Pro",
@@ -615,7 +615,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "learndash-pro"
+        "tier_slug": "pro"
       },
       {
         "name": "Elite",
@@ -625,12 +625,12 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "learndash-elite"
+        "tier_slug": "elite"
       }
     ],
     "features": [
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "LearnDash LMS",
         "description": "The most trusted WordPress LMS plugin for creating and selling courses.",
         "category": "core",
@@ -648,7 +648,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "MemberDash",
         "description": "Membership and content restriction functionality.",
         "category": "membership",
@@ -666,7 +666,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-pro",
+        "minimum_tier": "pro",
         "name": "Gradebook",
         "description": "Easily customize, track, and share scores with Gradebook. Explore student progression and scores in simple, flexible gradebook tables, and share individual scores and progress with students and their parents.",
         "category": "reporting",
@@ -684,7 +684,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-elite",
+        "minimum_tier": "elite",
         "name": "Groups Plus",
         "description": "Groups Plus modifies LearnDash Groups Hierarchy to create Organizations. Using WooCommerce, you can create and sell entire Organizations and allow your customers to purchase individual course seats within their Organization.",
         "category": "management",
@@ -702,7 +702,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-elite",
+        "minimum_tier": "elite",
         "name": "Instructor Role",
         "description": "Add multiple course authors without compromising site security by creating roles with restricted back-end access to Course Authors.",
         "category": "core",
@@ -720,7 +720,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-pro",
+        "minimum_tier": "pro",
         "name": "Notes",
         "description": "The Notes add-on makes note-taking simple and facilitates instructor communication during study time with an intuitive and flexible toolset.",
         "category": "core",
@@ -738,7 +738,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-pro",
+        "minimum_tier": "pro",
         "name": "ProPanel",
         "description": "Real-time reporting dashboard for course activity and student progress.",
         "category": "reporting",
@@ -756,7 +756,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-elite",
+        "minimum_tier": "elite",
         "name": "Ratings, Reviews & Feedback",
         "description": "Full control over the display of ratings and reviews, set custom templates, and make your courses better with student feedback.",
         "category": "core",
@@ -774,7 +774,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-elite",
+        "minimum_tier": "elite",
         "name": "Group Registration",
         "description": "Group registration and seat management for LearnDash courses.",
         "category": "management",
@@ -792,7 +792,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Achievements",
         "description": "Award badges and points for learner milestones and accomplishments through gamification.",
         "category": "core",
@@ -810,7 +810,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Certificate Builder",
         "description": "Build certificates using a drag and drop builder through the standard WordPress Gutenberg editor.",
         "category": "core",
@@ -828,7 +828,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Elementor",
         "description": "Use the powerful editing capabilities of Elementor to build your course exactly how you want it.",
         "category": "integration",
@@ -846,7 +846,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Notifications",
         "description": "Configure various notifications to be sent out automatically based on what learners do and do not do in a course.",
         "category": "core",
@@ -864,7 +864,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "WooCommerce",
         "description": "Sell your LearnDash courses with the WooCommerce shopping cart.",
         "category": "integration",
@@ -882,7 +882,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Integrity",
         "description": "Protect your course and website from spam, abuse and the copying of your content by students.",
         "category": "core",
@@ -900,7 +900,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Events Calendar",
         "description": "Connect an event with a course or group and automatically enroll the user using The Events Calendar.",
         "category": "integration",
@@ -918,7 +918,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Zapier",
         "description": "Create Zaps that include LearnDash activities, connecting with over 300 applications.",
         "category": "integration",
@@ -936,7 +936,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Migrations",
         "description": "Bring your course content over from other learning management systems like LearnPress, Tutor LMS, Sensei LMS, or Lifter LMS.",
         "category": "core",
@@ -954,7 +954,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Paid Memberships Pro",
         "description": "Create membership level access and associate the access levels to LearnDash courses with Paid Memberships Pro.",
         "category": "integration",
@@ -972,7 +972,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Easy Digital Downloads",
         "description": "Sell LearnDash courses using the Easy Digital Downloads shopping cart.",
         "category": "integration",
@@ -990,7 +990,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "MemberPress",
         "description": "Create membership levels in MemberPress and associate them to LearnDash courses with auto-enrollment.",
         "category": "integration",
@@ -1008,7 +1008,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Gravity Forms",
         "description": "Create custom course registration forms and auto-enroll users with Gravity Forms.",
         "category": "integration",
@@ -1026,7 +1026,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "bbPress",
         "description": "Add forums to your courses with bbPress, protecting them so only enrolled users can view and post.",
         "category": "integration",
@@ -1044,7 +1044,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "ThriveCart",
         "description": "Sell your courses with ThriveCart, a premium eCommerce solution with subscriptions, analytics, and more.",
         "category": "integration",
@@ -1062,7 +1062,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "2Checkout",
         "description": "Sell courses using the 2Checkout payment gateway.",
         "category": "integration",
@@ -1080,7 +1080,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Event Espresso",
         "description": "Associate online courses to live events so that when users register, they are auto-enrolled.",
         "category": "integration",
@@ -1098,7 +1098,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "SamCart",
         "description": "Sell LearnDash courses with SamCart, a high-converting hosted shopping cart.",
         "category": "integration",
@@ -1116,7 +1116,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Multilingual",
         "description": "Greater compatibility between LearnDash and multilingual sites using 3rd party translation plugins.",
         "category": "integration",
@@ -1134,7 +1134,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "learndash-basic",
+        "minimum_tier": "basic",
         "name": "Restrict Content Pro",
         "description": "Create membership levels in Restrict Content Pro and associate them to LearnDash courses with auto-enrollment.",
         "category": "integration",
@@ -1166,7 +1166,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "give-free"
+        "tier_slug": "free"
       },
       {
         "name": "Basic",
@@ -1176,7 +1176,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "give-basic"
+        "tier_slug": "basic"
       },
       {
         "name": "Pro",
@@ -1186,7 +1186,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "give-pro"
+        "tier_slug": "pro"
       },
       {
         "name": "Agency",
@@ -1196,12 +1196,12 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "give-agency"
+        "tier_slug": "agency"
       }
     ],
     "features": [
       {
-        "minimum_tier": "give-free",
+        "minimum_tier": "free",
         "name": "GiveWP",
         "description": "The most robust WordPress donation plugin for online giving.",
         "category": "core",
@@ -1219,7 +1219,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Recurring Donations",
         "description": "Accept recurring donations on a schedule.",
         "category": "core",
@@ -1237,7 +1237,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Fee Recovery",
         "description": "Optionally pass processing fees to donors.",
         "category": "core",
@@ -1255,7 +1255,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Form Field Manager",
         "description": "Add custom fields to donation forms.",
         "category": "core",
@@ -1273,7 +1273,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Annual Receipts",
         "description": "Generate annual tax-deductible receipts for donors.",
         "category": "core",
@@ -1291,7 +1291,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Funds & Designations",
         "description": "Allow donors to designate gifts to specific funds.",
         "category": "core",
@@ -1309,7 +1309,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Tributes",
         "description": "Allow donors to make tribute donations in honor of someone.",
         "category": "core",
@@ -1327,7 +1327,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "PDF Receipts",
         "description": "Generate downloadable PDF donation receipts.",
         "category": "core",
@@ -1345,7 +1345,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Manual Donations",
         "description": "Record offline or manual donations in the system.",
         "category": "core",
@@ -1363,7 +1363,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Peer-to-Peer",
         "description": "Enable supporters to create their own fundraising pages.",
         "category": "campaigns",
@@ -1381,7 +1381,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Text to Give",
         "description": "Accept donations via SMS text messages.",
         "category": "campaigns",
@@ -1399,7 +1399,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Stripe Gateway",
         "description": "Accept donations through Stripe.",
         "category": "gateway",
@@ -1417,7 +1417,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Authorize.net",
         "description": "Accept donations through Authorize.net.",
         "category": "gateway",
@@ -1435,7 +1435,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Square",
         "description": "Accept donations through Square.",
         "category": "gateway",
@@ -1453,7 +1453,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "PayPal Commerce",
         "description": "Accept donations through PayPal Commerce.",
         "category": "gateway",
@@ -1471,7 +1471,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Mollie",
         "description": "Accept donations through Mollie.",
         "category": "gateway",
@@ -1489,7 +1489,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "RazorPay",
         "description": "Accept donations through RazorPay.",
         "category": "gateway",
@@ -1507,7 +1507,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "GoCardless",
         "description": "Accept donations through GoCardless direct debit.",
         "category": "gateway",
@@ -1525,7 +1525,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Braintree",
         "description": "Accept donations through Braintree.",
         "category": "gateway",
@@ -1543,7 +1543,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Currency Switcher",
         "description": "Allow donors to give in their local currency.",
         "category": "integration",
@@ -1561,7 +1561,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-agency",
+        "minimum_tier": "agency",
         "name": "Salesforce",
         "description": "Sync donation data with Salesforce CRM.",
         "category": "integration",
@@ -1579,7 +1579,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Gift Aid",
         "description": "UK Gift Aid declarations for tax-efficient giving.",
         "category": "integration",
@@ -1597,7 +1597,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Webhooks",
         "description": "Send donation events to external services via webhooks.",
         "category": "integration",
@@ -1615,7 +1615,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "MailChimp",
         "description": "Sync donors with MailChimp email lists.",
         "category": "integration",
@@ -1633,7 +1633,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "ActiveCampaign",
         "description": "Sync donors with ActiveCampaign.",
         "category": "integration",
@@ -1651,7 +1651,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Zapier",
         "description": "Connect donations to 5000+ apps via Zapier.",
         "category": "integration",
@@ -1669,7 +1669,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "Constant Contact",
         "description": "Sync donors with Constant Contact.",
         "category": "integration",
@@ -1687,7 +1687,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-basic",
+        "minimum_tier": "basic",
         "name": "ConvertKit",
         "description": "Sync donors with ConvertKit.",
         "category": "integration",
@@ -1705,7 +1705,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-pro",
+        "minimum_tier": "pro",
         "name": "Google Analytics Tracking",
         "description": "Track donation events in Google Analytics.",
         "category": "integration",
@@ -1723,7 +1723,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-agency",
+        "minimum_tier": "agency",
         "name": "WooCommerce Upsells",
         "description": "Offer products as upsells during donations.",
         "category": "integration",
@@ -1741,7 +1741,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "give-agency",
+        "minimum_tier": "agency",
         "name": "Double the Donations",
         "description": "Corporate gift matching integration.",
         "category": "integration",
@@ -1773,7 +1773,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "the-events-calendar-free"
+        "tier_slug": "free"
       },
       {
         "name": "Basic",
@@ -1783,7 +1783,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "the-events-calendar-basic"
+        "tier_slug": "basic"
       },
       {
         "name": "Pro",
@@ -1793,7 +1793,7 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "the-events-calendar-pro"
+        "tier_slug": "pro"
       },
       {
         "name": "Agency",
@@ -1803,12 +1803,12 @@
         "features": [],
         "herald_slugs": [],
         "purchase_url": "",
-        "tier_slug": "the-events-calendar-agency"
+        "tier_slug": "agency"
       }
     ],
     "features": [
       {
-        "minimum_tier": "the-events-calendar-free",
+        "minimum_tier": "free",
         "name": "The Events Calendar",
         "description": "A powerful events management plugin for WordPress.",
         "category": "core",
@@ -1826,7 +1826,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-basic",
+        "minimum_tier": "basic",
         "name": "Calendar",
         "description": "Full-featured event calendar with multiple views.",
         "category": "core",
@@ -1841,7 +1841,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-basic",
+        "minimum_tier": "basic",
         "name": "Tickets & RSVP",
         "description": "Sell tickets and collect RSVPs for events.",
         "category": "core",
@@ -1859,7 +1859,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-pro",
+        "minimum_tier": "pro",
         "name": "Event Aggregator",
         "description": "Import events from other calendars, Meetup, and more.",
         "category": "import",
@@ -1877,7 +1877,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-pro",
+        "minimum_tier": "pro",
         "name": "Community",
         "description": "Allow community members to submit events from the frontend.",
         "category": "community",
@@ -1895,7 +1895,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-pro",
+        "minimum_tier": "pro",
         "name": "Promoter",
         "description": "Automated email marketing for events and attendees.",
         "category": "marketing",
@@ -1904,7 +1904,7 @@
         "kind": "service"
       },
       {
-        "minimum_tier": "the-events-calendar-agency",
+        "minimum_tier": "agency",
         "name": "Seating",
         "description": "Assigned seating charts and seat selection for events.",
         "category": "ticketing",
@@ -1922,7 +1922,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-basic",
+        "minimum_tier": "basic",
         "name": "Filter Bar",
         "description": "Advanced filtering for event calendars by category, venue, and more.",
         "category": "core",
@@ -1940,7 +1940,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-pro",
+        "minimum_tier": "pro",
         "name": "Eventbrite Tickets",
         "description": "Sync events and tickets with Eventbrite.",
         "category": "integration",
@@ -1958,7 +1958,7 @@
         "homepage": null
       },
       {
-        "minimum_tier": "the-events-calendar-agency",
+        "minimum_tier": "agency",
         "name": "Event Schedule Manager",
         "description": "Create multi-track schedules for conferences and multi-day events.",
         "category": "management",
@@ -1978,7 +1978,7 @@
       {
         "slug": "promoter",
         "kind": "service",
-        "minimum_tier": "the-events-calendar-agency",
+        "minimum_tier": "agency",
         "plugin_file": null,
         "wporg_slug": null,
         "version": "",
@@ -1994,7 +1994,7 @@
       {
         "slug": "assigned-seating",
         "kind": "service",
-        "minimum_tier": "the-events-calendar-agency",
+        "minimum_tier": "agency",
         "plugin_file": null,
         "wporg_slug": null,
         "version": "",

@@ -111,7 +111,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug'      => 'give',
-						'tier'              => 'give-pro',
+						'tier'              => 'pro',
 						'status'            => 'active',
 						'expires'           => '2030-12-31 23:59:59',
 						'validation_status' => 'valid',
@@ -138,7 +138,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug'      => 'give',
-						'tier'              => 'give-pro',
+						'tier'              => 'pro',
 						'status'            => 'active',
 						'expires'           => '2030-12-31 23:59:59',
 						'validation_status' => 'not_activated',
@@ -165,7 +165,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 				Product_Entry::from_array(
 					[
 						'product_slug'      => 'give',
-						'tier'              => 'give-pro',
+						'tier'              => 'pro',
 						'status'            => 'active',
 						'expires'           => '2030-12-31 23:59:59',
 						'validation_status' => 'valid',

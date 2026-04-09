@@ -16,7 +16,7 @@ final class Product_CatalogTest extends HarborTestCase {
 		'product_name' => 'Kadence',
 		'tiers'        => [
 			[
-				'tier_slug'    => 'kadence-basic',
+				'tier_slug'    => 'basic',
 				'name'         => 'Basic',
 				'rank'         => 1,
 				'price'        => 0,
@@ -25,7 +25,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'herald_slugs' => [],
 			],
 			[
-				'tier_slug'    => 'kadence-pro',
+				'tier_slug'    => 'pro',
 				'name'         => 'Pro',
 				'rank'         => 2,
 				'price'        => 14900,
@@ -34,7 +34,7 @@ final class Product_CatalogTest extends HarborTestCase {
 				'herald_slugs' => [],
 			],
 			[
-				'tier_slug'    => 'kadence-agency',
+				'tier_slug'    => 'agency',
 				'name'         => 'Agency',
 				'rank'         => 3,
 				'price'        => 29900,
@@ -47,7 +47,7 @@ final class Product_CatalogTest extends HarborTestCase {
 			[
 				'slug'              => 'kad-blocks-pro',
 				'kind'              => 'plugin',
-				'minimum_tier'      => 'kadence-basic',
+				'minimum_tier'      => 'basic',
 				'main_file'         => 'kadence-blocks-pro/kadence-blocks-pro.php',
 				'wporg_slug'        => null,
 				'download_url'      => 'https://licensing.stellarwp.com/api/plugins/kad-blocks-pro',
@@ -60,7 +60,7 @@ final class Product_CatalogTest extends HarborTestCase {
 			[
 				'slug'              => 'kad-pattern-hub',
 				'kind'              => 'plugin',
-				'minimum_tier'      => 'kadence-basic',
+				'minimum_tier'      => 'basic',
 				'wporg_slug'        => null,
 				'main_file'         => 'kad-pattern-hub/kad-pattern-hub.php',
 				'name'              => 'Pattern Hub',
@@ -89,13 +89,13 @@ final class Product_CatalogTest extends HarborTestCase {
 			$this->assertInstanceOf( Catalog_Tier::class, $tier );
 		}
 
-		$basic = $tiers->get( 'kadence-basic' );
-		$this->assertSame( 'kadence-basic', $basic->get_tier_slug() );
+		$basic = $tiers->get( 'basic' );
+		$this->assertSame( 'basic', $basic->get_tier_slug() );
 		$this->assertSame( 'Basic', $basic->get_name() );
 		$this->assertSame( 1, $basic->get_rank() );
 
-		$agency = $tiers->get( 'kadence-agency' );
-		$this->assertSame( 'kadence-agency', $agency->get_tier_slug() );
+		$agency = $tiers->get( 'agency' );
+		$this->assertSame( 'agency', $agency->get_tier_slug() );
 		$this->assertSame( 3, $agency->get_rank() );
 	}
 
@@ -123,7 +123,7 @@ final class Product_CatalogTest extends HarborTestCase {
 		$this->assertSame( 'kadence', $result['product_slug'] );
 		$this->assertSame( 'Kadence', $result['product_name'] );
 		$this->assertCount( 3, $result['tiers'] );
-		$this->assertSame( 'kadence-basic', $result['tiers'][0]['tier_slug'] );
+		$this->assertSame( 'basic', $result['tiers'][0]['tier_slug'] );
 		$this->assertSame( 'Basic', $result['tiers'][0]['name'] );
 		$this->assertSame( 1, $result['tiers'][0]['rank'] );
 		$this->assertSame( 0, $result['tiers'][0]['price'] );

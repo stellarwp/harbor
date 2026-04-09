@@ -134,7 +134,7 @@ final class Http_ClientTest extends HarborTestCase {
 					'product_name' => 'Kadence',
 					'tiers'        => [
 						[
-							'tier_slug'    => 'kadence-basic',
+							'tier_slug'    => 'basic',
 							'name'         => 'Basic',
 							'rank'         => 1,
 							'price'        => 0,
@@ -143,7 +143,7 @@ final class Http_ClientTest extends HarborTestCase {
 							'herald_slugs' => [],
 						],
 						[
-							'tier_slug'    => 'kadence-pro',
+							'tier_slug'    => 'pro',
 							'name'         => 'Pro',
 							'rank'         => 2,
 							'price'        => 14900,
@@ -156,7 +156,7 @@ final class Http_ClientTest extends HarborTestCase {
 						[
 							'slug'         => 'kad-blocks-pro',
 							'kind'         => 'plugin',
-							'minimum_tier' => 'kadence-basic',
+							'minimum_tier' => 'basic',
 							'main_file'    => 'kadence-blocks-pro/kadence-blocks-pro.php',
 							'wporg_slug'   => null,
 							'name'         => 'Blocks Pro',
@@ -170,7 +170,7 @@ final class Http_ClientTest extends HarborTestCase {
 					'product_name' => 'GiveWP',
 					'tiers'        => [
 						[
-							'tier_slug'    => 'give-basic',
+							'tier_slug'    => 'basic',
 							'name'         => 'Basic',
 							'rank'         => 1,
 							'price'        => 0,

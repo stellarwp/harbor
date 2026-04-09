@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 final class Catalog_TierTest extends HarborTestCase {
 
 	private array $valid_data = [
-		'tier_slug'    => 'kadence-pro',
+		'tier_slug'    => 'pro',
 		'name'         => 'Pro',
 		'rank'         => 2,
 		'price'        => 14900,
@@ -21,7 +21,7 @@ final class Catalog_TierTest extends HarborTestCase {
 	public function test_from_array_hydrates_all_fields(): void {
 		$tier = Catalog_Tier::from_array( $this->valid_data );
 
-		$this->assertSame( 'kadence-pro', $tier->get_tier_slug() );
+		$this->assertSame( 'pro', $tier->get_tier_slug() );
 		$this->assertSame( 'Pro', $tier->get_name() );
 		$this->assertSame( 2, $tier->get_rank() );
 		$this->assertSame( 14900, $tier->get_price() );
@@ -35,7 +35,7 @@ final class Catalog_TierTest extends HarborTestCase {
 		$tier   = Catalog_Tier::from_array( $this->valid_data );
 		$result = $tier->to_array();
 
-		$this->assertSame( 'kadence-pro', $result['tier_slug'] );
+		$this->assertSame( 'pro', $result['tier_slug'] );
 		$this->assertSame( 'Pro', $result['name'] );
 		$this->assertSame( 2, $result['rank'] );
 		$this->assertSame( 14900, $result['price'] );

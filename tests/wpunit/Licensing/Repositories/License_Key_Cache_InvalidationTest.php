@@ -72,20 +72,20 @@ final class License_Key_Cache_InvalidationTest extends HarborTestCase {
 		$this->license_repository->store_key( 'LWSW-UNIFIED-PRO-2026' );
 		$pro_result = $this->license_manager->get_products( 'example.com' );
 
-		$this->assertSame( 'kadence-pro', $pro_result->get( 'kadence' )->get_tier() );
-		$this->assertSame( 'give-pro', $pro_result->get( 'give' )->get_tier() );
+		$this->assertSame( 'pro', $pro_result->get( 'kadence' )->get_tier() );
+		$this->assertSame( 'pro', $pro_result->get( 'give' )->get_tier() );
 
 		// Cached — calling again returns stale pro data.
 		$stale = $this->license_manager->get_products( 'example.com' );
-		$this->assertSame( 'kadence-pro', $stale->get( 'kadence' )->get_tier(), 'Should still be cached pro data.' );
+		$this->assertSame( 'pro', $stale->get( 'kadence' )->get_tier(), 'Should still be cached pro data.' );
 
 		// Change the license key — fires action, invalidates the transient.
 		$this->license_repository->store_key( 'LWSW-UNIFIED-BASIC-2026' );
 
 		$basic_result = $this->license_manager->get_products( 'example.com' );
 
-		$this->assertSame( 'kadence-basic', $basic_result->get( 'kadence' )->get_tier() );
-		$this->assertSame( 'give-basic', $basic_result->get( 'give' )->get_tier() );
+		$this->assertSame( 'basic', $basic_result->get( 'kadence' )->get_tier() );
+		$this->assertSame( 'basic', $basic_result->get( 'give' )->get_tier() );
 	}
 
 	public function test_catalog_repository_fetches_fresh_after_key_change(): void {
