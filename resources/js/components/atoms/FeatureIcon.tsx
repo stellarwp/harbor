@@ -22,7 +22,7 @@ export function FeatureIcon( { slug }: FeatureIconProps ) {
     const src = FEATURE_LOGOS[ slug ];
 
     if ( ! src ) {
-        return <div className="rounded bg-muted shrink-0 w-8 h-8" />;
+        return null;
     }
 
     return (
