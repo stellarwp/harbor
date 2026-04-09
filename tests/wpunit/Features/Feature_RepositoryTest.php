@@ -101,9 +101,11 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$catalog_client   = new Catalog_Fixture( codecept_data_dir( 'catalog/default.json' ) );
 		$licensing_client = new Licensing_Fixture( codecept_data_dir( 'licensing' ) );
 
-		$catalog   = new Catalog_Repository( $catalog_client );
-		$licensing = new License_Manager( new License_Repository(), new Product_Registry(), $licensing_client );
-		$licensing->store_key( 'LWSW-test-error-key' );
+		$catalog    = new Catalog_Repository( $catalog_client );
+		$repository = new License_Repository();
+		$licensing  = new License_Manager( $repository, new Product_Registry(), $licensing_client );
+		$licensing->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$repository->set_products( new WP_Error( 'lw-harbor-invalid-response', 'Simulated server error' ) );
 
 		return new Feature_Repository(
 			$this->make_resolver( $catalog, $licensing )

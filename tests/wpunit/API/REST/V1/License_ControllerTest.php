@@ -217,15 +217,14 @@ final class License_ControllerTest extends HarborTestCase {
 	public function test_refresh_returns_key_with_empty_products_when_key_invalid(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ) );
+		$this->manager->store_key( 'LWSW-NOT-A-REAL-KEY' );
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
 		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
+		$this->assertSame( 'LWSW-NOT-A-REAL-KEY', $data['key'] );
 		$this->assertSame( [], $data['products'] );
 	}
 

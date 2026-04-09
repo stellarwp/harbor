@@ -36,7 +36,7 @@
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.1",
         "stellarwp/container-contract": "^1.0",
-        "stellarwp/licensing-api-client-wordpress": "^0.9"
+        "stellarwp/licensing-api-client-wordpress": "^0.10.0"
     },
     "config": {
         "preferred-install": "dist",

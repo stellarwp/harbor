@@ -83,7 +83,7 @@ final class Product_Entry {
 				'expires'            => $entry->expires->format( 'Y-m-d H:i:s' ),
 				'site_limit'         => $entry->activations->siteLimit,
 				'active_count'       => $entry->activations->activeCount,
-				'activation_domains' => $entry->activations->domains,
+				'activation_domains' => array_keys( $entry->activations->domains ),
 				'activated_here'     => $entry->activatedHere,
 				'validation_status'  => $entry->validationStatus,
 				'capabilities'       => $entry->capabilities->toArray(),
@@ -104,8 +104,12 @@ final class Product_Entry {
 		$activations        = isset( $data['activations'] ) && is_array( $data['activations'] ) ? $data['activations'] : [];
 		$raw_caps           = isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ? $data['capabilities'] : [];
 		$capabilities       = array_values( array_filter( array_map( [ Cast::class, 'to_string' ], $raw_caps ) ) );
-		$raw_domains        = isset( $activations['domains'] ) && is_array( $activations['domains'] ) ? $activations['domains'] : [];
-		$activation_domains = array_values( array_filter( array_map( [ Cast::class, 'to_string' ], $raw_domains ) ) );
+		$raw_domains = isset( $activations['domains'] ) && is_array( $activations['domains'] ) ? $activations['domains'] : [];
+		if ( ! empty( $raw_domains ) && is_array( reset( $raw_domains ) ) ) {
+			$activation_domains = array_keys( $raw_domains );
+		} else {
+			$activation_domains = array_values( array_filter( array_map( [ Cast::class, 'to_string' ], $raw_domains ) ) );
+		}
 
 		return new self(
 			[

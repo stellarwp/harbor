@@ -18,7 +18,18 @@ final class Product_EntryTest extends HarborTestCase {
 			'site_limit'   => 5,
 			'active_count' => 3,
 			'over_limit'   => false,
-			'domains'      => [ 'example.com', 'staging.example.com' ],
+			'domains'      => [
+				'example.com'         => [
+					'activated_at'   => '2026-01-01 00:00:00',
+					'deactivated_at' => null,
+					'is_active'      => true,
+				],
+				'staging.example.com' => [
+					'activated_at'   => '2026-01-01 00:00:00',
+					'deactivated_at' => null,
+					'is_active'      => true,
+				],
+			],
 		],
 		'capabilities'      => [ 'feature-a', 'feature-b' ],
 		'activated_here'    => true,
