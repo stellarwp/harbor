@@ -32,15 +32,14 @@ function ToastIcon( { variant }: { variant: ToastVariant } ) {
 export function Toaster() {
     const { toasts, removeToast } = useToast();
 
-    if ( toasts.length === 0 ) return null;
-
     return (
-        <div className="fixed bottom-4 right-4 z-[100001] flex flex-col gap-2 pointer-events-none">
+        <div
+            aria-live="polite"
+            className="fixed bottom-4 right-4 z-[100001] flex flex-col gap-2 pointer-events-none"
+        >
             { toasts.map( ( toast ) => (
                 <div
                     key={ toast.id }
-                    role="status"
-                    aria-live="polite"
                     className={ cn(
                         'pointer-events-auto flex items-start gap-3 rounded-lg px-4 py-3 shadow-lg text-sm max-w-xs',
                         VARIANT_STYLES[ toast.variant ]
