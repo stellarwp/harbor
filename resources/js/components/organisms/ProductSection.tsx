@@ -48,6 +48,11 @@ export function ProductSection( { product }: ProductSectionProps ) {
     const activeCount      = availableFeatures.filter( ( f ) => f.is_enabled ).length;
     const deactivatedCount = availableFeatures.filter( ( f ) => ! f.is_enabled ).length;
 
+    const isNotActivated = licenseProduct !== null && (
+        licenseProduct.validation_status === 'not_activated' ||
+        licenseProduct.validation_status === 'activation_required'
+    );
+
     const tierName = licenseProduct
         ? ( sortedCatalogTiers.find( ( t ) => t.tier_slug === licenseProduct.tier )?.name ?? licenseProduct.tier )
         : null;
@@ -62,7 +67,9 @@ export function ProductSection( { product }: ProductSectionProps ) {
                 <h2 className="text-base font-semibold m-0 p-0 text-white">
                     { product.name }
                 </h2>
-                { tierName ? (
+                { isNotActivated ? (
+                    <LicenseBadge type="not-activated" />
+                ) : tierName ? (
                     <LicenseBadge type="licensed" tierName={ tierName } />
                 ) : hasActiveLegacy ? (
                     <LicenseBadge type="legacy" />
