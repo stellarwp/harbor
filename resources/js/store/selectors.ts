@@ -140,7 +140,7 @@ export const isProductUnifiedLicensed = (state: State, productSlug: string): boo
 export const isProductLicenseValid = ( state: State, productSlug: string ): boolean => {
 	const product = state.license.license.products.find( ( p ) => p.product_slug === productSlug );
 	if ( ! product ) return false;
-	return product.validation_status == null || product.validation_status === 'valid';
+	return product.is_valid
 };
 
 /**
