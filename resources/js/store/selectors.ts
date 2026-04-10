@@ -127,6 +127,23 @@ export const isProductUnifiedLicensed = (state: State, productSlug: string): boo
 	state.license.license.products.some( (p) => p.product_slug === productSlug );
 
 /**
+ * True when the unified license entry for the given product is present and its
+ * validation_status indicates it is effective for this domain.
+ *
+ * Returns false when the product has no entry, or when a non-valid status is known
+ * (not_activated, expired, out_of_activations, suspended, etc.).
+ * A null/undefined validation_status is treated as valid, matching the PHP backend's
+ * is_license_invalid() logic.
+ *
+ * @since 1.0.0
+ */
+export const isProductLicenseValid = ( state: State, productSlug: string ): boolean => {
+	const product = state.license.license.products.find( ( p ) => p.product_slug === productSlug );
+	if ( ! product ) return false;
+	return product.validation_status == null || product.validation_status === 'valid';
+};
+
+/**
  * True when at least one feature belonging to the product has an active legacy license.
  */
 export const hasActiveLegacyLicenseForProduct = createSelector(
