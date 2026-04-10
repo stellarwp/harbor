@@ -5561,7 +5561,7 @@ const isProductUnifiedLicensed = (state, productSlug) => state.license.license.p
 const isProductLicenseValid = (state, productSlug) => {
   const product = state.license.license.products.find(p => p.product_slug === productSlug);
   if (!product) return false;
-  return product.validation_status == null || product.validation_status === 'valid';
+  return product.is_valid;
 };
 
 /**
