@@ -258,6 +258,16 @@ class Error_Code {
 	public const CAPABILITY_REVOKED = 'lw-harbor-capability-revoked';
 
 	/**
+	 * An attempt was made to enable a feature that is covered by neither
+	 * the unified license nor an active legacy license.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	public const NOT_LICENSED = 'lw-harbor-not-licensed';
+
+	/**
 	 * Maps an error code to its recommended HTTP status code.
 	 *
 	 * @since 1.0.0
@@ -273,8 +283,10 @@ class Error_Code {
 			self::FEATURE_TYPE_MISMATCH          => 400,
 
 			// 403 Forbidden — the feature is within the user's tier but its capability
-			// has been individually removed from their license.
+			// has been individually removed from their license, or it is covered by
+			// neither the unified license nor an active legacy license.
 			self::CAPABILITY_REVOKED             => 403,
+			self::NOT_LICENSED                   => 403,
 
 			// 404 Not Found — the requested feature slug does not exist in the catalog.
 			self::FEATURE_NOT_FOUND              => 404,
