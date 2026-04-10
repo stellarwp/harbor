@@ -10,6 +10,7 @@ use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Error_Code as Licensing_Error_Code;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
@@ -168,20 +169,25 @@ class Resolve_Feature_Collection {
 	/**
 	 * Resolves the capabilities granted by the license for a given product.
 	 *
-	 * Returns the capabilities array from the product entry when a license exists,
-	 * or null when no license is present for this product.
+	 * Returns null when no license is present or when the license is known to be
+	 * ineffective for this domain (any non-valid validation_status). Returning null
+	 * causes paid-tier features to render as locked rather than "Unavailable".
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param Product_Catalog    $product  The catalog product.
 	 * @param Product_Collection $products The licensing product collection.
 	 *
-	 * @return string[]|null The capabilities array, or null if the product has no license.
+	 * @return string[]|null The capabilities array, or null if the product has no effective license.
 	 */
 	private function resolve_capabilities( Product_Catalog $product, Product_Collection $products ): ?array {
 		$license = $products->get( $product->get_product_slug() );
 
 		if ( null === $license ) {
+			return null;
+		}
+
+		if ( $this->is_license_invalid( $license->get_validation_status() ) ) {
 			return null;
 		}
 
@@ -191,9 +197,8 @@ class Resolve_Feature_Collection {
 	/**
 	 * Returns the rank of the user's licensed tier for a product, or -1 if unlicensed.
 	 *
-	 * Used alongside resolve_capabilities() to compute in_catalog_tier for each feature.
-	 * A rank of -1 means no license covers this product, so no paid-tier features are
-	 * considered "in tier".
+	 * Returns -1 when the license is known to be ineffective for this domain, matching
+	 * the resolve_capabilities() guard so both flags are consistent.
 	 *
 	 * @since 1.0.0
 	 *
@@ -209,9 +214,31 @@ class Resolve_Feature_Collection {
 			return -1;
 		}
 
+		if ( $this->is_license_invalid( $license->get_validation_status() ) ) {
+			return -1;
+		}
+
 		$tier = $product->get_tier_by_slug( $license->get_tier() );
 
 		return $tier !== null ? $tier->get_rank() : -1;
+	}
+
+	/**
+	 * Returns true when a known validation status is present but is not 'valid'.
+	 *
+	 * Covers not_activated, activation_required, expired, suspended, cancelled,
+	 * out_of_activations, license_suspended, license_banned, no_entitlement, etc.
+	 * A null status means no domain was provided in the request, so capabilities
+	 * are left untouched in that case.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|null $validation_status The product's validation status.
+	 *
+	 * @return bool
+	 */
+	private function is_license_invalid( ?string $validation_status ): bool {
+		return $validation_status !== null && $validation_status !== Validation_Status::VALID;
 	}
 
 	/**
