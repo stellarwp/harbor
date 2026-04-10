@@ -27,16 +27,9 @@ export function NotActivatedBanner() {
 
 	if ( ! allNotActivated || ! licenseKey || ! window.harborData ) return null;
 
-	const { portalUrl, domain, callbackUrl } = window.harborData;
-
 	const activationUrl =
-		portalUrl +
-		'/license/?' +
-		new URLSearchParams( {
-			key:      licenseKey,
-			domain:   domain,
-			callback: callbackUrl,
-		} ).toString();
+		window.harborData.activationBaseUrl +
+		'&key=' + encodeURIComponent( licenseKey );
 
 	return (
 		<div

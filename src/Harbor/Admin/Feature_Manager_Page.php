@@ -143,11 +143,15 @@ class Feature_Manager_Page {
 			$handle,
 			'harborData',
 			[
-				'restUrl'     => rest_url( 'liquidweb/harbor/v1/' ),
-				'nonce'       => wp_create_nonce( 'wp_rest' ),
-				'domain'      => $this->site_data->get_domain(),
-				'portalUrl'   => Config::get_portal_base_url(),
-				'callbackUrl' => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
+				'restUrl'             => rest_url( 'liquidweb/harbor/v1/' ),
+				'nonce'               => wp_create_nonce( 'wp_rest' ),
+				'activationBaseUrl'   => add_query_arg(
+					[
+						'domain'   => $this->site_data->get_domain(),
+						'callback' => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
+					],
+					Config::get_portal_base_url() . '/license/'
+				),
 			]
 		);
 

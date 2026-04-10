@@ -48,15 +48,11 @@ export function LicensePanel() {
         return map;
     }, [ catalogs ] );
 
-    // Portal activation URL for this license key and domain.
+    // Portal activation URL: base is built by PHP, key is appended here so it
+    // stays reactive to license key changes without a page reload.
     const activationUrl = useMemo( () => {
         if ( ! licenseKey || ! window.harborData ) return null;
-        const { portalUrl, domain, callbackUrl } = window.harborData;
-        return (
-            portalUrl +
-            '/license/?' +
-            new URLSearchParams( { key: licenseKey, domain, callback: callbackUrl } ).toString()
-        );
+        return window.harborData.activationBaseUrl + '&key=' + encodeURIComponent( licenseKey );
     }, [ licenseKey ] );
 
     // Product slug → lowest-tier purchase URL map from the catalog.
