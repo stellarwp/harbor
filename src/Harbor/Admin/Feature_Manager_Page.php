@@ -2,6 +2,8 @@
 
 namespace LiquidWeb\Harbor\Admin;
 
+use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -21,6 +23,15 @@ class Feature_Manager_Page {
 	public const PAGE_SLUG = 'lw-software-manager';
 
 	/**
+	 * Site data provider.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Data
+	 */
+	private Data $site_data;
+
+	/**
 	 * Hook suffix returned by add_menu_page().
 	 * Empty string until the page is registered.
 	 *
@@ -29,6 +40,17 @@ class Feature_Manager_Page {
 	 * @var string
 	 */
 	private string $page_hook = '';
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Data $site_data Site data provider.
+	 */
+	public function __construct( Data $site_data ) {
+		$this->site_data = $site_data;
+	}
 
 	/**
 	 * Registers the unified feature manager page if this instance is the version leader.
@@ -121,8 +143,11 @@ class Feature_Manager_Page {
 			$handle,
 			'harborData',
 			[
-				'restUrl' => rest_url( 'liquidweb/harbor/v1/' ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'restUrl'     => rest_url( 'liquidweb/harbor/v1/' ),
+				'nonce'       => wp_create_nonce( 'wp_rest' ),
+				'domain'      => $this->site_data->get_domain(),
+				'portalUrl'   => Config::get_portal_base_url(),
+				'callbackUrl' => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
 			]
 		);
 
