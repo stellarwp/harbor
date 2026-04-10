@@ -7,6 +7,7 @@
  * @package LiquidWeb\Harbor
  */
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { __ } from '@wordpress/i18n';
 
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning';
 
@@ -14,6 +15,11 @@ export interface ToastAction {
     label:   string;
     onClick: () => void;
 }
+
+export const reloadPageAction: ToastAction = {
+    label:   __( 'Reload page to see changes', '%TEXTDOMAIN%' ),
+    onClick: () => window.location.reload(),
+};
 
 export interface Toast {
     id:      string;
