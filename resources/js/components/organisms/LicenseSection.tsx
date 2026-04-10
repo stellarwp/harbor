@@ -131,7 +131,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                     { hasUnactivatedProducts && activationUrl && (
                         <p className="text-xs text-muted-foreground text-center mt-1 mb-0">
                             <a href={ activationUrl } className="underline hover:opacity-75">
-                                { __( 'Manage license in Liquid Web Portal', '%TEXTDOMAIN%' ) }
+                                { __( 'Manage license in Liquid Web', '%TEXTDOMAIN%' ) }
                             </a>
                         </p>
                     ) }
