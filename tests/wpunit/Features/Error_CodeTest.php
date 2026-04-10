@@ -16,6 +16,7 @@ final class Error_CodeTest extends HarborTestCase {
 		return [
 			'FEATURE_TYPE_MISMATCH'          => [ Error_Code::FEATURE_TYPE_MISMATCH, 400 ],
 			'CAPABILITY_REVOKED'             => [ Error_Code::CAPABILITY_REVOKED, 403 ],
+			'NOT_LICENSED'                   => [ Error_Code::NOT_LICENSED, 403 ],
 			'FEATURE_NOT_FOUND'              => [ Error_Code::FEATURE_NOT_FOUND, 404 ],
 			'INSTALL_LOCKED'                 => [ Error_Code::INSTALL_LOCKED, 409 ],
 			'THEME_IS_ACTIVE'                => [ Error_Code::THEME_IS_ACTIVE, 409 ],
