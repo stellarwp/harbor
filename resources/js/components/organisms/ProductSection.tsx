@@ -68,7 +68,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     { product.name }
                 </h2>
                 { isNotActivated ? (
-                    <LicenseBadge type="inactive" />
+                    <LicenseBadge type="unactivated" />
                 ) : tierName ? (
                     <LicenseBadge type="licensed" tierName={ tierName } />
                 ) : hasActiveLegacy ? (

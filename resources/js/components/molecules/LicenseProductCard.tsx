@@ -30,7 +30,7 @@ export function LicenseProductCard( { lp, productName, tierName }: LicenseProduc
 					{ productName }
 				</span>
 				{ isNotActivated
-					? <LicenseBadge type="inactive" className="text-[10px]" />
+					? <LicenseBadge type="unactivated" className="text-[10px]" />
 					: <LicenseBadge type="licensed" tierName={ tierName } className="text-[10px]" />
 				}
 			</div>
