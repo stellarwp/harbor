@@ -75,7 +75,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		( select ) => {
 			const activeLegacy = select( harborStore ).getActiveLegacyLicense( feature.slug );
 			if ( ! activeLegacy ) return false;
-			return ! select( harborStore ).isProductUnifiedLicensed( feature.product );
+			return ! select( harborStore ).isProductLicenseValid( feature.product );
 		},
 		[ feature.slug, feature.product ]
 	);
