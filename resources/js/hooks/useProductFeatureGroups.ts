@@ -36,9 +36,19 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
 
     return useMemo( () => {
         const sorted         = catalogTiers.slice().sort( ( a, b ) => a.rank - b.rank );
-        const licenseProduct = licenseProducts.find( ( lp ) => lp.product_slug === productSlug );
-        const userTier       = licenseProduct?.tier ? sorted.find( ( t ) => t.tier_slug === licenseProduct.tier ) : null;
-        const rank           = userTier?.rank ?? -1;  // -1 = unlicensed (show all tier groups)
+        const licenseProduct  = licenseProducts.find( ( lp ) => lp.product_slug === productSlug );
+
+        // Treat any known non-valid status as unlicensed for tier-group rendering:
+        // the raw licenseProduct.tier is still present (e.g. "elite") but the product
+        // is not usable on this domain, so all tier groups should render as locked.
+        const isLicenseInvalid = licenseProduct !== undefined &&
+            licenseProduct.validation_status !== null &&
+            licenseProduct.validation_status !== 'valid';
+
+        const userTier = ( ! isLicenseInvalid && licenseProduct?.tier )
+            ? sorted.find( ( t ) => t.tier_slug === licenseProduct.tier )
+            : null;
+        const rank     = userTier?.rank ?? -1;  // -1 = unlicensed (show all tier groups)
         const upgrade        = sorted.filter( ( t ) => t.rank > rank );
         const slugs          = isUnifiedLicensed
             ? new Set<string>()
