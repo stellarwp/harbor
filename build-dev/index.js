@@ -4215,7 +4215,7 @@ function useFeatureRow(feature) {
   const isLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
-    return !select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductUnifiedLicensed(feature.product);
+    return !select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductLicenseValid(feature.product);
   }, [feature.slug, feature.product]);
   const licenseBadgeType = (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.getLicenseBadgeType)(feature, isLegacy);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
@@ -4370,12 +4370,12 @@ function useProductFeatureGroups(productSlug) {
   const {
     catalogTiers,
     licenseProducts,
-    isUnifiedLicensed,
+    isLicenseValid,
     legacyLicenses
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => ({
     catalogTiers: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getProductCatalog(productSlug)?.tiers ?? [],
     licenseProducts: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLicenseProducts(),
-    isUnifiedLicensed: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductUnifiedLicensed(productSlug),
+    isLicenseValid: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isProductLicenseValid(productSlug),
     legacyLicenses: select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLegacyLicenses()
   }), [productSlug]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
@@ -4399,7 +4399,7 @@ function useProductFeatureGroups(productSlug) {
     // are locked because the product is not activated, not because the tier is wrong.
     // These render without an upgrade button.
     const activationTiers = isLicenseInvalid ? sorted.filter(t => t.rank <= rank && t.rank > 0) : [];
-    const slugs = isUnifiedLicensed ? new Set() : new Set(legacyLicenses.filter(l => l.is_active).map(l => l.slug));
+    const slugs = isLicenseValid ? new Set() : new Set(legacyLicenses.filter(l => l.is_active).map(l => l.slug));
     const isLegacyAvailable = f => slugs.has(f.slug);
 
     // Available: the standard set, PLUS revoked features.
@@ -4421,7 +4421,7 @@ function useProductFeatureGroups(productSlug) {
       upgradeCatalogTiers: upgrade,
       activationCatalogTiers: activationTiers
     };
-  }, [allFeatures, catalogTiers, licenseProducts, isUnifiedLicensed, legacyLicenses, productSlug]);
+  }, [allFeatures, catalogTiers, licenseProducts, isLicenseValid, legacyLicenses, productSlug]);
 }
 
 /***/ },
@@ -5443,6 +5443,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isLicenseDeleting: () => (/* binding */ isLicenseDeleting),
 /* harmony export */   isLicenseRefreshing: () => (/* binding */ isLicenseRefreshing),
 /* harmony export */   isLicenseStoring: () => (/* binding */ isLicenseStoring),
+/* harmony export */   isProductLicenseValid: () => (/* binding */ isProductLicenseValid),
 /* harmony export */   isProductUnifiedLicensed: () => (/* binding */ isProductUnifiedLicensed)
 /* harmony export */ });
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
@@ -5526,6 +5527,23 @@ const getActiveLegacyLicense = (state, slug) => {
  * True when the unified license covers the given product slug.
  */
 const isProductUnifiedLicensed = (state, productSlug) => state.license.license.products.some(p => p.product_slug === productSlug);
+
+/**
+ * True when the unified license entry for the given product is present and its
+ * validation_status indicates it is effective for this domain.
+ *
+ * Returns false when the product has no entry, or when a non-valid status is known
+ * (not_activated, expired, out_of_activations, suspended, etc.).
+ * A null/undefined validation_status is treated as valid, matching the PHP backend's
+ * is_license_invalid() logic.
+ *
+ * @since 1.0.0
+ */
+const isProductLicenseValid = (state, productSlug) => {
+  const product = state.license.license.products.find(p => p.product_slug === productSlug);
+  if (!product) return false;
+  return product.validation_status == null || product.validation_status === 'valid';
+};
 
 /**
  * True when at least one feature belonging to the product has an active legacy license.
