@@ -108,16 +108,24 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 			if ( result instanceof HarborError ) {
 				addError( result );
 			} else {
-				/* translators: %s is the name of the feature being enabled */
-				addToast( sprintf( __( '%s enabled', '%TEXTDOMAIN%' ), feature.name ), 'success' );
+				addToast(
+					/* translators: %s is the name of the feature being enabled */
+					sprintf( __( '%s enabled', '%TEXTDOMAIN%' ), feature.name ),
+					'success',
+					{ label: __( 'Reload page to see changes', '%TEXTDOMAIN%' ), onClick: () => window.location.reload() },
+				);
 			}
 		} else {
 			const result = await disableFeature( feature.slug );
 			if ( result instanceof HarborError ) {
 				addError( result );
 			} else {
-				/* translators: %s is the name of the feature being disabled */
-				addToast( sprintf( __( '%s disabled', '%TEXTDOMAIN%' ), feature.name ), 'default' );
+				addToast(
+					/* translators: %s is the name of the feature being disabled */
+					sprintf( __( '%s disabled', '%TEXTDOMAIN%' ), feature.name ),
+					'default',
+					{ label: __( 'Reload page to see changes', '%TEXTDOMAIN%' ), onClick: () => window.location.reload() },
+				);
 			}
 		}
 		setPendingAction( null );

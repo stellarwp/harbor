@@ -47,7 +47,18 @@ export function Toaster() {
                     ) }
                 >
                     <ToastIcon variant={ toast.variant } />
-                    <span className="flex-1">{ toast.message }</span>
+                    <div className="flex-1 flex flex-col gap-1.5">
+                        <span>{ toast.message }</span>
+                        { toast.action && (
+                            <button
+                                type="button"
+                                onClick={ () => { toast.action!.onClick(); removeToast( toast.id ); } }
+                                className="self-start text-xs font-medium underline underline-offset-2 hover:no-underline"
+                            >
+                                { toast.action.label }
+                            </button>
+                        ) }
+                    </div>
                     <button
                         type="button"
                         onClick={ () => removeToast( toast.id ) }
