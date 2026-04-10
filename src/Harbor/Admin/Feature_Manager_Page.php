@@ -3,6 +3,8 @@
 namespace LiquidWeb\Harbor\Admin;
 
 use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\Version;
 
@@ -32,6 +34,24 @@ class Feature_Manager_Page {
 	private Data $site_data;
 
 	/**
+	 * License manager.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var License_Manager
+	 */
+	private License_Manager $license_manager;
+
+	/**
+	 * Catalog repository.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Catalog_Repository
+	 */
+	private Catalog_Repository $catalog;
+
+	/**
 	 * Hook suffix returned by add_menu_page().
 	 * Empty string until the page is registered.
 	 *
@@ -46,10 +66,14 @@ class Feature_Manager_Page {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Data $site_data Site data provider.
+	 * @param Data               $site_data       Site data provider.
+	 * @param License_Manager    $license_manager License manager.
+	 * @param Catalog_Repository $catalog         Catalog repository.
 	 */
-	public function __construct( Data $site_data ) {
-		$this->site_data = $site_data;
+	public function __construct( Data $site_data, License_Manager $license_manager, Catalog_Repository $catalog ) {
+		$this->site_data       = $site_data;
+		$this->license_manager = $license_manager;
+		$this->catalog         = $catalog;
 	}
 
 	/**
@@ -182,10 +206,34 @@ class Feature_Manager_Page {
 	 * @return void
 	 */
 	public function render(): void {
+		$this->maybe_refresh();
 		?>
 		<div class="wrap">
 			<div id="lw-harbor-root" class="lw-harbor-ui"></div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Refreshes license and catalog data when the portal redirects back with
+	 * ?refresh=auto (e.g. after a user activates their license). Strips the
+	 * query param and redirects so a manual reload does not re-trigger the
+	 * refresh.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	private function maybe_refresh(): void {
+		if ( ! isset( $_GET['refresh'] ) || $_GET['refresh'] !== 'auto' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		$this->license_manager->refresh_products( $this->site_data->get_domain() );
+		$this->catalog->refresh();
+
+		$clean_url = remove_query_arg( 'refresh' );
+		wp_safe_redirect( $clean_url );
+		exit;
 	}
 }
