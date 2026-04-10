@@ -176,6 +176,23 @@ export const getCatalogTier = (
 // License
 // ---------------------------------------------------------------------------
 
+const UNACTIVATED_STATUSES = [ 'not_activated', 'activation_required' ] as const;
+
+/**
+ * True when a license is present and every product's validation_status indicates
+ * it has not been activated on this domain (not_activated or activation_required).
+ * Returns false when there are no products.
+ */
+export const areAllProductsNotActivated = ( state: State ): boolean => {
+	const products = state.license.license.products;
+	return (
+		products.length > 0 &&
+		products.every(
+			( p ) => UNACTIVATED_STATUSES.includes( p.validation_status as typeof UNACTIVATED_STATUSES[number] )
+		)
+	);
+};
+
 /**
  * Returns the stored unified license key, or null. Triggers getLicenseKey resolver.
  * @param state
