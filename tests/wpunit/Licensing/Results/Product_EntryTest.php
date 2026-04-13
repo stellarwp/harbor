@@ -23,11 +23,13 @@ final class Product_EntryTest extends HarborTestCase {
 					'activated_at'   => '2026-01-01 00:00:00',
 					'deactivated_at' => null,
 					'is_active'      => true,
+					'is_production'  => true,
 				],
 				'staging.example.com' => [
 					'activated_at'   => '2026-01-01 00:00:00',
 					'deactivated_at' => null,
 					'is_active'      => true,
+					'is_production'  => false,
 				],
 			],
 		],
