@@ -9,6 +9,7 @@ use LiquidWeb\LicensingApiClient\Resources\Contracts\CreditsResourceInterface;
 use LiquidWeb\LicensingApiClient\Resources\Contracts\EntitlementsResourceInterface;
 use LiquidWeb\LicensingApiClient\Resources\Contracts\LicensesResourceInterface;
 use LiquidWeb\LicensingApiClient\Resources\Contracts\ProductsResourceInterface;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\TokensResourceInterface;
 use LiquidWeb\LicensingApiClient\Responses\Product\Catalog;
 use Nyholm\Psr7\Response;
 
@@ -146,6 +147,40 @@ final class Fixture_Client implements LicensingClientInterface, ProductsResource
 	 * @param string $token The token (unused).
 	 */
 	public function withToken( string $token ): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @throws \BadMethodCallException Always.
+	 */
+	public function tokens(): TokensResourceInterface {
+		throw new \BadMethodCallException( 'Fixture_Client does not support tokens().' );
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param array<string, string|int|float|bool> $headers Headers (unused).
+	 */
+	public function withHeaders( array $headers ): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param string $traceId Trace ID (unused).
+	 */
+	public function withTraceId( string $traceId ): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function withoutHeaders(): LicensingClientInterface {
 		return $this;
 	}
 }
