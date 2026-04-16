@@ -75,7 +75,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
             <SectionHeader
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'License', '%TEXTDOMAIN%' ) }
-                action={ hasLicense && (
+                action={ (
                     <button
                         type="button"
                         onClick={ onRefresh }
