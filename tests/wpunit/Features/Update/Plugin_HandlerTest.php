@@ -124,6 +124,46 @@ final class Plugin_HandlerTest extends HarborTestCase {
 	}
 
 	/**
+	 * Creates a Plugin_Handler with a wporg Plugin feature in the Feature_Repository.
+	 *
+	 * The feature's catalog slug is always 'my-plugin'. The wporg slug is set to
+	 * the given value, which may or may not match the catalog slug.
+	 *
+	 * @param string $wporg_slug The WordPress.org slug for the feature.
+	 *
+	 * @return Plugin_Handler
+	 */
+	private function handler_with_wporg_feature( string $wporg_slug ): Plugin_Handler {
+		$feature = new Plugin(
+			[
+				'slug'         => 'my-plugin',
+				'product'      => 'test',
+				'tier'         => 'basic',
+				'name'         => 'My Plugin',
+				'description'  => 'A test plugin.',
+				'plugin_file'  => 'my-plugin/my-plugin.php',
+				'is_available' => true,
+				'wporg_slug'   => $wporg_slug,
+			]
+		);
+
+		$features = new Feature_Collection();
+		$features->add( $feature );
+
+		$resolver           = $this->makeEmpty( Resolve_Update_Data::class );
+		$feature_repository = $this->makeEmpty( Feature_Repository::class, [ 'get' => $features ] );
+
+		$license_manager = $this->container->get( License_Manager::class );
+		$license_manager->store_key( 'LWSW-test-handler-key' );
+
+		return new Plugin_Handler(
+			$resolver,
+			$feature_repository,
+			$license_manager
+		);
+	}
+
+	/**
 	 * Tests filter_plugins_api passes through for a non-plugin_information action.
 	 *
 	 * @return void
@@ -242,6 +282,56 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		$this->assertSame( '2.0.0', $result->version );
 		$this->assertSame( 'My Plugin', $result->name );
 		$this->assertSame( 'https://example.com/my-plugin.zip', $result->download_link );
+	}
+
+	/**
+	 * Tests filter_plugins_api passes through when the requested slug already matches
+	 * the feature's WordPress.org slug, deferring to WordPress.org for the response.
+	 *
+	 * @return void
+	 */
+	public function test_it_passes_through_for_wporg_feature_when_slug_matches_wporg_slug(): void {
+		$handler = $this->handler_with_wporg_feature( 'my-plugin' );
+
+		$args       = new stdClass();
+		$args->slug = 'my-plugin';
+
+		$result = $handler->filter_plugins_api( false, 'plugin_information', $args );
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * Tests filter_plugins_api proxies to plugins_api with the correct WordPress.org slug
+	 * when the incoming slug is the catalog slug but differs from the feature's wporg slug.
+	 *
+	 * @return void
+	 */
+	public function test_it_proxies_plugins_api_to_wporg_slug_when_slugs_differ(): void {
+		$handler = $this->handler_with_wporg_feature( 'real-wporg-slug' );
+
+		$fake_wporg_info       = new stdClass();
+		$fake_wporg_info->name = 'My Plugin from WPOrg';
+		$fake_wporg_info->slug = 'real-wporg-slug';
+
+		$interceptor = static function ( $result, $action, $args ) use ( $fake_wporg_info ) {
+			if ( 'plugin_information' === $action && isset( $args->slug ) && 'real-wporg-slug' === $args->slug ) {
+				return $fake_wporg_info;
+			}
+
+			return $result;
+		};
+
+		add_filter( 'plugins_api', $interceptor, 10, 3 );
+
+		$args       = new stdClass();
+		$args->slug = 'my-plugin';
+
+		$result = $handler->filter_plugins_api( false, 'plugin_information', $args );
+
+		remove_filter( 'plugins_api', $interceptor, 10 );
+
+		$this->assertSame( $fake_wporg_info, $result );
 	}
 
 	/**
