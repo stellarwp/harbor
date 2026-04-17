@@ -17,6 +17,10 @@ final class Product_Collection extends Collection {
 	/**
 	 * Adds a product entry to the collection, keyed by its slug.
 	 *
+	 * When the licensing server returns multiple entitlements for the same
+	 * product slug (one per tier), the entry where activated_here is true
+	 * takes precedence over one where it is false or null.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param Product_Entry $entry Product entry instance.
@@ -24,11 +28,20 @@ final class Product_Collection extends Collection {
 	 * @return Product_Entry
 	 */
 	public function add( Product_Entry $entry ): Product_Entry {
-		if ( ! $this->offsetExists( $entry->get_product_slug() ) ) {
-			$this->offsetSet( $entry->get_product_slug(), $entry );
+		$slug = $entry->get_product_slug();
+
+		if ( ! $this->offsetExists( $slug ) ) {
+			$this->offsetSet( $slug, $entry );
+		} else {
+			// Always replace the entry if it is activated here.
+			$existing = $this->offsetGet( $slug );
+
+			if ( $entry->get_activated_here() && ! ( $existing && $existing->get_activated_here() ) ) {
+				$this->offsetSet( $slug, $entry );
+			}
 		}
 
-		return $this->offsetGet( $entry->get_product_slug() ) ?? $entry;
+		return $this->offsetGet( $slug ) ?? $entry;
 	}
 
 	/**
