@@ -8,6 +8,7 @@ use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Utils\Cast;
 use LiquidWeb\LicensingApiClient\Config as LicensingConfig;
 use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
@@ -73,7 +74,7 @@ final class Provider extends Abstract_Provider {
 		add_action(
 			'admin_init',
 			function () {
-				if ( ( sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ) ) !== Feature_Manager_Page::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No nonce needed for this GET parameter.
+				if ( sanitize_text_field( wp_unslash( Cast::to_string( $_GET['page'] ?? '' ) ) ) !== Feature_Manager_Page::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No nonce needed for this GET parameter.
 					return;
 				}
 
