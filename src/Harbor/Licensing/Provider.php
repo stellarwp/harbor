@@ -64,5 +64,18 @@ final class Provider extends Abstract_Provider {
 				$license_manager->store_embedded_key_if_present();
 			}
 		);
+
+		// activated_plugin fires before plugins_loaded, so if the plugin
+		// containing LWSW_KEY.php is itself being activated, Harbor isn't
+		// initialized yet and the listener above never runs. This catches
+		// it on the next page load.
+		add_action(
+			'admin_init',
+			function () {
+				/** @var License_Manager $license_manager */
+				$license_manager = $this->container->get( License_Manager::class );
+				$license_manager->store_embedded_key_if_present();
+			}
+		);
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace LiquidWeb\Harbor\Licensing\Registry;
 
+use LiquidWeb\Harbor\Traits\With_Debugging;
+use LiquidWeb\Harbor\Utils\Cast;
 use LiquidWeb\Harbor\Utils\License_Key;
 
 /**
@@ -19,6 +21,8 @@ use LiquidWeb\Harbor\Utils\License_Key;
  * @since 1.0.0
  */
 final class Product_Registry {
+
+	use With_Debugging;
 
 	/**
 	 * The filename Harbor looks for inside each active plugin's root directory.
@@ -62,19 +66,44 @@ final class Product_Registry {
 	 * @return string|null
 	 */
 	public function first_with_embedded_key(): ?string {
-		foreach ( $this->resolve_plugin_dirs() as $dir ) {
+		$dirs = $this->resolve_plugin_dirs();
+
+		self::debug_log(
+			sprintf( 'Scanning %d active plugin(s) for embedded license key.', count( $dirs ) )
+		);
+
+		foreach ( $dirs as $dir ) {
 			$key_file = $dir . '/' . self::KEY_FILE;
 
 			if ( ! is_readable( $key_file ) ) {
 				continue;
 			}
 
+			self::debug_log(
+				sprintf( 'Found %s in %s — loading.', self::KEY_FILE, $dir )
+			);
+
 			$key = include $key_file;
 
 			if ( is_string( $key ) && License_Key::is_valid_format( $key ) ) {
+				self::debug_log(
+					sprintf( 'Valid embedded license key found in %s: %s', $dir, $key )
+				);
+
 				return $key;
 			}
+
+			self::debug_log(
+				sprintf(
+					'%s in %s did not return a valid LWSW- key. Got: %s',
+					self::KEY_FILE,
+					$dir,
+					Cast::to_string( $key )
+				)
+			);
 		}
+
+		self::debug_log( 'No embedded license key found in any active plugin.' );
 
 		return null;
 	}
