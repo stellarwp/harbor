@@ -2,13 +2,11 @@
 
 namespace LiquidWeb\Harbor\Licensing;
 
-use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
-use LiquidWeb\Harbor\Utils\Cast;
 use LiquidWeb\LicensingApiClient\Config as LicensingConfig;
 use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
@@ -61,23 +59,6 @@ final class Provider extends Abstract_Provider {
 		add_action(
 			'activated_plugin',
 			function () {
-				/** @var License_Manager $license_manager */
-				$license_manager = $this->container->get( License_Manager::class );
-				$license_manager->store_embedded_key_if_present();
-			}
-		);
-
-		// Fallback for when the plugin containing LWSW_KEY.php is itself being
-		// activated — Harbor isn't initialized during that request so the
-		// activated_plugin listener above never runs. Scoped to the software
-		// manager page to avoid scanning on every admin request.
-		add_action(
-			'admin_init',
-			function () {
-				if ( sanitize_text_field( wp_unslash( Cast::to_string( $_GET['page'] ?? '' ) ) ) !== Feature_Manager_Page::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No nonce needed for this GET parameter.
-					return;
-				}
-
 				/** @var License_Manager $license_manager */
 				$license_manager = $this->container->get( License_Manager::class );
 				$license_manager->store_embedded_key_if_present();

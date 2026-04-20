@@ -206,6 +206,13 @@ class Feature_Manager_Page {
 	 * @return void
 	 */
 	public function render(): void {
+		// Store the embedded key if present.
+		// This is a fallback for when the plugin containing LWSW_KEY.php is itself being
+		// activated — Harbor isn't initialized during that request so the
+		// activated_plugin listener above never runs.
+		$this->license_manager->store_embedded_key_if_present();
+
+		// Refresh the license and catalog data.
 		$this->maybe_refresh();
 		?>
 		<div class="wrap">
