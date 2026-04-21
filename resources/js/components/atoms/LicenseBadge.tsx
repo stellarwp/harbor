@@ -9,10 +9,11 @@
 import { __ } from '@wordpress/i18n';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { LicenseStatus } from '@/types/api';
 
 type LicenseBadgeProps =
-	| { type: 'licensed';                                                                                                                  tierName: string; className?: string; }
-	| { type: 'unlicensed' | 'legacy' | 'free' | 'bonus' | 'revoked' | 'unactivated' | 'expired' | 'cancelled' | 'suspended' | 'over_limit'; tierName?: never; className?: string; };
+	| { type: 'licensed';                    tierName: string;  className?: string; }
+	| { type: Exclude<LicenseStatus, 'licensed'>; tierName?: never; className?: string; };
 
 const variantMap = {
 	licensed:        'gradient',
