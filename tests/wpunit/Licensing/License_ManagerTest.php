@@ -239,9 +239,9 @@ final class License_ManagerTest extends HarborTestCase {
 		/** @var Product_Collection $result */
 		$result = $this->manager->get_products( 'example.com' );
 
-		$this->assertNotNull( $result->get( 'give' ) );
-		$this->assertNotNull( $result->get( 'the-events-calendar' ) );
-		$this->assertNotNull( $result->get( 'kadence' ) );
+		$this->assertNotEmpty( $result->get_all_by_slug( 'give' ) );
+		$this->assertNotEmpty( $result->get_all_by_slug( 'the-events-calendar' ) );
+		$this->assertNotEmpty( $result->get_all_by_slug( 'kadence' ) );
 	}
 
 	// -------------------------------------------------------------------------
