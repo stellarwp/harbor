@@ -175,7 +175,7 @@ class Feature_Manager_Page {
 						'redirect_url'    => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
 						'domain'          => $this->site_data->get_domain(),
 					],
-					Config::get_portal_base_url() . '/license/'
+					Config::get_portal_base_url() . '/subscriptions/'
 				),
 			]
 		);
