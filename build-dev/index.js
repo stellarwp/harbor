@@ -4701,7 +4701,6 @@ const enableFeature = slug => async ({
       type: 'TOGGLE_FEATURE_FINISHED',
       feature
     });
-    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
@@ -4736,7 +4735,6 @@ const disableFeature = slug => async ({
       type: 'TOGGLE_FEATURE_FINISHED',
       feature
     });
-    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to disable your feature.', '%TEXTDOMAIN%'));
@@ -4771,7 +4769,6 @@ const updateFeature = slug => async ({
       type: 'UPDATE_FEATURE_FINISHED',
       feature
     });
-    dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to update your feature.', '%TEXTDOMAIN%'));
