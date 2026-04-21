@@ -743,7 +743,11 @@ const variantMap = {
   free: 'secondary',
   bonus: 'warning',
   revoked: 'destructive',
-  unactivated: 'warning'
+  unactivated: 'warning',
+  expired: 'destructive',
+  cancelled: 'outline',
+  suspended: 'destructive',
+  over_limit: 'warning'
 };
 const labelMap = {
   unlicensed: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unlicensed', '%TEXTDOMAIN%'),
@@ -751,7 +755,11 @@ const labelMap = {
   free: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Free', '%TEXTDOMAIN%'),
   bonus: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Bonus', '%TEXTDOMAIN%'),
   revoked: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unavailable', '%TEXTDOMAIN%'),
-  unactivated: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unactivated', '%TEXTDOMAIN%')
+  unactivated: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unactivated', '%TEXTDOMAIN%'),
+  expired: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Expired', '%TEXTDOMAIN%'),
+  cancelled: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Cancelled', '%TEXTDOMAIN%'),
+  suspended: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Suspended', '%TEXTDOMAIN%'),
+  over_limit: () => (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Over limit', '%TEXTDOMAIN%')
 };
 
 /**
@@ -1625,13 +1633,41 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * @since 1.0.0
  */
+function getStatusBadgeType(lp) {
+  if (lp.is_valid && lp.activated_here === false) return 'unactivated';
+  switch (lp.validation_status) {
+    case 'not_activated':
+    case 'activation_required':
+      return 'unactivated';
+    case 'expired':
+      return 'expired';
+    case 'cancelled':
+      return 'cancelled';
+    case 'suspended':
+    case 'license_suspended':
+    case 'license_banned':
+      return 'suspended';
+    case 'out_of_activations':
+      return 'over_limit';
+    default:
+      return 'unlicensed';
+  }
+}
 function LicenseProductCard({
   lp,
   productName,
   tierName
 }) {
   const expiryStatus = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.getExpiryStatus)(lp.expires);
-  const isNotActivated = lp.validation_status === 'not_activated' || lp.validation_status === 'activation_required';
+  const isActivatedHere = lp.is_valid && lp.activated_here === true;
+  const badge = isActivatedHere ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_1__.LicenseBadge, {
+    type: "licensed",
+    tierName: tierName,
+    className: "text-[10px]"
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_1__.LicenseBadge, {
+    type: getStatusBadgeType(lp),
+    className: "text-[10px]"
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: `rounded-lg border bg-card px-3 py-2.5 space-y-2.5 ${_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.expiryCardClass[expiryStatus]}`,
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -1644,14 +1680,7 @@ function LicenseProductCard({
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         className: "text-sm font-medium text-foreground flex-1 min-w-0",
         children: productName
-      }), isNotActivated ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_1__.LicenseBadge, {
-        type: "unactivated",
-        className: "text-[10px]"
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_1__.LicenseBadge, {
-        type: "licensed",
-        tierName: tierName,
-        className: "text-[10px]"
-      })]
+      }), badge]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
       className: `text-xs ${_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.expiryTextClass[expiryStatus]}`,
       children: [expiryStatus === 'expired' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Expired', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Expires', '%TEXTDOMAIN%'), ' ', (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_3__.formatDate)(lp.expires)]
@@ -2304,7 +2333,7 @@ function LicenseSection({
         lp: lp,
         productName: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
         tierName: tierNameMap[lp.tier] ?? lp.tier
-      }, lp.product_slug)), hasUnactivatedProducts && activationUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
+      }, `${lp.product_slug}:${lp.tier}`)), hasUnactivatedProducts && activationUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
         className: "text-xs text-muted-foreground text-center mt-1 mb-0",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
           href: activationUrl,
@@ -2381,8 +2410,9 @@ function ProductSection({
     hasActiveLegacy
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => {
     const licenseProducts = select(_store__WEBPACK_IMPORTED_MODULE_6__.store).getLicenseProducts();
+    const forProduct = licenseProducts.filter(lp => lp.product_slug === product.slug);
     return {
-      licenseProduct: licenseProducts.find(lp => lp.product_slug === product.slug) ?? null,
+      licenseProduct: forProduct.find(lp => lp.activated_here === true) ?? null,
       hasActiveLegacy: select(_store__WEBPACK_IMPORTED_MODULE_6__.store).hasActiveLegacyLicenseForProduct(product.slug)
     };
   }, [product.slug]);
@@ -4397,7 +4427,8 @@ function useProductFeatureGroups(productSlug) {
   }), [productSlug]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const sorted = catalogTiers.slice().sort((a, b) => a.rank - b.rank);
-    const licenseProduct = licenseProducts.find(lp => lp.product_slug === productSlug);
+    const forProduct = licenseProducts.filter(lp => lp.product_slug === productSlug);
+    const licenseProduct = forProduct.find(lp => lp.activated_here === true);
 
     // A license is "invalid" when a validation status is known but not 'valid'
     // (e.g. not_activated, expired, suspended). The raw tier is still present on
@@ -5546,21 +5577,12 @@ const getActiveLegacyLicense = (state, slug) => {
 const isProductUnifiedLicensed = (state, productSlug) => state.license.license.products.some(p => p.product_slug === productSlug);
 
 /**
- * True when the unified license entry for the given product is present and its
- * validation_status indicates it is effective for this domain.
- *
- * Returns false when the product has no entry, or when a non-valid status is known
- * (not_activated, expired, out_of_activations, suspended, etc.).
- * A null/undefined validation_status is treated as valid, matching the PHP backend's
- * is_license_invalid() logic.
+ * True when any tier entry for the given product has is_valid set to true,
+ * meaning the product is activated on the current domain with an active entitlement.
  *
  * @since 1.0.0
  */
-const isProductLicenseValid = (state, productSlug) => {
-  const product = state.license.license.products.find(p => p.product_slug === productSlug);
-  if (!product) return false;
-  return product.is_valid;
-};
+const isProductLicenseValid = (state, productSlug) => state.license.license.products.some(p => p.product_slug === productSlug && p.is_valid === true);
 
 /**
  * True when at least one feature belonging to the product has an active legacy license.
@@ -5604,7 +5626,7 @@ const areAllProductsNotActivated = state => {
  */
 const getLicenseKey = state => state.license.license.key;
 const hasLicense = state => state.license.license.key !== null;
-const getLicenseProducts = state => state.license.license.products;
+const getLicenseProducts = state => state.license.license.products.slice().sort((a, b) => (b.activated_here === true ? 1 : 0) - (a.activated_here === true ? 1 : 0));
 const getLicenseError = state => state.license.license.error;
 const isLicenseStoring = state => state.license.isStoring;
 const isLicenseDeleting = state => state.license.isDeleting;
