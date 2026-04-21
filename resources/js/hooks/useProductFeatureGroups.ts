@@ -37,7 +37,8 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
 
     return useMemo( () => {
         const sorted         = catalogTiers.slice().sort( ( a, b ) => a.rank - b.rank );
-        const licenseProduct = licenseProducts.find( ( lp ) => lp.product_slug === productSlug );
+        const forProduct     = licenseProducts.filter( ( lp ) => lp.product_slug === productSlug );
+        const licenseProduct = forProduct.find( ( lp ) => lp.activated_here === true );
 
         // A license is "invalid" when a validation status is known but not 'valid'
         // (e.g. not_activated, expired, suspended). The raw tier is still present on

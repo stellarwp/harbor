@@ -3,7 +3,6 @@
 namespace LiquidWeb\Harbor\Licensing\Repositories;
 
 use LiquidWeb\Harbor\Licensing\Product_Collection;
-use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Utils\Sanitize;
 use WP_Error;
 
@@ -397,28 +396,7 @@ final class License_Repository {
 	}
 
 	/**
-	 * Get a specific product entry from the cached catalog.
-	 *
-	 * Returns null if no catalog is cached or the product is not found.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $slug The product slug to retrieve.
-	 *
-	 * @return Product_Entry|null
-	 */
-	public function get_product( string $slug ): ?Product_Entry {
-		$products = $this->get_products();
-
-		if ( ! $products instanceof Product_Collection ) {
-			return null;
-		}
-
-		return $products->get( $slug );
-	}
-
-	/**
-	 * Whether a product exists in the cached catalog.
+	 * Whether any entry for a product slug exists in the cached catalog.
 	 *
 	 * @since 1.0.0
 	 *
@@ -427,11 +405,20 @@ final class License_Repository {
 	 * @return bool
 	 */
 	public function has_product( string $slug ): bool {
-		return $this->get_product( $slug ) !== null;
+		$products = $this->get_products();
+
+		if ( ! $products instanceof Product_Collection ) {
+			return false;
+		}
+
+		return count( $products->get_all_by_slug( $slug ) ) > 0;
 	}
 
 	/**
-	 * Whether a product has a valid license status in the cached catalog.
+	 * Whether any entry for a product slug has a valid license status.
+	 *
+	 * Returns true when at least one tier entry for the slug is valid, meaning
+	 * the product is activated on the current domain and the entitlement is active.
 	 *
 	 * @since 1.0.0
 	 *
@@ -440,9 +427,19 @@ final class License_Repository {
 	 * @return bool
 	 */
 	public function is_product_valid( string $slug ): bool {
-		$product = $this->get_product( $slug );
+		$products = $this->get_products();
 
-		return $product !== null && $product->is_valid();
+		if ( ! $products instanceof Product_Collection ) {
+			return false;
+		}
+
+		foreach ( $products->get_all_by_slug( $slug ) as $entry ) {
+			if ( $entry->is_valid() ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

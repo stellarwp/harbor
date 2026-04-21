@@ -127,21 +127,13 @@ export const isProductUnifiedLicensed = (state: State, productSlug: string): boo
 	state.license.license.products.some( (p) => p.product_slug === productSlug );
 
 /**
- * True when the unified license entry for the given product is present and its
- * validation_status indicates it is effective for this domain.
- *
- * Returns false when the product has no entry, or when a non-valid status is known
- * (not_activated, expired, out_of_activations, suspended, etc.).
- * A null/undefined validation_status is treated as valid, matching the PHP backend's
- * is_license_invalid() logic.
+ * True when any tier entry for the given product has is_valid set to true,
+ * meaning the product is activated on the current domain with an active entitlement.
  *
  * @since 1.0.0
  */
-export const isProductLicenseValid = ( state: State, productSlug: string ): boolean => {
-	const product = state.license.license.products.find( ( p ) => p.product_slug === productSlug );
-	if ( ! product ) return false;
-	return product.is_valid
-};
+export const isProductLicenseValid = ( state: State, productSlug: string ): boolean =>
+	state.license.license.products.some( ( p ) => p.product_slug === productSlug && p.is_valid === true );
 
 /**
  * True when at least one feature belonging to the product has an active legacy license.
@@ -196,12 +188,14 @@ export const getCatalogTier = (
 const UNACTIVATED_STATUSES = [ 'not_activated', 'activation_required' ] as const;
 
 /**
- * True when a license is present and every product's validation_status indicates
- * it has not been activated on this domain (not_activated or activation_required).
- * Returns false when there are no products.
+ * True when a license is present and every non-expired product's validation_status
+ * indicates it has not been activated on this domain. Expired products are excluded
+ * so they don't suppress the notice for products that can still be activated.
  */
 export const areAllProductsNotActivated = ( state: State ): boolean => {
-	const products = state.license.license.products;
+	const products = state.license.license.products.filter(
+		( p ) => p.validation_status !== 'expired'
+	);
 	return (
 		products.length > 0 &&
 		products.every(
@@ -221,7 +215,9 @@ export const hasLicense = (state: State): boolean =>
 	state.license.license.key !== null;
 
 export const getLicenseProducts = (state: State): LicenseProduct[] =>
-	state.license.license.products;
+	state.license.license.products
+		.slice()
+		.sort( ( a, b ) => ( b.activated_here === true ? 1 : 0 ) - ( a.activated_here === true ? 1 : 0 ) );
 
 export const getLicenseError = (state: State): LicenseError | null =>
 	state.license.license.error;

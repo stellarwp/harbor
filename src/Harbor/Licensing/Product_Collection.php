@@ -6,7 +6,12 @@ use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Utils\Collection;
 
 /**
- * A collection of Product_Entry objects, keyed by product slug.
+ * A collection of Product_Entry objects, keyed by "product_slug:tier".
+ *
+ * The licensing API returns one entry per tier for each product, so multiple
+ * entries with the same slug but different tiers can coexist. Use
+ * get_all_by_slug() to retrieve all tiers, or get_activated_entry() to
+ * retrieve the single entry activated on the current domain.
  *
  * @since 1.0.0
  *
@@ -15,11 +20,9 @@ use LiquidWeb\Harbor\Utils\Collection;
 final class Product_Collection extends Collection {
 
 	/**
-	 * Adds a product entry to the collection, keyed by its slug.
+	 * Adds a product entry to the collection, keyed by "slug:tier".
 	 *
-	 * When the licensing server returns multiple entitlements for the same
-	 * product slug (one per tier), the entry where activated_here is true
-	 * takes precedence over one where it is false or null.
+	 * All entries are stored — no deduplication across tiers.
 	 *
 	 * @since 1.0.0
 	 *
@@ -28,33 +31,50 @@ final class Product_Collection extends Collection {
 	 * @return Product_Entry
 	 */
 	public function add( Product_Entry $entry ): Product_Entry {
-		$slug = $entry->get_product_slug();
-
-		if ( ! $this->offsetExists( $slug ) ) {
-			$this->offsetSet( $slug, $entry );
-		} else {
-			// Always replace the entry if it is activated here.
-			$existing = $this->offsetGet( $slug );
-
-			if ( $entry->get_activated_here() && ! ( $existing && $existing->get_activated_here() ) ) {
-				$this->offsetSet( $slug, $entry );
-			}
-		}
-
-		return $this->offsetGet( $slug ) ?? $entry;
+		$this->offsetSet( $entry->get_product_slug() . ':' . $entry->get_tier(), $entry );
+		return $entry;
 	}
 
 	/**
-	 * Retrieves a product entry by slug.
+	 * Returns all stored entries for a given product slug.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $offset The product slug.
+	 * @param string $slug The product slug.
+	 *
+	 * @return Product_Entry[]
+	 */
+	public function get_all_by_slug( string $slug ): array {
+		$entries = [];
+
+		foreach ( $this as $entry ) {
+			if ( $entry->get_product_slug() === $slug ) {
+				$entries[] = $entry;
+			}
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * Returns the entry that is activated on the current domain for a given slug.
+	 *
+	 * Returns null when no entry for the slug has activated_here set to true.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The product slug.
 	 *
 	 * @return Product_Entry|null
 	 */
-	public function get( $offset ): ?Product_Entry { // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found -- Narrows return type for IDE support.
-		return parent::get( $offset );
+	public function get_activated_entry( string $slug ): ?Product_Entry {
+		foreach ( $this as $entry ) {
+			if ( $entry->get_product_slug() === $slug && $entry->get_activated_here() ) {
+				return $entry;
+			}
+		}
+
+		return null;
 	}
 
 	/**

@@ -121,7 +121,7 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 <div className="space-y-3">
                     { licenseProducts.map( ( lp ) => (
                         <LicenseProductCard
-                            key={ lp.product_slug }
+                            key={ `${ lp.product_slug }:${ lp.tier }` }
                             lp={ lp }
                             productName={ PRODUCTS.find( ( p ) => p.slug === lp.product_slug )?.name ?? lp.product_slug }
                             tierName={ tierNameMap[ lp.tier ] ?? lp.tier }

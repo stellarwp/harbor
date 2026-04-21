@@ -181,7 +181,7 @@ class Resolve_Feature_Collection {
 	 * @return string[]|null The capabilities array, or null if the product has no effective license.
 	 */
 	private function resolve_capabilities( Product_Catalog $product, Product_Collection $products ): ?array {
-		$license = $products->get( $product->get_product_slug() );
+		$license = $products->get_activated_entry( $product->get_product_slug() );
 
 		if ( null === $license ) {
 			return null;
@@ -208,7 +208,7 @@ class Resolve_Feature_Collection {
 	 * @return int The license tier rank, or -1 if no license covers this product.
 	 */
 	private function resolve_license_tier_rank( Product_Catalog $product, Product_Collection $products ): int {
-		$license = $products->get( $product->get_product_slug() );
+		$license = $products->get_activated_entry( $product->get_product_slug() );
 
 		if ( null === $license ) {
 			return -1;

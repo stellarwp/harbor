@@ -356,6 +356,19 @@ export interface LegacyLicense {
 // License types — GET/POST /liquidweb/harbor/v1/license
 // ---------------------------------------------------------------------------
 
+export type LicenseStatus =
+	| 'licensed'
+	| 'unlicensed'
+	| 'legacy'
+	| 'free'
+	| 'bonus'
+	| 'revoked'
+	| 'unactivated'
+	| 'expired'
+	| 'cancelled'
+	| 'suspended'
+	| 'over_limit';
+
 /**
  * A licensed product entry as returned alongside the license key.
  *
@@ -364,7 +377,7 @@ export interface LegacyLicense {
 export interface LicenseProduct {
     product_slug: string;
     tier: string;
-    status: string;
+    status: LicenseStatus;
     expires: string;
     activations: {
         site_limit: number;

@@ -35,9 +35,10 @@ export function ProductSection( { product }: ProductSectionProps ) {
     const { licenseProduct, hasActiveLegacy } = useSelect(
         ( select ) => {
             const licenseProducts = select( harborStore ).getLicenseProducts();
+            const forProduct      = licenseProducts.filter( ( lp ) => lp.product_slug === product.slug );
             return {
-                licenseProduct:        licenseProducts.find( ( lp ) => lp.product_slug === product.slug ) ?? null,
-                hasActiveLegacy:       select( harborStore ).hasActiveLegacyLicenseForProduct( product.slug ),
+                licenseProduct:  forProduct.find( ( lp ) => lp.activated_here === true ) ?? null,
+                hasActiveLegacy: select( harborStore ).hasActiveLegacyLicenseForProduct( product.slug ),
             };
         },
         [ product.slug ],

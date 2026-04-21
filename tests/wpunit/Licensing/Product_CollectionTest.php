@@ -43,51 +43,16 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection = new Product_Collection();
 		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
+		$this->assertCount( 1, $collection );
 	}
 
-	public function test_add_first_wins_when_neither_entry_is_activated_here(): void {
+	public function test_add_stores_all_tiers_for_the_same_slug(): void {
 		$collection = new Product_Collection();
 		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
 		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
-
-		$this->assertSame( 'essentials', $collection->get( 'learndash' )->get_tier() );
-	}
-
-	public function test_add_replaces_first_entry_when_later_entry_is_activated_here(): void {
-		$collection = new Product_Collection();
-		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
-		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
-
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
-	}
-
-	public function test_add_does_not_replace_activated_here_entry_with_non_activated(): void {
-		$collection = new Product_Collection();
-		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
-		$collection->add( $this->make_entry( 'learndash', 'elite', false ) );
-
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
-	}
-
-	public function test_add_first_wins_when_both_entries_are_activated_here(): void {
-		$collection = new Product_Collection();
-		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 		$collection->add( $this->make_entry( 'learndash', 'elite', true ) );
 
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
-	}
-
-	public function test_add_picks_activated_entry_from_three_tier_response(): void {
-		// Mirrors the real server response: three entitlements for the same product,
-		// only the middle one (pro) is activated on the current domain.
-		$collection = new Product_Collection();
-		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
-		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
-		$collection->add( $this->make_entry( 'learndash', 'elite', false ) );
-
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
-		$this->assertCount( 1, $collection );
+		$this->assertCount( 3, $collection );
 	}
 
 	public function test_add_treats_different_slugs_independently(): void {
@@ -95,18 +60,79 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 		$collection->add( $this->make_entry( 'kadence', 'essentials', true ) );
 
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
-		$this->assertSame( 'essentials', $collection->get( 'kadence' )->get_tier() );
 		$this->assertCount( 2, $collection );
 	}
 
-	public function test_add_handles_null_activated_here_as_not_activated(): void {
-		// activated_here is null when no domain was sent in the request.
-		// It should behave the same as false — first-wins, not treated as activated.
+	// -------------------------------------------------------------------------
+	// get_all_by_slug()
+	// -------------------------------------------------------------------------
+
+	public function test_get_all_by_slug_returns_all_entries_for_slug(): void {
 		$collection = new Product_Collection();
-		$collection->add( $this->make_entry( 'learndash', 'essentials', null ) );
+		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
+		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
+		$collection->add( $this->make_entry( 'learndash', 'elite', true ) );
+		$collection->add( $this->make_entry( 'kadence', 'pro', false ) );
+
+		$entries = $collection->get_all_by_slug( 'learndash' );
+
+		$this->assertCount( 3, $entries );
+	}
+
+	public function test_get_all_by_slug_returns_empty_array_for_unknown_slug(): void {
+		$collection = new Product_Collection();
+		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
+
+		$this->assertSame( [], $collection->get_all_by_slug( 'unknown' ) );
+	}
+
+	public function test_get_all_by_slug_does_not_return_entries_for_other_slugs(): void {
+		$collection = new Product_Collection();
+		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
+		$collection->add( $this->make_entry( 'kadence', 'pro', false ) );
+
+		$entries = $collection->get_all_by_slug( 'learndash' );
+
+		$this->assertCount( 1, $entries );
+		$this->assertSame( 'learndash', $entries[0]->get_product_slug() );
+	}
+
+	// -------------------------------------------------------------------------
+	// get_activated_entry()
+	// -------------------------------------------------------------------------
+
+	public function test_get_activated_entry_returns_the_activated_here_entry(): void {
+		$collection = new Product_Collection();
+		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
+		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
+		$collection->add( $this->make_entry( 'learndash', 'elite', false ) );
+
+		$entry = $collection->get_activated_entry( 'learndash' );
+
+		$this->assertNotNull( $entry );
+		$this->assertSame( 'pro', $entry->get_tier() );
+	}
+
+	public function test_get_activated_entry_returns_null_when_none_is_activated_here(): void {
+		$collection = new Product_Collection();
+		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
+		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
+
+		$this->assertNull( $collection->get_activated_entry( 'learndash' ) );
+	}
+
+	public function test_get_activated_entry_returns_null_for_unknown_slug(): void {
+		$collection = new Product_Collection();
 		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 
-		$this->assertSame( 'pro', $collection->get( 'learndash' )->get_tier() );
+		$this->assertNull( $collection->get_activated_entry( 'unknown' ) );
+	}
+
+	public function test_get_activated_entry_treats_null_activated_here_as_not_activated(): void {
+		$collection = new Product_Collection();
+		$collection->add( $this->make_entry( 'learndash', 'essentials', null ) );
+		$collection->add( $this->make_entry( 'learndash', 'pro', null ) );
+
+		$this->assertNull( $collection->get_activated_entry( 'learndash' ) );
 	}
 }

@@ -134,7 +134,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$result = $this->repository->get_products();
 
 		$this->assertInstanceOf( Product_Collection::class, $result );
-		$this->assertSame( 'give', $result->get( 'give' )->get_product_slug() );
+		$this->assertSame( 'give', $result->get_all_by_slug( 'give' )[0]->get_product_slug() );
 	}
 
 	public function test_get_products_hydrates_from_stored_array(): void {
@@ -163,7 +163,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$result = $this->repository->get_products();
 
 		$this->assertInstanceOf( Product_Collection::class, $result );
-		$this->assertSame( 'give', $result->get( 'give' )->get_product_slug() );
+		$this->assertSame( 'give', $result->get_all_by_slug( 'give' )[0]->get_product_slug() );
 	}
 
 	public function test_set_products_stores_plain_array_in_option(): void {
@@ -224,7 +224,7 @@ final class License_RepositoryTest extends HarborTestCase {
 		$result = $this->repository->get_products();
 
 		$this->assertInstanceOf( Product_Collection::class, $result );
-		$this->assertSame( 'give', $result->get( 'give' )->get_product_slug() );
+		$this->assertSame( 'give', $result->get_all_by_slug( 'give' )[0]->get_product_slug() );
 	}
 
 	public function test_get_products_last_success_at_returns_null_before_first_fetch(): void {
@@ -376,14 +376,15 @@ final class License_RepositoryTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// get_product()
+	// get_all_by_slug() via get_products()
 	// -------------------------------------------------------------------------
 
-	public function test_get_product_returns_null_on_cache_miss(): void {
-		$this->assertNull( $this->repository->get_product( 'give' ) );
+	public function test_get_all_by_slug_returns_empty_on_cache_miss(): void {
+		$products = $this->repository->get_products();
+		$this->assertNotInstanceOf( Product_Collection::class, $products );
 	}
 
-	public function test_get_product_returns_null_for_unknown_slug(): void {
+	public function test_get_all_by_slug_returns_empty_for_unknown_slug(): void {
 		$this->repository->set_products(
 			Product_Collection::from_array(
 				[
@@ -400,10 +401,12 @@ final class License_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$this->assertNull( $this->repository->get_product( 'unknown-product' ) );
+		$products = $this->repository->get_products();
+		$this->assertInstanceOf( Product_Collection::class, $products );
+		$this->assertSame( [], $products->get_all_by_slug( 'unknown-product' ) );
 	}
 
-	public function test_get_product_returns_entry_for_known_slug(): void {
+	public function test_get_all_by_slug_returns_entries_for_known_slug(): void {
 		$this->repository->set_products(
 			Product_Collection::from_array(
 				[
@@ -420,16 +423,17 @@ final class License_RepositoryTest extends HarborTestCase {
 			)
 		);
 
-		$result = $this->repository->get_product( 'give' );
-
-		$this->assertInstanceOf( Product_Entry::class, $result );
-		$this->assertSame( 'give', $result->get_product_slug() );
+		$products = $this->repository->get_products();
+		$this->assertInstanceOf( Product_Collection::class, $products );
+		$entries = $products->get_all_by_slug( 'give' );
+		$this->assertCount( 1, $entries );
+		$this->assertSame( 'give', $entries[0]->get_product_slug() );
 	}
 
-	public function test_get_product_returns_null_when_cache_contains_wp_error(): void {
+	public function test_get_all_by_slug_returns_empty_when_cache_contains_wp_error(): void {
 		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'Bad key' ) );
 
-		$this->assertNull( $this->repository->get_product( 'give' ) );
+		$this->assertFalse( $this->repository->has_product( 'give' ) );
 	}
 
 	// -------------------------------------------------------------------------
