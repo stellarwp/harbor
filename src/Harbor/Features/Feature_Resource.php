@@ -97,8 +97,8 @@ final class Feature_Resource {
 		);
 
 		if ( $this->feature instanceof Plugin ) {
-			$harbor_plugin_files      = array_filter( array_values( _lw_harbor_instance_registry() ) );
-			$data['is_harbor_host'] = in_array( $this->feature->get_plugin_file(), $harbor_plugin_files, true );
+			$harbor_host_files      = array_values( array_filter( _lw_harbor_instance_registry() ) );
+			$data['is_harbor_host'] = in_array( $this->feature->get_plugin_file(), $harbor_host_files, true );
 		}
 
 		return $data;
