@@ -144,7 +144,7 @@ class Config {
 	 * The container is always vendor-bundled inside the host plugin, so its
 	 * file path starts with that plugin's directory. We derive the plugin slug
 	 * from the path, then confirm against active_plugins / active_sitewide_plugins,
-	 * falling back to a header scan if options aren't populated.
+	 * returning null if no match is found.
 	 *
 	 * @since 1.0.0
 	 *
