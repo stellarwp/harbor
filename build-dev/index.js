@@ -1132,10 +1132,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/atoms/StatusBadge */ "./resources/js/components/atoms/StatusBadge.tsx");
 /* harmony import */ var _components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/VersionDisplay */ "./resources/js/components/molecules/VersionDisplay.tsx");
 /* harmony import */ var _components_ui_switch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/ui/switch */ "./resources/js/components/ui/switch.tsx");
-/* harmony import */ var _hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/hooks/useFeatureRow */ "./resources/js/hooks/useFeatureRow.ts");
-/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
+/* harmony import */ var _hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/hooks/useFeatureRow */ "./resources/js/hooks/useFeatureRow.ts");
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__);
 /**
  * A single feature row in the product feature list.
  *
@@ -1144,6 +1146,8 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
+
 
 
 
@@ -1171,45 +1175,48 @@ function FeatureRow({
     showSwitch,
     switchChecked,
     licenseBadgeType,
+    showDeactivateConfirm,
     handleToggle,
-    handleUpdate
-  } = (0,_hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_10__.useFeatureRow)(feature);
+    handleUpdate,
+    handleConfirmDeactivate,
+    handleCancelDeactivate
+  } = (0,_hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_12__.useFeatureRow)(feature);
   const Chevron = expanded ? lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"] : lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"];
 
   // Legacy-licensed and revoked features are not marked available by the API
   // but should render with the full available layout — controls visible, no muted style.
   // This override only applies to installable features (plugins/themes) since
   // non-installable features (services) have no controls to show.
-  const isVisuallyAvailable = feature.is_available || (0,_types_utils__WEBPACK_IMPORTED_MODULE_11__.isInstallableFeature)(feature) && (licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked');
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+  const isVisuallyAvailable = feature.is_available || (0,_types_utils__WEBPACK_IMPORTED_MODULE_13__.isInstallableFeature)(feature) && (licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked');
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('border-b last:border-b-0', isVisuallyAvailable ? (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('bg-white', pendingAction && 'opacity-75') : 'bg-muted/30'),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
       className: "flex items-center gap-3 py-3 px-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
         onClick: () => setExpanded(!expanded),
         className: "flex items-center gap-2 min-w-0 cursor-pointer",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Chevron, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(Chevron, {
           className: "w-4 h-4 text-muted-foreground shrink-0"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
           slug: feature.slug
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
           className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('font-medium min-w-0 text-sm truncate', !isVisuallyAvailable && 'text-muted-foreground'),
           children: feature.name
-        }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
+        }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
           type: licenseBadgeType
         })]
-      }), isVisuallyAvailable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+      }), isVisuallyAvailable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "flex items-center gap-3 ml-auto shrink-0",
-        children: (0,_types_utils__WEBPACK_IMPORTED_MODULE_11__.isInstallableFeature)(feature) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
+        children: (0,_types_utils__WEBPACK_IMPORTED_MODULE_13__.isInstallableFeature)(feature) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
             feature: feature,
             pendingAction: pendingAction,
             installableBusy: installableBusy,
             upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to receive updates and support.', '%TEXTDOMAIN%') : undefined,
             onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
             status: badgeStatus
-          }), showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_9__.Switch, {
+          }), showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_9__.Switch, {
             checked: switchChecked,
             onCheckedChange: handleToggle,
             disabled: !!pendingAction || installableBusy || licenseBadgeType === 'revoked' && !switchChecked,
@@ -1217,23 +1224,44 @@ function FeatureRow({
             (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
             (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
           status: badgeStatus
         })
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "ml-auto shrink-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
           feature: feature,
           upgradeLabel: upgradeTierName ? /* translators: %s is the name of the tier required to receive updates */
           (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade to %s to receive updates and support.', '%TEXTDOMAIN%'), upgradeTierName) : undefined
         })
       })]
-    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
-      className: "px-4 pb-3 pl-[2.75rem]",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
-        className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('text-sm text-muted-foreground leading-relaxed', isVisuallyAvailable ? '!mt-[0.75em] !mb-0' : 'mt-2 mb-0'),
+    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+      className: "px-4 pb-3 pl-11",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("p", {
+        className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('text-sm text-muted-foreground leading-relaxed', isVisuallyAvailable ? 'mt-[0.75em]! mb-0!' : 'mt-2 mb-0'),
         children: feature.description
       })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_11__.Dialog, {
+      open: showDeactivateConfirm,
+      onClose: handleCancelDeactivate,
+      maxWidth: "max-w-md",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_11__.DialogHeader, {
+        title: /* translators: %s is the name of the feature being deactivated */
+        (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Deactivate %s?', '%TEXTDOMAIN%'), feature.name),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('This plugin powers this page. Deactivating it will make this page unavailable until it is reactivated from the WordPress Plugins page.', '%TEXTDOMAIN%'),
+        onClose: handleCancelDeactivate
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_11__.DialogFooter, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_10__.Button, {
+          variant: "outline",
+          onClick: handleCancelDeactivate,
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cancel', '%TEXTDOMAIN%')
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_10__.Button, {
+          variant: "destructive",
+          onClick: handleConfirmDeactivate,
+          disabled: pendingAction === 'disabling',
+          children: pendingAction === 'disabling' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Deactivating…', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Deactivate', '%TEXTDOMAIN%')
+        })]
+      })]
     })]
   });
 }
@@ -3090,7 +3118,7 @@ function DialogFooter({
   className
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-    className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_3__.cn)('flex items-center justify-end gap-2 px-6 pb-6 pt-0', className),
+    className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_3__.cn)('flex items-center justify-end gap-3 px-6 pb-6 pt-4', className),
     children: children
   });
 }
@@ -4373,6 +4401,7 @@ function useFeatureRow(feature) {
     updateFeature
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
   const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => (0,_types_utils__WEBPACK_IMPORTED_MODULE_9__.isInstallableFeature)(feature) && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
+  const enabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getEnabledHarborHostCount(), []);
   const isLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
@@ -4380,6 +4409,7 @@ function useFeatureRow(feature) {
   }, [feature.slug, feature.product]);
   const licenseBadgeType = (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_4__.getLicenseBadgeType)(feature, isLegacy);
   const [pendingAction, setPendingAction] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [showDeactivateConfirm, setShowDeactivateConfirm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
 
   // Non-installable features (services) have no install/toggle/update lifecycle.
   if (!(0,_types_utils__WEBPACK_IMPORTED_MODULE_9__.isInstallableFeature)(feature)) {
@@ -4390,13 +4420,22 @@ function useFeatureRow(feature) {
       showSwitch: false,
       switchChecked: false,
       licenseBadgeType,
+      showDeactivateConfirm: false,
       handleToggle: async () => {},
-      handleUpdate: async () => {}
+      handleUpdate: async () => {},
+      handleConfirmDeactivate: async () => {},
+      handleCancelDeactivate: () => {}
     };
   }
   const featureEnabled = feature.is_enabled;
   const featureInstalled = feature.installed_version !== null;
+  const isHarborHost = feature.type === 'plugin' && feature.is_harbor_host;
+  const isLastHarborHost = isHarborHost && featureEnabled && enabledHarborHostCount === 1;
   const handleToggle = async checked => {
+    if (!checked && isLastHarborHost) {
+      setShowDeactivateConfirm(true);
+      return;
+    }
     setPendingAction(checked ? featureInstalled ? 'enabling' : 'installing' : 'disabling');
     if (checked) {
       const result = await enableFeature(feature.slug);
@@ -4419,6 +4458,20 @@ function useFeatureRow(feature) {
     }
     setPendingAction(null);
   };
+  const handleConfirmDeactivate = async () => {
+    setShowDeactivateConfirm(false);
+    setPendingAction('disabling');
+    const result = await disableFeature(feature.slug);
+    if (result instanceof _errors__WEBPACK_IMPORTED_MODULE_8__.HarborError) {
+      addError(result);
+    } else {
+      window.location.href = window.harborData?.pluginsUrl ?? '/wp-admin/plugins.php';
+    }
+    setPendingAction(null);
+  };
+  const handleCancelDeactivate = () => {
+    setShowDeactivateConfirm(false);
+  };
   const handleUpdate = async () => {
     setPendingAction('updating');
     const result = await updateFeature(feature.slug);
@@ -4440,8 +4493,11 @@ function useFeatureRow(feature) {
     showSwitch,
     switchChecked,
     licenseBadgeType,
+    showDeactivateConfirm,
     handleToggle,
-    handleUpdate
+    handleUpdate,
+    handleConfirmDeactivate,
+    handleCancelDeactivate
   };
 }
 
@@ -5579,6 +5635,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getCatalog: () => (/* binding */ getCatalog),
 /* harmony export */   getCatalogTier: () => (/* binding */ getCatalogTier),
 /* harmony export */   getDeleteLicenseError: () => (/* binding */ getDeleteLicenseError),
+/* harmony export */   getEnabledHarborHostCount: () => (/* binding */ getEnabledHarborHostCount),
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatureError: () => (/* binding */ getFeatureError),
 /* harmony export */   getFeatureMismatchType: () => (/* binding */ getFeatureMismatchType),
@@ -5643,6 +5700,14 @@ const getFeatureMismatchType = (state, slug) => {
   return (0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_1__.getFeatureMismatch)(feature);
 };
 const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? false;
+
+/**
+ * Returns the number of Harbor host plugins (is_harbor_host: true) that are currently enabled.
+ *
+ * Used to prevent deactivating the last active Harbor host — doing so would take
+ * the Feature Manager offline since Harbor is bundled inside that plugin.
+ */
+const getEnabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.features.bySlug).filter(f => f.type === 'plugin' && f.is_harbor_host && f.is_enabled).length, state => [state.features.bySlug]);
 
 /**
  * True when any feature is being toggled or updated.

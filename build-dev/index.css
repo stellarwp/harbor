@@ -37,6 +37,7 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-xs: 20rem;
+    --container-md: 28rem;
     --container-lg: 32rem;
     --container-xl: 36rem;
     --text-xs: 0.75rem;
@@ -386,9 +387,6 @@
   .lw-harbor-ui .\!mt-8 {
     margin-top: calc(var(--spacing) * 8) !important;
   }
-  .lw-harbor-ui .\!mt-\[0\.75em\] {
-    margin-top: 0.75em !important;
-  }
   .lw-harbor-ui .mt-0 {
     margin-top: calc(var(--spacing) * 0) !important;
   }
@@ -407,13 +405,16 @@
   .lw-harbor-ui .mt-8 {
     margin-top: calc(var(--spacing) * 8) !important;
   }
-  .lw-harbor-ui .\!mb-0 {
-    margin-bottom: calc(var(--spacing) * 0) !important;
+  .lw-harbor-ui .mt-\[0\.75em\]\! {
+    margin-top: 0.75em !important;
   }
   .lw-harbor-ui .\!mb-6 {
     margin-bottom: calc(var(--spacing) * 6) !important;
   }
   .lw-harbor-ui .mb-0 {
+    margin-bottom: calc(var(--spacing) * 0) !important;
+  }
+  .lw-harbor-ui .mb-0\! {
     margin-bottom: calc(var(--spacing) * 0) !important;
   }
   .lw-harbor-ui .ml-1 {
@@ -576,6 +577,9 @@
   }
   .lw-harbor-ui .max-w-lg {
     max-width: var(--container-lg) !important;
+  }
+  .lw-harbor-ui .max-w-md {
+    max-width: var(--container-md) !important;
   }
   .lw-harbor-ui .max-w-xl {
     max-width: var(--container-xl) !important;
@@ -985,8 +989,8 @@
   .lw-harbor-ui .py-6 {
     padding-block: calc(var(--spacing) * 6) !important;
   }
-  .lw-harbor-ui .pt-0 {
-    padding-top: calc(var(--spacing) * 0) !important;
+  .lw-harbor-ui .pt-4 {
+    padding-top: calc(var(--spacing) * 4) !important;
   }
   .lw-harbor-ui .pr-8 {
     padding-right: calc(var(--spacing) * 8) !important;
@@ -1009,8 +1013,8 @@
   .lw-harbor-ui .pl-10 {
     padding-left: calc(var(--spacing) * 10) !important;
   }
-  .lw-harbor-ui .pl-\[2\.75rem\] {
-    padding-left: 2.75rem !important;
+  .lw-harbor-ui .pl-11 {
+    padding-left: calc(var(--spacing) * 11) !important;
   }
   .lw-harbor-ui .text-center {
     text-align: center !important;
