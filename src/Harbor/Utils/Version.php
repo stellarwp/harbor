@@ -110,20 +110,16 @@ class Version {
 	 */
 	public static function register_debug_info(): void {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$container_parts = explode( '\\', get_class( Config::get_container() ) );
-			$prefix          = $container_parts[0];
-			$version         = Harbor::VERSION;
-
 			add_action(
 				'admin_footer',
-				static function () use ( $prefix, $version ) {
+				static function () {
 					if ( ! Version::is_leader() ) {
 						return;
 					}
 					$data = [
 						'lw-harbor' => [
-							'leader'  => $prefix,
-							'version' => $version,
+							'leader'  => Config::get_plugin_basename(),
+							'version' => Harbor::VERSION,
 						],
 					];
 
