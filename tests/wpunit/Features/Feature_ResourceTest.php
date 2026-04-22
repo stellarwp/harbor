@@ -149,6 +149,49 @@ final class Feature_ResourceTest extends HarborTestCase {
 	// -------------------------------------------------------------------------
 
 	/**
+	 * to_array() includes is_harbor_host as true when the plugin file matches the registered host.
+	 *
+	 * harbor/bootstrap-plugin.php is the active test plugin (wpunit.suite.dist.yml). During
+	 * bootstrap, Config::detect_plugin_file() resolves to it because the test Container class
+	 * file lives inside the harbor/ plugin directory. The instance registry is populated from
+	 * bootstrap-plugin.php during plugins_loaded, before wp_loaded fires.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_includes_is_harbor_host_true_for_registered_host(): void {
+		$resource = Feature_Resource::from_feature( $this->make_plugin( 'harbor/bootstrap-plugin.php' ) );
+		$data     = $resource->to_array();
+
+		$this->assertArrayHasKey( 'is_harbor_host', $data );
+		$this->assertTrue( $data['is_harbor_host'] );
+	}
+
+	/**
+	 * to_array() includes is_harbor_host as false when the plugin file is not in the instance registry.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_includes_is_harbor_host_false_when_not_registered(): void {
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$data     = $resource->to_array();
+
+		$this->assertArrayHasKey( 'is_harbor_host', $data );
+		$this->assertFalse( $data['is_harbor_host'] );
+	}
+
+	/**
+	 * to_array() does not include is_harbor_host for themes.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_does_not_include_is_harbor_host_for_themes(): void {
+		$resource = Feature_Resource::from_feature( $this->make_theme() );
+		$data     = $resource->to_array();
+
+		$this->assertArrayNotHasKey( 'is_harbor_host', $data );
+	}
+
+	/**
 	 * to_array() includes update_version merged with all feature attributes.
 	 *
 	 * @return void
@@ -183,16 +226,18 @@ final class Feature_ResourceTest extends HarborTestCase {
 	// -------------------------------------------------------------------------
 
 	/**
+	 * @param string $plugin_file Plugin file path relative to the plugins directory.
+	 *
 	 * @return Plugin
 	 */
-	private function make_plugin(): Plugin {
+	private function make_plugin( string $plugin_file = 'stellar-export/stellar-export.php' ): Plugin {
 		return Plugin::from_array(
 			[
 				'slug'         => 'stellar-export',
 				'product'      => 'LearnDash',
 				'tier'         => 'Tier 1',
 				'name'         => 'Stellar Export',
-				'plugin_file'  => 'stellar-export/stellar-export.php',
+				'plugin_file'  => $plugin_file,
 				'is_available' => true,
 			]
 		);
