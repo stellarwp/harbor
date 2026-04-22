@@ -139,7 +139,6 @@ final class Http_ClientTest extends HarborTestCase {
 							'rank'         => 1,
 							'price'        => 0,
 							'currency'     => 'USD',
-							'features'     => [],
 							'herald_slugs' => [],
 						],
 						[
@@ -175,7 +174,6 @@ final class Http_ClientTest extends HarborTestCase {
 							'rank'         => 1,
 							'price'        => 0,
 							'currency'     => 'USD',
-							'features'     => [],
 							'herald_slugs' => [],
 						],
 					],

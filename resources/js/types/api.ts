@@ -266,10 +266,6 @@ export interface CatalogTier {
      */
     currency: string;
     /**
-     * Marketing feature descriptions for this tier.
-     */
-    features: string[];
-    /**
      * Herald slugs associated with this tier.
      */
     herald_slugs: string[];

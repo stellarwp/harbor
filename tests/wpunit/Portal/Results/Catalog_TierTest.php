@@ -13,7 +13,6 @@ final class Catalog_TierTest extends HarborTestCase {
 		'rank'         => 2,
 		'price'        => 14900,
 		'currency'     => 'USD',
-		'features'     => [ 'Premium blocks', 'Priority support' ],
 		'herald_slugs' => [ 'kadence-blocks-pro' ],
 		'purchase_url' => 'https://example.com/checkout/?add-to-cart=123',
 	];
@@ -26,7 +25,6 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( 2, $tier->get_rank() );
 		$this->assertSame( 14900, $tier->get_price() );
 		$this->assertSame( 'USD', $tier->get_currency() );
-		$this->assertSame( [ 'Premium blocks', 'Priority support' ], $tier->get_features() );
 		$this->assertSame( [ 'kadence-blocks-pro' ], $tier->get_herald_slugs() );
 		$this->assertSame( 'https://example.com/checkout/?add-to-cart=123', $tier->get_purchase_url() );
 	}
@@ -40,7 +38,6 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( 2, $result['rank'] );
 		$this->assertSame( 14900, $result['price'] );
 		$this->assertSame( 'USD', $result['currency'] );
-		$this->assertSame( [ 'Premium blocks', 'Priority support' ], $result['features'] );
 		$this->assertSame( [ 'kadence-blocks-pro' ], $result['herald_slugs'] );
 		$this->assertSame( 'https://example.com/checkout/?add-to-cart=123', $result['purchase_url'] );
 	}
@@ -60,7 +57,6 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( 0, $tier->get_rank() );
 		$this->assertSame( 0, $tier->get_price() );
 		$this->assertSame( '', $tier->get_currency() );
-		$this->assertSame( [], $tier->get_features() );
 		$this->assertSame( [], $tier->get_herald_slugs() );
 		$this->assertSame( '', $tier->get_purchase_url() );
 	}

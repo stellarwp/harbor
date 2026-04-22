@@ -17,7 +17,6 @@ use LiquidWeb\Harbor\Utils\Cast;
  *     rank: int,
  *     price: int,
  *     currency: string,
- *     features: list<string>,
  *     herald_slugs: list<string>,
  *     purchase_url: string,
  * }
@@ -37,7 +36,6 @@ final class Catalog_Tier {
 		'rank'          => 0,
 		'price'         => 0,
 		'currency'      => '',
-		'features'      => [],
 		'herald_slugs'  => [],
 		'purchase_url'  => '',
 	];
@@ -74,9 +72,6 @@ final class Catalog_Tier {
 				'rank'         => Cast::to_int( $data['rank'] ?? 0 ),
 				'price'        => Cast::to_int( $data['price'] ?? 0 ),
 				'currency'     => Cast::to_string( $data['currency'] ?? '' ),
-				'features'     => isset( $data['features'] ) && is_array( $data['features'] )
-					? array_map( [ Cast::class, 'to_string' ], array_values( $data['features'] ) )
-					: [],
 				'herald_slugs' => isset( $data['herald_slugs'] ) && is_array( $data['herald_slugs'] )
 					? array_map( [ Cast::class, 'to_string' ], array_values( $data['herald_slugs'] ) )
 					: [],
@@ -149,20 +144,6 @@ final class Catalog_Tier {
 	 */
 	public function get_currency(): string {
 		return $this->attributes['currency'];
-	}
-
-	/**
-	 * Gets the marketing feature descriptions for this tier.
-	 *
-	 * These are human-readable selling points (e.g. "Priority support"),
-	 * not to be confused with Catalog_Feature objects.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string[]
-	 */
-	public function get_features(): array {
-		return $this->attributes['features'];
 	}
 
 	/**

@@ -198,12 +198,6 @@ final class Catalog_Controller extends WP_REST_Controller {
 							'currency'     => [
 								'type' => 'string',
 							],
-							'features'     => [
-								'type'  => 'array',
-								'items' => [
-									'type' => 'string',
-								],
-							],
 							'herald_slugs' => [
 								'type'  => 'array',
 								'items' => [
