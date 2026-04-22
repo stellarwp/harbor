@@ -36,7 +36,9 @@ add_action( 'plugins_loaded', function() {
   * https://github.com/stellarwp/container-contract/blob/main/examples/di52/Container.php
   */
  $container = new Container();
- Config::set_plugin_file( plugin_basename( __FILE__ ) );
+ // Use a plugin basename constant defined in your main plugin file,
+ // e.g. define( 'MY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) )
+ Config::set_plugin_file( MY_PLUGIN_BASENAME );
  Config::set_container( $container );
  Harbor::init();
 }, 0 );
