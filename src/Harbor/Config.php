@@ -66,13 +66,13 @@ class Config {
 	protected static $herald_base_url = self::DEFAULT_HERALD_BASE_URL;
 
 	/**
-	 * Cached result of detect_plugin_file(). False means not yet computed.
+	 * The plugin file path (relative to WP_PLUGIN_DIR) of the plugin hosting this Harbor instance.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var string|null|false
+	 * @var string|null
 	 */
-	protected static $detected_plugin_file = false;
+	protected static $plugin_file = null;
 
 	/**
 	 * Get the container.
@@ -115,92 +115,35 @@ class Config {
 		static::$licensing_base_url    = self::DEFAULT_LICENSING_BASE_URL;
 		static::$portal_base_url       = self::DEFAULT_PORTAL_BASE_URL;
 		static::$herald_base_url       = self::DEFAULT_HERALD_BASE_URL;
-		static::$detected_plugin_file  = false;
+		static::$plugin_file           = null;
 	}
 
 	/**
 	 * Returns the plugin file path (relative to WP_PLUGIN_DIR) of the plugin
-	 * hosting this Harbor instance, or null if it cannot be determined.
-	 *
-	 * Auto-detected by locating the container class file within the active
-	 * plugin tree — no manual configuration required. Result is cached after
-	 * the first call.
+	 * hosting this Harbor instance, or null if not set.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string|null
 	 */
 	public static function get_plugin_file(): ?string {
-		if ( static::$detected_plugin_file === false ) {
-			static::$detected_plugin_file = static::detect_plugin_file();
-		}
-
-		return static::$detected_plugin_file;
+		return static::$plugin_file;
 	}
 
 	/**
-	 * Detects the host plugin file by reflecting on the container class.
+	 * Set the plugin file path of the plugin hosting this Harbor instance.
 	 *
-	 * The container is always vendor-bundled inside the host plugin, so its
-	 * file path starts with that plugin's directory. We derive the plugin slug
-	 * from the path, then confirm against active_plugins / active_sitewide_plugins,
-	 * returning null if no match is found.
+	 * Pass the result of plugin_basename( __FILE__ ) from the host plugin's
+	 * main file, e.g. 'myplugin/myplugin.php'.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string|null
+	 * @param string $plugin_file Plugin file path relative to WP_PLUGIN_DIR.
+	 *
+	 * @return void
 	 */
-	protected static function detect_plugin_file(): ?string {
-		if ( ! static::has_container() ) {
-			return null;
-		}
-
-		try {
-			// e.g. ReflectionClass { name: 'MyPlugin\Container', ... }
-			$reflection = new \ReflectionClass( static::get_container() );
-			// e.g. '/var/www/html/wp-content/plugins/myplugin/src/Container.php'
-			$class_file = $reflection->getFileName();
-		} catch ( \Exception $e ) {
-			return null;
-		}
-
-		// getFileName() returns false for internal (built-in) classes.
-		if ( ! is_string( $class_file ) ) {
-			return null;
-		}
-
-		// e.g. '/var/www/html/wp-content/plugins/'
-		$plugins_prefix = trailingslashit( WP_PLUGIN_DIR );
-
-		// Bail if the container class isn't under WP_PLUGIN_DIR at all.
-		if ( strpos( $class_file, $plugins_prefix ) !== 0 ) {
-			return null;
-		}
-
-		// Strip the plugins prefix, then take the first path segment.
-		// '/var/www/html/wp-content/plugins/myplugin/src/Container.php' → 'myplugin'
-		$plugin_slug = explode( '/', substr( $class_file, strlen( $plugins_prefix ) ) )[0];
-
-		if ( empty( $plugin_slug ) ) {
-			return null;
-		}
-
-		// Prefer the exact file path from options so we respect how the plugin registered itself.
-		// active_plugins: [ 'myplugin/myplugin.php', ... ]
-		// active_sitewide_plugins (multisite): [ 'myplugin/myplugin.php' => timestamp, ... ]
-		$candidates = array_merge(
-			(array) get_option( 'active_plugins', [] ),
-			array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) )
-		);
-
-		foreach ( $candidates as $plugin_file ) {
-			// dirname( 'myplugin/myplugin.php' ) === 'myplugin' ✓
-			if ( is_string( $plugin_file ) && dirname( $plugin_file ) === $plugin_slug ) {
-				return $plugin_file;
-			}
-		}
-
-		return null;
+	public static function set_plugin_file( string $plugin_file ): void {
+		static::$plugin_file = $plugin_file;
 	}
 
 	/**

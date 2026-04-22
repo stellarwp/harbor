@@ -152,9 +152,9 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * to_array() includes is_harbor_host as true when the plugin file matches the registered host.
 	 *
 	 * harbor/bootstrap-plugin.php is the active test plugin (wpunit.suite.dist.yml). During
-	 * bootstrap, Config::detect_plugin_file() resolves to it because the test Container class
-	 * file lives inside the harbor/ plugin directory. The instance registry is populated from
-	 * bootstrap-plugin.php during plugins_loaded, before wp_loaded fires.
+	 * bootstrap, Config::set_plugin_file() is called with plugin_basename( __FILE__ ) so the
+	 * instance registry is populated from bootstrap-plugin.php during plugins_loaded, before
+	 * wp_loaded fires.
 	 *
 	 * @return void
 	 */

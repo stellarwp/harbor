@@ -21,6 +21,7 @@ composer require stellarwp/harbor
 Initializing the Harbor library should be done within the `plugins_loaded` action, preferably at priority `0`.
 
 ```php
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 
 add_action( 'plugins_loaded', function() {
@@ -35,6 +36,7 @@ add_action( 'plugins_loaded', function() {
   * https://github.com/stellarwp/container-contract/blob/main/examples/di52/Container.php
   */
  $container = new Container();
+ Config::set_plugin_file( plugin_basename( __FILE__ ) );
  Config::set_container( $container );
  Harbor::init();
 }, 0 );

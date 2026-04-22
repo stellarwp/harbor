@@ -22,6 +22,9 @@ class HarborServiceProvider
 {
     public function register(): void
     {
+        // Tell Harbor which plugin file hosts this instance
+        Config::set_plugin_file(plugin_basename(__FILE__));
+
         // Give Harbor access to your DI container
         Config::set_container($container);
 
@@ -38,6 +41,7 @@ class HarborServiceProvider
 
 **Key points:**
 
+- `Config::set_plugin_file()` must be called with `plugin_basename(__FILE__)` from your plugin's main file before `Harbor::init()`
 - `Config::set_container()` must be called before `Harbor::init()`
 - `Harbor::init()` sets up all internal providers (storage, API, licensing, admin UI, etc.)
 - Register the Harbor service provider after all other providers so the container is fully configured
