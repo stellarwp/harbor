@@ -11,6 +11,8 @@ use LiquidWeb\LicensingApiClient\Resources\Contracts\LicensesResourceInterface;
 use LiquidWeb\LicensingApiClient\Resources\Contracts\ProductsResourceInterface;
 use LiquidWeb\LicensingApiClient\Resources\Contracts\TokensResourceInterface;
 use LiquidWeb\LicensingApiClient\Responses\Product\Catalog;
+use LiquidWeb\LicensingApiClient\Tracing\TraceContext;
+use LiquidWeb\LicensingApiClient\Tracing\TraceParent;
 use Nyholm\Psr7\Response;
 
 /**
@@ -171,9 +173,18 @@ final class Fixture_Client implements LicensingClientInterface, ProductsResource
 	/**
 	 * @inheritDoc
 	 *
-	 * @param string $traceId Trace ID (unused).
+	 * @param TraceParent $traceParent Trace parent (unused).
 	 */
-	public function withTraceId( string $traceId ): LicensingClientInterface {
+	public function withTraceParent( TraceParent $traceParent ): LicensingClientInterface {
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param TraceContext $traceContext Trace context (unused).
+	 */
+	public function withTraceContext( TraceContext $traceContext ): LicensingClientInterface {
 		return $this;
 	}
 

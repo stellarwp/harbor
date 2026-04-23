@@ -15,10 +15,11 @@ final class Product_EntryTest extends HarborTestCase {
 		'status'            => 'active',
 		'expires'           => '2026-12-31 23:59:59',
 		'activations'       => [
-			'site_limit'   => 5,
-			'active_count' => 3,
-			'over_limit'   => false,
-			'domains'      => [
+			'site_limit'         => 5,
+			'active_count'       => 3,
+			'over_limit'         => false,
+			'excess_activations' => 0,
+			'domains'            => [
 				'example.com'         => [
 					'activated_at'   => '2026-01-01 00:00:00',
 					'deactivated_at' => null,
