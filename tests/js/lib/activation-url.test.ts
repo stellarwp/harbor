@@ -54,4 +54,16 @@ describe( 'buildActivationUrl', () => {
 
         expect( new URL( result ).searchParams.get( 'sku' ) ).toBe( 'kadence:plus' );
     } );
+
+    it( 'throws TypeError when baseUrl is not a valid URL', () => {
+        expect( () => buildActivationUrl( 'not-a-url', 'givewp', 'elite' ) ).toThrow( TypeError );
+    } );
+
+    it( 'percent-encodes special characters in productSlug and tier', () => {
+        const result = buildActivationUrl( BASE_URL, 'give/wp', 'pro?tier' );
+        const url    = new URL( result );
+
+        expect( url.searchParams.get( 'sku' ) ).toBe( 'give/wp:pro?tier' );
+        expect( result ).toContain( 'sku=give%2Fwp%3Apro%3Ftier' );
+    } );
 } );
