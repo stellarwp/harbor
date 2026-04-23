@@ -29,6 +29,12 @@ export interface FeaturesState {
 	 */
 	bySlug: Record<string, Feature>;
 	/**
+	 * Slugs of plugins that are Harbor hosts, set once from the initial page load.
+	 * Not updated on toggle — mid-request activations don't register in the Harbor
+	 * instance registry, so post-toggle API responses can't be trusted for this.
+	 */
+	harborHostSlugs: string[];
+	/**
 	 * Feature slugs currently being toggled.
 	 */
 	toggling: Record<string, boolean>;

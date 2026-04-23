@@ -74,6 +74,7 @@ function legacyLicenses(
 
 const FEATURES_DEFAULT: FeaturesState = {
 	bySlug: {},
+	harborHostSlugs: [],
 	toggling: {},
 	updating: {},
 	errorBySlug: {},
@@ -87,9 +88,11 @@ function features(
 		case 'RECEIVE_FEATURES': {
 			return {
 				...state,
-				bySlug: Object.fromEntries(
-					action.features.map((f) => [f.slug, f])
-				),
+				bySlug: Object.fromEntries( action.features.map( ( f ) => [ f.slug, f ] ) ),
+				// Set once — post-toggle responses can't be trusted for this (see FeaturesState).
+				harborHostSlugs: action.features
+					.filter( ( f ) => f.type === 'plugin' && f.is_harbor_host )
+					.map( ( f ) => f.slug ),
 			};
 		}
 
@@ -107,10 +110,7 @@ function features(
 			const { [slug]: _, ...remainingToggling } = state.toggling;
 			return {
 				...state,
-				bySlug: {
-					...state.bySlug,
-					[slug]: action.feature,
-				},
+				bySlug: { ...state.bySlug, [ slug ]: action.feature },
 				toggling: remainingToggling,
 			};
 		}

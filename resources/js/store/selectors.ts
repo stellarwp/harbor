@@ -73,10 +73,10 @@ export const isFeatureUpdating = (state: State, slug: string): boolean =>
  */
 export const getEnabledHarborHostCount = createSelector(
 	(state: State): number =>
-		Object.values(state.features.bySlug).filter(
-			(f) => f.type === 'plugin' && f.is_harbor_host && f.is_enabled
+		state.features.harborHostSlugs.filter(
+			(slug) => state.features.bySlug[slug]?.is_enabled
 		).length,
-	(state: State) => [state.features.bySlug]
+	(state: State) => [state.features.harborHostSlugs, state.features.bySlug]
 );
 
 /**
