@@ -8,11 +8,12 @@ import type {
 	Action,
 	CatalogState,
 	FeaturesState,
+	HarborHostsState,
 	LegacyLicensesState,
 	LicenseState,
 } from './types';
 
-export const reducer = combineReducers({ features, license, catalog, legacyLicenses });
+export const reducer = combineReducers({ features, harborHosts, license, catalog, legacyLicenses });
 
 // ---------------------------------------------------------------------------
 // Catalog
@@ -87,9 +88,7 @@ function features(
 		case 'RECEIVE_FEATURES': {
 			return {
 				...state,
-				bySlug: Object.fromEntries(
-					action.features.map((f) => [f.slug, f])
-				),
+				bySlug: Object.fromEntries( action.features.map( ( f ) => [ f.slug, f ] ) ),
 			};
 		}
 
@@ -107,10 +106,7 @@ function features(
 			const { [slug]: _, ...remainingToggling } = state.toggling;
 			return {
 				...state,
-				bySlug: {
-					...state.bySlug,
-					[slug]: action.feature,
-				},
+				bySlug: { ...state.bySlug, [ slug ]: action.feature },
 				toggling: remainingToggling,
 			};
 		}
@@ -161,6 +157,26 @@ function features(
 			};
 		}
 
+		default:
+			return state;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Harbor hosts
+// ---------------------------------------------------------------------------
+
+const HARBOR_HOSTS_DEFAULT: HarborHostsState = {
+	basenames: [],
+};
+
+function harborHosts(
+	state: HarborHostsState = HARBOR_HOSTS_DEFAULT,
+	action: Action
+): HarborHostsState {
+	switch ( action.type ) {
+		case 'RECEIVE_HARBOR_HOSTS':
+			return { ...state, basenames: action.basenames };
 		default:
 			return state;
 	}

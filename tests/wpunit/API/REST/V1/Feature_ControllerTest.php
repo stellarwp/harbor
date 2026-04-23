@@ -992,7 +992,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertTrue( $plugin['additionalProperties'] );
 		$this->assertSame( [ Feature::TYPE_PLUGIN ], $plugin['properties']['type']['enum'] );
 
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'is_harbor_host', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
+		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
 
 		foreach ( $expected as $property ) {
 			$this->assertArrayHasKey( $property, $plugin['properties'], "Missing plugin schema property: {$property}" );

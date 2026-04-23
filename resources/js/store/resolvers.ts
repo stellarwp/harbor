@@ -35,6 +35,28 @@ export const getFeatures =
 		}
 	};
 
+/**
+ * Fetches the active Harbor host plugin basenames from the REST API.
+ * Triggered automatically when getHarborHostBasenames is first called, and
+ * invalidated after plugin activation so the list stays current.
+ */
+export const getHarborHostBasenames =
+	(): Thunk =>
+	async ({ dispatch }) => {
+		try {
+			const basenames = await apiFetch<string[]>({
+				path: '/liquidweb/harbor/v1/hosts',
+			});
+			dispatch.receiveHarborHosts(basenames);
+		} catch (err) {
+			throw await HarborError.wrap(
+				err,
+				ErrorCode.FeaturesFetchFailed,
+				__('Liquid Web Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%')
+			);
+		}
+	};
+
 export const getFeaturesByProduct = forwardResolverWithoutArgs('getFeatures');
 export const getFeature = forwardResolverWithoutArgs('getFeatures');
 export const isFeatureEnabled = forwardResolverWithoutArgs('getFeatures');

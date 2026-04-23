@@ -20,6 +20,7 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton( License_Controller::class );
 		$this->container->singleton( Catalog_Controller::class );
 		$this->container->singleton( Legacy_License_Controller::class );
+		$this->container->singleton( Harbor_Hosts_Controller::class );
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 	}
 
@@ -36,6 +37,7 @@ final class Provider extends Abstract_Provider {
 			$this->container->get( License_Controller::class )->register_routes();
 			$this->container->get( Catalog_Controller::class )->register_routes();
 			$this->container->get( Legacy_License_Controller::class )->register_routes();
+			$this->container->get( Harbor_Hosts_Controller::class )->register_routes();
 		}
 	}
 }

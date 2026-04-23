@@ -412,15 +412,9 @@ class Feature_Controller extends WP_REST_Controller {
 		];
 
 		$plugin_properties = [
-			'plugin_file'      => [
+			'plugin_file' => [
 				'description' => __( 'The plugin file path relative to the plugins directory.', '%TEXTDOMAIN%' ),
 				'type'        => 'string',
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
-			'is_harbor_host' => [
-				'description' => __( 'Whether this plugin is a Harbor host — it called Harbor::init() and registered itself in the instance registry. Deactivating the last enabled Harbor host would take the Feature Manager offline.', '%TEXTDOMAIN%' ),
-				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],

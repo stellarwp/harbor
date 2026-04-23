@@ -66,17 +66,26 @@ export const isFeatureUpdating = (state: State, slug: string): boolean =>
 	state.features.updating[slug] ?? false;
 
 /**
- * Returns the number of Harbor host plugins (is_harbor_host: true) that are currently enabled.
+ * Returns the plugin basenames of all active Harbor-bundled plugins.
+ */
+export const getHarborHostBasenames = ( state: State ): string[] =>
+	state.harborHosts.basenames;
+
+/**
+ * Returns the number of Harbor host plugins that are currently enabled.
  *
- * Used to prevent deactivating the last active Harbor host — doing so would take
- * the Feature Manager offline since Harbor is bundled inside that plugin.
+ * Uses the dedicated hosts registry (accurate after activation) rather than
+ * the is_harbor_host field on features (unreliable for mid-request activations).
  */
 export const getEnabledHarborHostCount = createSelector(
-	(state: State): number =>
-		Object.values(state.features.bySlug).filter(
-			(f) => f.type === 'plugin' && f.is_harbor_host && f.is_enabled
+	( state: State ): number =>
+		Object.values( state.features.bySlug ).filter(
+			( f ) =>
+				f.type === 'plugin' &&
+				state.harborHosts.basenames.includes( f.plugin_file ) &&
+				f.is_enabled
 		).length,
-	(state: State) => [state.features.bySlug]
+	( state: State ) => [ state.harborHosts.basenames, state.features.bySlug ]
 );
 
 /**

@@ -14,21 +14,56 @@ import type { Action, Thunk } from './types';
 // Plain action creators (synchronous)
 // ---------------------------------------------------------------------------
 
+/**
+ * Receives the list of features from the REST API.
+ *
+ * @param features The list of features.
+ * @since 1.0.0
+ */
 export const receiveFeatures = (features: Feature[]): Action => ({
 	type: 'RECEIVE_FEATURES',
 	features,
 });
 
+/**
+ * Receives the list of Harbor host plugin basenames from the REST API.
+ *
+ * @param basenames The list of Harbor host plugin basenames.
+ * @since 1.0.0
+ */
+export const receiveHarborHosts = (basenames: string[]): Action => ({
+	type: 'RECEIVE_HARBOR_HOSTS',
+	basenames,
+});
+
+/**
+ * Receives the license from the REST API.
+ *
+ * @param license The license.
+ * @since 1.0.0
+ */
 export const receiveLicense = (license: License): Action => ({
 	type: 'RECEIVE_LICENSE',
 	license,
 });
 
+/**
+ * Receives the product catalog from the REST API.
+ *
+ * @param catalogs The product catalog.
+ * @since 1.0.0
+ */
 export const receiveCatalog = (catalogs: ProductCatalog[]): Action => ({
 	type: 'RECEIVE_CATALOG',
 	catalogs,
 });
 
+/**
+ * Receives the legacy licenses from the REST API.
+ *
+ * @param licenses The legacy licenses.
+ * @since 1.0.0
+ */
 export const receiveLegacyLicenses = (licenses: LegacyLicense[]): Action => ({
 	type: 'RECEIVE_LEGACY_LICENSES',
 	licenses,
@@ -53,7 +88,15 @@ export const enableFeature =
 				path: `/liquidweb/harbor/v1/features/${slug}/enable`,
 				method: 'POST',
 			});
+			// TOGGLE_FEATURE_FINISHED patches bySlug with the returned feature — no
+			// need to invalidate getFeatures. A background re-fetch would race the
+			// optimistic patch and could overwrite correct state with stale data,
+			// causing the toggle flicker reproduced in https://github.com/stellarwp/harbor/pull/94.
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
+			// Activation may have bootstrapped a new Harbor host plugin, so refresh
+			// the hosts list. RECEIVE_HARBOR_HOSTS only touches harborHosts.basenames
+			// and never overwrites bySlug, so there is no flicker risk.
+			dispatch.invalidateResolution('getHarborHostBasenames', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
@@ -84,6 +127,9 @@ export const disableFeature =
 				path: `/liquidweb/harbor/v1/features/${slug}/disable`,
 				method: 'POST',
 			});
+			// Same reasoning as enableFeature: patch via TOGGLE_FEATURE_FINISHED,
+			// do not invalidate getFeatures (https://github.com/stellarwp/harbor/pull/94). No hosts invalidation needed
+			// because deactivation cannot introduce a new Harbor host.
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
@@ -115,6 +161,9 @@ export const updateFeature =
 				path: `/liquidweb/harbor/v1/features/${slug}/update`,
 				method: 'POST',
 			});
+			// Same reasoning as enableFeature/disableFeature: UPDATE_FEATURE_FINISHED
+			// patches bySlug directly — invalidating getFeatures is unnecessary and
+			// risks the stale-overwrite flicker (https://github.com/stellarwp/harbor/pull/94).
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
@@ -161,6 +210,9 @@ export const storeLicense =
 				type: 'STORE_LICENSE_FINISHED',
 				license: result,
 			});
+			// License changes affect entitlements globally (available features, tiers,
+			// locked state), so a full re-fetch of features is correct here — unlike
+			// toggle/update actions where the API already returns the patched feature.
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {

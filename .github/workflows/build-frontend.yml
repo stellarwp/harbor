@@ -35,5 +35,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Build frontend assets"
-          file_pattern: "build/* build-dev/*"
+          file_pattern: "build/ build-dev/"
           add_options: "-f"
+          skip_dirty_check: true

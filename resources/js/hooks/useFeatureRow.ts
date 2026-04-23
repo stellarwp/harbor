@@ -81,6 +81,11 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		[]
 	);
 
+	const harborHostBasenames = useSelect(
+		( select ) => select( harborStore ).getHarborHostBasenames(),
+		[]
+	);
+
 	const isLegacy = useSelect(
 		( select ) => {
 			const activeLegacy = select( harborStore ).getActiveLegacyLicense( feature.slug );
@@ -114,7 +119,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 
 	const featureEnabled   = feature.is_enabled;
 	const featureInstalled = feature.installed_version !== null;
-	const isHarborHost     = feature.type === 'plugin' && feature.is_harbor_host;
+	const isHarborHost     = feature.type === 'plugin' && harborHostBasenames.includes( feature.plugin_file );
 	const isLastHarborHost = isHarborHost && featureEnabled && enabledHarborHostCount === 1;
 
 	const handleToggle = async ( checked: boolean ) => {

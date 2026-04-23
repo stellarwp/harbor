@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 
 /**
- * Decorates a resolved Feature with transient-sourced update information.
+ * Decorates a resolved Feature with request-context data for REST API responses.
  *
  * After feature resolution is complete (Feature_Repository cache is warm),
  * reading the update transient via get_site_transient() is safe: the transient
@@ -39,7 +39,7 @@ final class Feature_Resource {
 	 *
 	 * @var string|null
 	 */
-	private $update_version;
+	private ?string $update_version;
 
 	/**
 	 * @since 1.0.0
@@ -47,14 +47,13 @@ final class Feature_Resource {
 	 * @param Feature     $feature        The resolved feature.
 	 * @param string|null $update_version Version from the update transient, or null.
 	 */
-	public function __construct( Feature $feature, $update_version ) {
+	public function __construct( Feature $feature, ?string $update_version ) {
 		$this->feature        = $feature;
 		$this->update_version = $update_version;
 	}
 
 	/**
-	 * Constructs a Feature_Resource from a resolved Feature by reading the
-	 * appropriate WordPress update transient.
+	 * Constructs a Feature_Resource from a resolved Feature.
 	 *
 	 * Should only be called after Feature_Repository has already cached its
 	 * results so transient access does not trigger re-resolution.
@@ -85,23 +84,15 @@ final class Feature_Resource {
 	 * @return array<string, mixed>
 	 */
 	public function to_array(): array {
-		// Services do not support update_version or is_harbor_host.
-
+		// Services do not support update_version.
 		if ( $this->feature instanceof Service ) {
 			return $this->feature->to_array();
 		}
 
-		$data = array_merge(
+		return array_merge(
 			$this->feature->to_array(),
 			[ 'update_version' => $this->update_version ]
 		);
-
-		if ( $this->feature instanceof Plugin ) {
-			$harbor_host_files      = array_values( array_filter( _lw_harbor_instance_registry() ) );
-			$data['is_harbor_host'] = in_array( $this->feature->get_plugin_file(), $harbor_host_files, true );
-		}
-
-		return $data;
 	}
 
 	/**
@@ -111,7 +102,7 @@ final class Feature_Resource {
 	 *
 	 * @return string|null
 	 */
-	public function get_update_version() {
+	public function get_update_version(): ?string {
 		return $this->update_version;
 	}
 

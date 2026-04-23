@@ -23,6 +23,14 @@ export interface CatalogState {
 	byProductSlug: Record<string, ProductCatalog>;
 }
 
+export interface HarborHostsState {
+	/**
+	 * Plugin basenames of all active Harbor-bundled plugins, populated by the
+	 * getHarborHostBasenames resolver and refreshed after plugin activation.
+	 */
+	basenames: string[];
+}
+
 export interface FeaturesState {
 	/**
 	 * Feature objects keyed by slug, populated by the getFeatures resolver.
@@ -82,6 +90,7 @@ export interface LegacyLicensesState {
 
 export interface State {
 	features: FeaturesState;
+	harborHosts: HarborHostsState;
 	license: LicenseState;
 	catalog: CatalogState;
 	legacyLicenses: LegacyLicensesState;
@@ -94,6 +103,7 @@ export interface State {
 export type Action =
 	| { type: 'RECEIVE_CATALOG'; catalogs: ProductCatalog[] }
 	| { type: 'RECEIVE_FEATURES'; features: Feature[] }
+	| { type: 'RECEIVE_HARBOR_HOSTS'; basenames: string[] }
 	| { type: 'RECEIVE_LEGACY_LICENSES'; licenses: LegacyLicense[] }
 	| { type: 'TOGGLE_FEATURE_START'; slug: string }
 	| { type: 'TOGGLE_FEATURE_FINISHED'; feature: Feature }

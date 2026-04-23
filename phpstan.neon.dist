@@ -52,4 +52,4 @@ parameters:
 				- src/Harbor/Harbor.php
 				- src/Harbor/Utils/Version.php
 				- src/Harbor/API/Functions/Global_Function_Registry.php
-				- src/Harbor/Features/Feature_Resource.php
+				- src/Harbor/API/REST/V1/Harbor_Hosts_Controller.php

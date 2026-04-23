@@ -19,18 +19,18 @@ if ( ! function_exists( '_lw_harbor_instance_registry' ) ) {
 	 * vendor-prefixed copies share the same registry. Only currently-active
 	 * instances can register themselves, so there is no stale-version problem.
 	 *
-	 * - Register: _lw_harbor_instance_registry( '3.0.1', 'givewp/give.php' )
+	 * - Register: _lw_harbor_instance_registry( '3.0.1', 'givewp/give.php' )  // appends to version's list
 	 * - Read all:  _lw_harbor_instance_registry()
 	 *
 	 * @internal Not intended for direct use by plugins.
 	 *
 	 * @param string $version     Version to register (omit when reading).
-	 * @param string $plugin_file Plugin file path relative to WP_PLUGIN_DIR (omit when reading).
+	 * @param string $plugin_basename Plugin basename relative to WP_PLUGIN_DIR (omit when reading).
 	 *
-	 * @return array<string, string> Map of version string to plugin file path.
+	 * @return array<string, string[]> Map of version string to list of plugin basenames.
 	 */
-	function _lw_harbor_instance_registry( string $version = '', string $plugin_file = '' ): array {
-		/** @var array<string, string> $instances */
+	function _lw_harbor_instance_registry( string $version = '', string $plugin_basename = '' ): array {
+		/** @var array<string, string[]> $instances */
 		static $instances = [];
 
 		// Only accept registrations during the bootstrap window (before wp_loaded).
@@ -38,7 +38,7 @@ if ( ! function_exists( '_lw_harbor_instance_registry' ) ) {
 		// arriving after wp_loaded is outside the expected lifecycle and is ignored
 		// to prevent external code from injecting fake versions into the registry.
 		if ( $version !== '' && ! did_action( 'wp_loaded' ) ) {
-			$instances[ $version ] = $plugin_file;
+			$instances[ $version ][] = $plugin_basename;
 		}
 
 		return $instances;
