@@ -37,7 +37,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 */
 	public function test_update_version_is_null_when_directly_constructed_with_null(): void {
 		$plugin   = $this->make_plugin();
-		$resource = new Feature_Resource( $plugin, null );
+		$resource = new Feature_Resource( $plugin, null, null );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -49,9 +49,22 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 */
 	public function test_get_feature_returns_decorated_feature(): void {
 		$plugin   = $this->make_plugin();
-		$resource = new Feature_Resource( $plugin, null );
+		$resource = new Feature_Resource( $plugin, null, null );
 
 		$this->assertSame( $plugin, $resource->get_feature() );
+	}
+
+	/**
+	 * to_array() includes is_harbor_host as true when directly constructed with true.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_includes_is_harbor_host_true_when_constructed_with_true(): void {
+		$resource = new Feature_Resource( $this->make_plugin(), null, true );
+		$data     = $resource->to_array();
+
+		$this->assertArrayHasKey( 'is_harbor_host', $data );
+		$this->assertTrue( $data['is_harbor_host'] );
 	}
 
 	// -------------------------------------------------------------------------
