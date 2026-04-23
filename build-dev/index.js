@@ -4403,6 +4403,7 @@ function useFeatureRow(feature) {
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useDispatch)(_store__WEBPACK_IMPORTED_MODULE_3__.store);
   const installableBusy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => (0,_types_utils__WEBPACK_IMPORTED_MODULE_9__.isInstallableFeature)(feature) && select(_store__WEBPACK_IMPORTED_MODULE_3__.store).isAnyInstallableBusy(), [feature.type]);
   const enabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getEnabledHarborHostCount(), []);
+  const harborHostBasenames = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getHarborHostBasenames(), []);
   const isLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => {
     const activeLegacy = select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getActiveLegacyLicense(feature.slug);
     if (!activeLegacy) return false;
@@ -4430,7 +4431,7 @@ function useFeatureRow(feature) {
   }
   const featureEnabled = feature.is_enabled;
   const featureInstalled = feature.installed_version !== null;
-  const isHarborHost = feature.type === 'plugin' && feature.is_harbor_host;
+  const isHarborHost = feature.type === 'plugin' && harborHostBasenames.includes(feature.plugin_file);
   const isLastHarborHost = isHarborHost && featureEnabled && enabledHarborHostCount === 1;
   const handleToggle = async checked => {
     if (!checked && isLastHarborHost) {
@@ -4837,6 +4838,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   enableFeature: () => (/* binding */ enableFeature),
 /* harmony export */   receiveCatalog: () => (/* binding */ receiveCatalog),
 /* harmony export */   receiveFeatures: () => (/* binding */ receiveFeatures),
+/* harmony export */   receiveHarborHosts: () => (/* binding */ receiveHarborHosts),
 /* harmony export */   receiveLegacyLicenses: () => (/* binding */ receiveLegacyLicenses),
 /* harmony export */   receiveLicense: () => (/* binding */ receiveLicense),
 /* harmony export */   refreshCatalog: () => (/* binding */ refreshCatalog),
@@ -4865,6 +4867,10 @@ __webpack_require__.r(__webpack_exports__);
 const receiveFeatures = features => ({
   type: 'RECEIVE_FEATURES',
   features
+});
+const receiveHarborHosts = basenames => ({
+  type: 'RECEIVE_HARBOR_HOSTS',
+  basenames
 });
 const receiveLicense = license => ({
   type: 'RECEIVE_LICENSE',
@@ -4905,6 +4911,7 @@ const enableFeature = slug => async ({
       type: 'TOGGLE_FEATURE_FINISHED',
       feature
     });
+    dispatch.invalidateResolution('getHarborHosts', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
@@ -5210,6 +5217,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const reducer = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.combineReducers)({
   features,
+  harborHosts,
   license,
   catalog,
   legacyLicenses
@@ -5263,7 +5271,6 @@ function legacyLicenses(state = LEGACY_LICENSES_DEFAULT, action) {
 
 const FEATURES_DEFAULT = {
   bySlug: {},
-  harborHostSlugs: [],
   toggling: {},
   updating: {},
   errorBySlug: {}
@@ -5274,9 +5281,7 @@ function features(state = FEATURES_DEFAULT, action) {
       {
         return {
           ...state,
-          bySlug: Object.fromEntries(action.features.map(f => [f.slug, f])),
-          // Set once — post-toggle responses can't be trusted for this (see FeaturesState).
-          harborHostSlugs: action.features.filter(f => f.type === 'plugin' && f.is_harbor_host).map(f => f.slug)
+          bySlug: Object.fromEntries(action.features.map(f => [f.slug, f]))
         };
       }
     case 'TOGGLE_FEATURE_START':
@@ -5375,6 +5380,25 @@ function features(state = FEATURES_DEFAULT, action) {
           }
         };
       }
+    default:
+      return state;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Harbor hosts
+// ---------------------------------------------------------------------------
+
+const HARBOR_HOSTS_DEFAULT = {
+  basenames: []
+};
+function harborHosts(state = HARBOR_HOSTS_DEFAULT, action) {
+  switch (action.type) {
+    case 'RECEIVE_HARBOR_HOSTS':
+      return {
+        ...state,
+        basenames: action.basenames
+      };
     default:
       return state;
   }
@@ -5502,6 +5526,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatures: () => (/* binding */ getFeatures),
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
+/* harmony export */   getHarborHosts: () => (/* binding */ getHarborHosts),
 /* harmony export */   getLegacyLicenseBySlug: () => (/* binding */ getLegacyLicenseBySlug),
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
 /* harmony export */   getLicenseKey: () => (/* binding */ getLicenseKey),
@@ -5547,6 +5572,24 @@ const getFeatures = () => async ({
     dispatch.receiveFeatures(features);
   } catch (err) {
     throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your features.', '%TEXTDOMAIN%'));
+  }
+};
+
+/**
+ * Fetches the active Harbor host plugin basenames from the REST API.
+ * Triggered automatically when getHarborHosts is first called, and
+ * invalidated after plugin activation so the list stays current.
+ */
+const getHarborHosts = () => async ({
+  dispatch
+}) => {
+  try {
+    const basenames = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()({
+      path: '/liquidweb/harbor/v1/hosts'
+    });
+    dispatch.receiveHarborHosts(basenames);
+  } catch (err) {
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%'));
   }
 };
 const getFeaturesByProduct = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getFeatures');
@@ -5645,6 +5688,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getFeatureMismatchType: () => (/* binding */ getFeatureMismatchType),
 /* harmony export */   getFeatures: () => (/* binding */ getFeatures),
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
+/* harmony export */   getHarborHostBasenames: () => (/* binding */ getHarborHostBasenames),
 /* harmony export */   getLegacyLicenseBySlug: () => (/* binding */ getLegacyLicenseBySlug),
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
 /* harmony export */   getLicenseError: () => (/* binding */ getLicenseError),
@@ -5706,12 +5750,17 @@ const getFeatureMismatchType = (state, slug) => {
 const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? false;
 
 /**
- * Returns the number of Harbor host plugins (is_harbor_host: true) that are currently enabled.
- *
- * Used to prevent deactivating the last active Harbor host — doing so would take
- * the Feature Manager offline since Harbor is bundled inside that plugin.
+ * Returns the plugin basenames of all active Harbor-bundled plugins.
  */
-const getEnabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => state.features.harborHostSlugs.filter(slug => state.features.bySlug[slug]?.is_enabled).length, state => [state.features.harborHostSlugs, state.features.bySlug]);
+const getHarborHostBasenames = state => state.harborHosts.basenames;
+
+/**
+ * Returns the number of Harbor host plugins that are currently enabled.
+ *
+ * Uses the dedicated hosts registry (accurate after activation) rather than
+ * the is_harbor_host field on features (unreliable for mid-request activations).
+ */
+const getEnabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.features.bySlug).filter(f => f.type === 'plugin' && state.harborHosts.basenames.includes(f.plugin_file) && f.is_enabled).length, state => [state.harborHosts.basenames, state.features.bySlug]);
 
 /**
  * True when any feature is being toggled or updated.
