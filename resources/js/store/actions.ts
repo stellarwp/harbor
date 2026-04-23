@@ -61,7 +61,7 @@ export const enableFeature =
 			// TOGGLE_FEATURE_FINISHED patches bySlug with the returned feature — no
 			// need to invalidate getFeatures. A background re-fetch would race the
 			// optimistic patch and could overwrite correct state with stale data,
-			// causing the toggle flicker reproduced in SCON-647.
+			// causing the toggle flicker reproduced in https://github.com/stellarwp/harbor/pull/94.
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			// Activation may have bootstrapped a new Harbor host plugin, so refresh
 			// the hosts list. RECEIVE_HARBOR_HOSTS only touches harborHosts.basenames
@@ -98,7 +98,7 @@ export const disableFeature =
 				method: 'POST',
 			});
 			// Same reasoning as enableFeature: patch via TOGGLE_FEATURE_FINISHED,
-			// do not invalidate getFeatures (SCON-647). No hosts invalidation needed
+			// do not invalidate getFeatures (https://github.com/stellarwp/harbor/pull/94). No hosts invalidation needed
 			// because deactivation cannot introduce a new Harbor host.
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
 			return null;
