@@ -17,23 +17,9 @@ final class Harbor_Hosts_ControllerTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		/** @var WP_REST_Server $wp_rest_server */
-		global $wp_rest_server;
-		$wp_rest_server = new WP_REST_Server();
-		$this->server   = $wp_rest_server;
-
-		// Allow registering routes outside of the rest_api_init hook.
-		$this->set_fn_return(
-			'did_action',
-			function ( $hook_name ) {
-				if ( $hook_name !== 'rest_api_init' ) {
-					return \did_action( $hook_name );
-				}
-
-				return true;
-			},
-			true
-		);
+		// rest_get_server() initializes the global server and fires rest_api_init,
+		// so routes registered here behave as they would in a real request.
+		$this->server = rest_get_server();
 
 		$controller = new Harbor_Hosts_Controller();
 		$controller->register_routes();

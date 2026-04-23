@@ -194,4 +194,13 @@ final class Fixture_Client implements LicensingClientInterface, ProductsResource
 	public function withoutHeaders(): LicensingClientInterface {
 		return $this;
 	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param string $traceId Trace ID (unused).
+	 */
+	public function withTraceId( string $traceId ): LicensingClientInterface {
+		return $this;
+	}
 }
