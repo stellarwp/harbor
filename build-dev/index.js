@@ -4965,7 +4965,7 @@ const enableFeature = slug => async ({
     // Activation may have bootstrapped a new Harbor host plugin, so refresh
     // the hosts list. RECEIVE_HARBOR_HOSTS only touches harborHosts.basenames
     // and never overwrites bySlug, so there is no flicker risk.
-    dispatch.invalidateResolution('getHarborHosts', []);
+    dispatch.invalidateResolution('getHarborHostBasenames', []);
     return null;
   } catch (err) {
     const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
@@ -5589,7 +5589,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getFeature: () => (/* binding */ getFeature),
 /* harmony export */   getFeatures: () => (/* binding */ getFeatures),
 /* harmony export */   getFeaturesByProduct: () => (/* binding */ getFeaturesByProduct),
-/* harmony export */   getHarborHosts: () => (/* binding */ getHarborHosts),
+/* harmony export */   getHarborHostBasenames: () => (/* binding */ getHarborHostBasenames),
 /* harmony export */   getLegacyLicenseBySlug: () => (/* binding */ getLegacyLicenseBySlug),
 /* harmony export */   getLegacyLicenses: () => (/* binding */ getLegacyLicenses),
 /* harmony export */   getLicenseKey: () => (/* binding */ getLicenseKey),
@@ -5640,10 +5640,10 @@ const getFeatures = () => async ({
 
 /**
  * Fetches the active Harbor host plugin basenames from the REST API.
- * Triggered automatically when getHarborHosts is first called, and
+ * Triggered automatically when getHarborHostBasenames is first called, and
  * invalidated after plugin activation so the list stays current.
  */
-const getHarborHosts = () => async ({
+const getHarborHostBasenames = () => async ({
   dispatch
 }) => {
   try {
