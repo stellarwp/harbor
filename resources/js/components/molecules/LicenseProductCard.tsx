@@ -2,8 +2,7 @@
  * Card showing a single licensed product: logo, name, tier badge, and expiry.
  *
  * When a product is unactivated and an activation URL is provided, the card
- * renders a tinted footer strip with a status indicator and an Activate button
- * (Option E layout).
+ * renders a tinted footer strip with a status indicator and an Activate button.
  *
  * @package LiquidWeb\Harbor
  */
@@ -75,7 +74,7 @@ export function LicenseProductCard( { lp, productName, tierName, activationUrl }
 				<div className="flex items-center justify-between px-3 py-1.5 bg-muted/50 border-t">
 					<div className="flex items-center gap-1.5">
 						<span className="size-1.5 rounded-full bg-amber-500 shrink-0" />
-						<span className="text-xs text-muted-foreground">
+						<span className="text-xs text-amber-600 dark:text-amber-500">
 							{ __( 'Not activated', '%TEXTDOMAIN%' ) }
 						</span>
 					</div>
