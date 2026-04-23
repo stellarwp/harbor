@@ -5,24 +5,40 @@ on:
     types: [published]
 
 jobs:
-  validate-version:
-    name: Validate version
+  sync-version:
+    name: Sync version
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
-      - name: Check VERSION constant matches release tag
+      - name: Sync VERSION constant to release tag
         run: |
-          TAG_VERSION="${{ github.event.release.tag_name }}"
-          TAG_VERSION="${TAG_VERSION#v}"
+          TAG="${{ github.event.release.tag_name }}"
+          TAG_VERSION="${TAG#v}"
           PHP_VERSION=$(grep -oP "const VERSION = '\K[^']+" src/Harbor/Harbor.php)
 
           echo "Release tag: $TAG_VERSION"
           echo "Harbor::VERSION: $PHP_VERSION"
 
-          if [ "$TAG_VERSION" != "$PHP_VERSION" ]; then
-            echo "::error::Version mismatch — release tag ($TAG_VERSION) does not match Harbor::VERSION ($PHP_VERSION)"
-            exit 1
+          if [ "$TAG_VERSION" = "$PHP_VERSION" ]; then
+            echo "Versions match. Nothing to do."
+            exit 0
           fi
 
-          echo "Versions match."
+          echo "Version mismatch — updating Harbor::VERSION from $PHP_VERSION to $TAG_VERSION"
+
+          sed -i "s/const VERSION = '$PHP_VERSION'/const VERSION = '$TAG_VERSION'/" src/Harbor/Harbor.php
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/Harbor/Harbor.php
+          git commit -m "chore: bump version to $TAG_VERSION"
+          git push origin main
+
+          git tag -f "$TAG"
+          git push origin --force "refs/tags/$TAG"
