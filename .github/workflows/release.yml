@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  validate-version:
+    name: Validate version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check VERSION constant matches release tag
+        run: |
+          TAG_VERSION="${{ github.event.release.tag_name }}"
+          TAG_VERSION="${TAG_VERSION#v}"
+          PHP_VERSION=$(grep -oP "const VERSION = '\K[^']+" src/Harbor/Harbor.php)
+
+          echo "Release tag: $TAG_VERSION"
+          echo "Harbor::VERSION: $PHP_VERSION"
+
+          if [ "$TAG_VERSION" != "$PHP_VERSION" ]; then
+            echo "::error::Version mismatch — release tag ($TAG_VERSION) does not match Harbor::VERSION ($PHP_VERSION)"
+            exit 1
+          fi
+
+          echo "Versions match."
