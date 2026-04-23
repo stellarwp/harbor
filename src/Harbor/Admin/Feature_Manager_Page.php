@@ -178,6 +178,7 @@ class Feature_Manager_Page {
 					],
 					Config::get_portal_base_url() . '/subscriptions/'
 				),
+				'subscriptionsUrl'    => Config::get_portal_base_url() . '/subscriptions/',
 			]
 		);
 
