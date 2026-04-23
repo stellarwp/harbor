@@ -7,6 +7,7 @@
  * @package LiquidWeb\Harbor
  */
 import { __ } from '@wordpress/i18n';
+import { createInterpolateElement } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { AlertTriangle } from 'lucide-react';
 import { store as harborStore } from '@/store';
@@ -20,7 +21,11 @@ export function LegacyLicenseBanner() {
         []
     );
 
-    if ( ! hasLegacy ) return null;
+    if ( ! hasLegacy || ! window.harborData ) {
+			return null;
+		}
+
+    const portalUrl = window.harborData.subscriptionsUrl;
 
     return (
         <div
@@ -29,7 +34,12 @@ export function LegacyLicenseBanner() {
         >
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
             <p className="m-0">
-                { __( 'You have one or more legacy licenses active. Legacy licenses work but do not receive automatic upgrades. Consider upgrading to a unified license for the latest features.', '%TEXTDOMAIN%' ) }
+                { createInterpolateElement(
+                    __( 'You have one or more legacy licenses active. They continue to receive product updates while valid. Consider <a>switching to a unified license</a> to manage all your products with a single key.', '%TEXTDOMAIN%' ),
+                    {
+                        a: <a href={ portalUrl } target="_blank" rel="noopener noreferrer" className="underline font-medium" />,
+                    }
+                ) }
             </p>
         </div>
     );

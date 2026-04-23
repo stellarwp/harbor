@@ -9,7 +9,8 @@
         "site_limit": 3,
         "active_count": 1,
         "over_limit": false,
-        "domains": []
+        "domains": [],
+        "excess_activations": 0
       },
       "validation_status": "valid",
       "is_valid": true,
@@ -53,7 +54,8 @@
         "site_limit": 3,
         "active_count": 2,
         "over_limit": false,
-        "domains": []
+        "domains": [],
+        "excess_activations": 0
       },
       "validation_status": "suspended",
       "is_valid": false,
@@ -77,7 +79,8 @@
         "site_limit": 3,
         "active_count": 1,
         "over_limit": false,
-        "domains": []
+        "domains": [],
+        "excess_activations": 0
       },
       "validation_status": "cancelled",
       "is_valid": false,
@@ -119,7 +122,8 @@
         "site_limit": 3,
         "active_count": 0,
         "over_limit": false,
-        "domains": []
+        "domains": [],
+        "excess_activations": 0
       },
       "validation_status": "not_activated",
       "is_valid": false,

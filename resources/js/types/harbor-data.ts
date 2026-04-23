@@ -3,4 +3,5 @@ export interface HarborData {
     nonce:             string;
     pluginsUrl:        string;
     activationUrl:     string;
+    subscriptionsUrl:  string;
 }

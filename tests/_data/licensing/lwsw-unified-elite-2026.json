@@ -9,7 +9,8 @@
         "site_limit": 0,
         "active_count": 5,
         "over_limit": false,
-        "domains": []
+        "domains": [],
+        "excess_activations": 0
       },
       "validation_status": "valid",
       "is_valid": true,
