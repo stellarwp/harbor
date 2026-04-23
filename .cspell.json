@@ -1,6 +1,9 @@
 {
   "version": "0.2",
   "language": "en",
+  "ignoreRegExpList": [
+    "%[0-9A-Fa-f]{2}"
+  ],
   "ignorePaths": [
     ".cspell.json",
     ".git",
