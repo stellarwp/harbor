@@ -131,6 +131,9 @@ export const updateFeature =
 				path: `/liquidweb/harbor/v1/features/${slug}/update`,
 				method: 'POST',
 			});
+			// Same reasoning as enableFeature/disableFeature: UPDATE_FEATURE_FINISHED
+			// patches bySlug directly — invalidating getFeatures is unnecessary and
+			// risks the stale-overwrite flicker (https://github.com/stellarwp/harbor/pull/94).
 			dispatch({ type: 'UPDATE_FEATURE_FINISHED', feature });
 			return null;
 		} catch (err) {
@@ -177,6 +180,9 @@ export const storeLicense =
 				type: 'STORE_LICENSE_FINISHED',
 				license: result,
 			});
+			// License changes affect entitlements globally (available features, tiers,
+			// locked state), so a full re-fetch of features is correct here — unlike
+			// toggle/update actions where the API already returns the patched feature.
 			dispatch.invalidateResolution('getFeatures', []);
 			return null;
 		} catch (err) {
