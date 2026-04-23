@@ -37,10 +37,10 @@ export const getFeatures =
 
 /**
  * Fetches the active Harbor host plugin basenames from the REST API.
- * Triggered automatically when getHarborHosts is first called, and
+ * Triggered automatically when getHarborHostBasenames is first called, and
  * invalidated after plugin activation so the list stays current.
  */
-export const getHarborHosts =
+export const getHarborHostBasenames =
 	(): Thunk =>
 	async ({ dispatch }) => {
 		try {

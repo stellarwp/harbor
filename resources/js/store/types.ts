@@ -26,7 +26,7 @@ export interface CatalogState {
 export interface HarborHostsState {
 	/**
 	 * Plugin basenames of all active Harbor-bundled plugins, populated by the
-	 * getHarborHosts resolver and refreshed after plugin activation.
+	 * getHarborHostBasenames resolver and refreshed after plugin activation.
 	 */
 	basenames: string[];
 }

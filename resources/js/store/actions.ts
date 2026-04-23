@@ -96,7 +96,7 @@ export const enableFeature =
 			// Activation may have bootstrapped a new Harbor host plugin, so refresh
 			// the hosts list. RECEIVE_HARBOR_HOSTS only touches harborHosts.basenames
 			// and never overwrites bySlug, so there is no flicker risk.
-			dispatch.invalidateResolution('getHarborHosts', []);
+			dispatch.invalidateResolution('getHarborHostBasenames', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
