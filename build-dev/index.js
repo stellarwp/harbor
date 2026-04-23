@@ -5263,6 +5263,7 @@ function legacyLicenses(state = LEGACY_LICENSES_DEFAULT, action) {
 
 const FEATURES_DEFAULT = {
   bySlug: {},
+  harborHostSlugs: [],
   toggling: {},
   updating: {},
   errorBySlug: {}
@@ -5273,7 +5274,9 @@ function features(state = FEATURES_DEFAULT, action) {
       {
         return {
           ...state,
-          bySlug: Object.fromEntries(action.features.map(f => [f.slug, f]))
+          bySlug: Object.fromEntries(action.features.map(f => [f.slug, f])),
+          // Set once — post-toggle responses can't be trusted for this (see FeaturesState).
+          harborHostSlugs: action.features.filter(f => f.type === 'plugin' && f.is_harbor_host).map(f => f.slug)
         };
       }
     case 'TOGGLE_FEATURE_START':
@@ -5708,7 +5711,7 @@ const isFeatureUpdating = (state, slug) => state.features.updating[slug] ?? fals
  * Used to prevent deactivating the last active Harbor host — doing so would take
  * the Feature Manager offline since Harbor is bundled inside that plugin.
  */
-const getEnabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => Object.values(state.features.bySlug).filter(f => f.type === 'plugin' && f.is_harbor_host && f.is_enabled).length, state => [state.features.bySlug]);
+const getEnabledHarborHostCount = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.createSelector)(state => state.features.harborHostSlugs.filter(slug => state.features.bySlug[slug]?.is_enabled).length, state => [state.features.harborHostSlugs, state.features.bySlug]);
 
 /**
  * True when any feature is being toggled or updated.
