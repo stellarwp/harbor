@@ -8,11 +8,12 @@ import type {
 	Action,
 	CatalogState,
 	FeaturesState,
+	HarborHostsState,
 	LegacyLicensesState,
 	LicenseState,
 } from './types';
 
-export const reducer = combineReducers({ features, license, catalog, legacyLicenses });
+export const reducer = combineReducers({ features, harborHosts, license, catalog, legacyLicenses });
 
 // ---------------------------------------------------------------------------
 // Catalog
@@ -74,7 +75,6 @@ function legacyLicenses(
 
 const FEATURES_DEFAULT: FeaturesState = {
 	bySlug: {},
-	harborHostSlugs: [],
 	toggling: {},
 	updating: {},
 	errorBySlug: {},
@@ -89,10 +89,6 @@ function features(
 			return {
 				...state,
 				bySlug: Object.fromEntries( action.features.map( ( f ) => [ f.slug, f ] ) ),
-				// Set once — post-toggle responses can't be trusted for this (see FeaturesState).
-				harborHostSlugs: action.features
-					.filter( ( f ) => f.type === 'plugin' && f.is_harbor_host )
-					.map( ( f ) => f.slug ),
 			};
 		}
 
@@ -161,6 +157,26 @@ function features(
 			};
 		}
 
+		default:
+			return state;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Harbor hosts
+// ---------------------------------------------------------------------------
+
+const HARBOR_HOSTS_DEFAULT: HarborHostsState = {
+	basenames: [],
+};
+
+function harborHosts(
+	state: HarborHostsState = HARBOR_HOSTS_DEFAULT,
+	action: Action
+): HarborHostsState {
+	switch ( action.type ) {
+		case 'RECEIVE_HARBOR_HOSTS':
+			return { ...state, basenames: action.basenames };
 		default:
 			return state;
 	}

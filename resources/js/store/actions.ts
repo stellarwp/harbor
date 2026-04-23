@@ -19,6 +19,11 @@ export const receiveFeatures = (features: Feature[]): Action => ({
 	features,
 });
 
+export const receiveHarborHosts = (basenames: string[]): Action => ({
+	type: 'RECEIVE_HARBOR_HOSTS',
+	basenames,
+});
+
 export const receiveLicense = (license: License): Action => ({
 	type: 'RECEIVE_LICENSE',
 	license,
@@ -54,6 +59,7 @@ export const enableFeature =
 				method: 'POST',
 			});
 			dispatch({ type: 'TOGGLE_FEATURE_FINISHED', feature });
+			dispatch.invalidateResolution('getHarborHosts', []);
 			return null;
 		} catch (err) {
 			const error = await HarborError.wrap(
