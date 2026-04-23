@@ -32,14 +32,17 @@ class InstanceRegistryTest extends HarborTestCase {
 		$this->assertArrayNotHasKey( $unique_version, $versions );
 	}
 
-	public function test_it_returns_plugin_file_as_value_for_registered_version(): void {
-		// The bootstrap plugin registered itself before wp_loaded; its value is a plugin_file string, not true.
+	public function test_it_returns_plugin_files_as_array_for_registered_version(): void {
+		// The bootstrap plugin registered itself before wp_loaded; its value is an array of plugin_file strings.
 		// @phpstan-ignore function.internal
 		$registry = _lw_harbor_instance_registry();
 
-		foreach ( $registry as $version => $plugin_file ) {
+		foreach ( $registry as $version => $plugin_files ) {
 			$this->assertIsString( $version );
-			$this->assertIsString( $plugin_file );
+			$this->assertIsArray( $plugin_files );
+			foreach ( $plugin_files as $plugin_file ) {
+				$this->assertIsString( $plugin_file );
+			}
 		}
 	}
 

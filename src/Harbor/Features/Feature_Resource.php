@@ -97,8 +97,7 @@ final class Feature_Resource {
 		);
 
 		if ( $this->feature instanceof Plugin ) {
-			$harbor_host_files      = array_values( array_filter( _lw_harbor_instance_registry() ) );
-			$data['is_harbor_host'] = in_array( $this->feature->get_plugin_file(), $harbor_host_files, true );
+			$data['is_harbor_host'] = self::plugin_file_is_harbor_host( $this->feature->get_plugin_file() );
 		}
 
 		return $data;
@@ -135,6 +134,16 @@ final class Feature_Resource {
 	 *
 	 * @return string|null
 	 */
+	private static function plugin_file_is_harbor_host( string $plugin_file ): bool {
+		foreach ( _lw_harbor_instance_registry() as $files ) {
+			if ( in_array( $plugin_file, $files, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private static function get_plugin_update_version( Plugin $feature ) {
 		$transient = get_site_transient( 'update_plugins' );
 

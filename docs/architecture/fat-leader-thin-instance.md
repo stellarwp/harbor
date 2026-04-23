@@ -15,7 +15,7 @@ flowchart TD
         GiveWP["GiveWP\n(entry plugin)"] -->|register version| Registry
         TEC["TEC\n(entry plugin)"] -->|register version| Registry
 
-        Registry["_lw_harbor_instance_registry()\n\nkadence-blocks/vendor → Harbor 1.2.0\ngive/vendor → Harbor 1.3.0 ← highest\nthe-events-calendar/ → Harbor 1.1.0"]
+        Registry["_lw_harbor_instance_registry()\n\n1.2.0 → [kadence-blocks/vendor]\n1.3.0 → [give/vendor] ← highest\n1.1.0 → [the-events-calendar/vendor]"]
 
         Registry -->|"Version::is_highest()"| Leader
 
@@ -29,7 +29,7 @@ flowchart TD
 
 ## Leader Election
 
-Multiple vendor-prefixed copies negotiate leadership through a shared global function, `_lw_harbor_instance_registry()`, defined in `src/Harbor/global-functions.php`. Because global functions are declared once (PHP's `function_exists` guard), the static variable inside that function is shared by all vendor-prefixed copies regardless of which one's file was included first. Each instance calls `_lw_harbor_instance_registry( Harbor::VERSION )` during bootstrap to register itself. Registrations are only accepted before `wp_loaded`, so all real instances (which initialize on `plugins_loaded`) can register, but nothing can inject fake versions after the bootstrap window closes.
+Multiple vendor-prefixed copies negotiate leadership through a shared global function, `_lw_harbor_instance_registry()`, defined in `src/Harbor/global-functions.php`. Because global functions are declared once (PHP's `function_exists` guard), the static variable inside that function is shared by all vendor-prefixed copies regardless of which one's file was included first. Each instance calls `_lw_harbor_instance_registry( Harbor::VERSION, $plugin_file )` during bootstrap to register itself. The registry maps each version string to an array of plugin files — multiple plugins shipping the same Harbor version all appear under the same key. Registrations are only accepted before `wp_loaded`, so all real instances (which initialize on `plugins_loaded`) can register, but nothing can inject fake versions after the bootstrap window closes.
 
 `Version::is_highest()` (in `src/Harbor/Utils/Version.php`) reads the registry and returns `true` if this instance's version string is greater than or equal to all registered versions. `Version::should_handle( $action )` layers a per-responsibility mutex on top: it fires `do_action( 'lw-harbor/handled/{action}' )` the first time a qualifying instance claims a responsibility, and any subsequent call (even from the same instance) sees `did_action()` return `true` and backs off. This ensures exactly one instance handles each shared responsibility — admin page, REST routes, etc. — even when two copies run the same version.
 
