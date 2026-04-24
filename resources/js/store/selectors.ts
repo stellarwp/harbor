@@ -144,10 +144,20 @@ export const getActiveLegacyLicense = (state: State, slug: string): LegacyLicens
 };
 
 /**
+ * Returns all license products excluding those with a cancelled status.
+ *
+ * Cancelled products are excluded globally so they do not influence any
+ * selector's output — they clutter the UI and should not affect license
+ * validity or activation checks.
+ */
+export const getWithoutCancelledProducts = ( state: State ): LicenseProduct[] =>
+	state.license.license.products.filter( ( p ) => p.status !== 'cancelled' );
+
+/**
  * True when the unified license covers the given product slug.
  */
 export const isProductUnifiedLicensed = (state: State, productSlug: string): boolean =>
-	state.license.license.products.some( (p) => p.product_slug === productSlug );
+	getWithoutCancelledProducts( state ).some( ( p ) => p.product_slug === productSlug );
 
 /**
  * True when any tier entry for the given product has is_valid set to true,
@@ -156,7 +166,7 @@ export const isProductUnifiedLicensed = (state: State, productSlug: string): boo
  * @since 1.0.0
  */
 export const isProductLicenseValid = ( state: State, productSlug: string ): boolean =>
-	state.license.license.products.some( ( p ) => p.product_slug === productSlug && p.is_valid === true );
+	getWithoutCancelledProducts( state ).some( ( p ) => p.product_slug === productSlug && p.is_valid === true );
 
 /**
  * True when at least one feature belonging to the product has an active legacy license.
@@ -216,7 +226,7 @@ const UNACTIVATED_STATUSES = [ 'not_activated', 'activation_required' ] as const
  * so they don't suppress the notice for products that can still be activated.
  */
 export const areAllProductsNotActivated = ( state: State ): boolean => {
-	const products = state.license.license.products.filter(
+	const products = getWithoutCancelledProducts( state ).filter(
 		( p ) => p.validation_status !== 'expired'
 	);
 	return (
@@ -238,7 +248,7 @@ export const hasLicense = (state: State): boolean =>
 	state.license.license.key !== null;
 
 export const getLicenseProducts = (state: State): LicenseProduct[] =>
-	state.license.license.products
+	getWithoutCancelledProducts( state )
 		.slice()
 		.sort( ( a, b ) => ( b.activated_here === true ? 1 : 0 ) - ( a.activated_here === true ? 1 : 0 ) );
 

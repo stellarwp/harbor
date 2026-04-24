@@ -12,7 +12,8 @@
     "lint:css": "wp-scripts lint-style",
     "check:spelling": "bunx cspell lint -c .cspell.json --no-progress --no-must-find-files --dot '**'",
     "lint:md": "markdownlint '**/*.md' --ignore node_modules --ignore vendor",
-    "fix:md": "prettier --write '**/*.md' '!node_modules/**' '!vendor/**' && markdownlint '**/*.md' --ignore node_modules --ignore vendor --fix"
+    "fix:md": "prettier --write '**/*.md' '!node_modules/**' '!vendor/**' && markdownlint '**/*.md' --ignore node_modules --ignore vendor --fix",
+    "test:js": "wp-scripts test-unit-js"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

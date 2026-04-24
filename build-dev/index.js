@@ -2299,13 +2299,14 @@ function LicensePanel() {
   }, [catalogs]);
   const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
 
-  // Product slug → lowest-tier purchase URL map from the catalog.
+  // Product slug → lowest paid-tier purchase URL map from the catalog.
   const upsellUrlMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const map = {};
     catalogs.forEach(catalog => {
       const sorted = catalog.tiers.slice().sort((a, b) => a.rank - b.rank);
-      if (sorted[0]?.purchase_url) {
-        map[catalog.product_slug] = sorted[0].purchase_url;
+      const paidTier = sorted.find(t => t.rank > 0);
+      if (paidTier?.purchase_url) {
+        map[catalog.product_slug] = paidTier.purchase_url;
       }
     });
     return map;
@@ -5901,6 +5902,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getProductTiers: () => (/* binding */ getProductTiers),
 /* harmony export */   getRefreshLicenseError: () => (/* binding */ getRefreshLicenseError),
 /* harmony export */   getStoreLicenseError: () => (/* binding */ getStoreLicenseError),
+/* harmony export */   getWithoutCancelledProducts: () => (/* binding */ getWithoutCancelledProducts),
 /* harmony export */   hasActiveLegacyLicenseForProduct: () => (/* binding */ hasActiveLegacyLicenseForProduct),
 /* harmony export */   hasLegacyLicense: () => (/* binding */ hasLegacyLicense),
 /* harmony export */   hasLegacyLicenses: () => (/* binding */ hasLegacyLicenses),
@@ -6006,9 +6008,18 @@ const getActiveLegacyLicense = (state, slug) => {
 };
 
 /**
+ * Returns all license products excluding those with a cancelled status.
+ *
+ * Cancelled products are excluded globally so they do not influence any
+ * selector's output — they clutter the UI and should not affect license
+ * validity or activation checks.
+ */
+const getWithoutCancelledProducts = state => state.license.license.products.filter(p => p.status !== 'cancelled');
+
+/**
  * True when the unified license covers the given product slug.
  */
-const isProductUnifiedLicensed = (state, productSlug) => state.license.license.products.some(p => p.product_slug === productSlug);
+const isProductUnifiedLicensed = (state, productSlug) => getWithoutCancelledProducts(state).some(p => p.product_slug === productSlug);
 
 /**
  * True when any tier entry for the given product has is_valid set to true,
@@ -6016,7 +6027,7 @@ const isProductUnifiedLicensed = (state, productSlug) => state.license.license.p
  *
  * @since 1.0.0
  */
-const isProductLicenseValid = (state, productSlug) => state.license.license.products.some(p => p.product_slug === productSlug && p.is_valid === true);
+const isProductLicenseValid = (state, productSlug) => getWithoutCancelledProducts(state).some(p => p.product_slug === productSlug && p.is_valid === true);
 
 /**
  * True when at least one feature belonging to the product has an active legacy license.
@@ -6050,7 +6061,7 @@ const UNACTIVATED_STATUSES = ['not_activated', 'activation_required'];
  * so they don't suppress the notice for products that can still be activated.
  */
 const areAllProductsNotActivated = state => {
-  const products = state.license.license.products.filter(p => p.validation_status !== 'expired');
+  const products = getWithoutCancelledProducts(state).filter(p => p.validation_status !== 'expired');
   return products.length > 0 && products.every(p => UNACTIVATED_STATUSES.includes(p.validation_status));
 };
 
@@ -6060,7 +6071,7 @@ const areAllProductsNotActivated = state => {
  */
 const getLicenseKey = state => state.license.license.key;
 const hasLicense = state => state.license.license.key !== null;
-const getLicenseProducts = state => state.license.license.products.slice().sort((a, b) => (b.activated_here === true ? 1 : 0) - (a.activated_here === true ? 1 : 0));
+const getLicenseProducts = state => getWithoutCancelledProducts(state).slice().sort((a, b) => (b.activated_here === true ? 1 : 0) - (a.activated_here === true ? 1 : 0));
 const getLicenseError = state => state.license.license.error;
 const isLicenseStoring = state => state.license.isStoring;
 const isLicenseDeleting = state => state.license.isDeleting;
