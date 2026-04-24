@@ -170,13 +170,15 @@ class Feature_Manager_Page {
 				'restUrl'             => rest_url( 'liquidweb/harbor/v1/' ),
 				'nonce'               => wp_create_nonce( 'wp_rest' ),
 				'pluginsUrl'          => admin_url( 'plugins.php' ),
-				'activationUrl'       => add_query_arg(
+				'activationUrl'       => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(
 					[
 						'portal-referral' => 'plugin',
 						'redirect_url'    => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
 						'domain'          => $this->site_data->get_domain(),
 					],
-					Config::get_portal_base_url() . '/subscriptions/'
+					'',
+					'&',
+					PHP_QUERY_RFC3986
 				),
 				'subscriptionsUrl'    => Config::get_portal_base_url() . '/subscriptions/',
 			]
