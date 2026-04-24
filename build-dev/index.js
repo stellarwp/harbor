@@ -2298,13 +2298,14 @@ function LicensePanel() {
   }, [catalogs]);
   const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
 
-  // Product slug → lowest-tier purchase URL map from the catalog.
+  // Product slug → lowest paid-tier purchase URL map from the catalog.
   const upsellUrlMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const map = {};
     catalogs.forEach(catalog => {
       const sorted = catalog.tiers.slice().sort((a, b) => a.rank - b.rank);
-      if (sorted[0]?.purchase_url) {
-        map[catalog.product_slug] = sorted[0].purchase_url;
+      const paidTier = sorted.find(t => t.rank > 0);
+      if (paidTier?.purchase_url) {
+        map[catalog.product_slug] = paidTier.purchase_url;
       }
     });
     return map;
