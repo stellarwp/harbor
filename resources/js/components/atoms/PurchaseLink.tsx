@@ -31,7 +31,6 @@ export function PurchaseLink( { tierName, upgradeUrl, mode = 'upgrade' }: Purcha
                 href={ upgradeUrl }
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={ label }
             >
                 { label }
                 <ExternalLink className="w-3 h-3" />

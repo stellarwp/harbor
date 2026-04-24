@@ -10,6 +10,7 @@ import { SectionHeader } from '@/components/atoms/SectionHeader';
 import { LicenseKeyInputSkeleton } from '@/components/atoms/LicenseKeyInputSkeleton';
 import { LicenseKeyInput } from '@/components/molecules/LicenseKeyInput';
 import { LicenseProductCard } from '@/components/molecules/LicenseProductCard';
+import { buildActivationUrl } from '@/lib/activation-url';
 import { PRODUCTS } from '@/data/products';
 import type { LicenseProduct } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
@@ -56,11 +57,8 @@ function LicenseSectionSkeleton() {
 export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading, activationUrl }: LicenseSectionProps ) {
     const [ isEditing, setIsEditing ] = useState( false );
 
-    const hasLicense = licenseKey !== null;
-
-    const hasUnactivatedProducts = licenseProducts.some(
-        ( lp ) => lp.validation_status === 'not_activated' || lp.validation_status === 'activation_required'
-    );
+    const hasLicense   = licenseKey !== null;
+    const manageUrl    = window.harborData?.subscriptionsUrl ?? null;
 
     const handleRemove = async (): Promise<HarborError | null> => {
         const error = await onRemove();
@@ -125,12 +123,16 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                             lp={ lp }
                             productName={ PRODUCTS.find( ( p ) => p.slug === lp.product_slug )?.name ?? lp.product_slug }
                             tierName={ tierNameMap[ lp.tier ] ?? lp.tier }
+                            activationUrl={ activationUrl
+                                ? buildActivationUrl( activationUrl, lp.product_slug, lp.tier )
+                                : undefined
+                            }
                         />
                     ) ) }
 
-                    { hasUnactivatedProducts && activationUrl && (
+                    { manageUrl && (
                         <p className="text-xs text-muted-foreground text-center mt-1 mb-0">
-                            <a href={ activationUrl } target="_blank" rel="noopener noreferrer" className="underline hover:opacity-75">
+                            <a href={ manageUrl } target="_blank" rel="noopener noreferrer" className="underline hover:opacity-75">
                                 { __( 'Manage license in Liquid Web', '%TEXTDOMAIN%' ) }
                             </a>
                         </p>
