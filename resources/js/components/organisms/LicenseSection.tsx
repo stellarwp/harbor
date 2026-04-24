@@ -35,7 +35,7 @@ function LicenseSectionSkeleton() {
     return (
         <div className="space-y-3">
             { PRODUCTS.map( ( p ) => (
-                <div key={ p.slug } className="rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse">
+                <div key={ p.slug } className="rounded-lg border bg-card px-3 py-2.5 animate-pulse">
                     <div className="flex items-center gap-2">
                         { /* logo */ }
                         <div className="w-6 h-6 rounded shrink-0 bg-muted" />
@@ -43,9 +43,9 @@ function LicenseSectionSkeleton() {
                         <div className="h-3.5 flex-1 rounded bg-muted" />
                         { /* tier badge */ }
                         <div className="h-4 w-14 rounded-full shrink-0 bg-muted" />
+                        { /* chevron */ }
+                        <div className="w-3.5 h-3.5 rounded shrink-0 bg-muted" />
                     </div>
-                    { /* expiry */ }
-                    <div className="h-3 w-24 rounded bg-muted" />
                 </div>
             ) ) }
         </div>
