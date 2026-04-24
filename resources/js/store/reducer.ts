@@ -4,6 +4,7 @@
  * @package LiquidWeb\Harbor
  */
 import { combineReducers } from '@wordpress/data';
+import type { License } from '@/types/api';
 import type {
 	Action,
 	CatalogState,
@@ -12,6 +13,13 @@ import type {
 	LegacyLicensesState,
 	LicenseState,
 } from './types';
+
+function withoutCancelledProducts( license: License ): License {
+	return {
+		...license,
+		products: license.products.filter( ( p ) => p.status !== 'cancelled' ),
+	};
+}
 
 export const reducer = combineReducers({ features, harborHosts, license, catalog, legacyLicenses });
 
@@ -204,7 +212,7 @@ function license(
 		case 'RECEIVE_LICENSE': {
 			return {
 				...state,
-				license: action.license,
+				license: withoutCancelledProducts( action.license ),
 			};
 		}
 
@@ -220,7 +228,7 @@ function license(
 			return {
 				...state,
 				isStoring: false,
-				license: action.license,
+				license: withoutCancelledProducts( action.license ),
 			};
 		}
 
@@ -268,7 +276,7 @@ function license(
 			return {
 				...state,
 				isRefreshing: false,
-				license: action.license,
+				license: withoutCancelledProducts( action.license ),
 			};
 		}
 
