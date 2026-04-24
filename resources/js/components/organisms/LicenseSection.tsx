@@ -3,15 +3,15 @@
  *
  * @package LiquidWeb\Harbor
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { KeyRound, Loader2, RefreshCw } from 'lucide-react';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
 import { LicenseKeyInputSkeleton } from '@/components/atoms/LicenseKeyInputSkeleton';
 import { LicenseKeyInput } from '@/components/molecules/LicenseKeyInput';
 import { LicenseProductCard } from '@/components/molecules/LicenseProductCard';
-import { buildActivationUrl } from '@/lib/activation-url';
 import { PRODUCTS } from '@/data/products';
+import { groupLicenseProducts } from '@/lib/group-license-products';
 import type { LicenseProduct } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
 
@@ -68,8 +68,8 @@ export function LicenseSection( {
 }: LicenseSectionProps ) {
     const [ isEditing, setIsEditing ] = useState( false );
 
-    const hasLicense   = licenseKey !== null;
-    const manageUrl    = window.harborData?.subscriptionsUrl ?? null;
+    const hasLicense = licenseKey !== null;
+    const manageUrl  = window.harborData?.subscriptionsUrl ?? null;
 
     const handleRemove = async (): Promise<HarborError | null> => {
         const error = await onRemove();
@@ -78,6 +78,11 @@ export function LicenseSection( {
         }
         return error;
     };
+
+    const groupedProducts = useMemo(
+        () => groupLicenseProducts( licenseProducts, tierRankMap ),
+        [ licenseProducts, tierRankMap ],
+    );
 
     return (
         <div className="space-y-3">
@@ -126,18 +131,16 @@ export function LicenseSection( {
                 </>
             ) }
 
-            { ! isLoading && hasLicense && licenseProducts.length > 0 && (
+            { ! isLoading && hasLicense && groupedProducts.length > 0 && (
                 <div className="space-y-3">
-                    { licenseProducts.map( ( lp ) => (
+                    { groupedProducts.map( ( g ) => (
                         <LicenseProductCard
-                            key={ `${ lp.product_slug }:${ lp.tier }` }
-                            lp={ lp }
-                            productName={ PRODUCTS.find( ( p ) => p.slug === lp.product_slug )?.name ?? lp.product_slug }
-                            tierName={ tierNameMap[ lp.tier ] ?? lp.tier }
-                            activationUrl={ activationUrl
-                                ? buildActivationUrl( activationUrl, lp.product_slug, lp.tier )
-                                : undefined
-                            }
+                            key={ `${ g.productSlug }:${ g.tiers.some( ( t ) => t.is_valid && t.activated_here ) }` }
+                            productSlug={ g.productSlug }
+                            productName={ g.productName }
+                            tiers={ g.tiers }
+                            tierNameMap={ tierNameMap }
+                            activationUrl={ activationUrl }
                         />
                     ) ) }
 
