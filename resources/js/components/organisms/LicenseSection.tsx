@@ -19,6 +19,7 @@ interface LicenseSectionProps {
     licenseKey:      string | null;
     licenseProducts: LicenseProduct[];
     tierNameMap:     Record<string, string>;
+    tierRankMap:     Record<string, number>;
     onRemove:        () => Promise<HarborError | null>;
     onRefresh:       () => Promise<void>;
     isRefreshing:    boolean;
@@ -54,7 +55,17 @@ function LicenseSectionSkeleton() {
 /**
  * @since 1.0.0
  */
-export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading, activationUrl }: LicenseSectionProps ) {
+export function LicenseSection( {
+    licenseKey,
+    licenseProducts,
+    tierNameMap,
+    tierRankMap,
+    onRemove,
+    onRefresh,
+    isRefreshing,
+    isLoading,
+    activationUrl,
+}: LicenseSectionProps ) {
     const [ isEditing, setIsEditing ] = useState( false );
 
     const hasLicense   = licenseKey !== null;
