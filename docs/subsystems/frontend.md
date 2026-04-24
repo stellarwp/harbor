@@ -180,12 +180,26 @@ PHP injects a `window.harborData` object containing:
 
 ```typescript
 interface HarborData {
-    restUrl: string;   // rest_url('liquidweb/harbor/v1/')
-    nonce:   string;   // wp_create_nonce('wp_rest')
+    restUrl:          string; // rest_url('liquidweb/harbor/v1/')
+    nonce:            string; // wp_create_nonce('wp_rest')
+    pluginsUrl:       string; // admin_url('plugins.php')
+    activationUrl:    string; // portal /subscriptions/ URL with referral + redirect params
+    subscriptionsUrl: string; // portal /subscriptions/ base, no query params
 }
 ```
 
 The `@wordpress/api-fetch` package handles nonce headers automatically via its built-in middleware, so `harborData.nonce` is available as a fallback. `harborData.restUrl` is available for constructing full URLs when needed.
+
+`activationUrl` is the portal URL used to drive unactivated products through the activation flow (pre-built with `portal-referral`, `redirect_url`, and `domain` query params). `subscriptionsUrl` is the bare `/subscriptions/` base used as the starting point for URL-building helpers like `buildChangePlanUrl`.
+
+### Upgrade CTA Routing
+
+When a user sees an upgrade button in a `TierGroup` — i.e. a tier ranked above their current one — the target URL depends on whether they already have a subscription for that product:
+
+- **Has a `licenseProduct` for this product** (valid, expired, or otherwise invalid): the button links to `<subscriptionsUrl>/<product-slug>/<tier-slug>/change-plan/`. The portal resolves the subscription from the authenticated session and drives the plan-change flow, so an upgrade modifies the existing subscription instead of adding a new plan to the basket.
+- **No `licenseProduct` for this product**: the button falls back to the catalog tier's `purchase_url` for a fresh purchase.
+
+URL construction is centralized in `resources/js/lib/change-plan-url.ts` (`buildChangePlanUrl`). The decision between change-plan and `purchase_url` is made in `ProductSection`, keeping `TierGroup` a dumb presentational component that receives a resolved `buttonHref`.
 
 ### Webpack Aliases
 

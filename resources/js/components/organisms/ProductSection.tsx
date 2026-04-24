@@ -18,6 +18,7 @@ import { TierGroup } from '@/components/molecules/TierGroup';
 import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
+import { buildChangePlanUrl } from '@/lib/change-plan-url';
 import type { Product } from '@/types/api';
 
 interface ProductSectionProps {
@@ -127,12 +128,23 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     { upgradeCatalogTiers.map( ( tier ) => {
                         const locked = lockedByTier[ tier.tier_slug ] ?? [];
                         if ( locked.length === 0 ) return null;
+
+                        // Subscribers (including those with invalid/expired licenses) get
+                        // routed to the portal's change-plan flow so an upgrade modifies
+                        // their existing subscription. Unlicensed visitors fall back to
+                        // the catalog's purchase_url so they can buy fresh.
+                        const subscriptionsUrl = window.harborData?.subscriptionsUrl;
+                        const buttonHref       = licenseProduct && subscriptionsUrl
+                            ? buildChangePlanUrl( subscriptionsUrl, product.slug, tier.tier_slug )
+                            : tier.purchase_url;
+
                         return (
                             <TierGroup
                                 key={ tier.tier_slug }
                                 tier={ tier }
                                 features={ locked }
                                 forceOpen={ isSearching }
+                                buttonHref={ buttonHref }
                             />
                         );
                     } ) }

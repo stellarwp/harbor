@@ -19,12 +19,18 @@ interface TierGroupProps {
     features:      Feature[];
     forceOpen?:    boolean;
     showUpgrade?:  boolean;
+    /**
+     * Target URL for the upgrade button. Resolved by the parent so the
+     * component doesn't need to know whether the user has an existing
+     * subscription (change-plan URL) or is purchasing fresh (purchase_url).
+     */
+    buttonHref?:   string;
 }
 
 /**
  * @since 1.0.0
  */
-export function TierGroup( { tier, features, forceOpen = false, showUpgrade = true }: TierGroupProps ) {
+export function TierGroup( { tier, features, forceOpen = false, showUpgrade = true, buttonHref }: TierGroupProps ) {
     const [ expanded, setExpanded ] = useState( false );
     const isOpen = expanded || forceOpen;
     const Chevron = isOpen ? ChevronDown : ChevronRight;
@@ -45,12 +51,12 @@ export function TierGroup( { tier, features, forceOpen = false, showUpgrade = tr
                     </Badge>
                     <Lock className="w-3.5 h-3.5 text-muted-foreground ml-1" />
                 </div>
-                { showUpgrade && (
+                { showUpgrade && buttonHref && (
                     <Button
                         variant="outline"
                         size="sm"
                         className="gap-1 text-xs h-7 ml-auto shrink-0"
-                        onClick={ () => window.open( tier.purchase_url, '_blank', 'noopener,noreferrer' ) }
+                        onClick={ () => window.open( buttonHref, '_blank', 'noopener,noreferrer' ) }
                     >
                         <ExternalLink className="w-3 h-3" />
                         { __( 'Upgrade to', '%TEXTDOMAIN%' ) }{ ' ' }{ tier.name }
