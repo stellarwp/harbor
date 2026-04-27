@@ -1658,21 +1658,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   LicenseProductCard: () => (/* binding */ LicenseProductCard)
 /* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/external-link.js");
-/* harmony import */ var _components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/components/atoms/LicenseBadge */ "./resources/js/components/atoms/LicenseBadge.tsx");
-/* harmony import */ var _components_ui_badge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/components/ui/badge */ "./resources/js/components/ui/badge.tsx");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/atoms/ProductLogo */ "./resources/js/components/atoms/ProductLogo.tsx");
-/* harmony import */ var _lib_license_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/lib/license-utils */ "./resources/js/lib/license-utils.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/chevron-down.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/chevron-up.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/external-link.js");
+/* harmony import */ var _components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/atoms/LicenseBadge */ "./resources/js/components/atoms/LicenseBadge.tsx");
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var _components_ui_tooltip__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/ui/tooltip */ "./resources/js/components/ui/tooltip.tsx");
+/* harmony import */ var _components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/atoms/ProductLogo */ "./resources/js/components/atoms/ProductLogo.tsx");
+/* harmony import */ var _lib_activation_url__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/lib/activation-url */ "./resources/js/lib/activation-url.ts");
+/* harmony import */ var _lib_utils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/lib/utils */ "./resources/js/lib/utils.ts");
+/* harmony import */ var _lib_license_utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/lib/license-utils */ "./resources/js/lib/license-utils.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
 /**
- * Card showing a single licensed product: logo, name, tier badge, and expiry.
- *
- * When a product is unactivated and an activation URL is provided, the card
- * renders a tinted footer strip with a status indicator and an Activate button.
+ * Card showing a single licensed product: logo, name, tier badge, and an
+ * expandable list of per-tier rows with expiry dates and Activate buttons.
  *
  * @package LiquidWeb\Harbor
  */
@@ -1684,11 +1688,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/**
- * @since 1.0.0
- */
+
+
+
 function getStatusBadgeType(lp) {
-  if (lp.is_valid && lp.activated_here === false) return 'unactivated';
   switch (lp.validation_status) {
     case 'not_activated':
     case 'activation_required':
@@ -1707,69 +1710,88 @@ function getStatusBadgeType(lp) {
       return 'unlicensed';
   }
 }
+
+/**
+ * @since 1.0.0
+ */
 function LicenseProductCard({
-  lp,
+  productSlug,
   productName,
-  tierName,
+  tiers,
+  tierNameMap,
   activationUrl
 }) {
-  const expiryStatus = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_6__.getExpiryStatus)(lp.expires);
-  const isActivatedHere = lp.is_valid && lp.activated_here === true;
-  const statusBadgeType = !isActivatedHere ? getStatusBadgeType(lp) : null;
-  const showFooter = statusBadgeType === 'unactivated' && !!activationUrl;
-  const showInlineBadge = !!statusBadgeType && !showFooter;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-    className: `rounded-lg border bg-card overflow-hidden ${_lib_license_utils__WEBPACK_IMPORTED_MODULE_6__.expiryCardClass[expiryStatus]}`,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      className: "px-3 py-2.5 space-y-2.5",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "flex items-center gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_5__.ProductLogo, {
-          slug: lp.product_slug,
-          size: 24,
-          variant: "nobg",
-          productName: productName
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-          className: "text-sm font-medium text-foreground flex-1 min-w-0",
-          children: productName
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_badge__WEBPACK_IMPORTED_MODULE_3__.Badge, {
-          variant: isActivatedHere ? 'gradient' : 'secondary',
-          className: "text-[10px] shrink-0",
-          children: tierName
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "flex items-center justify-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
-          className: `text-xs ${_lib_license_utils__WEBPACK_IMPORTED_MODULE_6__.expiryTextClass[expiryStatus]}`,
-          children: [expiryStatus === 'expired' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Expired', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Expires', '%TEXTDOMAIN%'), ' ', (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_6__.formatDate)(lp.expires)]
-        }), showInlineBadge && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_2__.LicenseBadge, {
-          type: statusBadgeType,
-          className: "text-[10px]"
-        })]
+  const activatedTiers = tiers.filter(lp => lp.is_valid && lp.activated_here === true);
+  const hasActivatedTier = activatedTiers.length > 0;
+  const [isOpen, setIsOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!hasActivatedTier);
+  const Chevron = isOpen ? lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"] : lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"];
+  const topActivatedTier = activatedTiers[activatedTiers.length - 1];
+  const headerBadge = hasActivatedTier && topActivatedTier ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_5__.LicenseBadge, {
+    type: "licensed",
+    tierName: tierNameMap[topActivatedTier.tier] ?? topActivatedTier.tier,
+    className: "text-[10px] shrink-0"
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_5__.LicenseBadge, {
+    type: getStatusBadgeType(tiers[0]),
+    className: "text-[10px] shrink-0"
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+    className: "rounded-lg border bg-card overflow-hidden",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("button", {
+      type: "button",
+      "aria-expanded": isOpen,
+      onClick: () => setIsOpen(v => !v),
+      className: "w-full flex items-center gap-2 px-3 py-2.5 text-left cursor-pointer",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_8__.ProductLogo, {
+        slug: productSlug,
+        size: 24,
+        variant: "nobg",
+        productName: productName
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+        className: "text-sm font-medium text-foreground flex-1 min-w-0 truncate text-left",
+        children: productName
+      }), headerBadge, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Chevron, {
+        className: "w-3.5 h-3.5 text-muted-foreground shrink-0 transition-transform duration-150"
       })]
-    }), showFooter && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      className: "flex items-center justify-between px-3 py-1.5 bg-muted/50 border-t",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "flex items-center gap-1.5",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-          className: "size-1.5 rounded-full bg-amber-500 shrink-0"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-          className: "text-xs text-amber-600 dark:text-amber-500",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Not activated', '%TEXTDOMAIN%')
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
-        variant: "outline",
-        size: "xs",
-        asChild: true,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
-          href: activationUrl,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Activate', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            className: "w-3 h-3 -translate-y-px"
+    }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+      className: "border-t",
+      children: tiers.map(lp => {
+        const expiryStatus = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.getExpiryStatus)(lp.expires);
+        const isActivatedHere = lp.is_valid && lp.activated_here === true;
+        const showActivate = !isActivatedHere && !!activationUrl;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+          className: "flex items-center justify-between px-3 py-2 bg-muted/50 border-b last:border-b-0",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+            className: "flex flex-col gap-0.5 min-w-0",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_ui_tooltip__WEBPACK_IMPORTED_MODULE_7__.Tooltip, {
+              label: isActivatedHere ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activated', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Not activated', '%TEXTDOMAIN%'),
+              className: "flex items-center gap-2",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                className: "font-bold text-[11px] w-fit whitespace-nowrap",
+                children: tierNameMap[lp.tier] ?? lp.tier
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                "aria-hidden": "true",
+                className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_10__.cn)('size-1.5 rounded-full shrink-0', isActivatedHere ? 'bg-green-500' : 'bg-amber-500')
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
+              className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_10__.cn)('text-[11px]', _lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.expiryTextClass[expiryStatus]),
+              children: [expiryStatus === 'expired' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Expired', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Expires', '%TEXTDOMAIN%'), ' ', (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.formatDate)(lp.expires)]
+            })]
+          }), showActivate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_6__.Button, {
+            variant: "outline",
+            size: "xs",
+            asChild: true,
+            className: "shrink-0 ml-2",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
+              href: (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_9__.buildActivationUrl)(activationUrl, lp.product_slug, lp.tier),
+              target: "_blank",
+              rel: "noopener noreferrer",
+              children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                className: "w-3 h-3 -translate-y-px"
+              })]
+            })
           })]
-        })
-      })]
+        }, `${lp.product_slug}:${lp.tier}`);
+      })
     })]
   });
 }
@@ -2289,15 +2311,23 @@ function LicensePanel() {
     isLicenseLoading: !select(_store__WEBPACK_IMPORTED_MODULE_5__.store).hasFinishedResolution('getLicenseKey', [])
   }), []);
 
-  // Flat tier slug → display name lookup from all catalog tiers.
-  const tierNameMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
-    const map = {};
+  // Flat tier slug → display name and rank lookups from all catalog tiers.
+  const {
+    tierNameMap,
+    tierRankMap
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
+    const names = {};
+    const ranks = {};
     catalogs.forEach(catalog => {
       catalog.tiers.forEach(t => {
-        map[t.tier_slug] = t.name;
+        names[t.tier_slug] = t.name;
+        ranks[t.tier_slug] = t.rank;
       });
     });
-    return map;
+    return {
+      tierNameMap: names,
+      tierRankMap: ranks
+    };
   }, [catalogs]);
   const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
 
@@ -2345,6 +2375,7 @@ function LicensePanel() {
       licenseKey: licenseKey,
       licenseProducts: licenseProducts,
       tierNameMap: tierNameMap,
+      tierRankMap: tierRankMap,
       onRemove: handleRemove,
       onRefresh: handleRefresh,
       isRefreshing: isRefreshing,
@@ -2380,8 +2411,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_atoms_LicenseKeyInputSkeleton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/atoms/LicenseKeyInputSkeleton */ "./resources/js/components/atoms/LicenseKeyInputSkeleton.tsx");
 /* harmony import */ var _components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/molecules/LicenseKeyInput */ "./resources/js/components/molecules/LicenseKeyInput.tsx");
 /* harmony import */ var _components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/LicenseProductCard */ "./resources/js/components/molecules/LicenseProductCard.tsx");
-/* harmony import */ var _lib_activation_url__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/lib/activation-url */ "./resources/js/lib/activation-url.ts");
-/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/* harmony import */ var _lib_group_license_products__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/lib/group-license-products */ "./resources/js/lib/group-license-products.ts");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
 /**
@@ -2406,9 +2437,9 @@ __webpack_require__.r(__webpack_exports__);
 function LicenseSectionSkeleton() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
     className: "space-y-3",
-    children: _data_products__WEBPACK_IMPORTED_MODULE_10__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-      className: "rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    children: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      className: "rounded-lg border bg-card px-3 py-2.5 animate-pulse",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "flex items-center gap-2",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "w-6 h-6 rounded shrink-0 bg-muted"
@@ -2416,10 +2447,10 @@ function LicenseSectionSkeleton() {
           className: "h-3.5 flex-1 rounded bg-muted"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "h-4 w-14 rounded-full shrink-0 bg-muted"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          className: "w-3.5 h-3.5 rounded shrink-0 bg-muted"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
-        className: "h-3 w-24 rounded bg-muted"
-      })]
+      })
     }, p.slug))
   });
 }
@@ -2431,6 +2462,7 @@ function LicenseSection({
   licenseKey,
   licenseProducts,
   tierNameMap,
+  tierRankMap,
   onRemove,
   onRefresh,
   isRefreshing,
@@ -2447,6 +2479,7 @@ function LicenseSection({
     }
     return error;
   };
+  const groupedProducts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,_lib_group_license_products__WEBPACK_IMPORTED_MODULE_10__.groupLicenseProducts)(licenseProducts, tierRankMap), [licenseProducts, tierRankMap]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: "space-y-3",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__.SectionHeader, {
@@ -2479,14 +2512,15 @@ function LicenseSection({
         className: "text-xs text-muted-foreground leading-relaxed mt-0 mb-0",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter your license key to unlock features.', '%TEXTDOMAIN%')
       })]
-    }), !isLoading && hasLicense && licenseProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    }), !isLoading && hasLicense && groupedProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
       className: "space-y-3",
-      children: [licenseProducts.map(lp => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__.LicenseProductCard, {
-        lp: lp,
-        productName: _data_products__WEBPACK_IMPORTED_MODULE_10__.PRODUCTS.find(p => p.slug === lp.product_slug)?.name ?? lp.product_slug,
-        tierName: tierNameMap[lp.tier] ?? lp.tier,
-        activationUrl: activationUrl ? (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_9__.buildActivationUrl)(activationUrl, lp.product_slug, lp.tier) : undefined
-      }, `${lp.product_slug}:${lp.tier}`)), manageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      children: [groupedProducts.map(g => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__.LicenseProductCard, {
+        productSlug: g.productSlug,
+        productName: g.productName,
+        tiers: g.tiers,
+        tierNameMap: tierNameMap,
+        activationUrl: activationUrl
+      }, `${g.productSlug}:${g.tiers.some(t => t.is_valid && t.activated_here)}`)), manageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
         className: "text-xs text-muted-foreground text-center mt-1 mb-0",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
           href: manageUrl,
@@ -3553,13 +3587,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 function Tooltip({
   label,
-  children
+  children,
+  className,
+  style
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(radix_ui__WEBPACK_IMPORTED_MODULE_0__.Provider, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(radix_ui__WEBPACK_IMPORTED_MODULE_0__.Root, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(radix_ui__WEBPACK_IMPORTED_MODULE_0__.Trigger, {
         asChild: true,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+          className: className,
           children: children
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(radix_ui__WEBPACK_IMPORTED_MODULE_0__.Portal, {
@@ -3574,7 +3611,8 @@ function Tooltip({
             lineHeight: 1.45,
             backgroundColor: '#1a1a1a',
             color: '#fff',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            ...style
           },
           children: label
         })
@@ -4912,6 +4950,48 @@ function forwardResolverWithoutArgs(resolverName) {
 
 /***/ },
 
+/***/ "./resources/js/lib/group-license-products.ts"
+/*!****************************************************!*\
+  !*** ./resources/js/lib/group-license-products.ts ***!
+  \****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   groupLicenseProducts: () => (/* binding */ groupLicenseProducts)
+/* harmony export */ });
+/* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/**
+ * @package LiquidWeb\Harbor
+ */
+
+/**
+ * Groups LicenseProduct entries by product_slug, sorts tiers within each group
+ * (activated-here first, then ascending by rank), and orders groups by the
+ * PRODUCTS constant. Products absent from licenseProducts are omitted.
+ *
+ * @since 1.0.0
+ */
+function groupLicenseProducts(licenseProducts, tierRankMap) {
+  const groups = {};
+  licenseProducts.forEach(lp => {
+    if (!groups[lp.product_slug]) {
+      groups[lp.product_slug] = [];
+    }
+    groups[lp.product_slug].push(lp);
+  });
+  Object.values(groups).forEach(tiers => {
+    tiers.sort((a, b) => (tierRankMap[a.tier] ?? 0) - (tierRankMap[b.tier] ?? 0));
+  });
+  return _data_products__WEBPACK_IMPORTED_MODULE_0__.PRODUCTS.filter(p => groups[p.slug] !== undefined).map(p => ({
+    productSlug: p.slug,
+    productName: p.name,
+    tiers: groups[p.slug]
+  }));
+}
+
+/***/ },
+
 /***/ "./resources/js/lib/license-utils.ts"
 /*!*******************************************!*\
   !*** ./resources/js/lib/license-utils.ts ***!
@@ -4920,7 +5000,6 @@ function forwardResolverWithoutArgs(resolverName) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   expiryCardClass: () => (/* binding */ expiryCardClass),
 /* harmony export */   expiryTextClass: () => (/* binding */ expiryTextClass),
 /* harmony export */   formatDate: () => (/* binding */ formatDate),
 /* harmony export */   getExpiryStatus: () => (/* binding */ getExpiryStatus)
@@ -4951,11 +5030,6 @@ function getExpiryStatus(dateStr) {
   if (diff <= 30 * 24 * 60 * 60 * 1000) return 'expiring-soon';
   return 'ok';
 }
-const expiryCardClass = {
-  expired: 'border-destructive/60 bg-destructive/5',
-  'expiring-soon': 'border-amber-400 bg-amber-50',
-  ok: ''
-};
 const expiryTextClass = {
   expired: 'text-destructive font-medium',
   'expiring-soon': 'text-amber-600 font-medium',
