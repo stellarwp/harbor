@@ -3,15 +3,15 @@
  *
  * @package LiquidWeb\Harbor
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { KeyRound, Loader2, RefreshCw } from 'lucide-react';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
 import { LicenseKeyInputSkeleton } from '@/components/atoms/LicenseKeyInputSkeleton';
 import { LicenseKeyInput } from '@/components/molecules/LicenseKeyInput';
 import { LicenseProductCard } from '@/components/molecules/LicenseProductCard';
-import { buildActivationUrl } from '@/lib/activation-url';
 import { PRODUCTS } from '@/data/products';
+import { groupLicenseProducts } from '@/lib/group-license-products';
 import type { LicenseProduct } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
 
@@ -19,6 +19,7 @@ interface LicenseSectionProps {
     licenseKey:      string | null;
     licenseProducts: LicenseProduct[];
     tierNameMap:     Record<string, string>;
+    tierRankMap:     Record<string, number>;
     onRemove:        () => Promise<HarborError | null>;
     onRefresh:       () => Promise<void>;
     isRefreshing:    boolean;
@@ -34,7 +35,7 @@ function LicenseSectionSkeleton() {
     return (
         <div className="space-y-3">
             { PRODUCTS.map( ( p ) => (
-                <div key={ p.slug } className="rounded-lg border bg-card px-3 py-2.5 space-y-2.5 animate-pulse">
+                <div key={ p.slug } className="rounded-lg border bg-card px-3 py-2.5 animate-pulse">
                     <div className="flex items-center gap-2">
                         { /* logo */ }
                         <div className="w-6 h-6 rounded shrink-0 bg-muted" />
@@ -42,9 +43,9 @@ function LicenseSectionSkeleton() {
                         <div className="h-3.5 flex-1 rounded bg-muted" />
                         { /* tier badge */ }
                         <div className="h-4 w-14 rounded-full shrink-0 bg-muted" />
+                        { /* chevron */ }
+                        <div className="w-3.5 h-3.5 rounded shrink-0 bg-muted" />
                     </div>
-                    { /* expiry */ }
-                    <div className="h-3 w-24 rounded bg-muted" />
                 </div>
             ) ) }
         </div>
@@ -54,11 +55,21 @@ function LicenseSectionSkeleton() {
 /**
  * @since 1.0.0
  */
-export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRemove, onRefresh, isRefreshing, isLoading, activationUrl }: LicenseSectionProps ) {
+export function LicenseSection( {
+    licenseKey,
+    licenseProducts,
+    tierNameMap,
+    tierRankMap,
+    onRemove,
+    onRefresh,
+    isRefreshing,
+    isLoading,
+    activationUrl,
+}: LicenseSectionProps ) {
     const [ isEditing, setIsEditing ] = useState( false );
 
-    const hasLicense   = licenseKey !== null;
-    const manageUrl    = window.harborData?.subscriptionsUrl ?? null;
+    const hasLicense = licenseKey !== null;
+    const manageUrl  = window.harborData?.subscriptionsUrl ?? null;
 
     const handleRemove = async (): Promise<HarborError | null> => {
         const error = await onRemove();
@@ -67,6 +78,11 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
         }
         return error;
     };
+
+    const groupedProducts = useMemo(
+        () => groupLicenseProducts( licenseProducts, tierRankMap ),
+        [ licenseProducts, tierRankMap ],
+    );
 
     return (
         <div className="space-y-3">
@@ -115,18 +131,16 @@ export function LicenseSection( { licenseKey, licenseProducts, tierNameMap, onRe
                 </>
             ) }
 
-            { ! isLoading && hasLicense && licenseProducts.length > 0 && (
+            { ! isLoading && hasLicense && groupedProducts.length > 0 && (
                 <div className="space-y-3">
-                    { licenseProducts.map( ( lp ) => (
+                    { groupedProducts.map( ( g ) => (
                         <LicenseProductCard
-                            key={ `${ lp.product_slug }:${ lp.tier }` }
-                            lp={ lp }
-                            productName={ PRODUCTS.find( ( p ) => p.slug === lp.product_slug )?.name ?? lp.product_slug }
-                            tierName={ tierNameMap[ lp.tier ] ?? lp.tier }
-                            activationUrl={ activationUrl
-                                ? buildActivationUrl( activationUrl, lp.product_slug, lp.tier )
-                                : undefined
-                            }
+                            key={ `${ g.productSlug }:${ g.tiers.some( ( t ) => t.is_valid && t.activated_here ) }` }
+                            productSlug={ g.productSlug }
+                            productName={ g.productName }
+                            tiers={ g.tiers }
+                            tierNameMap={ tierNameMap }
+                            activationUrl={ activationUrl }
                         />
                     ) ) }
 

@@ -21,17 +21,19 @@ import { Tooltip as TooltipPrimitive } from 'radix-ui';
 interface TooltipProps {
 	label:    string;
 	children: React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }
 
 /**
  * @since 1.0.0
  */
-export function Tooltip( { label, children }: TooltipProps ) {
+export function Tooltip( { label, children, className, style }: TooltipProps ) {
 	return (
 		<TooltipPrimitive.Provider>
 			<TooltipPrimitive.Root>
 				<TooltipPrimitive.Trigger asChild>
-					<span>{ children }</span>
+					<span className={ className }>{ children }</span>
 				</TooltipPrimitive.Trigger>
 				<TooltipPrimitive.Portal>
 					<TooltipPrimitive.Content
@@ -46,6 +48,7 @@ export function Tooltip( { label, children }: TooltipProps ) {
 							backgroundColor: '#1a1a1a',
 							color:           '#fff',
 							boxShadow:       '0 4px 12px rgba(0,0,0,0.2)',
+							...style
 						} }
 					>
 						{ label }

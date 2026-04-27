@@ -14,12 +14,12 @@
     --color-amber-50: oklch(98.7% 0.022 95.277);
     --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-200: oklch(92.4% 0.12 95.746);
-    --color-amber-400: oklch(82.8% 0.189 84.429);
     --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-amber-600: oklch(66.6% 0.179 58.318);
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-green-50: oklch(98.2% 0.018 155.826);
     --color-green-200: oklch(92.5% 0.084 155.995);
+    --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-800: oklch(44.8% 0.119 151.328);
     --color-emerald-100: oklch(95% 0.052 163.051);
@@ -421,6 +421,9 @@
   .lw-harbor-ui .ml-1 {
     margin-left: calc(var(--spacing) * 1) !important;
   }
+  .lw-harbor-ui .ml-2 {
+    margin-left: calc(var(--spacing) * 2) !important;
+  }
   .lw-harbor-ui .ml-4 {
     margin-left: calc(var(--spacing) * 4) !important;
   }
@@ -548,9 +551,6 @@
   }
   .lw-harbor-ui .w-14 {
     width: calc(var(--spacing) * 14) !important;
-  }
-  .lw-harbor-ui .w-24 {
-    width: calc(var(--spacing) * 24) !important;
   }
   .lw-harbor-ui .w-25 {
     width: calc(var(--spacing) * 25) !important;
@@ -707,13 +707,6 @@
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--lw-harbor-tw-space-y-reverse))) !important;
     }
   }
-  .lw-harbor-ui .space-y-2\.5 {
-    .lw-harbor-ui :where(& > :not(:last-child)) {
-      --lw-harbor-tw-space-y-reverse: 0;
-      margin-block-start: calc(calc(var(--spacing) * 2.5) * var(--lw-harbor-tw-space-y-reverse)) !important;
-      margin-block-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--lw-harbor-tw-space-y-reverse))) !important;
-    }
-  }
   .lw-harbor-ui .space-y-3 {
     .lw-harbor-ui :where(& > :not(:last-child)) {
       --lw-harbor-tw-space-y-reverse: 0;
@@ -817,17 +810,11 @@
   .lw-harbor-ui .border-amber-200 {
     border-color: var(--color-amber-200) !important;
   }
-  .lw-harbor-ui .border-amber-400 {
-    border-color: var(--color-amber-400) !important;
-  }
   .lw-harbor-ui .border-blue-200 {
     border-color: var(--color-blue-200) !important;
   }
   .lw-harbor-ui .border-border {
     border-color: oklch(0.9 0 0) !important;
-  }
-  .lw-harbor-ui .border-destructive\/60 {
-    border-color: color-mix(in oklab, oklch(0.577 0.245 27.325) 60%, transparent) !important;
   }
   .lw-harbor-ui .border-emerald-200 {
     border-color: var(--color-emerald-200) !important;
@@ -883,9 +870,6 @@
   .lw-harbor-ui .bg-destructive {
     background-color: oklch(0.577 0.245 27.325) !important;
   }
-  .lw-harbor-ui .bg-destructive\/5 {
-    background-color: color-mix(in oklab, oklch(0.577 0.245 27.325) 5%, transparent) !important;
-  }
   .lw-harbor-ui .bg-emerald-100 {
     background-color: var(--color-emerald-100) !important;
   }
@@ -894,6 +878,9 @@
   }
   .lw-harbor-ui .bg-green-50 {
     background-color: var(--color-green-50) !important;
+  }
+  .lw-harbor-ui .bg-green-500 {
+    background-color: var(--color-green-500) !important;
   }
   .lw-harbor-ui .bg-muted {
     background-color: oklch(0.955 0 0) !important;
@@ -1026,6 +1013,9 @@
   }
   .lw-harbor-ui .text-center {
     text-align: center !important;
+  }
+  .lw-harbor-ui .text-left {
+    text-align: left !important;
   }
   .lw-harbor-ui .text-right {
     text-align: right !important;
@@ -1239,6 +1229,10 @@
     transition-property: transform, translate, scale, rotate !important;
     transition-timing-function: var(--lw-harbor-tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--lw-harbor-tw-duration, var(--default-transition-duration)) !important;
+  }
+  .lw-harbor-ui .duration-150 {
+    --lw-harbor-tw-duration: 150ms;
+    transition-duration: 150ms !important;
   }
   .lw-harbor-ui .ease-in-out {
     --lw-harbor-tw-ease: var(--ease-in-out);
@@ -1619,11 +1613,6 @@
   .lw-harbor-ui .dark\:bg-input\/30 {
     .lw-harbor-ui &:is(.dark *) {
       background-color: color-mix(in oklab, oklch(0.9 0 0) 30%, transparent) !important;
-    }
-  }
-  .lw-harbor-ui .dark\:text-amber-500 {
-    .lw-harbor-ui &:is(.dark *) {
-      color: var(--color-amber-500) !important;
     }
   }
   .lw-harbor-ui .dark\:hover\:bg-accent\/50 {
@@ -2113,6 +2102,10 @@
   syntax: "*";
   inherits: false;
 }
+@property --lw-harbor-tw-duration {
+  syntax: "*";
+  inherits: false;
+}
 @property --lw-harbor-tw-ease {
   syntax: "*";
   inherits: false;
@@ -2183,6 +2176,7 @@
       --lw-harbor-tw-drop-shadow-color: initial;
       --lw-harbor-tw-drop-shadow-alpha: 100%;
       --lw-harbor-tw-drop-shadow-size: initial;
+      --lw-harbor-tw-duration: initial;
       --lw-harbor-tw-ease: initial;
     }
   }
