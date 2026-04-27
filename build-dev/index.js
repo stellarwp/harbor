@@ -2235,9 +2235,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_toast_context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/context/toast-context */ "./resources/js/context/toast-context.tsx");
 /* harmony import */ var _context_error_modal_context__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/context/error-modal-context */ "./resources/js/context/error-modal-context.tsx");
 /* harmony import */ var _errors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/errors */ "./resources/js/errors/index.ts");
-/* harmony import */ var _lib_change_plan_url__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/lib/change-plan-url */ "./resources/js/lib/change-plan-url.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
 /**
  * License sidebar panel.
  *
@@ -2246,7 +2245,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
-
 
 
 
@@ -2301,21 +2299,18 @@ function LicensePanel() {
   }, [catalogs]);
   const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
 
-  // Product slug → lowest paid-tier URL map. Uses the change-plan portal flow
-  // when the user already has a subscription, otherwise falls back to purchase_url.
+  // Product slug → lowest paid-tier purchase URL map from the catalog.
   const upsellUrlMap = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const map = {};
-    const subscriptionsUrl = window.harborData?.subscriptionsUrl ?? null;
     catalogs.forEach(catalog => {
       const sorted = catalog.tiers.slice().sort((a, b) => a.rank - b.rank);
       const paidTier = sorted.find(t => t.rank > 0);
-      if (!paidTier) {
-        return;
+      if (paidTier?.purchase_url) {
+        map[catalog.product_slug] = paidTier.purchase_url;
       }
-      map[catalog.product_slug] = licenseKey && subscriptionsUrl ? (0,_lib_change_plan_url__WEBPACK_IMPORTED_MODULE_10__.buildChangePlanUrl)(subscriptionsUrl, catalog.product_slug, paidTier.tier_slug) : paidTier.purchase_url;
     });
     return map;
-  }, [catalogs, licenseKey]);
+  }, [catalogs]);
   const licensedSlugs = new Set(licenseProducts.map(lp => lp.product_slug));
   const upsellProducts = _data_products__WEBPACK_IMPORTED_MODULE_6__.PRODUCTS.filter(p => !licensedSlugs.has(p.slug));
   const handleRemove = async () => {
@@ -2339,9 +2334,9 @@ function LicensePanel() {
       addToast((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License refreshed.', '%TEXTDOMAIN%'), 'success');
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "sticky top-4 w-[280px] shrink-0 space-y-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_LicenseSection__WEBPACK_IMPORTED_MODULE_3__.LicenseSection, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_organisms_LicenseSection__WEBPACK_IMPORTED_MODULE_3__.LicenseSection, {
       licenseKey: licenseKey,
       licenseProducts: licenseProducts,
       tierNameMap: tierNameMap,
@@ -2350,7 +2345,7 @@ function LicensePanel() {
       isRefreshing: isRefreshing,
       isLoading: isLicenseLoading,
       activationUrl: activationUrl
-    }), !isLicenseLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
+    }), !isLicenseLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_organisms_UpsellSection__WEBPACK_IMPORTED_MODULE_4__.UpsellSection, {
       products: upsellProducts,
       upsellUrlMap: upsellUrlMap
     })]

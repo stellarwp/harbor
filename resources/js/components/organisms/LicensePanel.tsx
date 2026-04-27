@@ -16,7 +16,6 @@ import { PRODUCTS } from '@/data/products';
 import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
-import { buildChangePlanUrl } from '@/lib/change-plan-url';
 
 /**
  * @since 1.0.0
@@ -51,25 +50,18 @@ export function LicensePanel() {
 
     const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
 
-    // Product slug → lowest paid-tier URL map. Uses the change-plan portal flow
-    // when the user already has a subscription, otherwise falls back to purchase_url.
+    // Product slug → lowest paid-tier purchase URL map from the catalog.
     const upsellUrlMap = useMemo( () => {
         const map: Record<string, string> = {};
-        const subscriptionsUrl             = window.harborData?.subscriptionsUrl ?? null;
-
         catalogs.forEach( ( catalog ) => {
             const sorted   = catalog.tiers.slice().sort( ( a, b ) => a.rank - b.rank );
             const paidTier = sorted.find( ( t ) => t.rank > 0 );
-            if ( ! paidTier ) {
-                return;
+            if ( paidTier?.purchase_url ) {
+                map[ catalog.product_slug ] = paidTier.purchase_url;
             }
-
-            map[ catalog.product_slug ] = ( licenseKey && subscriptionsUrl )
-                ? buildChangePlanUrl( subscriptionsUrl, catalog.product_slug, paidTier.tier_slug )
-                : paidTier.purchase_url;
         } );
         return map;
-    }, [ catalogs, licenseKey ] );
+    }, [ catalogs ] );
 
     const licensedSlugs  = new Set( licenseProducts.map( ( lp ) => lp.product_slug ) );
     const upsellProducts = PRODUCTS.filter( ( p ) => ! licensedSlugs.has( p.slug ) );
