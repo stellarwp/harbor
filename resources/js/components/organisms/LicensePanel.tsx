@@ -38,15 +38,17 @@ export function LicensePanel() {
         []
     );
 
-    // Flat tier slug → display name lookup from all catalog tiers.
-    const tierNameMap = useMemo( () => {
-        const map: Record<string, string> = {};
+    // Flat tier slug → display name and rank lookups from all catalog tiers.
+    const { tierNameMap, tierRankMap } = useMemo( () => {
+        const names: Record<string, string> = {};
+        const ranks: Record<string, number> = {};
         catalogs.forEach( ( catalog ) => {
             catalog.tiers.forEach( ( t ) => {
-                map[ t.tier_slug ] = t.name;
+                names[ t.tier_slug ] = t.name;
+                ranks[ t.tier_slug ] = t.rank;
             } );
         } );
-        return map;
+        return { tierNameMap: names, tierRankMap: ranks };
     }, [ catalogs ] );
 
     const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
@@ -106,6 +108,7 @@ export function LicensePanel() {
                 licenseKey={ licenseKey }
                 licenseProducts={ licenseProducts }
                 tierNameMap={ tierNameMap }
+                tierRankMap={ tierRankMap }
                 onRemove={ handleRemove }
                 onRefresh={ handleRefresh }
                 isRefreshing={ isRefreshing }

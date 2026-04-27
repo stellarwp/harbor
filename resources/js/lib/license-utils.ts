@@ -25,12 +25,6 @@ export function getExpiryStatus( dateStr: string ): 'expired' | 'expiring-soon' 
     return 'ok';
 }
 
-export const expiryCardClass: Record<string, string> = {
-    expired:          'border-destructive/60 bg-destructive/5',
-    'expiring-soon':  'border-amber-400 bg-amber-50',
-    ok:               '',
-};
-
 export const expiryTextClass: Record<string, string> = {
     expired:          'text-destructive font-medium',
     'expiring-soon':  'text-amber-600 font-medium',
