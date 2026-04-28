@@ -135,6 +135,16 @@ export const hasLegacyLicenses = (state: State): boolean =>
 	Object.keys(state.legacyLicenses.bySlug).length > 0;
 
 /**
+ * True when at least one legacy license belongs to a product not already
+ * covered by the unified license. Used to suppress the banner when the
+ * unified license makes legacy notices redundant.
+ */
+export const hasUncoveredLegacyLicenses = (state: State): boolean =>
+	Object.values(state.legacyLicenses.bySlug).some(
+		(license) => !isProductUnifiedLicensed(state, license.product)
+	);
+
+/**
  * Returns the legacy license for the given feature slug only if it is active,
  * or null if it does not exist or has expired.
  */

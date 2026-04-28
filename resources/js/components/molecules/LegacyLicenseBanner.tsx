@@ -17,7 +17,7 @@ import { store as harborStore } from '@/store';
  */
 export function LegacyLicenseBanner() {
     const hasLegacy = useSelect(
-        ( select ) => select( harborStore ).hasLegacyLicenses(),
+        ( select ) => select( harborStore ).hasUncoveredLegacyLicenses(),
         []
     );
 
