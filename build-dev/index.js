@@ -1957,6 +1957,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * @since TBD  Added showUnactivated prop to render an Unactivated badge in place of the upgrade button.
  * @since 1.0.0
  */
 function TierGroup({
@@ -2584,6 +2585,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * @since TBD  Show Unactivated badge on tier groups and product header for unactivated licenses; route upgrade button to change-plan URL for existing subscribers.
  * @since 1.0.0
  */
 function ProductSection({
@@ -4702,6 +4704,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * @since TBD  Detect unactivated license products and route their tiers to activationCatalogTiers instead of upgradeCatalogTiers. Exposes isUnactivatedLicense flag.
  * @since 1.0.0
  */
 function useProductFeatureGroups(productSlug) {
@@ -6190,6 +6193,8 @@ const areAllProductsNotActivated = state => {
  * Matches entries where activated_here is not true and validation_status is
  * not_activated or activation_required — i.e. the subscription exists but the
  * current domain is not in the activations list.
+ *
+ * @since TBD
  */
 const getUnactivatedLicenseProduct = (state, productSlug) => getWithoutCancelledProducts(state).find(p => p.product_slug === productSlug && p.activated_here !== true && UNACTIVATED_STATUSES.includes(p.validation_status)) ?? null;
 
