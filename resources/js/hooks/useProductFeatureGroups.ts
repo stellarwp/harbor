@@ -49,28 +49,43 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
             licenseProduct.validation_status !== null &&
             licenseProduct.validation_status !== 'valid';
 
-        // When no activated product is found, fall back to an unactivated one so that
-        // tiers the user already owns are not presented as upgrade opportunities.
-        const isUnactivatedLicense    = licenseProduct === undefined && unactivatedLicenseProduct !== null;
-        const effectiveLicenseForRank = licenseProduct ?? unactivatedLicenseProduct ?? null;
-
-        // Always resolve the real licensed tier rank so upgrade tiers are computed
-        // correctly even for invalid or unactivated licenses.
-        const userTier = effectiveLicenseForRank?.tier
-            ? sorted.find( ( t ) => t.tier_slug === effectiveLicenseForRank.tier )
+        // Rank of the activated product, or -1 when none is present.
+        const activatedTier = licenseProduct?.tier
+            ? sorted.find( ( t ) => t.tier_slug === licenseProduct.tier )
             : null;
-        const rank     = userTier?.rank ?? -1;  // -1 = unlicensed (show all tier groups)
+        const activatedRank = activatedTier?.rank ?? -1;
 
-        // Tiers strictly above the user's rank: features here need an upgrade.
+        // Rank of the unactivated product, if any.
+        // An unactivated product may sit above the activated tier (e.g. user purchased an
+        // upgrade to elite while pro is already active but elite not yet activated on this
+        // domain). In that case both tiers exist and only elite needs the activation badge.
+        const unactivatedTier = unactivatedLicenseProduct?.tier
+            ? sorted.find( ( t ) => t.tier_slug === unactivatedLicenseProduct.tier )
+            : null;
+        const unactivatedRank = unactivatedTier?.rank ?? -1;
+
+        // isUnactivatedLicense: the user owns a tier they have not activated on this domain,
+        // whether because no activated product exists at all (unactivatedRank > -1 > activatedRank)
+        // or because a higher purchased tier is not yet activated (unactivatedRank > activatedRank).
+        const isUnactivatedLicense = unactivatedLicenseProduct !== null && unactivatedRank > activatedRank;
+
+        // Effective rank = highest owned tier (activated or not).
+        const rank = Math.max( activatedRank, unactivatedRank );
+
+        // Tiers strictly above the highest owned rank: features here need an upgrade.
         const upgrade = sorted.filter( ( t ) => t.rank > rank );
 
         // activationTiers covers two cases:
-        //   1. isLicenseInvalid: activated_here=true but status is not 'valid' (expired, suspended, etc.)
-        //   2. isUnactivatedLicense: user owns the tier but the domain is not in the activations list
+        //   1. isLicenseInvalid: tiers within the activated rank locked due to invalid status
+        //      (expired, suspended, etc.) — user needs to fix the license, not upgrade.
+        //   2. isUnactivatedLicense: tiers above the activated rank but within the unactivated
+        //      rank — user owns them but hasn't activated on this domain yet.
         // Both render without an upgrade button.
-        const activationTiers = ( isLicenseInvalid || isUnactivatedLicense )
-            ? sorted.filter( ( t ) => t.rank <= rank && t.rank > 0 )
-            : [];
+        const activationTiers = isLicenseInvalid
+            ? sorted.filter( ( t ) => t.rank <= activatedRank && t.rank > 0 )
+            : isUnactivatedLicense
+                ? sorted.filter( ( t ) => t.rank <= rank && t.rank > activatedRank )
+                : [];
         const slugs          = isLicenseValid
             ? new Set<string>()
             : new Set( legacyLicenses.filter( ( l ) => l.is_active ).map( ( l ) => l.slug ) );

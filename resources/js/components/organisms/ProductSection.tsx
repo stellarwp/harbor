@@ -51,7 +51,10 @@ export function ProductSection( { product }: ProductSectionProps ) {
     const activeCount      = availableFeatures.filter( ( f ) => f.is_enabled ).length;
     const deactivatedCount = availableFeatures.filter( ( f ) => ! f.is_enabled ).length;
 
-    const isNotActivated = isUnactivatedLicense || (
+    // Show "Unactivated" in the header only when there is no activated product at all.
+    // An unactivated upgrade tier alongside an active lower tier (e.g. pro active + elite
+    // unactivated) should still show the active tier's name — not "Unactivated".
+    const isNotActivated = ( licenseProduct === null && isUnactivatedLicense ) || (
         licenseProduct !== null && (
             licenseProduct.validation_status === 'not_activated' ||
             licenseProduct.validation_status === 'activation_required'
