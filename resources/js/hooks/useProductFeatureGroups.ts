@@ -17,6 +17,7 @@ export interface FeatureGroups {
     sortedCatalogTiers:     CatalogTier[];  // All tiers — used for header tier name lookup
     upgradeCatalogTiers:    CatalogTier[];  // Tiers strictly above the user's rank — upgrade CTA shown
     activationCatalogTiers: CatalogTier[];  // Tiers within the user's rank, locked only because not activated — no upgrade CTA
+    isUnactivatedLicense:   boolean;        // true when the user owns the tier but has not activated it on this domain
 }
 
 /**
@@ -25,12 +26,13 @@ export interface FeatureGroups {
 export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
     const allFeatures = useFilteredFeatures( productSlug );
 
-    const { catalogTiers, licenseProducts, isLicenseValid, legacyLicenses } = useSelect(
+    const { catalogTiers, licenseProducts, isLicenseValid, legacyLicenses, unactivatedLicenseProduct } = useSelect(
         ( select ) => ({
-            catalogTiers:    select( harborStore ).getProductCatalog( productSlug )?.tiers ?? [],
-            licenseProducts: select( harborStore ).getLicenseProducts(),
-            isLicenseValid:  select( harborStore ).isProductLicenseValid( productSlug ),
-            legacyLicenses:  select( harborStore ).getLegacyLicenses(),
+            catalogTiers:              select( harborStore ).getProductCatalog( productSlug )?.tiers ?? [],
+            licenseProducts:           select( harborStore ).getLicenseProducts(),
+            isLicenseValid:            select( harborStore ).isProductLicenseValid( productSlug ),
+            legacyLicenses:            select( harborStore ).getLegacyLicenses(),
+            unactivatedLicenseProduct: select( harborStore ).getUnactivatedLicenseProduct( productSlug ),
         }),
         [ productSlug ]
     );
@@ -47,20 +49,26 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
             licenseProduct.validation_status !== null &&
             licenseProduct.validation_status !== 'valid';
 
+        // When no activated product is found, fall back to an unactivated one so that
+        // tiers the user already owns are not presented as upgrade opportunities.
+        const isUnactivatedLicense    = licenseProduct === undefined && unactivatedLicenseProduct !== null;
+        const effectiveLicenseForRank = licenseProduct ?? unactivatedLicenseProduct ?? null;
+
         // Always resolve the real licensed tier rank so upgrade tiers are computed
-        // correctly even for invalid licenses.
-        const userTier = licenseProduct?.tier
-            ? sorted.find( ( t ) => t.tier_slug === licenseProduct.tier )
+        // correctly even for invalid or unactivated licenses.
+        const userTier = effectiveLicenseForRank?.tier
+            ? sorted.find( ( t ) => t.tier_slug === effectiveLicenseForRank.tier )
             : null;
         const rank     = userTier?.rank ?? -1;  // -1 = unlicensed (show all tier groups)
 
         // Tiers strictly above the user's rank: features here need an upgrade.
         const upgrade = sorted.filter( ( t ) => t.rank > rank );
 
-        // For invalid licenses: tiers within the user's licensed rank (excluding free)
-        // are locked because the product is not activated, not because the tier is wrong.
-        // These render without an upgrade button.
-        const activationTiers = isLicenseInvalid
+        // activationTiers covers two cases:
+        //   1. isLicenseInvalid: activated_here=true but status is not 'valid' (expired, suspended, etc.)
+        //   2. isUnactivatedLicense: user owns the tier but the domain is not in the activations list
+        // Both render without an upgrade button.
+        const activationTiers = ( isLicenseInvalid || isUnactivatedLicense )
             ? sorted.filter( ( t ) => t.rank <= rank && t.rank > 0 )
             : [];
         const slugs          = isLicenseValid
@@ -102,6 +110,7 @@ export function useProductFeatureGroups( productSlug: string ): FeatureGroups {
             sortedCatalogTiers:     sorted,
             upgradeCatalogTiers:    upgrade,
             activationCatalogTiers: activationTiers,
+            isUnactivatedLicense,
         };
-    }, [ allFeatures, catalogTiers, licenseProducts, isLicenseValid, legacyLicenses, productSlug ] );
+    }, [ allFeatures, catalogTiers, licenseProducts, isLicenseValid, legacyLicenses, productSlug, unactivatedLicenseProduct ] );
 }
