@@ -30,7 +30,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 			uopz_allow_exit( true );
 		}
 
-		unset( $_GET['refresh'] );
+		unset( $_GET['refresh'], $_GET['page'] );
 
 		parent::tearDown();
 	}
@@ -137,6 +137,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	 */
 	public function it_should_not_refresh_when_param_is_absent(): void {
 		unset( $_GET['refresh'] );
+		$_GET['page'] = Feature_Manager_Page::PAGE_SLUG;
 
 		$refresh_called = false;
 		$page           = $this->make_page(
@@ -147,9 +148,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 			]
 		);
 
-		ob_start();
-		$page->render();
-		ob_end_clean();
+		$page->maybe_redirect_after_refresh();
 
 		$this->assertFalse( $refresh_called );
 	}
@@ -159,6 +158,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	 */
 	public function it_should_not_refresh_when_param_is_not_auto(): void {
 		$_GET['refresh'] = 'manual';
+		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
 
 		$refresh_called = false;
 		$page           = $this->make_page(
@@ -169,9 +169,28 @@ class Feature_Manager_PageTest extends HarborTestCase {
 			]
 		);
 
-		ob_start();
-		$page->render();
-		ob_end_clean();
+		$page->maybe_redirect_after_refresh();
+
+		$this->assertFalse( $refresh_called );
+	}
+
+	/**
+	 * @test
+	 */
+	public function it_should_not_refresh_when_page_slug_does_not_match(): void {
+		$_GET['refresh'] = 'auto';
+		$_GET['page']    = 'some-other-page';
+
+		$refresh_called = false;
+		$page           = $this->make_page(
+			[
+				'refresh_products' => static function () use ( &$refresh_called ) {
+					$refresh_called = true;
+				},
+			]
+		);
+
+		$page->maybe_redirect_after_refresh();
 
 		$this->assertFalse( $refresh_called );
 	}
@@ -181,6 +200,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	 */
 	public function it_should_refresh_license_and_catalog_when_refresh_auto_is_present(): void {
 		$_GET['refresh'] = 'auto';
+		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
 
 		$license_refreshed = false;
 		$catalog_refreshed = false;
@@ -198,7 +218,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 			]
 		);
 
-		$page->render();
+		$page->maybe_redirect_after_refresh();
 
 		$this->assertTrue( $license_refreshed );
 		$this->assertTrue( $catalog_refreshed );
@@ -209,6 +229,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	 */
 	public function it_should_pass_site_domain_to_refresh_products(): void {
 		$_GET['refresh'] = 'auto';
+		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
 
 		$refreshed_with  = null;
 		$site_data       = $this->makeEmpty( Data::class, [ 'get_domain' => 'mysite.com' ] ); // cspell:ignore mysite
@@ -223,7 +244,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$catalog = $this->makeEmpty( Catalog_Repository::class, [ 'refresh' => null ] );
 
 		$page = new Feature_Manager_Page( $site_data, $license_manager, $catalog );
-		$page->render();
+		$page->maybe_redirect_after_refresh();
 
 		$this->assertSame( 'mysite.com', $refreshed_with );
 	}

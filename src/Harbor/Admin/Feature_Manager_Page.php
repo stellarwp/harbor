@@ -99,6 +99,7 @@ class Feature_Manager_Page {
 		);
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_enqueue_assets' ] );
+		add_action( 'admin_init', [ $this, 'maybe_redirect_after_refresh' ] );
 	}
 
 	/**
@@ -217,8 +218,6 @@ class Feature_Manager_Page {
 		// activated_plugin listener above never runs.
 		$this->license_manager->store_embedded_key_if_present();
 
-		// Refresh the license and catalog data.
-		$this->maybe_refresh();
 		?>
 		<div class="wrap">
 			<div id="lw-harbor-root" class="lw-harbor-ui"></div>
@@ -232,12 +231,21 @@ class Feature_Manager_Page {
 	 * query param and redirects so a manual reload does not re-trigger the
 	 * refresh.
 	 *
+	 * Hooked on admin_init so headers have not yet been sent, allowing
+	 * wp_safe_redirect() to issue the Location header successfully. Calling
+	 * this from render() (the add_menu_page callback) is too late — WordPress
+	 * has already begun sending HTML output by that point.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
-	private function maybe_refresh(): void {
-		if ( ! isset( $_GET['refresh'] ) || $_GET['refresh'] !== 'auto' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	public function maybe_redirect_after_refresh(): void {
+		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		if ( $_GET['refresh'] !== 'auto' || $_GET['page'] !== self::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
