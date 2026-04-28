@@ -254,6 +254,8 @@ export const areAllProductsNotActivated = ( state: State ): boolean => {
  * Matches entries where activated_here is not true and validation_status is
  * not_activated or activation_required — i.e. the subscription exists but the
  * current domain is not in the activations list.
+ *
+ * @since TBD
  */
 export const getUnactivatedLicenseProduct = (
 	state:       State,
