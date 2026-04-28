@@ -13,7 +13,7 @@ class Config {
 	 *
 	 * @since 1.0.0
 	 */
-	public const DEFAULT_LICENSING_BASE_URL = 'https://licensing.stellarwp.com';
+	public const DEFAULT_LICENSING_BASE_URL = 'https://licensing.nexcess.com';
 
 	/**
 	 * The default base URL for the Commerce Portal (catalog API).
@@ -27,7 +27,7 @@ class Config {
 	 *
 	 * @since 1.0.0
 	 */
-	public const DEFAULT_HERALD_BASE_URL = 'https://herald.stellarwp.com';
+	public const DEFAULT_HERALD_BASE_URL = 'https://herald.nexcess.com';
 
 	/**
 	 * Container object.
