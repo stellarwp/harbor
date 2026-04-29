@@ -20,6 +20,10 @@ local-scripts/
 # OS
 .DS_Store
 
+# Playwright
+artifacts/
+test-results/
+
 # PHPStan cache
 phpstan-cache
 

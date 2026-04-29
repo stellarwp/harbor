@@ -3,6 +3,7 @@
 [![PHP Compatibility](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/compatibility.yml)
 [![PHP Tests](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/tests-php.yml)
 [![PHPStan](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/static-analysis.yml)
+[![E2E Tests](https://github.com/stellarwp/harbor/actions/workflows/tests-e2e.yml/badge.svg)](https://github.com/stellarwp/harbor/actions/workflows/tests-e2e.yml)
 
 ## Installation
 
@@ -132,4 +133,4 @@ Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 
 - [Integration Guide](/docs/guides/integration.md) — How to integrate your plugin with Harbor.
 - [CLI Commands](/docs/guides/cli.md) — WP-CLI commands for feature management.
-- [Testing](/docs/guides/testing.md) — Running automated tests with Codeception and `slic`.
+- [Testing](/docs/guides/testing.md) — PHP tests with Codeception/`slic`; E2E tests with Playwright/wp-env.

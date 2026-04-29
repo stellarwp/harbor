@@ -1,0 +1,14 @@
+{
+	"plugins": [ "./tests/_data/plugins/harbor-fixture" ],
+	"mappings": {
+		"wp-content/plugins/harbor": "."
+	},
+	"testsEnvironment": false,
+	"port": 8901,
+	"autoPort": true,
+	"config": {
+		"WP_DEBUG": false,
+		"WP_DEBUG_LOG": false,
+		"WP_DEBUG_DISPLAY": false
+	}
+}

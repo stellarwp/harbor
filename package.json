@@ -14,7 +14,10 @@
     "lint:md": "markdownlint '**/*.md' --ignore node_modules --ignore vendor",
     "fix:md": "prettier --write '**/*.md' '!node_modules/**' '!vendor/**' && markdownlint '**/*.md' --ignore node_modules --ignore vendor --fix",
     "test:js": "wp-scripts test-unit-js",
-    "test:shell": "bats tests/shell/"
+    "test:shell": "bats tests/shell/",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --project=headed"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -24,12 +27,15 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@stellarwp/changelogger": "^0.10.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@wordpress/api-fetch": "^7.40.0",
     "@wordpress/components": "^32.3.0",
     "@wordpress/data": "^10.40.0",
     "@wordpress/i18n": "^6.13.0",
+    "@wordpress/e2e-test-utils-playwright": "^1.40.0",
+    "@wordpress/env": "^11.0.0",
     "@wordpress/scripts": "^31.1.0",
     "autoprefixer": "^10.4.22",
     "bats": "^1.13.0",

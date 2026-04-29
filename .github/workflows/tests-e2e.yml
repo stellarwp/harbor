@@ -1,0 +1,82 @@
+# cspell:ignore shivammathur
+name: "E2E Tests"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    name: "E2E: Software Manager"
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v6
+
+      # -----------------------------------------------------------------------
+      # PHP + Composer (vendor/ is gitignored; needed for Harbor class loading)
+      # -----------------------------------------------------------------------
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      # -----------------------------------------------------------------------
+      # Node + JS dependencies
+      # -----------------------------------------------------------------------
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install JS dependencies
+        run: bun install
+
+      # -----------------------------------------------------------------------
+      # wp-env (Docker-based WordPress)
+      # -----------------------------------------------------------------------
+      - name: Start WordPress environment
+        id: wp-env
+        run: |
+          OUTPUT=$(bunx wp-env start 2>&1)
+          echo "$OUTPUT"
+          WP_URL=$(echo "$OUTPUT" | grep -oE 'http://localhost:[0-9]+' | head -1)
+          echo "url=${WP_URL:-http://localhost:8888}" >> "$GITHUB_OUTPUT"
+        env:
+          WP_ENV_HOME: ${{ github.workspace }}/.wp-env-home
+
+      # -----------------------------------------------------------------------
+      # Playwright
+      # -----------------------------------------------------------------------
+      - name: Install Playwright browsers
+        run: bunx playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        run: bun run test:e2e
+        env:
+          WP_BASE_URL: ${{ steps.wp-env.outputs.url }}
+
+      # -----------------------------------------------------------------------
+      # Artifacts
+      # -----------------------------------------------------------------------
+      - name: Upload test artifacts on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-artifacts
+          path: |
+            artifacts/
+            test-results/
+          retention-days: 7
+
+      - name: Stop WordPress environment
+        if: always()
+        run: bunx wp-env stop
+        env:
+          WP_ENV_HOME: ${{ github.workspace }}/.wp-env-home

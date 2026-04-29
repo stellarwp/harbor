@@ -1,6 +1,77 @@
 # Automated tests
 
-This repository uses Codeception for automated testing and leverages [`slic`](https://github.com/stellarwp/slic) for running the tests.
+This repository has two test suites:
+
+- **PHP tests** — Codeception unit/integration tests run via [`slic`](https://github.com/stellarwp/slic)
+- **E2E tests** — Playwright browser tests run against a Docker WordPress environment via [`wp-env`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/)
+
+---
+
+## E2E tests (Playwright)
+
+E2E tests live in `tests/e2e/` and exercise the Software Manager admin page end-to-end through a real browser against a real WordPress installation.
+
+### How it works
+
+A fixture WordPress plugin (`tests/_data/plugins/harbor-fixture/`) boots Harbor with local JSON fixture data instead of live API calls. Playwright logs in once via `global-setup.ts`, saves the session to `artifacts/storage-states/admin.json`, and reuses it across tests.
+
+### Prerequisites
+
+- Docker (for wp-env)
+- [Bun](https://bun.sh)
+- Composer
+
+### Running locally
+
+```bash
+# Install dependencies (first time only)
+bun install
+composer install
+
+# Start the WordPress environment (port 8901 by default)
+bunx wp-env start
+
+# Install Playwright browsers (first time only)
+bunx playwright install chromium --with-deps
+
+# Run all E2E tests (headless)
+bun run test:e2e
+
+# Stop the environment when done
+bunx wp-env stop
+```
+
+### Watching tests run in a browser
+
+```bash
+# Opens a live Chrome window; each action is slowed to 800 ms
+bun run test:e2e:headed
+```
+
+### Interactive UI mode (time-travel viewer)
+
+```bash
+bun run test:e2e:ui
+```
+
+UI mode lets you step through each action and view a screenshot at that point in time. The browser preview is blank between runs because `@wordpress/e2e-test-utils-playwright` closes the page after each test — click an action step in the timeline to see its screenshot.
+
+### Port configuration
+
+wp-env starts on port **8901** by default (configured in `.wp-env.json`). If that port is taken, `autoPort: true` picks the next available one. Override both wp-env and Playwright together with a single env var:
+
+```bash
+WP_ENV_PORT=9000 bunx wp-env start
+WP_ENV_PORT=9000 bun run test:e2e
+```
+
+### CI
+
+The GitHub Actions workflow (`.github/workflows/tests-e2e.yml`) captures the URL that wp-env prints on startup and passes it as `WP_BASE_URL` to the Playwright run, so the dynamic port is handled automatically.
+
+---
+
+## PHP tests (Codeception + slic)
 
 ## Pre-requisites
 
