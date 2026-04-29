@@ -4,4 +4,5 @@ export interface HarborData {
     pluginsUrl:        string;
     activationUrl:     string;
     subscriptionsUrl:  string;
+    version:           string;
 }

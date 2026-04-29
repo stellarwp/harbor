@@ -23,7 +23,7 @@ export function Shell( { header, sideContent, children }: ShellProps ) {
                 { header }
             </header>
 			<div className="flex-1 min-h-0 flex overflow-hidden">
-				<main className="flex-1 min-w-0 overflow-y-auto pb-6 px-8 bg-neutral-50">
+				<main className="flex flex-col flex-1 min-w-0 overflow-y-auto pb-6 px-8 bg-neutral-50">
 					{ children }
 				</main>
 				<aside className="shrink-0 overflow-y-auto border-l px-8 py-4">

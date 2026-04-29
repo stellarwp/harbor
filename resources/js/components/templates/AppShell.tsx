@@ -6,7 +6,7 @@
  *
  * @package LiquidWeb\Harbor
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Shell } from '@/components/templates/Shell';
 import { FilterBar } from '@/components/molecules/FilterBar';
 import { LicensePanel } from '@/components/organisms/LicensePanel';
@@ -58,6 +58,15 @@ export function AppShell() {
                         ) )
                     }
                 </div>
+
+                { window.harborData?.version && (
+                    <div className="flex items-center justify-end mt-auto">
+                        <p className="text-[13px] text-gray-500 mt-8 mb-0">
+							{ /* translators: %s: plugin version number */ }
+							{ sprintf( __( 'Version %s', '%TEXTDOMAIN%' ), window.harborData.version ) }
+						</p>
+                    </div>
+                ) }
             </ErrorBoundary>
         </Shell>
     );

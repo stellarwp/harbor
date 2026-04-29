@@ -32,6 +32,7 @@
     --color-blue-200: oklch(88.2% 0.059 254.128);
     --color-blue-800: oklch(42.4% 0.199 265.638);
     --color-gray-100: oklch(96.7% 0.003 264.542);
+    --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-neutral-50: oklch(98.5% 0 0);
     --color-neutral-800: oklch(26.9% 0 0);
     --color-black: #000;
@@ -407,6 +408,9 @@
   }
   .lw-harbor-ui .mt-\[0\.75em\]\! {
     margin-top: 0.75em !important;
+  }
+  .lw-harbor-ui .mt-auto {
+    margin-top: auto !important;
   }
   .lw-harbor-ui .\!mb-6 {
     margin-bottom: calc(var(--spacing) * 6) !important;
@@ -1042,6 +1046,9 @@
   .lw-harbor-ui .text-\[11px\] {
     font-size: 11px !important;
   }
+  .lw-harbor-ui .text-\[13px\] {
+    font-size: 13px !important;
+  }
   .lw-harbor-ui .leading-none {
     --lw-harbor-tw-leading: 1;
     line-height: 1 !important;
@@ -1093,6 +1100,9 @@
   }
   .lw-harbor-ui .text-foreground {
     color: oklch(0.145 0 0) !important;
+  }
+  .lw-harbor-ui .text-gray-500 {
+    color: var(--color-gray-500) !important;
   }
   .lw-harbor-ui .text-green-600 {
     color: var(--color-green-600) !important;

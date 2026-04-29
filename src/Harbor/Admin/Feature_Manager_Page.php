@@ -3,6 +3,7 @@
 namespace LiquidWeb\Harbor\Admin;
 
 use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
@@ -182,6 +183,7 @@ class Feature_Manager_Page {
 					PHP_QUERY_RFC3986
 				),
 				'subscriptionsUrl'    => Config::get_portal_base_url() . '/subscriptions/',
+				'version'             => Harbor::VERSION,
 			]
 		);
 
