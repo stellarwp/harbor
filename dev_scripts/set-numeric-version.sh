@@ -8,7 +8,7 @@
 # $1 - version number (x.x.x or x.x.x.x)
 # $2 - dry run (optional, defaults to false)
 #
-# cSpell:ignore Irnw
+# cSpell:ignore Irnw,INPLACE
 
 base_dir=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
 project_root=${HARBOR_PROJECT_ROOT:-"$base_dir/.."}
