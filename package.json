@@ -13,7 +13,8 @@
     "check:spelling": "bunx cspell lint -c .cspell.json --no-progress --no-must-find-files --dot '**'",
     "lint:md": "markdownlint '**/*.md' --ignore node_modules --ignore vendor",
     "fix:md": "prettier --write '**/*.md' '!node_modules/**' '!vendor/**' && markdownlint '**/*.md' --ignore node_modules --ignore vendor --fix",
-    "test:js": "wp-scripts test-unit-js"
+    "test:js": "wp-scripts test-unit-js",
+    "test:shell": "bats tests/shell/"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -31,6 +32,7 @@
     "@wordpress/i18n": "^6.13.0",
     "@wordpress/scripts": "^31.1.0",
     "autoprefixer": "^10.4.22",
+    "bats": "^1.13.0",
     "cspell": "^8",
     "markdownlint-cli": "^0.47",
     "postcss": "^8.5.6",

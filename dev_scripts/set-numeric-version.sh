@@ -11,6 +11,14 @@
 # cSpell:ignore Irnw
 
 base_dir=$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)
+project_root=${HARBOR_PROJECT_ROOT:-"$base_dir/.."}
+
+# BSD sed (macOS) requires an explicit empty-string suffix; GNU sed does not
+if sed --version 2>/dev/null | grep -q 'GNU'; then
+	SED_INPLACE=('sed' '-i')
+else
+	SED_INPLACE=('sed' '-i' '')
+fi
 
 # Get the value to replace "TBD" with as an argument
 replace_value=$1
@@ -42,7 +50,7 @@ function validate() {
 function replace_tbd_in_files() {
 	# Find all files with "TBD" in them
 	# shellcheck disable=SC2062,SC2035
-	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,.git,build,build-dev} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' -Irnw "$base_dir/../" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$base_dir/../||g")
+	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,.git,build,build-dev} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' -Irnw "$project_root/" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$project_root/||g")
 
 	if [ "$dry_run" = true ]; then
 		if [ -n "$files_with_tbd" ]; then
@@ -57,12 +65,12 @@ function replace_tbd_in_files() {
 	# Loop through each file
 	for file in $files_with_tbd; do
 		echo "Replacing $tbd_text with $replace_value in $file"
-		sed -i "s/$tbd_text/$replace_value/g" "$file"
+		"${SED_INPLACE[@]}" "s/$tbd_text/$replace_value/g" "$project_root/$file"
 	done
 }
 
 function update_harbor_version() {
-	harbor_file="$base_dir/../src/Harbor/Harbor.php"
+	harbor_file="$project_root/src/Harbor/Harbor.php"
 
 	if [ "$dry_run" = true ]; then
 		grep -q "$tbd_regex" "$harbor_file" && {
@@ -75,7 +83,7 @@ function update_harbor_version() {
 
 	# Update the VERSION constant in Harbor.php
 	echo "Updating VERSION constant in Harbor.php"
-	sed -i "s/public const VERSION = '[0-9.]*'/public const VERSION = '$replace_value'/" "$harbor_file"
+	"${SED_INPLACE[@]}" "s/public const VERSION = '[0-9.]*'/public const VERSION = '$replace_value'/" "$harbor_file"
 }
 
 # validate parameters
