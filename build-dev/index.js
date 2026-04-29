@@ -2912,8 +2912,8 @@ function AppShell() {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_FilterBar__WEBPACK_IMPORTED_MODULE_2__.FilterBar, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_ReloadBanner__WEBPACK_IMPORTED_MODULE_6__.ReloadBanner, {})]
     }),
     sideContent: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_organisms_LicensePanel__WEBPACK_IMPORTED_MODULE_3__.LicensePanel, {}),
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_atoms_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(_components_atoms_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
         className: "space-y-8",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LegacyLicenseBanner__WEBPACK_IMPORTED_MODULE_4__.LegacyLicenseBanner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_NotActivatedBanner__WEBPACK_IMPORTED_MODULE_5__.NotActivatedBanner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "flex items-center !mt-8 !mb-6",
@@ -2926,7 +2926,13 @@ function AppShell() {
         }, product.slug)) : visibleProducts.map(product => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_organisms_ProductSection__WEBPACK_IMPORTED_MODULE_7__.ProductSection, {
           product: product
         }, product.slug))]
-      })
+      }), window.harborData?.version && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        className: "flex items-center justify-end mt-auto",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("p", {
+          className: "text-[13px] text-gray-500 mt-8 mb-0",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Version %s', '%TEXTDOMAIN%'), window.harborData.version)
+        })
+      })]
     })
   });
 }
@@ -2968,7 +2974,7 @@ function Shell({
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
       className: "flex-1 min-h-0 flex overflow-hidden",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("main", {
-        className: "flex-1 min-w-0 overflow-y-auto pb-6 px-8 bg-neutral-50",
+        className: "flex flex-col flex-1 min-w-0 overflow-y-auto pb-6 px-8 bg-neutral-50",
         children: children
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("aside", {
         className: "shrink-0 overflow-y-auto border-l px-8 py-4",
