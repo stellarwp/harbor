@@ -21,7 +21,7 @@ export interface FeatureGroups {
 }
 
 /**
- * @since 1.0.1  Detect unactivated license products and route their tiers to activationCatalogTiers instead of upgradeCatalogTiers. Exposes isUnactivatedLicense flag.
+ * @since TBD  Detect unactivated license products and route their tiers to activationCatalogTiers instead of upgradeCatalogTiers. Exposes isUnactivatedLicense flag.
  * @since 1.0.0
  */
 export function useProductFeatureGroups( productSlug: string ): FeatureGroups {

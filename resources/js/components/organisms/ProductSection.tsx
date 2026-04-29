@@ -26,7 +26,7 @@ interface ProductSectionProps {
 }
 
 /**
- * @since 1.0.1  Show Unactivated badge on tier groups and product header for unactivated licenses; route upgrade button to change-plan URL for existing subscribers.
+ * @since TBD  Show Unactivated badge on tier groups and product header for unactivated licenses; route upgrade button to change-plan URL for existing subscribers.
  * @since 1.0.0
  */
 export function ProductSection( { product }: ProductSectionProps ) {
