@@ -42,7 +42,7 @@ function validate() {
 function replace_tbd_in_files() {
 	# Find all files with "TBD" in them
 	# shellcheck disable=SC2062,SC2035
-	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,.git} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' -Irnw "$base_dir/../" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$base_dir/../||g")
+	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,build,build-dev,.git} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' -Irnw "$base_dir/../" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$base_dir/../||g")
 
 	if [ "$dry_run" = true ]; then
 		if [ -n "$files_with_tbd" ]; then
