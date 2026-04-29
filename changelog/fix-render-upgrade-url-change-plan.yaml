@@ -1,3 +1,0 @@
-significance: patch
-type: fix
-entry: Upgrade buttons now route existing subscribers to the portal's change-plan flow for the target tier instead of the catalog `purchase_url`, which was adding a duplicate plan to the basket. Unlicensed visitors still see the `purchase_url` for a fresh purchase.

@@ -53,49 +53,49 @@ teardown() {
 
 # --- dry run ---
 
-@test "dry run skips validation and exits 0 when no TBD found" {
+@test "dry run skips validation and exits 0 when no 1.0.1 found" {
 	run "$SCRIPT" "" true
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Dry run"* ]]
 }
 
-@test "dry run exits 1 when TBD is found in files" {
-	echo "version: TBD" > "$TMPDIR/example.php"
+@test "dry run exits 1 when 1.0.1 is found in files" {
+	echo "version: 1.0.1" > "$TMPDIR/example.php"
 	run "$SCRIPT" "" true
 	[ "$status" -eq 1 ]
-	[[ "$output" == *"Found TBD"* ]]
+	[[ "$output" == *"Found 1.0.1"* ]]
 }
 
-@test "dry run exits 1 when Harbor.php has TBD" {
+@test "dry run exits 1 when Harbor.php has 1.0.1" {
 	cat > "$HARBOR_PHP" <<'PHP'
 <?php
 class Harbor {
-	public const VERSION = 'TBD';
+	public const VERSION = '1.0.1';
 }
 PHP
 	run "$SCRIPT" "" true
 	[ "$status" -eq 1 ]
-	[[ "$output" == *"Found TBD in Harbor.php"* ]]
+	[[ "$output" == *"Found 1.0.1 in Harbor.php"* ]]
 }
 
 # --- replace_tbd_in_files() ---
 
-@test "replaces TBD in a PHP file" {
-	echo "version: TBD" > "$TMPDIR/example.php"
+@test "replaces 1.0.1 in a PHP file" {
+	echo "version: 1.0.1" > "$TMPDIR/example.php"
 	run "$SCRIPT" "2.0.0"
 	grep -q "2.0.0" "$TMPDIR/example.php"
 }
 
-@test "does not replace TBD in .md files" {
-	echo "version: TBD" > "$TMPDIR/example.md"
+@test "does not replace 1.0.1 in .md files" {
+	echo "version: 1.0.1" > "$TMPDIR/example.md"
 	run "$SCRIPT" "2.0.0"
-	grep -q "TBD" "$TMPDIR/example.md"
+	grep -q "1.0.1" "$TMPDIR/example.md"
 }
 
-@test "does not replace TBD in .yml files" {
-	echo "version: TBD" > "$TMPDIR/example.yml"
+@test "does not replace 1.0.1 in .yml files" {
+	echo "version: 1.0.1" > "$TMPDIR/example.yml"
 	run "$SCRIPT" "2.0.0"
-	grep -q "TBD" "$TMPDIR/example.yml"
+	grep -q "1.0.1" "$TMPDIR/example.yml"
 }
 
 # --- update_harbor_version() ---
