@@ -86,7 +86,4 @@ jobs:
           branch: release-prep-${{ needs.set_vars.outputs.version }}
           base: ${{ needs.set_vars.outputs.ref }}
           delete-branch: true
-          labels: |
-            Code Review
-            No QA Needed
           token: ${{ secrets.GITHUB_TOKEN }}
