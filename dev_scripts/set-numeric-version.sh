@@ -50,7 +50,7 @@ function validate() {
 function replace_tbd_in_files() {
 	# Find all files with "TBD" in them
 	# shellcheck disable=SC2062,SC2035
-	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,.git,build,build-dev} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' -Irnw "$project_root/" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$project_root/||g")
+	files_with_tbd=$(grep --exclude-dir={vendor,node_modules,vendor-prefixed,dev_scripts,.git,build,build-dev} --exclude='*.md' --exclude='*.yml' --exclude='*diff*' --exclude='composer.json' --exclude='tests/shell/set-numeric-version.bats' -Irnw "$project_root/" -e "$tbd_regex" | cut -d':' -f1 | sed "s|$project_root/||g")
 
 	if [ "$dry_run" = true ]; then
 		if [ -n "$files_with_tbd" ]; then

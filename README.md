@@ -97,10 +97,9 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 
 ## Releasing
 
-1. Update the `VERSION` constant in `src/Harbor/Harbor.php` to the new version.
-2. Compile changelog entries: `bunx @stellarwp/changelogger write --overwrite-version <version>`
-3. Open a PR and merge.
-4. Create a GitHub Release with a new tag in the format `vX.X.X` targeting the merge commit.
+1. Run the **Release Prep** workflow (`Actions → Release Prep → Run workflow`). Supply the target branch, version (e.g. `1.2.0`), and the release date (e.g. `2026-04-29`). The workflow bumps the `VERSION` constant, compiles the changelog, and opens a PR automatically.
+2. Review and merge the PR.
+3. Create a GitHub Release with a new tag in the format `vX.X.X` targeting the merge commit.
 
 ## Documentation
 
