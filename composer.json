@@ -85,7 +85,9 @@
       ],
       "phpcs": "phpcs -s",
       "phpcs:fix": "phpcbf",
-      "phpcs:ci": "dev_scripts/partial-phpcs.sh"
+      "phpcs:ci": "dev_scripts/partial-phpcs.sh",
+      "release:prep": "dev_scripts/release-prep.sh",
+      "release:set-version": "dev_scripts/set-numeric-version.sh"
     },
     "scripts-descriptions": {
       "test:analysis": "Run static code analysis.",
@@ -99,6 +101,8 @@
       "compatibility:php-8.2": "Run PHPCompatibilityWP for PHP 8.2.",
       "compatibility:php-8.3": "Run PHPCompatibilityWP for PHP 8.3.",
       "compatibility:php-8.4": "Run PHPCompatibilityWP for PHP 8.4.",
-      "compatibility": "Run PHPCompatibilityWP for all supported PHP versions."
+      "compatibility": "Run PHPCompatibilityWP for all supported PHP versions.",
+      "release:prep": "Prepare a release: set version, replace TBD tags, and write changelog. Usage: composer release:prep -- <version> [date]",
+      "release:set-version": "Replace TBD tags and update Harbor::VERSION. Usage: composer release:set-version -- <version>"
     }
 }
