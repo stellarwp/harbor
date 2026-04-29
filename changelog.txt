@@ -1,3 +1,8 @@
+### [1.0.1] 2026-04-29
+
+* Feature - Show Harbor version on admin page footer
+* Fix - Upgrade buttons now route existing subscribers to the portal's change-plan flow for the target tier instead of the catalog `purchase_url`, which was adding a duplicate plan to the basket. Unlicensed visitors still see the `purchase_url` for a fresh purchase.
+
 = [1.0.0] 2026-04-28 =
 
 * Feature - Initial version.
