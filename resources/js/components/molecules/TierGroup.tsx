@@ -35,7 +35,7 @@ interface TierGroupProps {
 }
 
 /**
- * @since TBD  Added showUnactivated prop to render an Unactivated badge in place of the upgrade button.
+ * @since 1.0.1  Added showUnactivated prop to render an Unactivated badge in place of the upgrade button.
  * @since 1.0.0
  */
 export function TierGroup( { tier, features, forceOpen = false, showUpgrade = true, showUnactivated = false, buttonHref }: TierGroupProps ) {
