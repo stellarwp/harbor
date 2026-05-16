@@ -948,6 +948,7 @@ function NexcessLogo({
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
     src: _img_logo_nexcess_svg__WEBPACK_IMPORTED_MODULE_0__["default"],
     alt: "",
+    "aria-hidden": "true",
     className: className
   });
 }
@@ -1665,7 +1666,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Read licenseKeyPrefix from the getHarborDataValue helper for the placeholder.
+ * @since TBD   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
  * @since 1.0.0
  */
 function LicenseKeyInput({
@@ -1674,10 +1675,9 @@ function LicenseKeyInput({
   onEdit,
   onCancel,
   onRemove,
-  onSuccess,
-  prefillKey
+  onSuccess
 }) {
-  const [key, setKey] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [key, setKey] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(currentKey || '');
   const [localError, setLocalError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const {
     storeLicense
@@ -1702,16 +1702,10 @@ function LicenseKeyInput({
       setKey(currentKey);
     }
     if (!isEditing) {
-      setKey('');
+      setKey(currentKey || '');
       setLocalError(null);
     }
   }, [isEditing, currentKey]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (prefillKey) {
-      setKey(prefillKey);
-      setLocalError(null);
-    }
-  }, [prefillKey]);
   const handleActivate = async () => {
     const trimmedKey = key.trim();
     if (!trimmedKey) {
@@ -1739,7 +1733,7 @@ function LicenseKeyInput({
     className: "flex gap-2",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_6__.Input, {
       id: "license-key-input",
-      placeholder: `${(0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_12__.getHarborDataValue)('licenseKeyPrefix')}****-****-****-****-****`,
+      placeholder: (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_12__.getLicenseKeyPlaceholder)(),
       value: key,
       onChange: e => {
         setKey(e.target.value.toUpperCase());
@@ -1771,7 +1765,7 @@ function LicenseKeyInput({
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_6__.Input, {
         readOnly: true,
         value: currentKey,
-        className: "flex-1 text-xs font-mono uppercase bg-muted/40 cursor-default select-all",
+        className: "flex-1 text-xs font-mono uppercase bg-neutral-100 cursor-default select-all",
         tabIndex: -1
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
         type: "button",
@@ -2381,8 +2375,14 @@ function WelcomeLicenseForm() {
     onKeyChange,
     onActivate
   } = (0,_hooks_useWelcomeLicenseForm__WEBPACK_IMPORTED_MODULE_6__.useWelcomeLicenseForm)();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("form", {
     className: "rounded-lg border border-neutral-200 bg-white p-4 space-y-3",
+    onSubmit: e => {
+      e.preventDefault();
+      if (canSubmit) {
+        onActivate();
+      }
+    },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__.SectionHeader, {
       icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
         className: "w-4 h-4 text-muted-foreground"
@@ -2390,27 +2390,29 @@ function WelcomeLicenseForm() {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Unified License', '%TEXTDOMAIN%')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_ui_input__WEBPACK_IMPORTED_MODULE_3__.Input, {
       id: "welcome-license-key-input",
-      placeholder: `${(0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_7__.getHarborDataValue)('licenseKeyPrefix')}XXXX-XXXX-XXXX-XXXX-XXXX`,
+      placeholder: (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_7__.getLicenseKeyPlaceholder)(),
       value: key,
       onChange: e => onKeyChange(e.target.value),
-      onKeyDown: e => e.key === 'Enter' && canSubmit && onActivate(),
       className: "font-mono text-sm uppercase",
       "aria-invalid": !!serverError,
       "aria-describedby": serverError ? 'welcome-license-error' : showFormatHint ? 'welcome-license-hint' : undefined,
       disabled: !canModifyLicense
+      // eslint-disable-next-line jsx-a11y/no-autofocus
+      ,
+      autoFocus: true
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      type: "submit",
       className: "w-full",
-      onClick: onActivate,
       disabled: !canSubmit,
       children: isStoring ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_1__["default"], {
           className: "w-4 h-4 animate-spin"
         }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Verifying…', '%TEXTDOMAIN%')]
       }) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Activate', '%TEXTDOMAIN%')
-    }), showFormatHint && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+    }), showFormatHint && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
       id: "welcome-license-hint",
       className: "text-[13px] leading-6 text-muted-foreground tracking-[-0.08px] m-0",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("This doesn't look like a unified license key. If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%')
+      children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("This doesn't look like a unified license key.", '%TEXTDOMAIN%'), ' ', (0,_hooks_useWelcomeLicenseForm__WEBPACK_IMPORTED_MODULE_6__.getNonUnifiedLicenseAdvice)()]
     }), serverError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
       id: "welcome-license-error",
       className: "text-[13px] leading-6 text-destructive tracking-[-0.08px] m-0",
@@ -3401,7 +3403,7 @@ function Shell({
   children
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: "flex flex-col overflow-hidden h-[calc(100vh-32px)]",
+    className: "absolute top-0 left-0 w-full max-w-full flex flex-col overflow-hidden h-[calc(100vh-32px)]",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("header", {
       className: "shrink-0 border-b bg-background py-4 px-8 flex items-center gap-3",
       children: header
@@ -3455,7 +3457,7 @@ function WelcomeShell({
   children
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    className: "flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white",
+    className: "absolute top-0 left-0 w-full max-w-full flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "w-full max-w-104",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -3769,7 +3771,7 @@ function Input({
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
     type: type,
     "data-slot": "input",
-    className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_1__.cn)("file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50", "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive", className),
+    className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_1__.cn)("file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-white px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50", "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive", className),
     ...props
   });
 }
@@ -5310,6 +5312,7 @@ function useProductFeatureGroups(productSlug) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getNonUnifiedLicenseAdvice: () => (/* binding */ getNonUnifiedLicenseAdvice),
 /* harmony export */   pickWelcomeErrorMessage: () => (/* binding */ pickWelcomeErrorMessage),
 /* harmony export */   useWelcomeLicenseForm: () => (/* binding */ useWelcomeLicenseForm)
 /* harmony export */ });
@@ -5345,6 +5348,21 @@ __webpack_require__.r(__webpack_exports__);
 const SERVER_INVALID_KEY_CODE = 'lw-harbor-invalid-key';
 
 /**
+ * Translated sentence that redirects a customer with a non-unified key to the
+ * owning plugin's own settings page. Surfaced both as an inline format hint
+ * while the user is typing and as the server-side error tail when the
+ * licensing service rejects the key as unrecognized.
+ *
+ * Defined once so translators see a single string identity across both call
+ * sites — re-translating the same advice twice risks drift.
+ *
+ * @since TBD
+ */
+function getNonUnifiedLicenseAdvice() {
+  return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%');
+}
+
+/**
  * Compose the user-facing error message for a failed activation.
  *
  * storeLicense wraps any WP_Error from the licensing service via
@@ -5362,7 +5380,7 @@ function pickWelcomeErrorMessage(error) {
   const serverError = error.cause instanceof _errors__WEBPACK_IMPORTED_MODULE_4__.HarborError ? error.cause : null;
   const baseMessage = serverError?.message?.trim() || error.message;
   if (serverError?.code === SERVER_INVALID_KEY_CODE) {
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("We couldn't verify this key. If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%');
+    return `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("We couldn't verify this key.", '%TEXTDOMAIN%')} ${getNonUnifiedLicenseAdvice()}`;
   }
   return baseMessage;
 }
@@ -5388,7 +5406,7 @@ function useWelcomeLicenseForm() {
   const hasInputMinLength = trimmed.length >= prefix.length;
   const isLwswFormat = trimmed.startsWith(prefix.substring(0, trimmed.length));
   const showFormatHint = hasInput && !isLwswFormat && !serverError;
-  const canSubmit = canModifyLicense && hasInput && hasInputMinLength && isLwswFormat && !isStoring;
+  const canSubmit = canModifyLicense && hasInputMinLength && isLwswFormat && !isStoring;
   const onKeyChange = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(value => {
     setKey(value.toUpperCase());
     setServerError(null);
@@ -5616,7 +5634,8 @@ function groupLicenseProducts(licenseProducts, tierRankMap) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getHarborDataValue: () => (/* binding */ getHarborDataValue)
+/* harmony export */   getHarborDataValue: () => (/* binding */ getHarborDataValue),
+/* harmony export */   getLicenseKeyPlaceholder: () => (/* binding */ getLicenseKeyPlaceholder)
 /* harmony export */ });
 /**
  * Typed accessor for `window.harborData`.
@@ -5629,8 +5648,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Defaulting to `null` rather than `undefined` matches the surrounding
  * codebase convention (LicenseSection / LicensePanel already type their
- * optional URLs as `string | null`). The `window?.` chain protects test
- * paths that import the module without jsdom.
+ * optional URLs as `string | null`).
  *
  * @package LiquidWeb\Harbor
  */
@@ -5645,7 +5663,18 @@ const DEFAULTS = {
  */
 
 function getHarborDataValue(key, fallback) {
-  return window?.harborData?.[key] ?? fallback ?? DEFAULTS[key] ?? null;
+  return window.harborData?.[key] ?? fallback ?? DEFAULTS[key] ?? null;
+}
+
+/**
+ * Returns the placeholder string for a license-key input — the configured
+ * prefix followed by five groups of four X's, matching the issued key shape
+ * (e.g. `LWSW-XXXX-XXXX-XXXX-XXXX-XXXX`).
+ *
+ * @since TBD
+ */
+function getLicenseKeyPlaceholder() {
+  return `${getHarborDataValue('licenseKeyPrefix')}XXXX-XXXX-XXXX-XXXX-XXXX`;
 }
 
 /***/ },
