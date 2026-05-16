@@ -40,8 +40,8 @@ export function pickWelcomeErrorMessage( error: HarborError ): string {
     const baseMessage = serverError?.message?.trim() || error.message;
 
     if ( serverError?.code === SERVER_INVALID_KEY_CODE ) {
-        return baseMessage + ' ' + __(
-            "If this is a non-unified license, activate it in that plugin's own settings page.",
+        return __(
+            "We couldn't verify this key. If this is a non-unified license, activate it in that plugin's own settings page.",
             '%TEXTDOMAIN%'
         );
     }
