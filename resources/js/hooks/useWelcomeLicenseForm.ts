@@ -98,7 +98,7 @@ export function useWelcomeLicenseForm(): UseWelcomeLicenseForm {
 	const hasInputMinLength = trimmed.length >= prefix.length;
     const isLwswFormat      = trimmed.startsWith( prefix.substring( 0, trimmed.length ) );
     const showFormatHint    = hasInput && ! isLwswFormat && ! serverError;
-    const canSubmit         = canModifyLicense && hasInput && hasInputMinLength && isLwswFormat && ! isStoring;
+    const canSubmit         = canModifyLicense && hasInputMinLength && isLwswFormat && ! isStoring;
 
     const onKeyChange = useCallback( ( value: string ) => {
         setKey( value.toUpperCase() );
