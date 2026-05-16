@@ -22,6 +22,24 @@ import { getHarborDataValue }     from '@/lib/harbor-data';
 const SERVER_INVALID_KEY_CODE = 'lw-harbor-invalid-key';
 
 /**
+ * Translated sentence that redirects a customer with a non-unified key to the
+ * owning plugin's own settings page. Surfaced both as an inline format hint
+ * while the user is typing and as the server-side error tail when the
+ * licensing service rejects the key as unrecognized.
+ *
+ * Defined once so translators see a single string identity across both call
+ * sites — re-translating the same advice twice risks drift.
+ *
+ * @since TBD
+ */
+export function getNonUnifiedLicenseAdvice(): string {
+    return __(
+        "If this is a non-unified license, activate it in that plugin's own settings page.",
+        '%TEXTDOMAIN%'
+    );
+}
+
+/**
  * Compose the user-facing error message for a failed activation.
  *
  * storeLicense wraps any WP_Error from the licensing service via
@@ -40,10 +58,7 @@ export function pickWelcomeErrorMessage( error: HarborError ): string {
     const baseMessage = serverError?.message?.trim() || error.message;
 
     if ( serverError?.code === SERVER_INVALID_KEY_CODE ) {
-        return __(
-            "We couldn't verify this key. If this is a non-unified license, activate it in that plugin's own settings page.",
-            '%TEXTDOMAIN%'
-        );
+        return `${ __( "We couldn't verify this key.", '%TEXTDOMAIN%' ) } ${ getNonUnifiedLicenseAdvice() }`;
     }
 
     return baseMessage;

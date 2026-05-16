@@ -12,7 +12,7 @@ import { KeyRound, Loader2 }     from 'lucide-react';
 import { Input }                 from '@/components/ui/input';
 import { Button }                from '@/components/ui/button';
 import { SectionHeader }         from '@/components/atoms/SectionHeader';
-import { useWelcomeLicenseForm } from '@/hooks/useWelcomeLicenseForm';
+import { useWelcomeLicenseForm, getNonUnifiedLicenseAdvice } from '@/hooks/useWelcomeLicenseForm';
 import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 
 /**
@@ -70,7 +70,9 @@ export function WelcomeLicenseForm() {
                     id="welcome-license-hint"
                     className="text-[13px] leading-6 text-muted-foreground tracking-[-0.08px] m-0"
                 >
-                    { __( "This doesn't look like a unified license key. If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%' ) }
+                    { __( "This doesn't look like a unified license key.", '%TEXTDOMAIN%' ) }
+                    { ' ' }
+                    { getNonUnifiedLicenseAdvice() }
                 </p>
             ) }
             { serverError && (

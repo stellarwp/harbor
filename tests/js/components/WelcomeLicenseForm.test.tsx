@@ -4,7 +4,10 @@ import { useWelcomeLicenseForm }     from '@/hooks/useWelcomeLicenseForm';
 import type { UseWelcomeLicenseForm } from '@/hooks/useWelcomeLicenseForm';
 
 jest.mock( '@/hooks/useWelcomeLicenseForm', () => ( {
-    useWelcomeLicenseForm: jest.fn(),
+    useWelcomeLicenseForm:      jest.fn(),
+    getNonUnifiedLicenseAdvice: jest.fn().mockReturnValue(
+        "If this is a non-unified license, activate it in that plugin's own settings page."
+    ),
 } ) );
 
 jest.mock( '@/lib/harbor-data', () => ( {
