@@ -21,6 +21,7 @@ export function NexcessLogo( { className }: NexcessLogoProps ) {
         <img
             src={ nexcessLogoUrl }
             alt=""
+            aria-hidden="true"
             className={ className }
         />
     );
