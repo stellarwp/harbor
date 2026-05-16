@@ -72,6 +72,17 @@ describe( 'useWelcomeLicenseForm', () => {
         expect( result.current.canSubmit ).toBe( true );
     } );
 
+    it( 'allows partial-prefix typing without showing the hint but blocks submit until min length', () => {
+        // "LWSW" matches the start of the prefix so the hint stays hidden,
+        // but the length is below the prefix length so submit remains blocked.
+        const { result } = renderHook( () => useWelcomeLicenseForm() );
+
+        act( () => result.current.onKeyChange( 'LWSW' ) );
+
+        expect( result.current.showFormatHint ).toBe( false );
+        expect( result.current.canSubmit ).toBe( false );
+    } );
+
     it( 'clears any prior server error when the key changes', async () => {
         storeLicense.mockResolvedValueOnce( new HarborError(
             { code: 'lw-harbor-invalid-key', message: 'Bad key.' }
