@@ -36,8 +36,6 @@ interface LicenseKeyInputProps {
 	onRemove:    () => Promise<HarborError | null>;
 	/** Called on successful activation so the parent can respond (e.g. exit edit mode). */
 	onSuccess:   () => void;
-	/** When set, fills the input with this value (e.g. from a test-key cheat-sheet). */
-	prefillKey?: string;
 }
 
 /**
@@ -51,9 +49,8 @@ export function LicenseKeyInput( {
 	onCancel,
 	onRemove,
 	onSuccess,
-	prefillKey,
 }: LicenseKeyInputProps ) {
-	const [ key, setKey ]               = useState( '' );
+	const [ key, setKey ]               = useState( currentKey || '' );
 	const [ localError, setLocalError ] = useState< string | null >( null );
 
 	const { storeLicense } = useDispatch( harborStore );
@@ -74,17 +71,10 @@ export function LicenseKeyInput( {
 			setKey( currentKey );
 		}
 		if ( ! isEditing ) {
-			setKey( '' );
+			setKey( currentKey || '' );
 			setLocalError( null );
 		}
 	}, [ isEditing, currentKey ] );
-
-	useEffect( () => {
-		if ( prefillKey ) {
-			setKey( prefillKey );
-			setLocalError( null );
-		}
-	}, [ prefillKey ] );
 
 	const handleActivate = async () => {
 		const trimmedKey = key.trim();
@@ -152,7 +142,7 @@ export function LicenseKeyInput( {
 				<Input
 					readOnly
 					value={ currentKey }
-					className="flex-1 text-xs font-mono uppercase bg-muted/40 cursor-default select-all"
+					className="flex-1 text-xs font-mono uppercase bg-neutral-100 cursor-default select-all"
 					tabIndex={ -1 }
 				/>
 				<button
