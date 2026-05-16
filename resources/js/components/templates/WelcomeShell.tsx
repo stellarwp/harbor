@@ -20,7 +20,7 @@ interface WelcomeShellProps {
  */
 export function WelcomeShell( { children }: WelcomeShellProps ) {
     return (
-        <div className="flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white">
+        <div className="absolute top-0 left-0 max-w-full flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white">
             <div className="w-full max-w-104">
                 <div className="flex flex-col items-center gap-1.5 text-center">
                     <NexcessLogo className="w-18 h-18" />

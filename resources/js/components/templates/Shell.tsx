@@ -18,7 +18,7 @@ interface ShellProps {
  */
 export function Shell( { header, sideContent, children }: ShellProps ) {
     return (
-        <div className="flex flex-col overflow-hidden h-[calc(100vh-32px)]">
+        <div className="absolute top-0 left-0 max-w-full flex flex-col overflow-hidden h-[calc(100vh-32px)]">
             <header className="shrink-0 border-b bg-background py-4 px-8 flex items-center gap-3">
                 { header }
             </header>
