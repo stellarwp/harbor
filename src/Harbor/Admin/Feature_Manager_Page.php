@@ -153,6 +153,7 @@ class Feature_Manager_Page {
 	 *   dirname(dirname(__DIR__))             → src
 	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
 	 *
+	 * @since TBD   Expose License_Key::PREFIX to the React app via the localized payload.
 	 * @since 1.0.0
 	 *
 	 * @return void

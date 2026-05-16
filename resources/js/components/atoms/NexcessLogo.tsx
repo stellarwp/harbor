@@ -14,7 +14,7 @@ interface NexcessLogoProps {
 }
 
 /**
- * @since 1.0.0
+ * @since TBD
  */
 export function NexcessLogo( { className }: NexcessLogoProps ) {
     return (

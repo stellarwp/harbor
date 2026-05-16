@@ -13,6 +13,7 @@
  * @param baseUrl The upgrade_url string from the catalog tier.
  * @param domain  The site domain from getHarborDataValue( 'domain' ).
  *
+ * @since TBD    Domain parameter is now string | null to match the getHarborDataValue helper.
  * @since 1.0.2
  */
 export function buildUpgradeUrl(

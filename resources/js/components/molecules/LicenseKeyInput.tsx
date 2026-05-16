@@ -41,6 +41,7 @@ interface LicenseKeyInputProps {
 }
 
 /**
+ * @since TBD   Read licenseKeyPrefix from the getHarborDataValue helper for the placeholder.
  * @since 1.0.0
  */
 export function LicenseKeyInput( {

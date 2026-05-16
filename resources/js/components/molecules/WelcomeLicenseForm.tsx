@@ -16,7 +16,7 @@ import { useWelcomeLicenseForm } from '@/hooks/useWelcomeLicenseForm';
 import { getHarborDataValue }    from '@/lib/harbor-data';
 
 /**
- * @since 1.0.0
+ * @since TBD
  */
 export function WelcomeLicenseForm() {
     const {

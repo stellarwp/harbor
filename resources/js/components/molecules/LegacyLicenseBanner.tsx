@@ -14,6 +14,7 @@ import { store as harborStore } from '@/store';
 import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
+ * @since TBD   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 export function LegacyLicenseBanner() {

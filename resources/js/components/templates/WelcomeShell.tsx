@@ -16,7 +16,7 @@ interface WelcomeShellProps {
 }
 
 /**
- * @since 1.0.0
+ * @since TBD
  */
 export function WelcomeShell( { children }: WelcomeShellProps ) {
     return (

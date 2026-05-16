@@ -22,6 +22,7 @@ import { useHarborData } from '@/context/harbor-data-context';
 import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
+ * @since TBD   Read version through the getHarborDataValue helper.
  * @since 1.0.0
  */
 export function AppShell() {

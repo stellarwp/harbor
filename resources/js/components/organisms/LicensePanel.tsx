@@ -19,6 +19,7 @@ import { HarborError } from '@/errors';
 import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
+ * @since TBD   Read activationUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 export function LicensePanel() {

@@ -33,7 +33,7 @@ const SERVER_INVALID_KEY_CODE = 'lw-harbor-invalid-key';
  * specifically rejected the key as unrecognized — for expired or
  * suspended subscriptions that framing would be misleading.
  *
- * @since 1.0.0
+ * @since TBD
  */
 export function pickWelcomeErrorMessage( error: HarborError ): string {
     const serverError = error.cause instanceof HarborError ? error.cause : null;
@@ -61,7 +61,7 @@ export interface UseWelcomeLicenseForm {
 }
 
 /**
- * @since 1.0.0
+ * @since TBD
  */
 export function useWelcomeLicenseForm(): UseWelcomeLicenseForm {
     const [ key, setKey ]                 = useState( '' );

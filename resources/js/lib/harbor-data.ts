@@ -23,6 +23,9 @@ const DEFAULTS = {
 
 type KeyWithDefault = keyof typeof DEFAULTS;
 
+/**
+ * @since TBD
+ */
 export function getHarborDataValue<K extends KeyWithDefault>(
     key: K
 ): HarborData[K];

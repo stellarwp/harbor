@@ -54,6 +54,7 @@ function LicenseSectionSkeleton() {
 }
 
 /**
+ * @since TBD   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 export function LicenseSection( {
