@@ -97,7 +97,7 @@ export function LicensePanel() {
     };
 
     return (
-        <div className="sticky top-4 w-[280px] shrink-0 space-y-6">
+        <div className="sticky top-4 w-[285px] shrink-0 space-y-6">
             <LicenseSection
                 licenseKey={ licenseKey }
                 licenseProducts={ licenseProducts }

@@ -68,7 +68,7 @@ export function WelcomeLicenseForm() {
             { showFormatHint && (
                 <p
                     id="welcome-license-hint"
-                    className="text-sm text-muted-foreground m-0"
+                    className="text-[13px] leading-6 text-muted-foreground tracking-[-0.08px] m-0"
                 >
                     { __( "This doesn't look like a unified license key. If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%' ) }
                 </p>
@@ -76,7 +76,7 @@ export function WelcomeLicenseForm() {
             { serverError && (
                 <p
                     id="welcome-license-error"
-                    className="text-sm text-destructive m-0"
+                    className="text-[13px] leading-6 text-destructive tracking-[-0.08px] m-0"
                     role="alert"
                 >
                     { serverError }
