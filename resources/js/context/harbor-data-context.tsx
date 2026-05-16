@@ -83,7 +83,11 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
     }
 
     const isLoading        = RESOLVER_KEYS.some( ( key ) => result[ key ].isResolving && ! hasEverResolvedRef.current[ key ] );
-    const isLicenseLoading = result.license.isResolving && ! hasEverResolvedRef.current.license;
+    // True until the license resolver has settled its first cycle. Covers both
+    // the IDLE pre-fetch frame and the RESOLVING in-flight frame, so the
+    // welcome screen never flashes before the resolver has had a chance to
+    // report whether a key exists.
+    const isLicenseLoading = ! hasEverResolvedRef.current.license;
 
     useEffect( () => {
         const found = findErrors( result );

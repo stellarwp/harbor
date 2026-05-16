@@ -73,6 +73,16 @@ describe( 'HarborDataContext', () => {
         expect( captured!.isLicenseLoading ).toBe( false );
     } );
 
+    it( 'flags isLicenseLoading on first render before the resolver has started (IDLE)', () => {
+        setResolvers( {
+            license: { isResolving: false, hasResolved: false },
+        } );
+
+        render( <HarborDataProvider><Probe /></HarborDataProvider> );
+
+        expect( captured!.isLicenseLoading ).toBe( true );
+    } );
+
     it( 'flags both loading flags while the license resolver is on its first pass', () => {
         setResolvers( {
             license: { isResolving: true, hasResolved: false },

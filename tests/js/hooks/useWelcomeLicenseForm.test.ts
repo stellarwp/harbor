@@ -135,13 +135,17 @@ describe( 'pickWelcomeErrorMessage', () => {
         );
     }
 
-    it( 'appends the plugin-settings hint for lw-harbor-invalid-key', () => {
+    it( 'returns a single canned message for lw-harbor-invalid-key', () => {
         const error  = withCause( 'lw-harbor-invalid-key', 'License key not recognized.' );
         const result = pickWelcomeErrorMessage( error );
 
-        expect( result.startsWith( 'License key not recognized.' ) ).toBe( true );
+        // The canned message discards the server text and directs the user
+        // toward the plugin-settings path.
+        expect( result ).toMatch( /We couldn't verify this key/ );
         expect( result ).toMatch( /non-unified license/ );
         expect( result ).toMatch( /plugin's own settings page/ );
+        // The server's diagnostic is intentionally not surfaced.
+        expect( result ).not.toMatch( /License key not recognized\./ );
     } );
 
     it.each( [
@@ -170,13 +174,13 @@ describe( 'pickWelcomeErrorMessage', () => {
         expect( result ).not.toMatch( /non-unified license/ );
     } );
 
-    it( 'falls back to error.message when cause.message is whitespace', () => {
+    it( 'returns the canned invalid-key message even when cause.message is whitespace', () => {
         const error  = withCause( 'lw-harbor-invalid-key', '   ' );
         const result = pickWelcomeErrorMessage( error );
 
-        // The wrapper message is preserved, and the plugin-settings hint is
-        // still appended because the server code matched.
-        expect( result.startsWith( 'Liquid Web Software Manager failed to validate your license.' ) ).toBe( true );
+        // Whitespace in the server message doesn't change anything — the
+        // invalid-key branch returns the canned message regardless.
+        expect( result ).toMatch( /We couldn't verify this key/ );
         expect( result ).toMatch( /plugin's own settings page/ );
     } );
 } );
