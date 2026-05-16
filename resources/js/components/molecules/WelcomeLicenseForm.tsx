@@ -31,7 +31,15 @@ export function WelcomeLicenseForm() {
     } = useWelcomeLicenseForm();
 
     return (
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 space-y-3">
+        <form
+            className="rounded-lg border border-neutral-200 bg-white p-4 space-y-3"
+            onSubmit={ ( e ) => {
+                e.preventDefault();
+                if ( canSubmit ) {
+                    onActivate();
+                }
+            } }
+        >
             <SectionHeader
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'Unified License', '%TEXTDOMAIN%' ) }
@@ -41,7 +49,6 @@ export function WelcomeLicenseForm() {
                 placeholder={ getLicenseKeyPlaceholder() }
                 value={ key }
                 onChange={ ( e ) => onKeyChange( e.target.value ) }
-                onKeyDown={ ( e ) => e.key === 'Enter' && canSubmit && onActivate() }
                 className="font-mono text-sm uppercase"
                 aria-invalid={ !! serverError }
                 aria-describedby={
@@ -50,10 +57,12 @@ export function WelcomeLicenseForm() {
                   : undefined
                 }
                 disabled={ ! canModifyLicense }
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus
             />
             <Button
+                type="submit"
                 className="w-full"
-                onClick={ onActivate }
                 disabled={ ! canSubmit }
             >
                 { isStoring ? (
@@ -84,6 +93,6 @@ export function WelcomeLicenseForm() {
                     { serverError }
                 </p>
             ) }
-        </div>
+        </form>
     );
 }
