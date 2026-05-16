@@ -9,8 +9,7 @@
  *
  * Defaulting to `null` rather than `undefined` matches the surrounding
  * codebase convention (LicenseSection / LicensePanel already type their
- * optional URLs as `string | null`). The `window?.` chain protects test
- * paths that import the module without jsdom.
+ * optional URLs as `string | null`).
  *
  * @package LiquidWeb\Harbor
  */
@@ -41,7 +40,7 @@ export function getHarborDataValue<K extends keyof HarborData>(
     fallback?: HarborData[K]
 ): HarborData[K] | null {
     return (
-        window?.harborData?.[ key ]
+        window.harborData?.[ key ]
         ?? fallback
         ?? ( DEFAULTS as Partial<HarborData> )[ key ]
         ?? null
