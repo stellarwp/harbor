@@ -16,6 +16,7 @@ import { PRODUCTS } from '@/data/products';
 import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
+import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
  * @since 1.0.0
@@ -50,7 +51,7 @@ export function LicensePanel() {
         return { tierNameMap: names, tierRankMap: ranks };
     }, [ catalogs ] );
 
-    const activationUrl = licenseKey && window.harborData ? window.harborData.activationUrl : null;
+    const activationUrl = licenseKey ? getHarborDataValue( 'activationUrl' ) : null;
 
     // Product slug → lowest paid-tier purchase URL map from the catalog.
     const upsellUrlMap = useMemo( () => {

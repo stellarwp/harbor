@@ -11,6 +11,7 @@ import { createInterpolateElement } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { AlertTriangle } from 'lucide-react';
 import { store as harborStore } from '@/store';
+import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
  * @since 1.0.0
@@ -21,11 +22,10 @@ export function LegacyLicenseBanner() {
         []
     );
 
-    if ( ! hasLegacy || ! window.harborData ) {
+    const portalUrl = getHarborDataValue( 'subscriptionsUrl' );
+    if ( ! hasLegacy || ! portalUrl ) {
 			return null;
 		}
-
-    const portalUrl = window.harborData.subscriptionsUrl;
 
     return (
         <div

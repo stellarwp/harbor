@@ -19,12 +19,14 @@ import { ErrorBoundary } from '@/components/atoms/ErrorBoundary';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
 import { useHarborData } from '@/context/harbor-data-context';
+import { getHarborDataValue } from '@/lib/harbor-data';
 
 /**
  * @since 1.0.0
  */
 export function AppShell() {
     const { isLoading } = useHarborData();
+    const version       = getHarborDataValue( 'version' );
 
     const { productFilter } = useFilter();
 
@@ -59,11 +61,11 @@ export function AppShell() {
                     }
                 </div>
 
-                { window.harborData?.version && (
+                { version && (
                     <div className="flex items-center justify-end mt-auto">
                         <p className="text-[13px] text-gray-500 mt-8 mb-0">
 							{ /* translators: %s: plugin version number */ }
-							{ sprintf( __( 'Version %s', '%TEXTDOMAIN%' ), window.harborData.version ) }
+							{ sprintf( __( 'Version %s', '%TEXTDOMAIN%' ), version ) }
 						</p>
                     </div>
                 ) }

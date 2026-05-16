@@ -19,6 +19,7 @@ import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
 import { buildUpgradeUrl } from '@/lib/upgrade-url';
+import { getHarborDataValue } from '@/lib/harbor-data';
 import type { Product } from '@/types/api';
 
 interface ProductSectionProps {
@@ -140,7 +141,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
 
                         const effectiveLicenseProduct = licenseProduct ?? unactivatedLicenseProduct;
                         const buttonHref              = effectiveLicenseProduct
-                            ? ( tier.upgrade_url ? buildUpgradeUrl( tier.upgrade_url, window.harborData?.domain ) : undefined )
+                            ? ( tier.upgrade_url ? buildUpgradeUrl( tier.upgrade_url, getHarborDataValue( 'domain' ) ) : undefined )
                             : ( tier.purchase_url || undefined );
 
                         return (
