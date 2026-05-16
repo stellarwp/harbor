@@ -1,7 +1,7 @@
 /**
  * Typed accessor for `window.harborData`.
  *
- * Single chokepoint for global config access. Three lookup tiers:
+ * Single source of truth for global config access. Three lookup tiers:
  *   1. Live value at `window.harborData[ key ]`.
  *   2. Per-call `fallback` (optional).
  *   3. Built-in default from the `DEFAULTS` map.
