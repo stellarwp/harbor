@@ -13,7 +13,7 @@ import { Input }                 from '@/components/ui/input';
 import { Button }                from '@/components/ui/button';
 import { SectionHeader }         from '@/components/atoms/SectionHeader';
 import { useWelcomeLicenseForm } from '@/hooks/useWelcomeLicenseForm';
-import { getHarborDataValue }    from '@/lib/harbor-data';
+import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 
 /**
  * @since TBD
@@ -38,7 +38,7 @@ export function WelcomeLicenseForm() {
             />
             <Input
                 id="welcome-license-key-input"
-                placeholder={ `${ getHarborDataValue( 'licenseKeyPrefix' ) }XXXX-XXXX-XXXX-XXXX-XXXX` }
+                placeholder={ getLicenseKeyPlaceholder() }
                 value={ key }
                 onChange={ ( e ) => onKeyChange( e.target.value ) }
                 onKeyDown={ ( e ) => e.key === 'Enter' && canSubmit && onActivate() }

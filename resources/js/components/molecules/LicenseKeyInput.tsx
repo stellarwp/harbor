@@ -21,7 +21,7 @@ import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
-import { getHarborDataValue } from '@/lib/harbor-data';
+import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 
 interface LicenseKeyInputProps {
 	/** The currently stored key, or null when no license is active. */
@@ -41,7 +41,7 @@ interface LicenseKeyInputProps {
 }
 
 /**
- * @since TBD   Read licenseKeyPrefix from the getHarborDataValue helper for the placeholder.
+ * @since TBD   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
  * @since 1.0.0
  */
 export function LicenseKeyInput( {
@@ -115,7 +115,7 @@ export function LicenseKeyInput( {
 		<div className="flex gap-2">
 			<Input
 				id="license-key-input"
-				placeholder={ `${ getHarborDataValue( 'licenseKeyPrefix' ) }****-****-****-****-****` }
+				placeholder={ getLicenseKeyPlaceholder() }
 				value={ key }
 				onChange={ ( e ) => {
 					setKey( e.target.value.toUpperCase() );

@@ -1,4 +1,4 @@
-import { getHarborDataValue } from '@/lib/harbor-data';
+import { getHarborDataValue, getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 import type { HarborData } from '@/types/harbor-data';
 
 const FIXTURE: HarborData = {
@@ -52,5 +52,20 @@ describe( 'getHarborDataValue', () => {
         delete window.harborData;
         expect( () => getHarborDataValue( 'restUrl' ) ).not.toThrow();
         expect( getHarborDataValue( 'restUrl' ) ).toBeNull();
+    } );
+} );
+
+describe( 'getLicenseKeyPlaceholder', () => {
+    afterEach( () => {
+        delete window.harborData;
+    } );
+
+    it( 'returns the configured prefix followed by five XXXX groups', () => {
+        window.harborData = FIXTURE;
+        expect( getLicenseKeyPlaceholder() ).toBe( 'FIXTURE-XXXX-XXXX-XXXX-XXXX-XXXX' );
+    } );
+
+    it( 'falls back to the default LWSW- prefix when window.harborData is absent', () => {
+        expect( getLicenseKeyPlaceholder() ).toBe( 'LWSW-XXXX-XXXX-XXXX-XXXX-XXXX' );
     } );
 } );

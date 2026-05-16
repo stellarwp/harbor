@@ -8,7 +8,8 @@ jest.mock( '@/hooks/useWelcomeLicenseForm', () => ( {
 } ) );
 
 jest.mock( '@/lib/harbor-data', () => ( {
-    getHarborDataValue: jest.fn().mockReturnValue( 'LWSW-' ),
+    getHarborDataValue:        jest.fn().mockReturnValue( 'LWSW-' ),
+    getLicenseKeyPlaceholder:  jest.fn().mockReturnValue( 'LWSW-XXXX-XXXX-XXXX-XXXX-XXXX' ),
 } ) );
 
 const mockedHook = useWelcomeLicenseForm as unknown as jest.Mock;

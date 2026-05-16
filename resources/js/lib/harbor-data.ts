@@ -47,3 +47,14 @@ export function getHarborDataValue<K extends keyof HarborData>(
         ?? null
     );
 }
+
+/**
+ * Returns the placeholder string for a license-key input — the configured
+ * prefix followed by five groups of four X's, matching the issued key shape
+ * (e.g. `LWSW-XXXX-XXXX-XXXX-XXXX-XXXX`).
+ *
+ * @since TBD
+ */
+export function getLicenseKeyPlaceholder(): string {
+    return `${ getHarborDataValue( 'licenseKeyPrefix' ) }XXXX-XXXX-XXXX-XXXX-XXXX`;
+}
