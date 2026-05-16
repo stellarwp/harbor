@@ -25,8 +25,8 @@ describe( 'buildUpgradeUrl', () => {
         expect( new URL( result ).searchParams.get( 'domain' ) ).toBe( 'new.example.com' );
     } );
 
-    it( 'returns the base URL unchanged when domain is undefined', () => {
-        expect( buildUpgradeUrl( BASE_URL, undefined ) ).toBe( BASE_URL );
+    it( 'returns the base URL unchanged when domain is null', () => {
+        expect( buildUpgradeUrl( BASE_URL, null ) ).toBe( BASE_URL );
     } );
 
     it( 'returns the base URL unchanged when domain is an empty string', () => {
