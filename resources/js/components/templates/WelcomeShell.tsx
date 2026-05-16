@@ -20,20 +20,22 @@ interface WelcomeShellProps {
  */
 export function WelcomeShell( { children }: WelcomeShellProps ) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[600px] bg-neutral-50 px-4">
-            <div className="w-full max-w-sm space-y-6">
-                <div className="flex flex-col items-center gap-3 text-center">
-                    <NexcessLogo className="w-16 h-16" />
-                    <div className="space-y-1">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white">
+            <div className="w-full max-w-104">
+                <div className="flex flex-col items-center gap-1.5 text-center">
+                    <NexcessLogo className="w-18 h-18" />
+                    <div className="-space-y-1 mb-4">
+                        <h1 className="text-2xl leading-8 font-semibold tracking-wide p-0 text-neutral-950">
                             { __( 'Software License Manager', '%TEXTDOMAIN%' ) }
                         </h1>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-xs leading-8 font-semibold m-0 text-neutral-950">
                             { __( 'Liquid Web by Nexcess', '%TEXTDOMAIN%' ) }
                         </p>
                     </div>
                 </div>
-                { children }
+				<div className="space-y-8">
+					{ children }
+				</div>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@
  *
  * @package LiquidWeb\Harbor
  */
-import nexcessLogoUrl from '@/assets/nexcess-logo.svg';
+import nexcessLogoUrl from '@img/logo-nexcess.svg';
 
 interface NexcessLogoProps {
     className?: string;

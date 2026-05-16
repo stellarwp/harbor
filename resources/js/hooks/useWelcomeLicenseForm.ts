@@ -77,12 +77,13 @@ export function useWelcomeLicenseForm(): UseWelcomeLicenseForm {
         []
     );
 
-    const prefix         = getHarborDataValue( 'licenseKeyPrefix' );
-    const trimmed        = key.trim();
-    const hasInput       = trimmed.length > 0;
-    const isLwswFormat   = trimmed.startsWith( prefix );
-    const showFormatHint = hasInput && ! isLwswFormat && ! serverError;
-    const canSubmit      = canModifyLicense && hasInput && isLwswFormat && ! isStoring;
+    const prefix             = getHarborDataValue( 'licenseKeyPrefix' );
+    const trimmed           = key.trim();
+    const hasInput          = trimmed.length > 0;
+	const hasInputMinLength = trimmed.length >= prefix.length;
+    const isLwswFormat      = trimmed.startsWith( prefix.substring( 0, trimmed.length ) );
+    const showFormatHint    = hasInput && ! isLwswFormat && ! serverError;
+    const canSubmit         = canModifyLicense && hasInput && hasInputMinLength && isLwswFormat && ! isStoring;
 
     const onKeyChange = useCallback( ( value: string ) => {
         setKey( value.toUpperCase() );

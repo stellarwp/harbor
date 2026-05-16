@@ -31,7 +31,7 @@ export function WelcomeLicenseForm() {
     } = useWelcomeLicenseForm();
 
     return (
-        <div className="rounded-lg border bg-white p-4 space-y-3 shadow-sm">
+        <div className="rounded-lg border border-neutral-200 bg-white p-4 space-y-3">
             <SectionHeader
                 icon={ <KeyRound className="w-4 h-4 text-muted-foreground" /> }
                 label={ __( 'Unified License', '%TEXTDOMAIN%' ) }
@@ -68,7 +68,7 @@ export function WelcomeLicenseForm() {
             { showFormatHint && (
                 <p
                     id="welcome-license-hint"
-                    className="text-sm text-muted-foreground"
+                    className="text-sm text-muted-foreground m-0"
                 >
                     { __( "This doesn't look like a unified license key. If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%' ) }
                 </p>
@@ -76,7 +76,7 @@ export function WelcomeLicenseForm() {
             { serverError && (
                 <p
                     id="welcome-license-error"
-                    className="text-sm text-destructive"
+                    className="text-sm text-destructive m-0"
                     role="alert"
                 >
                     { serverError }

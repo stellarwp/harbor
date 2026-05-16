@@ -20,9 +20,9 @@ interface WelcomeNoticeBannerProps {
  */
 export function WelcomeNoticeBanner( { children }: WelcomeNoticeBannerProps ) {
     return (
-        <div className="flex gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-            <Info className="mt-0.5 h-4 w-4 shrink-0" />
-            <p className="m-0 leading-relaxed">{ children }</p>
+        <div className="flex gap-3 rounded-lg border border-neutral-200 bg-blue-50 pl-4 pr-11 py-4 text-sm text-blue-900">
+            <Info className="color-blue-600 mt-0.5 h-4 w-4 shrink-0" />
+            <p className="text-[13px] leading-6 m-0">{ children }</p>
         </div>
     );
 }
