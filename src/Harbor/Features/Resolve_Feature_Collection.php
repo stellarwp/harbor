@@ -304,17 +304,13 @@ class Resolve_Feature_Collection {
 			&& $legacy_license->is_active
 			&& $legacy_license->key !== '';
 
-		if ( $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
-			// WordPress.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
+		if ( $has_legacy_grant || $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
+			// An active legacy grant, WordPress.org, and free-tier features are all unconditionally available.
 			$is_available    = true;
 			$in_catalog_tier = true;
-		} elseif ( $capabilities === null ) {
-			// No Unified license: paid-tier features only available when a legacy key covers them.
-			$is_available    = $has_legacy_grant;
-			$in_catalog_tier = $has_legacy_grant;
 		} else {
-			$is_available    = in_array( $catalog_feature->get_slug(), $capabilities, true ) || $has_legacy_grant;
-			$in_catalog_tier = $license_tier_rank >= $minimum_rank || $has_legacy_grant;
+			$is_available    = $capabilities !== null && in_array( $catalog_feature->get_slug(), $capabilities, true );
+			$in_catalog_tier = $capabilities !== null && $license_tier_rank >= $minimum_rank;
 		}
 
 		$data = [
