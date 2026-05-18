@@ -215,6 +215,16 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assertSame( $expected_in_tier, $feature->is_in_catalog_tier(), 'in_catalog_tier mismatch.' );
 	}
 
+	/**
+	 * Tests that an active legacy license alone (no Unified license) makes a paid feature available.
+	 *
+	 * @return void
+	 */
+	/**
+	 * Tests that an active legacy license alone (no Unified license) makes a paid feature available.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_active_legacy_with_no_unified_license_is_available(): void {
 		$this->register_legacy_license(
 			[
@@ -228,6 +238,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', true, true );
 	}
 
+	/**
+	 * Tests that an inactive legacy license does not grant availability when no Unified license covers the feature.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_inactive_legacy_with_no_unified_license_is_unavailable(): void {
 		$this->register_legacy_license(
 			[
@@ -242,6 +257,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );
 	}
 
+	/**
+	 * Tests that a legacy entry with an empty key does not grant availability.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_legacy_with_empty_key_does_not_grant_availability(): void {
 		$this->register_legacy_license(
 			[
@@ -255,6 +275,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );
 	}
 
+	/**
+	 * Tests that a legacy entry whose slug does not match the catalog feature is ignored.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_legacy_slug_mismatch_does_not_grant_availability(): void {
 		$this->register_legacy_license(
 			[
@@ -268,6 +293,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );
 	}
 
+	/**
+	 * Tests that an active legacy entry grants availability even when the Unified license's capabilities omit the feature.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_active_legacy_overrides_missing_capability(): void {
 		$this->register_legacy_license(
 			[
@@ -285,6 +315,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', true, true );
 	}
 
+	/**
+	 * Tests that an active legacy entry grants in-tier status even when the Unified license is below the feature's minimum tier rank.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_active_legacy_overrides_insufficient_tier_rank(): void {
 		$this->register_legacy_license(
 			[
@@ -302,6 +337,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', true, true );
 	}
 
+	/**
+	 * Tests that free-tier (rank 0) features are unconditionally available regardless of legacy or Unified state.
+	 *
+	 * @return void
+	 */
 	public function test_free_tier_feature_is_available_regardless_of_legacy_state(): void {
 		// No legacy license registered. The free-tier (rank 0) feature should still be available.
 		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
@@ -309,6 +349,11 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$this->assert_resolved_feature_flags( $resolver, 'kadence-blocks', true, true );
 	}
 
+	/**
+	 * Tests that a paid feature is unavailable when neither a legacy entry nor a Unified license covers it.
+	 *
+	 * @return void
+	 */
 	public function test_paid_feature_without_legacy_or_unified_license_is_unavailable(): void {
 		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
 

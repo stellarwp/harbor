@@ -134,7 +134,11 @@ final class License_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that legacy entries missing either `key` or `slug` are dropped at repository intake.
+	 *
 	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public function test_drops_entries_with_empty_key_or_slug(): void {
 		add_filter(
