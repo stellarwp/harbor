@@ -91,17 +91,10 @@ final class Herald_Url_Builder implements Download_Url_Builder {
 			return '';
 		}
 
-		$legacy = $this->legacy_repository->find( $slug );
+		$legacy_key = $this->resolve_active_legacy_key( $slug );
 
-		if ( $legacy !== null && $legacy->is_active && $legacy->key !== '' ) {
-			return add_query_arg(
-				[
-					'plugin' => rawurlencode( $slug ),
-					'key'    => rawurlencode( $legacy->key ),
-					'site'   => rawurlencode( $domain ),
-				],
-				Config::get_herald_base_url() . '/legacy/download'
-			);
+		if ( $legacy_key !== null ) {
+			return $this->build_legacy_url( $slug, $legacy_key, $domain );
 		}
 
 		$license_key = $this->license_repository->get_key();
@@ -110,18 +103,78 @@ final class Herald_Url_Builder implements Download_Url_Builder {
 			return '';
 		}
 
-		$url = Config::get_herald_base_url()
-			. '/download/'
-			. rawurlencode( $slug )
-			. '/latest/'
-			. rawurlencode( $license_key )
-			. '/zip';
+		return $this->build_unified_url( $slug, $license_key, $domain );
+	}
 
-		return add_query_arg(
+	/**
+	 * Returns the active legacy license key for a slug, or null when none applies.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $slug The catalog feature slug.
+	 *
+	 * @return string|null
+	 */
+	private function resolve_active_legacy_key( string $slug ): ?string {
+		$legacy = $this->legacy_repository->find( $slug );
+
+		if ( $legacy === null || ! $legacy->is_active || $legacy->key === '' ) {
+			return null;
+		}
+
+		return $legacy->key;
+	}
+
+	/**
+	 * Builds the legacy Herald download URL for a slug + legacy key + domain.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $slug   The catalog feature slug.
+	 * @param string $key    The legacy license key.
+	 * @param string $domain The site domain.
+	 *
+	 * @return string
+	 */
+	private function build_legacy_url( string $slug, string $key, string $domain ): string {
+		return $this->herald_url(
+			'/legacy/download',
 			[
-				'site' => rawurlencode( $domain ),
-			],
-			$url
+				'plugin' => rawurlencode( $slug ),
+				'key'    => rawurlencode( $key ),
+				'site'   => rawurlencode( $domain ),
+			]
 		);
+	}
+
+	/**
+	 * Builds the Unified Herald download URL for a slug + Unified key + domain.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $slug   The catalog feature slug.
+	 * @param string $key    The Unified license key.
+	 * @param string $domain The site domain.
+	 *
+	 * @return string
+	 */
+	private function build_unified_url( string $slug, string $key, string $domain ): string {
+		$path = '/download/' . rawurlencode( $slug ) . '/latest/' . rawurlencode( $key ) . '/zip';
+
+		return $this->herald_url( $path, [ 'site' => rawurlencode( $domain ) ] );
+	}
+
+	/**
+	 * Composes a Herald URL from the configured base URL, a path, and query args.
+	 *
+	 * @since TBD
+	 *
+	 * @param string                $path  The path appended to the Herald base URL.
+	 * @param array<string, string> $query The query string arguments (already encoded by the caller).
+	 *
+	 * @return string
+	 */
+	private function herald_url( string $path, array $query ): string {
+		return add_query_arg( $query, Config::get_herald_base_url() . $path );
 	}
 }
