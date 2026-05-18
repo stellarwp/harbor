@@ -30,13 +30,18 @@ use StellarWP\ContainerContract\ContainerInterface;
 // Satisfies both DI52 and StellarWP's ContainerInterface.
 class Harbor_E2E_Container extends DI52Container implements ContainerInterface {}
 
-// Mock a premium plugin so Config::is_there_at_least_one_premium_plugin() returns
-// true and Harbor::register_providers() actually registers providers during init.
-// Without this the deferred registration short-circuits and the UI loads with no
-// product data.
+// Mock a premium plugin so Premium_Plugin_Registry::any() returns true and
+// Harbor::init() registers its providers. Without this Harbor short-circuits
+// and the admin page is never registered.
+//
+// Visiting any URL with ?lw_harbor_no_premium_exists=1 disables the mock for that
+// request — used by the smoke test that asserts the menu is hidden when no
+// premium plugin reports itself.
 add_filter(
 	'lw_harbor/premium_plugin_exists',
-	'__return_true'
+	static function () {
+		return ! isset( $_GET['lw_harbor_no_premium_exists'] );
+	}
 );
 
 add_action(
@@ -75,15 +80,49 @@ add_action(
 // Seed the pro fixture license key so the UI renders with licensed product data.
 // The key maps to tests/_data/licensing/lwsw-unified-pro-2026.json via strtolower().
 //
-// Also grants external API consent as the default so existing E2E specs land
-// on the Feature Manager rather than the opt-in screen.
-//
-// Both values use add_option() (a no-op when the option already exists) so
-// specs that revoke consent or change the key via the REST API don't get
-// silently overwritten on the next request.
+// Two gates:
+//   - ?lw_harbor_no_license=1 on the request URL skips seeding for that
+//     request (mirrors the premium filter gate above).
+//   - lw_harbor_initial_license_seeded marks that the initial seed has run.
+//     Once set, subsequent inits don't re-seed, so callers that delete the
+//     license option (via REST or otherwise) keep it deleted instead of
+//     having it re-added on the next request.
 add_action(
 	'init',
 	static function () {
+		if ( isset( $_GET['lw_harbor_no_license'] ) ) {
+			return;
+		}
+		if ( get_option( 'lw_harbor_initial_license_seeded' ) ) {
+			return;
+		}
 		add_option( 'lw_harbor_unified_license_key', 'LWSW-UNIFIED-PRO-2026' );
+		update_option( 'lw_harbor_initial_license_seeded', '1' );
+	}
+);
+
+// Test-only reset endpoint. Wipes the unified license key AND the licensing
+// products state — the latter carries the 60s validate_and_store throttle
+// cache, so without resetting it a failed validation in one test will return
+// the cached invalid-key error for the next 60s (License_Manager.php:153).
+// Specs call this in beforeEach to start each test from a clean slate.
+add_action(
+	'rest_api_init',
+	static function () {
+		register_rest_route(
+			'lw-harbor-fixture/v1',
+			'/reset',
+			[
+				'methods'             => 'POST',
+				'permission_callback' => static function () {
+					return current_user_can( 'manage_options' );
+				},
+				'callback'            => static function () {
+					delete_option( 'lw_harbor_unified_license_key' );
+					delete_option( 'lw_harbor_licensing_products_state' );
+					return new WP_REST_Response( null, 204 );
+				},
+			]
+		);
 	}
 );
