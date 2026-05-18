@@ -87,7 +87,7 @@ final class Herald_Url_Builder implements Download_Url_Builder {
 	public function build( string $slug ): string {
 		$domain = $this->site_data->get_domain();
 
-		if ( $domain === '' ) {
+		if ( ! $domain ) {
 			return '';
 		}
 
