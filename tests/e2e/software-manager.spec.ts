@@ -6,7 +6,10 @@ test.describe( 'Software Manager page', () => {
 	test( 'renders the React app root', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
 
-		await expect( page.locator( '#lw-harbor-root' ) ).toBeVisible();
+		// #lw-harbor-root is a zero-height mount point — the React tree
+		// inside renders into an absolutely-positioned Shell — so assert
+		// attachment, not visibility.
+		await expect( page.locator( '#lw-harbor-root' ) ).toBeAttached();
 	} );
 
 	test( 'displays the "Your Features" heading after data loads', async ( { page, admin } ) => {
