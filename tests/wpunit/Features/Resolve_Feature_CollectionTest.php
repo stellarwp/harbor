@@ -314,4 +314,35 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );
 	}
+
+	/**
+	 * Tests that the resolver still picks up legacy entries from the global filter
+	 * when constructed without the optional Legacy_License_Repository argument.
+	 *
+	 * Guards the three-argument constructor compatibility shim: callers that
+	 * predate the legacy feature must keep working, and the default repository
+	 * the resolver builds for itself must read the same `lw-harbor/legacy_licenses`
+	 * filter as the container-managed singleton.
+	 *
+	 * @return void
+	 */
+	public function test_resolver_without_legacy_repo_argument_uses_filter_backed_default(): void {
+		$this->register_legacy_license(
+			[
+				'key'  => 'legacy-key-abc',
+				'slug' => 'kad-blocks-pro',
+			]
+		);
+
+		$resolver = new Resolve_Feature_Collection(
+			$this->make_catalog_repository_returning( $this->make_catalog() ),
+			$this->make_license_manager_returning( new Product_Collection() ),
+			$this->makeEmpty( Data::class, [ 'get_domain' => 'example.com' ] )
+		);
+
+		$resolver->register_type( Feature::TYPE_PLUGIN, Plugin::class );
+		$resolver->register_type( Feature::TYPE_THEME, Theme::class );
+
+		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', true, true );
+	}
 }

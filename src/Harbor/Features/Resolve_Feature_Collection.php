@@ -88,21 +88,21 @@ class Resolve_Feature_Collection {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Repository        $catalog           The catalog repository.
-	 * @param License_Manager           $licensing         The license manager.
-	 * @param Data                      $site_data         The site data provider.
-	 * @param Legacy_License_Repository $legacy_repository The legacy license repository.
+	 * @param Catalog_Repository             $catalog           The catalog repository.
+	 * @param License_Manager                $licensing         The license manager.
+	 * @param Data                           $site_data         The site data provider.
+	 * @param Legacy_License_Repository|null $legacy_repository The legacy license repository. Default null, which creates a new instance for backwards compatibility.
 	 */
 	public function __construct(
 		Catalog_Repository $catalog,
 		License_Manager $licensing,
 		Data $site_data,
-		Legacy_License_Repository $legacy_repository
+		?Legacy_License_Repository $legacy_repository = null
 	) {
 		$this->catalog           = $catalog;
 		$this->licensing         = $licensing;
 		$this->site_data         = $site_data;
-		$this->legacy_repository = $legacy_repository;
+		$this->legacy_repository = $legacy_repository ?? new Legacy_License_Repository();
 	}
 
 	/**
