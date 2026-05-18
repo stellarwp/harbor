@@ -45,7 +45,7 @@ class License_Repository {
 			// Both `key` and `slug` are documented as required; entries missing
 			// either are dropped here so they never reach UI, notices, or any
 			// downstream consumer.
-			if ( $candidate->key === '' || $candidate->slug === '' ) {
+			if ( ! ( $candidate->key && $candidate->slug ) ) {
 				continue;
 			}
 
