@@ -212,11 +212,11 @@ Download URLs for exclusive (non-WordPress.org) features are not stored in the c
 
 Harbor ships three Herald implementations of the contract, each with a single, focused responsibility:
 
-| Class | URL format | Inputs |
-| --- | --- | --- |
-| `Herald_Url_Builder` | `{base}/download/{slug}/latest/{license_key}/zip?site={domain}` | Unified key via `Licensing\Repositories\License_Repository`, domain via `Site\Data` |
-| `Herald_Legacy_Url_Builder` | `{base}/legacy/download?plugin={slug}&key={legacy_key}&site={domain}` | Active legacy entry via `Legacy\License_Repository::find()`, domain via `Site\Data` |
-| `Herald_Routing_Url_Builder` | Delegates to one of the above | The two builders above |
+| Class                        | URL format                                                            | Inputs                                                                              |
+| ---------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `Herald_Url_Builder`         | `{base}/download/{slug}/latest/{license_key}/zip?site={domain}`       | Unified key via `Licensing\Repositories\License_Repository`, domain via `Site\Data` |
+| `Herald_Legacy_Url_Builder`  | `{base}/legacy/download?plugin={slug}&key={legacy_key}&site={domain}` | Active legacy entry via `Legacy\License_Repository::find()`, domain via `Site\Data` |
+| `Herald_Routing_Url_Builder` | Delegates to one of the above                                         | The two builders above                                                              |
 
 `Herald_Routing_Url_Builder` is the implementation bound to `Download_Url_Builder` in the container. It tries the legacy builder first, then falls back to the Unified builder when legacy returns an empty string. Each underlying builder returns an empty string when it cannot satisfy the slug (no covering legacy entry, no Unified key, or no domain), so the routing class needs no licensing state of its own — the policy is "first non-empty wins."
 

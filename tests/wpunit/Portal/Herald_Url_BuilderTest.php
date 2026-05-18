@@ -1,5 +1,7 @@
 <?php declare( strict_types=1 );
 
+// cspell:ignore rawurlencoded .
+
 namespace LiquidWeb\Harbor\Tests\Portal;
 
 use LiquidWeb\Harbor\Config;
