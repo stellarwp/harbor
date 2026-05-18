@@ -19,6 +19,7 @@ import { HarborError } from '@/errors';
 import type { Feature } from '@/types/api';
 import { isInstallableFeature } from '@/types/utils';
 import type { FeatureStatus } from '@/components/atoms/StatusBadge';
+import { getHarborDataValue } from '@/lib/harbor-data';
 
 export type PendingAction = 'enabling' | 'disabling' | 'installing' | 'updating' | null;
 
@@ -61,6 +62,7 @@ export interface FeatureRowState {
 }
 
 /**
+ * @since TBD   Read pluginsUrl through the getHarborDataValue helper for the post-deactivate redirect.
  * @since 1.0.0
  */
 export function useFeatureRow( feature: Feature ): FeatureRowState {
@@ -164,7 +166,7 @@ export function useFeatureRow( feature: Feature ): FeatureRowState {
 		if ( result instanceof HarborError ) {
 			addError( result );
 		} else {
-			window.location.href = window.harborData?.pluginsUrl ?? '/wp-admin/plugins.php';
+			window.location.href = getHarborDataValue( 'pluginsUrl' );
 		}
 		setPendingAction( null );
 	};

@@ -21,6 +21,7 @@ import { store as harborStore } from '@/store';
 import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
+import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 
 interface LicenseKeyInputProps {
 	/** The currently stored key, or null when no license is active. */
@@ -35,11 +36,10 @@ interface LicenseKeyInputProps {
 	onRemove:    () => Promise<HarborError | null>;
 	/** Called on successful activation so the parent can respond (e.g. exit edit mode). */
 	onSuccess:   () => void;
-	/** When set, fills the input with this value (e.g. from a test-key cheat-sheet). */
-	prefillKey?: string;
 }
 
 /**
+ * @since TBD   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
  * @since 1.0.0
  */
 export function LicenseKeyInput( {
@@ -49,9 +49,8 @@ export function LicenseKeyInput( {
 	onCancel,
 	onRemove,
 	onSuccess,
-	prefillKey,
 }: LicenseKeyInputProps ) {
-	const [ key, setKey ]               = useState( '' );
+	const [ key, setKey ]               = useState( currentKey || '' );
 	const [ localError, setLocalError ] = useState< string | null >( null );
 
 	const { storeLicense } = useDispatch( harborStore );
@@ -72,17 +71,10 @@ export function LicenseKeyInput( {
 			setKey( currentKey );
 		}
 		if ( ! isEditing ) {
-			setKey( '' );
+			setKey( currentKey || '' );
 			setLocalError( null );
 		}
 	}, [ isEditing, currentKey ] );
-
-	useEffect( () => {
-		if ( prefillKey ) {
-			setKey( prefillKey );
-			setLocalError( null );
-		}
-	}, [ prefillKey ] );
 
 	const handleActivate = async () => {
 		const trimmedKey = key.trim();
@@ -113,7 +105,7 @@ export function LicenseKeyInput( {
 		<div className="flex gap-2">
 			<Input
 				id="license-key-input"
-				placeholder="LWSW-****-****-****-****-****"
+				placeholder={ getLicenseKeyPlaceholder() }
 				value={ key }
 				onChange={ ( e ) => {
 					setKey( e.target.value.toUpperCase() );
@@ -150,7 +142,7 @@ export function LicenseKeyInput( {
 				<Input
 					readOnly
 					value={ currentKey }
-					className="flex-1 text-xs font-mono uppercase bg-muted/40 cursor-default select-all"
+					className="flex-1 text-xs font-mono uppercase bg-neutral-100 cursor-default select-all"
 					tabIndex={ -1 }
 				/>
 				<button

@@ -29,7 +29,8 @@
     "tests/_support/_generated",
     "vendor",
     ".claude",
-    ".plans"
+    ".plans",
+    ".local"
   ],
   "words": [
     "absint",
@@ -74,6 +75,7 @@
     "muwpunit",
     "myplugin",
     "nada",
+    "nexcess",
     "nobg",
     "nonce",
     "nosniff",

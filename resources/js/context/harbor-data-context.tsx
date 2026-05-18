@@ -22,11 +22,13 @@ import { useErrorModal } from '@/context/error-modal-context';
 import type { ResolvableSelectResponse } from '@/hooks/use-resolvable-select/types';
 
 interface HarborDataContextValue {
-    isLoading: boolean;
+    isLoading:        boolean;
+    isLicenseLoading: boolean;
 }
 
 const HarborDataContext = createContext<HarborDataContextValue>( {
-    isLoading: true,
+    isLoading:        true,
+    isLicenseLoading: true,
 } );
 
 type ResolvableRecord = Record<string, ResolvableSelectResponse<unknown>>;
@@ -50,6 +52,7 @@ function findErrors( results: ResolvableRecord ): HarborError[] {
 }
 
 /**
+ * @since TBD   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
  * @since 1.0.0
  */
 export function HarborDataProvider( { children }: { children: ReactNode } ) {
@@ -79,7 +82,12 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
 		}
     }
 
-    const isLoading = RESOLVER_KEYS.some( ( key ) => result[ key ].isResolving && ! hasEverResolvedRef.current[ key ] );
+    const isLoading        = RESOLVER_KEYS.some( ( key ) => result[ key ].isResolving && ! hasEverResolvedRef.current[ key ] );
+    // True until the license resolver has settled its first cycle. Covers both
+    // the IDLE pre-fetch frame and the RESOLVING in-flight frame, so the
+    // welcome screen never flashes before the resolver has had a chance to
+    // report whether a key exists.
+    const isLicenseLoading = ! hasEverResolvedRef.current.license;
 
     useEffect( () => {
         const found = findErrors( result );
@@ -112,7 +120,7 @@ export function HarborDataProvider( { children }: { children: ReactNode } ) {
     }, [ licenseError, addError, removeError ] );
 
     return (
-        <HarborDataContext.Provider value={ { isLoading } }>
+        <HarborDataContext.Provider value={ { isLoading, isLicenseLoading } }>
             { children }
         </HarborDataContext.Provider>
     );

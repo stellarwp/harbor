@@ -1,12 +1,15 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { setLicense, clearLicense, VALID_LICENSE_KEY } from './_helpers/license';
 
 const PRODUCT_NAMES = [ 'GiveWP', 'The Events Calendar', 'LearnDash', 'Kadence' ];
 
 test.describe( 'Software Manager page', () => {
-	test( 'renders the React app root', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+	test.beforeAll( async ( { requestUtils } ) => {
+		await setLicense( requestUtils, VALID_LICENSE_KEY );
+	} );
 
-		await expect( page.locator( '#lw-harbor-root' ) ).toBeVisible();
+	test.afterAll( async ( { requestUtils } ) => {
+		await clearLicense( requestUtils );
 	} );
 
 	test( 'displays the "Your Features" heading after data loads', async ( { page, admin } ) => {
@@ -41,7 +44,7 @@ test.describe( 'Software Manager page', () => {
 
 		// The sidebar LicenseKeyInput renders the stored key in a read-only input once loaded
 		await expect(
-			page.locator( 'input[value="LWSW-UNIFIED-PRO-2026"]' )
+			page.locator( `input[value="${ VALID_LICENSE_KEY }"]` )
 		).toBeVisible( { timeout: 15_000 } );
 	} );
 } );

@@ -11,13 +11,14 @@
  *   → https://my.liquidweb.com/upgrade/kadence/pro/?domain=example.com&portal-referral=plugin
  *
  * @param baseUrl The upgrade_url string from the catalog tier.
- * @param domain  The site domain from window.harborData.domain.
+ * @param domain  The site domain from getHarborDataValue( 'domain' ).
  *
+ * @since TBD    Domain parameter is now string | null to match the getHarborDataValue helper.
  * @since 1.0.2
  */
 export function buildUpgradeUrl(
     baseUrl: string,
-    domain:  string | undefined,
+    domain:  string | null,
 ): string {
     if ( ! domain ) {
         return baseUrl;
