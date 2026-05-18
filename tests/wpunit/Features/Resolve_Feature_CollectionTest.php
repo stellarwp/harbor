@@ -38,13 +38,14 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 	 */
 	private function register_legacy_license( array $overrides = [] ): void {
 		$defaults = [
-			'key'        => 'legacy-key-1234',
-			'slug'       => 'kad-blocks-pro',
-			'name'       => 'Kadence Blocks Pro',
-			'product'    => 'kadence',
-			'is_active'  => true,
-			'page_url'   => 'https://example.com/manage',
-			'expires_at' => '',
+			'key'             => 'legacy-key-1234',
+			'slug'            => 'kad-blocks-pro',
+			'name'            => 'Kadence Blocks Pro',
+			'product'         => 'kadence',
+			'is_active'       => true,
+			'use_for_updates' => true,
+			'page_url'        => 'https://example.com/manage',
+			'expires_at'      => '',
 		];
 
 		$entry = array_merge( $defaults, $overrides );
@@ -355,6 +356,29 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_paid_feature_without_legacy_or_unified_license_is_unavailable(): void {
+		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
+
+		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );
+	}
+
+	/**
+	 * Tests that an active legacy entry without `use_for_updates` opt-in does not grant availability.
+	 *
+	 * Covers the case where a plugin reports a legacy license whose backend is not
+	 * compatible with Harbor's update pipeline (e.g. SolidWP API keys): Harbor must
+	 * not advertise updates for these slugs because the download would fail validation.
+	 *
+	 * @return void
+	 */
+	public function test_paid_feature_legacy_without_use_for_updates_opt_in_is_unavailable(): void {
+		$this->register_legacy_license(
+			[
+				'key'             => 'legacy-key-abc',
+				'slug'            => 'kad-blocks-pro',
+				'use_for_updates' => false,
+			]
+		);
+
 		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
 
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', false, false );

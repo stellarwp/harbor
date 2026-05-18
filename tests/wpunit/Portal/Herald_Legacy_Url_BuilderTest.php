@@ -42,13 +42,14 @@ final class Herald_Legacy_Url_BuilderTest extends HarborTestCase {
 	 */
 	private function register_legacy_license( array $overrides = [] ): void {
 		$defaults = [
-			'key'        => 'legacy-key-1234',
-			'slug'       => 'kad-blocks-pro',
-			'name'       => 'Kadence Blocks Pro',
-			'product'    => 'kadence',
-			'is_active'  => true,
-			'page_url'   => 'https://example.com/manage',
-			'expires_at' => '',
+			'key'             => 'legacy-key-1234',
+			'slug'            => 'kad-blocks-pro',
+			'name'            => 'Kadence Blocks Pro',
+			'product'         => 'kadence',
+			'is_active'       => true,
+			'use_for_updates' => true,
+			'page_url'        => 'https://example.com/manage',
+			'expires_at'      => '',
 		];
 
 		$entry = array_merge( $defaults, $overrides );
@@ -188,6 +189,26 @@ final class Herald_Legacy_Url_BuilderTest extends HarborTestCase {
 		$this->assertStringContainsString( 'plugin=slug%20with%20spaces', $url );
 		$this->assertStringContainsString( 'key=KEY%20WITH%20SPACES', $url );
 		$this->assertStringContainsString( 'site=my%20site.example.com', $url );
+	}
+
+	/**
+	 * Tests that an entry without `use_for_updates` opt-in produces no URL,
+	 * even when otherwise active and matching.
+	 *
+	 * @return void
+	 */
+	public function test_build_returns_empty_when_legacy_has_not_opted_into_updates(): void {
+		$this->register_legacy_license(
+			[
+				'key'             => 'legacy-key-abc',
+				'slug'            => 'kad-blocks-pro',
+				'use_for_updates' => false,
+			]
+		);
+
+		$builder = $this->make_builder( self::TEST_DOMAIN );
+
+		$this->assertSame( '', $builder->build( 'kad-blocks-pro' ) );
 	}
 
 	/**

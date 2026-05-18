@@ -51,13 +51,14 @@ final class Herald_Routing_Url_BuilderTest extends HarborTestCase {
 				'lw-harbor/legacy_licenses',
 				static function ( array $licenses ): array {
 					$licenses[] = [
-						'key'        => 'legacy-key-abc',
-						'slug'       => 'kad-blocks-pro',
-						'name'       => 'Kadence Blocks Pro',
-						'product'    => 'kadence',
-						'is_active'  => true,
-						'page_url'   => 'https://example.com/manage',
-						'expires_at' => '',
+						'key'             => 'legacy-key-abc',
+						'slug'            => 'kad-blocks-pro',
+						'name'            => 'Kadence Blocks Pro',
+						'product'         => 'kadence',
+						'is_active'       => true,
+						'use_for_updates' => true,
+						'page_url'        => 'https://example.com/manage',
+						'expires_at'      => '',
 					];
 
 					return $licenses;

@@ -122,4 +122,25 @@ class License_Repository {
 	public function has_any(): bool {
 		return count( $this->all() ) > 0;
 	}
+
+	/**
+	 * Whether any reported legacy license has opted into Harbor's update pipeline.
+	 *
+	 * Used as the cheap pre-check for update handlers: if no reported entry has
+	 * `use_for_updates = true`, there is no work to do regardless of how many
+	 * informational legacy entries exist.
+	 *
+	 * @since TBD
+	 *
+	 * @return bool
+	 */
+	public function any_used_for_updates(): bool {
+		foreach ( $this->all() as $license ) {
+			if ( $license->use_for_updates ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

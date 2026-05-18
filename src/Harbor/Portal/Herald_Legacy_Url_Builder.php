@@ -18,9 +18,10 @@ use LiquidWeb\Harbor\Site\Data;
  * URL format: `{herald_base_url}/legacy/download?plugin={slug}&key={legacy_key}&site={domain}`
  *
  * Returns an empty string when the domain is missing, when no legacy entry
- * matches the slug, when the matched entry is inactive, or when its key is
- * empty. `Herald_Routing_Url_Builder` treats an empty return as "no legacy
- * URL available for this slug" and falls back to the Unified builder.
+ * matches the slug, when the matched entry is inactive, when its key is empty,
+ * or when the entry has not opted in via `use_for_updates`.
+ * `Herald_Routing_Url_Builder` treats an empty return as "no legacy URL
+ * available for this slug" and falls back to the Unified builder.
  *
  * @since TBD
  */
@@ -75,7 +76,7 @@ final class Herald_Legacy_Url_Builder implements Download_Url_Builder {
 
 		$legacy = $this->legacy_repository->find( $slug );
 
-		if ( $legacy === null || ! $legacy->is_active || $legacy->key === '' ) {
+		if ( $legacy === null || ! $legacy->is_active || $legacy->key === '' || ! $legacy->use_for_updates ) {
 			return '';
 		}
 

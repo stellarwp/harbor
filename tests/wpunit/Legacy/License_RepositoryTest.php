@@ -379,4 +379,64 @@ final class License_RepositoryTest extends HarborTestCase {
 
 		$this->assertTrue( $this->repository->has_any() );
 	}
+
+	/**
+	 * @since TBD
+	 */
+	public function test_any_used_for_updates_returns_false_when_no_entry_opts_in(): void {
+		add_filter(
+			'lw-harbor/legacy_licenses',
+			static function ( array $licenses ) {
+				$licenses[] = [
+					'key'             => 'k1',
+					'slug'            => 's1',
+					'name'            => 'N',
+					'product'         => 'B',
+					'is_active'       => true,
+					'use_for_updates' => false,
+				];
+				$licenses[] = [
+					'key'     => 'k2',
+					'slug'    => 's2',
+					'name'    => 'N',
+					'product' => 'B',
+				];
+
+				return $licenses;
+			}
+		);
+
+		$this->assertFalse( $this->repository->any_used_for_updates() );
+	}
+
+	/**
+	 * @since TBD
+	 */
+	public function test_any_used_for_updates_returns_true_when_at_least_one_entry_opts_in(): void {
+		add_filter(
+			'lw-harbor/legacy_licenses',
+			static function ( array $licenses ) {
+				$licenses[] = [
+					'key'             => 'k1',
+					'slug'            => 's1',
+					'name'            => 'N',
+					'product'         => 'B',
+					'is_active'       => true,
+					'use_for_updates' => false,
+				];
+				$licenses[] = [
+					'key'             => 'k2',
+					'slug'            => 's2',
+					'name'            => 'N',
+					'product'         => 'B',
+					'is_active'       => true,
+					'use_for_updates' => true,
+				];
+
+				return $licenses;
+			}
+		);
+
+		$this->assertTrue( $this->repository->any_used_for_updates() );
+	}
 }

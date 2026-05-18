@@ -503,18 +503,19 @@ final class Plugin_HandlerTest extends HarborTestCase {
 	 *
 	 * @return void
 	 */
-	private function register_legacy_license( string $slug, string $key = 'legacy-key-123' ): void {
+	private function register_legacy_license( string $slug, string $key = 'legacy-key-123', bool $use_for_updates = true ): void {
 		add_filter(
 			'lw-harbor/legacy_licenses',
-			static function ( array $licenses ) use ( $slug, $key ) {
+			static function ( array $licenses ) use ( $slug, $key, $use_for_updates ) {
 				$licenses[] = [
-					'key'        => $key,
-					'slug'       => $slug,
-					'name'       => 'Legacy ' . $slug,
-					'product'    => 'legacy-product',
-					'is_active'  => true,
-					'page_url'   => 'https://example.com/manage',
-					'expires_at' => '',
+					'key'             => $key,
+					'slug'            => $slug,
+					'name'            => 'Legacy ' . $slug,
+					'product'         => 'legacy-product',
+					'is_active'       => true,
+					'use_for_updates' => $use_for_updates,
+					'page_url'        => 'https://example.com/manage',
+					'expires_at'      => '',
 				];
 
 				return $licenses;
@@ -630,5 +631,32 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		$result = $this->handler->filter_update_check( $transient );
 
 		$this->assertSame( $transient, $result );
+	}
+
+	/**
+	 * Tests filter_update_check short-circuits when no Unified key is stored and
+	 * the only legacy entries present have not opted into updates.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_returns_transient_when_legacy_has_not_opted_in(): void {
+		$this->register_legacy_license( 'my-plugin', 'legacy-key-123', false );
+
+		$update_data = [
+			'my-plugin' => [
+				'version'     => '2.0.0',
+				'package'     => 'https://example.com/my-plugin.zip',
+				'plugin_file' => 'my-plugin/my-plugin.php',
+				'has_update'  => true,
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$transient = new stdClass();
+
+		$result = $handler->filter_update_check( $transient );
+
+		$this->assertObjectNotHasProperty( 'response', $result, 'Handler should bail before populating response when only opt-out legacy entries exist.' );
 	}
 }

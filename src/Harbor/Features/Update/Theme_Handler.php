@@ -102,9 +102,9 @@ class Theme_Handler {
 			return $result;
 		}
 
-		// Cheap gate: any legacy entry (active or not) is enough to attempt resolution.
-		// The downstream resolver still checks is_active per-feature before granting availability.
-		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->has_any() ) {
+		// Cheap gate: skip when there is neither a Unified key nor any legacy entry opted into updates.
+		// The downstream resolver still confirms each legacy entry's grant before granting availability.
+		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->any_used_for_updates() ) {
 			return $result;
 		}
 
@@ -171,9 +171,9 @@ class Theme_Handler {
 			$transient = new stdClass();
 		}
 
-		// Cheap gate: any legacy entry (active or not) is enough to attempt resolution.
-		// The downstream resolver still checks is_active per-feature before granting availability.
-		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->has_any() ) {
+		// Cheap gate: skip when there is neither a Unified key nor any legacy entry opted into updates.
+		// The downstream resolver still confirms each legacy entry's grant before granting availability.
+		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->any_used_for_updates() ) {
 			return $transient;
 		}
 

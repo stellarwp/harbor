@@ -25,8 +25,10 @@ use WP_Error;
  * For each catalog feature, computes is_available and in_catalog_tier by checking
  * the product entry's capabilities array and the user's licensed tier rank.
  * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
- * An active legacy license whose slug matches the catalog feature also grants availability
- * (and counts as in-tier), regardless of Unified capabilities or tier rank.
+ * A legacy license whose slug matches the catalog feature also grants availability (and counts
+ * as in-tier) when it is active, has a non-empty key, and has opted in via `use_for_updates`.
+ * The opt-in prevents Harbor from advertising updates for legacy keys whose backend is not
+ * compatible with Herald's `/legacy/download` endpoint.
  *
  * @since 1.0.0
  */
@@ -263,9 +265,9 @@ class Resolve_Feature_Collection {
 	 * and computes is_available and in_catalog_tier.
 	 *
 	 * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
-	 * An active legacy license whose slug matches the catalog feature also grants availability and
-	 * counts as in-tier, regardless of Unified capabilities or tier rank. The legacy key must be
-	 * non-empty for the grant to apply.
+	 * A legacy license whose slug matches the catalog feature also grants availability and counts as
+	 * in-tier, regardless of Unified capabilities or tier rank, when the entry is active, has a
+	 * non-empty key, and has opted in via `use_for_updates`.
 	 *
 	 * @since 1.0.0
 	 *
@@ -302,7 +304,8 @@ class Resolve_Feature_Collection {
 		$legacy_license   = $this->legacy_repository->find( $catalog_feature->get_slug() );
 		$has_legacy_grant = $legacy_license !== null
 			&& $legacy_license->is_active
-			&& $legacy_license->key !== '';
+			&& $legacy_license->key !== ''
+			&& $legacy_license->use_for_updates;
 
 		if ( $has_legacy_grant || $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
 			// An active legacy grant, WordPress.org, and free-tier features are all unconditionally available.
