@@ -29,7 +29,8 @@
     "tests/_support/_generated",
     "vendor",
     ".claude",
-    ".plans"
+    ".plans",
+    ".local"
   ],
   "words": [
     "absint",
