@@ -7,6 +7,7 @@ use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -152,6 +153,7 @@ class Feature_Manager_Page {
 	 *   dirname(dirname(__DIR__))             → src
 	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
 	 *
+	 * @since TBD   Expose License_Key::PREFIX to the React app via the localized payload.
 	 * @since 1.0.0
 	 *
 	 * @return void
@@ -201,6 +203,7 @@ class Feature_Manager_Page {
 				'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/',
 				'domain'           => $this->site_data->get_domain(),
 				'version'          => Harbor::VERSION,
+				'licenseKeyPrefix' => License_Key::PREFIX,
 			]
 		);
 

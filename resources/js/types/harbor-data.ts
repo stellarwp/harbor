@@ -6,4 +6,5 @@ export interface HarborData {
     subscriptionsUrl:  string;
     domain:            string;
     version:           string;
+    licenseKeyPrefix:  string;
 }
