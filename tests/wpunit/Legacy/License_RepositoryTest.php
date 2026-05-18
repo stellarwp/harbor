@@ -381,7 +381,9 @@ final class License_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since TBD
+	 * Tests that any_used_for_updates() returns false when every registered legacy entry omits or opts out of use_for_updates.
+	 *
+	 * @return void
 	 */
 	public function test_any_used_for_updates_returns_false_when_no_entry_opts_in(): void {
 		add_filter(
@@ -410,7 +412,9 @@ final class License_RepositoryTest extends HarborTestCase {
 	}
 
 	/**
-	 * @since TBD
+	 * Tests that any_used_for_updates() returns true when at least one registered legacy entry has use_for_updates set to true.
+	 *
+	 * @return void
 	 */
 	public function test_any_used_for_updates_returns_true_when_at_least_one_entry_opts_in(): void {
 		add_filter(
