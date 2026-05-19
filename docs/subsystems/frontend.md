@@ -129,7 +129,7 @@ Thunk action creators handle mutations:
 | `disableFeature`  | `POST /features/{slug}/disable`        | Toggles a feature off                     |
 | `updateFeature`   | `POST /features/{slug}/update`         | Updates to latest version                 |
 | `storeLicense`    | `POST /license`                        | Activates a key, invalidates features     |
-| `refreshLicense`  | `POST /license/refresh`                | Refreshes the license, invalidates features |
+| `refreshLicense`  | `POST /license/refresh`                | Refreshes license, invalidates features   |
 | `deleteLicense`   | `DELETE /license`                      | Removes the key, invalidates features     |
 | `refreshCatalog`  | `POST /catalog/refresh`                | Re-fetches the catalog into the store     |
 
@@ -161,7 +161,7 @@ const { data, status, isResolving, hasResolved, error } = resolve(store).getFeat
 
 First-party hooks under `resources/js/hooks/` encapsulate non-trivial UI and store wiring:
 
-- `useFeatureRow` — orchestrates `FeatureRow` behaviour (toggle state, store dispatch, reload-banner integration after successful enable/disable).
+- `useFeatureRow` — orchestrates `FeatureRow` behavior (toggle state, store dispatch, reload-banner integration after successful enable/disable).
 - `useFilteredFeatures` — returns the features for a given product filtered by `FilterContext` search.
 - `useProductFeatureGroups` — partitions a product's features into available + tier-grouped locked sets and computes upgrade vs activation tier lists.
 - `useWelcomeLicenseForm` — owns input state, derived `LWSW-` prefix validation, `storeLicense` dispatch, and the `pickWelcomeErrorMessage` helper for `WelcomeLicenseForm`. Mirrors the `useFeatureRow` pattern.
