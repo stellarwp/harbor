@@ -457,11 +457,11 @@ final class License_RepositoryTest extends HarborTestCase {
 	 *
 	 * The callback caps its own re-entry depth at 3 so that a missing guard fails
 	 * the assertion cleanly with a small count rather than blowing the PHP call
-	 * stack and segfaulting the test runner.
+	 * stack and causing a segmentation fault and crashing the test runner.
 	 *
 	 * @return void
 	 */
-	public function test_filter_callback_that_calls_all_does_not_redispatch_filter(): void {
+	public function test_filter_callback_that_calls_all_does_not_dispatch_filter_again(): void {
 		$repository       = $this->repository;
 		$reentrant_result = null;
 		$dispatch_count   = 0;
