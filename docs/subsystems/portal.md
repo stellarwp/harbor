@@ -210,15 +210,28 @@ The catalog is the menu. Licensing is the receipt. Feature resolution is the wai
 
 Download URLs for exclusive (non-WordPress.org) features are not stored in the catalog response. They are built at runtime by an implementation of the `Download_Url_Builder` contract (`Portal\Contracts\Download_Url_Builder`). The contract is intentionally minimal — a single `build( string $slug ): string` method — so the download backend can be swapped without touching consumers.
 
-The default implementation is `Herald_Url_Builder`, which constructs Herald download URLs using local data:
+Harbor ships three Herald implementations of the contract, each with a single, focused responsibility:
 
-```
-{herald_base_url}/download/{slug}/latest/{license_key}/zip?site={domain}
-```
+| Class                        | URL format                                                            | Inputs                                                                              |
+| ---------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `Herald_Url_Builder`         | `{base}/download/{slug}/latest/{license_key}/zip?site={domain}`       | Unified key via `Licensing\Repositories\License_Repository`, domain via `Site\Data` |
+| `Herald_Legacy_Url_Builder`  | `{base}/legacy/download?plugin={slug}&key={legacy_key}&site={domain}` | Active legacy entry via `Legacy\License_Repository::find()`, domain via `Site\Data` |
+| `Herald_Routing_Url_Builder` | Delegates to one of the above                                         | The two builders above                                                              |
 
-It reads the license key via the `License_Key_Provider` contract (satisfied by `License_Repository`) and the site domain from `Site\Data`. If either is unavailable (no key stored, or empty domain), it returns an empty string. The Herald base URL defaults to `https://herald.stellarwp.com` and is configurable via `Config::set_herald_base_url()`.
+`Herald_Routing_Url_Builder` is the implementation bound to `Download_Url_Builder` in the container. It tries the legacy builder first, then falls back to the Unified builder when legacy returns an empty string. Each underlying builder returns an empty string when it cannot satisfy the slug (no covering legacy entry, no Unified key, or no domain), so the routing class needs no licensing state of its own; the policy is simply "first non-empty wins."
 
-The Portal `Provider` binds `Download_Url_Builder` to `Herald_Url_Builder` in the container. To swap implementations (for example, to point at a different download service or to inject a test double), register a different binding for `Download_Url_Builder::class`.
+**Precedence.** An active legacy license whose `slug` matches the requested feature wins over a stored Unified key. This is intentional and deliberately inverts the order used during feature resolution (see [Features: Resolution](features.md#resolution), where Unified is the primary and Legacy is the fallback grant).
+
+The two orders answer different questions:
+
+- *Resolution* asks "should this feature be shown as available at all?" Either source of entitlement is sufficient, and Unified is checked first because it is the canonical, modern source.
+- *URL building* asks "which key should authenticate the actual ZIP fetch?" Legacy keys are scoped to a specific slug via their `slug` field, so when a matching legacy entry exists, Harbor knows Herald will accept that key for that slug. The Unified key only authenticates features inside its `capabilities` array, and the URL builder does not consult licensing state to find out which features that includes. Preferring legacy when present therefore avoids generating Unified URLs that Herald would reject in mixed-entitlement scenarios (for example, a customer on a Unified tier that does not include a legacy add-on they still hold).
+
+A legacy entry only contributes a URL when its `is_active` flag is `true`, its `key` is non-empty, and the reporting plugin has opted in with `use_for_updates = true`. The opt-in keeps Harbor from routing downloads for legacy keys whose backend is not Stellar Licensing v3 compatible. Otherwise `Herald_Legacy_Url_Builder` returns an empty string and the router falls through to `Herald_Url_Builder`.
+
+The router returns an empty string when neither builder can produce a URL. That typically means the domain is empty, or that there is no matching active legacy key and no Unified key. The Herald base URL defaults to `https://herald.stellarwp.com` and is configurable via `Config::set_herald_base_url()`.
+
+To swap the download backend entirely (point at a different service, inject a test double), register a different binding for `Download_Url_Builder::class`.
 
 `Resolve_Update_Data` depends on the contract and passes the resolved instance into `Plugin::get_update_data()` and `Theme::get_update_data()`, which call `build()` internally to populate the `package` field.
 

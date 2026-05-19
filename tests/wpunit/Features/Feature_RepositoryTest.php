@@ -14,6 +14,7 @@ use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Resolve_Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Plugin;
+use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client as Licensing_Fixture;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
@@ -60,7 +61,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		License_Manager $licensing
 	): Resolve_Feature_Collection {
 		$site_data = $this->makeEmpty( \LiquidWeb\Harbor\Site\Data::class, [ 'get_domain' => 'example.com' ] );
-		$resolver  = new Resolve_Feature_Collection( $catalog, $licensing, $site_data );
+		$resolver  = new Resolve_Feature_Collection( $catalog, $licensing, $site_data, new Legacy_License_Repository() );
 
 		$resolver->register_type( 'plugin', Plugin::class );
 		$resolver->register_type( 'theme', Plugin::class );
@@ -341,7 +342,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
 
-		$result = $method->invoke( $resolver, $catalog_feature, $product, null, -1 );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, null, -1, null );
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( Error_Code::UNKNOWN_FEATURE_TYPE, $result->get_error_code() );
@@ -387,7 +388,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 		$method = new ReflectionMethod( Resolve_Feature_Collection::class, 'hydrate_feature' );
 		$method->setAccessible( true ); // Required for PHP < 8.1.
 
-		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-plugin' ], 1 );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'test-plugin' ], 1, null );
 
 		$this->assertInstanceOf( Plugin::class, $result );
 		$this->assertSame( 'test-plugin', $result->get_slug() );
@@ -444,7 +445,7 @@ final class Feature_RepositoryTest extends HarborTestCase {
 
 		// Omit the free feature from capabilities, simulating a Commerce Portal that only
 		// lists paid features. The resolver must still mark it available and in tier.
-		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'some-paid-feature' ], 1 );
+		$result = $method->invoke( $resolver, $catalog_feature, $product, [ 'some-paid-feature' ], 1, null );
 
 		$this->assertInstanceOf( Plugin::class, $result );
 		$this->assertTrue( $result->is_available(), 'Free-tier feature must be available regardless of capabilities.' );

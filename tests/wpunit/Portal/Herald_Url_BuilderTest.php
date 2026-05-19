@@ -1,5 +1,7 @@
 <?php declare( strict_types=1 );
 
+// cspell:ignore rawurlencoded .
+
 namespace LiquidWeb\Harbor\Tests\Portal;
 
 use LiquidWeb\Harbor\Config;
@@ -40,6 +42,11 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		return new Herald_Url_Builder( new License_Repository(), $site_data );
 	}
 
+	/**
+	 * Tests that the builder composes the expected Unified Herald download URL.
+	 *
+	 * @return void
+	 */
 	public function test_build_returns_correct_url(): void {
 		$builder = $this->make_builder( self::TEST_LICENSE_KEY, self::TEST_DOMAIN );
 		$url     = $builder->build( 'kad-blocks-pro' );
@@ -50,6 +57,11 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		);
 	}
 
+	/**
+	 * Tests that the slug path segment is rawurlencoded.
+	 *
+	 * @return void
+	 */
 	public function test_build_url_encodes_slug(): void {
 		$builder = $this->make_builder( self::TEST_LICENSE_KEY, self::TEST_DOMAIN );
 		$url     = $builder->build( 'slug with spaces' );
@@ -57,6 +69,11 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		$this->assertStringContainsString( '/download/slug%20with%20spaces/', $url );
 	}
 
+	/**
+	 * Tests that the license key path segment is rawurlencoded.
+	 *
+	 * @return void
+	 */
 	public function test_build_url_encodes_license_key(): void {
 		$builder = $this->make_builder( 'KEY WITH SPACES', self::TEST_DOMAIN );
 		$url     = $builder->build( 'some-plugin' );
@@ -64,6 +81,11 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		$this->assertStringContainsString( '/latest/KEY%20WITH%20SPACES/', $url );
 	}
 
+	/**
+	 * Tests that the domain query parameter is rawurlencoded.
+	 *
+	 * @return void
+	 */
 	public function test_build_url_encodes_domain(): void {
 		$builder = $this->make_builder( self::TEST_LICENSE_KEY, 'my site.example.com' );
 		$url     = $builder->build( 'some-plugin' );
@@ -71,18 +93,33 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		$this->assertStringContainsString( '?site=my%20site.example.com', $url );
 	}
 
+	/**
+	 * Tests that the builder returns an empty string when no Unified license key is stored.
+	 *
+	 * @return void
+	 */
 	public function test_build_returns_empty_when_no_license_key(): void {
 		$builder = $this->make_builder( null, self::TEST_DOMAIN );
 
 		$this->assertSame( '', $builder->build( 'kad-blocks-pro' ) );
 	}
 
+	/**
+	 * Tests that the builder returns an empty string when the domain is empty.
+	 *
+	 * @return void
+	 */
 	public function test_build_returns_empty_when_domain_is_empty(): void {
 		$builder = $this->make_builder( self::TEST_LICENSE_KEY, '' );
 
 		$this->assertSame( '', $builder->build( 'kad-blocks-pro' ) );
 	}
 
+	/**
+	 * Tests that the builder uses the Herald base URL configured on Config.
+	 *
+	 * @return void
+	 */
 	public function test_build_uses_configured_herald_base_url(): void {
 		Config::set_herald_base_url( 'https://custom-herald.example.com' );
 
@@ -92,6 +129,11 @@ final class Herald_Url_BuilderTest extends HarborTestCase {
 		$this->assertStringStartsWith( 'https://custom-herald.example.com/', $url );
 	}
 
+	/**
+	 * Tests that a trailing slash on the configured base URL is normalized away.
+	 *
+	 * @return void
+	 */
 	public function test_build_strips_trailing_slash_from_base_url(): void {
 		Config::set_herald_base_url( 'https://herald.example.com/' );
 

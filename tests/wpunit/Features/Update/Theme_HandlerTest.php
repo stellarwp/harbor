@@ -7,6 +7,7 @@ use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Features\Update\Theme_Handler;
+use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use stdClass;
@@ -42,7 +43,8 @@ final class Theme_HandlerTest extends HarborTestCase {
 		$this->handler = new Theme_Handler(
 			$resolver,
 			$feature_repository,
-			$this->container->get( License_Manager::class )
+			$this->container->get( License_Manager::class ),
+			new Legacy_License_Repository()
 		);
 
 		$this->create_test_theme();
@@ -55,6 +57,7 @@ final class Theme_HandlerTest extends HarborTestCase {
 	 */
 	protected function tearDown(): void {
 		$this->remove_test_theme();
+		remove_all_filters( 'lw-harbor/legacy_licenses' );
 		parent::tearDown();
 	}
 
@@ -146,7 +149,8 @@ final class Theme_HandlerTest extends HarborTestCase {
 		return new Theme_Handler(
 			$resolver,
 			$feature_repository,
-			$license_manager
+			$license_manager,
+			new Legacy_License_Repository()
 		);
 	}
 
@@ -432,5 +436,166 @@ final class Theme_HandlerTest extends HarborTestCase {
 
 		$this->assertArrayNotHasKey( 'my-theme', $result->response, 'Uninstalled theme must not appear in response.' );
 		$this->assertArrayNotHasKey( 'my-theme', $result->no_update, 'Uninstalled theme must not appear in no_update.' );
+	}
+
+	/**
+	 * Registers a single active legacy license entry for a given slug.
+	 *
+	 * @param string $slug The slug to report.
+	 * @param string $key  The license key value.
+	 *
+	 * @return void
+	 */
+	private function register_legacy_license( string $slug, string $key = 'legacy-key-123', bool $use_for_updates = true ): void {
+		add_filter(
+			'lw-harbor/legacy_licenses',
+			static function ( array $licenses ) use ( $slug, $key, $use_for_updates ) {
+				$licenses[] = [
+					'key'             => $key,
+					'slug'            => $slug,
+					'name'            => 'Legacy ' . $slug,
+					'product'         => 'legacy-product',
+					'is_active'       => true,
+					'use_for_updates' => $use_for_updates,
+					'page_url'        => 'https://example.com/manage',
+					'expires_at'      => '',
+				];
+
+				return $licenses;
+			}
+		);
+	}
+
+	/**
+	 * Builds a Theme_Handler that has NO Unified key but DOES expose the
+	 * given feature through the Feature_Repository.
+	 *
+	 * @param array<string, mixed>|WP_Error $check_updates_return The Resolve_Update_Data return value.
+	 *
+	 * @return Theme_Handler
+	 */
+	private function handler_with_feature_and_no_unified_key( $check_updates_return ): Theme_Handler {
+		$feature = new Theme(
+			[
+				'slug'         => 'my-theme',
+				'product'      => 'test',
+				'tier'         => 'basic',
+				'name'         => 'My Theme',
+				'description'  => 'A test theme.',
+				'is_available' => true,
+			]
+		);
+
+		$features = new Feature_Collection();
+		$features->add( $feature );
+
+		$resolver           = $this->makeEmpty( Resolve_Update_Data::class, [ '__invoke' => $check_updates_return ] );
+		$feature_repository = $this->makeEmpty( Feature_Repository::class, [ 'get' => $features ] );
+
+		$license_manager = $this->container->get( License_Manager::class );
+		$license_manager->delete_key();
+
+		return new Theme_Handler(
+			$resolver,
+			$feature_repository,
+			$license_manager,
+			new Legacy_License_Repository()
+		);
+	}
+
+	/**
+	 * Tests filter_themes_api proceeds past the early-return guard when no
+	 * Unified key is stored but at least one legacy license entry exists.
+	 *
+	 * @return void
+	 */
+	public function test_filter_themes_api_proceeds_when_only_legacy_license_present(): void {
+		$this->register_legacy_license( 'my-theme' );
+
+		$update_data = [
+			'my-theme' => [
+				'version' => '2.0.0',
+				'package' => 'https://example.com/my-theme.zip',
+				'name'    => 'My Theme',
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$args       = new stdClass();
+		$args->slug = 'my-theme';
+
+		$result = $handler->filter_themes_api( false, 'theme_information', $args );
+
+		$this->assertInstanceOf( stdClass::class, $result, 'Legacy-only state should let themes_api populate a response.' );
+		$this->assertSame( 'my-theme', $result->slug );
+		$this->assertSame( '2.0.0', $result->version );
+	}
+
+	/**
+	 * Tests filter_update_check proceeds past the early-return guard when no
+	 * Unified key is stored but at least one legacy license entry exists.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_proceeds_when_only_legacy_license_present(): void {
+		$this->register_legacy_license( 'my-theme' );
+
+		$update_data = [
+			'my-theme' => [
+				'version'    => '2.0.0',
+				'package'    => 'https://example.com/my-theme.zip',
+				'has_update' => true,
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$result = $handler->filter_update_check( new stdClass() );
+
+		$this->assertObjectHasProperty( 'response', $result );
+		$this->assertArrayHasKey( 'my-theme', $result->response );
+		$this->assertSame( '2.0.0', $result->response['my-theme']['new_version'] );
+	}
+
+	/**
+	 * Tests filter_update_check short-circuits when neither a Unified key nor
+	 * any legacy entries exist, leaving the transient untouched.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_returns_transient_when_no_unified_key_and_no_legacy(): void {
+		$transient           = new stdClass();
+		$transient->response = [];
+
+		$result = $this->handler->filter_update_check( $transient );
+
+		$this->assertSame( $transient, $result );
+	}
+
+	/**
+	 * Tests filter_update_check short-circuits when no Unified key is stored and
+	 * the only legacy entries present have not opted into updates.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_returns_transient_when_legacy_has_not_opted_in(): void {
+		$this->register_legacy_license( 'my-theme', 'legacy-key-123', false );
+
+		$update_data = [
+			'my-theme' => [
+				'version'    => '2.0.0',
+				'package'    => 'https://example.com/my-theme.zip',
+				'has_update' => true,
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$transient = new stdClass();
+
+		$result = $handler->filter_update_check( $transient );
+
+		$this->assertObjectNotHasProperty( 'response', $result, 'Handler should bail before populating response when only opt-out legacy entries exist.' );
 	}
 }

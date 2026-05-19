@@ -66,15 +66,18 @@ flowchart TD
     HasLicense -->|No| FreeTier{"min_tier at\nrank 0 (free)?"}
 
     InCaps -->|Yes| Available["Available"]
-    InCaps -->|No| Unavailable["Unavailable"]
+    InCaps -->|No| LegacyCheck{"Active legacy license\nfor this slug?"}
 
     FreeTier -->|Yes| AvailableFallback["Available\n(fallback)"]
-    FreeTier -->|No| UnavailableFallback["Unavailable"]
+    FreeTier -->|No| LegacyCheck
+
+    LegacyCheck -->|Yes| AvailableLegacy["Available\n(legacy grant)"]
+    LegacyCheck -->|No| Unavailable["Unavailable"]
 
     Available --> EnabledCheck
     Unavailable --> EnabledCheck
     AvailableFallback --> EnabledCheck
-    UnavailableFallback --> EnabledCheck
+    AvailableLegacy --> EnabledCheck
 
     EnabledCheck{"Check local enabled state\n(per strategy)"}
 
@@ -99,6 +102,7 @@ Edge cases:
 - No licensing entry for a product (unlicensed): the resolver falls back to tier rank comparison using rank 0, making only free-tier features (`minimum_tier` at rank 0) available. Paid-tier features are unavailable.
 - A feature capable but outside the catalog tier: it is available — capabilities override the catalog tier.
 - A feature in the customer's catalog tier but absent from capabilities: it is unavailable — capabilities are the authority.
+- A legacy license whose `slug` matches a catalog feature can grant availability (and in-tier status) even with no Unified license, or with a Unified tier that doesn't include the feature. All four conditions must hold for the grant to apply: the entry's `key` is non-empty, `is_active` is `true`, and the reporting plugin has opted in with `use_for_updates = true`. The opt-in protects Harbor from advertising updates for legacy keys whose backend is not Stellar Licensing v3 compatible (e.g. SolidWP API keys), which would otherwise fail validation at Herald during download. Resolution checks Unified entitlement first and treats legacy as a fallback grant; download URL construction uses the inverse order so the legacy key authenticates downloads for its specific slug. See [Portal: Download URL Builder](portal.md#download-url-builder) for the rationale and the resulting URL format.
 
 ## The Manager
 

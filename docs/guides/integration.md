@@ -102,13 +102,14 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 
     foreach ($storedLicenses as $license) {
         $licenses[] = [
-            'key'        => $license['key'],         // The license key string
-            'slug'       => $license['slug'],        // The product/add-on slug this key covers
-            'name'       => $license['name'],        // Human-readable product name
-            'product'    => 'your-product',          // Product brand slug
-            'is_active'  => $license['is_active'],   // bool
-            'page_url'   => admin_url('...'),        // Where the user can manage this license
-            'expires_at' => $license['expires'],     // Optional: ISO date string e.g. "2026-01-01"
+            'key'             => $license['key'],         // The license key string
+            'slug'            => $license['slug'],        // The product/add-on slug this key covers
+            'name'            => $license['name'],        // Human-readable product name
+            'product'         => 'your-product',          // Product brand slug
+            'is_active'       => $license['is_active'],   // bool
+            'use_for_updates' => true,                    // Opt-in: route updates and downloads via Herald. See below.
+            'page_url'        => admin_url('...'),        // Where the user can manage this license
+            'expires_at'      => $license['expires'],     // Optional: ISO date string e.g. "2026-01-01"
         ];
     }
 
@@ -118,17 +119,32 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 
 **Legacy license array fields:**
 
-| Field        | Required | Description                                       |
-| ------------ | -------- | ------------------------------------------------- |
-| `key`        | Yes      | The license key string.                           |
-| `slug`       | Yes      | The product/add-on slug this key applies to.      |
-| `name`       | Yes      | Human-readable product name.                      |
-| `product`    | Yes      | Product brand slug (e.g. `givewp`, `kadence`).    |
-| `is_active`  | Yes      | Whether the license is currently active (`bool`). |
-| `page_url`   | Yes      | Admin URL where the user can manage this license. |
-| `expires_at` | No       | Expiry date string (e.g. `"2026-01-01"`).         |
+| Field             | Required | Description                                                                                                            |
+| ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `key`             | Yes      | The license key string.                                                                                                |
+| `slug`            | Yes      | The product/add-on slug this key applies to.                                                                           |
+| `name`            | Yes      | Human-readable product name.                                                                                           |
+| `product`         | Yes      | Product brand slug (e.g. `givewp`, `kadence`).                                                                         |
+| `is_active`       | Yes      | Whether the license is currently active (`bool`).                                                                      |
+| `use_for_updates` | No       | Opt-in (`bool`, default `false`). Set to `true` only when the key is compatible with Stellar Licensing v3 / Herald.    |
+| `page_url`        | Yes      | Admin URL where the user can manage this license.                                                                      |
+| `expires_at`      | No       | Expiry date string (e.g. `"2026-01-01"`).                                                                              |
 
 > **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge on the Feature Manager page.
+
+### How Harbor uses reported legacy keys
+
+Reported entries always appear in the unified license UI and feed admin notices. Whether they also feed Harbor's update pipeline (feature availability and download URLs) depends on the `use_for_updates` opt-in:
+
+1. **Opt-in entries (`use_for_updates = true`).** When such an entry is `is_active = true` with a non-empty `key`, it marks the catalog feature matching its `slug` as available and in-tier (even with no unified license installed, or when the installed unified tier does not include that feature). Update checks proceed for that slug, and the package URL routes through Herald's `/legacy/download` endpoint using the reported key.
+2. **Opt-out or omitted (`use_for_updates = false`, the default).** The entry is informational only. It appears in the licensing UI and admin notices, but does not grant availability, does not show "update available" badges, and is never sent to Herald.
+3. **Inactive entries (`is_active = false`).** Same informational-only treatment, plus the entry surfaces in admin notices urging the user to renew or reactivate.
+
+**When to set `use_for_updates = true`.** Only when the legacy key is compatible with Stellar Licensing v3 (the system Herald authenticates against on `/legacy/download`). Plugins whose legacy keys are issued by a separate licensing backend (for example, SolidWP API keys, or some Give legacy keys) should leave it `false`: surfacing an "update available" badge for a key Herald cannot validate would lead to download failures during install. When in doubt, leave it off and the entry continues to display in the UI/notices without breaking anything.
+
+**What `is_active` means.** Harbor takes this flag at face value from your plugin. It should reflect whatever your existing licensing system already considers a valid, in-good-standing license: for example, the result of a recent successful validation against your licensing server. Harbor does not (and cannot) independently verify the key; it trusts the reporting plugin to decide whether the customer is currently entitled to use the product. Regardless of the `is_active` value reported here, Herald validates the key server-side when serving the actual ZIP download, so a falsely-reported `is_active = true` cannot be used to obtain a package the customer is not entitled to.
+
+**Malformed entries.** `key` and `slug` are both required (see the table above). Entries missing either field are not considered legacy licenses at all. They are dropped at repository intake and never appear in the UI, notices, availability checks, or download URLs. Only emit entries you have a real key for.
 
 ### Admin notices for inactive legacy licenses
 

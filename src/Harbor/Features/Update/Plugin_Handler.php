@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\Features\Update;
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use stdClass;
@@ -50,24 +51,36 @@ class Plugin_Handler {
 	private License_Manager $license_manager;
 
 	/**
+	 * The legacy license repository.
+	 *
+	 * @since TBD
+	 *
+	 * @var Legacy_License_Repository
+	 */
+	private Legacy_License_Repository $legacy_repository;
+
+	/**
 	 * Constructor for the consolidated update handler.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Resolve_Update_Data $resolver           The update data resolver.
-	 * @param Feature_Repository  $feature_repository The feature repository.
-	 * @param License_Manager     $license_manager    The license manager.
+	 * @param Resolve_Update_Data       $resolver           The update data resolver.
+	 * @param Feature_Repository        $feature_repository The feature repository.
+	 * @param License_Manager           $license_manager    The license manager.
+	 * @param Legacy_License_Repository $legacy_repository  The legacy license repository.
 	 *
 	 * @return void
 	 */
 	public function __construct(
 		Resolve_Update_Data $resolver,
 		Feature_Repository $feature_repository,
-		License_Manager $license_manager
+		License_Manager $license_manager,
+		Legacy_License_Repository $legacy_repository
 	) {
 		$this->resolver           = $resolver;
 		$this->feature_repository = $feature_repository;
 		$this->license_manager    = $license_manager;
+		$this->legacy_repository  = $legacy_repository;
 	}
 
 	/**
@@ -88,7 +101,9 @@ class Plugin_Handler {
 			return $result;
 		}
 
-		if ( empty( $this->license_manager->get_key() ) ) {
+		// Cheap gate: skip when there is neither a Unified key nor any legacy entry opted into updates.
+		// The downstream resolver still confirms each legacy entry's grant before granting availability.
+		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->any_used_for_updates() ) {
 			return $result;
 		}
 
@@ -167,7 +182,9 @@ class Plugin_Handler {
 			$transient = new stdClass();
 		}
 
-		if ( empty( $this->license_manager->get_key() ) ) {
+		// Cheap gate: skip when there is neither a Unified key nor any legacy entry opted into updates.
+		// The downstream resolver still confirms each legacy entry's grant before granting availability.
+		if ( empty( $this->license_manager->get_key() ) && ! $this->legacy_repository->any_used_for_updates() ) {
 			return $transient;
 		}
 
