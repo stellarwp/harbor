@@ -52,7 +52,7 @@ function findErrors( results: ResolvableRecord ): HarborError[] {
 }
 
 /**
- * @since TBD   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
+ * @since 1.3.0   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
  * @since 1.0.0
  */
 export function HarborDataProvider( { children }: { children: ReactNode } ) {

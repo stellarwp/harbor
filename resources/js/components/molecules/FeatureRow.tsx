@@ -88,7 +88,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 									pendingAction={ pendingAction }
 									installableBusy={ installableBusy }
 									upgradeLabel={ licenseBadgeType === 'legacy'
-										? __( 'Upgrade your license to receive updates and support.', '%TEXTDOMAIN%' )
+										? __( 'Upgrade your license to manage updates from the Software License Manager.', '%TEXTDOMAIN%' )
 										: undefined
 									}
 									onUpdate={ licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate }

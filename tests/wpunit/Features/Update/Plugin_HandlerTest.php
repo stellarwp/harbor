@@ -7,6 +7,7 @@ use LiquidWeb\Harbor\Features\Feature_Repository;
 use LiquidWeb\Harbor\Features\Feature_Collection;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Update\Plugin_Handler;
+use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use stdClass;
@@ -35,7 +36,8 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		$this->handler = new Plugin_Handler(
 			$resolver,
 			$feature_repository,
-			$this->container->get( License_Manager::class )
+			$this->container->get( License_Manager::class ),
+			new Legacy_License_Repository()
 		);
 
 		$this->create_test_plugin();
@@ -48,6 +50,7 @@ final class Plugin_HandlerTest extends HarborTestCase {
 	 */
 	protected function tearDown(): void {
 		$this->remove_test_plugin();
+		remove_all_filters( 'lw-harbor/legacy_licenses' );
 		parent::tearDown();
 	}
 
@@ -119,7 +122,8 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		return new Plugin_Handler(
 			$resolver,
 			$feature_repository,
-			$license_manager
+			$license_manager,
+			new Legacy_License_Repository()
 		);
 	}
 
@@ -159,7 +163,8 @@ final class Plugin_HandlerTest extends HarborTestCase {
 		return new Plugin_Handler(
 			$resolver,
 			$feature_repository,
-			$license_manager
+			$license_manager,
+			new Legacy_License_Repository()
 		);
 	}
 
@@ -488,5 +493,170 @@ final class Plugin_HandlerTest extends HarborTestCase {
 
 		$this->assertArrayNotHasKey( 'my-plugin/my-plugin.php', $result->response, 'Uninstalled plugin must not appear in response.' );
 		$this->assertArrayNotHasKey( 'my-plugin/my-plugin.php', $result->no_update, 'Uninstalled plugin must not appear in no_update.' );
+	}
+
+	/**
+	 * Registers a single active legacy license entry for a given slug.
+	 *
+	 * @param string $slug The slug to report.
+	 * @param string $key  The license key value.
+	 *
+	 * @return void
+	 */
+	private function register_legacy_license( string $slug, string $key = 'legacy-key-123', bool $use_for_updates = true ): void {
+		add_filter(
+			'lw-harbor/legacy_licenses',
+			static function ( array $licenses ) use ( $slug, $key, $use_for_updates ) {
+				$licenses[] = [
+					'key'             => $key,
+					'slug'            => $slug,
+					'name'            => 'Legacy ' . $slug,
+					'product'         => 'legacy-product',
+					'is_active'       => true,
+					'use_for_updates' => $use_for_updates,
+					'page_url'        => 'https://example.com/manage',
+					'expires_at'      => '',
+				];
+
+				return $licenses;
+			}
+		);
+	}
+
+	/**
+	 * Builds a Plugin_Handler that has NO Unified key but DOES expose the
+	 * given feature through the Feature_Repository.
+	 *
+	 * @param array<string, mixed>|WP_Error $check_updates_return The Resolve_Update_Data return value.
+	 *
+	 * @return Plugin_Handler
+	 */
+	private function handler_with_feature_and_no_unified_key( $check_updates_return ): Plugin_Handler {
+		$feature = new Plugin(
+			[
+				'slug'         => 'my-plugin',
+				'product'      => 'test',
+				'tier'         => 'basic',
+				'name'         => 'My Plugin',
+				'description'  => 'A test plugin.',
+				'plugin_file'  => 'my-plugin/my-plugin.php',
+				'is_available' => true,
+			]
+		);
+
+		$features = new Feature_Collection();
+		$features->add( $feature );
+
+		$resolver           = $this->makeEmpty( Resolve_Update_Data::class, [ '__invoke' => $check_updates_return ] );
+		$feature_repository = $this->makeEmpty( Feature_Repository::class, [ 'get' => $features ] );
+
+		$license_manager = $this->container->get( License_Manager::class );
+		$license_manager->delete_key();
+
+		return new Plugin_Handler(
+			$resolver,
+			$feature_repository,
+			$license_manager,
+			new Legacy_License_Repository()
+		);
+	}
+
+	/**
+	 * Tests filter_plugins_api proceeds past the early-return guard when no
+	 * Unified key is stored but at least one legacy license entry exists.
+	 *
+	 * @return void
+	 */
+	public function test_filter_plugins_api_proceeds_when_only_legacy_license_present(): void {
+		$this->register_legacy_license( 'my-plugin' );
+
+		$update_data = [
+			'my-plugin' => [
+				'version'     => '2.0.0',
+				'package'     => 'https://example.com/my-plugin.zip',
+				'name'        => 'My Plugin',
+				'plugin_file' => 'my-plugin/my-plugin.php',
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$args       = new stdClass();
+		$args->slug = 'my-plugin';
+
+		$result = $handler->filter_plugins_api( false, 'plugin_information', $args );
+
+		$this->assertInstanceOf( stdClass::class, $result, 'Legacy-only state should let plugins_api populate a response.' );
+		$this->assertSame( 'my-plugin', $result->slug );
+		$this->assertSame( '2.0.0', $result->version );
+	}
+
+	/**
+	 * Tests filter_update_check proceeds past the early-return guard when no
+	 * Unified key is stored but at least one legacy license entry exists.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_proceeds_when_only_legacy_license_present(): void {
+		$this->register_legacy_license( 'my-plugin' );
+
+		$update_data = [
+			'my-plugin' => [
+				'version'     => '2.0.0',
+				'package'     => 'https://example.com/my-plugin.zip',
+				'plugin_file' => 'my-plugin/my-plugin.php',
+				'has_update'  => true,
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$result = $handler->filter_update_check( new stdClass() );
+
+		$this->assertObjectHasProperty( 'response', $result );
+		$this->assertArrayHasKey( 'my-plugin/my-plugin.php', $result->response );
+		$this->assertSame( '2.0.0', $result->response['my-plugin/my-plugin.php']->new_version );
+	}
+
+	/**
+	 * Tests filter_update_check short-circuits when neither a Unified key nor
+	 * any legacy entries exist, leaving the transient untouched.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_returns_transient_when_no_unified_key_and_no_legacy(): void {
+		$transient           = new stdClass();
+		$transient->response = [];
+
+		$result = $this->handler->filter_update_check( $transient );
+
+		$this->assertSame( $transient, $result );
+	}
+
+	/**
+	 * Tests filter_update_check short-circuits when no Unified key is stored and
+	 * the only legacy entries present have not opted into updates.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_returns_transient_when_legacy_has_not_opted_in(): void {
+		$this->register_legacy_license( 'my-plugin', 'legacy-key-123', false );
+
+		$update_data = [
+			'my-plugin' => [
+				'version'     => '2.0.0',
+				'package'     => 'https://example.com/my-plugin.zip',
+				'plugin_file' => 'my-plugin/my-plugin.php',
+				'has_update'  => true,
+			],
+		];
+
+		$handler = $this->handler_with_feature_and_no_unified_key( $update_data );
+
+		$transient = new stdClass();
+
+		$result = $handler->filter_update_check( $transient );
+
+		$this->assertObjectNotHasProperty( 'response', $result, 'Handler should bail before populating response when only opt-out legacy entries exist.' );
 	}
 }

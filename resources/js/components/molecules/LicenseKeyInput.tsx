@@ -39,7 +39,7 @@ interface LicenseKeyInputProps {
 }
 
 /**
- * @since TBD   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
+ * @since 1.3.0   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
  * @since 1.0.0
  */
 export function LicenseKeyInput( {

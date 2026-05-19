@@ -940,7 +940,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 function NexcessLogo({
   className
@@ -1396,7 +1396,7 @@ function FeatureRow({
             feature: feature,
             pendingAction: pendingAction,
             installableBusy: installableBusy,
-            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to receive updates and support.', '%TEXTDOMAIN%') : undefined,
+            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to manage updates from the Software License Manager.', '%TEXTDOMAIN%') : undefined,
             onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
             status: badgeStatus
@@ -1581,7 +1581,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Read subscriptionsUrl through the getHarborDataValue helper.
+ * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 
@@ -1666,7 +1666,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
+ * @since 1.3.0   Use the shared getLicenseKeyPlaceholder helper for the placeholder.
  * @since 1.0.0
  */
 function LicenseKeyInput({
@@ -2016,7 +2016,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Read activationUrl through the getHarborDataValue helper.
+ * @since 1.3.0   Read activationUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 
@@ -2361,7 +2361,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 
 function WelcomeLicenseForm() {
@@ -2451,7 +2451,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 function WelcomeNoticeBanner({
   children
@@ -2499,7 +2499,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 
 function AppLoader() {
@@ -2662,7 +2662,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Read activationUrl through the getHarborDataValue helper.
+ * @since 1.3.0   Read activationUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 
@@ -2837,7 +2837,7 @@ function LicenseSectionSkeleton() {
 }
 
 /**
- * @since TBD   Read subscriptionsUrl through the getHarborDataValue helper.
+ * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
 function LicenseSection({
@@ -2967,7 +2967,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD    Read domain through the getHarborDataValue helper for upgrade URLs.
+ * @since 1.3.0    Read domain through the getHarborDataValue helper for upgrade URLs.
  * @since 1.0.2  Route upgrade CTA to catalog upgrade_url for existing subscribers, purchase_url for new subscribers.
  * @since 1.0.1  Show Unactivated badge on tier groups and product header for unactivated licenses.
  * @since 1.0.0
@@ -3264,7 +3264,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 
 function WelcomeScreen() {
@@ -3330,7 +3330,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Read version through the getHarborDataValue helper.
+ * @since 1.3.0   Read version through the getHarborDataValue helper.
  * @since 1.0.0
  */
 
@@ -3451,7 +3451,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 function WelcomeShell({
   children
@@ -4325,7 +4325,7 @@ function findErrors(results) {
 }
 
 /**
- * @since TBD   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
+ * @since 1.3.0   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
  * @since 1.0.0
  */
 function HarborDataProvider({
@@ -5018,7 +5018,7 @@ function getSwitchChecked(pendingAction, featureEnabled) {
   return featureEnabled;
 }
 /**
- * @since TBD   Read pluginsUrl through the getHarborDataValue helper for the post-deactivate redirect.
+ * @since 1.3.0   Read pluginsUrl through the getHarborDataValue helper for the post-deactivate redirect.
  * @since 1.0.0
  */
 function useFeatureRow(feature) {
@@ -5356,7 +5356,7 @@ const SERVER_INVALID_KEY_CODE = 'lw-harbor-invalid-key';
  * Defined once so translators see a single string identity across both call
  * sites — re-translating the same advice twice risks drift.
  *
- * @since TBD
+ * @since 1.3.0
  */
 function getNonUnifiedLicenseAdvice() {
   return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("If this is a non-unified license, activate it in that plugin's own settings page.", '%TEXTDOMAIN%');
@@ -5374,7 +5374,7 @@ function getNonUnifiedLicenseAdvice() {
  * specifically rejected the key as unrecognized — for expired or
  * suspended subscriptions that framing would be misleading.
  *
- * @since TBD
+ * @since 1.3.0
  */
 function pickWelcomeErrorMessage(error) {
   const serverError = error.cause instanceof _errors__WEBPACK_IMPORTED_MODULE_4__.HarborError ? error.cause : null;
@@ -5385,7 +5385,7 @@ function pickWelcomeErrorMessage(error) {
   return baseMessage;
 }
 /**
- * @since TBD
+ * @since 1.3.0
  */
 function useWelcomeLicenseForm() {
   const [key, setKey] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -5659,7 +5659,7 @@ const DEFAULTS = {
 };
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 
 function getHarborDataValue(key, fallback) {
@@ -5671,7 +5671,7 @@ function getHarborDataValue(key, fallback) {
  * prefix followed by five groups of four X's, matching the issued key shape
  * (e.g. `LWSW-XXXX-XXXX-XXXX-XXXX-XXXX`).
  *
- * @since TBD
+ * @since 1.3.0
  */
 function getLicenseKeyPlaceholder() {
   return `${getHarborDataValue('licenseKeyPrefix')}XXXX-XXXX-XXXX-XXXX-XXXX`;
@@ -5750,7 +5750,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param baseUrl The upgrade_url string from the catalog tier.
  * @param domain  The site domain from getHarborDataValue( 'domain' ).
  *
- * @since TBD    Domain parameter is now string | null to match the getHarborDataValue helper.
+ * @since 1.3.0    Domain parameter is now string | null to match the getHarborDataValue helper.
  * @since 1.0.2
  */
 function buildUpgradeUrl(baseUrl, domain) {

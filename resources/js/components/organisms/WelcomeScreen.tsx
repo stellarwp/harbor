@@ -18,7 +18,7 @@ import { WelcomeNoticeBanner }      from '@/components/molecules/WelcomeNoticeBa
 import { WelcomeLicenseForm }       from '@/components/molecules/WelcomeLicenseForm';
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function WelcomeScreen() {
     return (
