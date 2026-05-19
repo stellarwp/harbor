@@ -1396,7 +1396,7 @@ function FeatureRow({
             feature: feature,
             pendingAction: pendingAction,
             installableBusy: installableBusy,
-            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to receive updates and support.', '%TEXTDOMAIN%') : undefined,
+            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to manage updates from the Software License Manager.', '%TEXTDOMAIN%') : undefined,
             onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
             status: badgeStatus
