@@ -23,7 +23,7 @@ const DEFAULTS = {
 type KeyWithDefault = keyof typeof DEFAULTS;
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function getHarborDataValue<K extends KeyWithDefault>(
     key: K
@@ -52,7 +52,7 @@ export function getHarborDataValue<K extends keyof HarborData>(
  * prefix followed by five groups of four X's, matching the issued key shape
  * (e.g. `LWSW-XXXX-XXXX-XXXX-XXXX-XXXX`).
  *
- * @since TBD
+ * @since 1.3.0
  */
 export function getLicenseKeyPlaceholder(): string {
     return `${ getHarborDataValue( 'licenseKeyPrefix' ) }XXXX-XXXX-XXXX-XXXX-XXXX`;

@@ -12,7 +12,7 @@ import { Loader2 }      from 'lucide-react';
 import { WelcomeShell } from '@/components/templates/WelcomeShell';
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function AppLoader() {
     return (

@@ -30,7 +30,7 @@ const SERVER_INVALID_KEY_CODE = 'lw-harbor-invalid-key';
  * Defined once so translators see a single string identity across both call
  * sites — re-translating the same advice twice risks drift.
  *
- * @since TBD
+ * @since 1.3.0
  */
 export function getNonUnifiedLicenseAdvice(): string {
     return __(
@@ -51,7 +51,7 @@ export function getNonUnifiedLicenseAdvice(): string {
  * specifically rejected the key as unrecognized — for expired or
  * suspended subscriptions that framing would be misleading.
  *
- * @since TBD
+ * @since 1.3.0
  */
 export function pickWelcomeErrorMessage( error: HarborError ): string {
     const serverError = error.cause instanceof HarborError ? error.cause : null;
@@ -76,7 +76,7 @@ export interface UseWelcomeLicenseForm {
 }
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function useWelcomeLicenseForm(): UseWelcomeLicenseForm {
     const [ key, setKey ]                 = useState( '' );

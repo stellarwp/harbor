@@ -53,7 +53,7 @@ class Plugin_Handler {
 	/**
 	 * The legacy license repository.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Legacy_License_Repository
 	 */

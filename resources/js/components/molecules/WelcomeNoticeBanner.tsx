@@ -16,7 +16,7 @@ interface WelcomeNoticeBannerProps {
 }
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function WelcomeNoticeBanner( { children }: WelcomeNoticeBannerProps ) {
     return (

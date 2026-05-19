@@ -13,14 +13,14 @@ use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
  * remains a pure per-backend implementation of the contract; this class is
  * the only one aware that multiple Herald variants coexist.
  *
- * @since TBD
+ * @since 1.3.0
  */
 final class Herald_Routing_Url_Builder implements Download_Url_Builder {
 
 	/**
 	 * The Unified Herald URL builder, used when no legacy URL is produced.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Download_Url_Builder
 	 */
@@ -29,7 +29,7 @@ final class Herald_Routing_Url_Builder implements Download_Url_Builder {
 	/**
 	 * The legacy Herald URL builder, tried first.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Download_Url_Builder
 	 */
@@ -38,7 +38,7 @@ final class Herald_Routing_Url_Builder implements Download_Url_Builder {
 	/**
 	 * Constructor.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @param Herald_Url_Builder        $unified The Unified Herald URL builder.
 	 * @param Herald_Legacy_Url_Builder $legacy  The legacy Herald URL builder.
@@ -51,7 +51,7 @@ final class Herald_Routing_Url_Builder implements Download_Url_Builder {
 	/**
 	 * Routes the slug to the legacy builder first, falling back to Unified.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @param string $slug The catalog feature slug.
 	 *

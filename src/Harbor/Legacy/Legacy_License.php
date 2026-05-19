@@ -63,7 +63,7 @@ class Legacy_License {
 	 * legacy licensing backend is not Stellar/Herald-compatible, which would
 	 * otherwise fail the actual server-side download.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var bool
 	 */

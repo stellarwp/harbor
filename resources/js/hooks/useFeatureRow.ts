@@ -62,7 +62,7 @@ export interface FeatureRowState {
 }
 
 /**
- * @since TBD   Read pluginsUrl through the getHarborDataValue helper for the post-deactivate redirect.
+ * @since 1.3.0   Read pluginsUrl through the getHarborDataValue helper for the post-deactivate redirect.
  * @since 1.0.0
  */
 export function useFeatureRow( feature: Feature ): FeatureRowState {
