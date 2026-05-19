@@ -414,4 +414,47 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 
 		$this->assert_resolved_feature_flags( $resolver, 'kad-blocks-pro', true, true );
 	}
+
+	/**
+	 * Tests that resolving a catalog with multiple features dispatches the
+	 * `lw-harbor/legacy_licenses` filter exactly once.
+	 *
+	 * Before the legacy lookup was hoisted out of hydrate_feature(), the filter
+	 * fired once per catalog feature. That meant every consumer hooked to the
+	 * filter ran N times on every resolution, and any callback that consults
+	 * Harbor itself (e.g. Solid Backups via lw_harbor_is_feature_available)
+	 * compounded that cost N-fold. Hoisting the lookup to once per __invoke()
+	 * is what this test pins down.
+	 *
+	 * @return void
+	 */
+	public function test_legacy_filter_dispatches_once_per_resolution_not_per_feature(): void {
+		$dispatch_count = 0;
+
+		add_filter(
+			'lw-harbor/legacy_licenses',
+			static function ( array $licenses ) use ( &$dispatch_count ) {
+				++$dispatch_count;
+
+				return $licenses;
+			}
+		);
+
+		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
+
+		$collection = ( $resolver )();
+
+		$this->assertInstanceOf( Feature_Collection::class, $collection );
+		$this->assertGreaterThan(
+			1,
+			$collection->count(),
+			'Sanity: the fixture catalog must contain more than one feature for this test to be meaningful.'
+		);
+		$this->assertSame(
+			1,
+			$dispatch_count,
+			'The lw-harbor/legacy_licenses filter must fire exactly once per resolution, '
+			. 'not once per catalog feature.'
+		);
+	}
 }

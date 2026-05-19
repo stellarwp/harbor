@@ -10,6 +10,7 @@ use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Legacy\Legacy_License;
 use LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Error_Code as Licensing_Error_Code;
@@ -158,7 +159,8 @@ class Resolve_Feature_Collection {
 			}
 		}
 
-		$collection = new Feature_Collection();
+		$collection      = new Feature_Collection();
+		$legacy_licenses = $this->build_legacy_license_map();
 
 		foreach ( $catalog as $product ) {
 			if ( ! $product instanceof Product_Catalog ) {
@@ -169,7 +171,8 @@ class Resolve_Feature_Collection {
 			$license_tier_rank = $this->resolve_license_tier_rank( $product, $products );
 
 			foreach ( $product->get_features() as $catalog_feature ) {
-				$feature = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank );
+				$legacy_license = $legacy_licenses[ $catalog_feature->get_slug() ] ?? null;
+				$feature        = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank, $legacy_license );
 
 				if ( is_wp_error( $feature ) ) {
 					static::debug_log( $feature->get_error_message() );
@@ -181,6 +184,28 @@ class Resolve_Feature_Collection {
 		}
 
 		return $collection;
+	}
+
+	/**
+	 * Builds a `slug => Legacy_License` map from the legacy repository.
+	 *
+	 * Resolved once per `__invoke()` call so the `lw-harbor/legacy_licenses`
+	 * filter dispatches once per resolution rather than once per catalog
+	 * feature. This also narrows the surface for filter re-entry: only one
+	 * dispatch can be in-flight while hydrate_feature() iterates.
+	 *
+	 * @since TBD
+	 *
+	 * @return array<string, Legacy_License>
+	 */
+	private function build_legacy_license_map(): array {
+		$map = [];
+
+		foreach ( $this->legacy_repository->all() as $license ) {
+			$map[ $license->slug ] = $license;
+		}
+
+		return $map;
 	}
 
 	/**
@@ -271,10 +296,11 @@ class Resolve_Feature_Collection {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature $catalog_feature   The catalog feature entry.
-	 * @param Product_Catalog $product           The parent catalog product.
-	 * @param string[]|null   $capabilities      The license capabilities, or null if unlicensed.
-	 * @param int             $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
+	 * @param Catalog_Feature     $catalog_feature   The catalog feature entry.
+	 * @param Product_Catalog     $product           The parent catalog product.
+	 * @param string[]|null       $capabilities      The license capabilities, or null if unlicensed.
+	 * @param int                 $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
+	 * @param Legacy_License|null $legacy_license    The legacy license entry whose slug matches this feature, or null if none.
 	 *
 	 * @return Feature|WP_Error The hydrated feature, or WP_Error for unknown types.
 	 */
@@ -282,7 +308,8 @@ class Resolve_Feature_Collection {
 		Catalog_Feature $catalog_feature,
 		Product_Catalog $product,
 		?array $capabilities,
-		int $license_tier_rank
+		int $license_tier_rank,
+		?Legacy_License $legacy_license
 	) {
 		$catalog_kind = $catalog_feature->get_kind();
 		$class        = $this->type_map[ $catalog_kind ] ?? null;
@@ -301,7 +328,6 @@ class Resolve_Feature_Collection {
 		$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
 		$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
 
-		$legacy_license   = $this->legacy_repository->find( $catalog_feature->get_slug() );
 		$has_legacy_grant = $legacy_license !== null
 			&& $legacy_license->is_active
 			&& $legacy_license->key !== ''
