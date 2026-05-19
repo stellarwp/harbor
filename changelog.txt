@@ -1,3 +1,8 @@
+### [1.3.0] 2026-05-19
+
+* Feature - Registered Legacy Licenses can now be utilized for updates if `use_for_updates` is `true`.
+* Tweak - The Software License Manager page now shows a splash screen until a Unified License Key is entered.
+
 ### [1.2.0] 2026-05-13
 
 * Feature - The features page no longer shows unless a Premium Addon has been registered.

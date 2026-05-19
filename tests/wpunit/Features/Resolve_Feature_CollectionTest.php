@@ -20,7 +20,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 /**
  * Unit tests for Resolve_Feature_Collection focused on the legacy-grant logic.
  *
- * @since TBD
+ * @since 1.3.0
  */
 final class Resolve_Feature_CollectionTest extends HarborTestCase {
 

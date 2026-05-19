@@ -67,7 +67,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * The legacy license repository.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Legacy_License_Repository
 	 */
@@ -194,7 +194,7 @@ class Resolve_Feature_Collection {
 	 * feature. This also narrows the surface for filter re-entry: only one
 	 * dispatch can be in-flight while hydrate_feature() iterates.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @return array<string, Legacy_License>
 	 */

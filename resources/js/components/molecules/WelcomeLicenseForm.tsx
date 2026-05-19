@@ -16,7 +16,7 @@ import { useWelcomeLicenseForm, getNonUnifiedLicenseAdvice } from '@/hooks/useWe
 import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
 
 /**
- * @since TBD
+ * @since 1.3.0
  */
 export function WelcomeLicenseForm() {
     const {

@@ -167,7 +167,7 @@ class License_Repository {
 	 * `use_for_updates = true`, there is no work to do regardless of how many
 	 * informational legacy entries exist.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @return bool
 	 */

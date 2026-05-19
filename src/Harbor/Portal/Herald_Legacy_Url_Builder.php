@@ -23,14 +23,14 @@ use LiquidWeb\Harbor\Site\Data;
  * `Herald_Routing_Url_Builder` treats an empty return as "no legacy URL
  * available for this slug" and falls back to the Unified builder.
  *
- * @since TBD
+ * @since 1.3.0
  */
 final class Herald_Legacy_Url_Builder implements Download_Url_Builder {
 
 	/**
 	 * The legacy license repository.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Legacy_License_Repository
 	 */
@@ -39,7 +39,7 @@ final class Herald_Legacy_Url_Builder implements Download_Url_Builder {
 	/**
 	 * Site data provider.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @var Data
 	 */
@@ -48,7 +48,7 @@ final class Herald_Legacy_Url_Builder implements Download_Url_Builder {
 	/**
 	 * Constructor.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @param Legacy_License_Repository $legacy_repository The legacy license repository.
 	 * @param Data                      $site_data         Site data provider.
@@ -61,7 +61,7 @@ final class Herald_Legacy_Url_Builder implements Download_Url_Builder {
 	/**
 	 * Builds the legacy Herald download URL for the given feature slug.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @param string $slug The catalog feature slug.
 	 *

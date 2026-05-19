@@ -136,7 +136,7 @@ final class License_RepositoryTest extends HarborTestCase {
 	/**
 	 * Tests that legacy entries missing either `key` or `slug` are dropped at repository intake.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @return void
 	 */
