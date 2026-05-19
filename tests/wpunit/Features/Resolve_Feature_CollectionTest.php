@@ -419,12 +419,13 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 	 * Tests that resolving a catalog with multiple features dispatches the
 	 * `lw-harbor/legacy_licenses` filter exactly once.
 	 *
-	 * Before the legacy lookup was hoisted out of hydrate_feature(), the filter
-	 * fired once per catalog feature. That meant every consumer hooked to the
-	 * filter ran N times on every resolution, and any callback that consults
-	 * Harbor itself (e.g. Solid Backups via lw_harbor_is_feature_available)
-	 * compounded that cost N-fold. Hoisting the lookup to once per __invoke()
-	 * is what this test pins down.
+	 * The resolver must look up legacy licenses once per `__invoke()` call and
+	 * reuse that result across every catalog feature it hydrates. if it calls
+	 * into the legacy repository per feature would dispatch the filter once per
+	 * feature instead, which (a) multiplies the work of every consumer hooked
+	 * to the filter by the catalog size, and (b) widens the re-entry surface
+	 * for callbacks that consult Harbor themselves
+	 * (e.g. Solid Backups via `lw_harbor_is_feature_available`).
 	 *
 	 * @return void
 	 */
