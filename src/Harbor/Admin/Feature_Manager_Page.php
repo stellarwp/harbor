@@ -128,7 +128,7 @@ class Feature_Manager_Page {
 	 * the React bundle is loaded only on this specific admin page.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Dropped string typehint for $hook_suffix.
+	 * @since TBD Dropped string type-hint for $hook_suffix.
 	 *
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 *
