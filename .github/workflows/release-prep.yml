@@ -64,6 +64,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.set_vars.outputs.ref }}
+          fetch-depth: 0
 
       - uses: oven-sh/setup-bun@v2
 
