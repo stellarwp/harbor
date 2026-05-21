@@ -1,0 +1,4 @@
+significance: patch
+type: fix
+entry: Typehint in WP Core's callback was too strict and could cause fatal.
+timestamp: 2026-05-21T15:02:34.497Z
