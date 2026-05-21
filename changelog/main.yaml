@@ -1,5 +1,0 @@
-significance: patch
-type: feature
-entry: Added the `lw_harbor_refresh_catalog()` global function to force a
-  synchronous re-fetch of the product catalog from the Commerce Portal API.
-timestamp: 2026-05-21T14:27:00.315Z

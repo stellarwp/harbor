@@ -1,3 +1,8 @@
+### [1.4.0] 2026-05-21
+
+* Fix - Type-hint in WP Core's callback was too strict and could cause fatal.
+* Feature - Added the `lw_harbor_refresh_catalog()` global function to force a synchronous re-fetch of the product catalog from the Commerce Portal API.
+
 ### [1.3.0] 2026-05-19
 
 * Feature - Registered Legacy Licenses can now be utilized for updates if `use_for_updates` is `true`.

@@ -252,7 +252,7 @@ if ( ! function_exists( 'lw_harbor_refresh_catalog' ) ) {
 	 * Portal API responds. Returns true on a successful refresh, false on any
 	 * failure (HTTP error, parsing error, or Harbor not being active).
 	 *
-	 * @since TBD
+	 * @since 1.4.0
 	 *
 	 * @return bool Whether the catalog was refreshed successfully.
 	 */
