@@ -5,8 +5,11 @@ namespace LiquidWeb\Harbor\Tests\API\Functions;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Portal\Catalog_Collection;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use LiquidWeb\Harbor\Harbor;
+use WP_Error;
 
 /**
  * Tests for the global helper functions defined in global-functions.php.
@@ -231,5 +234,46 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		$this->assertNotEmpty( $domain );
 		$this->assertSame( $expected, $domain );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_refresh_catalog()
+	// -------------------------------------------------------------------------
+
+	public function test_refresh_catalog_invokes_repository_refresh_and_returns_true_on_success(): void {
+		$called = false;
+
+		$catalog = $this->makeEmpty(
+			Catalog_Repository::class,
+			[
+				'refresh' => static function () use ( &$called ): Catalog_Collection {
+					$called = true;
+
+					return new Catalog_Collection();
+				},
+			]
+		);
+
+		$this->container->singleton( Catalog_Repository::class, $catalog );
+
+		$result = lw_harbor_refresh_catalog();
+
+		$this->assertTrue( $called );
+		$this->assertTrue( $result );
+	}
+
+	public function test_refresh_catalog_returns_false_when_refresh_returns_wp_error(): void {
+		$catalog = $this->makeEmpty(
+			Catalog_Repository::class,
+			[
+				'refresh' => static function (): WP_Error {
+					return new WP_Error( 'catalog_error', 'API unavailable.' );
+				},
+			]
+		);
+
+		$this->container->singleton( Catalog_Repository::class, $catalog );
+
+		$this->assertFalse( lw_harbor_refresh_catalog() );
 	}
 }
