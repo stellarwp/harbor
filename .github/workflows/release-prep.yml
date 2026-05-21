@@ -34,10 +34,16 @@ jobs:
         run: |
           # Use the ref input or default to ref where the workflow file is ran from.
           if [ -n "${{ github.event.inputs.ref }}" ]; then
-            echo "JOB_REF=${{ github.event.inputs.ref }}" >> $GITHUB_ENV
+            JOB_REF="${{ github.event.inputs.ref }}"
           else
-            echo "JOB_REF=${{ github.ref }}" >> $GITHUB_ENV
+            JOB_REF="${{ github.ref }}"
           fi
+          # Strip refs/heads/ so peter-evans sees the same short form it derives
+          # from `git symbolic-ref HEAD --short`. Without this, base="refs/heads/main"
+          # won't match working base "main" and the action enters its rebase path,
+          # which fetches into the checked-out branch and dies under Git >= 2.45.
+          JOB_REF="${JOB_REF#refs/heads/}"
+          echo "JOB_REF=$JOB_REF" >> $GITHUB_ENV
 
           echo "JOB_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
@@ -64,7 +70,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.set_vars.outputs.ref }}
-          fetch-depth: 0
 
       - uses: oven-sh/setup-bun@v2
 
