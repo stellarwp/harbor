@@ -119,16 +119,16 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 
 **Legacy license array fields:**
 
-| Field             | Required | Description                                                                                                            |
-| ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `key`             | Yes      | The license key string.                                                                                                |
-| `slug`            | Yes      | The product/add-on slug this key applies to.                                                                           |
-| `name`            | Yes      | Human-readable product name.                                                                                           |
-| `product`         | Yes      | Product brand slug (e.g. `givewp`, `kadence`).                                                                         |
-| `is_active`       | Yes      | Whether the license is currently active (`bool`).                                                                      |
-| `use_for_updates` | No       | Opt-in (`bool`, default `false`). Set to `true` only when the key is compatible with Stellar Licensing v3 / Herald.    |
-| `page_url`        | Yes      | Admin URL where the user can manage this license.                                                                      |
-| `expires_at`      | No       | Expiry date string (e.g. `"2026-01-01"`).                                                                              |
+| Field             | Required | Description                                                                                                         |
+| ----------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `key`             | Yes      | The license key string.                                                                                             |
+| `slug`            | Yes      | The product/add-on slug this key applies to.                                                                        |
+| `name`            | Yes      | Human-readable product name.                                                                                        |
+| `product`         | Yes      | Product brand slug (e.g. `givewp`, `kadence`).                                                                      |
+| `is_active`       | Yes      | Whether the license is currently active (`bool`).                                                                   |
+| `use_for_updates` | No       | Opt-in (`bool`, default `false`). Set to `true` only when the key is compatible with Stellar Licensing v3 / Herald. |
+| `page_url`        | Yes      | Admin URL where the user can manage this license.                                                                   |
+| `expires_at`      | No       | Expiry date string (e.g. `"2026-01-01"`).                                                                           |
 
 > **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge on the Feature Manager page.
 
@@ -228,6 +228,14 @@ if (lw_harbor_is_feature_available('feature-slug')) {
 $url = lw_harbor_get_license_page_url(); // string (empty string if Harbor is not active)
 ```
 
+### Force a catalog refresh
+
+```php
+$refreshed = lw_harbor_refresh_catalog(); // bool — true on success, false on failure
+```
+
+Bypasses Harbor's cached catalog and fetches a fresh copy from the Commerce Portal API. This is **synchronous** — the call blocks until the upstream responds — so reserve it for user-initiated actions (e.g. a "Refresh now" button) rather than passive page loads. Returns `false` when Harbor is not active or the upstream fetch fails; the previously cached catalog is preserved in that case so subsequent reads continue to work.
+
 ---
 
 ## 5. Registering a Submenu Link
@@ -291,3 +299,4 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                                                        |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system.                               |
+| `lw_harbor_refresh_catalog`                    | `(): bool`                          | Force a synchronous re-fetch of the product catalog. Returns `true` on success, `false` on failure.           |
