@@ -121,10 +121,10 @@ Prefix: `lw-harbor-`
 ### CSS Scope and DOM
 
 ```html
-<div id="lw-harbor-root" class="lw-harbor"></div>
+<div id="lw-harbor-root" class="lw-harbor-ui"></div>
 ```
 
-The `.lw-harbor` class is the Tailwind CSS scope boundary. A PostCSS plugin (`scopeToLwHarbor`) prefixes all generated selectors with `.lw-harbor` to prevent style conflicts with the WordPress admin.
+The `.lw-harbor-ui` class is the Tailwind CSS scope boundary. A PostCSS plugin (`scopeToHarborUI`) prefixes all generated selectors with `.lw-harbor-ui` to prevent style conflicts with the WordPress admin. The `lw-harbor` prefix family remains the canonical namespace for IDs and other DOM identifiers.
 
 ### Script Handles
 
@@ -142,11 +142,11 @@ wp_enqueue_script( 'lw-harbor-notice-dismiss', ... );
 
 | Identifier         | Convention                              |
 | ------------------ | --------------------------------------- |
-| Error class        | `LiquidError` (file: `liquid-error.ts`) |
-| Store name         | `'lw'`                                  |
+| Error class        | `HarborError` (file: `harbor-error.ts`) |
+| Store name         | `'lw/harbor'`                           |
 | Store registration | `registerHarborStore`                   |
 | Store import alias | `harborStore`                           |
-| REST paths         | `'/liquidweb/harbor/v1/...'`                   |
+| REST paths         | `'/liquidweb/harbor/v1/...'`            |
 | Docblock package   | `@package LiquidWeb\Harbor`             |
 
 <!-- markdownlint-enable MD060 -->
@@ -178,7 +178,7 @@ The library version starts at `0.0.1`. All `@since` tags for new code use `@sinc
 | Global functions        | `lw_harbor`        | `_`       | `lw_harbor_is_feature_enabled()`    |
 | WP-CLI                  | `harbor`           | ` `       | `wp harbor feature list`            |
 | Error codes (PHP)       | `lw-harbor`        | `-`       | `lw-harbor-feature-not-found`       |
-| CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor`, `#lw-harbor-root`     |
+| CSS/DOM                 | `lw-harbor`        | `-`       | `.lw-harbor-ui`, `#lw-harbor-root`  |
 | Script handles          | `lw-harbor`        | `-`       | `lw-harbor-ui`                      |
 
 <!-- markdownlint-enable MD060 -->
