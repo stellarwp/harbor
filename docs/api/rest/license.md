@@ -69,14 +69,24 @@ Validates a license key against the Licensing API and stores it. Verifies the ke
 
 Returns the same `{ key, products }` shape as `GET /license`.
 
+### Throttling
+
+Two layers protect the upstream API and shape the response under abusive or repeated input:
+
+- **Per-key cache**: an invalid key whose validation failed inside the per-key TTL window is short-circuited with the cached `WP_Error` from that prior attempt, without re-calling the upstream API. A different key submitted in the same window is not affected and reaches the API normally.
+- **Rolling-window counter**: once the number of distinct failed validation attempts in the failure window reaches the threshold, further attempts return `429 lw-harbor-too-many-attempts` until the failures age out of the window.
+
+Both windows are 60 seconds and the threshold is 5 failures. A successful validation clears the per-key cache entry for the validated key so a key that was temporarily rejected (for example because the licensing server was briefly unhealthy) can succeed on retry without waiting out the TTL.
+
 ### Errors
 
-| HTTP | Code                          | Meaning                            |
-| ---- | ----------------------------- | ---------------------------------- |
-| 400  | (validation)                  | Missing key or invalid format      |
-| 400  | `lw-harbor-invalid-key`       | Key not recognized by API          |
-| 500  | `lw-harbor-store-failed`      | Key could not be persisted         |
-| 502  | `lw-harbor-invalid-response`  | Upstream API returned bad response |
+| HTTP | Code                          | Meaning                                    |
+| ---- | ----------------------------- | ------------------------------------------ |
+| 400  | (validation)                  | Missing key or invalid format              |
+| 400  | `lw-harbor-invalid-key`       | Key not recognized by API                  |
+| 429  | `lw-harbor-too-many-attempts` | Rolling-window failure threshold reached   |
+| 500  | `lw-harbor-store-failed`      | Key could not be persisted                 |
+| 502  | `lw-harbor-invalid-response`  | Upstream API returned bad response         |
 
 ## POST /liquidweb/harbor/v1/license/refresh
 
