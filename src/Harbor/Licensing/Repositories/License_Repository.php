@@ -667,7 +667,18 @@ final class License_Repository {
 	private function read_validation_state(): Validation_State {
 		$raw = get_option( self::VALIDATION_STATE_OPTION_NAME, null );
 
-		return is_array( $raw ) ? Validation_State::from_array( $raw ) : new Validation_State();
+		if ( ! is_array( $raw ) ) {
+			return new Validation_State();
+		}
+
+		$string_keyed = [];
+		foreach ( $raw as $key => $value ) {
+			if ( is_string( $key ) ) {
+				$string_keyed[ $key ] = $value;
+			}
+		}
+
+		return Validation_State::from_array( $string_keyed );
 	}
 
 	/**
