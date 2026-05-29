@@ -130,10 +130,10 @@ Since there is only one unified key per site, there is only one state entry. Inv
 
 `validate_and_store()` uses a separate WordPress option (`lw_harbor_licensing_validation_state`) to track recent submission failures and rate-limit abusive input. It is distinct from the products state above so that user-submitted failures do not arm the background-fetch throttle that `get_products()` relies on. The envelope has two keys:
 
-| Key                  | Type                                                              | Description                                                                                            |
-| -------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `per_key`            | `array<string, array{failed_at: int, error: WP_Error}>` | Map of SHA-256 license-key hashes to the most recent failure for that key                              |
-| `failure_timestamps` | `int[]`                                                           | Sliding list of failure timestamps used by the rolling-window rate limiter                             |
+| Key                  | Type                                                    | Description                                                                |
+| -------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `per_key`            | `array<string, array{failed_at: int, error: WP_Error}>` | Map of SHA-256 license-key hashes to the most recent failure for that key  |
+| `failure_timestamps` | `int[]`                                                 | Sliding list of failure timestamps used by the rolling-window rate limiter |
 
 `License_Repository::record_validation_failure()` appends to both layers and prunes anything older than the retention window (the max of the per-key TTL and the rolling-window length, owned by `License_Manager`). `clear_validation_failure_for_key()` runs on the success path and removes the per-key entry only, so a legitimate success does not erase evidence of abusive traffic. `delete_validation_state()` wipes the whole option and runs from a handler on `lw-harbor/unified_license_key_changed`. That action is only emitted when a valid license key is entered (i.e. `validate_and_store()` succeeds and the stored value actually changes), so the throttle is reset only on a real key rotation. Failed validations and same-key resubmissions leave the validation state intact.
 
