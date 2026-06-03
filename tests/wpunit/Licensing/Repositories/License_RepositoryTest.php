@@ -7,12 +7,15 @@ use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use WP_Error;
 
 /**
  * @since 1.0.0
  */
 final class License_RepositoryTest extends HarborTestCase {
+
+	use With_Uopz;
 
 	private License_Repository $repository;
 
@@ -22,12 +25,14 @@ final class License_RepositoryTest extends HarborTestCase {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 	}
 
 	protected function tearDown(): void {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 		parent::tearDown();
 	}
 
@@ -752,5 +757,199 @@ final class License_RepositoryTest extends HarborTestCase {
 
 		$this->assertTrue( $this->repository->is_product_active( 'give' ) );
 		$this->assertFalse( $this->repository->is_product_active( 'tec' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// Validation throttle state
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Tests that get_per_key_failure returns null when the validation state option has not been written.
+	 *
+	 * @return void
+	 */
+	public function test_get_per_key_failure_returns_null_when_state_empty(): void {
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-ANY-KEY', MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that record_validation_failure and get_per_key_failure round-trip a WP_Error for the same key.
+	 *
+	 * @return void
+	 */
+	public function test_record_and_get_per_key_failure_round_trip(): void {
+		$error = new WP_Error( Error_Code::INVALID_KEY, 'Bad key' );
+
+		$this->repository->record_validation_failure( 'LWSW-BAD-KEY', $error, MINUTE_IN_SECONDS );
+
+		$result = $this->repository->get_per_key_failure( 'LWSW-BAD-KEY', MINUTE_IN_SECONDS );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
+	}
+
+	/**
+	 * Tests that get_per_key_failure returns null when asked about a key that has not been recorded.
+	 *
+	 * @return void
+	 */
+	public function test_get_per_key_failure_returns_null_for_unknown_key(): void {
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'Bad key' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-OTHER-KEY', MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that get_per_key_failure returns null once the entry is older than the supplied TTL.
+	 *
+	 * @return void
+	 */
+	public function test_get_per_key_failure_expires_after_ttl(): void {
+		$this->set_fn_return( 'time', 1000000 );
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'Bad key' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->set_fn_return( 'time', 1000061 );
+
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-BAD-KEY', MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that clear_validation_failure_for_key removes the cached error for that key.
+	 *
+	 * @return void
+	 */
+	public function test_clear_validation_failure_for_key_removes_entry(): void {
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'Bad key' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->repository->clear_validation_failure_for_key( 'LWSW-BAD-KEY' );
+
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-BAD-KEY', MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that clear_validation_failure_for_key does nothing when no entry exists for the key.
+	 *
+	 * @return void
+	 */
+	public function test_clear_validation_failure_for_key_is_noop_when_no_entry(): void {
+		$this->repository->clear_validation_failure_for_key( 'LWSW-NOT-PRESENT' );
+
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-NOT-PRESENT', MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that get_recent_failure_count returns zero when the validation state option is unset.
+	 *
+	 * @return void
+	 */
+	public function test_get_recent_failure_count_is_zero_when_state_empty(): void {
+		$this->assertSame( 0, $this->repository->get_recent_failure_count( MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that get_recent_failure_count counts every failure recorded inside the supplied window.
+	 *
+	 * @return void
+	 */
+	public function test_get_recent_failure_count_counts_in_window_failures(): void {
+		$this->set_fn_return( 'time', 1000000 );
+
+		for ( $i = 1; $i <= 4; $i++ ) {
+			$this->repository->record_validation_failure(
+				'LWSW-BAD-KEY-' . $i,
+				new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+				MINUTE_IN_SECONDS
+			);
+		}
+
+		$this->set_fn_return( 'time', 1000005 );
+
+		$this->assertSame( 4, $this->repository->get_recent_failure_count( MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that get_recent_failure_count excludes failures recorded outside the window.
+	 *
+	 * @return void
+	 */
+	public function test_get_recent_failure_count_excludes_aged_out_entries(): void {
+		$this->set_fn_return( 'time', 1000000 );
+
+		for ( $i = 1; $i <= 3; $i++ ) {
+			$this->repository->record_validation_failure(
+				'LWSW-BAD-KEY-' . $i,
+				new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+				MINUTE_IN_SECONDS
+			);
+		}
+
+		$this->set_fn_return( 'time', 1000061 );
+
+		// Pruning happens on write, so write a fresh entry here to force prune
+		// and assert that only the new one falls inside the window.
+		$this->repository->record_validation_failure(
+			'LWSW-LATE-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->assertSame( 1, $this->repository->get_recent_failure_count( MINUTE_IN_SECONDS ) );
+	}
+
+	/**
+	 * Tests that record_validation_failure prunes per-key entries older than the retention argument.
+	 *
+	 * @return void
+	 */
+	public function test_record_validation_failure_prunes_expired_per_key_entries(): void {
+		$this->set_fn_return( 'time', 1000000 );
+		$this->repository->record_validation_failure(
+			'LWSW-OLD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'old' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->set_fn_return( 'time', 1000061 );
+		$this->repository->record_validation_failure(
+			'LWSW-NEW-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'new' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$state = get_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
+
+		$this->assertIsArray( $state );
+		$this->assertIsArray( $state['per_key'] );
+		$this->assertCount( 1, $state['per_key'] );
+	}
+
+	/**
+	 * Tests that delete_validation_state removes all per-key entries and timestamps.
+	 *
+	 * @return void
+	 */
+	public function test_delete_validation_state_clears_option(): void {
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->repository->delete_validation_state();
+
+		$this->assertNull( $this->repository->get_per_key_failure( 'LWSW-BAD-KEY', MINUTE_IN_SECONDS ) );
+		$this->assertSame( 0, $this->repository->get_recent_failure_count( MINUTE_IN_SECONDS ) );
 	}
 }
