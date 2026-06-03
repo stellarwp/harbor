@@ -1,5 +1,5 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
-import { setLicense, clearLicense, VALID_LICENSE_KEY } from './_helpers/license';
+import { setLicense, clearLicense, VALID_LICENSE_KEY, MASKED_LICENSE_KEY } from './_helpers/license';
 
 const PRODUCT_NAMES = [ 'GiveWP', 'The Events Calendar', 'LearnDash', 'Kadence' ];
 
@@ -39,12 +39,35 @@ test.describe( 'Software Manager page', () => {
 		} );
 	} );
 
-	test( 'shows the license key in the sidebar', async ( { page, admin } ) => {
+	test( 'shows the license key masked in the sidebar', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
 
-		// The sidebar LicenseKeyInput renders the stored key in a read-only input once loaded
+		// The sidebar LicenseKeyInput renders the stored key masked in a
+		// read-only input once loaded — the full key must never be exposed.
+		await expect(
+			page.locator( `input[value="${ MASKED_LICENSE_KEY }"]` )
+		).toBeVisible( { timeout: 15_000 } );
 		await expect(
 			page.locator( `input[value="${ VALID_LICENSE_KEY }"]` )
+		).toHaveCount( 0 );
+	} );
+
+	test( 'reveals the full license key when editing', async ( { page, admin } ) => {
+		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+
+		// Wait for the masked field to load, then unlock it for editing.
+		await expect(
+			page.locator( `input[value="${ MASKED_LICENSE_KEY }"]` )
 		).toBeVisible( { timeout: 15_000 } );
+
+		await page.getByRole( 'button', { name: 'Edit' } ).click();
+
+		// Editing reveals the full key and removes the masked display.
+		await expect(
+			page.locator( `input[value="${ VALID_LICENSE_KEY }"]` )
+		).toBeVisible();
+		await expect(
+			page.locator( `input[value="${ MASKED_LICENSE_KEY }"]` )
+		).toHaveCount( 0 );
 	} );
 } );

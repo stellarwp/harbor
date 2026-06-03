@@ -22,6 +22,7 @@ import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
 import { getLicenseKeyPlaceholder } from '@/lib/harbor-data';
+import { maskLicenseKey } from '@/lib/license-utils';
 
 interface LicenseKeyInputProps {
 	/** The currently stored key, or null when no license is active. */
@@ -136,13 +137,16 @@ export function LicenseKeyInput( {
 	);
 
 	// ----- Locked state -----
+	// Display a masked key so the full value is never exposed on screen; the
+	// real key is revealed only when the field is unlocked for editing.
 	if ( currentKey !== null && ! isEditing ) {
 		return (
 			<div className="flex items-center gap-2">
 				<Input
 					readOnly
-					value={ currentKey }
-					className="flex-1 text-xs font-mono uppercase bg-neutral-100 cursor-default select-all"
+					value={ maskLicenseKey( currentKey ) }
+					aria-label={ __( 'License key (masked)', '%TEXTDOMAIN%' ) }
+					className="flex-1 text-xs font-mono uppercase bg-neutral-100 cursor-default select-none"
 					tabIndex={ -1 }
 				/>
 				<button

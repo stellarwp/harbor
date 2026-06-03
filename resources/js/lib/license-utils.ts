@@ -30,3 +30,30 @@ export const expiryTextClass: Record<string, string> = {
     'expiring-soon':  'text-amber-600 font-medium',
     ok:               'text-muted-foreground',
 };
+
+/**
+ * Masks a unified license key for display so the full key is never exposed
+ * on screen. The leading prefix segment and the final segment stay visible;
+ * every segment in between is replaced with X's of matching length, e.g.
+ * `LWSW-ABCD-EFGH-IJKL-MNOP-DJJT` becomes `LWSW-XXXX-XXXX-XXXX-XXXX-DJJT`.
+ *
+ * Keys with two or fewer dash-delimited segments have nothing safe to mask
+ * (no middle to hide), so they are returned unchanged.
+ *
+ * @since 1.4.0
+ */
+export function maskLicenseKey( key: string ): string {
+    const segments = key.split( '-' );
+
+    if ( segments.length <= 2 ) {
+        return key;
+    }
+
+    return segments
+        .map( ( segment, index ) => {
+            const isFirst = index === 0;
+            const isLast  = index === segments.length - 1;
+            return isFirst || isLast ? segment : 'X'.repeat( segment.length );
+        } )
+        .join( '-' );
+}
