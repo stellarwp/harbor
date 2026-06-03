@@ -52,6 +52,7 @@ final class License_ManagerTest extends HarborTestCase {
 
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 		parent::tearDown();
 	}
 
@@ -279,32 +280,181 @@ final class License_ManagerTest extends HarborTestCase {
 		$this->assertInstanceOf( Product_Collection::class, $result );
 	}
 
-	public function test_validate_and_store_returns_cached_error_when_within_throttle_window(): void {
-		// Write error state at a fixed time.
+	/**
+	 * Tests that a same-key submission inside the per-key window returns the cached error without calling the API.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_returns_cached_error_for_same_key_within_per_key_window(): void {
 		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure' ) );
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'API failure' ),
+			MINUTE_IN_SECONDS
+		);
 
-		// Advance to 30 s later — still within the 60 s TTL.
+		// Advance to 30 s later. Still within the 60 s per-key TTL.
 		$this->set_fn_return( 'time', 1000030 );
 
-		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
+		$result = $this->manager->validate_and_store( 'LWSW-BAD-KEY', 'example.com' );
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( Error_Code::INVALID_KEY, $result->get_error_code() );
 	}
 
-	public function test_validate_and_store_retries_api_after_throttle_window_expires(): void {
-		// Write error state at a fixed time.
+	/**
+	 * Tests that a same-key submission past the per-key window reaches the API again.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_retries_same_key_after_per_key_window_expires(): void {
 		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure' ) );
+		$this->repository->record_validation_failure(
+			'LWSW-UNIFIED-PRO-2026',
+			new WP_Error( Error_Code::INVALID_KEY, 'API failure' ),
+			MINUTE_IN_SECONDS
+		);
 
-		// Advance past the 60 s TTL.
+		// Advance past the 60 s per-key TTL.
 		$this->set_fn_return( 'time', 1000061 );
 
 		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
 
 		$this->assertInstanceOf( Product_Collection::class, $result );
 		$this->assertNotEmpty( $result );
+	}
+
+	/**
+	 * Tests that a different key is not blocked by a prior per-key failure.
+	 *
+	 * Covers the CONS-326 scenario: after an invalid key fails, the very next
+	 * attempt with a valid (different) key must reach the API without waiting
+	 * for any throttle window.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_different_key_bypasses_per_key_throttle(): void {
+		$this->set_fn_return( 'time', 1000000 );
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'API failure' ),
+			MINUTE_IN_SECONDS
+		);
+
+		$this->set_fn_return( 'time', 1000005 );
+
+		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $result );
+	}
+
+	/**
+	 * Tests that the rolling-window counter returns TOO_MANY_ATTEMPTS once the threshold is reached.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_throttles_after_failure_threshold_in_window(): void {
+		$this->set_fn_return( 'time', 1000000 );
+
+		for ( $i = 1; $i <= 5; $i++ ) {
+			$this->repository->record_validation_failure(
+				'LWSW-BAD-KEY-' . $i,
+				new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+				MINUTE_IN_SECONDS
+			);
+		}
+
+		$this->set_fn_return( 'time', 1000005 );
+
+		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( Error_Code::TOO_MANY_ATTEMPTS, $result->get_error_code() );
+		$this->assertSame( 429, $result->get_error_data()['status'] ?? null );
+	}
+
+	/**
+	 * Tests that the rolling-window throttle releases once recorded failures fall outside the window.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_window_throttle_releases_when_failures_age_out(): void {
+		$this->set_fn_return( 'time', 1000000 );
+
+		for ( $i = 1; $i <= 5; $i++ ) {
+			$this->repository->record_validation_failure(
+				'LWSW-BAD-KEY-' . $i,
+				new WP_Error( Error_Code::INVALID_KEY, 'fail' ),
+				MINUTE_IN_SECONDS
+			);
+		}
+
+		// Past the rolling window. The recent-failure count drops to zero.
+		$this->set_fn_return( 'time', 1000061 );
+
+		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $result );
+	}
+
+	/**
+	 * Tests that a validate_and_store failure records the error in the products state
+	 * surface so get_products_last_error / get_products_last_failure_at reflect it.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_failure_records_error_in_products_state(): void {
+		$result = $this->manager->validate_and_store( 'LWSW-DOES-NOT-EXIST', 'example.com' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+
+		$last_error = $this->repository->get_products_last_error();
+
+		$this->assertInstanceOf( WP_Error::class, $last_error );
+		$this->assertSame( $result->get_error_code(), $last_error->get_error_code() );
+		$this->assertNotNull( $this->repository->get_products_last_failure_at() );
+	}
+
+	/**
+	 * Tests that a validate_and_store failure leaves any previously-cached product
+	 * collection intact (set_products only writes last_error / last_failure_at on a WP_Error).
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_failure_preserves_existing_product_collection(): void {
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$this->manager->get_products( 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $this->repository->get_products() );
+
+		$failure = $this->manager->validate_and_store( 'LWSW-DOES-NOT-EXIST', 'example.com' );
+
+		$this->assertInstanceOf( WP_Error::class, $failure );
+		$this->assertInstanceOf( Product_Collection::class, $this->repository->get_products() );
+	}
+
+	/**
+	 * Tests that a successful validation clears the per-key throttle entry for that key.
+	 *
+	 * @return void
+	 */
+	public function test_validate_and_store_success_clears_per_key_throttle_for_that_key(): void {
+		$this->set_fn_return( 'time', 1000000 );
+		$this->repository->record_validation_failure(
+			'LWSW-UNIFIED-PRO-2026',
+			new WP_Error( Error_Code::INVALID_KEY, 'transient failure' ),
+			MINUTE_IN_SECONDS
+		);
+
+		// Advance past the per-key window so the success can proceed.
+		$this->set_fn_return( 'time', 1000061 );
+
+		$result = $this->manager->validate_and_store( 'LWSW-UNIFIED-PRO-2026', 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $result );
+		$this->assertNull(
+			$this->repository->get_per_key_failure( 'LWSW-UNIFIED-PRO-2026', MINUTE_IN_SECONDS )
+		);
 	}
 
 	public function test_successful_call_clears_error_state(): void {

@@ -126,6 +126,19 @@ On a successful fetch, `collection` and `last_success_at` are updated and `last_
 
 Since there is only one unified key per site, there is only one state entry. Invalidation is simple: `delete_products()` removes the option entirely, causing the next read to return `null` and trigger a fresh API call.
 
+### Validation Throttle Storage
+
+`validate_and_store()` uses a separate WordPress option (`lw_harbor_licensing_validation_state`) to track recent submission failures and rate-limit abusive input. It is distinct from the products state above so that user-submitted failures do not arm the background-fetch throttle that `get_products()` relies on. The envelope has two keys:
+
+| Key                  | Type                                                    | Description                                                                |
+| -------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `per_key`            | `array<string, array{failed_at: int, error: WP_Error}>` | Map of SHA-256 license-key hashes to the most recent failure for that key  |
+| `failure_timestamps` | `int[]`                                                 | Sliding list of failure timestamps used by the rolling-window rate limiter |
+
+`License_Repository::record_validation_failure()` appends to both layers and prunes anything older than the retention window (the max of the per-key TTL and the rolling-window length, owned by `License_Manager`). `clear_validation_failure_for_key()` runs on the success path and removes the per-key entry only, so a legitimate success does not erase evidence of abusive traffic. `delete_validation_state()` wipes the whole option and runs from a handler on `lw-harbor/unified_license_key_changed`. That action is only emitted when a valid license key is entered (i.e. `validate_and_store()` succeeds and the stored value actually changes), so the throttle is reset only on a real key rotation. Failed validations and same-key resubmissions leave the validation state intact.
+
+`Validation_State` (in `src/Harbor/Licensing/Validation_State.php`) is the in-memory value object the repository hydrates from the option. It owns the freshness checks, window count, and pruning logic. See [REST: License](../api/rest/license.md#throttling) for the corresponding behavior at the REST surface.
+
 ## Product Registry
 
 Products opt into unified licensing by bundling an `LWSW_KEY.php` file in their plugin root directory. The file must return a single `LWSW-`-prefixed key string:
@@ -204,10 +217,16 @@ flowchart TD
 flowchart TD
     Start["License_Manager::validate_and_store($key, $domain)"]
     Start --> Validate["Validate LWSW- prefix format"]
-    Validate --> API["LicensingClientInterface\n::products()->catalog($key, $domain)"]
+    Validate --> PerKey{"Per-key cached\nfailure within TTL?"}
+    PerKey -->|Yes| ReturnCached(["Return cached WP_Error"])
+    PerKey -->|No| Window{"Recent failures\n>= threshold?"}
+    Window -->|Yes| TooMany(["Return WP_Error\nTOO_MANY_ATTEMPTS (429)"])
+    Window -->|No| API["LicensingClientInterface\n::products()->catalog($key, $domain)"]
     API --> Check{"API error?"}
-    Check -->|Yes| Error(["Return WP_Error"])
-    Check -->|No| Persist["Persist Product_Collection\nto license state option"]
+    Check -->|Yes| RecordFail["record_validation_failure($key, $error)\nset_products($error)"]
+    RecordFail --> Error(["Return WP_Error"])
+    Check -->|No| ClearKey["clear_validation_failure_for_key($key)"]
+    ClearKey --> Persist["Persist Product_Collection\nto license state option"]
     Persist --> Store["License_Repository::store_key($key)"]
     Store --> Return(["Return Product_Entry[]\n(fetched product list)"])
 ```

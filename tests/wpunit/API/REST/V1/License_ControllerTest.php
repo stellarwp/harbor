@@ -28,6 +28,7 @@ final class License_ControllerTest extends HarborTestCase {
 
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 
 		$this->repository = new License_Repository();
 		$registry         = new Product_Registry();
@@ -60,6 +61,7 @@ final class License_ControllerTest extends HarborTestCase {
 
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 
 		parent::tearDown();
 	}
@@ -386,21 +388,84 @@ final class License_ControllerTest extends HarborTestCase {
 		$this->assertSame( [], $data['products'] );
 	}
 
-	public function test_store_returns_error_when_throttled(): void {
+	/**
+	 * Tests that POST /license returns the cached error when the same key is resubmitted inside the per-key window.
+	 *
+	 * @return void
+	 */
+	public function test_store_returns_cached_error_for_same_key_within_per_key_window(): void {
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 
-		// Write error state at a fixed time, then advance within the TTL.
 		$this->set_fn_return( 'time', 1000000 );
-		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ) );
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ),
+			MINUTE_IN_SECONDS
+		);
 		$this->set_fn_return( 'time', 1000030 );
 
 		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license' );
-		$request->set_param( 'key', 'LWSW-UNIFIED-PRO-2026' );
+		$request->set_param( 'key', 'LWSW-BAD-KEY' );
 
 		$response = $this->server->dispatch( $request );
 
 		$this->assertSame( 400, $response->get_status() );
 		$this->assertSame( Error_Code::INVALID_KEY, $response->get_data()['code'] );
 		$this->assertSame( 'API failure', $response->get_data()['message'] );
+	}
+
+	/**
+	 * Tests that POST /license with a different key is not blocked by a prior key's failure.
+	 *
+	 * Covers the CONS-326 scenario at the REST surface: a user submitting a valid
+	 * key right after an invalid one must not be blocked by the previous attempt.
+	 *
+	 * @return void
+	 */
+	public function test_store_with_different_key_bypasses_prior_failure(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$this->set_fn_return( 'time', 1000000 );
+		$this->repository->record_validation_failure(
+			'LWSW-BAD-KEY',
+			new WP_Error( Error_Code::INVALID_KEY, 'API failure', [ 'status' => 400 ] ),
+			MINUTE_IN_SECONDS
+		);
+		$this->set_fn_return( 'time', 1000005 );
+
+		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license' );
+		$request->set_param( 'key', 'LWSW-UNIFIED-PRO-2026' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $response->get_data()['key'] );
+	}
+
+	/**
+	 * Tests that POST /license responds with 429 once the rolling-window failure threshold is reached.
+	 *
+	 * @return void
+	 */
+	public function test_store_returns_429_when_failure_threshold_reached(): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$this->set_fn_return( 'time', 1000000 );
+		for ( $i = 1; $i <= 5; $i++ ) {
+			$this->repository->record_validation_failure(
+				'LWSW-BAD-KEY-' . $i,
+				new WP_Error( Error_Code::INVALID_KEY, 'fail', [ 'status' => 400 ] ),
+				MINUTE_IN_SECONDS
+			);
+		}
+		$this->set_fn_return( 'time', 1000005 );
+
+		$request = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license' );
+		$request->set_param( 'key', 'LWSW-UNIFIED-PRO-2026' );
+
+		$response = $this->server->dispatch( $request );
+
+		$this->assertSame( 429, $response->get_status() );
+		$this->assertSame( Error_Code::TOO_MANY_ATTEMPTS, $response->get_data()['code'] );
 	}
 }
