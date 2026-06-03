@@ -1,0 +1,5 @@
+significance: patch
+type: changed
+entry: Mask the unified license key in its locked display so the full key is not
+  exposed on screen; it is revealed only when editing.
+timestamp: 2026-06-03T20:32:06.102Z
