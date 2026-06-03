@@ -5703,6 +5703,8 @@ __webpack_require__.r(__webpack_exports__);
  * @package LiquidWeb\Harbor
  */
 
+// cspell:ignore EFGH IJKL MNOP DJJT -- illustrative masking example fragments
+
 /**
  * @since 1.0.0
  */
