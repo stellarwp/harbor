@@ -7,7 +7,7 @@ export const VALID_LICENSE_KEY = 'LWSW-UNIFIED-PRO-2026';
 // How the stored key renders once locked: the prefix and final segment stay
 // visible while the middle segments are masked with X's of matching length.
 // Mirrors maskLicenseKey() in resources/js/lib/license-utils.ts.
-export const MASKED_LICENSE_KEY = 'LWSW-XXXX-XXXX-XXXX-XXXX-DJJT';
+export const MASKED_LICENSE_KEY = 'LWSW-XXXXXXX-XXX-2026';
 
 export async function setLicense( requestUtils: RequestUtils, key: string ): Promise< void > {
 	await requestUtils.rest( {

@@ -4,6 +4,8 @@
  * @package LiquidWeb\Harbor
  */
 
+// cspell:ignore EFGH IJKL MNOP DJJT -- illustrative masking example fragments
+
 /**
  * @since 1.0.0
  */

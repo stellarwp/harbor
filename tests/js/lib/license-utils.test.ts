@@ -1,3 +1,4 @@
+// cspell:ignore EFGH IJKL MNOP DJJT -- illustrative masking example fragments
 import { maskLicenseKey } from '@/lib/license-utils';
 
 describe( 'maskLicenseKey', () => {
