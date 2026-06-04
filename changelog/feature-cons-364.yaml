@@ -1,0 +1,4 @@
+significance: patch
+type: tweak
+entry: Update the unified license key input UI to mask its value when in locked state.
+timestamp: 2026-06-03T20:37:12.586Z

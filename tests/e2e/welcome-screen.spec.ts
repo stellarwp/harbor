@@ -1,5 +1,5 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
-import { clearLicense, VALID_LICENSE_KEY } from './_helpers/license';
+import { clearLicense, VALID_LICENSE_KEY, MASKED_LICENSE_KEY } from './_helpers/license';
 
 const PAGE = { admin: 'options-general.php', query: 'page=lw-software-manager' };
 
@@ -63,6 +63,8 @@ test.describe( 'Welcome screen', () => {
 		await page.getByRole( 'button', { name: 'Activate' } ).click();
 
 		await expect( page.getByText( 'Your Features' ) ).toBeVisible( { timeout: 15_000 } );
-		await expect( page.locator( `input[value="${ VALID_LICENSE_KEY }"]` ) ).toBeVisible();
+		// The sidebar locks to the masked key — the full key is never exposed.
+		await expect( page.locator( `input[value="${ MASKED_LICENSE_KEY }"]` ) ).toBeVisible();
+		await expect( page.locator( `input[value="${ VALID_LICENSE_KEY }"]` ) ).toHaveCount( 0 );
 	} );
 } );
