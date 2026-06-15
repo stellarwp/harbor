@@ -300,3 +300,16 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system.                               |
 | `lw_harbor_refresh_catalog`                    | `(): bool`                          | Force a synchronous re-fetch of the product catalog. Returns `true` on success, `false` on failure.           |
+
+### Constants
+
+Define these in `wp-config.php` (or another point that loads before Harbor) to override defaults.
+
+| Constant                       | Type     | Purpose                                                                                                                                                                                                                          |
+| ------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `LW_HARBOR_DISABLE_DEBUG_LOG`  | `bool`   | When truthy, suppresses **all** of Harbor's debug logging even while `WP_DEBUG` and `WP_DEBUG_LOG` are enabled. Use this to silence Harbor's output without turning off WordPress debugging for the rest of the site.            |
+| `LW_HARBOR_LICENSING_BASE_URL` | `string` | Override the base URL for the licensing API. Intended for local development and testing.                                                                                                                                          |
+| `LW_HARBOR_PORTAL_BASE_URL`    | `string` | Override the base URL for the Commerce Portal catalog API. Intended for local development and testing.                                                                                                                            |
+| `LW_HARBOR_HERALD_BASE_URL`    | `string` | Override the base URL for the Herald API. Intended for local development and testing.                                                                                                                                            |
+
+Harbor's debug logging is otherwise gated on both `WP_DEBUG` and `WP_DEBUG_LOG` being enabled, and all messages are prefixed with `Harbor:` for easy filtering in `debug.log`.
