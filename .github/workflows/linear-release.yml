@@ -1,9 +1,6 @@
-# SCHEDULED variant — for comparison against linear-release.yml (continuous).
-# Pick ONE of the two; do not run both against the same Linear pipeline.
-#
-# Use this when you want to see what's queued for the next version *before* it
-# ships. A release is tracked in-flight as commits land, then finalized and
-# versioned at publish time.
+# Tracks Harbor releases in Linear using a SCHEDULED pipeline, so we can see
+# what's queued for the next version *before* it ships. A release is tracked
+# in-flight as commits land, then finalized and versioned at publish time.
 #
 #   - Push to main      -> `sync`     accumulates each merge's Linear issues onto
 #                                      the current in-flight (started) release.
