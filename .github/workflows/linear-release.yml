@@ -1,0 +1,39 @@
+# Syncs each published GitHub Release to a Linear release (continuous pipeline).
+#
+# On release publish, the official Linear Release Action scans the commits since
+# the previous release for Linear issue identifiers and records a completed
+# release, versioned from the release tag (e.g. v1.2.0 -> 1.2.0).
+#
+# Requires the LINEAR_ACCESS_KEY repository secret — the access key from the
+# Linear release pipeline (Settings -> Releases).
+name: Linear Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  linear-release:
+    name: Sync release to Linear
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0 # Full history so the CLI can scan commits since the last release.
+
+      - name: Derive version from release tag
+        id: version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - uses: linear/linear-release-action@v0
+        with:
+          access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
+          version: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+          dry_run: true # TODO: remove once verified — scans and logs but creates no Linear release.
