@@ -37,7 +37,6 @@ jobs:
         with:
           access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
           command: sync
-          dry_run: true # TODO: remove once verified.
 
   # Publishing the GitHub Release finalizes the in-flight release and stamps the
   # version from the tag.
@@ -63,7 +62,6 @@ jobs:
           command: complete
           version: ${{ steps.version.outputs.version }}
           name: ${{ steps.version.outputs.version }}
-          dry_run: true # TODO: remove once verified.
 
   # Optional: gate the release through phases (code freeze, QA, RC) before
   # completing it. Add a job like this triggered however you mark those phases
