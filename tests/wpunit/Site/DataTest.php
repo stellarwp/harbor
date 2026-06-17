@@ -29,6 +29,8 @@ class DataTest extends HarborTestCase {
 	/**
 	 * The domain should be the host of home_url(), lowercased.
 	 *
+	 * @since TBD
+	 *
 	 * @test
 	 */
 	public function it_should_return_the_host_of_home_url() {
@@ -43,6 +45,8 @@ class DataTest extends HarborTestCase {
 	 * A host-environment plugin that rewrites home_url (e.g. Hostinger's
 	 * preview-domain mu-plugin) must be honored, so the domain Harbor
 	 * validates against matches the URL used during activation.
+	 *
+	 * @since TBD
 	 *
 	 * @test
 	 */
@@ -65,6 +69,8 @@ class DataTest extends HarborTestCase {
 	/**
 	 * The host should always be returned in lowercase.
 	 *
+	 * @since TBD
+	 *
 	 * @test
 	 */
 	public function it_should_lowercase_the_host() {
@@ -85,6 +91,8 @@ class DataTest extends HarborTestCase {
 
 	/**
 	 * The lw-harbor/get_domain filter should be able to override the domain.
+	 *
+	 * @since TBD
 	 *
 	 * @test
 	 */
