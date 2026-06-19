@@ -77,6 +77,7 @@ export const receiveLegacyLicenses = (licenses: LegacyLicense[]): Action => ({
  * Enable a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const enableFeature =
@@ -103,7 +104,7 @@ export const enableFeature =
 				err,
 				ErrorCode.FeatureEnableFailed,
 				__(
-					'Liquid Web Software Manager failed to enable your feature.',
+					'Nexcess Software Manager failed to enable your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -116,6 +117,7 @@ export const enableFeature =
  * Disable a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const disableFeature =
@@ -137,7 +139,7 @@ export const disableFeature =
 				err,
 				ErrorCode.FeatureDisableFailed,
 				__(
-					'Liquid Web Software Manager failed to disable your feature.',
+					'Nexcess Software Manager failed to disable your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -150,6 +152,7 @@ export const disableFeature =
  * Update a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const updateFeature =
@@ -171,7 +174,7 @@ export const updateFeature =
 				err,
 				ErrorCode.FeatureUpdateFailed,
 				__(
-					'Liquid Web Software Manager failed to update your feature.',
+					'Nexcess Software Manager failed to update your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -185,6 +188,7 @@ export const updateFeature =
  * and features resolvers so the UI refreshes with the new entitlements.
  *
  * @param key
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const storeLicense =
@@ -194,7 +198,7 @@ export const storeLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to validate your license, another action is in progress.',
+					'Nexcess Software Manager failed to validate your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -220,7 +224,7 @@ export const storeLicense =
 				err,
 				ErrorCode.LicenseStoreFailed,
 				__(
-					'Liquid Web Software Manager failed to validate your license.',
+					'Nexcess Software Manager failed to validate your license.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -233,6 +237,7 @@ export const storeLicense =
  * Refresh the license from the upstream service via the REST API, then
  * invalidate the features resolver so the UI reflects any plan changes.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const refreshLicense =
@@ -242,7 +247,7 @@ export const refreshLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to refresh your license, another action is in progress.',
+					'Nexcess Software Manager failed to refresh your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -264,7 +269,7 @@ export const refreshLicense =
 				err,
 				ErrorCode.LicenseRefreshFailed,
 				__(
-					'Liquid Web Software Manager failed to refresh your license.',
+					'Nexcess Software Manager failed to refresh your license.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -276,6 +281,7 @@ export const refreshLicense =
 /**
  * Refresh the product catalog from the upstream service via the REST API.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const refreshCatalog =
@@ -293,7 +299,7 @@ export const refreshCatalog =
 				err,
 				ErrorCode.CatalogRefreshFailed,
 				__(
-					'Liquid Web Software Manager failed to refresh the product catalog.',
+					'Nexcess Software Manager failed to refresh the product catalog.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -305,6 +311,7 @@ export const refreshCatalog =
  * Delete the stored license key via the REST API, then invalidate the
  * features resolver so the UI refreshes.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 export const deleteLicense =
@@ -314,7 +321,7 @@ export const deleteLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to delete your license, another action is in progress.',
+					'Nexcess Software Manager failed to delete your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -333,7 +340,7 @@ export const deleteLicense =
 				err,
 				ErrorCode.LicenseDeleteFailed,
 				__(
-					'Liquid Web Software Manager failed to remove your license.',
+					'Nexcess Software Manager failed to remove your license.',
 					'%TEXTDOMAIN%'
 				)
 			);

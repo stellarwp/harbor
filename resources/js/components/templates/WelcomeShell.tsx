@@ -16,6 +16,7 @@ interface WelcomeShellProps {
 }
 
 /**
+ * @since TBD Updated brand subtitle to Nexcess branding.
  * @since 1.3.0
  */
 export function WelcomeShell( { children }: WelcomeShellProps ) {
@@ -29,7 +30,7 @@ export function WelcomeShell( { children }: WelcomeShellProps ) {
                             { __( 'Software License Manager', '%TEXTDOMAIN%' ) }
                         </h1>
                         <p className="text-xs leading-8 font-semibold m-0 text-neutral-950">
-                            { __( 'Liquid Web by Nexcess', '%TEXTDOMAIN%' ) }
+                            { __( 'Nexcess', '%TEXTDOMAIN%' ) }
                         </p>
                     </div>
                 </div>

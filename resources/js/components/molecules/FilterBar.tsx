@@ -15,6 +15,7 @@ import { useFilter } from '@/context/filter-context';
 import logoLW from '@img/logo-lw.svg';
 
 /**
+ * @since TBD Updated logo alt text and heading to Nexcess branding.
  * @since 1.0.0
  */
 export function FilterBar() {
@@ -31,7 +32,7 @@ export function FilterBar() {
         <div className="flex flex-wrap items-center gap-3">
             <img
                 src={ logoLW }
-                alt={ __( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ) }
+                alt={ __( 'Nexcess Software Manager', '%TEXTDOMAIN%' ) }
                 className="w-[130px] shrink-0"
             />
 

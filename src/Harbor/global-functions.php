@@ -269,8 +269,9 @@ if ( ! function_exists( 'lw_harbor_display_legacy_license_page_notice' ) ) {
 	 *
 	 * Intended to be called by consuming plugins on their own license settings
 	 * pages to inform users that licensing is now managed centrally through
-	 * Liquid Web's unified system.
+	 * Nexcess's unified system.
 	 *
+	 * @since TBD Updated docblock description to Nexcess branding.
 	 * @since 1.0.0
 	 *
 	 * @param string $product_name Optional human-readable product name (e.g. "GiveWP", "Kadence").

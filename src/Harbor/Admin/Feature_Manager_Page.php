@@ -20,11 +20,20 @@ use LiquidWeb\Harbor\Utils\Version;
 class Feature_Manager_Page {
 
 	/**
-	 * The admin page slug.
+	 * The canonical admin page slug.
 	 *
+	 * @since TBD Changed from 'lw-software-manager' to 'nexcess-software-manager' (Nexcess rebrand).
 	 * @since 1.0.0
 	 */
-	public const PAGE_SLUG = 'lw-software-manager';
+	public const PAGE_SLUG = 'nexcess-software-manager';
+
+	/**
+	 * Legacy admin page slug kept permanently registered so bookmarks and
+	 * Leader mid-session transitions remain functional after the rebrand.
+	 *
+	 * @since TBD
+	 */
+	public const PAGE_SLUG_LEGACY = 'lw-software-manager';
 
 	/**
 	 * Site data provider.
@@ -54,7 +63,7 @@ class Feature_Manager_Page {
 	private Catalog_Repository $catalog;
 
 	/**
-	 * Hook suffix returned by add_submenu_page().
+	 * Hook suffix for the canonical page slug, returned by add_submenu_page().
 	 * Empty string until the page is registered.
 	 *
 	 * @since 1.0.0
@@ -62,6 +71,16 @@ class Feature_Manager_Page {
 	 * @var string
 	 */
 	private string $page_hook = '';
+
+	/**
+	 * Hook suffix for the legacy page slug, returned by add_submenu_page().
+	 * Empty string until the page is registered.
+	 *
+	 * @since TBD
+	 *
+	 * @var string
+	 */
+	private string $page_hook_legacy = '';
 
 	/**
 	 * Constructor.
@@ -81,6 +100,7 @@ class Feature_Manager_Page {
 	/**
 	 * Registers the unified feature manager page if this instance is the version leader.
 	 *
+	 * @since TBD Also registers the legacy slug (lw-software-manager) as a permanent hidden alias.
 	 * @since 1.0.0
 	 *
 	 * @return void
@@ -92,18 +112,30 @@ class Feature_Manager_Page {
 
 		$this->page_hook = (string) add_submenu_page(
 			'options-general.php',
-			__( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ),
-			__( 'Liquid Web Products', '%TEXTDOMAIN%' ),
+			__( 'Nexcess Software Manager', '%TEXTDOMAIN%' ),
+			__( 'Nexcess Products', '%TEXTDOMAIN%' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ $this, 'render' ]
 		);
 
+		// Register the legacy slug permanently as a hidden page (no menu entry).
+		// This keeps the page reachable for bookmarks and for Leader mid-session
+		// scenarios where an older Harbor instance becomes the Leader.
+		$this->page_hook_legacy = (string) add_submenu_page(
+			null,
+			__( 'Nexcess Software Manager', '%TEXTDOMAIN%' ),
+			'',
+			'manage_options',
+			self::PAGE_SLUG_LEGACY,
+			[ $this, 'render' ]
+		);
+
 		/**
-		 * Filters whether to hide the Liquid Web Products item from the Settings menu.
+		 * Filters whether to hide the Nexcess Products item from the Settings menu.
 		 *
 		 * Hiding the menu item does not unregister the page. The Software Manager
-		 * UI remains accessible at options-general.php?page=lw-software-manager
+		 * UI remains accessible at options-general.php?page=nexcess-software-manager
 		 * for users who reach it via a direct link or a product plugin's submenu.
 		 *
 		 * @since 1.1.0
@@ -121,21 +153,22 @@ class Feature_Manager_Page {
 	}
 
 	/**
-	 * Enqueues the React Feature Manager UI assets only on the lw-software-manager page.
+	 * Enqueues the React Feature Manager UI assets only on the nexcess-software-manager page.
 	 *
 	 * Called on admin_enqueue_scripts. The hook suffix is compared against
 	 * $this->page_hook — the value returned by add_menu_page() — to ensure
 	 * the React bundle is loaded only on this specific admin page.
 	 *
-	 * @since 1.0.0
+	 * @since TBD   Also checks $this->page_hook_legacy so assets are enqueued on the legacy slug page.
 	 * @since 1.4.0 Dropped string type-hint for $hook_suffix.
+	 * @since 1.0.0
 	 *
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 *
 	 * @return void
 	 */
 	public function maybe_enqueue_assets( $hook_suffix ): void {
-		if ( $hook_suffix !== $this->page_hook ) {
+		if ( $hook_suffix !== $this->page_hook && $hook_suffix !== $this->page_hook_legacy ) {
 			return;
 		}
 

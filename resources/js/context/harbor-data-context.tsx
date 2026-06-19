@@ -44,7 +44,7 @@ function findErrors( results: ResolvableRecord ): HarborError[] {
             errors.push( HarborError.syncFrom(
                 entry.error,
                 ErrorCode.ResolutionFailed,
-                __( 'Liquid Web Software Manager failed to load your data.', '%TEXTDOMAIN%' ),
+                __( 'Nexcess Software Manager failed to load your data.', '%TEXTDOMAIN%' ),
             ) );
         }
     }
@@ -52,6 +52,7 @@ function findErrors( results: ResolvableRecord ): HarborError[] {
 }
 
 /**
+ * @since TBD     Updated fallback error message to Nexcess branding.
  * @since 1.3.0   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
  * @since 1.0.0
  */

@@ -33,7 +33,7 @@ function findError( results: ResolvableRecord ): HarborError | null {
             return HarborError.syncFrom(
                 entry.error,
                 ErrorCode.ResolutionFailed,
-                __( 'Liquid Web Software Manager failed to load your data.', '%TEXTDOMAIN%' ),
+                __( 'Nexcess Software Manager failed to load your data.', '%TEXTDOMAIN%' ),
             );
         }
     }
@@ -56,6 +56,8 @@ function findError( results: ResolvableRecord ): HarborError | null {
  *     [],
  * );
  * ```
+ *
+ * @since TBD Updated fallback error message to Nexcess branding.
  */
 export default function useResolvableSelectWithError<
     T extends ResolvableRecord,

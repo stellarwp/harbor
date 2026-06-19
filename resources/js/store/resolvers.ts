@@ -17,6 +17,7 @@ import { forwardResolver, forwardResolverWithoutArgs } from '@/lib/forward-resol
 /**
  * Fetches all features from the REST API and stores them.
  * Triggered automatically when getFeatures is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 export const getFeatures =
 	(): Thunk =>
@@ -30,7 +31,7 @@ export const getFeatures =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.FeaturesFetchFailed,
-				__('Liquid Web Software Manager failed to load your features.', '%TEXTDOMAIN%')
+				__('Nexcess Software Manager failed to load your features.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -39,6 +40,7 @@ export const getFeatures =
  * Fetches the active Harbor host plugin basenames from the REST API.
  * Triggered automatically when getHarborHostBasenames is first called, and
  * invalidated after plugin activation so the list stays current.
+ * @since TBD Updated error message to Nexcess branding.
  */
 export const getHarborHostBasenames =
 	(): Thunk =>
@@ -52,7 +54,7 @@ export const getHarborHostBasenames =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.FeaturesFetchFailed,
-				__('Liquid Web Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%')
+				__('Nexcess Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -67,6 +69,7 @@ export const isFeatureEnabled = forwardResolverWithoutArgs('getFeatures');
 
 /**
  * Fetches legacy licenses from the REST API.
+ * @since TBD Updated error message to Nexcess branding.
  */
 export const getLegacyLicenses =
 	(): Thunk =>
@@ -80,7 +83,7 @@ export const getLegacyLicenses =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.LegacyLicensesFetchFailed,
-				__('Liquid Web Software Manager failed to load legacy licenses.', '%TEXTDOMAIN%')
+				__('Nexcess Software Manager failed to load legacy licenses.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -96,6 +99,7 @@ export const hasLegacyLicenses = forwardResolver('getLegacyLicenses');
 /**
  * Fetches all product catalogs from the REST API and stores them.
  * Triggered automatically when getCatalog is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 export const getCatalog =
 	(): Thunk =>
@@ -109,7 +113,7 @@ export const getCatalog =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.CatalogFetchFailed,
-				__('Liquid Web Software Manager failed to load the product catalog.', '%TEXTDOMAIN%')
+				__('Nexcess Software Manager failed to load the product catalog.', '%TEXTDOMAIN%')
 			);
 		}
 	};
@@ -125,6 +129,7 @@ export const getCatalogTier    = forwardResolverWithoutArgs('getCatalog');
 /**
  * Fetches the stored license from the REST API.
  * Triggered automatically when getLicenseKey is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 export const getLicenseKey =
 	(): Thunk =>
@@ -138,7 +143,7 @@ export const getLicenseKey =
 			throw await HarborError.wrap(
 				err,
 				ErrorCode.LicenseFetchFailed,
-				__('Liquid Web Software Manager failed to load your license.', '%TEXTDOMAIN%')
+				__('Nexcess Software Manager failed to load your license.', '%TEXTDOMAIN%')
 			);
 		}
 	};
