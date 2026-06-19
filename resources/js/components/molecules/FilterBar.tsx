@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
-import logoLW from '@img/logo-lw.svg';
+import logoNX from '@img/nexcess-logo-light.svg';
 
 /**
  * @since TBD Updated logo alt text and heading to Nexcess branding.
@@ -31,7 +31,7 @@ export function FilterBar() {
     return (
         <div className="flex flex-wrap items-center gap-3">
             <img
-                src={ logoLW }
+                src={ logoNX }
                 alt={ __( 'Nexcess Software Manager', '%TEXTDOMAIN%' ) }
                 className="w-[130px] shrink-0"
             />
