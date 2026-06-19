@@ -1489,6 +1489,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * @since TBD Updated logo alt text and heading to Nexcess branding.
  * @since 1.0.0
  */
 
@@ -1509,7 +1510,7 @@ function FilterBar() {
     className: "flex flex-wrap items-center gap-3",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
       src: _img_logo_lw_svg__WEBPACK_IMPORTED_MODULE_6__["default"],
-      alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web Software Manager', '%TEXTDOMAIN%'),
+      alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Nexcess Software Manager', '%TEXTDOMAIN%'),
       className: "w-[130px] shrink-0"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "relative w-[260px]",
@@ -2842,6 +2843,7 @@ function LicenseSectionSkeleton() {
 }
 
 /**
+ * @since TBD     Updated portal link label to Nexcess branding.
  * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
  */
@@ -2914,7 +2916,7 @@ function LicenseSection({
           target: "_blank",
           rel: "noopener noreferrer",
           className: "underline hover:opacity-75",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manage license in Liquid Web', '%TEXTDOMAIN%')
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manage license in Nexcess', '%TEXTDOMAIN%')
         })
       })]
     })]
@@ -3456,6 +3458,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * @since TBD Updated brand subtitle to Nexcess branding.
  * @since 1.3.0
  */
 function WelcomeShell({
@@ -3476,7 +3479,7 @@ function WelcomeShell({
             children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Software License Manager', '%TEXTDOMAIN%')
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
             className: "text-xs leading-8 font-semibold m-0 text-neutral-950",
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web by Nexcess', '%TEXTDOMAIN%')
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Nexcess', '%TEXTDOMAIN%')
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -4323,13 +4326,14 @@ function findErrors(results) {
   for (const key in results) {
     const entry = results[key];
     if (entry.status === 'ERROR') {
-      errors.push(_errors_harbor_error__WEBPACK_IMPORTED_MODULE_5__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_6__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your data.', '%TEXTDOMAIN%')));
+      errors.push(_errors_harbor_error__WEBPACK_IMPORTED_MODULE_5__["default"].syncFrom(entry.error, _errors_error_code__WEBPACK_IMPORTED_MODULE_6__.ErrorCode.ResolutionFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load your data.', '%TEXTDOMAIN%')));
     }
   }
   return errors;
 }
 
 /**
+ * @since TBD     Updated fallback error message to Nexcess branding.
  * @since 1.3.0   Expose isLicenseLoading alongside isLoading so consumers can route on the license resolver alone.
  * @since 1.0.0
  */
@@ -5922,6 +5926,7 @@ const receiveLegacyLicenses = licenses => ({
  * Enable a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const enableFeature = slug => async ({
@@ -5950,7 +5955,7 @@ const enableFeature = slug => async ({
     dispatch.invalidateResolution('getHarborHostBasenames', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureEnableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to enable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -5964,6 +5969,7 @@ const enableFeature = slug => async ({
  * Disable a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const disableFeature = slug => async ({
@@ -5987,7 +5993,7 @@ const disableFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to disable your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureDisableFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to disable your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'TOGGLE_FEATURE_FAILED',
       slug,
@@ -6001,6 +6007,7 @@ const disableFeature = slug => async ({
  * Update a feature via the REST API.
  *
  * @param slug
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const updateFeature = slug => async ({
@@ -6024,7 +6031,7 @@ const updateFeature = slug => async ({
     });
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to update your feature.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeatureUpdateFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to update your feature.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'UPDATE_FEATURE_FAILED',
       slug,
@@ -6039,6 +6046,7 @@ const updateFeature = slug => async ({
  * and features resolvers so the UI refreshes with the new entitlements.
  *
  * @param key
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const storeLicense = key => async ({
@@ -6046,7 +6054,7 @@ const storeLicense = key => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to validate your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to validate your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'STORE_LICENSE_START'
@@ -6069,7 +6077,7 @@ const storeLicense = key => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to validate your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseStoreFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to validate your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'STORE_LICENSE_FAILED',
       error
@@ -6082,6 +6090,7 @@ const storeLicense = key => async ({
  * Refresh the license from the upstream service via the REST API, then
  * invalidate the features resolver so the UI reflects any plan changes.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const refreshLicense = () => async ({
@@ -6089,7 +6098,7 @@ const refreshLicense = () => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to refresh your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'REFRESH_LICENSE_START'
@@ -6109,7 +6118,7 @@ const refreshLicense = () => async ({
     }
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to refresh your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'REFRESH_LICENSE_FAILED',
       error
@@ -6121,6 +6130,7 @@ const refreshLicense = () => async ({
 /**
  * Refresh the product catalog from the upstream service via the REST API.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const refreshCatalog = () => async ({
@@ -6134,7 +6144,7 @@ const refreshCatalog = () => async ({
     dispatch.receiveCatalog(result);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to refresh the product catalog.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogRefreshFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to refresh the product catalog.', '%TEXTDOMAIN%'));
     return error;
   }
 };
@@ -6143,6 +6153,7 @@ const refreshCatalog = () => async ({
  * Delete the stored license key via the REST API, then invalidate the
  * features resolver so the UI refreshes.
  *
+ * @since TBD Updated error messages to Nexcess branding.
  * @since 1.0.0
  */
 const deleteLicense = () => async ({
@@ -6150,7 +6161,7 @@ const deleteLicense = () => async ({
   select
 }) => {
   if (!select.canModifyLicense()) {
-    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
+    return new _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError(_errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseActionInProgress, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to delete your license, another action is in progress.', '%TEXTDOMAIN%'));
   }
   dispatch({
     type: 'DELETE_LICENSE_START'
@@ -6166,7 +6177,7 @@ const deleteLicense = () => async ({
     dispatch.invalidateResolution('getFeatures', []);
     return null;
   } catch (err) {
-    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to remove your license.', '%TEXTDOMAIN%'));
+    const error = await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseDeleteFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to remove your license.', '%TEXTDOMAIN%'));
     dispatch({
       type: 'DELETE_LICENSE_FAILED',
       error
@@ -6606,6 +6617,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Fetches all features from the REST API and stores them.
  * Triggered automatically when getFeatures is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 const getFeatures = () => async ({
   dispatch
@@ -6616,7 +6628,7 @@ const getFeatures = () => async ({
     });
     dispatch.receiveFeatures(features);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your features.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load your features.', '%TEXTDOMAIN%'));
   }
 };
 
@@ -6624,6 +6636,7 @@ const getFeatures = () => async ({
  * Fetches the active Harbor host plugin basenames from the REST API.
  * Triggered automatically when getHarborHostBasenames is first called, and
  * invalidated after plugin activation so the list stays current.
+ * @since TBD Updated error message to Nexcess branding.
  */
 const getHarborHostBasenames = () => async ({
   dispatch
@@ -6634,7 +6647,7 @@ const getHarborHostBasenames = () => async ({
     });
     dispatch.receiveHarborHosts(basenames);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.FeaturesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load Harbor hosts.', '%TEXTDOMAIN%'));
   }
 };
 const getFeaturesByProduct = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getFeatures');
@@ -6647,6 +6660,7 @@ const isFeatureEnabled = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.f
 
 /**
  * Fetches legacy licenses from the REST API.
+ * @since TBD Updated error message to Nexcess branding.
  */
 const getLegacyLicenses = () => async ({
   dispatch
@@ -6657,7 +6671,7 @@ const getLegacyLicenses = () => async ({
     });
     dispatch.receiveLegacyLicenses(licenses);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load legacy licenses.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LegacyLicensesFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load legacy licenses.', '%TEXTDOMAIN%'));
   }
 };
 const getLegacyLicenseBySlug = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getLegacyLicenses');
@@ -6671,6 +6685,7 @@ const hasLegacyLicenses = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.
 /**
  * Fetches all product catalogs from the REST API and stores them.
  * Triggered automatically when getCatalog is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 const getCatalog = () => async ({
   dispatch
@@ -6681,7 +6696,7 @@ const getCatalog = () => async ({
     });
     dispatch.receiveCatalog(catalogs);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load the product catalog.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.CatalogFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load the product catalog.', '%TEXTDOMAIN%'));
   }
 };
 const getProductCatalog = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolverWithoutArgs)('getCatalog');
@@ -6695,6 +6710,7 @@ const getCatalogTier = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.for
 /**
  * Fetches the stored license from the REST API.
  * Triggered automatically when getLicenseKey is first called.
+ * @since TBD Updated error message to Nexcess branding.
  */
 const getLicenseKey = () => async ({
   dispatch
@@ -6705,7 +6721,7 @@ const getLicenseKey = () => async ({
     });
     dispatch.receiveLicense(result);
   } catch (err) {
-    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Liquid Web Software Manager failed to load your license.', '%TEXTDOMAIN%'));
+    throw await _errors__WEBPACK_IMPORTED_MODULE_2__.HarborError.wrap(err, _errors__WEBPACK_IMPORTED_MODULE_2__.ErrorCode.LicenseFetchFailed, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Nexcess Software Manager failed to load your license.', '%TEXTDOMAIN%'));
   }
 };
 const hasLicense = (0,_lib_forward_resolver__WEBPACK_IMPORTED_MODULE_3__.forwardResolver)('getLicenseKey');
