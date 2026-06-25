@@ -67,6 +67,43 @@ class DataTest extends HarborTestCase {
 	}
 
 	/**
+	 * Temporary-domain access leaves DB URLs on the production domain
+	 * but rewrites home_url() to the current temporary host at runtime.
+	 *
+	 * @since TBD
+	 *
+	 * @test
+	 */
+	public function it_should_derive_the_domain_from_home_url_not_the_siteurl_option() {
+		$data = $this->container->make( Harbor\Site\Data::class );
+
+		$production_url = 'https://production.com';
+		$temporary_host = 'staging.com';
+
+		update_option( 'siteurl', $production_url );
+		update_option( 'home', $production_url );
+
+		$filter = static function ( $url ) use ( $temporary_host ) {
+			return str_replace(
+				[
+					'http://production.com',
+					'https://production.com',
+				],
+				'https://' . $temporary_host,
+				$url
+			);
+		};
+
+		add_filter( 'home_url', $filter );
+
+		try {
+			$this->assertSame( $temporary_host, $data->get_site_domain() );
+		} finally {
+			remove_filter( 'home_url', $filter );
+		}
+	}
+
+	/**
 	 * The host should always be returned in lowercase.
 	 *
 	 * @since TBD
