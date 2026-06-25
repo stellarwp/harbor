@@ -113,7 +113,7 @@ final class License_Repository {
 	 * user-submitted failures do not arm the background-fetch throttle that
 	 * get_products() relies on.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var string
 	 */
@@ -567,7 +567,7 @@ final class License_Repository {
 	 * that a different key submitted right after a failed attempt is never
 	 * blocked by the previous key's error.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string $key The license key being submitted.
 	 * @param int    $ttl How long (seconds) a cached failure remains valid.
@@ -590,7 +590,7 @@ final class License_Repository {
 	 * timestamp in the rolling window (read by get_recent_failure_count),
 	 * pruning anything outside `$retention_seconds` so the option stays bounded.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string   $key               The license key whose validation failed.
 	 * @param WP_Error $error             The error returned by the upstream API.
@@ -617,7 +617,7 @@ final class License_Repository {
 	 * intentionally not cleared because legitimate successes should not erase
 	 * evidence of abusive traffic.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string $key The license key to clear.
 	 *
@@ -633,7 +633,7 @@ final class License_Repository {
 	/**
 	 * Number of failed validate_and_store attempts within the given window.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param int $window Length of the rolling window in seconds.
 	 *
@@ -649,7 +649,7 @@ final class License_Repository {
 	 * Wired up to lw-harbor/unified_license_key_changed so that rotating the
 	 * stored license key wipes per-key entries that are no longer relevant.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @return void
 	 */
@@ -660,7 +660,7 @@ final class License_Repository {
 	/**
 	 * Hydrate a Validation_State from the backing option, or a fresh one on miss.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @return Validation_State
 	 */
@@ -684,7 +684,7 @@ final class License_Repository {
 	/**
 	 * Persist a Validation_State to the backing option.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param Validation_State $state The state to persist.
 	 *
@@ -697,7 +697,7 @@ final class License_Repository {
 	/**
 	 * Hash a license key for use as a map key in the per-key throttle.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string $key The license key.
 	 *

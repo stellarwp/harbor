@@ -74,7 +74,7 @@ class Data {
 	 * so home_url() returns the canonical (option-backed) domain — no reliance
 	 * on request-only server variables.
 	 *
-	 * @since TBD resolve from home_url() so URL rewrite filters are respected
+	 * @since 1.5.0 resolve from home_url() so URL rewrite filters are respected
 	 * @since 1.0.0
 	 *
 	 * @return string

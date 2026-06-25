@@ -29,7 +29,7 @@ class DataTest extends HarborTestCase {
 	/**
 	 * The domain should be the host of home_url(), lowercased.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
@@ -46,7 +46,7 @@ class DataTest extends HarborTestCase {
 	 * preview-domain mu-plugin) must be honored, so the domain Harbor
 	 * validates against matches the URL used during activation.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
@@ -70,7 +70,7 @@ class DataTest extends HarborTestCase {
 	 * Temporary-domain access leaves DB URLs on the production domain
 	 * but rewrites home_url() to the current temporary host at runtime.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
@@ -106,7 +106,7 @@ class DataTest extends HarborTestCase {
 	/**
 	 * The host should always be returned in lowercase.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
@@ -129,7 +129,7 @@ class DataTest extends HarborTestCase {
 	/**
 	 * The lw-harbor/get_domain filter should be able to override the domain.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */

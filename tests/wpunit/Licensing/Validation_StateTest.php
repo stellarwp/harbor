@@ -8,7 +8,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_Error;
 
 /**
- * @since TBD
+ * @since 1.5.0
  */
 final class Validation_StateTest extends HarborTestCase {
 
