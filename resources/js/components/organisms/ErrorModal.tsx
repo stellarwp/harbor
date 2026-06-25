@@ -14,8 +14,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@/components/
 import { ErrorItem } from '@/components/atoms/ErrorItem';
 import { Button } from '@/components/ui/button';
 
-const DOCS_URL    = 'https://go.liquidweb.com/harbor-docs';
-const SUPPORT_URL = 'https://go.liquidweb.com/harbor-support';
+const DOCS_URL    = 'https://www.liquidweb.com/help-docs/software/';
+const SUPPORT_URL = 'https://software.liquidweb.com/support/';
 
 /**
  * @since 1.0.0
