@@ -139,7 +139,7 @@ final class Error_Code {
 	 * The validation endpoint received too many failed attempts within the
 	 * rate-limit window.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var string
 	 */

@@ -1,4 +1,0 @@
-significance: patch
-type: feature
-entry: Added const LW_HARBOR_DISABLE_DEBUG_LOG to disable harbor specific logs
-timestamp: 2026-06-15T21:08:53.244Z

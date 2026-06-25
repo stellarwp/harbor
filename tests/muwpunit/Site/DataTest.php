@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Tests\HarborTestCase;
  * resolved domain has to track the current subsite (via home_url()) rather
  * than a single network-wide value.
  *
- * @since TBD
+ * @since 1.5.0
  */
 final class DataTest extends HarborTestCase {
 
@@ -26,7 +26,7 @@ final class DataTest extends HarborTestCase {
 	/**
 	 * The domain should be the host of the current site's home_url().
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
@@ -40,7 +40,7 @@ final class DataTest extends HarborTestCase {
 	 * After switching to another subsite, the domain should reflect that
 	 * subsite's URL — not the main site's — confirming per-subsite resolution.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @test
 	 */
