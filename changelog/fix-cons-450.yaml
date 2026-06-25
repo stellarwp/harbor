@@ -1,0 +1,10 @@
+significance: patch
+type: fix
+entry: Fixed license validation using the wrong domain on staging/preview sites.
+  Site\Data::get_domain() now derives the host from home_url() instead of reading
+  the siteurl option directly, so host-environment plugins that rewrite the site
+  address (e.g. Hostinger's preview-domain mu-plugin) are honored and the domain
+  Harbor validates against matches the one used during activation. WP-CLI and
+  cron are unaffected, as home_url() returns the canonical domain when no web
+  request is present.
+timestamp: 2026-06-17T15:05:44.000Z

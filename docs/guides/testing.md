@@ -93,6 +93,33 @@ To run tests for the first time, there are a couple of things you need to do:
 
 You can simply run `slic run` or `slic run SUITE_YOU_WANT_TO_RUN` to quickly run automated tests for this library. If you want to use xdebug with your tests, you'll need to open a `slic ssh` session and turn xdebugging on (there's help text to show you how).
 
+The suites are `wpunit` (single-site) and `muwpunit` (multisite). Run a single test class with `--filter`, e.g. `slic run wpunit --filter DataTest`.
+
+### Dependencies and PHP version — always resolve through slic
+
+`composer.lock` is **gitignored** on purpose. CI (`.github/workflows/tests-php.yml`) tests a matrix of PHP versions (7.4 → 8.3) by setting the container PHP and *then* resolving dependencies inside that container:
+
+```yaml
+- ${SLIC_BIN} php-version set ${{ matrix.php }}
+- ${SLIC_BIN} composer install
+```
+
+Each leg gets a dependency set valid for its PHP (for example, Codeception v4-era on 7.4, v5 on 8.x). Because of this, **do not commit `composer.lock` and do not add a `config.platform.php` pin** — either one forces a single resolution target and breaks the per-version matrix.
+
+The practical rule for local development: **resolve dependencies through `slic`, never with host `composer`.** `slic composer install` resolves inside the container at its configured PHP version, matching what the tests actually run on. If you run host `composer install`/`update` on a newer PHP than the slic container (e.g. host PHP 8.4 vs container 8.2), Composer can pull packages that require the newer PHP (this has happened with `symfony/console`), and the suite then fails to even parse inside the container.
+
+```bash
+# Check / set the container PHP version (defaults to 8.2)
+slic php-version
+slic php-version set 8.2
+
+# Resolve dependencies inside the container, then run
+slic composer install
+slic run
+```
+
+If you hit a parse error or a "lock file does not contain a compatible set of packages" message, it almost always means `vendor/` was resolved against a different PHP than the container. Fix it with `slic composer update` (re-resolves for the container's PHP), not host `composer`.
+
 ## Debug logging
 
 Harbor uses the `With_Debugging` trait (`src/Harbor/Traits/With_Debugging.php`) for all debug output. When `WP_DEBUG` is enabled, log messages are written via `error_log()` with an `Harbor:` prefix so they're easy to filter.
