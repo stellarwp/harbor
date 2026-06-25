@@ -56,6 +56,19 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
         run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
 
+      # The push-time `sync` jobs accumulate issues onto an *unversioned*
+      # in-flight release. `complete` only ever looks a release up by version —
+      # it never sets one — so we must stamp the in-flight release with the
+      # published semver via `sync` first. With a version, `sync` assigns it to
+      # the current started release rather than creating a duplicate.
+      - name: Stamp the in-flight release with the published version
+        uses: linear/linear-release-action@v0
+        with:
+          access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
+          command: sync
+          version: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+
       - uses: linear/linear-release-action@v0
         with:
           access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
@@ -65,7 +78,7 @@ jobs:
 
   # Optional: gate the release through phases (code freeze, QA, RC) before
   # completing it. Add a job like this triggered however you mark those phases
-  # (e.g. a workflow_dispatch input, a label, or cutting a release/* branch):
+  # (e.g. a workflow_dispatch input, a label, or opening a release-prep-* branch):
   #
   #   - uses: linear/linear-release-action@v0
   #     with:
