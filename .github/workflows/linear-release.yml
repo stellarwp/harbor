@@ -1,0 +1,74 @@
+# Tracks Harbor releases in Linear using a SCHEDULED pipeline, so we can see
+# what's queued for the next version *before* it ships. A release is tracked
+# in-flight as commits land, then finalized and versioned at publish time.
+#
+#   - Push to main      -> `sync`     accumulates each merge's Linear issues onto
+#                                      the current in-flight (started) release.
+#                                      No version needed yet.
+#   - Release published -> `complete`  finalizes that release and labels it with
+#                                      the semver from the tag (v1.2.0 -> 1.2.0).
+#
+# Requires a LINEAR_ACCESS_KEY repo secret from a SCHEDULED Linear pipeline
+# (a continuous pipeline's key will not behave correctly here).
+name: Linear Release (Scheduled)
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  # Every merge to main rolls its issues into the in-flight release so you can
+  # watch "what's queued for next" in Linear during planning.
+  accumulate:
+    name: Accumulate issues into next release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history so the CLI can scan commits since the last release.
+
+      - uses: linear/linear-release-action@v0
+        with:
+          access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
+          command: sync
+
+  # Publishing the GitHub Release finalizes the in-flight release and stamps the
+  # version from the tag.
+  complete:
+    name: Complete release in Linear
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Derive version from release tag
+        id: version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - uses: linear/linear-release-action@v0
+        with:
+          access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
+          command: complete
+          version: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+
+  # Optional: gate the release through phases (code freeze, QA, RC) before
+  # completing it. Add a job like this triggered however you mark those phases
+  # (e.g. a workflow_dispatch input, a label, or cutting a release/* branch):
+  #
+  #   - uses: linear/linear-release-action@v0
+  #     with:
+  #       access_key: ${{ secrets.LINEAR_ACCESS_KEY }}
+  #       command: update
+  #       stage: in-qa
