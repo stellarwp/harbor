@@ -13,7 +13,7 @@ test.describe( 'Software Manager page', () => {
 	} );
 
 	test( 'displays the "Your Features" heading after data loads', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+		await admin.visitAdminPage( 'options-general.php', 'page=nexcess-software-manager' );
 
 		await expect( page.getByText( 'Your Features' ) ).toBeVisible( {
 			timeout: 15_000,
@@ -21,7 +21,7 @@ test.describe( 'Software Manager page', () => {
 	} );
 
 	test( 'renders a section for each product', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+		await admin.visitAdminPage( 'options-general.php', 'page=nexcess-software-manager' );
 
 		for ( const name of PRODUCT_NAMES ) {
 			await expect( page.getByText( name ).first() ).toBeVisible( {
@@ -31,7 +31,7 @@ test.describe( 'Software Manager page', () => {
 	} );
 
 	test( 'renders the filter bar with product selector', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+		await admin.visitAdminPage( 'options-general.php', 'page=nexcess-software-manager' );
 
 		// The FilterBar renders a product filter combobox once the app loads
 		await expect( page.getByRole( 'combobox' ).first() ).toBeVisible( {
@@ -40,7 +40,7 @@ test.describe( 'Software Manager page', () => {
 	} );
 
 	test( 'shows the license key masked in the sidebar', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+		await admin.visitAdminPage( 'options-general.php', 'page=nexcess-software-manager' );
 
 		// The sidebar LicenseKeyInput renders the stored key masked in a
 		// read-only input once loaded — the full key must never be exposed.
@@ -53,7 +53,7 @@ test.describe( 'Software Manager page', () => {
 	} );
 
 	test( 'reveals the full license key when editing', async ( { page, admin } ) => {
-		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+		await admin.visitAdminPage( 'options-general.php', 'page=nexcess-software-manager' );
 
 		// Wait for the masked field to load, then unlock it for editing.
 		await expect(

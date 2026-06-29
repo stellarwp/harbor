@@ -71,7 +71,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		set_current_screen( 'dashboard' );
 		$this->page->maybe_register_page();
 
-		$this->assertContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
+		$this->assertContains( 'nexcess-software-manager', $this->get_settings_submenu_slugs() );
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 
 		$this->page->maybe_register_page();
 
-		$this->assertNotContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
+		$this->assertNotContains( 'nexcess-software-manager', $this->get_settings_submenu_slugs() );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 
 		$this->page->maybe_register_page();
 
-		$this->assertNotContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
+		$this->assertNotContains( 'nexcess-software-manager', $this->get_settings_submenu_slugs() );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		set_current_screen( 'dashboard' );
 		$this->page->maybe_register_page();
 
-		$this->assertContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
+		$this->assertContains( 'nexcess-software-manager', $this->get_settings_submenu_slugs() );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$slugs = array_filter(
 			$this->get_settings_submenu_slugs(),
 			static function ( $s ) {
-				return $s === 'lw-software-manager';
+				return $s === 'nexcess-software-manager';
 			}
 		);
 
@@ -163,7 +163,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 			remove_filter( 'lw-harbor/hide_menu_item', '__return_true' );
 		}
 
-		$this->assertNotContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
+		$this->assertNotContains( 'nexcess-software-manager', $this->get_settings_submenu_slugs() );
 	}
 
 	/**

@@ -1,7 +1,7 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 import { clearLicense, VALID_LICENSE_KEY, MASKED_LICENSE_KEY } from './_helpers/license';
 
-const PAGE = { admin: 'options-general.php', query: 'page=lw-software-manager' };
+const PAGE = { admin: 'options-general.php', query: 'page=nexcess-software-manager' };
 
 test.describe( 'Welcome screen', () => {
 	test.beforeEach( async ( { requestUtils } ) => {

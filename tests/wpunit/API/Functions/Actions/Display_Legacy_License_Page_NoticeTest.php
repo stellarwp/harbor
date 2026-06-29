@@ -46,15 +46,15 @@ final class Display_Legacy_License_Page_NoticeTest extends HarborTestCase {
 		$output       = $this->invoke();
 
 		$this->assertStringContainsString( $expected_url, $output );
-		$this->assertStringContainsString( 'Liquid Web Software Manager', $output );
+		$this->assertStringContainsString( 'Nexcess Software Manager', $output );
 	}
 
 	public function test_generic_notice_contains_expected_messaging(): void {
 		$output = $this->invoke();
 
-		$this->assertStringContainsString( 'part of Liquid Web\'s software offerings', $output );
+		$this->assertStringContainsString( 'part of Nexcess\'s software offerings', $output );
 		$this->assertStringContainsString( 'managing legacy licenses from your previous account', $output );
-		$this->assertStringContainsString( 'If you purchased a new plan through Liquid Web', $output );
+		$this->assertStringContainsString( 'If you purchased a new plan through Nexcess', $output );
 	}
 
 	public function test_generic_notice_does_not_contain_product_name(): void {
@@ -90,15 +90,15 @@ final class Display_Legacy_License_Page_NoticeTest extends HarborTestCase {
 		$output       = $this->invoke( 'GiveWP' );
 
 		$this->assertStringContainsString( $expected_url, $output );
-		$this->assertStringContainsString( 'Liquid Web Software Manager', $output );
+		$this->assertStringContainsString( 'Nexcess Software Manager', $output );
 	}
 
 	public function test_product_notice_contains_expected_messaging(): void {
 		$output = $this->invoke( 'GiveWP' );
 
-		$this->assertStringContainsString( 'GiveWP is now part of Liquid Web\'s software offerings', $output );
+		$this->assertStringContainsString( 'GiveWP is now part of Nexcess\'s software offerings', $output );
 		$this->assertStringContainsString( 'managing legacy licenses from your previous GiveWP account', $output );
-		$this->assertStringContainsString( 'If you purchased a new plan through Liquid Web', $output );
+		$this->assertStringContainsString( 'If you purchased a new plan through Nexcess', $output );
 	}
 
 	public function test_product_name_is_escaped_in_output(): void {

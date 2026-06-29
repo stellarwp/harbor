@@ -10,7 +10,7 @@ describe( 'WelcomeShell', () => {
         );
 
         expect( screen.queryByText( 'Software License Manager' ) ).not.toBeNull();
-        expect( screen.queryByText( 'Liquid Web by Nexcess' ) ).not.toBeNull();
+        expect( screen.queryByText( 'Nexcess' ) ).not.toBeNull();
         // The decorative logo has empty alt text so it has no accessible role —
         // assert via the rendered <img> element instead.
         expect( document.querySelector( 'img[alt=""]' ) ).not.toBeNull();
