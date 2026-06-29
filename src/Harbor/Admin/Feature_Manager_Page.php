@@ -123,7 +123,7 @@ class Feature_Manager_Page {
 		// This keeps the page reachable for bookmarks and for Leader mid-session
 		// scenarios where an older Harbor instance becomes the Leader.
 		$this->page_hook_legacy = (string) add_submenu_page(
-			null,
+			'',
 			__( 'Nexcess Software Manager', '%TEXTDOMAIN%' ),
 			'',
 			'manage_options',

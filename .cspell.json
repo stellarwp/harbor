@@ -67,10 +67,13 @@
     "kses",
     "learndash",
     "liquidweb",
-    "litespeed",
+    "appserver",
+    "lando",
+    "lightningcss",
     "lndo",
     "lucatume",
     "lwsw",
+    "mamp",
     "memberdash",
     "multisite",
     "muwpunit",
@@ -136,6 +139,7 @@
     "wpspin",
     "wpunit",
     "writeln",
+    "wamp",
     "xdebugging"
   ],
   "dictionaries": [

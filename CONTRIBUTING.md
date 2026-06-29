@@ -31,12 +31,12 @@ Run `npm run` or `composer` in this repo to list available scripts (`package.jso
 
 ## Prerequisites
 
-| Tool | Minimum version | Notes |
-|---|---|---|
-| [Bun](https://bun.sh) | **1.3.x** | Versions before 1.3.x may not install platform-specific native binary packages (e.g. `lightningcss-linux-x64-gnu`) correctly — `npm run build` will fail with a `Cannot find module` error. Confirmed working on 1.3.14. Run `bun --version` and update if needed: `curl -fsSL https://bun.sh/install \| bash` |
-| Node.js | 14+ | Managed by `nvm` or included with Bun. `wp-scripts` requires Node 14+ for optional chaining syntax |
-| Composer | 2.x | For PHP dependency management |
-| PHP | 7.4+ | Required for Composer scripts and static analysis |
+| Tool                  | Minimum version | Notes                                                                                                                                                                                                                                                                                                          |
+| --------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Bun](https://bun.sh) | **1.3.x**       | Versions before 1.3.x may not install platform-specific native binary packages (e.g. `lightningcss-linux-x64-gnu`) correctly — `npm run build` will fail with a `Cannot find module` error. Confirmed working on 1.3.14. Run `bun --version` and update if needed: `curl -fsSL https://bun.sh/install \| bash` |
+| Node.js               | 14+             | Managed by `nvm` or included with Bun. `wp-scripts` requires Node 14+ for optional chaining syntax                                                                                                                                                                                                             |
+| Composer              | 2.x             | For PHP dependency management                                                                                                                                                                                                                                                                                  |
+| PHP                   | 7.4+            | Required for Composer scripts and static analysis                                                                                                                                                                                                                                                              |
 
 > **PHP install note:** For automated tests and static analysis, use `composer install` (full dev deps). The dev tree includes `lucatume/tdd-helpers`, which may cause install failures locally — PHP tests are typically run via [`slic`](https://github.com/stellarwp/slic), which runs `slic composer install` in its own environment. See [docs/guides/testing.md](docs/guides/testing.md).
 
