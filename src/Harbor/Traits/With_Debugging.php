@@ -25,7 +25,7 @@ trait With_Debugging {
 	 * defined and truthy, allowing site owners to silence Harbor's debug output even
 	 * while `WP_DEBUG` and `WP_DEBUG_LOG` remain enabled for other purposes.
 	 *
-	 * @since TBD add LW_HARBOR_DISABLE_DEBUG_LOG
+	 * @since 1.5.0 add LW_HARBOR_DISABLE_DEBUG_LOG
 	 * @since 1.0.0
 	 *
 	 * @param string $message The message to log.

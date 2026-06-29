@@ -2566,8 +2566,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const DOCS_URL = 'https://go.liquidweb.com/harbor-docs';
-const SUPPORT_URL = 'https://go.liquidweb.com/harbor-support';
+const DOCS_URL = 'https://www.liquidweb.com/help-docs/software/';
+const SUPPORT_URL = 'https://software.liquidweb.com/support/';
 
 /**
  * @since 1.0.0
@@ -5753,7 +5753,7 @@ const expiryTextClass = {
  * Keys with two or fewer dash-delimited segments have nothing safe to mask
  * (no middle to hide), so they are returned unchanged.
  *
- * @since TBD
+ * @since 1.5.0
  */
 function maskLicenseKey(key) {
   const segments = key.split('-');

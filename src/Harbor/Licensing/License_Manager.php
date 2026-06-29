@@ -42,7 +42,7 @@ class License_Manager {
 	 * Window (in seconds) during which a repeat submission of the same
 	 * invalid key returns the cached error without re-calling the API.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var int
 	 */
@@ -52,7 +52,7 @@ class License_Manager {
 	 * Sliding window (in seconds) for the site-wide failure counter that
 	 * protects against bots cycling through bad keys.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var int
 	 */
@@ -62,7 +62,7 @@ class License_Manager {
 	 * Number of failed validate_and_store attempts within
 	 * VALIDATION_FAILURE_WINDOW that triggers the rate-limit error.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var int
 	 */
@@ -527,12 +527,12 @@ class License_Manager {
 	 * VALIDATION_FAILURE_WINDOW seconds. Retention is the larger of the
 	 * two so neither layer has its data pruned before it can read it.
 	 *
-	 * As of TBD both constants hold the same value.
+	 * As of 1.5.0 both constants hold the same value.
 	 * This is intentional: this method lets either window be tuned
 	 * independently in the future without silently dropping data
 	 * the other layer depends on.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @return int
 	 */

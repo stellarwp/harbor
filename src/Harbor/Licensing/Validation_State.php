@@ -12,14 +12,14 @@ use WP_Error;
  * the persistence; this class owns the state shape and the throttle
  * semantics (freshness checks, window counting, pruning).
  *
- * @since TBD
+ * @since 1.5.0
  */
 final class Validation_State {
 
 	/**
 	 * Map of license-key hashes to the most recent failure for that key.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var array<string, array{failed_at: int, error: WP_Error}>
 	 */
@@ -28,7 +28,7 @@ final class Validation_State {
 	/**
 	 * Sliding list of failure timestamps used to throttle abusive traffic.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @var int[]
 	 */
@@ -38,7 +38,7 @@ final class Validation_State {
 	 * The cached WP_Error from the most recent failed attempt for the given
 	 * key hash, or null if there is no in-window entry for it.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string $key_hash The hashed license key.
 	 * @param int    $ttl      How long (seconds) a cached failure remains valid.
@@ -64,7 +64,7 @@ final class Validation_State {
 	 * Record a failure for the given key hash and append it to the
 	 * rolling-window failure list.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string   $key_hash The hashed license key.
 	 * @param WP_Error $error    The error returned by the upstream API.
@@ -92,7 +92,7 @@ final class Validation_State {
 	 * The rolling-window failure list is intentionally not touched: a
 	 * legitimate success should not erase evidence of abusive traffic.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param string $key_hash The hashed license key.
 	 *
@@ -106,7 +106,7 @@ final class Validation_State {
 	 * Number of recorded failures whose timestamp falls within `$window`
 	 * seconds of `$now`.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param int $window Length of the rolling window in seconds.
 	 * @param int $now    Current Unix timestamp.
@@ -130,7 +130,7 @@ final class Validation_State {
 	 * Drop per-key entries and rolling-window timestamps older than
 	 * `$retention` seconds relative to `$now`.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param int $retention How long (seconds) to keep entries.
 	 * @param int $now       Current Unix timestamp.
@@ -159,7 +159,7 @@ final class Validation_State {
 	/**
 	 * Serialize the state to a plain array for option storage.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @return array{per_key: array<string, array{failed_at: int, error: WP_Error}>, failure_timestamps: int[]}
 	 */
@@ -176,7 +176,7 @@ final class Validation_State {
 	 * Defensively skips malformed entries so a corrupted option cannot
 	 * break the throttle.
 	 *
-	 * @since TBD
+	 * @since 1.5.0
 	 *
 	 * @param array<string, mixed> $raw Raw option value.
 	 *
