@@ -29,7 +29,7 @@ npm run build             # first time, after pulling frontend changes, or one-o
 npm run start             # leave running while editing — rebuilds on save
 ```
 
-With `harbor:watch` and `npm run start` both running, each save recompiles assets here and the sync delivers the new `build/` / `build-dev/` output to WordPress. PHP-only work needs only `harbor:watch`.
+With `harbor:watch` and `npm run start` both running, each save rebuilds assets here and the sync delivers the new `build/` / `build-dev/` output to WordPress. PHP-only work needs only `harbor:watch`.
 
 Run `npm run` or `composer` in this repo to list available scripts (`package.json` / `composer.json`).
 
