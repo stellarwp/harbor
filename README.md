@@ -147,6 +147,7 @@ Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 ### Guides
 
 - [Integration Guide](/docs/guides/integration.md) — How to integrate your plugin with Harbor.
+- [Partner plugin testing](/docs/guides/partner-plugin-testing.md) — Test local Harbor changes in a real partner plugin (Composer path repo).
 - [CLI Commands](/docs/guides/cli.md) — WP-CLI commands for feature management.
 - [Testing](/docs/guides/testing.md) — PHP tests with Codeception/`slic`; E2E tests with Playwright/wp-env.
 
