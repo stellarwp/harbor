@@ -2,28 +2,34 @@
 
 ## Quick start
 
-**Day-to-day UI work** with [harbor-dev-tools](#local-development-recommended):
+**Day-to-day development** with [harbor-dev-tools](https://github.com/stellarwp/harbor-dev-tools) — PHP and UI. Install and activate **harbor-dev-tools** on your local WordPress site, then clone **this repository** as a sibling directory:
 
-```bash
-bun install
-npm run build    # required before testing UI changes in WordPress
+```
+wp-content/plugins/
+├── harbor-dev-tools/    ← active plugin (runs harbor:watch)
+└── harbor/              ← this repo (your git checkout)
 ```
 
-You do not need `composer install` in this repo for that workflow. See [Local development](#local-development-recommended).
+Setup, watch script, Branch Switcher, and fixtures: [harbor-dev-tools README](https://github.com/stellarwp/harbor-dev-tools/blob/main/README.md).
 
-**Automated tests** (E2E via wp-env, or PHP via slic):
-
-E2E — needs Node, PHP dev deps, and compiled React assets:
+In **harbor-dev-tools** (once per session):
 
 ```bash
-bun install          # Playwright, wp-env, and test runners
-composer install     # full dev deps — the E2E fixture plugin loads require-dev classes
-npm run build        # skip only if build/ already exists and you did not change frontend code
+composer install          # first time only
+composer harbor:watch     # leave running — syncs this repo into WordPress
 ```
 
-Then see [docs/guides/testing.md](docs/guides/testing.md#e2e-tests-playwright) for `wp-env start`, Playwright browsers, and `bun run test:e2e`.
+Leave `harbor:watch` running. It picks up PHP changes in `src/` automatically and re-runs Strauss. You do not need `composer install` in this repo for that workflow.
 
-PHP via slic — `composer install` in this repo (or `slic composer install` inside slic). Bun is not required for PHP-only tests.
+**When you change frontend code** (`resources/`), also in **this repo**:
+
+```bash
+bun install               # first time only
+npm run build             # first time, after pulling frontend changes, or one-off
+npm run start             # leave running while editing — rebuilds on save
+```
+
+With `harbor:watch` and `npm run start` both running, each save recompiles assets here and the sync delivers the new `build/` / `build-dev/` output to WordPress. PHP-only work needs only `harbor:watch`.
 
 Run `npm run` or `composer` in this repo to list available scripts (`package.json` / `composer.json`).
 
@@ -38,50 +44,14 @@ Run `npm run` or `composer` in this repo to list available scripts (`package.jso
 | Composer              | 2.x             | For PHP dependency management                                                                                                                                                                                                                                                                                  |
 | PHP                   | 7.4+            | Required for Composer scripts and static analysis                                                                                                                                                                                                                                                              |
 
-> **PHP install note:** For automated tests and static analysis, use `composer install` (full dev deps). The dev tree includes `lucatume/tdd-helpers`, which may cause install failures locally — PHP tests are typically run via [`slic`](https://github.com/stellarwp/slic), which runs `slic composer install` in its own environment. See [docs/guides/testing.md](docs/guides/testing.md).
-
----
-
-## Local development (recommended)
-
-For day-to-day Harbor UI and PHP work, use [harbor-dev-tools](https://github.com/stellarwp/harbor-dev-tools) instead of wiring a Composer path repository into a partner plugin. Clone this repo beside it at `wp-content/plugins/harbor`.
-
-Setup, watch script, Branch Switcher, Postman fixtures, and QA zip workflow: [harbor-dev-tools README](https://github.com/stellarwp/harbor-dev-tools/blob/main/README.md).
-
-Run `composer install` and `composer harbor:watch` in **harbor-dev-tools**, not in this repo. With watch running, PHP and compiled asset changes from this checkout are picked up automatically.
-
-For JavaScript work in this repo:
-
-```bash
-npm run build    # or npm run start during active UI work
-```
-
-Fixture keys and welcome-screen behavior: [docs/guides/testing.md](docs/guides/testing.md#local-development-with-fixtures).
-
-On Lando, run Composer from harbor-dev-tools with the `lando` prefix (see [harbor-dev-tools README](https://github.com/stellarwp/harbor-dev-tools/blob/main/README.md)). Keep this clone at `wp-content/plugins/harbor` inside the site root Lando mounts — harbor-dev-tools defaults to `../harbor`.
-
----
-
-## Testing in a partner plugin (advanced)
-
-When you need to validate inside a real partner plugin (GiveWP, Kadence, etc.) — for example Strauss text-domain behavior or partner-specific integration — use a Composer path repository.
-
-See [docs/guides/partner-plugin-testing.md](docs/guides/partner-plugin-testing.md) for setup, iteration, Docker/Lando mounts, and cleanup.
-
----
-
-## Running automated tests
-
-PHP tests (Codeception via slic), E2E tests (Playwright via wp-env), and fixture-based local development are covered in [docs/guides/testing.md](docs/guides/testing.md).
-
 ---
 
 ## Documentation index
 
 - [docs/harbor.md](docs/harbor.md) — architecture overview
 - [docs/guides/integration.md](docs/guides/integration.md) — partner plugin integration
-- [docs/guides/partner-plugin-testing.md](docs/guides/partner-plugin-testing.md) — test local Harbor changes in a partner plugin
 - [docs/guides/testing.md](docs/guides/testing.md) — PHP, E2E, and fixtures
+- [docs/guides/partner-plugin-testing.md](docs/guides/partner-plugin-testing.md) — advanced: test local changes inside a real partner plugin (Composer path repo)
 - [docs/subsystems/frontend.md](docs/subsystems/frontend.md) — React UI
 
 ---

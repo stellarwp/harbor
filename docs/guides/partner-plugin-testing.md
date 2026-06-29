@@ -3,8 +3,8 @@
 Harbor is never run in isolation — it is always vendored inside a partner plugin (GiveWP,
 Kadence, LearnDash, etc.) via [Strauss](https://github.com/BrianHenryIE/strauss). For
 day-to-day Harbor development, prefer [harbor-dev-tools](https://github.com/stellarwp/harbor-dev-tools)
-(see [CONTRIBUTING.md](../../CONTRIBUTING.md)). Use the path repository workflow below only
-when you must test inside a real partner plugin.
+(see [CONTRIBUTING.md](../../CONTRIBUTING.md) or the [harbor-dev-tools README](https://github.com/stellarwp/harbor-dev-tools/blob/main/README.md)). Use the path repository workflow below only
+when you must test **local changes** inside a real partner plugin.
 
 The full test pipeline:
 
