@@ -136,11 +136,31 @@ To see Harbor debug output during test runs, make sure `WP_DEBUG` is `true` in t
 
 ## Local development with fixtures
 
-During development the [sample plugin](https://github.com/lw-harbor-sample-plugin) replaces the real API clients with fixture clients that read local JSON files. The admin settings page (under **Harbor Sample Plugin**) exposes three controls:
+For day-to-day Harbor development, use [harbor-dev-tools](https://github.com/stellarwp/harbor-dev-tools) with a clone of this repo. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for setup.
+
+**Layout:**
+
+```
+wp-content/plugins/
+├── harbor-dev-tools/    ← active plugin (fixture mode, harbor:watch)
+└── harbor/              ← this repository
+```
+
+Harbor Dev Tools replaces the real API clients with fixture clients that read local JSON files. Open **Harbor Dev Tools** in wp-admin to configure:
 
 - **Fixture Mode** — toggle between fixture files and the real API.
 - **Fixture Key** — select which fixture set to use.
 - **API Base URL** — override the real API endpoint (ignored when fixture mode is on).
+
+Use fixture key **`lwsw-unified-basic-2026`** when exercising the Software Manager UI (welcome gate, product list, license sidebar). Keys like **`lwsw-unified-test-fixtures`** are aimed at API/Postman scenarios with a curated catalog subset — see the [harbor-dev-tools README](https://github.com/stellarwp/harbor-dev-tools/blob/main/README.md).
+
+Admin URLs while developing:
+
+| Check                        | URL                                                                                 |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| Software Manager (canonical) | `?page=nexcess-software-manager`                                                    |
+| Legacy slug (bookmarks)      | `?page=lw-software-manager`                                                         |
+| Welcome gate (no license)    | Clear the unified license option; disable fixture auto-key or turn off fixture mode |
 
 For how catalog and licensing data join to produce features, see [Data Sources in features.md](../subsystems/features.md#data-sources).
 
@@ -162,13 +182,13 @@ Some fixture keys (like `lwsw-unified-test-fixtures`) ship a dedicated catalog f
 
 ### File resolution order
 
-The sample plugin resolves fixture files from two directories, in order:
+harbor-dev-tools resolves fixture files from:
 
-1. `fixtures/` inside the sample plugin — custom or one-off files
-2. `WP_PLUGIN_DIR/harbor/tests/_data/` — shared Harbor test fixtures
+1. `fixtures/` inside harbor-dev-tools — custom or one-off files
+2. `vendor-prefixed/stellarwp/harbor/tests/_data/` — shared Harbor test fixtures synced from this repo
 
 The first match wins. For the catalog, if no key-specific file is found in either location, it falls back to `default.json` in the same order.
 
 ### Adding custom fixtures
 
-Drop JSON files into the sample plugin's `fixtures/catalog/` and `fixtures/licensing/` directories. The filename (without `.json`) becomes a selectable key in the settings dropdown. See the existing fixture files for the expected format.
+Drop JSON files into harbor-dev-tools `fixtures/catalog/` and `fixtures/licensing/`. The filename (without `.json`) becomes a selectable key in the plugin settings. See the existing fixture files for the expected format.

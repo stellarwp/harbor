@@ -194,6 +194,23 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	/**
 	 * @test
 	 */
+	public function it_should_register_the_legacy_slug_as_a_hidden_page(): void {
+		global $submenu, $_registered_pages;
+		$submenu           = [];
+		$_registered_pages = [];
+
+		set_current_screen( 'dashboard' );
+		$this->page->maybe_register_page();
+
+		$this->assertNotContains( Feature_Manager_Page::PAGE_SLUG_LEGACY, $this->get_settings_submenu_slugs() );
+
+		$legacy_hookname = get_plugin_page_hookname( Feature_Manager_Page::PAGE_SLUG_LEGACY, '' );
+		$this->assertTrue( isset( $_registered_pages[ $legacy_hookname ] ) );
+	}
+
+	/**
+	 * @test
+	 */
 	public function it_should_not_refresh_when_param_is_absent(): void {
 		unset( $_GET['refresh'] );
 		$_GET['page'] = Feature_Manager_Page::PAGE_SLUG;

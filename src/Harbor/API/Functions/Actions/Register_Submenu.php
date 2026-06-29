@@ -34,7 +34,7 @@ class Register_Submenu {
 
 				add_submenu_page(
 					$parent_slug,
-					__( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ),
+					__( 'Nexcess Software Manager', '%TEXTDOMAIN%' ),
 					__( 'Licensing', '%TEXTDOMAIN%' ),
 					'manage_options',
 					$page_url

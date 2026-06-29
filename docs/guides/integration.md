@@ -154,7 +154,7 @@ Because Harbor handles this, you should remove or suppress any existing license-
 
 ### Notifying users on the legacy license page
 
-If your plugin has its own license settings page, display a notice on that page to inform users that licensing has moved to Liquid Web's unified system:
+If your plugin has its own license settings page, display a notice on that page to inform users that licensing has moved to Nexcess's unified system:
 
 ```php
 // With a product name (recommended)
@@ -166,7 +166,7 @@ lw_harbor_display_legacy_license_page_notice();
 
 This outputs a standard WordPress info notice:
 
-> GiveWP iss now part of Liquid Web\'s software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
+> GiveWP is now part of Nexcess's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Nexcess, your products are managed through the Nexcess Software Manager.
 
 Call this function directly in the render callback for your legacy license page. Because it echoes immediately when called, no hook registration is needed — it renders wherever you place it.
 
@@ -254,13 +254,13 @@ The function always delegates to the highest-version Harbor instance on the site
 
 ### Hiding the Settings menu item
 
-By default, Harbor registers a **Liquid Web Products** entry under the WordPress **Settings** menu. If your plugin surfaces the Feature Manager through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
+By default, Harbor registers a **Nexcess Products** entry under the WordPress **Settings** menu. If your plugin surfaces the Feature Manager through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
 
 ```php
 add_filter('lw-harbor/hide_menu_item', '__return_true');
 ```
 
-The Feature Manager page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Liquid Web Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
+The Feature Manager page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Nexcess Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
 
 ---
 
@@ -278,7 +278,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `lw_harbor/premium_plugin_exists` | Announce that a premium plugin is present so `Harbor::init()` registers its providers. Receives and returns `bool`. **Must be attached before `Harbor::init()` runs**; see [Initialization](#1-initialization). |
 | `lw-harbor/legacy_licenses`       | Report pre-existing licenses to Harbor. Receives and returns `array $licenses`.                                                                                                                                 |
-| `lw-harbor/hide_menu_item`        | Hide the **Liquid Web Products** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                             |
+| `lw-harbor/hide_menu_item`        | Hide the **Nexcess Products** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                                |
 
 ### Actions
 

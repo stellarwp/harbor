@@ -11,6 +11,13 @@ test.describe( 'Smoke', () => {
 		await expect( page.locator( '#lw-harbor-root' ) ).not.toBeEmpty();
 	} );
 
+	test( 'renders the React app root on the legacy page slug', async ( { page, admin } ) => {
+		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
+
+		await expect( page.locator( '#lw-harbor-root' ) ).toBeAttached();
+		await expect( page.locator( '#lw-harbor-root' ) ).not.toBeEmpty();
+	} );
+
 	test( 'shows the Nexcess Products menu when a premium plugin is registered', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'index.php' );
 
