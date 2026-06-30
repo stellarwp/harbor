@@ -66,6 +66,7 @@ class Feature_Manager_Page {
 	 * Hook suffix for the canonical page slug, returned by add_submenu_page().
 	 * Empty string until the page is registered.
 	 *
+	 * @since TBD Clarified as canonical slug hook suffix after dual-slug registration.
 	 * @since 1.0.0
 	 *
 	 * @var string
@@ -138,6 +139,7 @@ class Feature_Manager_Page {
 		 * UI remains accessible at options-general.php?page=nexcess-software-manager
 		 * for users who reach it via a direct link or a product plugin's submenu.
 		 *
+		 * @since TBD Updated filter description to Nexcess branding.
 		 * @since 1.1.0
 		 *
 		 * @param bool $hide Whether to hide the menu item. Default false.
@@ -292,6 +294,7 @@ class Feature_Manager_Page {
 	 * this from render() (the add_submenu_page callback) is too late — WordPress
 	 * has already begun sending HTML output by that point.
 	 *
+	 * @since TBD Also accepts the legacy page slug for portal redirect refresh.
 	 * @since 1.0.0
 	 *
 	 * @return void
@@ -301,7 +304,11 @@ class Feature_Manager_Page {
 			return;
 		}
 
-		if ( $_GET['refresh'] !== 'auto' || $_GET['page'] !== self::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = $_GET['page']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if (
+			$_GET['refresh'] !== 'auto' // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			|| ( $page !== self::PAGE_SLUG && $page !== self::PAGE_SLUG_LEGACY )
+		) {
 			return;
 		}
 

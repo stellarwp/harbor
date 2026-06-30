@@ -141,6 +141,7 @@ class License_Notice_Handler {
 	 * current request so the notice is suppressed when the user is already
 	 * on the page they would be directed to.
 	 *
+	 * @since TBD Also treats the legacy page slug as the Feature Manager page.
 	 * @since 1.0.0
 	 *
 	 * @param string $page_url The product's license page URL.
@@ -155,7 +156,10 @@ class License_Notice_Handler {
 			return false;
 		}
 
-		if ( $current_page === Feature_Manager_Page::PAGE_SLUG ) {
+		if (
+			$current_page === Feature_Manager_Page::PAGE_SLUG
+			|| $current_page === Feature_Manager_Page::PAGE_SLUG_LEGACY
+		) {
 			return true;
 		}
 

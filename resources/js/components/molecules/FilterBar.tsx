@@ -15,7 +15,7 @@ import { useFilter } from '@/context/filter-context';
 import logoNX from '@img/nexcess-logo-light.svg';
 
 /**
- * @since TBD Updated logo alt text and heading to Nexcess branding.
+ * @since TBD Updated logo asset and alt text to Nexcess branding.
  * @since 1.0.0
  */
 export function FilterBar() {

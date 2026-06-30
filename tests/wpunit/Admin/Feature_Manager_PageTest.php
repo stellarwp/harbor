@@ -303,6 +303,35 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	/**
 	 * @test
 	 */
+	public function it_should_refresh_license_and_catalog_on_the_legacy_page_slug(): void {
+		$_GET['refresh'] = 'auto';
+		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG_LEGACY;
+
+		$license_refreshed = false;
+		$catalog_refreshed = false;
+
+		$page = $this->make_page(
+			[
+				'refresh_products' => static function () use ( &$license_refreshed ) {
+					$license_refreshed = true;
+				},
+			],
+			[
+				'refresh' => static function () use ( &$catalog_refreshed ) {
+					$catalog_refreshed = true;
+				},
+			]
+		);
+
+		$page->maybe_redirect_after_refresh();
+
+		$this->assertTrue( $license_refreshed );
+		$this->assertTrue( $catalog_refreshed );
+	}
+
+	/**
+	 * @test
+	 */
 	public function it_should_pass_site_domain_to_refresh_products(): void {
 		$_GET['refresh'] = 'auto';
 		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;

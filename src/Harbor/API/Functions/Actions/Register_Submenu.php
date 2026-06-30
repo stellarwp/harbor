@@ -10,6 +10,8 @@ namespace LiquidWeb\Harbor\API\Functions\Actions;
 class Register_Submenu {
 
 	/**
+	 * @since TBD Updated submenu page title to Nexcess branding.
+	 *
 	 * @param string $parent_slug The slug of the parent top-level menu item.
 	 *
 	 * @return void

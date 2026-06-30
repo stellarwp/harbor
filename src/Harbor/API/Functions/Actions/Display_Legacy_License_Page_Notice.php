@@ -14,6 +14,7 @@ use Throwable;
  * Informs users that licensing is now managed centrally through Nexcess's
  * unified system while the legacy page remains available for older licenses.
  *
+ * @since TBD Updated class description to Nexcess branding.
  * @since 1.0.0
  */
 class Display_Legacy_License_Page_Notice {
