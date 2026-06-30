@@ -1498,7 +1498,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD Updated logo alt text and heading to Nexcess branding.
+ * @since TBD Updated logo asset and alt text to Nexcess branding.
  * @since 1.0.0
  */
 
