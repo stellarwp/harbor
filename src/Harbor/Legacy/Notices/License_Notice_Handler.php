@@ -156,10 +156,7 @@ class License_Notice_Handler {
 			return false;
 		}
 
-		if (
-			$current_page === Feature_Manager_Page::PAGE_SLUG
-			|| $current_page === Feature_Manager_Page::PAGE_SLUG_LEGACY
-		) {
+		if ( Feature_Manager_Page::is_known_page_slug( $current_page ) ) {
 			return true;
 		}
 

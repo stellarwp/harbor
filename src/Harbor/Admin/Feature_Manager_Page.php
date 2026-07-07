@@ -36,6 +36,20 @@ class Feature_Manager_Page {
 	private const PAGE_SLUG_LEGACY = 'lw-software-manager';
 
 	/**
+	 * Returns true if the given slug is any known Feature Manager page slug
+	 * (canonical or legacy).
+	 *
+	 * @since TBD
+	 *
+	 * @param string $slug Admin page slug to test.
+	 *
+	 * @return bool
+	 */
+	public static function is_known_page_slug( string $slug ): bool {
+		return $slug === self::PAGE_SLUG || $slug === self::PAGE_SLUG_LEGACY;
+	}
+
+	/**
 	 * Site data provider.
 	 *
 	 * @since 1.0.0
