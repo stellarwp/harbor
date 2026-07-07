@@ -202,9 +202,9 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		set_current_screen( 'dashboard' );
 		$this->page->maybe_register_page();
 
-		$this->assertNotContains( Feature_Manager_Page::PAGE_SLUG_LEGACY, $this->get_settings_submenu_slugs() );
+		$this->assertNotContains( 'lw-software-manager', $this->get_settings_submenu_slugs() );
 
-		$legacy_hookname = get_plugin_page_hookname( Feature_Manager_Page::PAGE_SLUG_LEGACY, '' );
+		$legacy_hookname = get_plugin_page_hookname( 'lw-software-manager', '' );
 		$this->assertTrue( isset( $_registered_pages[ $legacy_hookname ] ) );
 	}
 
@@ -305,7 +305,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	 */
 	public function it_should_refresh_license_and_catalog_on_the_legacy_page_slug(): void {
 		$_GET['refresh'] = 'auto';
-		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG_LEGACY;
+		$_GET['page']    = 'lw-software-manager';
 
 		$license_refreshed = false;
 		$catalog_refreshed = false;
