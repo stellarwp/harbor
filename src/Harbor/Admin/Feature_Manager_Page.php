@@ -33,7 +33,7 @@ class Feature_Manager_Page {
 	 *
 	 * @since TBD
 	 */
-	public const PAGE_SLUG_LEGACY = 'lw-software-manager';
+	private const PAGE_SLUG_LEGACY = 'lw-software-manager';
 
 	/**
 	 * Site data provider.
