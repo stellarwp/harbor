@@ -256,7 +256,7 @@ export const areAllProductsNotActivated = ( state: State ): boolean => {
  * current domain is not in the activations list. A unified key can cover more
  * than one tier of the same product, so this can return multiple entries.
  *
- * @since 1.0.1
+ * @since TBD
  */
 export const getUnactivatedLicenseProducts = (
 	state:       State,
