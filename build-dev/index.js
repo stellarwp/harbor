@@ -7094,7 +7094,7 @@ const areAllProductsNotActivated = state => {
  * current domain is not in the activations list. A unified key can cover more
  * than one tier of the same product, so this can return multiple entries.
  *
- * @since 1.0.1
+ * @since TBD
  */
 const getUnactivatedLicenseProducts = (state, productSlug) => getWithoutCancelledProducts(state).filter(p => p.product_slug === productSlug && p.activated_here !== true && UNACTIVATED_STATUSES.includes(p.validation_status));
 
