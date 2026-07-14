@@ -11,14 +11,17 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
+import { ExternalLink } from 'lucide-react';
 import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { ProductLogo } from '@/components/atoms/ProductLogo';
+import { Button } from '@/components/ui/button';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
 import { TierGroup } from '@/components/molecules/TierGroup';
 import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
 import { buildUpgradeUrl } from '@/lib/upgrade-url';
+import { buildActivationUrl } from '@/lib/activation-url';
 import { getHarborDataValue } from '@/lib/harbor-data';
 import type { Product } from '@/types/api';
 
@@ -65,6 +68,12 @@ export function ProductSection( { product }: ProductSectionProps ) {
         )
     );
 
+    // Owned-but-unactivated products get an Activate CTA beside the header badge,
+    // falling back to the unactivated product record when no tier is active here.
+    const activationUrl             = getHarborDataValue( 'activationUrl' );
+    const effectiveLicenseProduct   = licenseProduct ?? unactivatedLicenseProduct;
+    const showHeaderActivate        = isNotActivated && !! activationUrl && !! effectiveLicenseProduct;
+
     const tierName = licenseProduct
         ? ( sortedCatalogTiers.find( ( t ) => t.tier_slug === licenseProduct.tier )?.name ?? licenseProduct.tier )
         : null;
@@ -81,7 +90,21 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     { product.name }
                 </h2>
                 { isNotActivated ? (
-                    <LicenseBadge type="unactivated" />
+                    <>
+                        <LicenseBadge type="unactivated" />
+                        { showHeaderActivate && effectiveLicenseProduct && (
+                            <Button variant="outline" size="xs" asChild className="shrink-0">
+                                <a
+                                    href={ buildActivationUrl( activationUrl, product.slug, effectiveLicenseProduct.tier ) }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    { __( 'Activate', '%TEXTDOMAIN%' ) }
+                                    <ExternalLink className="w-3 h-3 -translate-y-px" />
+                                </a>
+                            </Button>
+                        ) }
+                    </>
                 ) : tierName ? (
                     <LicenseBadge type="licensed" tierName={ tierName } />
                 ) : hasActiveLegacy ? (
