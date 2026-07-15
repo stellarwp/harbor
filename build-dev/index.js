@@ -3494,7 +3494,7 @@ function Shell({
   children
 }) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: "absolute top-0 left-0 w-full max-w-full flex flex-col overflow-hidden",
+    className: "absolute top-0 left-0 w-full max-w-full flex flex-col overflow-hidden h-[calc(100vh-32px)]",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("header", {
       className: "shrink-0 border-b bg-background py-4 px-8 flex items-center gap-3",
       children: header
