@@ -82,9 +82,14 @@ export function AppShell() {
                     <NotActivatedBanner />
 
                     { isLoading
-                        ? PRODUCTS.map( ( product ) => (
-                            <ProductSectionSkeleton key={ product.slug } product={ product } />
-                        ) )
+                        ? <>
+                            <div className="flex items-center !mt-8 !mb-6">
+                                <div className="h-7 w-48 rounded bg-muted animate-pulse" />
+                            </div>
+                            { Array.from( { length: PRODUCTS.length }, ( _, i ) => (
+                                <ProductSectionSkeleton key={ i } />
+                            ) ) }
+                        </>
                         : <>
                             { installedProducts.length > 0 && (
                                 <>
