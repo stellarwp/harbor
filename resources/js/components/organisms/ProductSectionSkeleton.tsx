@@ -2,15 +2,15 @@
  * Pulse-skeleton for a single product section, shown while the Harbor data
  * resolvers are in flight on the first page load.
  *
- * Mirrors ProductSection's DOM structure: same sticky header (with real logo
- * and product name but no badge or counters) followed by a fixed number of
- * skeleton feature rows.
+ * Mirrors ProductSection's DOM structure: same sticky header followed by a
+ * fixed number of skeleton feature rows. The header is intentionally nameless
+ * (placeholder logo and title bars, no real product) because install state and
+ * ownership — which decide each product's section and order — are not known
+ * until the data resolves. A nameless skeleton avoids named cards appearing to
+ * reorder when the computed layout replaces it.
  *
  * @package LiquidWeb\Harbor
  */
-import { ProductLogo } from '@/components/atoms/ProductLogo';
-import type { Product } from '@/types/api';
-
 const SKELETON_ROW_COUNT = 3;
 
 function SkeletonFeatureRow( { isLast }: { isLast: boolean } ) {
@@ -33,22 +33,19 @@ function SkeletonFeatureRow( { isLast }: { isLast: boolean } ) {
     );
 }
 
-interface ProductSectionSkeletonProps {
-    product: Product;
-}
-
 /**
+ * @since TBD    Render a nameless header instead of a real product logo/name.
  * @since 1.0.0
  */
-export function ProductSectionSkeleton( { product }: ProductSectionSkeletonProps ) {
+export function ProductSectionSkeleton() {
     return (
-        <section id={ product.slug } className="scroll-mt-20">
+        <section className="scroll-mt-20">
             <div className="h-0" />
             <div className="flex items-center gap-3 px-4 py-3 bg-neutral-800 text-white sticky top-0 z-10 border-x border-neutral-800 transition-[border-radius] rounded-t-lg border-t">
-                <ProductLogo slug={ product.slug } size={ 28 } productName={ product.name } />
-                <h2 className="text-base font-semibold m-0 p-0 text-white">
-                    { product.name }
-                </h2>
+                { /* logo placeholder */ }
+                <div className="w-7 h-7 rounded shrink-0 bg-white/20 animate-pulse" />
+                { /* product name placeholder */ }
+                <div className="h-4 w-32 rounded bg-white/20 animate-pulse" />
             </div>
             <div className="border border-t-0 rounded-b-lg overflow-hidden">
                 { Array.from( { length: SKELETON_ROW_COUNT }, ( _, i ) => (

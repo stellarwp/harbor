@@ -24,15 +24,17 @@ import type { Product } from '@/types/api';
 
 interface ProductSectionProps {
     product: Product;
+    hideLicenseBadge?: boolean;
 }
 
 /**
+ * @since TBD      Add hideLicenseBadge prop to suppress the header license badge for Available cards.
  * @since 1.3.0    Read domain through the getHarborDataValue helper for upgrade URLs.
  * @since 1.0.2  Route upgrade CTA to catalog upgrade_url for existing subscribers, purchase_url for new subscribers.
  * @since 1.0.1  Show Unactivated badge on tier groups and product header for unactivated licenses.
  * @since 1.0.0
  */
-export function ProductSection( { product }: ProductSectionProps ) {
+export function ProductSection( { product, hideLicenseBadge = false }: ProductSectionProps ) {
     const { searchQuery } = useFilter();
     const isSearching = searchQuery.trim().length > 0;
 
@@ -80,7 +82,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                 <h2 className="text-base font-semibold m-0 p-0 text-white">
                     { product.name }
                 </h2>
-                { isNotActivated ? (
+                { ! hideLicenseBadge && ( isNotActivated ? (
                     <LicenseBadge type="unactivated" />
                 ) : tierName ? (
                     <LicenseBadge type="licensed" tierName={ tierName } />
@@ -88,7 +90,7 @@ export function ProductSection( { product }: ProductSectionProps ) {
                     <LicenseBadge type="legacy" />
                 ) : (
                     <LicenseBadge type="unlicensed" className="text-white border-white/40" />
-                ) }
+                ) ) }
                 <span className="ml-auto text-xs text-white/70">
                     { activeCount } { __( 'active', '%TEXTDOMAIN%' ) }
                     { ' · ' }
