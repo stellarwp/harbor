@@ -68,9 +68,9 @@ class Feature_Manager_Page {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Data               $site_data       Site data provider.
-	 * @param License_Manager    $license_manager License manager.
-	 * @param Activation_Url     $activation_url  Portal activation URL builder.
+	 * @param Data            $site_data       Site data provider.
+	 * @param License_Manager $license_manager License manager.
+	 * @param Activation_Url  $activation_url  Portal activation URL builder.
 	 */
 	public function __construct( Data $site_data, License_Manager $license_manager, Activation_Url $activation_url ) {
 		$this->site_data       = $site_data;
