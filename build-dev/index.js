@@ -5740,7 +5740,7 @@ const expiryTextClass = {
  * Keys with two or fewer dash-delimited segments have nothing safe to mask
  * (no middle to hide), so they are returned unchanged.
  *
- * @since TBD
+ * @since 1.5.0
  */
 function maskLicenseKey(key) {
   const segments = key.split('-');
