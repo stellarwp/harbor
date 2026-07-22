@@ -47,6 +47,25 @@ Omit `$redirect_url` to fall back to Harbor's Software Manager page. Pass your
 own whenever the user started somewhere else — otherwise they will not come
 back to where they were.
 
+### Getting the return URL right
+
+Build the return URL from the parent your page is actually registered under,
+not from `admin.php`:
+
+| How your page is registered                    | Return URL                        |
+| ---------------------------------------------- | --------------------------------- |
+| `add_menu_page()` (top level)                  | `admin.php?page={slug}`           |
+| `add_submenu_page( 'options-general.php', … )` | `options-general.php?page={slug}` |
+| `add_submenu_page( 'tools.php', … )`           | `tools.php?page={slug}`           |
+
+WordPress resolves a page by a hook name derived from its parent. Address a
+Settings submenu through `admin.php` and the lookup misses, so the user lands on
+a "Cannot load {slug}" error instead of your onboarding screen — after they have
+already paid and activated. Use `menu_page_url( 'your-slug', false )` if you
+would rather not hardcode the parent at all.
+
+The examples below assume a top-level menu.
+
 ## From JavaScript
 
 Use this when the product or tier is chosen in the browser. If it is fixed at
@@ -56,8 +75,11 @@ Harbor registers a dependency-free script exposing `window.lwHarbor`. Declare it
 as a dependency:
 
 ```php
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Portal\Activation_Script;
 use LiquidWeb\Harbor\Portal\Activation_Url;
+
+$activation_url = Config::get_container()->get( Activation_Url::class );
 
 wp_enqueue_script(
     'kadence-onboarding',

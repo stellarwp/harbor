@@ -102,11 +102,16 @@ final class Activation_Url {
 	 * Returns the fallback destination: the Software Manager page, with a
 	 * refresh so freshly activated products show up straight away.
 	 *
+	 * The page is a submenu of Settings, so it must be addressed through
+	 * options-general.php. Routing it through admin.php instead lands the user
+	 * on a "Cannot load" error, because WordPress looks up the page under a
+	 * hook name that only matches its real parent.
+	 *
 	 * @since TBD
 	 *
 	 * @return string
 	 */
 	private function get_default_redirect_url(): string {
-		return admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' );
+		return admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' );
 	}
 }

@@ -72,9 +72,24 @@ final class Activation_UrlTest extends HarborTestCase {
 		$params = $this->query_params( $this->make_builder()->get_base() );
 
 		$this->assertSame(
-			admin_url( 'admin.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' ),
+			admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' ),
 			$params['redirect_url']
 		);
+	}
+
+	/**
+	 * Tests that the default redirect addresses the page through its real
+	 * parent. The Software Manager is a submenu of Settings, so an admin.php
+	 * URL resolves to a hook name WordPress never registered and the user gets
+	 * a "Cannot load" error instead of the page.
+	 *
+	 * @return void
+	 */
+	public function test_get_base_does_not_route_the_default_redirect_through_admin_php(): void {
+		$params = $this->query_params( $this->make_builder()->get_base() );
+
+		$this->assertStringContainsString( 'options-general.php', $params['redirect_url'] );
+		$this->assertStringNotContainsString( 'admin.php', $params['redirect_url'] );
 	}
 
 	/**
