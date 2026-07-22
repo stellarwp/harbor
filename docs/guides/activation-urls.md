@@ -129,20 +129,30 @@ if ( window.lwHarbor?.buildActivationUrl ) {
 `window.lwHarbor.version` reports the version that actually registered the
 script.
 
+### Enqueue timing
+
+You do not need to worry about hook priority. WordPress resolves script
+dependencies when scripts are **printed**, not when they are enqueued, and
+`admin_enqueue_scripts` always runs before `admin_print_scripts`. Harbor
+registers during `admin_enqueue_scripts` (at priority `0`, defensively), so any
+consumer enqueuing on that hook is in time regardless of its own priority.
+
+Declaring the dependency before Harbor has registered it is therefore fine —
+`wp_enqueue_script()` does not validate dependencies at call time.
+
 ### If your script does not load
 
-WordPress silently refuses to print a script whose dependency is not
-registered — no error, no console warning. If your onboarding JS goes missing,
-check that the handle exists:
+WordPress silently refuses to print a script whose dependency is still
+unregistered at print time — no error, no console warning. In practice that
+means Harbor is not present on the request at all rather than a timing problem.
+Check the handle exists:
 
 ```php
 wp_script_is( Activation_Script::HANDLE, 'registered' );
 ```
 
-Harbor registers on `admin_enqueue_scripts` at priority `0`, so enqueuing at the
-default priority is safe. Enqueue earlier than that and you will lose the race.
-
-The script is admin-only. It is not registered on the front end.
+The script is admin-only. It is not registered on the front end, so a dependency
+declared on a front-end script will never resolve.
 
 ## Why the handle is not vendor-prefixed
 

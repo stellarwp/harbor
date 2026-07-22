@@ -41,10 +41,10 @@ final class Activation_Script {
 	/**
 	 * Registers the script if this instance is the version leader.
 	 *
-	 * Runs early on `admin_enqueue_scripts` so the handle exists before
-	 * consumers enqueue at the default priority. A consumer that declares a
-	 * dependency on an unregistered handle is silently skipped by WordPress,
-	 * so registration must not lose that race.
+	 * WordPress resolves dependencies when scripts are printed rather than when
+	 * they are enqueued, and `admin_enqueue_scripts` always runs before
+	 * printing, so consumers are in time whatever priority they use. Priority 0
+	 * is defensive: it also covers anything that prints scripts by hand.
 	 *
 	 * @since TBD
 	 *
