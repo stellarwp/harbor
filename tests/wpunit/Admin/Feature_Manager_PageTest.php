@@ -5,7 +5,6 @@ namespace wpunit\Admin;
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Activation_Url;
-use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
@@ -44,12 +43,11 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		parent::tearDown();
 	}
 
-	private function make_page( array $license_manager_overrides = [], array $catalog_overrides = [] ): Feature_Manager_Page {
+	private function make_page( array $license_manager_overrides = [] ): Feature_Manager_Page {
 		$site_data       = $this->makeEmpty( Data::class, [ 'get_domain' => 'example.com' ] );
 		$license_manager = $this->makeEmpty( License_Manager::class, $license_manager_overrides );
-		$catalog         = $this->makeEmpty( Catalog_Repository::class, $catalog_overrides );
 
-		return new Feature_Manager_Page( $site_data, $license_manager, $catalog, new Activation_Url( $site_data ) );
+		return new Feature_Manager_Page( $site_data, $license_manager, new Activation_Url( $site_data ) );
 	}
 
 	private function get_settings_submenu_slugs(): array {

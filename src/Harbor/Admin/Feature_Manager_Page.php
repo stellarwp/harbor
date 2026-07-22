@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Activation_Url;
-use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Utils\Version;
@@ -46,15 +45,6 @@ class Feature_Manager_Page {
 	private License_Manager $license_manager;
 
 	/**
-	 * Catalog repository.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var Catalog_Repository
-	 */
-	private Catalog_Repository $catalog;
-
-	/**
 	 * Portal activation URL builder.
 	 *
 	 * @since TBD
@@ -80,13 +70,11 @@ class Feature_Manager_Page {
 	 *
 	 * @param Data               $site_data       Site data provider.
 	 * @param License_Manager    $license_manager License manager.
-	 * @param Catalog_Repository $catalog         Catalog repository.
 	 * @param Activation_Url     $activation_url  Portal activation URL builder.
 	 */
-	public function __construct( Data $site_data, License_Manager $license_manager, Catalog_Repository $catalog, Activation_Url $activation_url ) {
+	public function __construct( Data $site_data, License_Manager $license_manager, Activation_Url $activation_url ) {
 		$this->site_data       = $site_data;
 		$this->license_manager = $license_manager;
-		$this->catalog         = $catalog;
 		$this->activation_url  = $activation_url;
 	}
 

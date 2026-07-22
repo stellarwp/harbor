@@ -20,6 +20,11 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 */
 	private $user_id;
 
+	/**
+	 * @var string|null
+	 */
+	private $original_request_uri;
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -34,7 +39,8 @@ final class Activation_ReturnTest extends HarborTestCase {
 		// Always act as leader unless a test says otherwise.
 		$this->set_class_fn_return( Version::class, 'should_handle', true );
 
-		$_SERVER['REQUEST_URI'] = '/wp-admin/admin.php?page=some-plugin-page&' . Activation_Url::RETURN_PARAM . '=1';
+		$this->original_request_uri = $_SERVER['REQUEST_URI'] ?? null;
+		$_SERVER['REQUEST_URI']     = '/wp-admin/admin.php?page=some-plugin-page&' . Activation_Url::RETURN_PARAM . '=1';
 	}
 
 	protected function tearDown(): void {
@@ -42,7 +48,14 @@ final class Activation_ReturnTest extends HarborTestCase {
 			uopz_allow_exit( true );
 		}
 
-		unset( $_GET[ Activation_Url::RETURN_PARAM ], $_SERVER['REQUEST_URI'] );
+		unset( $_GET[ Activation_Url::RETURN_PARAM ] );
+
+		// Restore rather than unset: the test bootstrap reads this after teardown.
+		if ( $this->original_request_uri === null ) {
+			unset( $_SERVER['REQUEST_URI'] );
+		} else {
+			$_SERVER['REQUEST_URI'] = $this->original_request_uri;
+		}
 		wp_set_current_user( 0 );
 
 		parent::tearDown();

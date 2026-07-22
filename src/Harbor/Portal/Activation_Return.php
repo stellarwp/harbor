@@ -121,13 +121,13 @@ final class Activation_Return {
 		$products = $this->license_manager->refresh_products( $this->site_data->get_domain() );
 
 		if ( $products instanceof WP_Error ) {
-			static::debug_log_wp_error( $products, 'Failed to refresh license products after portal activation.' );
+			self::debug_log_wp_error( $products, 'Failed to refresh license products after portal activation.' );
 		}
 
 		$catalog = $this->catalog->refresh();
 
 		if ( $catalog instanceof WP_Error ) {
-			static::debug_log_wp_error( $catalog, 'Failed to refresh the catalog after portal activation.' );
+			self::debug_log_wp_error( $catalog, 'Failed to refresh the catalog after portal activation.' );
 		}
 	}
 }
