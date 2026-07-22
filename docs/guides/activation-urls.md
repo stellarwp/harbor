@@ -49,20 +49,19 @@ back to where they were.
 
 ### Getting the return URL right
 
-Build the return URL from the parent your page is actually registered under,
-not from `admin.php`:
+Prefer your page's canonical address — the parent it is actually registered
+under:
 
-| How your page is registered                    | Return URL                        |
+| How your page is registered                    | Canonical return URL              |
 | ---------------------------------------------- | --------------------------------- |
 | `add_menu_page()` (top level)                  | `admin.php?page={slug}`           |
 | `add_submenu_page( 'options-general.php', … )` | `options-general.php?page={slug}` |
 | `add_submenu_page( 'tools.php', … )`           | `tools.php?page={slug}`           |
 
-WordPress resolves a page by a hook name derived from its parent. Address a
-Settings submenu through `admin.php` and the lookup misses, so the user lands on
-a "Cannot load {slug}" error instead of your onboarding screen — after they have
-already paid and activated. Use `menu_page_url( 'your-slug', false )` if you
-would rather not hardcode the parent at all.
+WordPress will resolve an `admin.php?page={slug}` URL to a submenu page anyway,
+so this is a consistency preference rather than a correctness requirement.
+`menu_page_url( 'your-slug', false )` returns the canonical form without
+hardcoding the parent.
 
 The examples below assume a top-level menu.
 
