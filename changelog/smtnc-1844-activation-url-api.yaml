@@ -1,0 +1,4 @@
+significance: minor
+type: feature
+entry: Added a reusable activation URL API. Host plugins can build Liquid Web portal activation URLs from PHP via the Activation_Url service, or in the browser via the shared lw-harbor-activation script, which exposes window.lwHarbor.buildActivationUrl()
+timestamp: 2026-07-22T00:00:00.000Z

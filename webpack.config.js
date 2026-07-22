@@ -11,7 +11,14 @@ const outputPath   = path.resolve(
 module.exports = {
     ...defaultConfig,
     entry: {
-        index:    path.resolve( process.cwd(), 'resources', 'js', 'index.tsx' ),
+        index:      path.resolve( process.cwd(), 'resources', 'js', 'index.tsx' ),
+        // Shared helper consumed by host plugins' onboarding screens. Exposed
+        // as a window global so it works from an inline script, with no build
+        // step required on the consuming side.
+        activation: {
+            import:  path.resolve( process.cwd(), 'resources', 'js', 'activation-entry.ts' ),
+            library: { name: 'lwHarbor', type: 'window' },
+        },
     },
     output: {
         path:          outputPath,

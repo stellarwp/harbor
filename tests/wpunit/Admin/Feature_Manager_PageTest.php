@@ -4,6 +4,7 @@ namespace wpunit\Admin;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Activation_Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -48,7 +49,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$license_manager = $this->makeEmpty( License_Manager::class, $license_manager_overrides );
 		$catalog         = $this->makeEmpty( Catalog_Repository::class, $catalog_overrides );
 
-		return new Feature_Manager_Page( $site_data, $license_manager, $catalog );
+		return new Feature_Manager_Page( $site_data, $license_manager, $catalog, new Activation_Url( $site_data ) );
 	}
 
 	private function get_settings_submenu_slugs(): array {
@@ -302,7 +303,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		);
 		$catalog         = $this->makeEmpty( Catalog_Repository::class, [ 'refresh' => null ] );
 
-		$page = new Feature_Manager_Page( $site_data, $license_manager, $catalog );
+		$page = new Feature_Manager_Page( $site_data, $license_manager, $catalog, new Activation_Url( $site_data ) );
 		$page->maybe_redirect_after_refresh();
 
 		$this->assertSame( 'mysite.com', $refreshed_with );

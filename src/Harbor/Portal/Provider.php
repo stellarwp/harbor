@@ -33,6 +33,8 @@ final class Provider extends Abstract_Provider {
 		);
 
 		$this->container->singleton( Catalog_Repository::class );
+		$this->container->singleton( Activation_Url::class );
+		$this->container->singleton( Activation_Script::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Herald_Legacy_Url_Builder::class );
 		$this->container->singleton( Herald_Routing_Url_Builder::class );
@@ -44,5 +46,19 @@ final class Provider extends Abstract_Provider {
 				$this->container->get( Catalog_Repository::class )->delete_catalog();
 			}
 		);
+
+		add_action( 'admin_enqueue_scripts', [ $this, 'register_activation_script' ], 0, 0 );
+	}
+
+	/**
+	 * Registers the shared activation helper script if this instance
+	 * has the highest Harbor version among all active instances.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public function register_activation_script(): void {
+		$this->container->get( Activation_Script::class )->maybe_register();
 	}
 }

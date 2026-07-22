@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\Admin;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Activation_Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\License_Key;
@@ -54,6 +55,15 @@ class Feature_Manager_Page {
 	private Catalog_Repository $catalog;
 
 	/**
+	 * Portal activation URL builder.
+	 *
+	 * @since TBD
+	 *
+	 * @var Activation_Url
+	 */
+	private Activation_Url $activation_url;
+
+	/**
 	 * Hook suffix returned by add_submenu_page().
 	 * Empty string until the page is registered.
 	 *
@@ -71,11 +81,13 @@ class Feature_Manager_Page {
 	 * @param Data               $site_data       Site data provider.
 	 * @param License_Manager    $license_manager License manager.
 	 * @param Catalog_Repository $catalog         Catalog repository.
+	 * @param Activation_Url     $activation_url  Portal activation URL builder.
 	 */
-	public function __construct( Data $site_data, License_Manager $license_manager, Catalog_Repository $catalog ) {
+	public function __construct( Data $site_data, License_Manager $license_manager, Catalog_Repository $catalog, Activation_Url $activation_url ) {
 		$this->site_data       = $site_data;
 		$this->license_manager = $license_manager;
 		$this->catalog         = $catalog;
+		$this->activation_url  = $activation_url;
 	}
 
 	/**
@@ -191,16 +203,7 @@ class Feature_Manager_Page {
 				'restUrl'          => rest_url( 'liquidweb/harbor/v1/' ),
 				'nonce'            => wp_create_nonce( 'wp_rest' ),
 				'pluginsUrl'       => admin_url( 'plugins.php' ),
-				'activationUrl'    => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(
-					[
-						'portal-referral' => 'plugin',
-						'redirect_url'    => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
-						'domain'          => $this->site_data->get_domain(),
-					],
-					'',
-					'&',
-					PHP_QUERY_RFC3986
-				),
+				'activationUrl'    => $this->activation_url->get_base(),
 				'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/',
 				'domain'           => $this->site_data->get_domain(),
 				'version'          => Harbor::VERSION,
