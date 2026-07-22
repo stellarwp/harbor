@@ -1,0 +1,184 @@
+<?php declare( strict_types=1 );
+
+namespace LiquidWeb\Harbor\Tests\Portal;
+
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Activation_Return;
+use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
+use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
+use LiquidWeb\Harbor\Utils\Version;
+
+final class Activation_ReturnTest extends HarborTestCase {
+
+	use With_Uopz;
+
+	/**
+	 * @var int
+	 */
+	private $user_id;
+
+	protected function setUp(): void {
+		parent::setUp();
+
+		// The handler redirects and exits on its success path.
+		if ( function_exists( 'uopz_allow_exit' ) ) {
+			uopz_allow_exit( false );
+		}
+
+		$this->user_id = self::factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $this->user_id );
+
+		// Always act as leader unless a test says otherwise.
+		$this->set_class_fn_return( Version::class, 'should_handle', true );
+
+		$_SERVER['REQUEST_URI'] = '/wp-admin/admin.php?page=some-plugin-page&' . Activation_Url::RETURN_PARAM . '=1';
+	}
+
+	protected function tearDown(): void {
+		if ( function_exists( 'uopz_allow_exit' ) ) {
+			uopz_allow_exit( true );
+		}
+
+		unset( $_GET[ Activation_Url::RETURN_PARAM ], $_SERVER['REQUEST_URI'] );
+		wp_set_current_user( 0 );
+
+		parent::tearDown();
+	}
+
+	/**
+	 * Builds a handler whose collaborators record whether they were called.
+	 *
+	 * @param bool|null   $license_refreshed Set to true when the license refresh runs.
+	 * @param bool|null   $catalog_refreshed Set to true when the catalog refresh runs.
+	 * @param string|null $refreshed_with    Receives the domain passed to the license refresh.
+	 * @param string      $domain            The domain the site reports.
+	 *
+	 * @return Activation_Return
+	 */
+	private function make_handler( &$license_refreshed, &$catalog_refreshed, &$refreshed_with, string $domain = 'site.example.com' ): Activation_Return {
+		$license_manager = $this->makeEmpty(
+			License_Manager::class,
+			[
+				'refresh_products' => static function ( string $passed ) use ( &$license_refreshed, &$refreshed_with ) {
+					$license_refreshed = true;
+					$refreshed_with    = $passed;
+				},
+			]
+		);
+
+		$catalog = $this->makeEmpty(
+			Catalog_Repository::class,
+			[
+				'refresh' => static function () use ( &$catalog_refreshed ) {
+					$catalog_refreshed = true;
+				},
+			]
+		);
+
+		$site_data = $this->makeEmpty( Data::class, [ 'get_domain' => $domain ] );
+
+		return new Activation_Return( $license_manager, $catalog, $site_data );
+	}
+
+	/**
+	 * Tests that an ordinary admin request is left alone. The handler runs on
+	 * every admin_init, so it must cost nothing when the user is not returning
+	 * from the portal.
+	 *
+	 * @return void
+	 */
+	public function test_does_not_refresh_when_the_param_is_absent(): void {
+		unset( $_GET[ Activation_Url::RETURN_PARAM ] );
+
+		$license = false;
+		$catalog = false;
+		$domain  = null;
+
+		$this->make_handler( $license, $catalog, $domain )->maybe_refresh();
+
+		$this->assertFalse( $license );
+		$this->assertFalse( $catalog );
+	}
+
+	/**
+	 * Tests that the refresh runs when the user returns from the portal.
+	 *
+	 * @return void
+	 */
+	public function test_refreshes_license_and_catalog_on_return(): void {
+		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+
+		$license = false;
+		$catalog = false;
+		$domain  = null;
+
+		$this->make_handler( $license, $catalog, $domain )->maybe_refresh();
+
+		$this->assertTrue( $license );
+		$this->assertTrue( $catalog );
+	}
+
+	/**
+	 * Tests that the site's own domain is what gets refreshed.
+	 *
+	 * @return void
+	 */
+	public function test_passes_the_site_domain_to_the_license_refresh(): void {
+		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+
+		$license = false;
+		$catalog = false;
+		$domain  = null;
+
+		$this->make_handler( $license, $catalog, $domain, 'other-site.example.com' )->maybe_refresh();
+
+		$this->assertSame( 'other-site.example.com', $domain );
+	}
+
+	/**
+	 * Tests that a user without the managing capability cannot trigger the
+	 * refresh. The param rides on a URL owned by the calling plugin, so it can
+	 * land on a screen that does not gate on this capability itself.
+	 *
+	 * @return void
+	 */
+	public function test_does_not_refresh_without_the_required_capability(): void {
+		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
+
+		$license = false;
+		$catalog = false;
+		$domain  = null;
+
+		$this->make_handler( $license, $catalog, $domain )->maybe_refresh();
+
+		$this->assertFalse( $license );
+		$this->assertFalse( $catalog );
+	}
+
+	/**
+	 * Tests that only one Harbor instance refreshes. Every active copy runs
+	 * this on admin_init, so without the leader gate a site with four Liquid
+	 * Web plugins would make four identical API calls per return trip.
+	 *
+	 * @return void
+	 */
+	public function test_does_not_refresh_when_not_the_version_leader(): void {
+		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+
+		$this->set_class_fn_return( Version::class, 'should_handle', false );
+
+		$license = false;
+		$catalog = false;
+		$domain  = null;
+
+		$this->make_handler( $license, $catalog, $domain )->maybe_refresh();
+
+		$this->assertFalse( $license );
+		$this->assertFalse( $catalog );
+	}
+}

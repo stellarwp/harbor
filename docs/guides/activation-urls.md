@@ -21,6 +21,38 @@ Manager page — for example on a plugin's onboarding screen.
 the portal URL as separate params. `sku` is what lets the portal pre-select a
 product and tier instead of dropping the user on an unfiltered list.
 
+Harbor appends `lw-harbor-activated=1` to whatever return URL you supply. That
+tag lives inside `redirect_url`, not at the top level — see below.
+
+## The return trip refreshes your data automatically
+
+Licensing data is cached. Without a refresh, a user who has just activated in
+the portal comes back to a screen that still believes they are unlicensed: the
+Activate button is still there, the feature they paid for is still gated.
+
+You do not have to handle this. `Activation_Url` tags every return URL it
+builds, and `Activation_Return` watches for that tag on any admin screen. On the
+way back it refreshes the license products and the catalog, strips the tag, and
+redirects — all on `admin_init`, before your page renders. By the time your code
+runs, `License_Repository` is current.
+
+Consequences worth knowing:
+
+- **Read licensing state at render time**, not from something cached earlier in
+  the request. The refresh has already happened by then.
+- **The URL the user lands on is not the one you supplied** — it briefly carries
+  `lw-harbor-activated=1`, then redirects to your clean URL. Anything that
+  fingerprints the query string should tolerate that.
+- **Only one instance refreshes.** The handler is behind the same version
+  leadership check as the rest of Harbor, so four active Liquid Web plugins make
+  one API call between them, not four.
+- **It requires `manage_options`.** The tag rides on a URL your plugin owns, so
+  it can land on a screen with no capability check of its own.
+- **Failures are logged, not surfaced.** If the refresh fails the user still
+  reaches your page, with stale data. They have just come back from activating
+  and are looking at your screen, not a licensing one, so an error notice there
+  would be noise they cannot act on.
+
 ## From PHP
 
 Resolve `Activation_Url` from the container.

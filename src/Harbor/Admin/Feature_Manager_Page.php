@@ -129,7 +129,6 @@ class Feature_Manager_Page {
 		}
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_enqueue_assets' ] );
-		add_action( 'admin_init', [ $this, 'maybe_redirect_after_refresh' ] );
 	}
 
 	/**
@@ -251,35 +250,4 @@ class Feature_Manager_Page {
 		<?php
 	}
 
-	/**
-	 * Refreshes license and catalog data when the portal redirects back with
-	 * ?refresh=auto (e.g. after a user activates their license). Strips the
-	 * query param and redirects so a manual reload does not re-trigger the
-	 * refresh.
-	 *
-	 * Hooked on admin_init so headers have not yet been sent, allowing
-	 * wp_safe_redirect() to issue the Location header successfully. Calling
-	 * this from render() (the add_submenu_page callback) is too late — WordPress
-	 * has already begun sending HTML output by that point.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function maybe_redirect_after_refresh(): void {
-		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return;
-		}
-
-		if ( $_GET['refresh'] !== 'auto' || $_GET['page'] !== self::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return;
-		}
-
-		$this->license_manager->refresh_products( $this->site_data->get_domain() );
-		$this->catalog->refresh();
-
-		$clean_url = remove_query_arg( 'refresh' );
-		wp_safe_redirect( $clean_url );
-		exit;
-	}
 }

@@ -1,0 +1,4 @@
+significance: minor
+type: feature
+entry: Licensing data is now refreshed automatically when the Liquid Web portal returns a user to the site after activating, so screens gated on license state are correct on arrival. Host plugins need no code for this; sending the user through an Activation_Url is the whole opt-in
+timestamp: 2026-07-22T00:00:00.000Z

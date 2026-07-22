@@ -35,6 +35,7 @@ final class Provider extends Abstract_Provider {
 		$this->container->singleton( Catalog_Repository::class );
 		$this->container->singleton( Activation_Url::class );
 		$this->container->singleton( Activation_Script::class );
+		$this->container->singleton( Activation_Return::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Herald_Legacy_Url_Builder::class );
 		$this->container->singleton( Herald_Routing_Url_Builder::class );
@@ -48,6 +49,18 @@ final class Provider extends Abstract_Provider {
 		);
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_activation_script' ], 0, 0 );
+		add_action( 'admin_init', [ $this, 'maybe_refresh_after_activation' ], 0, 0 );
+	}
+
+	/**
+	 * Refreshes cached licensing data when the portal returns a user to the site.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public function maybe_refresh_after_activation(): void {
+		$this->container->get( Activation_Return::class )->maybe_refresh();
 	}
 
 	/**

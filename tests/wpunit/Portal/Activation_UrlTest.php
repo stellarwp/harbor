@@ -71,10 +71,41 @@ final class Activation_UrlTest extends HarborTestCase {
 	public function test_get_base_defaults_redirect_to_feature_manager_page(): void {
 		$params = $this->query_params( $this->make_builder()->get_base() );
 
-		$this->assertSame(
-			admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' ),
+		$this->assertStringStartsWith(
+			admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG ),
 			$params['redirect_url']
 		);
+	}
+
+	/**
+	 * Tests that the return URL is tagged so Activation_Return refreshes the
+	 * cached licensing data before the page renders. Without it the user comes
+	 * back to a screen that still believes they are unlicensed.
+	 *
+	 * @return void
+	 */
+	public function test_get_base_tags_the_return_url_for_refresh(): void {
+		$redirect = admin_url( 'admin.php?page=my-onboarding' );
+		$params   = $this->query_params( $this->make_builder()->get_base( $redirect ) );
+
+		parse_str( (string) wp_parse_url( $params['redirect_url'], PHP_URL_QUERY ), $return_params );
+
+		$this->assertSame( '1', $return_params[ Activation_Url::RETURN_PARAM ] );
+		$this->assertSame( 'my-onboarding', $return_params['page'] );
+	}
+
+	/**
+	 * Tests that the tag survives on the default destination too, so Harbor's
+	 * own page gets the same refresh as a host plugin's.
+	 *
+	 * @return void
+	 */
+	public function test_get_base_tags_the_default_return_url(): void {
+		$params = $this->query_params( $this->make_builder()->get_base() );
+
+		parse_str( (string) wp_parse_url( $params['redirect_url'], PHP_URL_QUERY ), $return_params );
+
+		$this->assertSame( '1', $return_params[ Activation_Url::RETURN_PARAM ] );
 	}
 
 	/**
@@ -101,7 +132,8 @@ final class Activation_UrlTest extends HarborTestCase {
 		$redirect = admin_url( 'admin.php?page=my-onboarding&step=2' );
 		$params   = $this->query_params( $this->make_builder()->get_base( $redirect ) );
 
-		$this->assertSame( $redirect, $params['redirect_url'] );
+		// The refresh tag is appended to whatever the caller supplied.
+		$this->assertStringStartsWith( $redirect, $params['redirect_url'] );
 	}
 
 	/**
@@ -146,7 +178,7 @@ final class Activation_UrlTest extends HarborTestCase {
 
 		$this->assertSame( 'plugin', $params['portal-referral'] );
 		$this->assertSame( self::TEST_DOMAIN, $params['domain'] );
-		$this->assertSame( $redirect, $params['redirect_url'] );
+		$this->assertStringStartsWith( $redirect, $params['redirect_url'] );
 	}
 
 	/**

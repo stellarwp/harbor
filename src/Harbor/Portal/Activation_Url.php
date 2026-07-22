@@ -26,6 +26,21 @@ use LiquidWeb\Harbor\Site\Data;
 final class Activation_Url {
 
 	/**
+	 * Query param added to the return URL to mark a portal round trip.
+	 *
+	 * Harbor caches licensing data, so a site that has just activated in the
+	 * portal still believes it is unlicensed until that cache is refreshed.
+	 * Activation_Return watches for this param and refreshes before the page
+	 * renders, so callers do not have to think about it.
+	 *
+	 * Deliberately namespaced. It rides on a URL owned by the calling plugin,
+	 * so a generic name like "refresh" would risk colliding with theirs.
+	 *
+	 * @since TBD
+	 */
+	public const RETURN_PARAM = 'lw-harbor-activated';
+
+	/**
 	 * Site data provider.
 	 *
 	 * @since TBD
@@ -60,7 +75,7 @@ final class Activation_Url {
 		$query = http_build_query(
 			[
 				'portal-referral' => 'plugin',
-				'redirect_url'    => $redirect_url ?? $this->get_default_redirect_url(),
+				'redirect_url'    => $this->mark_return_url( $redirect_url ?? $this->get_default_redirect_url() ),
 				'domain'          => $this->site_data->get_domain(),
 			],
 			'',
@@ -99,8 +114,21 @@ final class Activation_Url {
 	}
 
 	/**
-	 * Returns the fallback destination: the Software Manager page, with a
-	 * refresh so freshly activated products show up straight away.
+	 * Tags a return URL so Activation_Return knows the user is coming back from
+	 * the portal and refreshes the cached licensing data before rendering.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $redirect_url The caller's return URL.
+	 *
+	 * @return string
+	 */
+	private function mark_return_url( string $redirect_url ): string {
+		return add_query_arg( self::RETURN_PARAM, '1', $redirect_url );
+	}
+
+	/**
+	 * Returns the fallback destination: the Software Manager page.
 	 *
 	 * The page is a submenu of Settings, so options-general.php is its canonical
 	 * address, and the form used everywhere else that links to it. WordPress
@@ -112,6 +140,6 @@ final class Activation_Url {
 	 * @return string
 	 */
 	private function get_default_redirect_url(): string {
-		return admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG . '&refresh=auto' );
+		return admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG );
 	}
 }
