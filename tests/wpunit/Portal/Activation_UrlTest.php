@@ -81,7 +81,7 @@ final class Activation_UrlTest extends HarborTestCase {
 	 * Tests that the default redirect uses the page's canonical address. The
 	 * Software Manager is a submenu of Settings, and every other link to it in
 	 * the codebase uses the options-general.php form. WordPress resolves an
-	 * admin.php URL to the same page, so this pins consistency, not behaviour.
+	 * admin.php URL to the same page, so this pins consistency, not behavior.
 	 *
 	 * @return void
 	 */
