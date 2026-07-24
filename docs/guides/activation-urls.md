@@ -55,29 +55,29 @@ Consequences worth knowing:
 
 ## From PHP
 
-Resolve `Activation_Url` from the container.
+Call the global functions. Like the rest of Harbor's public API they resolve to
+the highest-version Harbor copy on the site, so you always get the loaded
+version's logic — do not build `Activation_Url` from your own bundled copy, which
+may not be the one actually running.
 
 ```php
-use LiquidWeb\Harbor\Portal\Activation_Url;
-
-$activation_url = Config::get_container()->get( Activation_Url::class );
-
 // Product-scoped, returning the user to your onboarding screen.
-$href = $activation_url->for_product(
+$href = lw_harbor_get_product_activation_url(
     'kadence',
     'pro',
     admin_url( 'admin.php?page=kadence-onboarding&step=2' )
 );
 ```
 
-| Method                                                             | Returns                                                                 |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| `get_base( ?string $redirect_url )`                                | The portal subscriptions URL with referral, redirect, and domain params |
-| `for_product( string $slug, string $tier, ?string $redirect_url )` | The same, plus `sku={slug}:{tier}`                                      |
+| Function                                                                                    | Returns                                                                 |
+| ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `lw_harbor_get_activation_url( ?string $redirect_url )`                                      | The portal subscriptions URL with referral, redirect, and domain params |
+| `lw_harbor_get_product_activation_url( string $slug, string $tier, ?string $redirect_url )` | The same, plus `sku={slug}:{tier}`                                       |
 
-Omit `$redirect_url` to fall back to Harbor's Software Manager page. Pass your
-own whenever the user started somewhere else — otherwise they will not come
-back to where they were.
+Both return an empty string when no Harbor instance is active — treat that as
+"hide the button". Omit `$redirect_url` to fall back to Harbor's Software Manager
+page. Pass your own whenever the user started somewhere else — otherwise they
+will not come back to where they were.
 
 ### Getting the return URL right
 
@@ -106,11 +106,7 @@ Harbor registers a dependency-free script exposing `window.lwHarbor`. Declare it
 as a dependency:
 
 ```php
-use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Portal\Activation_Script;
-use LiquidWeb\Harbor\Portal\Activation_Url;
-
-$activation_url = Config::get_container()->get( Activation_Url::class );
 
 wp_enqueue_script(
     'kadence-onboarding',
@@ -125,7 +121,7 @@ wp_localize_script(
     'kadence-onboarding',
     'kadenceOnboarding',
     [
-        'activationBaseUrl' => $activation_url->get_base(
+        'activationBaseUrl' => lw_harbor_get_activation_url(
             admin_url( 'admin.php?page=kadence-onboarding&step=2' )
         ),
     ]

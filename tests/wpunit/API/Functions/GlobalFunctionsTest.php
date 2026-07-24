@@ -276,4 +276,32 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		$this->assertFalse( lw_harbor_refresh_catalog() );
 	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_get_activation_url() / lw_harbor_get_product_activation_url()
+	// -------------------------------------------------------------------------
+
+	public function test_get_activation_url_targets_the_subscriptions_screen(): void {
+		$url = lw_harbor_get_activation_url();
+
+		$this->assertStringContainsString( '/subscriptions/', $url );
+		$this->assertStringContainsString( 'portal-referral=plugin', $url );
+		$this->assertStringNotContainsString( 'sku=', $url );
+	}
+
+	public function test_get_activation_url_carries_the_given_return_destination(): void {
+		$url = lw_harbor_get_activation_url( 'https://example.test/onboarding' );
+
+		$this->assertStringContainsString( rawurlencode( 'https://example.test/onboarding' ), $url );
+		// The return trip is tagged so Harbor refreshes its cache on the way back.
+		$this->assertStringContainsString( 'lw-harbor-activated', $url );
+	}
+
+	public function test_get_product_activation_url_scopes_to_the_product_and_tier(): void {
+		$url = lw_harbor_get_product_activation_url( 'learndash', 'elite' );
+
+		$this->assertStringContainsString( '/subscriptions/', $url );
+		// The sku is RFC3986-encoded, so the colon becomes %3A.
+		$this->assertStringContainsString( 'sku=learndash%3Aelite', $url );
+	}
 }

@@ -240,6 +240,53 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_get_activation_url' ) ) {
+	/**
+	 * Returns a Liquid Web portal activation URL for this site.
+	 *
+	 * Drops the user on the portal's subscriptions screen to activate a product
+	 * against this site, then returns them to $redirect_url (or the Software
+	 * Manager page when none is given).
+	 *
+	 * @since TBD
+	 *
+	 * @param string|null $redirect_url Where the portal returns the user afterwards.
+	 *
+	 * @return string The activation URL, or an empty string if no instance is active.
+	 */
+	function lw_harbor_get_activation_url( ?string $redirect_url = null ): string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_activation_url' );
+
+		$result = $callback ? $callback( $redirect_url ) : '';
+
+		return is_string( $result ) ? $result : '';
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
+	/**
+	 * Returns a portal activation URL scoped to a single product and tier.
+	 *
+	 * Like lw_harbor_get_activation_url(), but adds an `sku` param so the portal
+	 * pre-selects the given product and tier instead of an unfiltered list.
+	 *
+	 * @since TBD
+	 *
+	 * @param string      $product_slug The product slug, e.g. 'learndash'.
+	 * @param string      $tier         The tier slug, e.g. 'elite'.
+	 * @param string|null $redirect_url Where the portal returns the user afterwards.
+	 *
+	 * @return string The activation URL, or an empty string if no instance is active.
+	 */
+	function lw_harbor_get_product_activation_url( string $product_slug, string $tier, ?string $redirect_url = null ): string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_url' );
+
+		$result = $callback ? $callback( $product_slug, $tier, $redirect_url ) : '';
+
+		return is_string( $result ) ? $result : '';
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_refresh_catalog' ) ) {
 	/**
 	 * Forces a synchronous fresh catalog fetch from the Commerce Portal API.
