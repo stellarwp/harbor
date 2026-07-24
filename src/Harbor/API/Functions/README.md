@@ -117,21 +117,21 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 
 `src/Harbor/global-functions.php` exposes the public functions. Plugin consumers call these:
 
-| Function                                                             | What it does                                                                                  |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `lw_harbor_has_unified_license_key()`                                | Whether any unified license key is stored locally (no API call)                               |
-| `lw_harbor_get_unified_license_key()`                                | Returns the unified license key string, or null if not found                                  |
-| `lw_harbor_is_product_license_active( $product )`                    | Whether a product slug has `validation_status: valid` in the cached catalog                   |
-| `lw_harbor_is_feature_enabled( $slug )`                              | Whether a feature is in the catalog AND currently enabled/active                              |
-| `lw_harbor_is_feature_available( $slug )`                            | Whether a feature exists in the catalog, regardless of enabled state                          |
-| `lw_harbor_get_license_page_url()`                                   | Returns the admin URL for the Harbor Feature Manager page                                     |
-| `lw_harbor_get_activation_url( $redirect_url = null )`               | Returns a portal activation URL for this site, returning the user to `$redirect_url`          |
-| `lw_harbor_get_product_activation_url( $slug, $tier, $redirect = null )` | The activation URL scoped to a product and tier via `sku`                                 |
-| `lw_harbor_get_licensed_domain()`                                    | Returns the domain Harbor uses for licensing on the current site                              |
-| `lw_harbor_register_submenu( $parent_slug )`                         | Appends a Licensing submenu item under a plugin's top-level admin menu                        |
-| `lw_harbor_display_legacy_license_page_notice( $product_name = '' )` | Renders an info notice on a plugin's legacy license page pointing users to the unified system |
-| `lw_harbor_has_consent()`                                            | Whether the site owner has opted in to external Liquid Web API communications                 |
-| `lw_harbor_refresh_catalog()`                                        | Force a synchronous re-fetch of the product catalog from the Commerce Portal API              |
+| Function                                                                 | What it does                                                                                  |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `lw_harbor_has_unified_license_key()`                                    | Whether any unified license key is stored locally (no API call)                               |
+| `lw_harbor_get_unified_license_key()`                                    | Returns the unified license key string, or null if not found                                  |
+| `lw_harbor_is_product_license_active( $product )`                        | Whether a product slug has `validation_status: valid` in the cached catalog                   |
+| `lw_harbor_is_feature_enabled( $slug )`                                  | Whether a feature is in the catalog AND currently enabled/active                              |
+| `lw_harbor_is_feature_available( $slug )`                                | Whether a feature exists in the catalog, regardless of enabled state                          |
+| `lw_harbor_get_license_page_url()`                                       | Returns the admin URL for the Harbor Feature Manager page                                     |
+| `lw_harbor_get_activation_url( $redirect_url = null )`                   | Returns a portal activation URL for this site, returning the user to `$redirect_url`          |
+| `lw_harbor_get_product_activation_url( $slug, $tier, $redirect = null )` | The activation URL scoped to a product and tier via `sku`                                     |
+| `lw_harbor_get_licensed_domain()`                                        | Returns the domain Harbor uses for licensing on the current site                              |
+| `lw_harbor_register_submenu( $parent_slug )`                             | Appends a Licensing submenu item under a plugin's top-level admin menu                        |
+| `lw_harbor_display_legacy_license_page_notice( $product_name = '' )`     | Renders an info notice on a plugin's legacy license page pointing users to the unified system |
+| `lw_harbor_has_consent()`                                                | Whether the site owner has opted in to external Liquid Web API communications                 |
+| `lw_harbor_refresh_catalog()`                                            | Force a synchronous re-fetch of the product catalog from the Commerce Portal API              |
 
 Each function looks up the registered callback and delegates, returning `false` if no callback is registered yet:
 
