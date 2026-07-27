@@ -252,7 +252,7 @@ class Feature_Manager_Page {
 	 * The catalog is resolved here rather than injected: the constructor stopped
 	 * taking Catalog_Repository when this stopped being part of the page's job.
 	 *
-	 * @since      1.0.0
+	 * @since 1.0.0
 	 * @deprecated TBD Portal return trips are handled by Portal\Activation_Return.
 	 *
 	 * @return void

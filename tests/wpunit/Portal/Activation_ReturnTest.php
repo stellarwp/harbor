@@ -104,16 +104,20 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	private function stop_at_the_redirect(): void {
+		// The message is captured rather than read from the constant inside the
+		// closure: uopz runs it with no class scope, so self:: is unavailable.
+		$message = self::REDIRECT_REACHED;
+
 		$this->set_fn_return(
 			'wp_safe_redirect',
-			static function ( $location = null ) {
-				throw new TestException( self::REDIRECT_REACHED );
+			static function ( $location = null ) use ( $message ) {
+				throw new TestException( $message );
 			},
 			true
 		);
 
 		$this->expectException( TestException::class );
-		$this->expectExceptionMessage( self::REDIRECT_REACHED );
+		$this->expectExceptionMessage( $message );
 	}
 
 	/**
