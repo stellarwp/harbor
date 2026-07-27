@@ -1,8 +1,3 @@
-### [1.5.1] 2026-07-27
-
-* Tweak - Added an Activate control beside the Unactivated badge in the product header, with a tier picker when a license covers multiple unactivated tiers.
-* Tweak - Split the Feature Manager product list into Installed Features and Available Features sections.
-
 ### [1.5.0] 2026-06-25
 
 * Tweak - Update the unified license key input UI to mask its value when in locked state.

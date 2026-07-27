@@ -1,0 +1,4 @@
+significance: patch
+type: tweak
+entry: Added an Activate control beside the Unactivated badge in the product header, with a tier picker when a license covers multiple unactivated tiers.
+timestamp: 2026-07-14T17:35:16.508Z
