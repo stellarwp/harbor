@@ -177,6 +177,8 @@ final class Plugin extends Feature implements Installable {
 
 		$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $this->get_plugin_file() );
 
-		return $plugin_data['Version'] ?? null;
+		// get_plugin_data() fills every header key, defaulting to an empty string,
+		// so Version is always present and the null coalesce never applied.
+		return $plugin_data['Version'];
 	}
 }
