@@ -18,10 +18,6 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
-
 		// add_submenu_page() early-returns when the user lacks the required
 		// capability, so menu-registration tests need an administrator to be
 		// the current user before the call.
@@ -32,13 +28,7 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
 		wp_set_current_user( 0 );
-
-		unset( $_GET['refresh'], $_GET['page'] );
 
 		parent::tearDown();
 	}

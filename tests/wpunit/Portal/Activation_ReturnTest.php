@@ -8,12 +8,20 @@ use LiquidWeb\Harbor\Portal\Activation_Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\TestException;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Utils\Version;
 
 final class Activation_ReturnTest extends HarborTestCase {
 
 	use With_Uopz;
+
+	/**
+	 * Message carried by the exception that stands in for the success path's exit().
+	 *
+	 * @var string
+	 */
+	private const REDIRECT_REACHED = 'Reached the redirect on the success path.';
 
 	/**
 	 * @var int
@@ -28,11 +36,6 @@ final class Activation_ReturnTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		// The handler redirects and exits on its success path.
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
-
 		$this->user_id = self::factory()->user->create( [ 'role' => 'administrator' ] );
 		wp_set_current_user( $this->user_id );
 
@@ -44,12 +47,6 @@ final class Activation_ReturnTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
-		unset( $_GET[ Activation_Url::RETURN_PARAM ] );
-
 		// Restore rather than unset: the test bootstrap reads this after teardown.
 		if ( $this->original_request_uri === null ) {
 			unset( $_SERVER['REQUEST_URI'] );
@@ -97,6 +94,29 @@ final class Activation_ReturnTest extends HarborTestCase {
 	}
 
 	/**
+	 * Stops execution where the success path would have called exit(), by making
+	 * the redirect immediately before it throw.
+	 *
+	 * Suppressing exit() itself lets a failing test carry on past the point it
+	 * should have stopped, which can leave the failure unreported, so the test
+	 * expects the exception rather than the exit.
+	 *
+	 * @return void
+	 */
+	private function stop_at_the_redirect(): void {
+		$this->set_fn_return(
+			'wp_safe_redirect',
+			static function ( $location = null ) {
+				throw new TestException( self::REDIRECT_REACHED );
+			},
+			true
+		);
+
+		$this->expectException( TestException::class );
+		$this->expectExceptionMessage( self::REDIRECT_REACHED );
+	}
+
+	/**
 	 * Tests that an ordinary admin request is left alone. The handler runs on
 	 * every admin_init, so it must cost nothing when the user is not returning
 	 * from the portal.
@@ -128,10 +148,18 @@ final class Activation_ReturnTest extends HarborTestCase {
 		$catalog = false;
 		$domain  = null;
 
-		$this->make_handler( $license, $catalog, $domain )->maybe_refresh();
+		$handler = $this->make_handler( $license, $catalog, $domain );
 
-		$this->assertTrue( $license );
-		$this->assertTrue( $catalog );
+		$this->stop_at_the_redirect();
+
+		try {
+			$handler->maybe_refresh();
+		} catch ( TestException $e ) {
+			$this->assertTrue( $license );
+			$this->assertTrue( $catalog );
+
+			throw $e;
+		}
 	}
 
 	/**
@@ -146,9 +174,17 @@ final class Activation_ReturnTest extends HarborTestCase {
 		$catalog = false;
 		$domain  = null;
 
-		$this->make_handler( $license, $catalog, $domain, 'other-site.example.com' )->maybe_refresh();
+		$handler = $this->make_handler( $license, $catalog, $domain, 'other-site.example.com' );
 
-		$this->assertSame( 'other-site.example.com', $domain );
+		$this->stop_at_the_redirect();
+
+		try {
+			$handler->maybe_refresh();
+		} catch ( TestException $e ) {
+			$this->assertSame( 'other-site.example.com', $domain );
+
+			throw $e;
+		}
 	}
 
 	/**
