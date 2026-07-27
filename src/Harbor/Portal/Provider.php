@@ -48,6 +48,9 @@ final class Provider extends Abstract_Provider {
 			}
 		);
 
+		// Priority 0 on both: the script has to be registered before anything that
+		// enqueues it by handle gets a chance to run, and the return trip has to be
+		// handled before any screen reads the licensing data it is about to refresh.
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_activation_script' ], 0, 0 );
 		add_action( 'admin_init', [ $this, 'maybe_refresh_after_activation' ], 0, 0 );
 	}

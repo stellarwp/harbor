@@ -140,6 +140,6 @@ final class Activation_Url {
 	 * @return string
 	 */
 	private function get_default_redirect_url(): string {
-		return admin_url( 'options-general.php?page=' . Feature_Manager_Page::PAGE_SLUG );
+		return add_query_arg( 'page', Feature_Manager_Page::PAGE_SLUG, admin_url( 'options-general.php' ) );
 	}
 }

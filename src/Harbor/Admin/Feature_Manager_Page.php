@@ -6,6 +6,7 @@ use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Utils\Version;
@@ -236,6 +237,41 @@ class Feature_Manager_Page {
 			<div id="lw-harbor-root" class="lw-harbor-ui"></div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Refreshes license and catalog data when the portal redirects back with
+	 * ?refresh=auto, then strips the param and redirects so a manual reload does
+	 * not re-trigger the refresh.
+	 *
+	 * No longer hooked. Return trips are now tagged by Activation_Url and handled
+	 * for every screen by Activation_Return, not just for this page. Kept because
+	 * this class is not final and the method is public, so a consumer could be
+	 * calling it.
+	 *
+	 * The catalog is resolved here rather than injected: the constructor stopped
+	 * taking Catalog_Repository when this stopped being part of the page's job.
+	 *
+	 * @since      1.0.0
+	 * @deprecated TBD Portal return trips are handled by Portal\Activation_Return.
+	 *
+	 * @return void
+	 */
+	public function maybe_redirect_after_refresh(): void {
+		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		if ( $_GET['refresh'] !== 'auto' || $_GET['page'] !== self::PAGE_SLUG ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		$this->license_manager->refresh_products( $this->site_data->get_domain() );
+		Config::get_container()->get( Catalog_Repository::class )->refresh();
+
+		$clean_url = remove_query_arg( 'refresh' );
+		wp_safe_redirect( $clean_url );
+		exit;
 	}
 
 }

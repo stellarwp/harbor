@@ -297,6 +297,20 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertStringContainsString( 'lw-harbor-activated', $url );
 	}
 
+	public function test_get_activation_url_encodes_the_query_per_rfc3986(): void {
+		$url = lw_harbor_get_activation_url( 'https://example.test/on boarding~step' );
+
+		// The query is built with PHP_QUERY_RFC3986, not PHP's RFC1738 default.
+		// It matters because redirect_url carries a whole URL: RFC1738 encodes a
+		// space as "+" and a tilde as "%7E", which is also what add_query_arg()
+		// would do, and is why it is not used to build this query.
+		$this->assertStringContainsString( 'on%20boarding', $url );
+		$this->assertStringNotContainsString( 'on+boarding', $url );
+
+		$this->assertStringContainsString( '~step', $url );
+		$this->assertStringNotContainsString( '%7Estep', $url );
+	}
+
 	public function test_get_product_activation_url_scopes_to_the_product_and_tier(): void {
 		$url = lw_harbor_get_product_activation_url( 'learndash', 'elite' );
 
