@@ -34,7 +34,7 @@ function SkeletonFeatureRow( { isLast }: { isLast: boolean } ) {
 }
 
 /**
- * @since TBD    Render a nameless header instead of a real product logo/name.
+ * @since 1.6.0    Render a nameless header instead of a real product logo/name.
  * @since 1.0.0
  */
 export function ProductSectionSkeleton() {
