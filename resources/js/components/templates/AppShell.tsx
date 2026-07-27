@@ -26,7 +26,7 @@ import { isProductInstalled, isProductOwned } from '@/lib/product-install';
 import type { Product } from '@/types/api';
 
 /**
- * @since 1.5.1     Split products into Installed Features and Available Features sections.
+ * @since TBD     Split products into Installed Features and Available Features sections.
  * @since 1.3.0   Read version through the getHarborDataValue helper.
  * @since 1.0.0
  */
