@@ -248,12 +248,30 @@ export const areAllProductsNotActivated = ( state: State ): boolean => {
 };
 
 /**
- * Returns the first license product for the given slug that the user owns but
- * has not yet activated on this domain, or null when none exists.
+ * Returns every license product for the given slug that the user owns but has
+ * not yet activated on this domain.
  *
  * Matches entries where activated_here is not true and validation_status is
  * not_activated or activation_required — i.e. the subscription exists but the
- * current domain is not in the activations list.
+ * current domain is not in the activations list. A unified key can cover more
+ * than one tier of the same product, so this can return multiple entries.
+ *
+ * @since 1.6.0
+ */
+export const getUnactivatedLicenseProducts = (
+	state:       State,
+	productSlug: string
+): LicenseProduct[] =>
+	getWithoutCancelledProducts( state ).filter(
+		( p ) =>
+			p.product_slug === productSlug &&
+			p.activated_here !== true &&
+			UNACTIVATED_STATUSES.includes( p.validation_status as typeof UNACTIVATED_STATUSES[ number ] )
+	);
+
+/**
+ * Returns the first license product for the given slug that the user owns but
+ * has not yet activated on this domain, or null when none exists.
  *
  * @since 1.0.1
  */
@@ -261,12 +279,7 @@ export const getUnactivatedLicenseProduct = (
 	state:       State,
 	productSlug: string
 ): LicenseProduct | null =>
-	getWithoutCancelledProducts( state ).find(
-		( p ) =>
-			p.product_slug === productSlug &&
-			p.activated_here !== true &&
-			UNACTIVATED_STATUSES.includes( p.validation_status as typeof UNACTIVATED_STATUSES[ number ] )
-	) ?? null;
+	getUnactivatedLicenseProducts( state, productSlug )[ 0 ] ?? null;
 
 /**
  * Returns the stored unified license key, or null. Triggers getLicenseKey resolver.
