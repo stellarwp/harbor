@@ -12,10 +12,12 @@ test.describe( 'Software Manager page', () => {
 		await clearLicense( requestUtils );
 	} );
 
-	test( 'displays the "Your Features" heading after data loads', async ( { page, admin } ) => {
+	test( 'displays the "Available Features" heading after data loads', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'options-general.php', 'page=lw-software-manager' );
 
-		await expect( page.getByText( 'Your Features' ) ).toBeVisible( {
+		// None of the catalog products are installed in the test environment,
+		// so every product renders under the Available Features section.
+		await expect( page.getByText( 'Available Features' ) ).toBeVisible( {
 			timeout: 15_000,
 		} );
 	} );
