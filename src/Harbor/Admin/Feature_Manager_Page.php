@@ -258,6 +258,8 @@ class Feature_Manager_Page {
 	 * @return void
 	 */
 	public function maybe_redirect_after_refresh(): void {
+		_deprecated_function( __METHOD__, 'TBD', 'LiquidWeb\Harbor\Portal\Activation_Return::maybe_refresh()' );
+
 		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
