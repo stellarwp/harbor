@@ -2985,7 +2985,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD      Add hideLicenseBadge prop to suppress the header license badge for Available cards.
+ * @since 1.5.1      Add hideLicenseBadge prop to suppress the header license badge for Available cards.
  * @since 1.3.0    Read domain through the getHarborDataValue helper for upgrade URLs.
  * @since 1.0.2  Route upgrade CTA to catalog upgrade_url for existing subscribers, purchase_url for new subscribers.
  * @since 1.0.1  Show Unactivated badge on tier groups and product header for unactivated licenses.
@@ -3229,7 +3229,7 @@ function SkeletonFeatureRow({
 }
 
 /**
- * @since TBD    Render a nameless header instead of a real product logo/name.
+ * @since 1.5.1    Render a nameless header instead of a real product logo/name.
  * @since 1.0.0
  */
 function ProductSectionSkeleton() {
@@ -3427,7 +3427,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD     Split products into Installed Features and Available Features sections.
+ * @since 1.5.1     Split products into Installed Features and Available Features sections.
  * @since 1.3.0   Read version through the getHarborDataValue helper.
  * @since 1.0.0
  */
@@ -6007,7 +6007,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param features The product's features from getFeaturesByProduct().
  *
- * @since TBD
+ * @since 1.5.1
  */
 function isProductInstalled(features) {
   return features.some(f => (f.type === 'plugin' || f.type === 'theme') && !!f.installed_version);
@@ -6025,7 +6025,7 @@ function isProductInstalled(features) {
  * @param args.licenseProducts All non-cancelled license products from getLicenseProducts().
  * @param args.hasActiveLegacy Whether an active legacy license covers the product.
  *
- * @since TBD
+ * @since 1.5.1
  */
 function isProductOwned(slug, args) {
   if (args.hasActiveLegacy) {
@@ -7205,7 +7205,7 @@ const areAllProductsNotActivated = state => {
  * current domain is not in the activations list. A unified key can cover more
  * than one tier of the same product, so this can return multiple entries.
  *
- * @since TBD
+ * @since 1.5.1
  */
 const getUnactivatedLicenseProducts = (state, productSlug) => getWithoutCancelledProducts(state).filter(p => p.product_slug === productSlug && p.activated_here !== true && UNACTIVATED_STATUSES.includes(p.validation_status));
 
