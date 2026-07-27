@@ -12,7 +12,7 @@ import type { Feature, LicenseProduct } from '@/types/api';
  *
  * @param features The product's features from getFeaturesByProduct().
  *
- * @since TBD
+ * @since 1.5.1
  */
 export function isProductInstalled( features: Feature[] ): boolean {
     return features.some(
@@ -32,7 +32,7 @@ export function isProductInstalled( features: Feature[] ): boolean {
  * @param args.licenseProducts All non-cancelled license products from getLicenseProducts().
  * @param args.hasActiveLegacy Whether an active legacy license covers the product.
  *
- * @since TBD
+ * @since 1.5.1
  */
 export function isProductOwned(
     slug: string,
