@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "product_slug": "learndash",
+      "tier": "pro",
+      "status": "active",
+      "expires": "2026-12-31 23:59:59",
+      "activations": {
+        "site_limit": 3,
+        "active_count": 1,
+        "over_limit": false,
+        "domains": [],
+        "excess_activations": 0
+      },
+      "validation_status": "valid",
+      "is_valid": true,
+      "capabilities": [
+        "sfwd-lms",
+        "learndash-achievements",
+        "learndash-certificate-builder",
+        "learndash-notifications"
+      ],
+      "activated_here": true
+    },
+    {
+      "product_slug": "learndash",
+      "tier": "elite",
+      "status": "active",
+      "expires": "2026-12-31 23:59:59",
+      "activations": {
+        "site_limit": 3,
+        "active_count": 0,
+        "over_limit": false,
+        "domains": [],
+        "excess_activations": 0
+      },
+      "validation_status": "not_activated",
+      "is_valid": false,
+      "capabilities": [
+        "sfwd-lms",
+        "memberdash",
+        "learndash-achievements",
+        "learndash-certificate-builder",
+        "learndash-notifications",
+        "learndash-propanel",
+        "learndash-groups-plus",
+        "instructor-role"
+      ],
+      "activated_here": false
+    }
+  ]
+}

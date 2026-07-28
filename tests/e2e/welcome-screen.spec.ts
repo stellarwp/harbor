@@ -53,7 +53,7 @@ test.describe( 'Welcome screen', () => {
 			"We couldn't verify this key."
 		);
 		// Welcome screen stays mounted — no transition to the products page.
-		await expect( page.getByText( 'Your Features' ) ).toHaveCount( 0 );
+		await expect( page.getByText( 'Available Features' ) ).toHaveCount( 0 );
 	} );
 
 	test( 'transitions to the products page on successful activation', async ( { page, admin } ) => {
@@ -62,7 +62,7 @@ test.describe( 'Welcome screen', () => {
 		await page.locator( '#welcome-license-key-input' ).fill( VALID_LICENSE_KEY );
 		await page.getByRole( 'button', { name: 'Activate' } ).click();
 
-		await expect( page.getByText( 'Your Features' ) ).toBeVisible( { timeout: 15_000 } );
+		await expect( page.getByText( 'Available Features' ) ).toBeVisible( { timeout: 15_000 } );
 		// The sidebar locks to the masked key — the full key is never exposed.
 		await expect( page.locator( `input[value="${ MASKED_LICENSE_KEY }"]` ) ).toBeVisible();
 		await expect( page.locator( `input[value="${ VALID_LICENSE_KEY }"]` ) ).toHaveCount( 0 );
