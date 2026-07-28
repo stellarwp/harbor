@@ -131,9 +131,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  *     if ( window.lwHarbor?.buildActivationUrl ) { ... }
  *
- * `window.lwHarbor.version` is appended by PHP after this bundle loads, so it
- * always reports the version that actually registered the script.
- *
  * Keep this entry dependency-free. It loads on admin pages that have nothing
  * to do with Harbor's own UI, so it must not pull in React or the store.
  *

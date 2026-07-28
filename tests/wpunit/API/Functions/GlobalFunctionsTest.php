@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\Tests\API\Functions;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
+use LiquidWeb\Harbor\Portal\Activation\Script;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -32,6 +33,10 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	protected function tearDown(): void {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+
+		// wp_scripts() is a global that outlives a single test method.
+		wp_deregister_script( Script::HANDLE );
+		wp_deregister_script( 'consumer-onboarding' );
 
 		parent::tearDown();
 	}
@@ -278,27 +283,27 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// lw_harbor_get_activation_url() / lw_harbor_get_product_activation_url()
+	// lw_harbor_get_activation_base_url() / lw_harbor_get_product_activation_url()
 	// -------------------------------------------------------------------------
 
-	public function test_get_activation_url_targets_the_subscriptions_screen(): void {
-		$url = lw_harbor_get_activation_url();
+	public function test_get_activation_base_url_targets_the_subscriptions_screen(): void {
+		$url = lw_harbor_get_activation_base_url();
 
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		$this->assertStringContainsString( 'portal-referral=plugin', $url );
 		$this->assertStringNotContainsString( 'sku=', $url );
 	}
 
-	public function test_get_activation_url_carries_the_given_return_destination(): void {
-		$url = lw_harbor_get_activation_url( 'https://example.test/onboarding' );
+	public function test_get_activation_base_url_carries_the_given_return_destination(): void {
+		$url = lw_harbor_get_activation_base_url( 'https://example.test/onboarding' );
 
 		$this->assertStringContainsString( rawurlencode( 'https://example.test/onboarding' ), $url );
 		// The return trip is tagged so Harbor refreshes its cache on the way back.
 		$this->assertStringContainsString( 'lw-harbor-activated', $url );
 	}
 
-	public function test_get_activation_url_encodes_the_query_per_rfc3986(): void {
-		$url = lw_harbor_get_activation_url( 'https://example.test/on boarding~step' );
+	public function test_get_activation_base_url_encodes_the_query_per_rfc3986(): void {
+		$url = lw_harbor_get_activation_base_url( 'https://example.test/on boarding~step' );
 
 		// The query is built with PHP_QUERY_RFC3986, not PHP's RFC1738 default.
 		// It matters because redirect_url carries a whole URL: RFC1738 encodes a
@@ -317,5 +322,68 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		// The sku is RFC3986-encoded, so the colon becomes %3A.
 		$this->assertStringContainsString( 'sku=learndash%3Aelite', $url );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_add_activation_script_dependency()
+	// -------------------------------------------------------------------------
+
+	public function test_add_activation_script_dependency_attaches_harbors_handle(): void {
+		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
+		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
+
+		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
+		do_action( 'admin_enqueue_scripts' );
+
+		$this->assertContains(
+			Script::HANDLE,
+			wp_scripts()->registered['consumer-onboarding']->deps
+		);
+	}
+
+	/**
+	 * The caller must not have to run after Harbor's own registration. Naming the
+	 * handle in a $deps array never cared about order, and neither should this.
+	 */
+	public function test_add_activation_script_dependency_does_not_depend_on_call_order(): void {
+		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
+
+		// Asked for before Harbor has registered anything.
+		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
+
+		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
+		do_action( 'admin_enqueue_scripts' );
+
+		$this->assertContains(
+			Script::HANDLE,
+			wp_scripts()->registered['consumer-onboarding']->deps
+		);
+	}
+
+	/**
+	 * A dependency that will never resolve stops WordPress printing the
+	 * consumer's script at all, so no Harbor means no dependency added.
+	 */
+	public function test_add_activation_script_dependency_is_a_noop_without_harbors_script(): void {
+		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
+
+		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
+		do_action( 'admin_enqueue_scripts' );
+
+		$this->assertSame( [], wp_scripts()->registered['consumer-onboarding']->deps );
+	}
+
+	public function test_add_activation_script_dependency_does_not_duplicate(): void {
+		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
+		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
+
+		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
+		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
+		do_action( 'admin_enqueue_scripts' );
+
+		$this->assertSame(
+			[ Script::HANDLE ],
+			wp_scripts()->registered['consumer-onboarding']->deps
+		);
 	}
 }

@@ -1,14 +1,14 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Tests\Portal;
+namespace LiquidWeb\Harbor\Tests\Portal\Activation;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
-use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
-final class Activation_UrlTest extends HarborTestCase {
+final class UrlTest extends HarborTestCase {
 
 	private const TEST_PORTAL_BASE = 'https://portal.test.example.com';
 	private const TEST_DOMAIN      = 'site.example.com';
@@ -23,13 +23,13 @@ final class Activation_UrlTest extends HarborTestCase {
 		parent::tearDown();
 	}
 
-	private function make_builder( string $domain = self::TEST_DOMAIN ): Activation_Url {
+	private function make_builder( string $domain = self::TEST_DOMAIN ): Url {
 		$site_data = $this->makeEmpty(
 			Data::class,
 			[ 'get_domain' => $domain ]
 		);
 
-		return new Activation_Url( $site_data );
+		return new Url( $site_data );
 	}
 
 	/**
@@ -78,7 +78,7 @@ final class Activation_UrlTest extends HarborTestCase {
 	}
 
 	/**
-	 * Tests that the return URL is tagged so Activation_Return refreshes the
+	 * Tests that the return URL is tagged so Return_Handler refreshes the
 	 * cached licensing data before the page renders. Without it the user comes
 	 * back to a screen that still believes they are unlicensed.
 	 *
@@ -90,7 +90,7 @@ final class Activation_UrlTest extends HarborTestCase {
 
 		parse_str( (string) wp_parse_url( $params['redirect_url'], PHP_URL_QUERY ), $return_params );
 
-		$this->assertSame( '1', $return_params[ Activation_Url::RETURN_PARAM ] );
+		$this->assertSame( '1', $return_params[ Url::RETURN_PARAM ] );
 		$this->assertSame( 'my-onboarding', $return_params['page'] );
 	}
 
@@ -105,7 +105,7 @@ final class Activation_UrlTest extends HarborTestCase {
 
 		parse_str( (string) wp_parse_url( $params['redirect_url'], PHP_URL_QUERY ), $return_params );
 
-		$this->assertSame( '1', $return_params[ Activation_Url::RETURN_PARAM ] );
+		$this->assertSame( '1', $return_params[ Url::RETURN_PARAM ] );
 	}
 
 	/**

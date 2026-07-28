@@ -1,6 +1,6 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Portal;
+namespace LiquidWeb\Harbor\Portal\Activation;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
@@ -23,18 +23,22 @@ use LiquidWeb\Harbor\Site\Data;
  *
  * @since TBD
  */
-final class Activation_Url {
+final class Url {
 
 	/**
 	 * Query param added to the return URL to mark a portal round trip.
 	 *
 	 * Harbor caches licensing data, so a site that has just activated in the
 	 * portal still believes it is unlicensed until that cache is refreshed.
-	 * Activation_Return watches for this param and refreshes before the page
+	 * Return_Handler watches for this param and refreshes before the page
 	 * renders, so callers do not have to think about it.
 	 *
 	 * Deliberately namespaced. It rides on a URL owned by the calling plugin,
 	 * so a generic name like "refresh" would risk colliding with theirs.
+	 *
+	 * Internal to Harbor. It is `public` only because Harbor reads it across
+	 * class boundaries and PHP has no narrower visibility for that. Consumers
+	 * should not need it at all — the round trip is handled for them.
 	 *
 	 * @since TBD
 	 */
@@ -114,7 +118,7 @@ final class Activation_Url {
 	}
 
 	/**
-	 * Tags a return URL so Activation_Return knows the user is coming back from
+	 * Tags a return URL so Return_Handler knows the user is coming back from
 	 * the portal and refreshes the cached licensing data before rendering.
 	 *
 	 * @since TBD

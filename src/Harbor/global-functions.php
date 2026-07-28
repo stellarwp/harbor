@@ -240,13 +240,16 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_get_activation_url' ) ) {
+if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
 	/**
-	 * Returns a Liquid Web portal activation URL for this site.
+	 * Returns the base Liquid Web portal activation URL for this site.
 	 *
 	 * Drops the user on the portal's subscriptions screen to activate a product
 	 * against this site, then returns them to $redirect_url (or the Software
-	 * Manager page when none is given).
+	 * Manager page when none is given). The list is unfiltered — to have the
+	 * portal pre-select one product and tier, use
+	 * lw_harbor_get_product_activation_url() instead, or append the sku in the
+	 * browser with window.lwHarbor.buildActivationUrl().
 	 *
 	 * @since TBD
 	 *
@@ -254,8 +257,8 @@ if ( ! function_exists( 'lw_harbor_get_activation_url' ) ) {
 	 *
 	 * @return string The activation URL, or an empty string if no instance is active.
 	 */
-	function lw_harbor_get_activation_url( ?string $redirect_url = null ): string {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_activation_url' );
+	function lw_harbor_get_activation_base_url( ?string $redirect_url = null ): string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_activation_base_url' );
 
 		$result = $callback ? $callback( $redirect_url ) : '';
 
@@ -267,7 +270,7 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	/**
 	 * Returns a portal activation URL scoped to a single product and tier.
 	 *
-	 * Like lw_harbor_get_activation_url(), but adds an `sku` param so the portal
+	 * Like lw_harbor_get_activation_base_url(), but adds an `sku` param so the portal
 	 * pre-selects the given product and tier instead of an unfiltered list.
 	 *
 	 * @since TBD
@@ -284,6 +287,33 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 		$result = $callback ? $callback( $product_slug, $tier, $redirect_url ) : '';
 
 		return is_string( $result ) ? $result : '';
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_add_activation_script_dependency' ) ) {
+	/**
+	 * Declares Harbor's activation helper script as a dependency of your script.
+	 *
+	 * Call this after registering your own script and before it is printed. Your
+	 * script then has `window.lwHarbor.buildActivationUrl()` available, without
+	 * naming Harbor's handle or touching Harbor's classes — the copy that
+	 * registered the script is not necessarily the copy you bundled.
+	 *
+	 * Does nothing when no Harbor instance is active, so no version check is
+	 * needed on the calling side.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $handle Your already-registered script handle.
+	 *
+	 * @return void
+	 */
+	function lw_harbor_add_activation_script_dependency( string $handle ): void {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_add_activation_script_dependency' );
+
+		if ( $callback ) {
+			$callback( $handle );
+		}
 	}
 }
 

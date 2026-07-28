@@ -1,8 +1,9 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Portal;
+namespace LiquidWeb\Harbor\Portal\Activation;
 
 use LiquidWeb\Harbor\Harbor;
+use LiquidWeb\Harbor\Utils\Assets;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -14,9 +15,12 @@ use LiquidWeb\Harbor\Utils\Version;
  * they can do that without bundling their own copy, which also works from an
  * inline script on a PHP-rendered page with no build step.
  *
- * Consumers declare `lw-harbor-activation` as a script dependency:
+ * Consumers attach it to their own script through the global function, which
+ * keeps them out of Harbor's classes — the copy they bundled is not necessarily
+ * the copy that registered the script:
  *
- *     wp_enqueue_script( 'my-onboarding', $url, [ Activation_Script::HANDLE ], $ver, true );
+ *     wp_register_script( 'my-onboarding', $url, [], $ver, true );
+ *     lw_harbor_add_activation_script_dependency( 'my-onboarding' );
  *
  * Only one instance registers the script. Every active Harbor copy runs this
  * code, so registration is claimed by the highest version via
@@ -25,7 +29,7 @@ use LiquidWeb\Harbor\Utils\Version;
  *
  * @since TBD
  */
-final class Activation_Script {
+final class Script {
 
 	/**
 	 * The registered script handle.
@@ -33,6 +37,11 @@ final class Activation_Script {
 	 * Deliberately not vendor-prefixed. Strauss rewrites class names, not
 	 * strings, so every Harbor copy on the site agrees on this handle — that
 	 * is what allows a single registration to serve all of them.
+	 *
+	 * Internal to Harbor. It is `public` only because Harbor reads it across
+	 * class boundaries and PHP has no narrower visibility for that; consumers
+	 * should call `lw_harbor_add_activation_script_dependency()` rather than
+	 * read this, so they are never coupled to their own bundled copy.
 	 *
 	 * @since TBD
 	 */
@@ -55,26 +64,12 @@ final class Activation_Script {
 			return;
 		}
 
-		$build_dir       = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'build-dev' : 'build';
-		$plugin_root_dir = dirname( dirname( dirname( __DIR__ ) ) );
-		$plugin_root_url = trailingslashit(
-			plugin_dir_url( $plugin_root_dir . '/index.php' )
-		);
-
 		wp_register_script(
 			self::HANDLE,
-			$plugin_root_url . $build_dir . '/activation.js',
+			Assets::url( 'activation.js' ),
 			[],
 			Harbor::VERSION,
 			[ 'in_footer' => false ]
-		);
-
-		// Reported at runtime rather than compiled in, so it always matches the
-		// instance that actually won registration.
-		wp_add_inline_script(
-			self::HANDLE,
-			sprintf( 'window.lwHarbor.version = %s;', wp_json_encode( Harbor::VERSION ) ),
-			'after'
 		);
 	}
 }

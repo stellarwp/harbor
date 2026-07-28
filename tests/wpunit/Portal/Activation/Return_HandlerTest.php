@@ -1,10 +1,10 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Tests\Portal;
+namespace LiquidWeb\Harbor\Tests\Portal\Activation;
 
 use LiquidWeb\Harbor\Licensing\License_Manager;
-use LiquidWeb\Harbor\Portal\Activation_Return;
-use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Activation\Return_Handler;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -12,7 +12,7 @@ use LiquidWeb\Harbor\Tests\TestException;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Utils\Version;
 
-final class Activation_ReturnTest extends HarborTestCase {
+final class Return_HandlerTest extends HarborTestCase {
 
 	use With_Uopz;
 
@@ -43,7 +43,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 		$this->set_class_fn_return( Version::class, 'should_handle', true );
 
 		$this->original_request_uri = $_SERVER['REQUEST_URI'] ?? null;
-		$_SERVER['REQUEST_URI']     = '/wp-admin/admin.php?page=some-plugin-page&' . Activation_Url::RETURN_PARAM . '=1';
+		$_SERVER['REQUEST_URI']     = '/wp-admin/admin.php?page=some-plugin-page&' . Url::RETURN_PARAM . '=1';
 	}
 
 	protected function tearDown(): void {
@@ -66,9 +66,9 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @param string|null $refreshed_with    Receives the domain passed to the license refresh.
 	 * @param string      $domain            The domain the site reports.
 	 *
-	 * @return Activation_Return
+	 * @return Return_Handler
 	 */
-	private function make_handler( &$license_refreshed, &$catalog_refreshed, &$refreshed_with, string $domain = 'site.example.com' ): Activation_Return {
+	private function make_handler( &$license_refreshed, &$catalog_refreshed, &$refreshed_with, string $domain = 'site.example.com' ): Return_Handler {
 		$license_manager = $this->makeEmpty(
 			License_Manager::class,
 			[
@@ -90,7 +90,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 
 		$site_data = $this->makeEmpty( Data::class, [ 'get_domain' => $domain ] );
 
-		return new Activation_Return( $license_manager, $catalog, $site_data );
+		return new Return_Handler( $license_manager, $catalog, $site_data );
 	}
 
 	/**
@@ -128,7 +128,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_does_not_refresh_when_the_param_is_absent(): void {
-		unset( $_GET[ Activation_Url::RETURN_PARAM ] );
+		unset( $_GET[ Url::RETURN_PARAM ] );
 
 		$license = false;
 		$catalog = false;
@@ -146,7 +146,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_refreshes_license_and_catalog_on_return(): void {
-		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+		$_GET[ Url::RETURN_PARAM ] = '1';
 
 		$license = false;
 		$catalog = false;
@@ -172,7 +172,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_passes_the_site_domain_to_the_license_refresh(): void {
-		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+		$_GET[ Url::RETURN_PARAM ] = '1';
 
 		$license = false;
 		$catalog = false;
@@ -199,7 +199,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_does_not_refresh_without_the_required_capability(): void {
-		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+		$_GET[ Url::RETURN_PARAM ] = '1';
 
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
@@ -221,7 +221,7 @@ final class Activation_ReturnTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_does_not_refresh_when_not_the_version_leader(): void {
-		$_GET[ Activation_Url::RETURN_PARAM ] = '1';
+		$_GET[ Url::RETURN_PARAM ] = '1';
 
 		$this->set_class_fn_return( Version::class, 'should_handle', false );
 

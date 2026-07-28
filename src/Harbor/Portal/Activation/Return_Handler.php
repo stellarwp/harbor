@@ -1,8 +1,9 @@
 <?php declare( strict_types=1 );
 
-namespace LiquidWeb\Harbor\Portal;
+namespace LiquidWeb\Harbor\Portal\Activation;
 
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use LiquidWeb\Harbor\Utils\Version;
@@ -16,16 +17,16 @@ use WP_Error;
  * "Activate" button that should now be gone, a feature that should now be
  * available — stays wrong until something refreshes it.
  *
- * `Activation_Url` tags every return URL it builds, whichever page the calling
+ * Activation\Url tags every return URL it builds, whichever page the calling
  * plugin nominated. This watches for that tag on any admin screen, refreshes,
  * then strips the tag and redirects so a reload does not refresh again.
  *
- * Host plugins need no code for this. Sending a user through a URL from
- * `Activation_Url` is the whole opt-in.
+ * Host plugins need no code for this. Sending a user through an activation URL
+ * is the whole opt-in.
  *
  * @since TBD
  */
-final class Activation_Return {
+final class Return_Handler {
 
 	use With_Debugging;
 
@@ -83,25 +84,22 @@ final class Activation_Return {
 	 * @return void
 	 */
 	public function maybe_refresh(): void {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only refresh of the site's own data, guarded by capability below.
-		if ( ! isset( $_GET[ Activation_Url::RETURN_PARAM ] ) ) {
-			return;
-		}
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
-
-		// The tag rides on a plugin-owned URL, so it can land on a screen with
-		// no capability check of its own.
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! isset( $_GET[ Url::RETURN_PARAM ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only refresh of the site's own data, guarded by capability below.
 			return;
 		}
 
-		if ( ! Version::should_handle( 'activation_return' ) ) {
+		// Leadership is asked first: whether this copy is the one that acts is a
+		// question about the install, while the capability check is about the
+		// user in front of it. The capability check is needed at all because the
+		// tag rides on a plugin-owned URL, so it can land on a screen with no
+		// check of its own.
+		if ( ! Version::should_handle( 'activation_return' ) || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
 		$this->refresh();
 
-		wp_safe_redirect( remove_query_arg( Activation_Url::RETURN_PARAM ) );
+		wp_safe_redirect( remove_query_arg( Url::RETURN_PARAM ) );
 		exit;
 	}
 

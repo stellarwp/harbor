@@ -6,6 +6,9 @@ use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
 use LiquidWeb\Harbor\Portal\Clients\Http_Client;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
+use LiquidWeb\Harbor\Portal\Activation\Return_Handler;
+use LiquidWeb\Harbor\Portal\Activation\Script;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -33,9 +36,9 @@ final class Provider extends Abstract_Provider {
 		);
 
 		$this->container->singleton( Catalog_Repository::class );
-		$this->container->singleton( Activation_Url::class );
-		$this->container->singleton( Activation_Script::class );
-		$this->container->singleton( Activation_Return::class );
+		$this->container->singleton( Url::class );
+		$this->container->singleton( Script::class );
+		$this->container->singleton( Return_Handler::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Herald_Legacy_Url_Builder::class );
 		$this->container->singleton( Herald_Routing_Url_Builder::class );
@@ -68,11 +71,11 @@ final class Provider extends Abstract_Provider {
 	 * @return void
 	 */
 	public function maybe_refresh_after_activation(): void {
-		if ( ! isset( $_GET[ Activation_Url::RETURN_PARAM ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check only; the handler validates before acting.
+		if ( ! isset( $_GET[ Url::RETURN_PARAM ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check only; the handler validates before acting.
 			return;
 		}
 
-		$this->container->get( Activation_Return::class )->maybe_refresh();
+		$this->container->get( Return_Handler::class )->maybe_refresh();
 	}
 
 	/**
@@ -84,6 +87,6 @@ final class Provider extends Abstract_Provider {
 	 * @return void
 	 */
 	public function register_activation_script(): void {
-		$this->container->get( Activation_Script::class )->maybe_register();
+		$this->container->get( Script::class )->maybe_register();
 	}
 }

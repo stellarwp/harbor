@@ -30,11 +30,11 @@ Licensing data is cached. Without a refresh, a user who has just activated in
 the portal comes back to a screen that still believes they are unlicensed: the
 Activate button is still there, the feature they paid for is still gated.
 
-You do not have to handle this. `Activation_Url` tags every return URL it
-builds, and `Activation_Return` watches for that tag on any admin screen. On the
-way back it refreshes the license products and the catalog, strips the tag, and
-redirects — all on `admin_init`, before your page renders. By the time your code
-runs, `License_Repository` is current.
+You do not have to handle this. Harbor tags every return URL it builds and
+watches for that tag on any admin screen. On the way back it refreshes the
+license products and the catalog, strips the tag, and redirects — all on
+`admin_init`, before your page renders. By the time your code runs,
+`License_Repository` is current.
 
 Consequences worth knowing:
 
@@ -44,7 +44,7 @@ Consequences worth knowing:
   `lw-harbor-activated=1`, then redirects to your clean URL. Anything that
   fingerprints the query string should tolerate that.
 - **Only one instance refreshes.** The handler is behind the same version
-  leadership check as the rest of Harbor, so four active Liquid Web plugins make
+  leadership check as the rest of Harbor, so four active plugins using Harbor make
   one API call between them, not four.
 - **It requires `manage_options`.** The tag rides on a URL your plugin owns, so
   it can land on a screen with no capability check of its own.
@@ -57,21 +57,27 @@ Consequences worth knowing:
 
 Call the global functions. Like the rest of Harbor's public API they resolve to
 the highest-version Harbor copy on the site, so you always get the loaded
-version's logic — do not build `Activation_Url` from your own bundled copy, which
-may not be the one actually running.
+version's logic — do not build the URL from a Harbor class in your own bundled
+copy, which may not be the one actually running.
 
 ```php
 // Product-scoped, returning the user to your onboarding screen.
 $href = lw_harbor_get_product_activation_url(
     'kadence',
     'pro',
-    admin_url( 'admin.php?page=kadence-onboarding&step=2' )
+    add_query_arg(
+        [
+            'page' => 'kadence-onboarding',
+            'step' => 2,
+        ],
+        admin_url( 'admin.php' )
+    )
 );
 ```
 
 | Function                                                                                    | Returns                                                                 |
 | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `lw_harbor_get_activation_url( ?string $redirect_url )`                                     | The portal subscriptions URL with referral, redirect, and domain params |
+| `lw_harbor_get_activation_base_url( ?string $redirect_url )`                                | The portal subscriptions URL with referral, redirect, and domain params |
 | `lw_harbor_get_product_activation_url( string $slug, string $tier, ?string $redirect_url )` | The same, plus `sku={slug}:{tier}`                                      |
 
 Both return an empty string when no Harbor instance is active — treat that as
@@ -102,31 +108,45 @@ The examples below assume a top-level menu.
 Use this when the product or tier is chosen in the browser. If it is fixed at
 render time, build the URL in PHP instead and skip the script entirely.
 
-Harbor registers a dependency-free script exposing `window.lwHarbor`. Declare it
-as a dependency:
+Harbor registers a dependency-free script exposing `window.lwHarbor`. Register
+your own script, then ask Harbor to attach itself as a dependency:
 
 ```php
-use LiquidWeb\Harbor\Portal\Activation_Script;
-
-wp_enqueue_script(
+wp_register_script(
     'kadence-onboarding',
     $url . 'build/onboarding.js',
-    [ Activation_Script::HANDLE ],
+    [],
     $version,
     true
 );
+
+lw_harbor_add_activation_script_dependency( 'kadence-onboarding' );
 
 // The helper only appends sku, so pass it a base URL built in PHP.
 wp_localize_script(
     'kadence-onboarding',
     'kadenceOnboarding',
     [
-        'activationBaseUrl' => lw_harbor_get_activation_url(
-            admin_url( 'admin.php?page=kadence-onboarding&step=2' )
+        'activationBaseUrl' => lw_harbor_get_activation_base_url(
+            add_query_arg(
+                [
+                    'page' => 'kadence-onboarding',
+                    'step' => 2,
+                ],
+                admin_url( 'admin.php' )
+            )
         ),
     ]
 );
+
+wp_enqueue_script( 'kadence-onboarding' );
 ```
+
+Do not reach for Harbor's own classes or constants to name the handle. The copy
+your plugin bundled is not necessarily the copy that registered the script, so a
+constant read from your own copy can disagree with what is actually on the page.
+`lw_harbor_add_activation_script_dependency()` is a no-op when no Harbor is
+active, so it needs no guard of its own.
 
 Then in the browser:
 
@@ -144,8 +164,11 @@ required on the consuming side.
 ### Always feature-detect
 
 Every active Harbor copy runs the registration code, but only the highest
-version claims it. The API available at runtime is therefore the leader's, which
-may be older than the copy your plugin ships.
+version claims it. That leader is never older than the copy your plugin ships —
+if yours is the newest, yours becomes the leader — so the API you were built
+against is the floor, not a gamble. Feature-detect anyway, for the case that
+matters: no Harbor is active on the request at all, and `window.lwHarbor` is
+simply undefined.
 
 ```js
 if ( window.lwHarbor?.buildActivationUrl ) {
@@ -153,30 +176,21 @@ if ( window.lwHarbor?.buildActivationUrl ) {
 }
 ```
 
-`window.lwHarbor.version` reports the version that actually registered the
-script.
-
 ### Enqueue timing
 
-You do not need to worry about hook priority. WordPress resolves script
-dependencies when scripts are **printed**, not when they are enqueued, and
-`admin_enqueue_scripts` always runs before `admin_print_scripts`. Harbor
-registers during `admin_enqueue_scripts` (at priority `0`, defensively), so any
-consumer enqueuing on that hook is in time regardless of its own priority.
-
-Declaring the dependency before Harbor has registered it is therefore fine —
-`wp_enqueue_script()` does not validate dependencies at call time.
+You do not need to worry about hook priority. Harbor registers its own script
+during `admin_enqueue_scripts` (at priority `0`, defensively), and
+`lw_harbor_add_activation_script_dependency()` defers the actual wiring to the
+end of that same hook. So it does not matter whether you call it before or after
+Harbor has registered — or on an earlier hook entirely.
 
 ### If your script does not load
 
 WordPress silently refuses to print a script whose dependency is still
 unregistered at print time — no error, no console warning. In practice that
 means Harbor is not present on the request at all rather than a timing problem.
-Check the handle exists:
-
-```php
-wp_script_is( Activation_Script::HANDLE, 'registered' );
-```
+Feature-detect in the browser instead, as above: if `window.lwHarbor` is
+undefined, no Harbor instance registered the script.
 
 The script is admin-only. It is not registered on the front end, so a dependency
 declared on a front-end script will never resolve.

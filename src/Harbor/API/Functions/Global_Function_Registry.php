@@ -3,12 +3,13 @@
 namespace LiquidWeb\Harbor\API\Functions;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
+use LiquidWeb\Harbor\API\Functions\Actions\Add_Activation_Script_Dependency;
 use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
-use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Traits\With_Debugging;
@@ -133,11 +134,11 @@ class Global_Function_Registry {
 		);
 
 		\_lw_harbor_global_function_registry(
-			'lw_harbor_get_activation_url',
+			'lw_harbor_get_activation_base_url',
 			$version,
 			static function ( ?string $redirect_url = null ): string {
 				try {
-					return Config::get_container()->get( Activation_Url::class )->get_base( $redirect_url );
+					return Config::get_container()->get( Url::class )->get_base( $redirect_url );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error building activation URL' );
 
@@ -151,13 +152,19 @@ class Global_Function_Registry {
 			$version,
 			static function ( string $product_slug, string $tier, ?string $redirect_url = null ): string {
 				try {
-					return Config::get_container()->get( Activation_Url::class )->for_product( $product_slug, $tier, $redirect_url );
+					return Config::get_container()->get( Url::class )->for_product( $product_slug, $tier, $redirect_url );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error building product activation URL' );
 
 					return '';
 				}
 			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_add_activation_script_dependency',
+			$version,
+			new Add_Activation_Script_Dependency()
 		);
 
 		\_lw_harbor_global_function_registry(

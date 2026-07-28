@@ -5,9 +5,10 @@ namespace LiquidWeb\Harbor\Admin;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
-use LiquidWeb\Harbor\Portal\Activation_Url;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Utils\Assets;
 use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Utils\Version;
 
@@ -50,9 +51,9 @@ class Feature_Manager_Page {
 	 *
 	 * @since TBD
 	 *
-	 * @var Activation_Url
+	 * @var Url
 	 */
-	private Activation_Url $activation_url;
+	private Url $activation_url;
 
 	/**
 	 * Hook suffix returned by add_submenu_page().
@@ -71,9 +72,9 @@ class Feature_Manager_Page {
 	 *
 	 * @param Data            $site_data       Site data provider.
 	 * @param License_Manager $license_manager License manager.
-	 * @param Activation_Url  $activation_url  Portal activation URL builder.
+	 * @param Url             $activation_url  Portal activation URL builder.
 	 */
-	public function __construct( Data $site_data, License_Manager $license_manager, Activation_Url $activation_url ) {
+	public function __construct( Data $site_data, License_Manager $license_manager, Url $activation_url ) {
 		$this->site_data       = $site_data;
 		$this->license_manager = $license_manager;
 		$this->activation_url  = $activation_url;
@@ -146,29 +147,19 @@ class Feature_Manager_Page {
 	 * Registers and enqueues the React Feature Manager UI JS and CSS.
 	 *
 	 * Loads from build-dev/ when WP_DEBUG is true (source maps included),
-	 * from build/ otherwise (minified, no source maps).
+	 * from build/ otherwise (minified, no source maps). Assets resolves which.
 	 *
-	 * Path resolution from this file:
-	 *   __DIR__                               → src/Harbor/Admin
-	 *   dirname(__DIR__)                      → src/Harbor
-	 *   dirname(dirname(__DIR__))             → src
-	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
-	 *
+	 * @since TBD     Resolve the build directory through Assets.
 	 * @since 1.3.0   Expose License_Key::PREFIX to the React app via the localized payload.
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
 	private function enqueue_assets(): void {
-		$build_dir       = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'build-dev' : 'build';
-		$plugin_root_dir = dirname( dirname( dirname( __DIR__ ) ) );
-		$plugin_root_url = trailingslashit(
-			plugin_dir_url( $plugin_root_dir . '/index.php' )
-		);
-		$handle          = 'lw-harbor-ui';
+		$handle = 'lw-harbor-ui';
 
 		// Load asset file for dependencies and version.
-		$asset_file = $plugin_root_dir . '/' . $build_dir . '/index.asset.php';
+		$asset_file = Assets::path( 'index.asset.php' );
 
 		/** @var array{dependencies: array<string>, version: string} $asset_data */
 		$asset_data = file_exists( $asset_file ) ? require $asset_file : [
@@ -178,7 +169,7 @@ class Feature_Manager_Page {
 
 		wp_register_script(
 			$handle,
-			$plugin_root_url . $build_dir . '/index.js',
+			Assets::url( 'index.js' ),
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			[ 'in_footer' => true ]
@@ -201,7 +192,7 @@ class Feature_Manager_Page {
 
 		wp_register_style(
 			$handle,
-			$plugin_root_url . $build_dir . '/index.css',
+			Assets::url( 'index.css' ),
 			[],
 			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- version is content-hashed into the asset filename by the build pipeline.
 		);
@@ -244,8 +235,8 @@ class Feature_Manager_Page {
 	 * ?refresh=auto, then strips the param and redirects so a manual reload does
 	 * not re-trigger the refresh.
 	 *
-	 * No longer hooked. Return trips are now tagged by Activation_Url and handled
-	 * for every screen by Activation_Return, not just for this page. Kept because
+	 * No longer hooked. Return trips are now tagged by Url and handled
+	 * for every screen by Return_Handler, not just for this page. Kept because
 	 * this class is not final and the method is public, so a consumer could be
 	 * calling it.
 	 *
@@ -253,12 +244,12 @@ class Feature_Manager_Page {
 	 * taking Catalog_Repository when this stopped being part of the page's job.
 	 *
 	 * @since 1.0.0
-	 * @deprecated TBD Portal return trips are handled by Portal\Activation_Return.
+	 * @deprecated TBD Portal return trips are handled by Portal\Activation\Return_Handler.
 	 *
 	 * @return void
 	 */
 	public function maybe_redirect_after_refresh(): void {
-		_deprecated_function( __METHOD__, 'TBD', 'LiquidWeb\Harbor\Portal\Activation_Return::maybe_refresh()' );
+		_deprecated_function( __METHOD__, 'TBD', 'LiquidWeb\Harbor\Portal\Activation\Return_Handler::maybe_refresh()' );
 
 		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
