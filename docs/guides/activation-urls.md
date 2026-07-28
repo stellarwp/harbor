@@ -80,10 +80,18 @@ $href = lw_harbor_get_product_activation_url(
 | `lw_harbor_get_activation_base_url( ?string $redirect_url )`                                | The portal subscriptions URL with referral, redirect, and domain params |
 | `lw_harbor_get_product_activation_url( string $slug, string $tier, ?string $redirect_url )` | The same, plus `sku={slug}:{tier}`                                      |
 
-Both return an empty string when no Harbor instance is active — treat that as
-"hide the button". Omit `$redirect_url` to fall back to Harbor's Software Manager
-page. Pass your own whenever the user started somewhere else — otherwise they
-will not come back to where they were.
+Both return `null` when no Harbor instance is active, or when the URL could not
+be built — treat that as "hide the button". Omit `$redirect_url` to fall back to
+Harbor's Software Manager page. Pass your own whenever the user started somewhere
+else — otherwise they will not come back to where they were.
+
+```php
+$href = lw_harbor_get_activation_base_url( $return_url );
+
+if ( null === $href ) {
+    return; // Nothing to offer.
+}
+```
 
 ### Getting the return URL right
 

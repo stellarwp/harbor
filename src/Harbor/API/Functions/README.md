@@ -125,8 +125,8 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 | `lw_harbor_is_feature_enabled( $slug )`                                  | Whether a feature is in the catalog AND currently enabled/active                              |
 | `lw_harbor_is_feature_available( $slug )`                                | Whether a feature exists in the catalog, regardless of enabled state                          |
 | `lw_harbor_get_license_page_url()`                                       | Returns the admin URL for the Harbor Feature Manager page                                     |
-| `lw_harbor_get_activation_base_url( $redirect_url = null )`              | The unscoped portal activation URL, returning the user to `$redirect_url`                     |
-| `lw_harbor_get_product_activation_url( $slug, $tier, $redirect = null )` | The activation URL scoped to a product and tier via `sku`                                     |
+| `lw_harbor_get_activation_base_url( $redirect_url = null )`              | The unscoped portal activation URL, or null when unavailable                                  |
+| `lw_harbor_get_product_activation_url( $slug, $tier, $redirect = null )` | The activation URL scoped to a product and tier via `sku`, or null when unavailable           |
 | `lw_harbor_add_activation_script_dependency( $handle )`                  | Attaches Harbor's browser activation helper to one of your registered scripts                 |
 | `lw_harbor_get_licensed_domain()`                                        | Returns the domain Harbor uses for licensing on the current site                              |
 | `lw_harbor_register_submenu( $parent_slug )`                             | Appends a Licensing submenu item under a plugin's top-level admin menu                        |

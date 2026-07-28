@@ -136,13 +136,13 @@ class Global_Function_Registry {
 		\_lw_harbor_global_function_registry(
 			'lw_harbor_get_activation_base_url',
 			$version,
-			static function ( ?string $redirect_url = null ): string {
+			static function ( ?string $redirect_url = null ): ?string {
 				try {
 					return Config::get_container()->get( Url::class )->get_base( $redirect_url );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error building activation URL' );
 
-					return '';
+					return null;
 				}
 			}
 		);
@@ -150,13 +150,13 @@ class Global_Function_Registry {
 		\_lw_harbor_global_function_registry(
 			'lw_harbor_get_product_activation_url',
 			$version,
-			static function ( string $product_slug, string $tier, ?string $redirect_url = null ): string {
+			static function ( string $product_slug, string $tier, ?string $redirect_url = null ): ?string {
 				try {
 					return Config::get_container()->get( Url::class )->for_product( $product_slug, $tier, $redirect_url );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error building product activation URL' );
 
-					return '';
+					return null;
 				}
 			}
 		);

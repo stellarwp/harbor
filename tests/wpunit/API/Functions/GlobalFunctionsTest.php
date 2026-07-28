@@ -9,6 +9,7 @@ use LiquidWeb\Harbor\Portal\Activation\Script;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Harbor;
 use WP_Error;
 
@@ -22,6 +23,8 @@ use WP_Error;
  * @since 1.0.0
  */
 final class GlobalFunctionsTest extends HarborTestCase {
+
+	use With_Uopz;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -322,6 +325,18 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		// The sku is RFC3986-encoded, so the colon becomes %3A.
 		$this->assertStringContainsString( 'sku=learndash%3Aelite', $url );
+	}
+
+	/**
+	 * Null, not an empty string, is what "there is no URL for you" looks like —
+	 * it is the one answer a consumer must not paste into an href.
+	 */
+	public function test_activation_urls_are_null_when_no_instance_is_active(): void {
+		// An empty registry is what a site with no active Harbor looks like.
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertNull( lw_harbor_get_activation_base_url() );
+		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash', 'elite' ) );
 	}
 
 	// -------------------------------------------------------------------------
