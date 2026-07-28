@@ -328,7 +328,22 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	// lw_harbor_add_activation_script_dependency()
 	// -------------------------------------------------------------------------
 
+	/**
+	 * Empties admin_enqueue_scripts so firing it only runs what the test added.
+	 *
+	 * WordPress core hooks WP_Site_Health onto it, which reads the current
+	 * screen and there is not one here. Must run before the function under test,
+	 * which registers its own callback on the same hook.
+	 *
+	 * @return void
+	 */
+	private function isolate_enqueue_hook(): void {
+		remove_all_actions( 'admin_enqueue_scripts' );
+	}
+
 	public function test_add_activation_script_dependency_attaches_harbors_handle(): void {
+		$this->isolate_enqueue_hook();
+
 		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
 		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
 
@@ -346,6 +361,8 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	 * handle in a $deps array never cared about order, and neither should this.
 	 */
 	public function test_add_activation_script_dependency_does_not_depend_on_call_order(): void {
+		$this->isolate_enqueue_hook();
+
 		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
 
 		// Asked for before Harbor has registered anything.
@@ -365,6 +382,8 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	 * consumer's script at all, so no Harbor means no dependency added.
 	 */
 	public function test_add_activation_script_dependency_is_a_noop_without_harbors_script(): void {
+		$this->isolate_enqueue_hook();
+
 		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
 
 		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
@@ -374,6 +393,8 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	public function test_add_activation_script_dependency_does_not_duplicate(): void {
+		$this->isolate_enqueue_hook();
+
 		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
 		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
 
