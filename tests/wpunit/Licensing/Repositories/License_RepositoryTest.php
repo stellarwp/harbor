@@ -555,6 +555,98 @@ final class License_RepositoryTest extends HarborTestCase {
 		$this->assertFalse( $this->repository->is_product_valid( 'give' ) );
 	}
 
+	public function test_has_capability_returns_false_without_cached_products(): void {
+		$this->assertFalse( $this->repository->has_capability( 'give-recurring' ) );
+	}
+
+	public function test_has_capability_returns_true_for_not_activated_product(): void {
+		$this->repository->set_products(
+			Product_Collection::from_array(
+				[
+					Product_Entry::from_array(
+						[
+							'product_slug'      => 'give',
+							'tier'              => 'pro',
+							'status'            => 'active',
+							'expires'           => '2030-12-31 23:59:59',
+							'validation_status' => 'not_activated',
+							'activated_here'    => false,
+							'capabilities'      => [ 'give', 'give-recurring' ],
+						]
+					),
+				]
+			)
+		);
+
+		$this->assertTrue( $this->repository->has_capability( 'give-recurring' ) );
+	}
+
+	public function test_has_capability_returns_false_for_expired_product(): void {
+		$this->repository->set_products(
+			Product_Collection::from_array(
+				[
+					Product_Entry::from_array(
+						[
+							'product_slug'      => 'give',
+							'tier'              => 'pro',
+							'status'            => 'active',
+							'expires'           => '2020-12-31 23:59:59',
+							'validation_status' => 'expired',
+							'activated_here'    => false,
+							'capabilities'      => [ 'give', 'give-recurring' ],
+						]
+					),
+				]
+			)
+		);
+
+		$this->assertFalse( $this->repository->has_capability( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_active_returns_true_for_valid_activated_product(): void {
+		$this->repository->set_products(
+			Product_Collection::from_array(
+				[
+					Product_Entry::from_array(
+						[
+							'product_slug'      => 'give',
+							'tier'              => 'pro',
+							'status'            => 'active',
+							'expires'           => '2030-12-31 23:59:59',
+							'validation_status' => 'valid',
+							'activated_here'    => true,
+							'capabilities'      => [ 'give', 'give-recurring' ],
+						]
+					),
+				]
+			)
+		);
+
+		$this->assertTrue( $this->repository->is_capability_active( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_active_returns_false_for_not_activated_product(): void {
+		$this->repository->set_products(
+			Product_Collection::from_array(
+				[
+					Product_Entry::from_array(
+						[
+							'product_slug'      => 'give',
+							'tier'              => 'pro',
+							'status'            => 'active',
+							'expires'           => '2030-12-31 23:59:59',
+							'validation_status' => 'not_activated',
+							'activated_here'    => false,
+							'capabilities'      => [ 'give', 'give-recurring' ],
+						]
+					),
+				]
+			)
+		);
+
+		$this->assertFalse( $this->repository->is_capability_active( 'give-recurring' ) );
+	}
+
 	public function test_store_fires_action_when_key_changes(): void {
 		$fired = [];
 

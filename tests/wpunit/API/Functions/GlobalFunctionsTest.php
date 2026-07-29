@@ -190,6 +190,210 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// lw_harbor_get_licensed_products()
+	// -------------------------------------------------------------------------
+
+	public function test_get_licensed_products_returns_null_without_cached_products(): void {
+		$this->assertNull( lw_harbor_get_licensed_products() );
+	}
+
+	public function test_get_licensed_products_returns_cached_collection(): void {
+		$collection = Product_Collection::from_array(
+			[
+				Product_Entry::from_array(
+					[
+						'product_slug'      => 'give',
+						'tier'              => 'pro',
+						'status'            => 'active',
+						'expires'           => '2030-12-31 23:59:59',
+						'validation_status' => 'valid',
+						'capabilities'      => [ 'give' ],
+					]
+				),
+			]
+		);
+
+		update_option(
+			License_Repository::PRODUCTS_STATE_OPTION_NAME,
+			[
+				'collection'      => $collection->to_array(),
+				'last_success_at' => null,
+				'last_error'      => null,
+			]
+		);
+
+		$result = lw_harbor_get_licensed_products();
+
+		$this->assertInstanceOf( Product_Collection::class, $result );
+		$this->assertCount( 1, $result );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_is_capability_licensed()
+	// -------------------------------------------------------------------------
+
+	public function test_is_capability_licensed_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_is_capability_licensed( 'give' ) );
+	}
+
+	public function test_is_capability_licensed_returns_true_for_valid_capability(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'valid',
+					'activated_here'    => true,
+					'capabilities'      => [ 'give', 'give-recurring' ],
+				],
+			]
+		);
+
+		$this->assertTrue( lw_harbor_is_capability_licensed( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_licensed_returns_true_when_not_activated_on_domain(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'not_activated',
+					'activated_here'    => false,
+					'capabilities'      => [ 'give', 'give-recurring' ],
+				],
+			]
+		);
+
+		$this->assertTrue( lw_harbor_is_capability_licensed( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_licensed_returns_false_for_expired_product(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2020-12-31 23:59:59',
+					'validation_status' => 'expired',
+					'activated_here'    => false,
+					'capabilities'      => [ 'give', 'give-recurring' ],
+				],
+			]
+		);
+
+		$this->assertFalse( lw_harbor_is_capability_licensed( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_licensed_returns_false_for_unknown_capability(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'valid',
+					'activated_here'    => true,
+					'capabilities'      => [ 'give' ],
+				],
+			]
+		);
+
+		$this->assertFalse( lw_harbor_is_capability_licensed( 'give-recurring' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_is_capability_license_active()
+	// -------------------------------------------------------------------------
+
+	public function test_is_capability_license_active_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_is_capability_license_active( 'give' ) );
+	}
+
+	public function test_is_capability_license_active_returns_true_for_valid_activated_capability(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'valid',
+					'activated_here'    => true,
+					'capabilities'      => [ 'give', 'give-recurring' ],
+				],
+			]
+		);
+
+		$this->assertTrue( lw_harbor_is_capability_license_active( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_license_active_returns_false_when_not_activated_on_domain(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'not_activated',
+					'activated_here'    => false,
+					'capabilities'      => [ 'give', 'give-recurring' ],
+				],
+			]
+		);
+
+		$this->assertFalse( lw_harbor_is_capability_license_active( 'give-recurring' ) );
+	}
+
+	public function test_is_capability_license_active_returns_false_for_unknown_capability(): void {
+		$this->seed_capability_products(
+			[
+				[
+					'product_slug'      => 'give',
+					'tier'              => 'pro',
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => 'valid',
+					'activated_here'    => true,
+					'capabilities'      => [ 'give' ],
+				],
+			]
+		);
+
+		$this->assertFalse( lw_harbor_is_capability_license_active( 'give-recurring' ) );
+	}
+
+	/**
+	 * @param array<int, array<string, mixed>> $products
+	 */
+	private function seed_capability_products( array $products ): void {
+		$entries = array_map(
+			static function ( array $product ): Product_Entry {
+				return Product_Entry::from_array( $product );
+			},
+			$products
+		);
+
+		$collection = Product_Collection::from_array( $entries );
+
+		update_option(
+			License_Repository::PRODUCTS_STATE_OPTION_NAME,
+			[
+				'collection'      => $collection->to_array(),
+				'last_success_at' => null,
+				'last_error'      => null,
+			]
+		);
+	}
+
+	// -------------------------------------------------------------------------
 	// lw_harbor_is_feature_enabled() / lw_harbor_is_feature_available()
 	// -------------------------------------------------------------------------
 

@@ -2,6 +2,7 @@
 
 namespace LiquidWeb\Harbor\Licensing\Repositories;
 
+use LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Validation_State;
 use LiquidWeb\Harbor\Utils\Sanitize;
@@ -459,6 +460,70 @@ final class License_Repository {
 	}
 
 	/**
+	 * Whether the unified license includes a capability, regardless of domain activation.
+	 *
+	 * Returns true when at least one cached product entry lists the capability and
+	 * the entry is not in a status that indicates the license does not cover it
+	 * (e.g. expired, no entitlement).
+	 *
+	 * @since TBD
+	 *
+	 * @param string $capability_slug The capability slug to check.
+	 *
+	 * @return bool
+	 */
+	public function has_capability( string $capability_slug ): bool {
+		$products = $this->get_products();
+
+		if ( ! $products instanceof Product_Collection ) {
+			return false;
+		}
+
+		foreach ( $products as $entry ) {
+			if (
+				$this->is_capability_covered_by_license( $entry->get_validation_status() )
+				&& in_array( $capability_slug, $entry->get_capabilities(), true )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a capability is active on the current domain under the unified license.
+	 *
+	 * Returns true when at least one cached product entry is valid, activated on
+	 * this domain, and lists the capability.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $capability_slug The capability slug to check.
+	 *
+	 * @return bool
+	 */
+	public function is_capability_active( string $capability_slug ): bool {
+		$products = $this->get_products();
+
+		if ( ! $products instanceof Product_Collection ) {
+			return false;
+		}
+
+		foreach ( $products as $entry ) {
+			if (
+				$entry->is_valid()
+				&& $entry->get_activated_here()
+				&& in_array( $capability_slug, $entry->get_capabilities(), true )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Whether a product has a valid, active license.
 	 *
 	 * Returns true when the cached catalog shows the product as valid, or when
@@ -557,6 +622,37 @@ final class License_Repository {
 		$current_time = time();
 
 		return $current_time <= $last_active + $this->get_grace_period_in_seconds();
+	}
+
+	/**
+	 * Whether a validation status indicates the license covers the product.
+	 *
+	 * Excludes statuses where the unified key does not entitle the product
+	 * (expired, suspended, no entitlement, etc.). Includes not_activated and
+	 * similar states where the product is on the license but not active here.
+	 *
+	 * @since TBD
+	 *
+	 * @param string|null $status A Validation_Status constant value, or null.
+	 *
+	 * @return bool
+	 */
+	private function is_capability_covered_by_license( ?string $status ): bool {
+		if ( $status === null ) {
+			return false;
+		}
+
+		$not_covered = [
+			Validation_Status::EXPIRED,
+			Validation_Status::SUSPENDED,
+			Validation_Status::CANCELLED,
+			Validation_Status::LICENSE_SUSPENDED,
+			Validation_Status::LICENSE_BANNED,
+			Validation_Status::NO_ENTITLEMENT,
+			Validation_Status::INVALID_KEY,
+		];
+
+		return ! in_array( $status, $not_covered, true );
 	}
 
 	/**

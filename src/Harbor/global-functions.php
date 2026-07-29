@@ -263,6 +263,67 @@ if ( ! function_exists( 'lw_harbor_refresh_catalog' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_get_licensed_products' ) ) {
+	/**
+	 * Get the cached licensed products from the unified license key.
+	 *
+	 * Returns the locally stored product catalog without making any remote API
+	 * calls. Use License_Manager::get_products() when a fetch on cache miss is
+	 * needed.
+	 *
+	 * @since TBD
+	 *
+	 * @return \LiquidWeb\Harbor\Licensing\Product_Collection|null The cached products, or null when none are stored.
+	 */
+	function lw_harbor_get_licensed_products(): ?\LiquidWeb\Harbor\Licensing\Product_Collection {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_licensed_products' );
+
+		// @phpstan-ignore return.type
+		return $callback ? $callback() : null;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_is_capability_licensed' ) ) {
+	/**
+	 * Whether the unified license includes a capability, regardless of domain activation.
+	 *
+	 * Does not make any remote API calls — only checks the locally cached
+	 * product catalog.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $capability_slug The capability slug to check.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_is_capability_licensed( string $capability_slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_capability_licensed' );
+
+		return $callback ? (bool) $callback( $capability_slug ) : false;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_is_capability_license_active' ) ) {
+	/**
+	 * Whether a capability is active on the current domain under the unified license.
+	 *
+	 * Returns true when the capability is covered by the unified key and the
+	 * product is valid and activated on this domain. Does not make any remote
+	 * API calls — only checks the locally cached product catalog.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $capability_slug The capability slug to check.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_is_capability_license_active( string $capability_slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_capability_license_active' );
+
+		return $callback ? (bool) $callback( $capability_slug ) : false;
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_display_legacy_license_page_notice' ) ) {
 	/**
 	 * Displays an informational admin notice on legacy plugin license pages.
