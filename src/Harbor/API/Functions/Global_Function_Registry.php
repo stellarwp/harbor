@@ -7,7 +7,6 @@ use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
-use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
@@ -81,23 +80,7 @@ class Global_Function_Registry {
 		);
 
 		\_lw_harbor_global_function_registry(
-			'lw_harbor_get_licensed_products',
-			$version,
-			static function (): ?Product_Collection {
-				try {
-					$products = Config::get_container()->get( License_Repository::class )->get_products();
-
-					return $products instanceof Product_Collection ? $products : null;
-				} catch ( Throwable $e ) {
-					self::debug_log_throwable( $e, 'Error getting licensed products' );
-
-					return null;
-				}
-			}
-		);
-
-		\_lw_harbor_global_function_registry(
-			'lw_harbor_is_capability_licensed',
+			'lw_harbor_is_capability_license_available',
 			$version,
 			static function ( string $capability_slug ): bool {
 				try {

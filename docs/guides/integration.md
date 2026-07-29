@@ -291,8 +291,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | Function                                       | Signature                           | Purpose                                                                                                       |
 | ---------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Check if a specific product slug has an active license.                                                       |
-| `lw_harbor_get_licensed_products`              | `(): ?Product_Collection`           | Get the locally cached licensed products from the unified key (no remote call).                               |
-| `lw_harbor_is_capability_licensed`           | `(string $slug): bool`              | Check if the unified key includes a capability, regardless of domain activation.                               |
+| `lw_harbor_is_capability_license_available`           | `(string $slug): bool`              | Check if the unified key includes a capability, regardless of domain activation.                               |
 | `lw_harbor_is_capability_license_active`       | `(string $slug): bool`              | Check if a capability is valid and activated on the current domain.                                           |
 | `lw_harbor_has_unified_license_key`            | `(): bool`                          | Check if a unified key is stored locally (no remote call).                                                    |
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |

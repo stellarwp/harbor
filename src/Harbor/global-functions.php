@@ -263,27 +263,7 @@ if ( ! function_exists( 'lw_harbor_refresh_catalog' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_get_licensed_products' ) ) {
-	/**
-	 * Get the cached licensed products from the unified license key.
-	 *
-	 * Returns the locally stored product catalog without making any remote API
-	 * calls. Use License_Manager::get_products() when a fetch on cache miss is
-	 * needed.
-	 *
-	 * @since TBD
-	 *
-	 * @return \LiquidWeb\Harbor\Licensing\Product_Collection|null The cached products, or null when none are stored.
-	 */
-	function lw_harbor_get_licensed_products(): ?\LiquidWeb\Harbor\Licensing\Product_Collection {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_licensed_products' );
-
-		// @phpstan-ignore return.type
-		return $callback ? $callback() : null;
-	}
-}
-
-if ( ! function_exists( 'lw_harbor_is_capability_licensed' ) ) {
+if ( ! function_exists( 'lw_harbor_is_capability_license_available' ) ) {
 	/**
 	 * Whether the unified license includes a capability, regardless of domain activation.
 	 *
@@ -296,8 +276,8 @@ if ( ! function_exists( 'lw_harbor_is_capability_licensed' ) ) {
 	 *
 	 * @return bool
 	 */
-	function lw_harbor_is_capability_licensed( string $capability_slug ): bool {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_capability_licensed' );
+	function lw_harbor_is_capability_license_available( string $capability_slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_capability_license_available' );
 
 		return $callback ? (bool) $callback( $capability_slug ) : false;
 	}
