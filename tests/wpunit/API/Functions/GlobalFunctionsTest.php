@@ -328,6 +328,31 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	/**
+	 * Without a tier the portal shows a product and tier picker, still scoped to
+	 * the activating domain. That is a worse screen than a pre-selected product,
+	 * but it is a working one, which is what lets the tier be optional at all.
+	 */
+	public function test_get_product_activation_url_sends_a_bare_slug_without_a_tier(): void {
+		$url = lw_harbor_get_product_activation_url( 'learndash' );
+
+		$this->assertStringContainsString( 'sku=learndash', $url );
+		// No trailing separator: "learndash%3A" would be a tier named empty string.
+		$this->assertStringNotContainsString( 'sku=learndash%3A', $url );
+	}
+
+	/**
+	 * An empty tier is the same as no tier. Guarded separately from null because
+	 * a caller forwarding an unfound tier is the likely source of one, and losing
+	 * the guard produces a silently different SKU rather than an error.
+	 */
+	public function test_get_product_activation_url_treats_an_empty_tier_as_no_tier(): void {
+		$this->assertSame(
+			lw_harbor_get_product_activation_url( 'learndash' ),
+			lw_harbor_get_product_activation_url( 'learndash', '' )
+		);
+	}
+
+	/**
 	 * Null, not an empty string, is what "there is no URL for you" looks like —
 	 * it is the one answer a consumer must not paste into an href.
 	 */
@@ -337,6 +362,127 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		$this->assertNull( lw_harbor_get_activation_base_url() );
 		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash', 'elite' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_is_product_licensed()
+	// -------------------------------------------------------------------------
+
+	public function test_is_product_licensed_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+	}
+
+	/**
+	 * The point of this function next to lw_harbor_is_product_license_active():
+	 * a product the key covers but which is not activated here is licensed, and
+	 * that is exactly the state an activation prompt exists for.
+	 */
+	public function test_is_product_licensed_returns_true_for_an_unactivated_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
+
+		$this->assertTrue( lw_harbor_is_product_licensed( 'give' ) );
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+	}
+
+	public function test_is_product_licensed_returns_false_for_an_uncovered_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_is_product_licensed( 'learndash' ) );
+	}
+
+	public function test_is_product_licensed_returns_false_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_get_product_tier()
+	// -------------------------------------------------------------------------
+
+	public function test_get_product_tier_returns_the_tier_for_a_single_entry(): void {
+		$this->store_products( [ [ 'give', 'essentials', 'not_activated' ] ] );
+
+		$this->assertSame( 'essentials', lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	/**
+	 * The ambiguity rule. Returning the first entry would send the user to a tier
+	 * they may not have meant; null sends them to the portal's picker instead,
+	 * which is the right interface for a genuine choice.
+	 */
+	public function test_get_product_tier_returns_null_when_several_tiers_match(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	public function test_get_product_tier_returns_null_for_an_uncovered_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertNull( lw_harbor_get_product_tier( 'learndash' ) );
+	}
+
+	public function test_get_product_tier_returns_null_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	/**
+	 * The two functions are designed to compose: whatever the tier lookup returns,
+	 * including null, is a valid second argument to the URL builder.
+	 */
+	public function test_an_ambiguous_tier_composes_into_an_unscoped_activation_url(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$url = lw_harbor_get_product_activation_url( 'give', lw_harbor_get_product_tier( 'give' ) );
+
+		$this->assertStringContainsString( 'sku=give', $url );
+		$this->assertStringNotContainsString( 'sku=give%3A', $url );
+	}
+
+	/**
+	 * Stores a product catalog in the option the repository reads.
+	 *
+	 * @param array<int,array{0:string,1:string,2:string}> $products Each entry as
+	 *                                                               [ slug, tier, validation status ].
+	 *
+	 * @return void
+	 */
+	private function store_products( array $products ): void {
+		$entries = [];
+
+		foreach ( $products as list( $slug, $tier, $validation_status ) ) {
+			$entries[] = Product_Entry::from_array(
+				[
+					'product_slug'      => $slug,
+					'tier'              => $tier,
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => $validation_status,
+				]
+			);
+		}
+
+		update_option(
+			License_Repository::PRODUCTS_STATE_OPTION_NAME,
+			[
+				'collection'      => Product_Collection::from_array( $entries )->to_array(),
+				'last_success_at' => null,
+				'last_error'      => null,
+			]
+		);
 	}
 
 	// -------------------------------------------------------------------------

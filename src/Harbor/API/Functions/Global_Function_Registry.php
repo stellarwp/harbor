@@ -150,11 +150,39 @@ class Global_Function_Registry {
 		\_lw_harbor_global_function_registry(
 			'lw_harbor_get_product_activation_url',
 			$version,
-			static function ( string $product_slug, string $tier, ?string $redirect_url = null ): ?string {
+			static function ( string $product_slug, ?string $tier = null, ?string $redirect_url = null ): ?string {
 				try {
 					return Config::get_container()->get( Url::class )->for_product( $product_slug, $tier, $redirect_url );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error building product activation URL' );
+
+					return null;
+				}
+			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_is_product_licensed',
+			$version,
+			static function ( string $product ): bool {
+				try {
+					return Config::get_container()->get( License_Repository::class )->has_product( $product );
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error checking whether a product is licensed' );
+
+					return false;
+				}
+			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_get_product_tier',
+			$version,
+			static function ( string $product ): ?string {
+				try {
+					return Config::get_container()->get( License_Repository::class )->get_product_tier( $product );
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error reading product tier' );
 
 					return null;
 				}
