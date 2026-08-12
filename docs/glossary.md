@@ -8,15 +8,15 @@ The complete, non-personalized definition of every Liquid Web product family: it
 
 The catalog answers "what does this product offer?" It is the menu — it does not know what any given customer ordered. It has no knowledge of license keys, entitlements, or local activation state.
 
-Harbor caches the catalog in a WordPress option (`lw_harbor_catalog_state`) via `Catalog_Repository`. 
+Harbor caches the catalog in a WordPress option (`lw_harbor_catalog_state`) via `Catalog_Repository`.
 
 To see the catalog information on your site, run this command:
+
 ```
 wp harbor catalog list
 ```
 
 This will return the following:
-
 
 | product_slug        | tiers | features |
 |---------------------|-------|----------|
@@ -49,6 +49,7 @@ See [Licensing](subsystems/licensing.md) and [Harbor: The Three Data Layers](har
 
 Example:
 To see in your site, run this command:
+
 ```
 wp harbor license get
 ```
@@ -81,6 +82,7 @@ Every feature has two independent states:
 See [Features](subsystems/features.md).
 
 To see the features in your site, run this command:
+
 ```
 wp harbor feature list
 ```
