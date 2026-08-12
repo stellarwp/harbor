@@ -1,4 +1,4 @@
 significance: minor
 type: feature
-entry: Added lw_harbor_is_product_licensed() and lw_harbor_get_product_tier() so host plugins can ask whether a license covers a product, and at which tier, without resolving Harbor's internal licensing classes from their own vendor-prefixed copy. The tier argument to lw_harbor_get_product_activation_url() is now optional and accepts null, which sends an unscoped sku so the portal offers its own product and tier picker; get_product_tier() returns null when a license covers a product at several tiers, letting that choice fall to the portal rather than being guessed
+entry: Added lw_harbor_is_product_licensed() and lw_harbor_get_product_tier() so host plugins can ask whether a license covers a product, and at which tier, without resolving Harbor's internal licensing classes from their own vendor-prefixed copy
 timestamp: 2026-07-30T00:00:00.000Z
