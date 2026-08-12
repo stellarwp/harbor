@@ -7,7 +7,6 @@ use LiquidWeb\Harbor\Portal\Clients\Http_Client;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
 use LiquidWeb\Harbor\Portal\Activation\Return_Handler;
-use LiquidWeb\Harbor\Portal\Activation\Script;
 use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
@@ -37,7 +36,6 @@ final class Provider extends Abstract_Provider {
 
 		$this->container->singleton( Catalog_Repository::class );
 		$this->container->singleton( Url::class );
-		$this->container->singleton( Script::class );
 		$this->container->singleton( Return_Handler::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Herald_Legacy_Url_Builder::class );
@@ -51,10 +49,8 @@ final class Provider extends Abstract_Provider {
 			}
 		);
 
-		// Priority 0 on both: the script has to be registered before anything that
-		// enqueues it by handle gets a chance to run, and the return trip has to be
-		// handled before any screen reads the licensing data it is about to refresh.
-		add_action( 'admin_enqueue_scripts', [ $this, 'register_activation_script' ], 0, 0 );
+		// Priority 0: the return trip has to be handled before any screen reads the
+		// licensing data it is about to refresh.
 		add_action( 'admin_init', [ $this, 'maybe_refresh_after_activation' ], 0, 0 );
 	}
 
@@ -78,15 +74,4 @@ final class Provider extends Abstract_Provider {
 		$this->container->get( Return_Handler::class )->maybe_refresh();
 	}
 
-	/**
-	 * Registers the shared activation helper script if this instance
-	 * has the highest Harbor version among all active instances.
-	 *
-	 * @since TBD
-	 *
-	 * @return void
-	 */
-	public function register_activation_script(): void {
-		$this->container->get( Script::class )->maybe_register();
-	}
 }

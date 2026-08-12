@@ -248,8 +248,7 @@ if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
 	 * against this site, then returns them to $redirect_url (or the Software
 	 * Manager page when none is given). The list is unfiltered — to have the
 	 * portal pre-select one product and tier, use
-	 * lw_harbor_get_product_activation_url() instead, or append the sku in the
-	 * browser with window.lwHarbor.buildActivationUrl().
+	 * lw_harbor_get_product_activation_url() instead.
 	 *
 	 * @since TBD
 	 *
@@ -338,33 +337,6 @@ if ( ! function_exists( 'lw_harbor_get_product_tier' ) ) {
 		$result = $callback ? $callback( $product ) : null;
 
 		return is_string( $result ) && '' !== $result ? $result : null;
-	}
-}
-
-if ( ! function_exists( 'lw_harbor_add_activation_script_dependency' ) ) {
-	/**
-	 * Declares Harbor's activation helper script as a dependency of your script.
-	 *
-	 * Call this after registering your own script and before it is printed. Your
-	 * script then has `window.lwHarbor.buildActivationUrl()` available, without
-	 * naming Harbor's handle or touching Harbor's classes — the copy that
-	 * registered the script is not necessarily the copy you bundled.
-	 *
-	 * Does nothing when no Harbor instance is active, so no version check is
-	 * needed on the calling side.
-	 *
-	 * @since TBD
-	 *
-	 * @param string $handle Your already-registered script handle.
-	 *
-	 * @return void
-	 */
-	function lw_harbor_add_activation_script_dependency( string $handle ): void {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_add_activation_script_dependency' );
-
-		if ( $callback ) {
-			$callback( $handle );
-		}
 	}
 }
 

@@ -5,7 +5,6 @@ namespace LiquidWeb\Harbor\Tests\API\Functions;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use LiquidWeb\Harbor\Portal\Activation\Script;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -36,10 +35,6 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	protected function tearDown(): void {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
-
-		// wp_scripts() is a global that outlives a single test method.
-		wp_deregister_script( Script::HANDLE );
-		wp_deregister_script( 'consumer-onboarding' );
 
 		parent::tearDown();
 	}
@@ -482,90 +477,6 @@ final class GlobalFunctionsTest extends HarborTestCase {
 				'last_success_at' => null,
 				'last_error'      => null,
 			]
-		);
-	}
-
-	// -------------------------------------------------------------------------
-	// lw_harbor_add_activation_script_dependency()
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Empties admin_enqueue_scripts so firing it only runs what the test added.
-	 *
-	 * WordPress core hooks WP_Site_Health onto it, which reads the current
-	 * screen and there is not one here. Must run before the function under test,
-	 * which registers its own callback on the same hook.
-	 *
-	 * @return void
-	 */
-	private function isolate_enqueue_hook(): void {
-		remove_all_actions( 'admin_enqueue_scripts' );
-	}
-
-	public function test_add_activation_script_dependency_attaches_harbors_handle(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertContains(
-			Script::HANDLE,
-			wp_scripts()->registered['consumer-onboarding']->deps
-		);
-	}
-
-	/**
-	 * The caller must not have to run after Harbor's own registration. Naming the
-	 * handle in a $deps array never cared about order, and neither should this.
-	 */
-	public function test_add_activation_script_dependency_does_not_depend_on_call_order(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		// Asked for before Harbor has registered anything.
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertContains(
-			Script::HANDLE,
-			wp_scripts()->registered['consumer-onboarding']->deps
-		);
-	}
-
-	/**
-	 * A dependency that will never resolve stops WordPress printing the
-	 * consumer's script at all, so no Harbor means no dependency added.
-	 */
-	public function test_add_activation_script_dependency_is_a_noop_without_harbors_script(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertSame( [], wp_scripts()->registered['consumer-onboarding']->deps );
-	}
-
-	public function test_add_activation_script_dependency_does_not_duplicate(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertSame(
-			[ Script::HANDLE ],
-			wp_scripts()->registered['consumer-onboarding']->deps
 		);
 	}
 }

@@ -3,7 +3,6 @@
 namespace LiquidWeb\Harbor\API\Functions;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
-use LiquidWeb\Harbor\API\Functions\Actions\Add_Activation_Script_Dependency;
 use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
@@ -187,12 +186,6 @@ class Global_Function_Registry {
 					return null;
 				}
 			}
-		);
-
-		\_lw_harbor_global_function_registry(
-			'lw_harbor_add_activation_script_dependency',
-			$version,
-			new Add_Activation_Script_Dependency()
 		);
 
 		\_lw_harbor_global_function_registry(
