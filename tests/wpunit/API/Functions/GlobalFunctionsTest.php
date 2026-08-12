@@ -337,8 +337,8 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 	/**
 	 * An empty tier is the same as no tier. Guarded separately from null because
-	 * a caller forwarding an unfound tier is the likely source of one, and losing
-	 * the guard produces a silently different SKU rather than an error.
+	 * a caller forwarding a tier it could not find is the likely source of one,
+	 * and losing the guard produces a silently different SKU rather than an error.
 	 */
 	public function test_get_product_activation_url_treats_an_empty_tier_as_no_tier(): void {
 		$this->assertSame(

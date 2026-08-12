@@ -37,7 +37,7 @@ final class Url {
 	 * so a generic name like "refresh" would risk colliding with theirs.
 	 *
 	 * Internal to Harbor. It is `public` only because Return_Handler, its
-	 * sibling in this namespace, reads it to recognise the return trip and then
+	 * sibling in this namespace, reads it to recognize the return trip and then
 	 * strip the tag; PHP offers nothing narrower for that. Consumers should not
 	 * need it at all — the round trip is handled for them.
 	 *
