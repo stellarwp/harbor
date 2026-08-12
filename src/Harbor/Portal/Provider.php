@@ -57,20 +57,14 @@ final class Provider extends Abstract_Provider {
 	/**
 	 * Refreshes cached licensing data when the portal returns a user to the site.
 	 *
-	 * The tag is checked here, before the handler is resolved, because this runs
-	 * on every admin page load and resolving it builds the licensing HTTP client.
-	 * Almost every request is not a return trip, so that work would be wasted.
-	 * The handler repeats the check for its own sake.
+	 * Whether this request is a return trip at all is the handler's own first
+	 * question, so it is not asked again here.
 	 *
 	 * @since TBD
 	 *
 	 * @return void
 	 */
 	public function maybe_refresh_after_activation(): void {
-		if ( ! isset( $_GET[ Url::RETURN_PARAM ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check only; the handler validates before acting.
-			return;
-		}
-
 		$this->container->get( Return_Handler::class )->maybe_refresh();
 	}
 

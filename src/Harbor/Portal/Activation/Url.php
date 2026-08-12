@@ -36,9 +36,10 @@ final class Url {
 	 * Deliberately namespaced. It rides on a URL owned by the calling plugin,
 	 * so a generic name like "refresh" would risk colliding with theirs.
 	 *
-	 * Internal to Harbor. It is `public` only because Harbor reads it across
-	 * class boundaries and PHP has no narrower visibility for that. Consumers
-	 * should not need it at all — the round trip is handled for them.
+	 * Internal to Harbor. It is `public` only because Return_Handler, its
+	 * sibling in this namespace, reads it to recognise the return trip and then
+	 * strip the tag; PHP offers nothing narrower for that. Consumers should not
+	 * need it at all — the round trip is handled for them.
 	 *
 	 * @since TBD
 	 */
