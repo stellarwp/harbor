@@ -133,7 +133,7 @@ class Global_Function_Registry {
 		);
 
 		\_lw_harbor_global_function_registry(
-			'lw_harbor_get_activation_base_url',
+			'lw_harbor_get_product_activation_base_url',
 			$version,
 			static function ( ?string $redirect_url = null ): ?string {
 				try {

@@ -1,4 +1,4 @@
 significance: minor
 type: feature
-entry: Added a reusable activation URL API. Host plugins can build Liquid Web portal activation URLs via the lw_harbor_get_activation_base_url() and lw_harbor_get_product_activation_url() global functions, and pass them to their own onboarding screens
+entry: Added a reusable activation URL API. Host plugins can build Liquid Web portal activation URLs via the lw_harbor_get_product_activation_base_url() and lw_harbor_get_product_activation_url() global functions, and pass them to their own onboarding screens
 timestamp: 2026-07-22T00:00:00.000Z

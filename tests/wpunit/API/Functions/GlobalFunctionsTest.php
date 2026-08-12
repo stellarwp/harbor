@@ -281,27 +281,27 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// lw_harbor_get_activation_base_url() / lw_harbor_get_product_activation_url()
+	// lw_harbor_get_product_activation_base_url() / lw_harbor_get_product_activation_url()
 	// -------------------------------------------------------------------------
 
-	public function test_get_activation_base_url_targets_the_subscriptions_screen(): void {
-		$url = lw_harbor_get_activation_base_url();
+	public function test_get_product_activation_base_url_targets_the_subscriptions_screen(): void {
+		$url = lw_harbor_get_product_activation_base_url();
 
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		$this->assertStringContainsString( 'portal-referral=plugin', $url );
 		$this->assertStringNotContainsString( 'sku=', $url );
 	}
 
-	public function test_get_activation_base_url_carries_the_given_return_destination(): void {
-		$url = lw_harbor_get_activation_base_url( 'https://example.test/onboarding' );
+	public function test_get_product_activation_base_url_carries_the_given_return_destination(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/onboarding' );
 
 		$this->assertStringContainsString( rawurlencode( 'https://example.test/onboarding' ), $url );
 		// The return trip is tagged so Harbor refreshes its cache on the way back.
 		$this->assertStringContainsString( 'lw-harbor-activated', $url );
 	}
 
-	public function test_get_activation_base_url_encodes_the_query_per_rfc3986(): void {
-		$url = lw_harbor_get_activation_base_url( 'https://example.test/on boarding~step' );
+	public function test_get_product_activation_base_url_encodes_the_query_per_rfc3986(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/on boarding~step' );
 
 		// The query is built with PHP_QUERY_RFC3986, not PHP's RFC1738 default.
 		// It matters because redirect_url carries a whole URL: RFC1738 encodes a
@@ -355,7 +355,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		// An empty registry is what a site with no active Harbor looks like.
 		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
 
-		$this->assertNull( lw_harbor_get_activation_base_url() );
+		$this->assertNull( lw_harbor_get_product_activation_base_url() );
 		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash', 'elite' ) );
 	}
 

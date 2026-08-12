@@ -80,7 +80,7 @@ $href = lw_harbor_get_product_activation_url(
 
 | Function                                                                                     | Returns                                                                 |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `lw_harbor_get_activation_base_url( ?string $redirect_url )`                                 | The portal subscriptions URL with referral, redirect, and domain params |
+| `lw_harbor_get_product_activation_base_url( ?string $redirect_url )`                         | The portal subscriptions URL with referral, redirect, and domain params |
 | `lw_harbor_get_product_activation_url( string $slug, ?string $tier, ?string $redirect_url )` | The same, plus `sku={slug}` and `:{tier}` when a tier is given          |
 | `lw_harbor_is_product_licensed( string $slug )`                                              | Whether the stored license covers the product at all, activated or not  |
 | `lw_harbor_get_product_tier( string $slug )`                                                 | The licensed tier, or `null` when absent or licensed at several         |
@@ -91,7 +91,7 @@ back to Harbor's Software Manager page. Pass your own whenever the user started
 somewhere else — otherwise they will not come back to where they were.
 
 ```php
-$href = lw_harbor_get_activation_base_url( $return_url );
+$href = lw_harbor_get_product_activation_base_url( $return_url );
 
 if ( null === $href ) {
     return; // Nothing to offer.

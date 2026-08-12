@@ -240,15 +240,17 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
+if ( ! function_exists( 'lw_harbor_get_product_activation_base_url' ) ) {
 	/**
-	 * Returns the base Liquid Web portal activation URL for this site.
+	 * Returns the base URL that product activation is built on for this site.
 	 *
 	 * Drops the user on the portal's subscriptions screen to activate a product
 	 * against this site, then returns them to $redirect_url (or the Software
-	 * Manager page when none is given). The list is unfiltered — to have the
-	 * portal pre-select one product and tier, use
-	 * lw_harbor_get_product_activation_url() instead.
+	 * Manager page when none is given).
+	 *
+	 * The URL itself names no product: the list arrives unfiltered and the user
+	 * picks. To have the portal pre-select one product and tier instead, use
+	 * lw_harbor_get_product_activation_url(), which is this URL plus an `sku`.
 	 *
 	 * @since TBD
 	 *
@@ -257,8 +259,8 @@ if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
 	 * @return string|null The activation URL, or null when no Harbor instance is
 	 *                     active or the URL could not be built.
 	 */
-	function lw_harbor_get_activation_base_url( ?string $redirect_url = null ): ?string {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_activation_base_url' );
+	function lw_harbor_get_product_activation_base_url( ?string $redirect_url = null ): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_base_url' );
 
 		$result = $callback ? $callback( $redirect_url ) : null;
 
@@ -270,7 +272,7 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	/**
 	 * Returns a portal activation URL scoped to a single product and tier.
 	 *
-	 * Like lw_harbor_get_activation_base_url(), but adds an `sku` param so the portal
+	 * Like lw_harbor_get_product_activation_base_url(), but adds an `sku` param so the portal
 	 * pre-selects the given product and tier instead of an unfiltered list.
 	 *
 	 * @since TBD
