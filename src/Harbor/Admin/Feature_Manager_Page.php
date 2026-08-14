@@ -8,7 +8,6 @@ use LiquidWeb\Harbor\Licensing\License_Manager;
 use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
-use LiquidWeb\Harbor\Utils\Assets;
 use LiquidWeb\Harbor\Utils\License_Key;
 use LiquidWeb\Harbor\Utils\Version;
 
@@ -147,19 +146,29 @@ class Feature_Manager_Page {
 	 * Registers and enqueues the React Feature Manager UI JS and CSS.
 	 *
 	 * Loads from build-dev/ when WP_DEBUG is true (source maps included),
-	 * from build/ otherwise (minified, no source maps). Assets resolves which.
+	 * from build/ otherwise (minified, no source maps).
 	 *
-	 * @since TBD     Resolve the build directory through Assets.
+	 * Path resolution from this file:
+	 *   __DIR__                               → src/Harbor/Admin
+	 *   dirname(__DIR__)                      → src/Harbor
+	 *   dirname(dirname(__DIR__))             → src
+	 *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
+	 *
 	 * @since 1.3.0   Expose License_Key::PREFIX to the React app via the localized payload.
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
 	private function enqueue_assets(): void {
-		$handle = 'lw-harbor-ui';
+		$build_dir       = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'build-dev' : 'build';
+		$plugin_root_dir = dirname( dirname( dirname( __DIR__ ) ) );
+		$plugin_root_url = trailingslashit(
+			plugin_dir_url( $plugin_root_dir . '/index.php' )
+		);
+		$handle          = 'lw-harbor-ui';
 
 		// Load asset file for dependencies and version.
-		$asset_file = Assets::path( 'index.asset.php' );
+		$asset_file = $plugin_root_dir . '/' . $build_dir . '/index.asset.php';
 
 		/** @var array{dependencies: array<string>, version: string} $asset_data */
 		$asset_data = file_exists( $asset_file ) ? require $asset_file : [
@@ -169,7 +178,7 @@ class Feature_Manager_Page {
 
 		wp_register_script(
 			$handle,
-			Assets::url( 'index.js' ),
+			$plugin_root_url . $build_dir . '/index.js',
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			[ 'in_footer' => true ]
@@ -192,7 +201,7 @@ class Feature_Manager_Page {
 
 		wp_register_style(
 			$handle,
-			Assets::url( 'index.css' ),
+			$plugin_root_url . $build_dir . '/index.css',
 			[],
 			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- version is content-hashed into the asset filename by the build pipeline.
 		);

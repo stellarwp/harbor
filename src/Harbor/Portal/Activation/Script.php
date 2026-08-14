@@ -3,7 +3,6 @@
 namespace LiquidWeb\Harbor\Portal\Activation;
 
 use LiquidWeb\Harbor\Harbor;
-use LiquidWeb\Harbor\Utils\Assets;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -64,9 +63,15 @@ final class Script {
 			return;
 		}
 
+		$build_dir       = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'build-dev' : 'build';
+		$plugin_root_dir = dirname( dirname( dirname( dirname( __DIR__ ) ) ) );
+		$plugin_root_url = trailingslashit(
+			plugin_dir_url( $plugin_root_dir . '/index.php' )
+		);
+
 		wp_register_script(
 			self::HANDLE,
-			Assets::url( 'activation.js' ),
+			$plugin_root_url . $build_dir . '/activation.js',
 			[],
 			Harbor::VERSION,
 			[ 'in_footer' => false ]
