@@ -431,6 +431,40 @@ final class License_Repository {
 	}
 
 	/**
+	 * The tier a product is licensed at, when that is unambiguous.
+	 *
+	 * Returns null when the license does not cover the product, and also when it
+	 * covers it at more than one tier. Callers use this to scope an activation
+	 * URL, and the portal answers an unscoped SKU with a product and tier picker
+	 * — which is the right interface for a genuine choice. Picking a tier here on
+	 * the caller's behalf would send someone to one they may not have meant.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $slug The product slug to read.
+	 *
+	 * @return string|null The tier, or null when the product is absent or licensed
+	 *                     at several tiers.
+	 */
+	public function get_product_tier( string $slug ): ?string {
+		$products = $this->get_products();
+
+		if ( ! $products instanceof Product_Collection ) {
+			return null;
+		}
+
+		$entries = $products->get_all_by_slug( $slug );
+
+		if ( 1 !== count( $entries ) ) {
+			return null;
+		}
+
+		$tier = reset( $entries )->get_tier();
+
+		return '' !== $tier ? $tier : null;
+	}
+
+	/**
 	 * Whether any entry for a product slug has a valid license status.
 	 *
 	 * Returns true when at least one tier entry for the slug is valid, meaning

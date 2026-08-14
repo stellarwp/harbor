@@ -240,16 +240,17 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
+if ( ! function_exists( 'lw_harbor_get_product_activation_base_url' ) ) {
 	/**
-	 * Returns the base Liquid Web portal activation URL for this site.
+	 * Returns the base URL that product activation is built on for this site.
 	 *
 	 * Drops the user on the portal's subscriptions screen to activate a product
 	 * against this site, then returns them to $redirect_url (or the Software
-	 * Manager page when none is given). The list is unfiltered — to have the
-	 * portal pre-select one product and tier, use
-	 * lw_harbor_get_product_activation_url() instead, or append the sku in the
-	 * browser with window.lwHarbor.buildActivationUrl().
+	 * Manager page when none is given).
+	 *
+	 * The URL itself names no product: the list arrives unfiltered and the user
+	 * picks. To have the portal pre-select one product and tier instead, use
+	 * lw_harbor_get_product_activation_url(), which is this URL plus an `sku`.
 	 *
 	 * @since TBD
 	 *
@@ -258,8 +259,8 @@ if ( ! function_exists( 'lw_harbor_get_activation_base_url' ) ) {
 	 * @return string|null The activation URL, or null when no Harbor instance is
 	 *                     active or the URL could not be built.
 	 */
-	function lw_harbor_get_activation_base_url( ?string $redirect_url = null ): ?string {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_activation_base_url' );
+	function lw_harbor_get_product_activation_base_url( ?string $redirect_url = null ): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_base_url' );
 
 		$result = $callback ? $callback( $redirect_url ) : null;
 
@@ -271,19 +272,21 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	/**
 	 * Returns a portal activation URL scoped to a single product and tier.
 	 *
-	 * Like lw_harbor_get_activation_base_url(), but adds an `sku` param so the portal
+	 * Like lw_harbor_get_product_activation_base_url(), but adds an `sku` param so the portal
 	 * pre-selects the given product and tier instead of an unfiltered list.
 	 *
 	 * @since TBD
 	 *
 	 * @param string      $product_slug The product slug, e.g. 'learndash'.
-	 * @param string      $tier         The tier slug, e.g. 'elite'.
+	 * @param string|null $tier         The tier slug, e.g. 'elite'. Pass null when
+	 *                                  the tier is unknown, and the portal shows a
+	 *                                  picker instead of a pre-selected product.
 	 * @param string|null $redirect_url Where the portal returns the user afterwards.
 	 *
 	 * @return string|null The activation URL, or null when no Harbor instance is
 	 *                     active or the URL could not be built.
 	 */
-	function lw_harbor_get_product_activation_url( string $product_slug, string $tier, ?string $redirect_url = null ): ?string {
+	function lw_harbor_get_product_activation_url( string $product_slug, ?string $tier = null, ?string $redirect_url = null ): ?string {
 		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_url' );
 
 		$result = $callback ? $callback( $product_slug, $tier, $redirect_url ) : null;
@@ -292,30 +295,50 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_add_activation_script_dependency' ) ) {
+if ( ! function_exists( 'lw_harbor_is_product_licensed' ) ) {
 	/**
-	 * Declares Harbor's activation helper script as a dependency of your script.
+	 * Whether the stored license covers a product at all, activated or not.
 	 *
-	 * Call this after registering your own script and before it is printed. Your
-	 * script then has `window.lwHarbor.buildActivationUrl()` available, without
-	 * naming Harbor's handle or touching Harbor's classes — the copy that
-	 * registered the script is not necessarily the copy you bundled.
-	 *
-	 * Does nothing when no Harbor instance is active, so no version check is
-	 * needed on the calling side.
+	 * Distinct from lw_harbor_is_product_license_active(), which reports whether the
+	 * product is activated on this domain. A product can be licensed but not yet
+	 * activated here — precisely the state an activation prompt exists for, so a
+	 * consumer deciding whether to offer one wants this, not that.
 	 *
 	 * @since TBD
 	 *
-	 * @param string $handle Your already-registered script handle.
+	 * @param string $product The product slug, e.g. 'learndash'.
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	function lw_harbor_add_activation_script_dependency( string $handle ): void {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_add_activation_script_dependency' );
+	function lw_harbor_is_product_licensed( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_product_licensed' );
 
-		if ( $callback ) {
-			$callback( $handle );
-		}
+		return $callback ? (bool) $callback( $product ) : false;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_get_product_tier' ) ) {
+	/**
+	 * Returns the tier a product is licensed at, when that is unambiguous.
+	 *
+	 * Pass the result straight to lw_harbor_get_product_activation_url(): null is a
+	 * valid tier there, and means the portal offers its own picker rather than a
+	 * pre-selected product.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $product The product slug, e.g. 'learndash'.
+	 *
+	 * @return string|null The tier, or null when no Harbor instance is active, the
+	 *                     license does not cover the product, or it covers it at
+	 *                     several tiers.
+	 */
+	function lw_harbor_get_product_tier( string $product ): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_tier' );
+
+		$result = $callback ? $callback( $product ) : null;
+
+		return is_string( $result ) && '' !== $result ? $result : null;
 	}
 }
 

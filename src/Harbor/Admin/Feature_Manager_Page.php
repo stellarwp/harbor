@@ -55,6 +55,19 @@ class Feature_Manager_Page {
 	private Url $activation_url;
 
 	/**
+	 * Catalog repository.
+	 *
+	 * Used only by the deprecated maybe_redirect_after_refresh(), and injected
+	 * rather than service-located so that removing the method removes its
+	 * dependency with it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Catalog_Repository
+	 */
+	private Catalog_Repository $catalog;
+
+	/**
 	 * Hook suffix returned by add_submenu_page().
 	 * Empty string until the page is registered.
 	 *
@@ -69,14 +82,16 @@ class Feature_Manager_Page {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Data            $site_data       Site data provider.
-	 * @param License_Manager $license_manager License manager.
-	 * @param Url             $activation_url  Portal activation URL builder.
+	 * @param Data               $site_data       Site data provider.
+	 * @param License_Manager    $license_manager License manager.
+	 * @param Url                $activation_url  Portal activation URL builder.
+	 * @param Catalog_Repository $catalog         Catalog repository.
 	 */
-	public function __construct( Data $site_data, License_Manager $license_manager, Url $activation_url ) {
+	public function __construct( Data $site_data, License_Manager $license_manager, Url $activation_url, Catalog_Repository $catalog ) {
 		$this->site_data       = $site_data;
 		$this->license_manager = $license_manager;
 		$this->activation_url  = $activation_url;
+		$this->catalog         = $catalog;
 	}
 
 	/**
@@ -249,9 +264,6 @@ class Feature_Manager_Page {
 	 * this class is not final and the method is public, so a consumer could be
 	 * calling it.
 	 *
-	 * The catalog is resolved here rather than injected: the constructor stopped
-	 * taking Catalog_Repository when this stopped being part of the page's job.
-	 *
 	 * @since 1.0.0
 	 * @deprecated TBD Portal return trips are handled by Portal\Activation\Return_Handler.
 	 *
@@ -269,7 +281,7 @@ class Feature_Manager_Page {
 		}
 
 		$this->license_manager->refresh_products( $this->site_data->get_domain() );
-		Config::get_container()->get( Catalog_Repository::class )->refresh();
+		$this->catalog->refresh();
 
 		$clean_url = remove_query_arg( 'refresh' );
 		wp_safe_redirect( $clean_url );

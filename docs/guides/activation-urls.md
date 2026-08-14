@@ -15,11 +15,14 @@ Manager page — for example on a plugin's onboarding screen.
     &redirect_url={where the portal returns the user}
     &domain={this site's domain}
     &sku={product_slug}:{tier}      # only on product-scoped URLs
+                                    # the :{tier} half is omitted when unknown
 ```
 
 `redirect_url` is percent-encoded, so its own query string does not leak into
 the portal URL as separate params. `sku` is what lets the portal pre-select a
-product and tier instead of dropping the user on an unfiltered list.
+product and tier instead of dropping the user on an unfiltered list. Without a
+tier the portal offers a picker limited to the activating domain, so a partial
+`sku` narrows the choice rather than failing.
 
 Harbor appends `lw-harbor-activated=1` to whatever return URL you supply. That
 tag lives inside `redirect_url`, not at the top level — see below.
@@ -64,7 +67,7 @@ copy, which may not be the one actually running.
 // Product-scoped, returning the user to your onboarding screen.
 $href = lw_harbor_get_product_activation_url(
     'kadence',
-    'pro',
+    lw_harbor_get_product_tier( 'kadence' ),
     add_query_arg(
         [
             'page' => 'kadence-onboarding',
@@ -75,21 +78,51 @@ $href = lw_harbor_get_product_activation_url(
 );
 ```
 
-| Function                                                                                    | Returns                                                                 |
-| ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `lw_harbor_get_activation_base_url( ?string $redirect_url )`                                | The portal subscriptions URL with referral, redirect, and domain params |
-| `lw_harbor_get_product_activation_url( string $slug, string $tier, ?string $redirect_url )` | The same, plus `sku={slug}:{tier}`                                      |
+| Function                                                                                     | Returns                                                                 |
+| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `lw_harbor_get_product_activation_base_url( ?string $redirect_url )`                         | The portal subscriptions URL with referral, redirect, and domain params |
+| `lw_harbor_get_product_activation_url( string $slug, ?string $tier, ?string $redirect_url )` | The same, plus `sku={slug}` and `:{tier}` when a tier is given          |
+| `lw_harbor_is_product_licensed( string $slug )`                                              | Whether the stored license covers the product at all, activated or not  |
+| `lw_harbor_get_product_tier( string $slug )`                                                 | The licensed tier, or `null` when absent or licensed at several         |
 
-Both return `null` when no Harbor instance is active, or when the URL could not
-be built — treat that as "hide the button". Omit `$redirect_url` to fall back to
-Harbor's Software Manager page. Pass your own whenever the user started somewhere
-else — otherwise they will not come back to where they were.
+The URL builders return `null` when no Harbor instance is active, or when the URL
+could not be built — treat that as "hide the button". Omit `$redirect_url` to fall
+back to Harbor's Software Manager page. Pass your own whenever the user started
+somewhere else — otherwise they will not come back to where they were.
 
 ```php
-$href = lw_harbor_get_activation_base_url( $return_url );
+$href = lw_harbor_get_product_activation_base_url( $return_url );
 
 if ( null === $href ) {
     return; // Nothing to offer.
+}
+```
+
+### Do not look the tier up yourself
+
+`$tier` is optional, and `lw_harbor_get_product_tier()` is the supported way to
+find one. Pass its result straight through, including when it is `null`: an
+unscoped `sku` sends the user to the portal's product and tier picker, still
+scoped to the activating domain, which is the right screen when the license
+covers the product at more than one tier.
+
+Reaching into `License_Repository` or `Product_Entry` from your own bundled copy
+to read a tier is the thing this API exists to replace. Those classes are
+Strauss-prefixed per plugin, and only the highest-version copy refreshes the
+catalog — so you would be reading the leader's data with your own, possibly
+older, code.
+
+```php
+// Licensed but not yet activated here: the state worth prompting on.
+if (
+    lw_harbor_is_product_licensed( 'kadence' )
+    && ! lw_harbor_is_product_license_active( 'kadence' )
+) {
+    $href = lw_harbor_get_product_activation_url(
+        'kadence',
+        lw_harbor_get_product_tier( 'kadence' ),
+        $return_url
+    );
 }
 ```
 
@@ -113,99 +146,39 @@ The examples below assume a top-level menu.
 
 ## From JavaScript
 
-Use this when the product or tier is chosen in the browser. If it is fixed at
-render time, build the URL in PHP instead and skip the script entirely.
-
-Harbor registers a dependency-free script exposing `window.lwHarbor`. Register
-your own script, then ask Harbor to attach itself as a dependency:
+Harbor does not ship a browser API for this. Build the URL in PHP and hand it to
+your script, so the `sku` contract lives in exactly one place.
 
 ```php
-wp_register_script(
-    'kadence-onboarding',
-    $url . 'build/onboarding.js',
-    [],
-    $version,
-    true
-);
-
-lw_harbor_add_activation_script_dependency( 'kadence-onboarding' );
-
-// The helper only appends sku, so pass it a base URL built in PHP.
 wp_localize_script(
     'kadence-onboarding',
     'kadenceOnboarding',
     [
-        'activationBaseUrl' => lw_harbor_get_activation_base_url(
-            add_query_arg(
-                [
-                    'page' => 'kadence-onboarding',
-                    'step' => 2,
-                ],
-                admin_url( 'admin.php' )
-            )
+        'activationUrl' => lw_harbor_get_product_activation_url(
+            'kadence',
+            lw_harbor_get_product_tier( 'kadence' ),
+            menu_page_url( 'kadence-onboarding', false )
         ),
     ]
 );
-
-wp_enqueue_script( 'kadence-onboarding' );
 ```
 
-Do not reach for Harbor's own classes or constants to name the handle. The copy
-your plugin bundled is not necessarily the copy that registered the script, so a
-constant read from your own copy can disagree with what is actually on the page.
-`lw_harbor_add_activation_script_dependency()` is a no-op when no Harbor is
-active, so it needs no guard of its own.
-
-Then in the browser:
-
 ```js
-const href = window.lwHarbor.buildActivationUrl(
-    kadenceOnboarding.activationBaseUrl,
-    'kadence',
-    selectedTier
-);
-```
-
-This works from a bundled module or an inline `<script>` — no build step
-required on the consuming side.
-
-### Always feature-detect
-
-Every active Harbor copy runs the registration code, but only the highest
-version claims it. That leader is never older than the copy your plugin ships —
-if yours is the newest, yours becomes the leader — so the API you were built
-against is the floor, not a gamble. Feature-detect anyway, for the case that
-matters: no Harbor is active on the request at all, and `window.lwHarbor` is
-simply undefined.
-
-```js
-if ( window.lwHarbor?.buildActivationUrl ) {
-    // safe to use
+if ( kadenceOnboarding.activationUrl ) {
+    // safe to link to
 }
 ```
 
-### Enqueue timing
+The function returns `null` when no Harbor instance is active, so a falsy value
+is your signal to hide the control rather than render a dead link.
 
-You do not need to worry about hook priority. Harbor registers its own script
-during `admin_enqueue_scripts` (at priority `0`, defensively), and
-`lw_harbor_add_activation_script_dependency()` defers the actual wiring to the
-end of that same hook. So it does not matter whether you call it before or after
-Harbor has registered — or on an earlier hook entirely.
+When the tier is chosen in the browser, localize one URL per tier and pick
+between them client-side:
 
-### If your script does not load
+```php
+$tiers = [];
 
-WordPress silently refuses to print a script whose dependency is still
-unregistered at print time — no error, no console warning. In practice that
-means Harbor is not present on the request at all rather than a timing problem.
-Feature-detect in the browser instead, as above: if `window.lwHarbor` is
-undefined, no Harbor instance registered the script.
-
-The script is admin-only. It is not registered on the front end, so a dependency
-declared on a front-end script will never resolve.
-
-## Why the handle is not vendor-prefixed
-
-`lw-harbor-activation` and `lwHarbor` are plain strings. Strauss rewrites class
-names, not strings, so every Harbor copy on the site agrees on them — which is
-what allows a single registration to serve every plugin. This is deliberate; do
-not prefix them.
+foreach ( [ 'plus', 'pro' ] as $tier ) {
+    $tiers[ $tier ] = lw_harbor_get_product_activation_url( 'kadence', $tier, $return_url );
+}
+```

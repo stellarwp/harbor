@@ -36,9 +36,10 @@ final class Url {
 	 * Deliberately namespaced. It rides on a URL owned by the calling plugin,
 	 * so a generic name like "refresh" would risk colliding with theirs.
 	 *
-	 * Internal to Harbor. It is `public` only because Harbor reads it across
-	 * class boundaries and PHP has no narrower visibility for that. Consumers
-	 * should not need it at all — the round trip is handled for them.
+	 * Internal to Harbor. It is `public` only because Return_Handler, its
+	 * sibling in this namespace, reads it to recognize the return trip and then
+	 * strip the tag; PHP offers nothing narrower for that. Consumers should not
+	 * need it at all — the round trip is handled for them.
 	 *
 	 * @since TBD
 	 */
@@ -91,30 +92,42 @@ final class Url {
 	}
 
 	/**
-	 * Builds an activation URL scoped to a single product and tier.
+	 * Builds an activation URL scoped to a single product, and to a tier when one
+	 * is known.
 	 *
 	 * The `sku` param lets the portal pre-select the right product and tier
-	 * instead of dropping the user on an unfiltered subscriptions list.
+	 * instead of dropping the user on an unfiltered subscriptions list. Without a
+	 * tier the portal shows its own product and tier picker, still scoped to the
+	 * activating domain, so omitting one degrades rather than fails.
 	 *
 	 * @since TBD
 	 *
 	 * @param string      $product_slug The product slug, e.g. "givewp".
-	 * @param string      $tier         The tier slug, e.g. "elite".
+	 * @param string|null $tier         The tier slug, e.g. "elite". Null when the
+	 *                                  tier is unknown or the license covers the
+	 *                                  product at several, leaving the choice to
+	 *                                  the portal.
 	 * @param string|null $redirect_url Where the portal returns the user after
 	 *                                  activating. Defaults to the Software
 	 *                                  Manager page with a refresh triggered.
 	 *
 	 * @return string
 	 */
-	public function for_product( string $product_slug, string $tier, ?string $redirect_url = null ): string {
-		$sku = http_build_query(
-			[ 'sku' => $product_slug . ':' . $tier ],
+	public function for_product( string $product_slug, ?string $tier = null, ?string $redirect_url = null ): string {
+		// Guard the empty string as well as null: "slug:" would read as a tier
+		// named empty string, which is not the same as no tier at all.
+		$sku = null !== $tier && '' !== $tier
+			? $product_slug . ':' . $tier
+			: $product_slug;
+
+		$query = http_build_query(
+			[ 'sku' => $sku ],
 			'',
 			'&',
 			PHP_QUERY_RFC3986
 		);
 
-		return $this->get_base( $redirect_url ) . '&' . $sku;
+		return $this->get_base( $redirect_url ) . '&' . $query;
 	}
 
 	/**

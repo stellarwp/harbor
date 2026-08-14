@@ -5,7 +5,6 @@ namespace LiquidWeb\Harbor\Tests\API\Functions;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
-use LiquidWeb\Harbor\Portal\Activation\Script;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -36,10 +35,6 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	protected function tearDown(): void {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
-
-		// wp_scripts() is a global that outlives a single test method.
-		wp_deregister_script( Script::HANDLE );
-		wp_deregister_script( 'consumer-onboarding' );
 
 		parent::tearDown();
 	}
@@ -286,27 +281,27 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// lw_harbor_get_activation_base_url() / lw_harbor_get_product_activation_url()
+	// lw_harbor_get_product_activation_base_url() / lw_harbor_get_product_activation_url()
 	// -------------------------------------------------------------------------
 
-	public function test_get_activation_base_url_targets_the_subscriptions_screen(): void {
-		$url = lw_harbor_get_activation_base_url();
+	public function test_get_product_activation_base_url_targets_the_subscriptions_screen(): void {
+		$url = lw_harbor_get_product_activation_base_url();
 
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		$this->assertStringContainsString( 'portal-referral=plugin', $url );
 		$this->assertStringNotContainsString( 'sku=', $url );
 	}
 
-	public function test_get_activation_base_url_carries_the_given_return_destination(): void {
-		$url = lw_harbor_get_activation_base_url( 'https://example.test/onboarding' );
+	public function test_get_product_activation_base_url_carries_the_given_return_destination(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/onboarding' );
 
 		$this->assertStringContainsString( rawurlencode( 'https://example.test/onboarding' ), $url );
 		// The return trip is tagged so Harbor refreshes its cache on the way back.
 		$this->assertStringContainsString( 'lw-harbor-activated', $url );
 	}
 
-	public function test_get_activation_base_url_encodes_the_query_per_rfc3986(): void {
-		$url = lw_harbor_get_activation_base_url( 'https://example.test/on boarding~step' );
+	public function test_get_product_activation_base_url_encodes_the_query_per_rfc3986(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/on boarding~step' );
 
 		// The query is built with PHP_QUERY_RFC3986, not PHP's RFC1738 default.
 		// It matters because redirect_url carries a whole URL: RFC1738 encodes a
@@ -328,6 +323,31 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	/**
+	 * Without a tier the portal shows a product and tier picker, still scoped to
+	 * the activating domain. That is a worse screen than a pre-selected product,
+	 * but it is a working one, which is what lets the tier be optional at all.
+	 */
+	public function test_get_product_activation_url_sends_a_bare_slug_without_a_tier(): void {
+		$url = lw_harbor_get_product_activation_url( 'learndash' );
+
+		$this->assertStringContainsString( 'sku=learndash', $url );
+		// No trailing separator: "learndash%3A" would be a tier named empty string.
+		$this->assertStringNotContainsString( 'sku=learndash%3A', $url );
+	}
+
+	/**
+	 * An empty tier is the same as no tier. Guarded separately from null because
+	 * a caller forwarding a tier it could not find is the likely source of one,
+	 * and losing the guard produces a silently different SKU rather than an error.
+	 */
+	public function test_get_product_activation_url_treats_an_empty_tier_as_no_tier(): void {
+		$this->assertSame(
+			lw_harbor_get_product_activation_url( 'learndash' ),
+			lw_harbor_get_product_activation_url( 'learndash', '' )
+		);
+	}
+
+	/**
 	 * Null, not an empty string, is what "there is no URL for you" looks like —
 	 * it is the one answer a consumer must not paste into an href.
 	 */
@@ -335,91 +355,128 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		// An empty registry is what a site with no active Harbor looks like.
 		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
 
-		$this->assertNull( lw_harbor_get_activation_base_url() );
+		$this->assertNull( lw_harbor_get_product_activation_base_url() );
 		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash', 'elite' ) );
 	}
 
 	// -------------------------------------------------------------------------
-	// lw_harbor_add_activation_script_dependency()
+	// lw_harbor_is_product_licensed()
 	// -------------------------------------------------------------------------
 
+	public function test_is_product_licensed_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+	}
+
 	/**
-	 * Empties admin_enqueue_scripts so firing it only runs what the test added.
+	 * The point of this function next to lw_harbor_is_product_license_active():
+	 * a product the key covers but which is not activated here is licensed, and
+	 * that is exactly the state an activation prompt exists for.
+	 */
+	public function test_is_product_licensed_returns_true_for_an_unactivated_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
+
+		$this->assertTrue( lw_harbor_is_product_licensed( 'give' ) );
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+	}
+
+	public function test_is_product_licensed_returns_false_for_an_uncovered_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_is_product_licensed( 'learndash' ) );
+	}
+
+	public function test_is_product_licensed_returns_false_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_get_product_tier()
+	// -------------------------------------------------------------------------
+
+	public function test_get_product_tier_returns_the_tier_for_a_single_entry(): void {
+		$this->store_products( [ [ 'give', 'essentials', 'not_activated' ] ] );
+
+		$this->assertSame( 'essentials', lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	/**
+	 * The ambiguity rule. Returning the first entry would send the user to a tier
+	 * they may not have meant; null sends them to the portal's picker instead,
+	 * which is the right interface for a genuine choice.
+	 */
+	public function test_get_product_tier_returns_null_when_several_tiers_match(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	public function test_get_product_tier_returns_null_for_an_uncovered_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertNull( lw_harbor_get_product_tier( 'learndash' ) );
+	}
+
+	public function test_get_product_tier_returns_null_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
+	}
+
+	/**
+	 * The two functions are designed to compose: whatever the tier lookup returns,
+	 * including null, is a valid second argument to the URL builder.
+	 */
+	public function test_an_ambiguous_tier_composes_into_an_unscoped_activation_url(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$url = lw_harbor_get_product_activation_url( 'give', lw_harbor_get_product_tier( 'give' ) );
+
+		$this->assertStringContainsString( 'sku=give', $url );
+		$this->assertStringNotContainsString( 'sku=give%3A', $url );
+	}
+
+	/**
+	 * Stores a product catalog in the option the repository reads.
 	 *
-	 * WordPress core hooks WP_Site_Health onto it, which reads the current
-	 * screen and there is not one here. Must run before the function under test,
-	 * which registers its own callback on the same hook.
+	 * @param array<int,array{0:string,1:string,2:string}> $products Each entry as
+	 *                                                               [ slug, tier, validation status ].
 	 *
 	 * @return void
 	 */
-	private function isolate_enqueue_hook(): void {
-		remove_all_actions( 'admin_enqueue_scripts' );
-	}
+	private function store_products( array $products ): void {
+		$entries = [];
 
-	public function test_add_activation_script_dependency_attaches_harbors_handle(): void {
-		$this->isolate_enqueue_hook();
+		foreach ( $products as list( $slug, $tier, $validation_status ) ) {
+			$entries[] = Product_Entry::from_array(
+				[
+					'product_slug'      => $slug,
+					'tier'              => $tier,
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => $validation_status,
+				]
+			);
+		}
 
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertContains(
-			Script::HANDLE,
-			wp_scripts()->registered['consumer-onboarding']->deps
-		);
-	}
-
-	/**
-	 * The caller must not have to run after Harbor's own registration. Naming the
-	 * handle in a $deps array never cared about order, and neither should this.
-	 */
-	public function test_add_activation_script_dependency_does_not_depend_on_call_order(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		// Asked for before Harbor has registered anything.
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertContains(
-			Script::HANDLE,
-			wp_scripts()->registered['consumer-onboarding']->deps
-		);
-	}
-
-	/**
-	 * A dependency that will never resolve stops WordPress printing the
-	 * consumer's script at all, so no Harbor means no dependency added.
-	 */
-	public function test_add_activation_script_dependency_is_a_noop_without_harbors_script(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertSame( [], wp_scripts()->registered['consumer-onboarding']->deps );
-	}
-
-	public function test_add_activation_script_dependency_does_not_duplicate(): void {
-		$this->isolate_enqueue_hook();
-
-		wp_register_script( Script::HANDLE, 'https://example.test/activation.js', [], '1.0.0', true );
-		wp_register_script( 'consumer-onboarding', 'https://example.test/onboarding.js', [], '1.0.0', true );
-
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		lw_harbor_add_activation_script_dependency( 'consumer-onboarding' );
-		do_action( 'admin_enqueue_scripts' );
-
-		$this->assertSame(
-			[ Script::HANDLE ],
-			wp_scripts()->registered['consumer-onboarding']->deps
+		update_option(
+			License_Repository::PRODUCTS_STATE_OPTION_NAME,
+			[
+				'collection'      => Product_Collection::from_array( $entries )->to_array(),
+				'last_success_at' => null,
+				'last_error'      => null,
+			]
 		);
 	}
 }
