@@ -49,23 +49,19 @@ final class Provider extends Abstract_Provider {
 			}
 		);
 
-		// Priority 0: the return trip has to be handled before any screen reads the
-		// licensing data it is about to refresh.
-		add_action( 'admin_init', [ $this, 'maybe_refresh_after_activation' ], 0, 0 );
+		/**
+		 * Refreshes cached licensing data when the portal returns a user to the site.
+		 *
+		 * Whether this request is a return trip at all is the handler's own first
+		 * question, so it is not asked again here.
+		 */
+		add_action(
+			'admin_init',
+			function () {
+				$this->container->get( Return_Handler::class )->maybe_refresh();
+			},
+			0,
+			0
+		);
 	}
-
-	/**
-	 * Refreshes cached licensing data when the portal returns a user to the site.
-	 *
-	 * Whether this request is a return trip at all is the handler's own first
-	 * question, so it is not asked again here.
-	 *
-	 * @since TBD
-	 *
-	 * @return void
-	 */
-	public function maybe_refresh_after_activation(): void {
-		$this->container->get( Return_Handler::class )->maybe_refresh();
-	}
-
 }
