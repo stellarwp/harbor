@@ -121,6 +121,7 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `lw_harbor_has_unified_license_key()`                                           | Whether any unified license key is stored locally (no API call)                                             |
 | `lw_harbor_get_unified_license_key()`                                           | Returns the unified license key string, or null if not found                                                |
+| `lw_harbor_store_unified_license_key( $key )`                                   | Validates a key against the portal and stores it; returns false, and never overwrites, if one is stored     |
 | `lw_harbor_is_product_license_active( $product )`                               | Whether a product slug has `validation_status: valid` in the cached catalog                                 |
 | `lw_harbor_is_product_licensed( $product )`                                     | Whether the stored license covers a product at all, activated here or not                                   |
 | `lw_harbor_get_product_tier( $product )`                                        | The tier a product is licensed at, or null when absent or licensed at several                               |

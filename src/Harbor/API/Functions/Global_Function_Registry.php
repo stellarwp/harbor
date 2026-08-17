@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\API\Functions;
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
+use LiquidWeb\Harbor\API\Functions\Actions\Store_Unified_License_Key;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
@@ -64,6 +65,12 @@ class Global_Function_Registry {
 					return null;
 				}
 			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_store_unified_license_key',
+			$version,
+			new Store_Unified_License_Key()
 		);
 
 		\_lw_harbor_global_function_registry(

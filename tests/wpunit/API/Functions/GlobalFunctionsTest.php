@@ -2,12 +2,15 @@
 
 namespace LiquidWeb\Harbor\Tests\API\Functions;
 
+use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Licensing\Fixture_Client;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Harbor;
 use WP_Error;
@@ -25,18 +28,34 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 	use With_Uopz;
 
+	/**
+	 * A key the fixture client recognizes (tests/_data/licensing/lwsw-unified-pro-2026.json).
+	 */
+	private const STORABLE_KEY = 'LWSW-UNIFIED-PRO-2026';
+
 	protected function setUp(): void {
 		parent::setUp();
 
-		delete_option( License_Repository::KEY_OPTION_NAME );
-		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		$this->forget_license_state();
 	}
 
 	protected function tearDown(): void {
-		delete_option( License_Repository::KEY_OPTION_NAME );
-		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		$this->forget_license_state();
 
 		parent::tearDown();
+	}
+
+	/**
+	 * The validation state holds the per-key throttle and the rolling failure
+	 * counter that lw_harbor_store_unified_license_key() feeds, so leaving it
+	 * behind lets one test rate-limit the next.
+	 *
+	 * @return void
+	 */
+	private function forget_license_state(): void {
+		delete_option( License_Repository::KEY_OPTION_NAME );
+		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::VALIDATION_STATE_OPTION_NAME );
 	}
 
 	// -------------------------------------------------------------------------
@@ -445,6 +464,61 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		$this->assertStringContainsString( 'sku=give', $url );
 		$this->assertStringNotContainsString( 'sku=give%3A', $url );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_store_unified_license_key()
+	// -------------------------------------------------------------------------
+
+	public function test_store_unified_license_key_stores_a_validated_key(): void {
+		$this->bind_fixture_license_manager();
+
+		$this->assertTrue( lw_harbor_store_unified_license_key( self::STORABLE_KEY ) );
+
+		// Asserted through the public surface rather than the option, since that is
+		// how a consumer will see the result.
+		$this->assertTrue( lw_harbor_has_unified_license_key() );
+		$this->assertSame( self::STORABLE_KEY, lw_harbor_get_unified_license_key() );
+	}
+
+	public function test_store_unified_license_key_returns_false_when_a_key_is_already_stored(): void {
+		$this->bind_fixture_license_manager();
+		update_option( License_Repository::KEY_OPTION_NAME, 'LWSW-ALREADY-HERE' );
+
+		$this->assertFalse( lw_harbor_store_unified_license_key( self::STORABLE_KEY ) );
+		$this->assertSame( 'LWSW-ALREADY-HERE', lw_harbor_get_unified_license_key() );
+	}
+
+	public function test_store_unified_license_key_returns_false_for_an_unrecognized_key(): void {
+		$this->bind_fixture_license_manager();
+
+		$this->assertFalse( lw_harbor_store_unified_license_key( 'LWSW-DOES-NOT-EXIST' ) );
+		$this->assertFalse( lw_harbor_has_unified_license_key() );
+	}
+
+	public function test_store_unified_license_key_returns_false_when_no_instance_is_active(): void {
+		// An empty registry is what a site with no active Harbor looks like.
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_store_unified_license_key( self::STORABLE_KEY ) );
+		$this->assertEmpty( get_option( License_Repository::KEY_OPTION_NAME ) );
+	}
+
+	/**
+	 * Swaps in a manager whose "portal" is the JSON fixtures on disk, so storing a
+	 * key never reaches the network.
+	 *
+	 * @return void
+	 */
+	private function bind_fixture_license_manager(): void {
+		$this->container->singleton(
+			License_Manager::class,
+			new License_Manager(
+				new License_Repository(),
+				new Product_Registry( [] ),
+				new Fixture_Client( codecept_data_dir( 'licensing' ) )
+			)
+		);
 	}
 
 	/**

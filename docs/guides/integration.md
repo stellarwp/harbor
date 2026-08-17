@@ -200,6 +200,20 @@ if (lw_harbor_has_unified_license_key()) {
 $key = lw_harbor_get_unified_license_key(); // string|null
 ```
 
+### Store a unified license key
+
+Hand Harbor a key collected on your own onboarding screen. It is validated against the portal before it is stored, so this blocks on an outbound HTTP request.
+
+```php
+if (!lw_harbor_has_unified_license_key()) {
+    $stored = lw_harbor_store_unified_license_key($key); // bool
+}
+```
+
+Check `lw_harbor_has_unified_license_key()` first, as above. This function refuses when a key is already stored — it never replaces one, and that includes re-submitting the key already in place. Note that a plugin shipping a bundled `LWSW_KEY.php` always has a key stored by the time its onboarding screen runs, and so will always get `false` here.
+
+`false` deliberately collapses "a key is already stored", "that key was rejected", and "the portal call failed". Enable `WP_DEBUG_LOG` and read the `Harbor:` lines to tell them apart. Note this differs from the REST and WP-CLI surfaces, which do replace an existing key.
+
 ### Get the licensed domain
 
 ```php
@@ -293,6 +307,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Check if a specific product slug has an active license.                                                       |
 | `lw_harbor_has_unified_license_key`            | `(): bool`                          | Check if a unified key is stored locally (no remote call).                                                    |
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
+| `lw_harbor_store_unified_license_key`          | `(string $key): bool`               | Validate a key against the portal and store it. Returns `false` if a key is already stored; never overwrites. |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                                                   |
 | `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Feature Manager page (empty string if inactive).                                    |

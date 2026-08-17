@@ -134,6 +134,42 @@ if ( ! function_exists( 'lw_harbor_get_unified_license_key' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_store_unified_license_key' ) ) {
+	/**
+	 * Validates a unified license key against the Liquid Web portal and stores it.
+	 *
+	 * Refuses when a key is already stored, and never replaces one. That includes
+	 * re-submitting the key already stored, and includes a network-level key seen
+	 * from a subsite. Consumers wanting to tell "this site is already licensed"
+	 * apart from "that key was rejected" should call
+	 * lw_harbor_has_unified_license_key() first, since the return value here
+	 * collapses the two.
+	 *
+	 * Deliberately stricter than the REST and WP-CLI surfaces, which do replace an
+	 * existing key: those are admin-authenticated actions taken by someone who can
+	 * see what they are overwriting, whereas this runs wherever a host plugin calls
+	 * it.
+	 *
+	 * #todo - we need to activate the product here and seat must be consumed.
+	 * Synchronous: this performs an outbound HTTP request and blocks until the
+	 * portal responds. It validates the key only; no product is activated and no
+	 * seat is consumed.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $key The unified license key, e.g. 'LWSW-XXXXXXXX-XXXXXXXX'.
+	 *
+	 * @return bool True when the key was validated and stored. False when a key is
+	 *              already stored, the key is malformed or rejected, the portal
+	 *              call fails, or no Harbor instance is active.
+	 */
+	function lw_harbor_store_unified_license_key( string $key ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_store_unified_license_key' );
+
+		return $callback ? (bool) $callback( $key ) : false;
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 	/**
 	 * Whether a specific product has an active, valid license.  *
