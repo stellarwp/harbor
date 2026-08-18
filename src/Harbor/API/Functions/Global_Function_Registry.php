@@ -71,9 +71,15 @@ class Global_Function_Registry {
 			'lw_harbor_store_unified_license_key',
 			$version,
 			static function ( string $key ): bool {
-				$action = Config::get_container()->get( Store_Unified_License_Key::class );
+				try {
+					$action = Config::get_container()->get( Store_Unified_License_Key::class );
 
-				return $action( $key );
+					return $action( $key );
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error storing unified license key' );
+
+					return false;
+				}
 			}
 		);
 

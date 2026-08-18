@@ -1,4 +1,4 @@
 significance: minor
 type: feature
-entry: Added lw_harbor_store_unified_license_key() so host plugins can hand a unified license key to Harbor from their own onboarding screen instead of calling the REST API. The key is validated against the portal before it is stored, and a key that is already stored is never replaced
+entry: Added lw_harbor_store_unified_license_key() so host plugins can hand a unified license key to Harbor from their own onboarding screen instead of calling the REST API.
 timestamp: 2026-08-17T00:00:00.000Z

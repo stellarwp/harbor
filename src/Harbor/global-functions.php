@@ -171,7 +171,7 @@ if ( ! function_exists( 'lw_harbor_store_unified_license_key' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 	/**
-	 * Whether a specific product has an active, valid license.  *
+	 * Whether a specific product has an active, valid license.
 	 *
 	 * @since 1.0.0
 	 *
