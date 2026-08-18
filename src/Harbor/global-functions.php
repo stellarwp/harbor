@@ -150,10 +150,9 @@ if ( ! function_exists( 'lw_harbor_store_unified_license_key' ) ) {
 	 * see what they are overwriting, whereas this runs wherever a host plugin calls
 	 * it.
 	 *
-	 * #todo - we need to activate the product here and seat must be consumed.
 	 * Synchronous: this performs an outbound HTTP request and blocks until the
-	 * portal responds. It validates the key only; no product is activated and no
-	 * seat is consumed.
+	 * portal responds. Aside from the no-replace rule above, this works the same
+	 * way as the REST store endpoint (License_Controller::store_item()).
 	 *
 	 * @since TBD
 	 *

@@ -70,7 +70,11 @@ class Global_Function_Registry {
 		\_lw_harbor_global_function_registry(
 			'lw_harbor_store_unified_license_key',
 			$version,
-			new Store_Unified_License_Key()
+			static function ( string $key ): bool {
+				$action = Config::get_container()->get( Store_Unified_License_Key::class );
+
+				return $action( $key );
+			}
 		);
 
 		\_lw_harbor_global_function_registry(

@@ -212,8 +212,6 @@ if (!lw_harbor_has_unified_license_key()) {
 
 Check `lw_harbor_has_unified_license_key()` first, as above. This function refuses when a key is already stored — it never replaces one, and that includes re-submitting the key already in place. Note that a plugin shipping a bundled `LWSW_KEY.php` always has a key stored by the time its onboarding screen runs, and so will always get `false` here.
 
-`false` deliberately collapses "a key is already stored", "that key was rejected", and "the portal call failed". Enable `WP_DEBUG_LOG` and read the `Harbor:` lines to tell them apart. Note this differs from the REST and WP-CLI surfaces, which do replace an existing key.
-
 ### Get the licensed domain
 
 ```php
