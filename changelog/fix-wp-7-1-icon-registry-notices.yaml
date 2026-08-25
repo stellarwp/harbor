@@ -1,4 +1,4 @@
 significance: patch
 type: fix
-entry: Fixed the PHP test suite failing on WordPress 7.1, which flags a second icon-collection registration as incorrect usage when a test fires `init` again.
-timestamp: 2026-08-25T19:21:48.000Z
+entry: Fixed the PHP test suite failing on WordPress 7.1 by unhooking core's icon registration after init, matching what WordPress's own test suite does.
+timestamp: 2026-08-25T19:37:03.000Z
