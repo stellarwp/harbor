@@ -56,10 +56,17 @@ class HarborTestCase extends WPTestCase {
 	 * @return void
 	 */
 	public function assert_post_conditions() {
+		// Read, modify, write back: on multisite the base class proxies this
+		// property to a wrapped core test case, where editing it in place is a
+		// no-op ("indirect modification of overloaded property").
+		$caught = $this->caught_doing_it_wrong;
+
 		unset(
-			$this->caught_doing_it_wrong['WP_Icon_Collections_Registry::register'],
-			$this->caught_doing_it_wrong['WP_Icons_Registry::register']
+			$caught['WP_Icon_Collections_Registry::register'],
+			$caught['WP_Icons_Registry::register']
 		);
+
+		$this->caught_doing_it_wrong = $caught;
 
 		parent::assert_post_conditions();
 	}
