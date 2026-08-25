@@ -17,8 +17,11 @@ whether the plugin you are editing is distributed on WordPress.org.** Harbor is 
 in free .org plugins (Kadence Blocks, Give, TEC free) as well as paid ones, and it is
 inert in the free ones on purpose. Several of the things Harbor does — validating a key,
 calling our servers, installing a plugin — could be read as running against the
-WordPress.org plugin guidelines if a plugin distributed there did them, and a free
-plugin's place in the directory is what is at stake.
+[WordPress.org plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) if a plugin distributed there did them, and a free
+plugin's place in the directory is what is at stake. The points at issue are item 5
+(trialware), item 6 (a service existing solely to validate licenses), item 7 (contacting
+external servers without consent), and item 8 (executable code from outside the .org
+repository).
 
 A plugin on WordPress.org **must not**:
 
