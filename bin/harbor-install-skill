@@ -13,6 +13,9 @@
  * vendor/ — a link would dangle for anyone who has not run `composer install`.
  * Commit the copy, and re-run this command (or wire it to post-update-cmd) so it
  * tracks the installed Harbor version.
+ *
+ * If Strauss is configured with delete_vendor_packages, run this before Strauss:
+ * the package it reads from no longer exists afterwards.
  */
 
 const SKILL_NAME = 'harbor-integration';
@@ -71,7 +74,10 @@ $package_dir = dirname( __DIR__ );
 $source      = realpath( $package_dir . '/skill' );
 
 if ( ! $source ) {
-	fail( 'Could not locate the Harbor skill directory. Is the package installed intact?' );
+	fail(
+		'Could not locate the Harbor skill directory at ' . $package_dir . '/skill.' . PHP_EOL
+		. 'If Strauss runs with delete_vendor_packages or delete_vendor_files, run this command before Strauss.'
+	);
 }
 
 $project = getcwd();
