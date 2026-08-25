@@ -1,4 +1,0 @@
-significance: patch
-type: fix
-entry: Fixed the PHP test suite failing on WordPress 7.1 by unhooking core's icon registration after init, matching what WordPress's own test suite does.
-timestamp: 2026-08-25T19:37:03.000Z
