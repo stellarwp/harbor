@@ -26,7 +26,7 @@ Exclude the file in your `composer.json` Strauss config:
 
 ## Before you build: the free-vs-premium boundary
 
-Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free) as well as paid ones, and it stays completely inert in the free ones by design. This is not a nicety. When Harbor first shipped inside The Events Calendar, the WordPress.org plugins team threatened to remove the plugin from the directory.
+Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free) as well as paid ones, and it stays completely inert in the free ones by design. This is not a nicety. Several of the things Harbor does — validating a license key, calling our servers, installing a plugin — could be read as running against the WordPress.org plugin guidelines if a plugin distributed there did them. Keeping all of it behind the premium-plugin gate is what keeps our free plugins clearly on the right side of those guidelines, and a free plugin's place in the directory is what is at stake.
 
 **A plugin distributed on WordPress.org must not:**
 
@@ -38,7 +38,7 @@ Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free)
 
 **All new licensing and activation surface lives in the premium plugin**, where the premium-plugin gate has opened and Harbor is active. Every license field, validation call, activation button, and install flow belongs there. (Pre-existing Uplink license fields in free plugins are grandfathered and are not what this rule is about; it governs new surface.)
 
-**Onboarding for a free product is never gated behind a license.** A free plugin's onboarding must complete without a key. This has been attempted before and must not ship.
+**Onboarding for a free product is never gated behind a license.** A free plugin's onboarding must complete without a key, with no exceptions — including a step that can be skipped.
 
 The three WordPress.org guideline points at stake, and what keeps Harbor on the right side of each:
 

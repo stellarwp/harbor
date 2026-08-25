@@ -15,8 +15,10 @@ version wins). Never assume a shared installation.
 Read this before writing any license, activation, or onboarding code. **Determine first
 whether the plugin you are editing is distributed on WordPress.org.** Harbor is bundled
 in free .org plugins (Kadence Blocks, Give, TEC free) as well as paid ones, and it is
-inert in the free ones on purpose. When Harbor first shipped inside The Events Calendar,
-the WordPress.org plugins team threatened to remove the plugin.
+inert in the free ones on purpose. Several of the things Harbor does — validating a key,
+calling our servers, installing a plugin — could be read as running against the
+WordPress.org plugin guidelines if a plugin distributed there did them, and a free
+plugin's place in the directory is what is at stake.
 
 A plugin on WordPress.org **must not**:
 
@@ -34,7 +36,7 @@ activation buttons, install flows. (Pre-existing Uplink license fields in free p
 are grandfathered; this rule governs new surface.)
 
 **Free-product onboarding is never gated behind a license.** It must complete without a
-key. This has been attempted and rejected before.
+key, with no exceptions — including a step that can be skipped.
 
 If a ticket asks for validation, an install-from-key flow, or a Harbor call inside a free
 plugin, it cannot be built as written. Say so and move the work to the premium plugin.
