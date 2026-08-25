@@ -84,29 +84,9 @@ Planning consequence: any plugin ticket depending on new Harbor code inherits th
 
 ### Install the agent skill
 
-Harbor ships an agent skill that states the rules above in the form an AI coding agent reads before it edits your plugin. Install it once, from the plugin root:
+Harbor ships an agent skill stating the rules above in the form an AI coding agent reads before it edits your plugin. Install it from the plugin root with `vendor/bin/harbor-install-skill`, commit the result, and wire it to `post-update-cmd` so it tracks the installed Harbor version.
 
-```bash
-vendor/bin/harbor-install-skill
-```
-
-That writes `.claude/skills/harbor-integration/SKILL.md`, stamped with the Harbor version it came from. **Commit it** — it is the copy every developer and agent working in the repo will read, and it must be present without anyone running `composer install` first.
-
-To keep it tracking the installed Harbor version, add it to your Composer scripts:
-
-```json
-"scripts": {
-    "post-update-cmd": ["harbor-install-skill"]
-}
-```
-
-**Ordering with Strauss.** The command reads from `vendor/stellarwp/harbor`. If your Strauss config sets `delete_vendor_packages` or `delete_vendor_files`, that directory is gone or gutted once Strauss has run, so the command must run *before* it:
-
-```json
-"scripts": {
-    "post-update-cmd": ["harbor-install-skill", "@strauss"]
-}
-```
+Full instructions, including the ordering constraint against Strauss, are in the [README](/README.md#agent-skill) — that file ships in the Composer dist, so it is the copy present in your `vendor/` tree. This guide is not: `.gitattributes` export-ignores `docs/`.
 
 ---
 
