@@ -40,6 +40,30 @@ class HarborTestCase extends WPTestCase {
 		$this->container = Config::get_container();
 	}
 
+	/**
+	 * WordPress 7.1 registers its icon collections on `init` and flags a second
+	 * registration as incorrect usage. Any test that fires `init` again, or loads
+	 * an admin include that re-runs the registration, records those notices, and
+	 * the base test case then fails the test for a notice no Harbor code caused.
+	 *
+	 * Drop core's icon-registry notices before the base class asserts on them.
+	 * Runs after the test body and before tearDown(), and only unsets what is
+	 * actually there, so nothing changes on WordPress versions that never
+	 * register icons.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public function assert_post_conditions() {
+		unset(
+			$this->caught_doing_it_wrong['WP_Icon_Collections_Registry::register'],
+			$this->caught_doing_it_wrong['WP_Icons_Registry::register']
+		);
+
+		parent::assert_post_conditions();
+	}
+
 	protected function tearDown(): void {
 		Config::reset();
 
