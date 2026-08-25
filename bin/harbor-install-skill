@@ -1,0 +1,135 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+/**
+ * Installs Harbor's agent skill into the consuming project's .claude/skills directory.
+ *
+ * Run from the root of a plugin that requires stellarwp/harbor:
+ *
+ *     vendor/bin/harbor-install-skill
+ *
+ * The skill is copied, not linked, because Strauss may delete or gut
+ * vendor/stellarwp/harbor after install, and because consuming plugins gitignore
+ * vendor/ — a link would dangle for anyone who has not run `composer install`.
+ * Commit the copy, and re-run this command (or wire it to post-update-cmd) so it
+ * tracks the installed Harbor version.
+ */
+
+const SKILL_NAME = 'harbor-integration';
+
+/**
+ * Writes a line to stdout.
+ */
+function writeln( string $line ): void {
+	echo $line . PHP_EOL;
+}
+
+/**
+ * Writes a line to stderr and exits with a failure code.
+ */
+function fail( string $line ): void {
+	fwrite( STDERR, $line . PHP_EOL );
+	exit( 1 );
+}
+
+/**
+ * Reads Harbor's version from the source it was installed with.
+ */
+function harbor_version( string $package_dir ): string {
+	$harbor = $package_dir . '/src/Harbor/Harbor.php';
+
+	if ( ! is_readable( $harbor ) ) {
+		return 'unknown';
+	}
+
+	$found = preg_match(
+		'/const\s+VERSION\s*=\s*[\'"]([^\'"]+)[\'"]/',
+		(string) file_get_contents( $harbor ),
+		$matches
+	);
+
+	return $found ? $matches[1] : 'unknown';
+}
+
+/**
+ * Recursively removes a directory.
+ */
+function remove_dir( string $dir ): void {
+	$entries = new RecursiveIteratorIterator(
+		new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS ),
+		RecursiveIteratorIterator::CHILD_FIRST
+	);
+
+	foreach ( $entries as $entry ) {
+		$entry->isDir() ? rmdir( $entry->getPathname() ) : unlink( $entry->getPathname() );
+	}
+
+	rmdir( $dir );
+}
+
+$package_dir = dirname( __DIR__ );
+$source      = realpath( $package_dir . '/skill' );
+
+if ( ! $source ) {
+	fail( 'Could not locate the Harbor skill directory. Is the package installed intact?' );
+}
+
+$project = getcwd();
+
+if ( ! $project ) {
+	fail( 'Could not determine the current working directory.' );
+}
+
+if ( realpath( $project ) === realpath( $package_dir ) ) {
+	fail( 'Run this from the root of a plugin that requires Harbor, not from Harbor itself.' );
+}
+
+$skills_dir = $project . '/.claude/skills';
+$target     = $skills_dir . '/' . SKILL_NAME;
+
+if ( ! is_dir( $skills_dir ) && ! mkdir( $skills_dir, 0755, true ) && ! is_dir( $skills_dir ) ) {
+	fail( 'Could not create ' . $skills_dir );
+}
+
+if ( is_link( $target ) ) {
+	unlink( $target );
+} elseif ( is_dir( $target ) ) {
+	remove_dir( $target );
+} elseif ( file_exists( $target ) ) {
+	unlink( $target );
+}
+
+if ( ! mkdir( $target, 0755, true ) ) {
+	fail( 'Could not create ' . $target );
+}
+
+$version = harbor_version( $package_dir );
+$stamp   = '<!-- Installed by `vendor/bin/harbor-install-skill` from stellarwp/harbor ' . $version
+	. '. Do not edit here; edit skill/SKILL.md in the Harbor repo and re-run the command. -->';
+
+foreach ( scandir( $source ) ?: [] as $entry ) {
+	if ( $entry === '.' || $entry === '..' || is_dir( $source . '/' . $entry ) ) {
+		continue;
+	}
+
+	$contents = (string) file_get_contents( $source . '/' . $entry );
+
+	if ( substr( $entry, -3 ) === '.md' ) {
+		$contents = rtrim( $contents ) . PHP_EOL . PHP_EOL . $stamp . PHP_EOL;
+	}
+
+	if ( file_put_contents( $target . '/' . $entry, $contents ) === false ) {
+		fail( 'Could not write ' . $target . '/' . $entry );
+	}
+}
+
+if ( ! is_file( $target . '/SKILL.md' ) ) {
+	fail( 'Copied ' . $target . ' but SKILL.md is missing.' );
+}
+
+writeln( 'Installed .claude/skills/' . SKILL_NAME . ' from Harbor ' . $version . '.' );
+writeln( 'Commit it. To keep it current, add to your composer.json:' );
+writeln( '' );
+writeln( '    "scripts": {' );
+writeln( '        "post-update-cmd": ["harbor-install-skill"]' );
+writeln( '    }' );

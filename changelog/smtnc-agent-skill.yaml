@@ -1,0 +1,4 @@
+significance: minor
+type: feature
+entry: Added an agent skill (skill/SKILL.md) documenting the free-vs-premium boundary, API-consumption, and release rules, plus a `vendor/bin/harbor-install-skill` command that installs it into a consuming plugin's .claude/skills directory.
+timestamp: 2026-08-25T17:00:14.000Z

@@ -8,6 +8,80 @@ This document explains how to integrate a WordPress plugin with LiquidWeb Harbor
 
 Since the recommendation is to use [Strauss](https://github.com/BrianHenryIE/strauss) to prefix this library's namespaces, all examples use the `Boomshakalaka` namespace prefix. Replace `Boomshakalaka` with your actual vendor prefix wherever it appears.
 
+### Strauss must not prefix the global functions
+
+Harbor's global functions (`src/Harbor/global-functions.php`) are deliberately non-namespaced. They are how the copies of Harbor on a site find each other and route every call to the highest-version copy. Recent Strauss versions prefix global function names as well as namespaces, which breaks that negotiation: each plugin ends up with its own privately-named copy of the helpers, and `function_exists()` guards never see one another.
+
+Exclude the file in your `composer.json` Strauss config:
+
+```json
+"exclude_from_prefix": {
+    "file_patterns": [
+        "/harbor/src/Harbor/global-functions\\.php$"
+    ]
+}
+```
+
+---
+
+## Before you build: the free-vs-premium boundary
+
+Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free) as well as paid ones, and it stays completely inert in the free ones by design. This is not a nicety. When Harbor first shipped inside The Events Calendar, the WordPress.org plugins team threatened to remove the plugin from the directory.
+
+**A plugin distributed on WordPress.org must not:**
+
+- present a license field that validates a key,
+- call Harbor, the Commerce Portal, the Licensing API, or Herald at runtime,
+- install or activate anything from an entered key.
+
+**The most a free plugin may do** is show a static link pointing the user to the Portal, and optionally detect the `LWSW-` key *format* locally — a string check with no network call — to steer a user who pasted a unified key into a legacy field.
+
+**All new licensing and activation surface lives in the premium plugin**, where the premium-plugin gate has opened and Harbor is active. Every license field, validation call, activation button, and install flow belongs there. (Pre-existing Uplink license fields in free plugins are grandfathered and are not what this rule is about; it governs new surface.)
+
+**Onboarding for a free product is never gated behind a license.** A free plugin's onboarding must complete without a key. This has been attempted before and must not ship.
+
+The three WordPress.org guideline points at stake, and what keeps Harbor on the right side of each:
+
+| Risk                                | Guideline                                                        | Harbor guardrail                                                                                                                                                                                                          |
+| ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installing a paid add-on from a key | Item 8 — executable code served from outside the .org repo       | Harbor never auto-installs. Installs are user-initiated, `manage_options`-gated, tier-gated, and require a valid `LWSW-` key on a site where a premium plugin is installed.                                               |
+| "Enter key to unlock"               | Items 5 & 6 — a free plugin gating its own features behind a key | Storing a key runs `validate_and_store()`, which verifies the key and fetches the catalog. It does not consume a seat, activate a product, or unlock anything, and the path only exists once a premium plugin is present. |
+| Phoning home without consent        | Item 7 — outbound calls the user never opted into                | The entire networked subsystem sits behind the premium-plugin gate. A free-only site never contacts our servers.                                                                                                          |
+
+Any ticket that moves one of these lines — validating in a free plugin, installing from a key, calling out without the gate — is out of bounds regardless of the UX benefit. Take it to the premium plugin instead.
+
+### Consume the API; never hand-roll
+
+Portal and activation URLs, script handles, and license state come from Harbor's `lw_harbor_*` global functions. Do not build a Portal query string, activation URL, or licensing request inside a plugin. Every hand-rolled copy is a copy of the Portal contract that silently drifts the moment the Portal changes a parameter, and it bypasses the version negotiation that makes the helpers resolve to the highest Harbor copy on the site.
+
+If the helper you need does not exist yet, that is a Harbor ticket, not a reason to inline it. See [The Harbor release train](#the-harbor-release-train).
+
+### Naming: the "Unified License Manager"
+
+Harbor's in-plugin license management page is called the **Unified License Manager** in everything a user sees: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere.
+
+The name is deliberately brand-neutral. The company name has changed several times (Liquid Web / Nexcess / StellarWP), and a brand-based label would need re-touching in every plugin on every rebrand.
+
+Internally the page is `Admin\Feature_Manager_Page` and the docs refer to the Feature Manager when discussing the code. That is an implementation name — do not surface it to users.
+
+### The Harbor release train
+
+Harbor changes ship on Harbor's release train. A plugin ticket that needs new Harbor code is blocked until that code is reviewed, merged, tagged, and released:
+
+```text
+Harbor PR reviewed -> merged -> tagged/released
+        -> composer update into each dependent plugin
+        -> plugin PR QA'd -> plugin released
+```
+
+**Never release or QA a plugin whose `composer.json` pins a Harbor dev branch.** Pointing at `dev-main` or a feature branch while prototyping is fine, and it usefully makes the cross-repo dependency visible. Shipping in that state is not, because leadership is elected by version:
+
+- A dev branch carries no bumped version. If another plugin on the site ships the same released version *without* your dev-only change and wins leadership, your feature silently does not run. Often it does not even error — depending on the code path, a missing method or class can also fatal.
+- Code still in review can change before it merges, and the plugin that vendored it is now wrong.
+- Pins rot. Kadence Shop Kit tracked a dev Uplink branch during Consolidation; the branch drifted so far from Uplink's latest that it could not be safely merged and complicated that project for a long time.
+
+Planning consequence: any plugin ticket depending on new Harbor code inherits the Harbor release as a hard predecessor. Code review of the dependent plugin PR can run in parallel; QA cannot.
+
 ---
 
 ## 1. Initialization
@@ -130,7 +204,7 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 | `page_url`        | Yes      | Admin URL where the user can manage this license.                                                                   |
 | `expires_at`      | No       | Expiry date string (e.g. `"2026-01-01"`).                                                                           |
 
-> **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge on the Feature Manager page.
+> **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge in the Unified License Manager.
 
 ### How Harbor uses reported legacy keys
 
@@ -222,11 +296,13 @@ if (lw_harbor_is_feature_available('feature-slug')) {
 }
 ```
 
-### Get the Feature Manager admin URL
+### Get the Unified License Manager admin URL
 
 ```php
 $url = lw_harbor_get_license_page_url(); // string (empty string if Harbor is not active)
 ```
+
+Label the link **Unified License Manager** in whatever UI you place it in. Never build this URL by hand.
 
 ### Force a catalog refresh
 
@@ -240,7 +316,7 @@ Bypasses Harbor's cached catalog and fetches a fresh copy from the Commerce Port
 
 ## 5. Registering a Submenu Link
 
-If your plugin has its own top-level admin menu, call `lw_harbor_register_submenu()` to append a **Licensing** item that links directly to the Harbor Feature Manager page. This lets users reach the unified license UI without leaving your plugin's menu area.
+If your plugin has its own top-level admin menu, call `lw_harbor_register_submenu()` to append a **Licensing** item that links directly to the Unified License Manager. This lets users reach the unified license UI without leaving your plugin's menu area.
 
 ```php
 add_action('lw_harbor/loaded', function () {
@@ -254,13 +330,13 @@ The function always delegates to the highest-version Harbor instance on the site
 
 ### Hiding the Settings menu item
 
-By default, Harbor registers a **Liquid Web Products** entry under the WordPress **Settings** menu. If your plugin surfaces the Feature Manager through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
+By default, Harbor registers a **Liquid Web Products** entry under the WordPress **Settings** menu. If your plugin surfaces the Unified License Manager through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
 
 ```php
 add_filter('lw-harbor/hide_menu_item', '__return_true');
 ```
 
-The Feature Manager page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Liquid Web Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
+The page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Liquid Web Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
 
 ---
 
@@ -271,6 +347,18 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 ---
 
 ## 7. Quick Reference
+
+### Never do this
+
+| Don't                                                                                 | Do instead                                                               | Why                                                                                                        |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Build a Portal or activation query string in a plugin                                 | Call the `lw_harbor_*` helper                                            | One copy of the Portal contract per plugin; all drift the moment a parameter changes                       |
+| Validate a key, or call Harbor / Portal / Licensing / Herald, from a free .org plugin | Static Portal link, or a local `LWSW-` format check with no network call | WordPress.org guideline items 5, 6, 7 — see [the boundary](#before-you-build-the-free-vs-premium-boundary) |
+| Install or activate a plugin from an entered key                                      | User-initiated install inside the premium plugin                         | Guideline item 8 — executable code from outside the .org repo                                              |
+| Gate free-plugin onboarding on a license                                              | Complete onboarding with no key                                          | Free onboarding must never require a key                                                                   |
+| Release or QA a plugin pinned to a Harbor dev branch                                  | Wait for the tagged release, then `composer update`                      | Leader election is by version; a dev branch silently loses and the feature does not run                    |
+| Let Strauss prefix `global-functions.php`                                             | Add the `exclude_from_prefix` file pattern                               | Prefixed helpers cannot find the other Harbor copies                                                       |
+| Say "Feature Manager" in user-facing copy                                             | Say "Unified License Manager"                                            | One brand-neutral name across every plugin                                                                 |
 
 ### Filters
 
@@ -295,7 +383,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                                                   |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Feature Manager page (empty string if inactive).                                    |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Unified License Manager (empty string if inactive).                                 |
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                                                        |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system.                               |

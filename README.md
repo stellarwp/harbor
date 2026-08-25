@@ -19,6 +19,20 @@ composer require stellarwp/harbor
 >
 > Luckily, adding Strauss to your `composer.json` is only slightly more complicated than adding a typical dependency, so checkout our [strauss docs](https://github.com/stellarwp/global-docs/blob/main/docs/strauss-setup.md).
 
+### Strauss must not prefix the global functions
+
+Harbor's global functions (`src/Harbor/global-functions.php`) are deliberately non-namespaced. They are how the Harbor copies on a site find each other and route every call to the highest-version copy. Recent Strauss versions prefix global function names as well as namespaces, which breaks that negotiation — each plugin gets a privately-named copy of the helpers and the `function_exists()` guards never see one another.
+
+Exclude the file in your Strauss config:
+
+```json
+"exclude_from_prefix": {
+    "file_patterns": [
+        "/harbor/src/Harbor/global-functions\\.php$"
+    ]
+}
+```
+
 ## Initialize the library
 
 Initializing the Harbor library should be done within the `plugins_loaded` action, preferably at priority `0`.
