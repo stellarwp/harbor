@@ -47,7 +47,7 @@ class HarborTestCase extends WPTestCase {
 	 * the base test case then fails the test for a notice no Harbor code caused.
 	 *
 	 * Drop core's icon-registry notices before the base class asserts on them.
-	 * Runs after the test body and before tearDown(), and only unsets what is
+	 * Runs after the test body and before tearDown(), and only removes what is
 	 * actually there, so nothing changes on WordPress versions that never
 	 * register icons.
 	 *
