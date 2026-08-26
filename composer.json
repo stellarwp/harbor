@@ -51,7 +51,7 @@
         "exussum12/coverage-checker": "^1.1",
         "lucatume/codeception-snapshot-assertions": "*",
         "lucatume/di52": "^3",
-        "lucatume/wp-browser": "*",
+        "lucatume/wp-browser": ">=4.7.2",
         "php-stubs/wp-cli-stubs": "^2",
         "phpcompatibility/phpcompatibility-wp": "^2",
         "phpspec/prophecy": "*",
