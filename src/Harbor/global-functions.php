@@ -296,14 +296,17 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lw_harbor_is_product_licensed' ) ) {
+if ( ! function_exists( 'lw_harbor_has_product_entitlement' ) ) {
 	/**
-	 * Whether the stored license covers a product at all, activated or not.
+	 * Whether the stored license carries an entitlement for a product at all,
+	 * activated on this domain or not.
 	 *
-	 * Distinct from lw_harbor_is_product_license_active(), which reports whether the
-	 * product is activated on this domain. A product can be licensed but not yet
-	 * activated here — precisely the state an activation prompt exists for, so a
-	 * consumer deciding whether to offer one wants this, not that.
+	 * Distinct from lw_harbor_is_product_license_active(), which reports whether
+	 * the entitlement is activated *here*. A product can be entitled but not yet
+	 * activated on this site — precisely the state an activation prompt exists
+	 * for. Most callers want lw_harbor_product_needs_activation(), which pairs the
+	 * two; reach for this one when you need the states apart, as a screen showing
+	 * both "Activate" and "Manage" does.
 	 *
 	 * @since TBD
 	 *
@@ -311,8 +314,36 @@ if ( ! function_exists( 'lw_harbor_is_product_licensed' ) ) {
 	 *
 	 * @return bool
 	 */
-	function lw_harbor_is_product_licensed( string $product ): bool {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_product_licensed' );
+	function lw_harbor_has_product_entitlement( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_has_product_entitlement' );
+
+		return $callback ? (bool) $callback( $product ) : false;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_product_needs_activation' ) ) {
+	/**
+	 * Whether the license entitles this site to a product that is not yet
+	 * activated on it — the one state an activation prompt is for.
+	 *
+	 * Pairs lw_harbor_has_product_entitlement() with
+	 * lw_harbor_is_product_license_active() so consumers do not each rewrite the
+	 * conditional. Asking only whether the product is active offers activation to
+	 * someone with no entitlement, who is then sent to a portal with nothing for
+	 * them; asking only about the entitlement offers it to someone already
+	 * activated.
+	 *
+	 * False when no Harbor instance is active, so a consumer can treat it as
+	 * "offer nothing".
+	 *
+	 * @since TBD
+	 *
+	 * @param string $product The product slug, e.g. 'learndash'.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_product_needs_activation( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_product_needs_activation' );
 
 		return $callback ? (bool) $callback( $product ) : false;
 	}

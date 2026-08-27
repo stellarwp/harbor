@@ -384,35 +384,79 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// lw_harbor_is_product_licensed()
+	// lw_harbor_has_product_entitlement()
 	// -------------------------------------------------------------------------
 
-	public function test_is_product_licensed_returns_false_without_cached_products(): void {
-		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+	public function test_has_product_entitlement_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'give' ) );
 	}
 
 	/**
 	 * The point of this function next to lw_harbor_is_product_license_active():
-	 * a product the key covers but which is not activated here is licensed, and
-	 * that is exactly the state an activation prompt exists for.
+	 * a product the key entitles but which is not activated here still has an
+	 * entitlement, and that is exactly the state an activation prompt exists for.
 	 */
-	public function test_is_product_licensed_returns_true_for_an_unactivated_product(): void {
+	public function test_has_product_entitlement_returns_true_for_an_unactivated_product(): void {
 		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
 
-		$this->assertTrue( lw_harbor_is_product_licensed( 'give' ) );
+		$this->assertTrue( lw_harbor_has_product_entitlement( 'give' ) );
 		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
 	}
 
-	public function test_is_product_licensed_returns_false_for_an_uncovered_product(): void {
+	public function test_has_product_entitlement_returns_false_for_an_uncovered_product(): void {
 		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
 
-		$this->assertFalse( lw_harbor_is_product_licensed( 'learndash' ) );
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'learndash' ) );
 	}
 
-	public function test_is_product_licensed_returns_false_when_no_instance_is_active(): void {
+	public function test_has_product_entitlement_returns_false_when_no_instance_is_active(): void {
 		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
 
-		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'give' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_product_needs_activation()
+	// -------------------------------------------------------------------------
+
+	/**
+	 * The state the prompt exists for: entitled, not yet activated here.
+	 */
+	public function test_product_needs_activation_when_entitled_but_not_activated(): void {
+		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
+
+		$this->assertTrue( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	/**
+	 * Already activated here — the caller should be offering "manage", not
+	 * "activate".
+	 */
+	public function test_product_does_not_need_activation_once_activated(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	/**
+	 * No entitlement at all. Asking only whether the product is active would
+	 * offer activation here and send the user to a portal with nothing for them,
+	 * which is the mistake this function exists to stop consumers repeating.
+	 */
+	public function test_product_does_not_need_activation_without_an_entitlement(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'learndash' ) );
+	}
+
+	public function test_product_needs_activation_is_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	public function test_product_needs_activation_is_false_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
 	}
 
 	/**

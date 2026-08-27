@@ -81,7 +81,8 @@ $href = lw_harbor_get_product_activation_url(
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `lw_harbor_get_product_activation_base_url( ?string $redirect_url )`                         | The portal subscriptions URL with referral, redirect, and domain params |
 | `lw_harbor_get_product_activation_url( string $slug, ?string $redirect_url )`                | The same, plus `sku={slug}` and `:{tier}` when a tier resolves          |
-| `lw_harbor_is_product_licensed( string $slug )`                                              | Whether the stored license covers the product at all, activated or not  |
+| `lw_harbor_product_needs_activation( string $slug )`                                         | Entitled but not activated here — the state a prompt is for             |
+| `lw_harbor_has_product_entitlement( string $slug )`                                          | Whether the license entitles the product at all, activated or not       |
 
 The URL builders return `null` when no Harbor instance is active, or when the URL
 could not be built — treat that as "hide the button". Omit `$redirect_url` to fall
@@ -111,11 +112,8 @@ catalog — so you would be reading the leader's data with your own, possibly
 older, code.
 
 ```php
-// Licensed but not yet activated here: the state worth prompting on.
-if (
-    lw_harbor_is_product_licensed( 'kadence' )
-    && ! lw_harbor_is_product_license_active( 'kadence' )
-) {
+// Entitled but not yet activated here: the state worth prompting on.
+if ( lw_harbor_product_needs_activation( 'kadence' ) ) {
     $href = lw_harbor_get_product_activation_url( 'kadence', $return_url );
 }
 ```
