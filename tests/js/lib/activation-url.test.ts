@@ -2,12 +2,14 @@ import { buildActivationUrl } from '@/lib/activation-url';
 
 // Realistic base URL as produced by the server.
 // redirect_url is percent-encoded; its decoded value is a WP admin URL that
-// itself carries ?page=lw-software-manager&refresh=auto as its own params.
-// refresh=auto is NOT a top-level param — it lives inside redirect_url.
+// itself carries ?page=lw-software-manager&lw-harbor-activated=1 as its own
+// params. lw-harbor-activated is NOT a top-level param — it lives inside
+// redirect_url, where Harbor reads it on the return trip to refresh licensing
+// data before the page renders.
 const BASE_URL =
     'https://my.liquidweb.com/subscriptions/' +
     '?portal-referral=plugin' +
-    '&redirect_url=https%3A%2F%2Fexample.com%2Fwp-admin%2Foptions-general.php%3Fpage%3Dlw-software-manager%26refresh%3Dauto' +
+    '&redirect_url=https%3A%2F%2Fexample.com%2Fwp-admin%2Foptions-general.php%3Fpage%3Dlw-software-manager%26lw-harbor-activated%3D1' +
     '&domain=example.com';
 
 describe( 'buildActivationUrl', () => {
@@ -24,16 +26,16 @@ describe( 'buildActivationUrl', () => {
 
         expect( url.searchParams.get( 'portal-referral' ) ).toBe( 'plugin' );
         expect( url.searchParams.get( 'domain' ) ).toBe( 'example.com' );
-        // refresh=auto is inside redirect_url, not a top-level param
-        expect( url.searchParams.get( 'refresh' ) ).toBeNull();
+        // lw-harbor-activated is inside redirect_url, not a top-level param
+        expect( url.searchParams.get( 'lw-harbor-activated' ) ).toBeNull();
     } );
 
-    it( 'keeps redirect_url intact — decoded value includes refresh=auto', () => {
+    it( 'keeps redirect_url intact — decoded value includes the refresh tag', () => {
         const result      = buildActivationUrl( BASE_URL, 'givewp', 'elite' );
         const redirectVal = new URL( result ).searchParams.get( 'redirect_url' );
 
         expect( redirectVal ).toBe(
-            'https://example.com/wp-admin/options-general.php?page=lw-software-manager&refresh=auto'
+            'https://example.com/wp-admin/options-general.php?page=lw-software-manager&lw-harbor-activated=1'
         );
         // and remains percent-encoded in the raw string
         expect( result ).toContain(

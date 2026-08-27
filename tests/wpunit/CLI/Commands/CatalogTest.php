@@ -10,6 +10,7 @@ use LiquidWeb\Harbor\Portal\Results\Product_Catalog;
 use LiquidWeb\Harbor\Portal\Results\Tier_Collection;
 use LiquidWeb\Harbor\CLI\Commands\Catalog as Catalog_Command;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\TestException;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
@@ -24,6 +25,13 @@ final class CatalogTest extends HarborTestCase {
 
 	use With_Uopz;
 
+	/**
+	 * Message carried by the exception that stands in for WP_CLI::error()'s exit().
+	 *
+	 * @var string
+	 */
+	private const CLI_ERROR_REACHED = 'Reached WP_CLI::error().';
+
 	/** @var Spy_Logger */
 	private Spy_Logger $logger;
 
@@ -32,10 +40,6 @@ final class CatalogTest extends HarborTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
 
 		$utils_file = dirname( ( new \ReflectionClass( WP_CLI::class ) )->getFileName() ) . '/utils.php';
 		if ( file_exists( $utils_file ) ) {
@@ -49,11 +53,36 @@ final class CatalogTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
 		parent::tearDown();
+	}
+
+	/**
+	 * Stops execution where WP_CLI::error() would have called exit(), standing in
+	 * for the logger call it makes first so assertions on the spy still hold.
+	 *
+	 * Suppressing exit() itself lets a failing test carry on past the point it
+	 * should have stopped, which can leave the failure unreported, so the test
+	 * expects the exception rather than the exit.
+	 *
+	 * @return void
+	 */
+	private function stop_at_the_cli_error(): void {
+		$logger  = $this->logger;
+		$message = self::CLI_ERROR_REACHED;
+
+		$this->set_class_fn_return(
+			WP_CLI::class,
+			'error',
+			static function ( $error ) use ( $logger, $message ) {
+				$logger->error( (string) $error );
+
+				throw new TestException( $message );
+			},
+			true
+		);
+
+		$this->expectException( TestException::class );
+		$this->expectExceptionMessage( $message );
 	}
 
 	// ------------------------------------------------------------------
@@ -90,9 +119,16 @@ final class CatalogTest extends HarborTestCase {
 		);
 
 		$command = new Catalog_Command( $repository );
-		$command->list_( [], [] );
 
-		$this->assertSame( 'Could not fetch catalog.', $this->logger->last_error );
+		$this->stop_at_the_cli_error();
+
+		try {
+			$command->list_( [], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Could not fetch catalog.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -115,9 +151,15 @@ final class CatalogTest extends HarborTestCase {
 	public function test_tiers_calls_error_for_nonexistent_product(): void {
 		$command = $this->make_command( $this->catalogs );
 
-		$command->tiers( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Product "nonexistent" not found in catalog.', $this->logger->last_error );
+		try {
+			$command->tiers( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Product "nonexistent" not found in catalog.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_tiers_logs_no_tiers_for_empty_tier_collection(): void {
@@ -166,9 +208,15 @@ final class CatalogTest extends HarborTestCase {
 	public function test_features_calls_error_for_nonexistent_product(): void {
 		$command = $this->make_command( $this->catalogs );
 
-		$command->features( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Product "nonexistent" not found in catalog.', $this->logger->last_error );
+		try {
+			$command->features( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Product "nonexistent" not found in catalog.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_features_logs_no_features_for_empty_list(): void {
@@ -223,9 +271,16 @@ final class CatalogTest extends HarborTestCase {
 		);
 
 		$command = new Catalog_Command( $repository );
-		$command->refresh( [], [] );
 
-		$this->assertSame( 'API is down.', $this->logger->last_error );
+		$this->stop_at_the_cli_error();
+
+		try {
+			$command->refresh( [], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'API is down.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------

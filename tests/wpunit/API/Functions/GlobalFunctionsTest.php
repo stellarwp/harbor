@@ -8,6 +8,7 @@ use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Harbor;
 use WP_Error;
 
@@ -21,6 +22,8 @@ use WP_Error;
  * @since 1.0.0
  */
 final class GlobalFunctionsTest extends HarborTestCase {
+
+	use With_Uopz;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -275,5 +278,217 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->container->singleton( Catalog_Repository::class, $catalog );
 
 		$this->assertFalse( lw_harbor_refresh_catalog() );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_get_product_activation_base_url() / lw_harbor_get_product_activation_url()
+	// -------------------------------------------------------------------------
+
+	public function test_get_product_activation_base_url_targets_the_subscriptions_screen(): void {
+		$url = lw_harbor_get_product_activation_base_url();
+
+		$this->assertStringContainsString( '/subscriptions/', $url );
+		$this->assertStringContainsString( 'portal-referral=plugin', $url );
+		$this->assertStringNotContainsString( 'sku=', $url );
+	}
+
+	public function test_get_product_activation_base_url_carries_the_given_return_destination(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/onboarding' );
+
+		$this->assertStringContainsString( rawurlencode( 'https://example.test/onboarding' ), $url );
+		// The return trip is tagged so Harbor refreshes its cache on the way back.
+		$this->assertStringContainsString( 'lw-harbor-activated', $url );
+	}
+
+	public function test_get_product_activation_base_url_encodes_the_query_per_rfc3986(): void {
+		$url = lw_harbor_get_product_activation_base_url( 'https://example.test/on boarding~step' );
+
+		// The query is built with PHP_QUERY_RFC3986, not PHP's RFC1738 default.
+		// It matters because redirect_url carries a whole URL: RFC1738 encodes a
+		// space as "+" and a tilde as "%7E", which is also what add_query_arg()
+		// would do, and is why it is not used to build this query.
+		$this->assertStringContainsString( 'on%20boarding', $url );
+		$this->assertStringNotContainsString( 'on+boarding', $url );
+
+		$this->assertStringContainsString( '~step', $url );
+		$this->assertStringNotContainsString( '%7Estep', $url );
+	}
+
+	public function test_get_product_activation_url_scopes_to_the_product_and_tier(): void {
+		$this->store_products( [ [ 'learndash', 'elite', 'not_activated' ] ] );
+
+		$url = lw_harbor_get_product_activation_url( 'learndash' );
+
+		$this->assertStringContainsString( '/subscriptions/', $url );
+		// The sku is RFC3986-encoded, so the colon becomes %3A.
+		$this->assertStringContainsString( 'sku=learndash%3Aelite', $url );
+	}
+
+	/**
+	 * With no license to read a tier from, the portal shows a product and tier
+	 * picker, still scoped to the activating domain. That is a worse screen than a
+	 * pre-selected product, but a working one — which is what lets the SKU go out
+	 * unscoped at all.
+	 */
+	public function test_get_product_activation_url_sends_a_bare_slug_when_no_tier_resolves(): void {
+		$url = lw_harbor_get_product_activation_url( 'learndash' );
+
+		$this->assertStringContainsString( 'sku=learndash', $url );
+		// No trailing separator: "learndash%3A" would be a tier named empty string.
+		$this->assertStringNotContainsString( 'sku=learndash%3A', $url );
+	}
+
+	/**
+	 * The tier is resolved from the license, so a single covered tier scopes the
+	 * SKU without the caller looking it up or passing it.
+	 */
+	public function test_get_product_activation_url_resolves_the_licensed_tier(): void {
+		$this->store_products( [ [ 'give', 'essentials', 'not_activated' ] ] );
+
+		$this->assertStringContainsString(
+			'sku=give%3Aessentials',
+			lw_harbor_get_product_activation_url( 'give' )
+		);
+	}
+
+	/**
+	 * The ambiguity rule, enforced inside the URL builder. A license covering
+	 * the product at several tiers scopes to none of them, so the portal offers
+	 * its own picker rather than us sending the user to a tier they may not have
+	 * meant.
+	 */
+	public function test_get_product_activation_url_sends_a_bare_slug_for_an_ambiguous_tier(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$url = lw_harbor_get_product_activation_url( 'give' );
+
+		$this->assertStringContainsString( 'sku=give', $url );
+		$this->assertStringNotContainsString( 'sku=give%3A', $url );
+	}
+
+	/**
+	 * Null, not an empty string, is what "there is no URL for you" looks like —
+	 * it is the one answer a consumer must not paste into an href.
+	 */
+	public function test_activation_urls_are_null_when_no_instance_is_active(): void {
+		// An empty registry is what a site with no active Harbor looks like.
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertNull( lw_harbor_get_product_activation_base_url() );
+		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_has_product_entitlement()
+	// -------------------------------------------------------------------------
+
+	public function test_has_product_entitlement_returns_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'give' ) );
+	}
+
+	/**
+	 * The point of this function next to lw_harbor_is_product_license_active():
+	 * a product the key entitles but which is not activated here still has an
+	 * entitlement, and that is exactly the state an activation prompt exists for.
+	 */
+	public function test_has_product_entitlement_returns_true_for_an_unactivated_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
+
+		$this->assertTrue( lw_harbor_has_product_entitlement( 'give' ) );
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+	}
+
+	public function test_has_product_entitlement_returns_false_for_an_uncovered_product(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'learndash' ) );
+	}
+
+	public function test_has_product_entitlement_returns_false_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_has_product_entitlement( 'give' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// lw_harbor_product_needs_activation()
+	// -------------------------------------------------------------------------
+
+	/**
+	 * The state the prompt exists for: entitled, not yet activated here.
+	 */
+	public function test_product_needs_activation_when_entitled_but_not_activated(): void {
+		$this->store_products( [ [ 'give', 'pro', 'not_activated' ] ] );
+
+		$this->assertTrue( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	/**
+	 * Already activated here — the caller should be offering "manage", not
+	 * "activate".
+	 */
+	public function test_product_does_not_need_activation_once_activated(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	/**
+	 * No entitlement at all. Asking only whether the product is active would
+	 * offer activation here and send the user to a portal with nothing for them,
+	 * which is the mistake this function exists to stop consumers repeating.
+	 */
+	public function test_product_does_not_need_activation_without_an_entitlement(): void {
+		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'learndash' ) );
+	}
+
+	public function test_product_needs_activation_is_false_without_cached_products(): void {
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	public function test_product_needs_activation_is_false_when_no_instance_is_active(): void {
+		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
+
+		$this->assertFalse( lw_harbor_product_needs_activation( 'give' ) );
+	}
+
+	/**
+	 * Stores a product catalog in the option the repository reads.
+	 *
+	 * @param array<int,array{0:string,1:string,2:string}> $products Each entry as
+	 *                                                               [ slug, tier, validation status ].
+	 *
+	 * @return void
+	 */
+	private function store_products( array $products ): void {
+		$entries = [];
+
+		foreach ( $products as list( $slug, $tier, $validation_status ) ) {
+			$entries[] = Product_Entry::from_array(
+				[
+					'product_slug'      => $slug,
+					'tier'              => $tier,
+					'status'            => 'active',
+					'expires'           => '2030-12-31 23:59:59',
+					'validation_status' => $validation_status,
+				]
+			);
+		}
+
+		update_option(
+			License_Repository::PRODUCTS_STATE_OPTION_NAME,
+			[
+				'collection'      => Product_Collection::from_array( $entries )->to_array(),
+				'last_success_at' => null,
+				'last_error'      => null,
+			]
+		);
 	}
 }

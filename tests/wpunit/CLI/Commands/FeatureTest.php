@@ -11,6 +11,7 @@ use LiquidWeb\Harbor\Features\Strategy\Strategy_Factory;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\TestException;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
@@ -19,14 +20,22 @@ use WP_Error;
 /**
  * Tests for the WP-CLI `wp harbor feature` command.
  *
- * Uses a spy logger to capture WP_CLI output and uopz to prevent
- * exit() from killing the test process.
+ * Uses a spy logger to capture WP_CLI output. Cases that reach WP_CLI::error()
+ * stand in for the exit() it ends with, so execution stops where it would in
+ * production without suppressing exit() itself.
  *
  * @since 1.0.0
  */
 final class FeatureTest extends HarborTestCase {
 
 	use With_Uopz;
+
+	/**
+	 * Message carried by the exception that stands in for WP_CLI::error()'s exit().
+	 *
+	 * @var string
+	 */
+	private const CLI_ERROR_REACHED = 'Reached WP_CLI::error().';
 
 	/** @var Manager */
 	private Manager $manager;
@@ -45,10 +54,6 @@ final class FeatureTest extends HarborTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
 
 		// WP_CLI\Formatter depends on functions from utils.php that aren't autoloaded.
 		$utils_file = dirname( ( new \ReflectionClass( WP_CLI::class ) )->getFileName() ) . '/utils.php';
@@ -118,11 +123,36 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
 		parent::tearDown();
+	}
+
+	/**
+	 * Stops execution where WP_CLI::error() would have called exit(), standing in
+	 * for the logger call it makes first so assertions on the spy still hold.
+	 *
+	 * Suppressing exit() itself lets a failing test carry on past the point it
+	 * should have stopped, which can leave the failure unreported, so the test
+	 * expects the exception rather than the exit.
+	 *
+	 * @return void
+	 */
+	private function stop_at_the_cli_error(): void {
+		$logger  = $this->logger;
+		$message = self::CLI_ERROR_REACHED;
+
+		$this->set_class_fn_return(
+			WP_CLI::class,
+			'error',
+			static function ( $error ) use ( $logger, $message ) {
+				$logger->error( (string) $error );
+
+				throw new TestException( $message );
+			},
+			true
+		);
+
+		$this->expectException( TestException::class );
+		$this->expectExceptionMessage( $message );
 	}
 
 	// ------------------------------------------------------------------
@@ -148,9 +178,15 @@ final class FeatureTest extends HarborTestCase {
 		$manager    = new Manager( $repository, $factory );
 		$command    = new Feature_Command( $manager );
 
-		$command->list_( [], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Could not fetch features.', $this->logger->last_error );
+		try {
+			$command->list_( [], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Could not fetch features.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_list_filters_by_group(): void {
@@ -215,9 +251,15 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	public function test_get_calls_error_for_nonexistent_feature(): void {
-		$this->command->get( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Feature "nonexistent" not found.', $this->logger->last_error );
+		try {
+			$this->command->get( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Feature "nonexistent" not found.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_get_respects_fields_parameter(): void {
@@ -248,17 +290,29 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	public function test_enable_calls_error_for_nonexistent_feature(): void {
-		$this->command->enable( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+		try {
+			$this->command->enable( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_enable_calls_error_on_strategy_failure(): void {
 		$command = $this->make_command_with_strategy( [ 'enable' => new WP_Error( 'fail', 'Could not enable feature.' ) ] );
 
-		$command->enable( [ 'test-theme' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Could not enable feature.', $this->logger->last_error );
+		try {
+			$command->enable( [ 'test-theme' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Could not enable feature.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -273,17 +327,29 @@ final class FeatureTest extends HarborTestCase {
 	}
 
 	public function test_disable_calls_error_for_nonexistent_feature(): void {
-		$this->command->disable( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+		try {
+			$this->command->disable( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_disable_calls_error_on_strategy_failure(): void {
 		$command = $this->make_command_with_strategy( [ 'disable' => new WP_Error( 'fail', 'Could not disable feature.' ) ] );
 
-		$command->disable( [ 'test-theme' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Could not disable feature.', $this->logger->last_error );
+		try {
+			$command->disable( [ 'test-theme' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Could not disable feature.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -299,15 +365,27 @@ final class FeatureTest extends HarborTestCase {
 	public function test_is_enabled_calls_error_when_strategy_inactive(): void {
 		$command = $this->make_command_with_strategy( [ 'is_active' => false ] );
 
-		$command->is_enabled( [ 'test-theme' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Feature "test-theme" is not enabled.', $this->logger->last_error );
+		try {
+			$command->is_enabled( [ 'test-theme' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Feature "test-theme" is not enabled.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_is_enabled_calls_error_for_nonexistent_feature(): void {
-		$this->command->is_enabled( [ 'nonexistent' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+		try {
+			$this->command->is_enabled( [ 'nonexistent' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertStringContainsString( 'nonexistent', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------

@@ -5,6 +5,7 @@ namespace LiquidWeb\Harbor\Admin;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Utils\License_Key;
@@ -45,7 +46,20 @@ class Feature_Manager_Page {
 	private License_Manager $license_manager;
 
 	/**
+	 * Portal activation URL builder.
+	 *
+	 * @since TBD
+	 *
+	 * @var Url
+	 */
+	private Url $activation_url;
+
+	/**
 	 * Catalog repository.
+	 *
+	 * Used only by the deprecated maybe_redirect_after_refresh(), and injected
+	 * rather than service-located so that removing the method removes its
+	 * dependency with it.
 	 *
 	 * @since 1.0.0
 	 *
@@ -70,11 +84,13 @@ class Feature_Manager_Page {
 	 *
 	 * @param Data               $site_data       Site data provider.
 	 * @param License_Manager    $license_manager License manager.
+	 * @param Url                $activation_url  Portal activation URL builder.
 	 * @param Catalog_Repository $catalog         Catalog repository.
 	 */
-	public function __construct( Data $site_data, License_Manager $license_manager, Catalog_Repository $catalog ) {
+	public function __construct( Data $site_data, License_Manager $license_manager, Url $activation_url, Catalog_Repository $catalog ) {
 		$this->site_data       = $site_data;
 		$this->license_manager = $license_manager;
+		$this->activation_url  = $activation_url;
 		$this->catalog         = $catalog;
 	}
 
@@ -117,7 +133,6 @@ class Feature_Manager_Page {
 		}
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_enqueue_assets' ] );
-		add_action( 'admin_init', [ $this, 'maybe_redirect_after_refresh' ] );
 	}
 
 	/**
@@ -191,16 +206,7 @@ class Feature_Manager_Page {
 				'restUrl'          => rest_url( 'liquidweb/harbor/v1/' ),
 				'nonce'            => wp_create_nonce( 'wp_rest' ),
 				'pluginsUrl'       => admin_url( 'plugins.php' ),
-				'activationUrl'    => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(
-					[
-						'portal-referral' => 'plugin',
-						'redirect_url'    => admin_url( 'admin.php?page=' . self::PAGE_SLUG . '&refresh=auto' ),
-						'domain'          => $this->site_data->get_domain(),
-					],
-					'',
-					'&',
-					PHP_QUERY_RFC3986
-				),
+				'activationUrl'    => $this->activation_url->get_base(),
 				'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/',
 				'domain'           => $this->site_data->get_domain(),
 				'version'          => Harbor::VERSION,
@@ -250,20 +256,22 @@ class Feature_Manager_Page {
 
 	/**
 	 * Refreshes license and catalog data when the portal redirects back with
-	 * ?refresh=auto (e.g. after a user activates their license). Strips the
-	 * query param and redirects so a manual reload does not re-trigger the
-	 * refresh.
+	 * ?refresh=auto, then strips the param and redirects so a manual reload does
+	 * not re-trigger the refresh.
 	 *
-	 * Hooked on admin_init so headers have not yet been sent, allowing
-	 * wp_safe_redirect() to issue the Location header successfully. Calling
-	 * this from render() (the add_submenu_page callback) is too late — WordPress
-	 * has already begun sending HTML output by that point.
+	 * No longer hooked. Return trips are now tagged by Url and handled
+	 * for every screen by Return_Handler, not just for this page. Kept because
+	 * this class is not final and the method is public, so a consumer could be
+	 * calling it.
 	 *
 	 * @since 1.0.0
+	 * @deprecated TBD Portal return trips are handled by Portal\Activation\Return_Handler.
 	 *
 	 * @return void
 	 */
 	public function maybe_redirect_after_refresh(): void {
+		_deprecated_function( __METHOD__, 'TBD', 'LiquidWeb\Harbor\Portal\Activation\Return_Handler::maybe_refresh()' );
+
 		if ( ! isset( $_GET['refresh'], $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
@@ -279,4 +287,5 @@ class Feature_Manager_Page {
 		wp_safe_redirect( $clean_url );
 		exit;
 	}
+
 }

@@ -6,6 +6,8 @@ use LiquidWeb\Harbor\Portal\Clients\Portal_Client;
 use LiquidWeb\Harbor\Portal\Clients\Http_Client;
 use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
+use LiquidWeb\Harbor\Portal\Activation\Return_Handler;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
 use LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -33,6 +35,8 @@ final class Provider extends Abstract_Provider {
 		);
 
 		$this->container->singleton( Catalog_Repository::class );
+		$this->container->singleton( Url::class );
+		$this->container->singleton( Return_Handler::class );
 		$this->container->singleton( Herald_Url_Builder::class );
 		$this->container->singleton( Herald_Legacy_Url_Builder::class );
 		$this->container->singleton( Herald_Routing_Url_Builder::class );
@@ -43,6 +47,21 @@ final class Provider extends Abstract_Provider {
 			function () {
 				$this->container->get( Catalog_Repository::class )->delete_catalog();
 			}
+		);
+
+		/**
+		 * Refreshes cached licensing data when the portal returns a user to the site.
+		 *
+		 * Whether this request is a return trip at all is the handler's own first
+		 * question, so it is not asked again here.
+		 */
+		add_action(
+			'admin_init',
+			function () {
+				$this->container->get( Return_Handler::class )->maybe_refresh();
+			},
+			0,
+			0
 		);
 	}
 }

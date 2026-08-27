@@ -240,6 +240,115 @@ if ( ! function_exists( 'lw_harbor_get_license_page_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_get_product_activation_base_url' ) ) {
+	/**
+	 * Returns the base URL that product activation is built on for this site.
+	 *
+	 * Drops the user on the portal's subscriptions screen to activate a product
+	 * against this site, then returns them to $redirect_url (or the Software
+	 * Manager page when none is given).
+	 *
+	 * The URL itself names no product: the list arrives unfiltered and the user
+	 * picks. To have the portal pre-select one product and tier instead, use
+	 * lw_harbor_get_product_activation_url(), which is this URL plus an `sku`.
+	 *
+	 * @since TBD
+	 *
+	 * @param string|null $redirect_url Where the portal returns the user afterwards.
+	 *
+	 * @return string|null The activation URL, or null when no Harbor instance is
+	 *                     active or the URL could not be built.
+	 */
+	function lw_harbor_get_product_activation_base_url( ?string $redirect_url = null ): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_base_url' );
+
+		$result = $callback ? $callback( $redirect_url ) : null;
+
+		return is_string( $result ) && '' !== $result ? $result : null;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
+	/**
+	 * Returns a portal activation URL scoped to a single product and tier.
+	 *
+	 * Like lw_harbor_get_product_activation_base_url(), but adds an `sku` param so the portal
+	 * pre-selects the given product instead of an unfiltered list.
+	 *
+	 * The SKU carries the tier the license covers the product at, resolved for
+	 * you. Where the license covers it at several tiers nothing is guessed: the
+	 * SKU goes out unscoped and the portal offers its own picker.
+	 *
+	 * @since TBD
+	 *
+	 * @param string      $product_slug The product slug, e.g. 'learndash'.
+	 * @param string|null $redirect_url Where the portal returns the user afterwards.
+	 *
+	 * @return string|null The activation URL, or null when no Harbor instance is
+	 *                     active or the URL could not be built.
+	 */
+	function lw_harbor_get_product_activation_url( string $product_slug, ?string $redirect_url = null ): ?string {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_url' );
+
+		$result = $callback ? $callback( $product_slug, $redirect_url ) : null;
+
+		return is_string( $result ) && '' !== $result ? $result : null;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_has_product_entitlement' ) ) {
+	/**
+	 * Whether the stored license carries an entitlement for a product at all,
+	 * activated on this domain or not.
+	 *
+	 * Distinct from lw_harbor_is_product_license_active(), which reports whether
+	 * the entitlement is activated *here*. A product can be entitled but not yet
+	 * activated on this site — precisely the state an activation prompt exists
+	 * for. Most callers want lw_harbor_product_needs_activation(), which pairs the
+	 * two; reach for this one when you need the states apart, as a screen showing
+	 * both "Activate" and "Manage" does.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $product The product slug, e.g. 'learndash'.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_has_product_entitlement( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_has_product_entitlement' );
+
+		return $callback ? (bool) $callback( $product ) : false;
+	}
+}
+
+if ( ! function_exists( 'lw_harbor_product_needs_activation' ) ) {
+	/**
+	 * Whether the license entitles this site to a product that is not yet
+	 * activated on it — the one state an activation prompt is for.
+	 *
+	 * Pairs lw_harbor_has_product_entitlement() with
+	 * lw_harbor_is_product_license_active() so consumers do not each rewrite the
+	 * conditional. Asking only whether the product is active offers activation to
+	 * someone with no entitlement, who is then sent to a portal with nothing for
+	 * them; asking only about the entitlement offers it to someone already
+	 * activated.
+	 *
+	 * False when no Harbor instance is active, so a consumer can treat it as
+	 * "offer nothing".
+	 *
+	 * @since TBD
+	 *
+	 * @param string $product The product slug, e.g. 'learndash'.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_product_needs_activation( string $product ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_product_needs_activation' );
+
+		return $callback ? (bool) $callback( $product ) : false;
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_refresh_catalog' ) ) {
 	/**
 	 * Forces a synchronous fresh catalog fetch from the Commerce Portal API.

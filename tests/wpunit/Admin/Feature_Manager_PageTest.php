@@ -4,6 +4,8 @@ namespace wpunit\Admin;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -18,10 +20,6 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
-
 		// add_submenu_page() early-returns when the user lacks the required
 		// capability, so menu-registration tests need an administrator to be
 		// the current user before the call.
@@ -32,23 +30,20 @@ class Feature_Manager_PageTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
 		wp_set_current_user( 0 );
-
-		unset( $_GET['refresh'], $_GET['page'] );
 
 		parent::tearDown();
 	}
 
-	private function make_page( array $license_manager_overrides = [], array $catalog_overrides = [] ): Feature_Manager_Page {
+	private function make_page( array $license_manager_overrides = [] ): Feature_Manager_Page {
 		$site_data       = $this->makeEmpty( Data::class, [ 'get_domain' => 'example.com' ] );
 		$license_manager = $this->makeEmpty( License_Manager::class, $license_manager_overrides );
-		$catalog         = $this->makeEmpty( Catalog_Repository::class, $catalog_overrides );
+		$catalog         = $this->makeEmpty( Catalog_Repository::class );
+		// License_Repository is final and cannot be doubled. The real one reads an
+		// unseeded option here, so no tier resolves — which is all this page needs.
+		$licenses = $this->container->get( License_Repository::class );
 
-		return new Feature_Manager_Page( $site_data, $license_manager, $catalog );
+		return new Feature_Manager_Page( $site_data, $license_manager, new Url( $site_data, $licenses ), $catalog );
 	}
 
 	private function get_settings_submenu_slugs(): array {
@@ -189,122 +184,5 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		// the page when the URL is visited directly.
 		$hookname = get_plugin_page_hookname( Feature_Manager_Page::PAGE_SLUG, 'options-general.php' );
 		$this->assertTrue( isset( $_registered_pages[ $hookname ] ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function it_should_not_refresh_when_param_is_absent(): void {
-		unset( $_GET['refresh'] );
-		$_GET['page'] = Feature_Manager_Page::PAGE_SLUG;
-
-		$refresh_called = false;
-		$page           = $this->make_page(
-			[
-				'refresh_products' => static function () use ( &$refresh_called ) {
-					$refresh_called = true;
-				},
-			]
-		);
-
-		$page->maybe_redirect_after_refresh();
-
-		$this->assertFalse( $refresh_called );
-	}
-
-	/**
-	 * @test
-	 */
-	public function it_should_not_refresh_when_param_is_not_auto(): void {
-		$_GET['refresh'] = 'manual';
-		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
-
-		$refresh_called = false;
-		$page           = $this->make_page(
-			[
-				'refresh_products' => static function () use ( &$refresh_called ) {
-					$refresh_called = true;
-				},
-			]
-		);
-
-		$page->maybe_redirect_after_refresh();
-
-		$this->assertFalse( $refresh_called );
-	}
-
-	/**
-	 * @test
-	 */
-	public function it_should_not_refresh_when_page_slug_does_not_match(): void {
-		$_GET['refresh'] = 'auto';
-		$_GET['page']    = 'some-other-page';
-
-		$refresh_called = false;
-		$page           = $this->make_page(
-			[
-				'refresh_products' => static function () use ( &$refresh_called ) {
-					$refresh_called = true;
-				},
-			]
-		);
-
-		$page->maybe_redirect_after_refresh();
-
-		$this->assertFalse( $refresh_called );
-	}
-
-	/**
-	 * @test
-	 */
-	public function it_should_refresh_license_and_catalog_when_refresh_auto_is_present(): void {
-		$_GET['refresh'] = 'auto';
-		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
-
-		$license_refreshed = false;
-		$catalog_refreshed = false;
-
-		$page = $this->make_page(
-			[
-				'refresh_products' => static function () use ( &$license_refreshed ) {
-					$license_refreshed = true;
-				},
-			],
-			[
-				'refresh' => static function () use ( &$catalog_refreshed ) {
-					$catalog_refreshed = true;
-				},
-			]
-		);
-
-		$page->maybe_redirect_after_refresh();
-
-		$this->assertTrue( $license_refreshed );
-		$this->assertTrue( $catalog_refreshed );
-	}
-
-	/**
-	 * @test
-	 */
-	public function it_should_pass_site_domain_to_refresh_products(): void {
-		$_GET['refresh'] = 'auto';
-		$_GET['page']    = Feature_Manager_Page::PAGE_SLUG;
-
-		$refreshed_with  = null;
-		$site_data       = $this->makeEmpty( Data::class, [ 'get_domain' => 'mysite.com' ] ); // cspell:ignore mysite
-		$license_manager = $this->makeEmpty(
-			License_Manager::class,
-			[
-				'refresh_products' => static function ( string $domain ) use ( &$refreshed_with ) {
-					$refreshed_with = $domain;
-				},
-			]
-		);
-		$catalog         = $this->makeEmpty( Catalog_Repository::class, [ 'refresh' => null ] );
-
-		$page = new Feature_Manager_Page( $site_data, $license_manager, $catalog );
-		$page->maybe_redirect_after_refresh();
-
-		$this->assertSame( 'mysite.com', $refreshed_with );
 	}
 }

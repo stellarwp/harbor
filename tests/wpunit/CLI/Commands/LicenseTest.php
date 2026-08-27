@@ -9,6 +9,7 @@ use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\CLI\Spy_Logger;
+use LiquidWeb\Harbor\Tests\TestException;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 use WP_CLI;
@@ -22,6 +23,13 @@ use WP_Error;
 final class LicenseTest extends HarborTestCase {
 
 	use With_Uopz;
+
+	/**
+	 * Message carried by the exception that stands in for WP_CLI::error()'s exit().
+	 *
+	 * @var string
+	 */
+	private const CLI_ERROR_REACHED = 'Reached WP_CLI::error().';
 
 	/** @var Spy_Logger */
 	private Spy_Logger $logger;
@@ -37,10 +45,6 @@ final class LicenseTest extends HarborTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( false );
-		}
 
 		$utils_file = dirname( ( new \ReflectionClass( WP_CLI::class ) )->getFileName() ) . '/utils.php';
 		if ( file_exists( $utils_file ) ) {
@@ -91,11 +95,36 @@ final class LicenseTest extends HarborTestCase {
 	}
 
 	protected function tearDown(): void {
-		if ( function_exists( 'uopz_allow_exit' ) ) {
-			uopz_allow_exit( true );
-		}
-
 		parent::tearDown();
+	}
+
+	/**
+	 * Stops execution where WP_CLI::error() would have called exit(), standing in
+	 * for the logger call it makes first so assertions on the spy still hold.
+	 *
+	 * Suppressing exit() itself lets a failing test carry on past the point it
+	 * should have stopped, which can leave the failure unreported, so the test
+	 * expects the exception rather than the exit.
+	 *
+	 * @return void
+	 */
+	private function stop_at_the_cli_error(): void {
+		$logger  = $this->logger;
+		$message = self::CLI_ERROR_REACHED;
+
+		$this->set_class_fn_return(
+			WP_CLI::class,
+			'error',
+			static function ( $error ) use ( $logger, $message ) {
+				$logger->error( (string) $error );
+
+				throw new TestException( $message );
+			},
+			true
+		);
+
+		$this->expectException( TestException::class );
+		$this->expectExceptionMessage( $message );
 	}
 
 	// ------------------------------------------------------------------
@@ -209,9 +238,15 @@ final class LicenseTest extends HarborTestCase {
 		$manager = $this->makeEmpty( License_Manager::class );
 		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
 
-		$command->set( [ 'INVALID-KEY' ], [] );
+		$this->stop_at_the_cli_error();
 
-		$this->assertSame( 'Invalid license key format. Keys must start with LWSW-.', $this->logger->last_error );
+		try {
+			$command->set( [ 'INVALID-KEY' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Invalid license key format. Keys must start with LWSW-.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	public function test_set_calls_error_on_api_failure(): void {
@@ -223,9 +258,16 @@ final class LicenseTest extends HarborTestCase {
 		);
 
 		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
-		$command->set( [ 'LWSW-bad-key' ], [] );
 
-		$this->assertSame( 'License not recognized.', $this->logger->last_error );
+		$this->stop_at_the_cli_error();
+
+		try {
+			$command->set( [ 'LWSW-bad-key' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'License not recognized.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -257,9 +299,16 @@ final class LicenseTest extends HarborTestCase {
 		);
 
 		$command = new License_Command( $manager, $this->site_data, $this->legacy_repository );
-		$command->lookup( [ 'bad-key' ], [] );
 
-		$this->assertSame( 'Invalid key format.', $this->logger->last_error );
+		$this->stop_at_the_cli_error();
+
+		try {
+			$command->lookup( [ 'bad-key' ], [] );
+		} catch ( TestException $e ) {
+			$this->assertSame( 'Invalid key format.', $this->logger->last_error );
+
+			throw $e;
+		}
 	}
 
 	// ------------------------------------------------------------------

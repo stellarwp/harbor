@@ -1,0 +1,200 @@
+<?php declare( strict_types=1 );
+
+namespace LiquidWeb\Harbor\Portal\Activation;
+
+use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
+use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
+use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Traits\With_Debugging;
+use Throwable;
+
+/**
+ * Builds Liquid Web portal activation URLs.
+ *
+ * Sending a user to one of these URLs drops them into the portal's
+ * subscriptions screen, from where they can activate a product against this
+ * site. The portal reads the `domain` param to know which site to activate,
+ * and the `redirect_url` param to know where to send the user afterwards.
+ *
+ * Callers supply their own return destination, so a plugin can bring the user
+ * back to its own onboarding screen rather than to the Software Manager page.
+ * When no destination is given, the Software Manager page is used.
+ *
+ * `redirect_url` must resolve to an admin screen. Return_Handler, which
+ * refreshes the cached licensing data on the way back, only runs on
+ * `admin_init`; a front-end destination would never trigger it, so the user
+ * would land on a page still showing stale licensing state with the
+ * `lw-harbor-activated` tag stuck in the URL.
+ *
+ * URL format:
+ * `{portal_base_url}/subscriptions/?portal-referral=plugin&redirect_url={url}&domain={domain}[&sku={slug}:{tier}]`
+ *
+ * @since TBD
+ */
+final class Url {
+
+	use With_Debugging;
+
+	/**
+	 * Query param added to the return URL to mark a portal round trip.
+	 *
+	 * Harbor caches licensing data, so a site that has just activated in the
+	 * portal still believes it is unlicensed until that cache is refreshed.
+	 * Return_Handler watches for this param and refreshes before the page
+	 * renders, so callers do not have to think about it.
+	 *
+	 * Deliberately namespaced. It rides on a URL owned by the calling plugin,
+	 * so a generic name like "refresh" would risk colliding with theirs.
+	 *
+	 * Internal to Harbor. It is `public` only because Return_Handler, its
+	 * sibling in this namespace, reads it to recognize the return trip and then
+	 * strip the tag; PHP offers nothing narrower for that. Consumers should not
+	 * need it at all — the round trip is handled for them.
+	 *
+	 * @since TBD
+	 */
+	public const RETURN_PARAM = 'lw-harbor-activated';
+
+	/**
+	 * Site data provider.
+	 *
+	 * @since TBD
+	 *
+	 * @var Data
+	 */
+	private Data $site_data;
+
+	/**
+	 * License lookups, used to resolve the tier a product is licensed at.
+	 *
+	 * @since TBD
+	 *
+	 * @var License_Repository
+	 */
+	private License_Repository $licenses;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since TBD
+	 *
+	 * @param Data               $site_data Site data provider.
+	 * @param License_Repository $licenses  License lookups.
+	 */
+	public function __construct( Data $site_data, License_Repository $licenses ) {
+		$this->site_data = $site_data;
+		$this->licenses  = $licenses;
+	}
+
+	/**
+	 * Builds the base activation URL.
+	 *
+	 * @since TBD
+	 *
+	 * @param string|null $redirect_url Where the portal returns the user after
+	 *                                  activating. Must be an admin URL — see
+	 *                                  the class docblock. Defaults to the
+	 *                                  Software Manager page with a refresh
+	 *                                  triggered.
+	 *
+	 * @return string
+	 */
+	public function get_base( ?string $redirect_url = null ): string {
+		$query = http_build_query(
+			[
+				'portal-referral' => 'plugin',
+				'redirect_url'    => $this->mark_return_url( $redirect_url ?? $this->get_default_redirect_url() ),
+				'domain'          => $this->site_data->get_domain(),
+			],
+			'',
+			'&',
+			PHP_QUERY_RFC3986
+		);
+
+		return Config::get_portal_base_url() . '/subscriptions/?' . $query;
+	}
+
+	/**
+	 * Builds an activation URL scoped to a single product, and to the tier the
+	 * license covers it at when that is unambiguous.
+	 *
+	 * The `sku` param lets the portal pre-select the right product and tier
+	 * instead of dropping the user on an unfiltered subscriptions list. Where no
+	 * tier resolves the portal shows its own product and tier picker, still
+	 * scoped to the activating domain, so it degrades rather than fails.
+	 *
+	 * @since TBD
+	 *
+	 * @param string      $product_slug The product slug, e.g. "givewp".
+	 * @param string|null $redirect_url Where the portal returns the user after
+	 *                                  activating. Must be an admin URL. Defaults to the
+	 *                                  Unified License Manager page with a refresh
+	 *                                  triggered.
+	 *
+	 * @return string
+	 */
+	public function for_product( string $product_slug, ?string $redirect_url = null ): string {
+		// The tier is resolved here rather than asked of the caller: every caller
+		// wanted the licensed one, and none had another use for the value. Null
+		// survives a license that covers the product at several tiers, which is
+		// the picker case below.
+		//
+		// A failed lookup costs the caller the tier, not the URL: an unscoped SKU
+		// still reaches the portal's picker, which is the degradation this method
+		// promises. Letting it escape would return null all the way up and leave
+		// the caller with no activation link at all.
+		try {
+			$tier = $this->licenses->get_product_tier( $product_slug );
+		} catch ( Throwable $e ) {
+			self::debug_log_throwable( $e, 'Error reading product tier' );
+
+			$tier = null;
+		}
+
+		// Guard the empty string as well as null: "slug:" would read as a tier
+		// named empty string, which is not the same as no tier at all.
+		$sku = null !== $tier && '' !== $tier
+			? $product_slug . ':' . $tier
+			: $product_slug;
+
+		$query = http_build_query(
+			[ 'sku' => $sku ],
+			'',
+			'&',
+			PHP_QUERY_RFC3986
+		);
+
+		return $this->get_base( $redirect_url ) . '&' . $query;
+	}
+
+	/**
+	 * Tags a return URL so Return_Handler knows the user is coming back from
+	 * the portal and refreshes the cached licensing data before rendering.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $redirect_url The caller's return URL.
+	 *
+	 * @return string
+	 */
+	private function mark_return_url( string $redirect_url ): string {
+		return add_query_arg( self::RETURN_PARAM, '1', $redirect_url );
+	}
+
+	/**
+	 * Returns the fallback destination: the Software Manager page.
+	 *
+	 * The page is a submenu of Settings, so options-general.php is its canonical
+	 * address, and the form used everywhere else that links to it. WordPress
+	 * resolves an admin.php URL to the same page, so this is about staying
+	 * consistent rather than about correctness.
+	 *
+	 * @since TBD
+	 *
+	 * @return string
+	 */
+	private function get_default_redirect_url(): string {
+		return add_query_arg( 'page', Feature_Manager_Page::PAGE_SLUG, admin_url( 'options-general.php' ) );
+	}
+}

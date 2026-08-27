@@ -1,0 +1,4 @@
+significance: minor
+type: feature
+entry: Added lw_harbor_product_needs_activation() so host plugins can ask whether to offer an activation prompt in one call, and lw_harbor_has_product_entitlement() for screens that need the entitled and activated states apart, without resolving Harbor's internal licensing classes from their own vendor-prefixed copy
+timestamp: 2026-07-30T00:00:00.000Z
