@@ -273,23 +273,24 @@ if ( ! function_exists( 'lw_harbor_get_product_activation_url' ) ) {
 	 * Returns a portal activation URL scoped to a single product and tier.
 	 *
 	 * Like lw_harbor_get_product_activation_base_url(), but adds an `sku` param so the portal
-	 * pre-selects the given product and tier instead of an unfiltered list.
+	 * pre-selects the given product instead of an unfiltered list.
+	 *
+	 * The SKU carries the tier the license covers the product at, resolved for
+	 * you. Where the license covers it at several tiers nothing is guessed: the
+	 * SKU goes out unscoped and the portal offers its own picker.
 	 *
 	 * @since TBD
 	 *
 	 * @param string      $product_slug The product slug, e.g. 'learndash'.
-	 * @param string|null $tier         The tier slug, e.g. 'elite'. Pass null when
-	 *                                  the tier is unknown, and the portal shows a
-	 *                                  picker instead of a pre-selected product.
 	 * @param string|null $redirect_url Where the portal returns the user afterwards.
 	 *
 	 * @return string|null The activation URL, or null when no Harbor instance is
 	 *                     active or the URL could not be built.
 	 */
-	function lw_harbor_get_product_activation_url( string $product_slug, ?string $tier = null, ?string $redirect_url = null ): ?string {
+	function lw_harbor_get_product_activation_url( string $product_slug, ?string $redirect_url = null ): ?string {
 		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_activation_url' );
 
-		$result = $callback ? $callback( $product_slug, $tier, $redirect_url ) : null;
+		$result = $callback ? $callback( $product_slug, $redirect_url ) : null;
 
 		return is_string( $result ) && '' !== $result ? $result : null;
 	}
@@ -314,31 +315,6 @@ if ( ! function_exists( 'lw_harbor_is_product_licensed' ) ) {
 		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_product_licensed' );
 
 		return $callback ? (bool) $callback( $product ) : false;
-	}
-}
-
-if ( ! function_exists( 'lw_harbor_get_product_tier' ) ) {
-	/**
-	 * Returns the tier a product is licensed at, when that is unambiguous.
-	 *
-	 * Pass the result straight to lw_harbor_get_product_activation_url(): null is a
-	 * valid tier there, and means the portal offers its own picker rather than a
-	 * pre-selected product.
-	 *
-	 * @since TBD
-	 *
-	 * @param string $product The product slug, e.g. 'learndash'.
-	 *
-	 * @return string|null The tier, or null when no Harbor instance is active, the
-	 *                     license does not cover the product, or it covers it at
-	 *                     several tiers.
-	 */
-	function lw_harbor_get_product_tier( string $product ): ?string {
-		$callback = _lw_harbor_global_function_registry( 'lw_harbor_get_product_tier' );
-
-		$result = $callback ? $callback( $product ) : null;
-
-		return is_string( $result ) && '' !== $result ? $result : null;
 	}
 }
 

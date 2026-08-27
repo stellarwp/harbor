@@ -67,7 +67,6 @@ copy, which may not be the one actually running.
 // Product-scoped, returning the user to your onboarding screen.
 $href = lw_harbor_get_product_activation_url(
     'kadence',
-    lw_harbor_get_product_tier( 'kadence' ),
     add_query_arg(
         [
             'page' => 'kadence-onboarding',
@@ -81,9 +80,8 @@ $href = lw_harbor_get_product_activation_url(
 | Function                                                                                     | Returns                                                                 |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `lw_harbor_get_product_activation_base_url( ?string $redirect_url )`                         | The portal subscriptions URL with referral, redirect, and domain params |
-| `lw_harbor_get_product_activation_url( string $slug, ?string $tier, ?string $redirect_url )` | The same, plus `sku={slug}` and `:{tier}` when a tier is given          |
+| `lw_harbor_get_product_activation_url( string $slug, ?string $redirect_url )`                | The same, plus `sku={slug}` and `:{tier}` when a tier resolves          |
 | `lw_harbor_is_product_licensed( string $slug )`                                              | Whether the stored license covers the product at all, activated or not  |
-| `lw_harbor_get_product_tier( string $slug )`                                                 | The licensed tier, or `null` when absent or licensed at several         |
 
 The URL builders return `null` when no Harbor instance is active, or when the URL
 could not be built — treat that as "hide the button". Omit `$redirect_url` to fall
@@ -98,13 +96,13 @@ if ( null === $href ) {
 }
 ```
 
-### Do not look the tier up yourself
+### The tier is not yours to pass
 
-`$tier` is optional, and `lw_harbor_get_product_tier()` is the supported way to
-find one. Pass its result straight through, including when it is `null`: an
-unscoped `sku` sends the user to the portal's product and tier picker, still
-scoped to the activating domain, which is the right screen when the license
-covers the product at more than one tier.
+There is no tier argument. Harbor resolves the tier the license covers the
+product at, and builds the `sku` from it. When the license covers it at more
+than one tier, nothing is guessed: the `sku` goes out unscoped and the portal
+shows its product and tier picker, still scoped to the activating domain, which
+is the right screen for a genuine choice.
 
 Reaching into `License_Repository` or `Product_Entry` from your own bundled copy
 to read a tier is the thing this API exists to replace. Those classes are
@@ -118,11 +116,7 @@ if (
     lw_harbor_is_product_licensed( 'kadence' )
     && ! lw_harbor_is_product_license_active( 'kadence' )
 ) {
-    $href = lw_harbor_get_product_activation_url(
-        'kadence',
-        lw_harbor_get_product_tier( 'kadence' ),
-        $return_url
-    );
+    $href = lw_harbor_get_product_activation_url( 'kadence', $return_url );
 }
 ```
 
@@ -156,7 +150,6 @@ wp_localize_script(
     [
         'activationUrl' => lw_harbor_get_product_activation_url(
             'kadence',
-            lw_harbor_get_product_tier( 'kadence' ),
             menu_page_url( 'kadence-onboarding', false )
         ),
     ]
@@ -171,14 +164,3 @@ if ( kadenceOnboarding.activationUrl ) {
 
 The function returns `null` when no Harbor instance is active, so a falsy value
 is your signal to hide the control rather than render a dead link.
-
-When the tier is chosen in the browser, localize one URL per tier and pick
-between them client-side:
-
-```php
-$tiers = [];
-
-foreach ( [ 'plus', 'pro' ] as $tier ) {
-    $tiers[ $tier ] = lw_harbor_get_product_activation_url( 'kadence', $tier, $return_url );
-}
-```

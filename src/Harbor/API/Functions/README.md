@@ -123,12 +123,11 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 | `lw_harbor_get_unified_license_key()`                                           | Returns the unified license key string, or null if not found                                                |
 | `lw_harbor_is_product_license_active( $product )`                               | Whether a product slug has `validation_status: valid` in the cached catalog                                 |
 | `lw_harbor_is_product_licensed( $product )`                                     | Whether the stored license covers a product at all, activated here or not                                   |
-| `lw_harbor_get_product_tier( $product )`                                        | The tier a product is licensed at, or null when absent or licensed at several                               |
 | `lw_harbor_is_feature_enabled( $slug )`                                         | Whether a feature is in the catalog AND currently enabled/active                                            |
 | `lw_harbor_is_feature_available( $slug )`                                       | Whether a feature exists in the catalog, regardless of enabled state                                        |
 | `lw_harbor_get_license_page_url()`                                              | Returns the admin URL for the Harbor Feature Manager page                                                   |
 | `lw_harbor_get_product_activation_base_url( $redirect_url = null )`             | The unscoped portal activation URL, or null when unavailable                                                |
-| `lw_harbor_get_product_activation_url( $slug, $tier = null, $redirect = null )` | The activation URL scoped to a product via `sku`, and to a tier when one is given, or null when unavailable |
+| `lw_harbor_get_product_activation_url( $slug, $redirect = null )`               | The activation URL scoped to a product via `sku`, and to its licensed tier, or null                         |
 | `lw_harbor_get_licensed_domain()`                                               | Returns the domain Harbor uses for licensing on the current site                                            |
 | `lw_harbor_register_submenu( $parent_slug )`                                    | Appends a Licensing submenu item under a plugin's top-level admin menu                                      |
 | `lw_harbor_display_legacy_license_page_notice( $product_name = '' )`            | Renders an info notice on a plugin's legacy license page pointing users to the unified system               |

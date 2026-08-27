@@ -315,7 +315,9 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	public function test_get_product_activation_url_scopes_to_the_product_and_tier(): void {
-		$url = lw_harbor_get_product_activation_url( 'learndash', 'elite' );
+		$this->store_products( [ [ 'learndash', 'elite', 'not_activated' ] ] );
+
+		$url = lw_harbor_get_product_activation_url( 'learndash' );
 
 		$this->assertStringContainsString( '/subscriptions/', $url );
 		// The sku is RFC3986-encoded, so the colon becomes %3A.
@@ -323,11 +325,12 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	/**
-	 * Without a tier the portal shows a product and tier picker, still scoped to
-	 * the activating domain. That is a worse screen than a pre-selected product,
-	 * but it is a working one, which is what lets the tier be optional at all.
+	 * With no license to read a tier from, the portal shows a product and tier
+	 * picker, still scoped to the activating domain. That is a worse screen than a
+	 * pre-selected product, but a working one — which is what lets the SKU go out
+	 * unscoped at all.
 	 */
-	public function test_get_product_activation_url_sends_a_bare_slug_without_a_tier(): void {
+	public function test_get_product_activation_url_sends_a_bare_slug_when_no_tier_resolves(): void {
 		$url = lw_harbor_get_product_activation_url( 'learndash' );
 
 		$this->assertStringContainsString( 'sku=learndash', $url );
@@ -336,15 +339,36 @@ final class GlobalFunctionsTest extends HarborTestCase {
 	}
 
 	/**
-	 * An empty tier is the same as no tier. Guarded separately from null because
-	 * a caller forwarding a tier it could not find is the likely source of one,
-	 * and losing the guard produces a silently different SKU rather than an error.
+	 * The tier is resolved from the license, so a single covered tier scopes the
+	 * SKU without the caller looking it up or passing it.
 	 */
-	public function test_get_product_activation_url_treats_an_empty_tier_as_no_tier(): void {
-		$this->assertSame(
-			lw_harbor_get_product_activation_url( 'learndash' ),
-			lw_harbor_get_product_activation_url( 'learndash', '' )
+	public function test_get_product_activation_url_resolves_the_licensed_tier(): void {
+		$this->store_products( [ [ 'give', 'essentials', 'not_activated' ] ] );
+
+		$this->assertStringContainsString(
+			'sku=give%3Aessentials',
+			lw_harbor_get_product_activation_url( 'give' )
 		);
+	}
+
+	/**
+	 * The ambiguity rule, enforced inside the URL builder. A license covering
+	 * the product at several tiers scopes to none of them, so the portal offers
+	 * its own picker rather than us sending the user to a tier they may not have
+	 * meant.
+	 */
+	public function test_get_product_activation_url_sends_a_bare_slug_for_an_ambiguous_tier(): void {
+		$this->store_products(
+			[
+				[ 'give', 'essentials', 'not_activated' ],
+				[ 'give', 'pro', 'not_activated' ],
+			]
+		);
+
+		$url = lw_harbor_get_product_activation_url( 'give' );
+
+		$this->assertStringContainsString( 'sku=give', $url );
+		$this->assertStringNotContainsString( 'sku=give%3A', $url );
 	}
 
 	/**
@@ -356,7 +380,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
 
 		$this->assertNull( lw_harbor_get_product_activation_base_url() );
-		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash', 'elite' ) );
+		$this->assertNull( lw_harbor_get_product_activation_url( 'learndash' ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -389,62 +413,6 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
 
 		$this->assertFalse( lw_harbor_is_product_licensed( 'give' ) );
-	}
-
-	// -------------------------------------------------------------------------
-	// lw_harbor_get_product_tier()
-	// -------------------------------------------------------------------------
-
-	public function test_get_product_tier_returns_the_tier_for_a_single_entry(): void {
-		$this->store_products( [ [ 'give', 'essentials', 'not_activated' ] ] );
-
-		$this->assertSame( 'essentials', lw_harbor_get_product_tier( 'give' ) );
-	}
-
-	/**
-	 * The ambiguity rule. Returning the first entry would send the user to a tier
-	 * they may not have meant; null sends them to the portal's picker instead,
-	 * which is the right interface for a genuine choice.
-	 */
-	public function test_get_product_tier_returns_null_when_several_tiers_match(): void {
-		$this->store_products(
-			[
-				[ 'give', 'essentials', 'not_activated' ],
-				[ 'give', 'pro', 'not_activated' ],
-			]
-		);
-
-		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
-	}
-
-	public function test_get_product_tier_returns_null_for_an_uncovered_product(): void {
-		$this->store_products( [ [ 'give', 'pro', 'valid' ] ] );
-
-		$this->assertNull( lw_harbor_get_product_tier( 'learndash' ) );
-	}
-
-	public function test_get_product_tier_returns_null_when_no_instance_is_active(): void {
-		$this->set_fn_return( '_lw_harbor_global_function_registry', null );
-
-		$this->assertNull( lw_harbor_get_product_tier( 'give' ) );
-	}
-
-	/**
-	 * The two functions are designed to compose: whatever the tier lookup returns,
-	 * including null, is a valid second argument to the URL builder.
-	 */
-	public function test_an_ambiguous_tier_composes_into_an_unscoped_activation_url(): void {
-		$this->store_products(
-			[
-				[ 'give', 'essentials', 'not_activated' ],
-				[ 'give', 'pro', 'not_activated' ],
-			]
-		);
-
-		$url = lw_harbor_get_product_activation_url( 'give', lw_harbor_get_product_tier( 'give' ) );
-
-		$this->assertStringContainsString( 'sku=give', $url );
-		$this->assertStringNotContainsString( 'sku=give%3A', $url );
 	}
 
 	/**

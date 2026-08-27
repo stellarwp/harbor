@@ -4,7 +4,10 @@ namespace LiquidWeb\Harbor\Portal\Activation;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Site\Data;
+use LiquidWeb\Harbor\Traits\With_Debugging;
+use Throwable;
 
 /**
  * Builds Liquid Web portal activation URLs.
@@ -30,6 +33,8 @@ use LiquidWeb\Harbor\Site\Data;
  * @since TBD
  */
 final class Url {
+
+	use With_Debugging;
 
 	/**
 	 * Query param added to the return URL to mark a portal round trip.
@@ -61,14 +66,25 @@ final class Url {
 	private Data $site_data;
 
 	/**
+	 * License lookups, used to resolve the tier a product is licensed at.
+	 *
+	 * @since TBD
+	 *
+	 * @var License_Repository
+	 */
+	private License_Repository $licenses;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since TBD
 	 *
-	 * @param Data $site_data Site data provider.
+	 * @param Data               $site_data Site data provider.
+	 * @param License_Repository $licenses  License lookups.
 	 */
-	public function __construct( Data $site_data ) {
+	public function __construct( Data $site_data, License_Repository $licenses ) {
 		$this->site_data = $site_data;
+		$this->licenses  = $licenses;
 	}
 
 	/**
@@ -100,21 +116,17 @@ final class Url {
 	}
 
 	/**
-	 * Builds an activation URL scoped to a single product, and to a tier when one
-	 * is known.
+	 * Builds an activation URL scoped to a single product, and to the tier the
+	 * license covers it at when that is unambiguous.
 	 *
 	 * The `sku` param lets the portal pre-select the right product and tier
-	 * instead of dropping the user on an unfiltered subscriptions list. Without a
-	 * tier the portal shows its own product and tier picker, still scoped to the
-	 * activating domain, so omitting one degrades rather than fails.
+	 * instead of dropping the user on an unfiltered subscriptions list. Where no
+	 * tier resolves the portal shows its own product and tier picker, still
+	 * scoped to the activating domain, so it degrades rather than fails.
 	 *
 	 * @since TBD
 	 *
 	 * @param string      $product_slug The product slug, e.g. "givewp".
-	 * @param string|null $tier         The tier slug, e.g. "elite". Null when the
-	 *                                  tier is unknown or the license covers the
-	 *                                  product at several, leaving the choice to
-	 *                                  the portal.
 	 * @param string|null $redirect_url Where the portal returns the user after
 	 *                                  activating. Must be an admin URL. Defaults to the
 	 *                                  Unified License Manager page with a refresh
@@ -122,7 +134,24 @@ final class Url {
 	 *
 	 * @return string
 	 */
-	public function for_product( string $product_slug, ?string $tier = null, ?string $redirect_url = null ): string {
+	public function for_product( string $product_slug, ?string $redirect_url = null ): string {
+		// The tier is resolved here rather than asked of the caller: every caller
+		// wanted the licensed one, and none had another use for the value. Null
+		// survives a license that covers the product at several tiers, which is
+		// the picker case below.
+		//
+		// A failed lookup costs the caller the tier, not the URL: an unscoped SKU
+		// still reaches the portal's picker, which is the degradation this method
+		// promises. Letting it escape would return null all the way up and leave
+		// the caller with no activation link at all.
+		try {
+			$tier = $this->licenses->get_product_tier( $product_slug );
+		} catch ( Throwable $e ) {
+			self::debug_log_throwable( $e, 'Error reading product tier' );
+
+			$tier = null;
+		}
+
 		// Guard the empty string as well as null: "slug:" would read as a tier
 		// named empty string, which is not the same as no tier at all.
 		$sku = null !== $tier && '' !== $tier

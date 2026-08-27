@@ -4,6 +4,7 @@ namespace wpunit\Admin;
 
 use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\Licensing\License_Manager;
+use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Activation\Url;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
@@ -38,8 +39,11 @@ class Feature_Manager_PageTest extends HarborTestCase {
 		$site_data       = $this->makeEmpty( Data::class, [ 'get_domain' => 'example.com' ] );
 		$license_manager = $this->makeEmpty( License_Manager::class, $license_manager_overrides );
 		$catalog         = $this->makeEmpty( Catalog_Repository::class );
+		// License_Repository is final and cannot be doubled. The real one reads an
+		// unseeded option here, so no tier resolves — which is all this page needs.
+		$licenses = $this->container->get( License_Repository::class );
 
-		return new Feature_Manager_Page( $site_data, $license_manager, new Url( $site_data ), $catalog );
+		return new Feature_Manager_Page( $site_data, $license_manager, new Url( $site_data, $licenses ), $catalog );
 	}
 
 	private function get_settings_submenu_slugs(): array {
