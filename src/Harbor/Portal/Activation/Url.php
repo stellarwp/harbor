@@ -18,6 +18,12 @@ use LiquidWeb\Harbor\Site\Data;
  * back to its own onboarding screen rather than to the Software Manager page.
  * When no destination is given, the Software Manager page is used.
  *
+ * `redirect_url` must resolve to an admin screen. Return_Handler, which
+ * refreshes the cached licensing data on the way back, only runs on
+ * `admin_init`; a front-end destination would never trigger it, so the user
+ * would land on a page still showing stale licensing state with the
+ * `lw-harbor-activated` tag stuck in the URL.
+ *
  * URL format:
  * `{portal_base_url}/subscriptions/?portal-referral=plugin&redirect_url={url}&domain={domain}[&sku={slug}:{tier}]`
  *
@@ -71,8 +77,10 @@ final class Url {
 	 * @since TBD
 	 *
 	 * @param string|null $redirect_url Where the portal returns the user after
-	 *                                  activating. Defaults to the Software
-	 *                                  Manager page with a refresh triggered.
+	 *                                  activating. Must be an admin URL — see
+	 *                                  the class docblock. Defaults to the
+	 *                                  Software Manager page with a refresh
+	 *                                  triggered.
 	 *
 	 * @return string
 	 */
@@ -108,8 +116,9 @@ final class Url {
 	 *                                  product at several, leaving the choice to
 	 *                                  the portal.
 	 * @param string|null $redirect_url Where the portal returns the user after
-	 *                                  activating. Defaults to the Software
-	 *                                  Manager page with a refresh triggered.
+	 *                                  activating. Must be an admin URL. Defaults to the
+	 *                                  Unified License Manager page with a refresh
+	 *                                  triggered.
 	 *
 	 * @return string
 	 */
