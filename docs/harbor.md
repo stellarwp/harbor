@@ -141,6 +141,7 @@ There is no automatic migration from per-resource keys to unified keys.
 | [REST API Reference](api/rest/)                                          | Endpoint specs, parameters, error codes                            |
 | [WP-CLI Reference](guides/cli.md)                                        | Command reference and scripting patterns                           |
 | [Integration Guide](guides/integration.md)                               | Bootstrapping Harbor in a plugin, legacy license reporting         |
+| [Partner plugin testing](guides/partner-plugin-testing.md)               | Test local Harbor changes in a real partner plugin (path repo)     |
 | [Frontend](subsystems/frontend.md)                                       | React app, @wordpress/data store, component hierarchy, CSS scoping |
 | [Notices](subsystems/notices.md)                                         | Admin notices, legacy license warnings, persistent dismissal       |
 | [Testing Guide](guides/testing.md)                                       | Codeception setup, fixture data, debug logging                     |
