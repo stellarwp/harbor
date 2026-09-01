@@ -19,6 +19,56 @@ composer require stellarwp/harbor
 >
 > Luckily, adding Strauss to your `composer.json` is only slightly more complicated than adding a typical dependency, so checkout our [strauss docs](https://github.com/stellarwp/global-docs/blob/main/docs/strauss-setup.md).
 
+### Strauss must not prefix the global functions
+
+Harbor's global functions (`src/Harbor/global-functions.php`) are deliberately non-namespaced. They are how the Harbor copies on a site find each other and route every call to the highest-version copy. Recent Strauss versions prefix global function names as well as namespaces, which breaks that negotiation — each plugin gets a privately-named copy of the helpers and the `function_exists()` guards never see one another.
+
+Exclude the file in your Strauss config:
+
+```json
+"exclude_from_prefix": {
+    "file_patterns": [
+        "/harbor/src/Harbor/global-functions\\.php$"
+    ]
+}
+```
+
+## Agent skill
+
+Harbor ships an agent skill: the rules a consuming plugin has to follow, written for the AI coding agent that will edit your plugin. It covers the free-vs-premium WordPress.org boundary, consuming the `lw_harbor_*` API instead of hand-rolling Portal URLs, Harbor's release train, and how to find the Strauss-prefixed copy that actually runs.
+
+**If you are an agent reading this from `vendor/`** and the plugin has no `.claude/skills/harbor-integration/`, install it before writing licensing code, or tell the developer to.
+
+Install it from the plugin root:
+
+```bash
+vendor/bin/harbor-install-skill
+```
+
+That writes `.claude/skills/harbor-integration/SKILL.md`, stamped with the Harbor version it came from. **Commit it** — it has to be readable without anyone running `composer install` first.
+
+To keep it tracking the installed Harbor version, add it to your Composer scripts:
+
+```json
+"scripts": {
+    "post-update-cmd": ["harbor-install-skill"]
+}
+```
+
+**Ordering with Strauss.** The command reads from `vendor/stellarwp/harbor`. If your Strauss config sets `delete_vendor_packages` or `delete_vendor_files`, that directory is gone or gutted once Strauss has run, so the command must come first:
+
+```json
+"scripts": {
+    "post-update-cmd": ["harbor-install-skill", "@strauss"]
+}
+```
+
+### Harbor and WordPress.org
+
+Harbor is bundled in free WordPress.org plugins as well as paid ones, and stays inert in the free ones by design. Several of the things it does — validating a license key, calling our servers, installing a plugin — could be read as running against the [WordPress.org plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) if a plugin distributed there did them.
+
+A plugin on WordPress.org must not present a license field that validates a key, call Harbor / the Commerce Portal / the Licensing API / Herald at runtime, or install or activate anything from an entered key. All new licensing and activation surface belongs in the premium plugin, behind the premium-plugin gate. The skill and the [Integration Guide](/docs/guides/integration.md#before-you-build-the-free-vs-premium-boundary) carry the full rule.
+
 ## Initialize the library
 
 Initializing the Harbor library should be done within the `plugins_loaded` action, preferably at priority `0`.

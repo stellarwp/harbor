@@ -2,7 +2,7 @@
 
 A PHP library bundled by Liquid Web WordPress plugins to handle licensing, updates, and feature management. Each Liquid Web plugin ships its own vendor-prefixed copy via Strauss. Multiple copies coexist on a single WordPress site and negotiate leadership internally.
 
-We are developing version 1. It is not released. Do not worry about backward compatibility or breaking changes. When something needs to change, refactor to fit. Do not add shims, aliases, or deprecation layers.
+Harbor is released and consumed by plugins through Composer + Strauss (see the "Plugins with Harbor" table in `README.md`). Internals are still fair game to refactor — no shims, aliases, or deprecation layers for internal classes. The consumed surface is different: the `lw_harbor_*` global functions, the `lw_harbor/` and `lw-harbor/` hooks, and the `Config` / `Harbor::init()` bootstrap are vendored into shipped plugins, so changing them breaks sites running an older plugin alongside a newer one. Change those deliberately, with a version bump and a changelog entry.
 
 See `docs/harbor.md` for the architecture overview. Subsystem docs live in `docs/subsystems/`, architecture docs in `docs/architecture/`, API references in `docs/api/`, and guides in `docs/guides/`.
 
