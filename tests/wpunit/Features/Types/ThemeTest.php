@@ -4,6 +4,8 @@ namespace LiquidWeb\Harbor\Tests\Features\Types;
 
 use LiquidWeb\Harbor\Features\Contracts\Installable;
 use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Portal\Contracts\Download_Url_Builder;
+use LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class ThemeTest extends HarborTestCase {
@@ -326,5 +328,55 @@ final class ThemeTest extends HarborTestCase {
 		$this->assertSame( 'theme', $feature->get_type() );
 		$this->assertTrue( $feature->is_available() );
 		$this->assertSame( 'https://example.com/docs', $feature->get_documentation_url() );
+	}
+	// -------------------------------------------------------------------------
+	// get_update_data() tests
+	// -------------------------------------------------------------------------
+
+	/**
+	 * @param string|null $changelog
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function get_update_data_for_changelog( ?string $changelog ): array {
+		$catalog_feature = Catalog_Feature::from_array(
+			[
+				'slug'      => self::SLUG,
+				'kind'      => 'theme',
+				'version'   => '2.0.0',
+				'changelog' => $changelog,
+			]
+		);
+
+		$url_builder = $this->createMock( Download_Url_Builder::class );
+		$url_builder->method( 'build' )->willReturn( 'https://example.com/download/' . self::SLUG );
+
+		return $this->make_feature()->get_update_data( $catalog_feature, $url_builder );
+	}
+
+	public function test_get_update_data_includes_changelog_section_when_catalog_has_one(): void {
+		$changelog = '<ul><li>Fix: Something that was broken.</li></ul>';
+
+		$data = $this->get_update_data_for_changelog( $changelog );
+
+		$this->assertSame(
+			[
+				'description' => self::DESCRIPTION,
+				'changelog'   => $changelog,
+			],
+			$data['sections']
+		);
+	}
+
+	public function test_get_update_data_omits_changelog_section_when_catalog_has_none(): void {
+		$data = $this->get_update_data_for_changelog( null );
+
+		$this->assertSame( [ 'description' => self::DESCRIPTION ], $data['sections'] );
+	}
+
+	public function test_get_update_data_omits_changelog_section_when_catalog_changelog_is_empty(): void {
+		$data = $this->get_update_data_for_changelog( '' );
+
+		$this->assertSame( [ 'description' => self::DESCRIPTION ], $data['sections'] );
 	}
 }
