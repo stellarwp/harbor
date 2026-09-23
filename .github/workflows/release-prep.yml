@@ -66,6 +66,9 @@ jobs:
 
     needs: set_vars
 
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v6
         with:
@@ -92,4 +95,4 @@ jobs:
           branch: release-prep-${{ needs.set_vars.outputs.version }}
           base: ${{ needs.set_vars.outputs.ref }}
           delete-branch: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_BOT_TOKEN }}
