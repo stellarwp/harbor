@@ -67,8 +67,7 @@ jobs:
     needs: set_vars
 
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v6
