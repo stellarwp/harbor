@@ -1,0 +1,3 @@
+significance: patch
+type: fix
+entry: Include the catalog changelog in the plugin and theme update data so the WordPress "View details" modal shows a Changelog tab instead of only the description.
