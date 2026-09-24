@@ -22,7 +22,7 @@ on:
 
 jobs:
   set_vars:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
 
     outputs:
       ref: ${{ steps.set_var.outputs.ref }}
@@ -62,7 +62,7 @@ jobs:
           echo "date=${{ env.JOB_DATE }}" >> $GITHUB_OUTPUT
 
   release-prep:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
 
     needs: set_vars
 
