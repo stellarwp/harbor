@@ -75,7 +75,7 @@ The GitHub Actions workflow (`.github/workflows/tests-e2e.yml`) captures the URL
 
 Add the `playground` label to a pull request and the `Playground Preview` workflow (`.github/workflows/playground-preview.yml`) comments with two buttons. Each opens a throwaway WordPress in the browser, logged in and on the Software Manager page.
 
-- **Harbor Dev Tools only**: [Harbor Dev Tools](https://github.com/stellarwp/harbor-dev-tools) built against the pull request. It bumps its bundled Harbor one patch version, so the pull request's code is the leader, and it serves fixture catalog and licensing data. Pick another fixture key under **Harbor Dev Tools** to change the license state.
+- **Harbor Dev Tools only**: [Harbor Dev Tools](https://github.com/stellarwp/harbor-dev-tools) built against the pull request. It bumps its bundled Harbor one patch version, so the pull request's code is the leader, and it serves fixture catalog and licensing data. The site starts on the `lwsw-unified-pro-2026` fixture key from `tests/_data/licensing/`. Pick another fixture key under **Harbor Dev Tools** to change the license state.
 - **With GiveWP**: the same, plus the latest GiveWP release, which bundles its own copy of Harbor. Use it to check a change with two Harbor hosts on one site.
 
 The preview is rebuilt on every push while the label stays on. Pull requests from forks are skipped because they cannot see the secrets. Debug output is written to `wp-content/debug.log` rather than the screen.
