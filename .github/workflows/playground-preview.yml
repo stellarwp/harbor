@@ -1,0 +1,146 @@
+# cspell:ignore shivammathur evnt adamziel noopener noreferrer argjson startswith
+name: Playground Preview
+
+# Adds a "Preview in WordPress Playground" button to a pull request: a throwaway WordPress in the
+# browser running the pull request's copy of Harbor.
+#
+# Harbor is a library, so the preview installs Harbor Dev Tools built against the pull request.
+# Harbor Dev Tools bumps its bundled Harbor one patch version, which makes the pull request's
+# code the leader on the site, and serves fixture catalog and licensing data, so no license key
+# is needed.
+#
+# It is opt-in: add the "playground" label to a pull request to get a preview, and it is rebuilt
+# on every push for as long as the label stays on. Pull requests from forks are skipped, because
+# they cannot see the secrets.
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+# One run per pull request at a time. A push while a preview is still building cancels that build,
+# so an older zip can never overwrite a newer button.
+concurrency:
+  group: playground-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  zip:
+    if: >-
+      !github.event.pull_request.head.repo.fork
+      && contains(github.event.pull_request.labels.*.name, 'playground')
+      && (github.event.action != 'labeled' || github.event.label.name == 'playground')
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+
+    permissions:
+      contents: read
+
+    outputs:
+      url: ${{ steps.package.outputs.url }}
+
+    steps:
+      - name: Checkout Harbor
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: harbor
+          persist-credentials: false
+
+      - name: Checkout Harbor Dev Tools
+        uses: actions/checkout@v6
+        with:
+          repository: stellarwp/harbor-dev-tools
+          path: harbor-dev-tools
+          token: ${{ secrets.GH_BOT_TOKEN }}
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          coverage: none
+
+      # watch.sh is the script behind "composer harbor:watch". With --no-watch it copies the
+      # checked-out Harbor into Harbor Dev Tools once and runs Strauss.
+      - name: Build Harbor Dev Tools against this pull request
+        working-directory: harbor-dev-tools
+        run: |
+          composer install --no-interaction
+          ./dev_scripts/watch.sh "$GITHUB_WORKSPACE/harbor" --no-watch
+
+      - name: Package the zip
+        id: package
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          name="harbor-playground-pr${PR}-${SHA:0:7}.zip"
+          mkdir zip_files
+          cd harbor-dev-tools
+          mkdir harbor-dev-tools
+          cp -r plugin.php src vendor vendor-prefixed fixtures harbor-dev-tools/
+          zip -qr "../zip_files/${name}" harbor-dev-tools
+          echo "url=https://evnt.is/test-zip?file=${name}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the zip
+        uses: the-events-calendar/action-s3-utility@main
+        with:
+          args: --acl public-read --follow-symlinks
+        env:
+          S3_BUCKET: ${{ secrets.PACKAGED_ZIP_BUCKET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.PACKAGED_ZIP_REGION }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          COMMAND: sync
+          SOURCE_DIR: zip_files
+
+  button:
+    needs: zip
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+
+    # Writes one comment on the pull request, nothing else.
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Post the buttons
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ZIP_URL: ${{ needs.zip.outputs.url }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Debug output goes to the log instead of the screen: a released host plugin can bundle
+          # an older Harbor, and Playground reports any notice printed during its activation as
+          # unexpected output.
+          blueprint() {
+            jq -c -n --arg url "$ZIP_URL" --argjson give "$1" '{
+              landingPage: "/wp-admin/options-general.php?page=lw-software-manager",
+              preferredVersions: { php: "8.3", wp: "latest" },
+              features: { networking: true },
+              steps: ([
+                { step: "defineWpConfigConsts", consts: { WP_DEBUG: true, WP_DEBUG_LOG: true, WP_DEBUG_DISPLAY: false } },
+                { step: "login", username: "admin" },
+                { step: "installPlugin", pluginData: { resource: "url", url: $url }, options: { activate: true, targetFolderName: "harbor-dev-tools" } }
+              ] + (if $give then [
+                { step: "installPlugin", pluginData: { resource: "wordpress.org/plugins", slug: "give" }, options: { activate: true } }
+              ] else [] end))
+            }' | jq -s -R -r @uri
+          }
+          button() {
+            printf '<a href="https://playground.wordpress.net/?blueprint-url=data:application/json,%s" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/adamziel/playground-preview/refs/heads/trunk/assets/playground-preview-button.svg" alt="%s" width="220" height="57" /></a>' "$1" "$2"
+          }
+          plain=$(button "$(blueprint false)" "Open WordPress Playground Preview")
+          with_give=$(button "$(blueprint true)" "Open WordPress Playground Preview with GiveWP")
+
+          marker='<!-- harbor-playground-preview -->'
+          built=$(date -u '+%Y-%m-%d %H:%M UTC')
+          body=$(printf '%s\n### WordPress Playground Preview\n\nTry this pull request in a throwaway WordPress in your browser. Harbor Dev Tools runs this branch of Harbor as the leader, with fixture licensing data. Built %s from %s, or [download the zip](%s) for a site of your own.\n\n**Harbor Dev Tools only**\n\n%s\n\n**With GiveWP** (the latest release, which bundles its own copy of Harbor)\n\n%s\n' "$marker" "$built" "$SHA" "$ZIP_URL" "$plain" "$with_give")
+
+          existing=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n 1)
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing" -f body="$body" > /dev/null
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$body" > /dev/null
+          fi
