@@ -307,10 +307,12 @@ if (lw_harbor_is_feature_available('feature-slug')) {
 ### Get the Unified License Manager admin URL
 
 ```php
-$url = lw_harbor_get_license_page_url(); // string (empty string if Harbor is not active)
+$url = lw_harbor_get_license_page_url(); // string (empty string if no Harbor copy is loaded)
 ```
 
 Label the link **Unified License Manager** in whatever UI you place it in. Never build this URL by hand.
+
+A non-empty URL does not mean the page exists. When no premium plugin has opened the gate, the function still returns the URL, but the page behind it is not registered. Check `did_action( 'lw_harbor/loaded' )` before showing the link.
 
 ### Force a catalog refresh
 
@@ -391,7 +393,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                                                   |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Unified License Manager (empty string if inactive).                                 |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Unified License Manager (empty string if no Harbor copy is loaded).                 |
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                                                        |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system.                               |
