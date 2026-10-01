@@ -8,6 +8,7 @@ use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Harbor;
 use WP_Error;
 
@@ -21,6 +22,8 @@ use WP_Error;
  * @since 1.0.0
  */
 final class GlobalFunctionsTest extends HarborTestCase {
+
+	use With_Uopz;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -275,5 +278,34 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->container->singleton( Catalog_Repository::class, $catalog );
 
 		$this->assertFalse( lw_harbor_refresh_catalog() );
+	}
+
+	// -------------------------------------------------------------------------
+	// No registered instance
+	// -------------------------------------------------------------------------
+
+	/**
+	 * A host that boots after wp_loaded stays out of the instance registry. When it
+	 * is the only host, no leader callback resolves and each function returns its default.
+	 */
+	public function test_functions_return_defaults_when_no_instance_is_registered(): void {
+		update_option( License_Repository::KEY_OPTION_NAME, 'LWSW-UNIFIED-PRO-2026' );
+
+		$this->assertTrue( lw_harbor_has_unified_license_key() );
+		$this->assertNotSame( '', lw_harbor_get_licensed_domain() );
+
+		$this->set_fn_return( '_lw_harbor_instance_registry', [] );
+
+		$this->assertFalse( lw_harbor_has_unified_license_key() );
+		$this->assertNull( lw_harbor_get_unified_license_key() );
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'some-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'some-feature' ) );
+		$this->assertSame( '', lw_harbor_get_licensed_domain() );
+		$this->assertSame( '', lw_harbor_get_license_page_url() );
+		$this->assertFalse( lw_harbor_refresh_catalog() );
+
+		lw_harbor_register_submenu( 'edit.php?post_type=give_forms' );
+		lw_harbor_display_legacy_license_page_notice( 'GiveWP' );
 	}
 }
