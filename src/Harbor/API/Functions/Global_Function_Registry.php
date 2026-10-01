@@ -30,10 +30,19 @@ class Global_Function_Registry {
 	use With_Debugging;
 
 	/**
+	 * Missing-feature messages already logged on this request.
+	 *
+	 * @since TBD
+	 *
+	 * @var array<string, true>
+	 */
+	private static $logged_missing_features = [];
+
+	/**
 	 * Registers this instance's callbacks into the global function registry.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Feature and catalog callbacks return their default without logging when Harbor is not loaded or the feature is not in the catalog.
+	 * @since TBD Feature and catalog callbacks return their default without logging when Harbor is not loaded, and log a feature missing from the catalog once per request.
 	 *
 	 * @param string $version The version of this Harbor instance.
 	 *
@@ -212,7 +221,9 @@ class Global_Function_Registry {
 	/**
 	 * Logs a feature lookup error.
 	 *
-	 * A slug that is not in the catalog is an expected answer, so it is not logged.
+	 * A host can ask about the same slug many times in one request. A slug missing
+	 * from the catalog is logged the first time only, so a wrong slug or a stale
+	 * catalog still shows up in the log without repeating on every check.
 	 *
 	 * @since TBD
 	 *
@@ -223,7 +234,13 @@ class Global_Function_Registry {
 	 */
 	private static function log_feature_error( WP_Error $error, string $context ): void {
 		if ( $error->get_error_code() === Error_Code::FEATURE_NOT_FOUND ) {
-			return;
+			$message = $error->get_error_message();
+
+			if ( isset( self::$logged_missing_features[ $message ] ) ) {
+				return;
+			}
+
+			self::$logged_missing_features[ $message ] = true;
 		}
 
 		self::debug_log_wp_error( $error, $context );

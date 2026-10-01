@@ -206,7 +206,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertFalse( lw_harbor_is_feature_available( 'any-feature' ) );
 	}
 
-	public function test_feature_checks_log_errors_except_a_slug_missing_from_the_catalog(): void {
+	public function test_feature_checks_log_a_missing_slug_once_and_other_errors_every_time(): void {
 		$this->set_const_value( 'WP_DEBUG', true );
 		$this->set_const_value( 'WP_DEBUG_LOG', true );
 
@@ -221,7 +221,7 @@ final class GlobalFunctionsTest extends HarborTestCase {
 			true
 		);
 
-		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "give-recurring" not found in the catalog.' );
+		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "logged-once-feature" not found in the catalog.' );
 		$this->container->singleton(
 			Manager::class,
 			$this->makeEmpty(
@@ -237,15 +237,22 @@ final class GlobalFunctionsTest extends HarborTestCase {
 			)
 		);
 
-		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
-		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
-		$this->assertSame( [], $logged );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertCount( 1, $logged );
+		$this->assertStringContainsString( 'Feature "logged-once-feature" not found in the catalog.', $logged[0] );
+
+		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "another-logged-once-feature" not found in the catalog.' );
+
+		$this->assertFalse( lw_harbor_is_feature_available( 'another-logged-once-feature' ) );
+		$this->assertCount( 2, $logged );
 
 		$error = new WP_Error( Error_Code::FEATURE_CHECK_FAILED, 'Catalog unavailable.' );
 
-		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
-		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
-		$this->assertCount( 2, $logged );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertCount( 4, $logged );
 	}
 
 	/**
