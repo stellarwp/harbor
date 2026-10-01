@@ -2,6 +2,7 @@
 
 namespace wpunit;
 
+use LiquidWeb\Harbor\Harbor;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 /**
@@ -20,7 +21,9 @@ class InstanceRegistryTest extends HarborTestCase {
 		$this->assertIsArray( _lw_harbor_instance_registry() );
 	}
 
-	public function test_it_silently_ignores_registrations_after_wp_loaded(): void {
+	public function test_it_rejects_registrations_after_wp_loaded(): void {
+		$this->setExpectedIncorrectUsage( '_lw_harbor_instance_registry' );
+
 		$unique_version = '99.99.99';
 
 		// @phpstan-ignore function.internal
@@ -30,6 +33,22 @@ class InstanceRegistryTest extends HarborTestCase {
 		$versions = _lw_harbor_instance_registry();
 
 		$this->assertArrayNotHasKey( $unique_version, $versions );
+	}
+
+	/**
+	 * A host that boots inside its activation hook calls Harbor::init() after wp_loaded.
+	 * WPTestCase fails this test if that call reports incorrect usage.
+	 */
+	public function test_harbor_init_after_wp_loaded_skips_registration(): void {
+		$this->assertGreaterThan( 0, did_action( 'wp_loaded' ) );
+
+		// @phpstan-ignore function.internal
+		$before = _lw_harbor_instance_registry();
+
+		Harbor::init();
+
+		// @phpstan-ignore function.internal
+		$this->assertSame( $before, _lw_harbor_instance_registry() );
 	}
 
 	public function test_it_returns_plugin_files_as_array_for_registered_version(): void {

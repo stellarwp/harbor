@@ -2,12 +2,15 @@
 
 namespace LiquidWeb\Harbor\Tests\API\Functions;
 
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
 use LiquidWeb\Harbor\Portal\Catalog_Collection;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Harbor;
 use WP_Error;
 
@@ -21,6 +24,8 @@ use WP_Error;
  * @since 1.0.0
  */
 final class GlobalFunctionsTest extends HarborTestCase {
+
+	use With_Uopz;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -201,6 +206,101 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertFalse( lw_harbor_is_feature_available( 'any-feature' ) );
 	}
 
+	public function test_feature_checks_log_a_missing_slug_once_and_other_errors_every_time(): void {
+		$this->set_const_value( 'WP_DEBUG', true );
+		$this->set_const_value( 'WP_DEBUG_LOG', true );
+
+		$logged = [];
+		$this->set_fn_return(
+			'error_log',
+			static function ( string $message ) use ( &$logged ): bool {
+				$logged[] = $message;
+
+				return true;
+			},
+			true
+		);
+
+		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "logged-once-feature" not found in the catalog.' );
+		$this->container->singleton(
+			Manager::class,
+			$this->makeEmpty(
+				Manager::class,
+				[
+					'is_enabled'   => static function () use ( &$error ): WP_Error {
+						return $error;
+					},
+					'is_available' => static function () use ( &$error ): WP_Error {
+						return $error;
+					},
+				]
+			)
+		);
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertCount( 1, $logged );
+		$this->assertStringContainsString( 'Feature "logged-once-feature" not found in the catalog.', $logged[0] );
+
+		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "another-logged-once-feature" not found in the catalog.' );
+
+		$this->assertFalse( lw_harbor_is_feature_available( 'another-logged-once-feature' ) );
+		$this->assertCount( 2, $logged );
+
+		$error = new WP_Error( Error_Code::FEATURE_CHECK_FAILED, 'Catalog unavailable.' );
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'logged-once-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'logged-once-feature' ) );
+		$this->assertCount( 4, $logged );
+	}
+
+	/**
+	 * Harbor::init() registers the callbacks for every host, but binds the Features and
+	 * Portal services only when a premium plugin is present.
+	 */
+	public function test_feature_and_catalog_checks_skip_their_services_when_harbor_is_not_loaded(): void {
+		$resolved = false;
+		$this->container->singleton(
+			Manager::class,
+			$this->makeEmpty(
+				Manager::class,
+				[
+					'is_enabled'   => static function () use ( &$resolved ): bool {
+						$resolved = true;
+
+						return true;
+					},
+					'is_available' => static function () use ( &$resolved ): bool {
+						$resolved = true;
+
+						return true;
+					},
+				]
+			)
+		);
+		$this->container->singleton(
+			Catalog_Repository::class,
+			$this->makeEmpty(
+				Catalog_Repository::class,
+				[
+					'refresh' => static function () use ( &$resolved ): Catalog_Collection {
+						$resolved = true;
+
+						return new Catalog_Collection();
+					},
+				]
+			)
+		);
+
+		unset( $GLOBALS['wp_actions']['lw_harbor/loaded'] );
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_refresh_catalog() );
+		$this->assertFalse( $resolved );
+	}
+
 	// -------------------------------------------------------------------------
 	// lw_harbor_get_unified_license_key()
 	// -------------------------------------------------------------------------
@@ -275,5 +375,34 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->container->singleton( Catalog_Repository::class, $catalog );
 
 		$this->assertFalse( lw_harbor_refresh_catalog() );
+	}
+
+	// -------------------------------------------------------------------------
+	// No registered instance
+	// -------------------------------------------------------------------------
+
+	/**
+	 * A host that boots after wp_loaded stays out of the instance registry. When it
+	 * is the only host, no leader callback resolves and each function returns its default.
+	 */
+	public function test_functions_return_defaults_when_no_instance_is_registered(): void {
+		update_option( License_Repository::KEY_OPTION_NAME, 'LWSW-UNIFIED-PRO-2026' );
+
+		$this->assertTrue( lw_harbor_has_unified_license_key() );
+		$this->assertNotSame( '', lw_harbor_get_licensed_domain() );
+
+		$this->set_fn_return( '_lw_harbor_instance_registry', [] );
+
+		$this->assertFalse( lw_harbor_has_unified_license_key() );
+		$this->assertNull( lw_harbor_get_unified_license_key() );
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'some-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'some-feature' ) );
+		$this->assertSame( '', lw_harbor_get_licensed_domain() );
+		$this->assertSame( '', lw_harbor_get_license_page_url() );
+		$this->assertFalse( lw_harbor_refresh_catalog() );
+
+		lw_harbor_register_submenu( 'edit.php?post_type=give_forms' );
+		lw_harbor_display_legacy_license_page_notice( 'GiveWP' );
 	}
 }
