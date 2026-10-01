@@ -57,7 +57,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 		$license = Legacy_License::from_data(
 			[
 				'key'       => 'key-from-array',
-				'slug'      => 'give-recurring',
+				'slug'      => 'give-recurring-donations',
 				'name'      => 'Give Recurring',
 				'product'   => 'GiveWP',
 				'is_active' => false,
@@ -67,7 +67,7 @@ final class Legacy_LicenseTest extends HarborTestCase {
 
 		$this->assertInstanceOf( Legacy_License::class, $license );
 		$this->assertSame( 'key-from-array', $license->key );
-		$this->assertSame( 'give-recurring', $license->slug );
+		$this->assertSame( 'give-recurring-donations', $license->slug );
 		$this->assertSame( 'Give Recurring', $license->name );
 		$this->assertSame( 'GiveWP', $license->product );
 		$this->assertFalse( $license->is_active );

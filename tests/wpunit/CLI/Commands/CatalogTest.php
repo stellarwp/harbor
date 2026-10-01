@@ -387,7 +387,7 @@ final class CatalogTest extends HarborTestCase {
 		$givewp_features = [
 			Catalog_Feature::from_array(
 				[
-					'slug'              => 'give-recurring',
+					'slug'              => 'give-recurring-donations',
 					'kind'              => 'plugin',
 					'minimum_tier'      => 'basic',
 					'name'              => 'Recurring Donations',

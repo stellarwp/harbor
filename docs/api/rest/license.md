@@ -25,7 +25,7 @@ Returns the stored unified license key and its associated products. Products com
         "over_limit": false,
         "domains": ["example.com"]
       },
-      "capabilities": ["give-recurring", "give-fee-recovery"],
+      "capabilities": ["give-recurring-donations", "give-fee-recovery"],
       "activated_here": true,
       "validation_status": "valid",
       "is_valid": true
