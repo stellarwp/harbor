@@ -64,7 +64,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -92,7 +92,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => true,
 				],
@@ -111,7 +111,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -140,7 +140,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 					'page_url'  => 'https://example.com/licenses',
@@ -162,7 +162,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -182,12 +182,12 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
 				[
-					'slug'      => 'give-stripe',
+					'slug'      => 'give-stripe-gateway',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -207,12 +207,12 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
 				[
-					'slug'      => 'give-stripe',
+					'slug'      => 'give-stripe-gateway',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -237,7 +237,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -262,7 +262,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
@@ -292,7 +292,7 @@ final class License_Notice_HandlerTest extends HarborTestCase {
 		$this->add_licenses(
 			[
 				[
-					'slug'      => 'give-recurring',
+					'slug'      => 'give-recurring-donations',
 					'product'   => 'give',
 					'is_active' => false,
 				],
