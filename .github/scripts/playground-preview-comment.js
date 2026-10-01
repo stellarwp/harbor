@@ -1,0 +1,107 @@
+// cspell:ignore adamziel noopener noreferrer
+/**
+ * Builds the pull request comment for the Playground Preview workflow.
+ *
+ * It touches neither GitHub nor the filesystem, so it can be unit tested and
+ * reused by another repository's preview workflow.
+ */
+
+const PLAYGROUND_URL = 'https://playground.wordpress.net/?blueprint-url=data:application/json,';
+const BUTTON_IMAGE   = 'https://raw.githubusercontent.com/adamziel/playground-preview/refs/heads/trunk/assets/playground-preview-button.svg';
+
+/*
+ * The Software Manager page lists the four product brands only. Harbor Dev
+ * Tools' default fixture key describes a product named test-fixtures, which
+ * that page does not show, so the site starts on a fixture that covers the
+ * real brands.
+ */
+const FIXTURE_KEY = 'lwsw-unified-pro-2026';
+
+/**
+ * Builds the Playground blueprint for one preview button.
+ *
+ * @param {Object}  args
+ * @param {string}  args.zipUrl   Public URL of the Harbor Dev Tools zip built for the pull request.
+ * @param {boolean} args.withGive Whether to also install the latest GiveWP release.
+ *
+ * @return {Object} The blueprint.
+ */
+function buildBlueprint( { zipUrl, withGive } ) {
+    const steps = [
+        /*
+         * Debug output goes to the log instead of the screen: a released host
+         * plugin can bundle an older Harbor, and Playground reports any notice
+         * printed during its activation as unexpected output.
+         */
+        { step: 'defineWpConfigConsts', consts: { WP_DEBUG: true, WP_DEBUG_LOG: true, WP_DEBUG_DISPLAY: false } },
+        { step: 'login', username: 'admin' },
+        { step: 'setSiteOptions', options: { lw_harbor_dev_tools_fixture_key: FIXTURE_KEY } },
+        {
+            step: 'installPlugin',
+            pluginData: { resource: 'url', url: zipUrl },
+            options: { activate: true, targetFolderName: 'harbor-dev-tools' },
+        },
+    ];
+
+    if ( withGive ) {
+        steps.push( {
+            step: 'installPlugin',
+            pluginData: { resource: 'wordpress.org/plugins', slug: 'give' },
+            options: { activate: true },
+        } );
+    }
+
+    return {
+        landingPage: '/wp-admin/options-general.php?page=lw-software-manager',
+        preferredVersions: { php: '8.3', wp: 'latest' },
+        features: { networking: true },
+        steps,
+    };
+}
+
+/**
+ * Builds the HTML for one preview button.
+ *
+ * @param {Object} blueprint The blueprint the button opens.
+ * @param {string} label     Alternative text for the button image.
+ *
+ * @return {string} The button markup.
+ */
+function buildButton( blueprint, label ) {
+    const href = PLAYGROUND_URL + encodeURIComponent( JSON.stringify( blueprint ) );
+
+    return `<a href="${ href }" target="_blank" rel="noopener noreferrer"><img src="${ BUTTON_IMAGE }" alt="${ label }" width="220" height="57" /></a>`;
+}
+
+/**
+ * Builds the comment body.
+ *
+ * @param {Object} args
+ * @param {string} args.zipUrl  Public URL of the Harbor Dev Tools zip built for the pull request.
+ * @param {string} args.sha     Commit the zip was built from.
+ * @param {Date}   args.builtAt When the zip was built.
+ *
+ * @return {string} The comment body, as Markdown.
+ */
+function buildComment( { zipUrl, sha, builtAt } ) {
+    const built    = builtAt.toISOString().slice( 0, 16 ).replace( 'T', ' ' ) + ' UTC';
+    const plain    = buildButton( buildBlueprint( { zipUrl, withGive: false } ), 'Open WordPress Playground Preview' );
+    const withGive = buildButton( buildBlueprint( { zipUrl, withGive: true } ), 'Open WordPress Playground Preview with GiveWP' );
+
+    return [
+        '### WordPress Playground Preview',
+        '',
+        `Try this pull request in a throwaway WordPress in your browser. Harbor Dev Tools runs this branch of Harbor as the leader, licensed with the ${ FIXTURE_KEY } fixture key. Free features can be enabled; premium ones cannot, because their downloads need a real key. Built ${ built } from ${ sha }, or [download the zip](${ zipUrl }) for a site of your own.`,
+        '',
+        '**Harbor Dev Tools only**',
+        '',
+        plain,
+        '',
+        '**With GiveWP** (the latest GiveWP release installed alongside Harbor Dev Tools. GiveWP bundles its own copy of Harbor, and Harbor Dev Tools stays the leader.)',
+        '',
+        withGive,
+        '',
+    ].join( '\n' );
+}
+
+module.exports = { buildBlueprint, buildComment };

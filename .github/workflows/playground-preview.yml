@@ -1,4 +1,4 @@
-# cspell:ignore shivammathur evnt adamziel noopener noreferrer argjson startswith
+# cspell:ignore shivammathur evnt marocchino
 name: Playground Preview
 
 # Adds a "Preview in WordPress Playground" button to a pull request: a throwaway WordPress in the
@@ -102,53 +102,35 @@ jobs:
     needs: zip
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
-    # Writes one comment on the pull request, nothing else.
+    # Reads the comment script and writes one comment on the pull request, nothing else.
     permissions:
+      contents: read
       pull-requests: write
 
     steps:
-      - name: Post the buttons
+      - name: Checkout the comment script
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: .github/scripts
+          persist-credentials: false
+
+      - name: Build the comment
+        id: comment
+        uses: actions/github-script@v9
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ZIP_URL: ${{ needs.zip.outputs.url }}
-          PR: ${{ github.event.pull_request.number }}
           SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          # Debug output goes to the log instead of the screen: a released host plugin can bundle
-          # an older Harbor, and Playground reports any notice printed during its activation as
-          # unexpected output.
-          #
-          # The Software Manager page lists the four product brands only. Harbor Dev Tools'
-          # default fixture key describes a product named test-fixtures, which that page does
-          # not show, so the site starts on a fixture that covers the real brands.
-          blueprint() {
-            jq -c -n --arg url "$ZIP_URL" --argjson give "$1" '{
-              landingPage: "/wp-admin/options-general.php?page=lw-software-manager",
-              preferredVersions: { php: "8.3", wp: "latest" },
-              features: { networking: true },
-              steps: ([
-                { step: "defineWpConfigConsts", consts: { WP_DEBUG: true, WP_DEBUG_LOG: true, WP_DEBUG_DISPLAY: false } },
-                { step: "login", username: "admin" },
-                { step: "setSiteOptions", options: { lw_harbor_dev_tools_fixture_key: "lwsw-unified-pro-2026" } },
-                { step: "installPlugin", pluginData: { resource: "url", url: $url }, options: { activate: true, targetFolderName: "harbor-dev-tools" } }
-              ] + (if $give then [
-                { step: "installPlugin", pluginData: { resource: "wordpress.org/plugins", slug: "give" }, options: { activate: true } }
-              ] else [] end))
-            }' | jq -s -R -r @uri
-          }
-          button() {
-            printf '<a href="https://playground.wordpress.net/?blueprint-url=data:application/json,%s" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/adamziel/playground-preview/refs/heads/trunk/assets/playground-preview-button.svg" alt="%s" width="220" height="57" /></a>' "$1" "$2"
-          }
-          plain=$(button "$(blueprint false)" "Open WordPress Playground Preview")
-          with_give=$(button "$(blueprint true)" "Open WordPress Playground Preview with GiveWP")
+        with:
+          result-encoding: string
+          script: |
+            const { buildComment } = require( './.github/scripts/playground-preview-comment.js' );
 
-          marker='<!-- harbor-playground-preview -->'
-          built=$(date -u '+%Y-%m-%d %H:%M UTC')
-          body=$(printf '%s\n### WordPress Playground Preview\n\nTry this pull request in a throwaway WordPress in your browser. Harbor Dev Tools runs this branch of Harbor as the leader, licensed with the lwsw-unified-pro-2026 fixture key. Free features can be enabled; premium ones cannot, because their downloads need a real key. Built %s from %s, or [download the zip](%s) for a site of your own.\n\n**Harbor Dev Tools only**\n\n%s\n\n**With GiveWP** (the latest release, which bundles its own copy of Harbor)\n\n%s\n' "$marker" "$built" "$SHA" "$ZIP_URL" "$plain" "$with_give")
+            return buildComment( { zipUrl: process.env.ZIP_URL, sha: process.env.SHA, builtAt: new Date() } );
 
-          existing=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n 1)
-          if [ -n "$existing" ]; then
-            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing" -f body="$body" > /dev/null
-          else
-            gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$body" > /dev/null
-          fi
+      # One comment per pull request, updated in place on every build.
+      - name: Post the comment
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: playground-preview
+          message: ${{ steps.comment.outputs.result }}
