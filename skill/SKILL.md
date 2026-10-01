@@ -33,6 +33,11 @@ The most a free plugin may do: a **static link** to the Portal, and optionally a
 `LWSW-` format check** — a string comparison, no network call — to steer a user who
 pasted a unified key into a legacy field.
 
+Bundling Harbor is not the violation. A free entry plugin still vendors Harbor and calls
+`Harbor::init()`; with no premium plugin on the site the gate stays closed and nothing
+networked is registered. Do not remove that bootstrap. What a free plugin must not do is
+open the gate itself or drive Harbor's licensing and install paths.
+
 All new licensing and activation surface belongs in the **premium** plugin, where the
 premium-plugin gate has opened and Harbor is active: license fields, validation calls,
 activation buttons, install flows. (Pre-existing Uplink license fields in free plugins
@@ -77,6 +82,7 @@ not run — sometimes without an error, sometimes as a fatal on a missing method
 
    Every class reference below is written unprefixed. Prefix it yourself, and never copy
    a prefix out of documentation examples.
+
 2. **Check the Strauss global-function exclusion.** `src/Harbor/global-functions.php`
    must not be prefixed. Recent Strauss versions prefix global function names, which
    breaks cross-copy negotiation — each plugin gets private helpers and the
@@ -99,9 +105,10 @@ not run — sometimes without an error, sometimes as a fatal on a missing method
 4. **PHP 7.4 is the floor.** No union types, `match`, constructor promotion, named
    arguments, enums, or readonly.
 
-## Bootstrap (premium plugins)
+## Bootstrap
 
-Order matters and is the most common source of "Harbor does nothing" bugs.
+Order matters and is the most common source of "Harbor does nothing" bugs. A free entry
+plugin runs steps 2–4 only; step 1 belongs to the premium plugin.
 
 ```php
 use Prefix\LiquidWeb\Harbor\Config;
@@ -134,8 +141,9 @@ Anything that depends on a booted Harbor hooks `lw_harbor/loaded`, not `plugins_
 Both are real. Copy them exactly; guessing the separator silently no-ops.
 
 - `lw_harbor/` (underscore) — `premium_plugin_exists`, `loaded`
-- `lw-harbor/` (hyphen) — `legacy_licenses`, `hide_menu_item`, and internal events
-  such as `lw-harbor/catalog/fetched`, `lw-harbor/licensing/key_stored`
+- `lw-harbor/` (hyphen) — `legacy_licenses`, `hide_menu_item`, `get_domain`, and
+  internal events such as `lw-harbor/unified_license_key_changed`,
+  `lw-harbor/feature_enabled`
 
 ## Bundling a license key
 
@@ -184,18 +192,20 @@ add_filter( 'lw-harbor/legacy_licenses', function ( array $licenses ): array {
 ## Global helpers
 
 All delegate to the highest-version Harbor instance on the site, so they are safe under
-multiple bundled copies. All are premium-context only in practice — in a free-only site
-the gate never opened, so state reads return empty and URLs return an empty string.
+multiple bundled copies. All are premium-context only in practice. On a free-only site
+the gate never opened: feature checks and `lw_harbor_refresh_catalog()` return `false`,
+and `lw_harbor_get_license_page_url()` still returns a URL, but the page behind it is not
+registered. Check `did_action( 'lw_harbor/loaded' )` before linking to it.
 
 | Function                                       | Signature                           | Purpose                                                                                   |
 | ---------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------- |
 | `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Primary gate for premium behavior / fee waivers.                                          |
 | `lw_harbor_has_unified_license_key`            | `(): bool`                          | Local check, no remote call.                                                              |
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Stored unified key.                                                                       |
-| `lw_harbor_get_licensed_domain`                | `(): string`                        | Host portion of `siteurl`, lowercased.                                                    |
+| `lw_harbor_get_licensed_domain`                | `(): string`                        | Host portion of `home_url()`, lowercased.                                                 |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Feature active locally on this site.                                                      |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Feature included in the customer's tier.                                                  |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Unified License Manager URL; empty when inactive.                                         |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Unified License Manager URL; empty when no Harbor copy is loaded.                         |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Appends a Licensing item. No-op before `lw_harbor/loaded`.                                |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Echoes the migration notice.                                                              |
 | `lw_harbor_refresh_catalog`                    | `(): bool`                          | **Synchronous** catalog re-fetch. User-initiated actions only, never a passive page load. |

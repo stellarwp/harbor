@@ -34,13 +34,15 @@ Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free)
 - call Harbor, the Commerce Portal, the Licensing API, or Herald at runtime,
 - install or activate anything from an entered key.
 
-**The most a free plugin may do** is show a static link pointing the user to the Portal, and optionally detect the `LWSW-` key *format* locally — a string check with no network call — to steer a user who pasted a unified key into a legacy field.
+**The most a free plugin may do** is show a static link pointing the user to the Portal, and optionally detect the `LWSW-` key _format_ locally — a string check with no network call — to steer a user who pasted a unified key into a legacy field.
+
+**Bundling Harbor is not the violation.** A free entry plugin still vendors Harbor and calls `Harbor::init()`; with no premium plugin on the site the gate stays closed and nothing networked is registered. What a free plugin must not do is open the gate itself or drive Harbor's licensing and install paths.
 
 **All new licensing and activation surface lives in the premium plugin**, where the premium-plugin gate has opened and Harbor is active. Every license field, validation call, activation button, and install flow belongs there. (Pre-existing Uplink license fields in free plugins are grandfathered and are not what this rule is about; it governs new surface.)
 
 **Onboarding for a free product is never gated behind a license.** A free plugin's onboarding must complete without a key, with no exceptions — including a step that can be skipped.
 
-The three [WordPress.org guideline](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) points at stake, and what keeps Harbor on the right side of each:
+The [WordPress.org guideline](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) items at stake, and what keeps Harbor on the right side of each:
 
 | Risk                                | Guideline                                                                                                                                                                                                                                                                                                                                     | Harbor guardrail                                                                                                                                                                                                          |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -76,7 +78,7 @@ Harbor PR reviewed -> merged -> tagged/released
 
 **Never release or QA a plugin whose `composer.json` pins a Harbor dev branch.** Pointing at `dev-main` or a feature branch while prototyping is fine, and it usefully makes the cross-repo dependency visible. Shipping in that state is not, because leadership is elected by version:
 
-- A dev branch carries no bumped version. If another plugin on the site ships the same released version *without* your dev-only change and wins leadership, your feature silently does not run. Often it does not even error — depending on the code path, a missing method or class can also fatal.
+- A dev branch carries no bumped version. If another plugin on the site ships the same released version _without_ your dev-only change and wins leadership, your feature silently does not run. Often there is no error at all; on other code paths a missing method or class is a fatal.
 - Code still in review can change before it merges, and the plugin that vendored it is now wrong.
 - Pins rot. Kadence Shop Kit tracked a dev Uplink branch during Consolidation; the branch drifted so far from Uplink's latest that it could not be safely merged and complicated that project for a long time.
 
@@ -246,7 +248,7 @@ lw_harbor_display_legacy_license_page_notice();
 
 This outputs a standard WordPress info notice:
 
-> GiveWP iss now part of Liquid Web\'s software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
+> GiveWP is now part of Liquid Web's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
 
 Call this function directly in the render callback for your legacy license page. Because it echoes immediately when called, no hook registration is needed — it renders wherever you place it.
 
@@ -286,7 +288,7 @@ $key = lw_harbor_get_unified_license_key(); // string|null
 $domain = lw_harbor_get_licensed_domain(); // string
 ```
 
-This returns the domain that Harbor uses for licensing on the current site (the host portion of the WordPress `siteurl`, lowercased). Useful when your plugin needs to display or transmit the licensed domain to an external service.
+This returns the domain that Harbor uses for licensing on the current site (the host portion of `home_url()`, lowercased). Useful when your plugin needs to display or transmit the licensed domain to an external service.
 
 ### Check feature availability
 
