@@ -130,6 +130,7 @@ There is no automatic migration from per-resource keys to unified keys.
 | Document                                                                 | Covers                                                             |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------ |
 | [This document](harbor.md)                                               | Architecture overview and how the layers relate                    |
+| [Glossary](glossary.md)                                                  | Definitions of key terms (catalog, features, seats, keys, Portal)  |
 | [Licensing](subsystems/licensing.md)                                     | Key discovery, API responses, validation workflows, caching        |
 | [Portal](subsystems/portal.md)                                           | Product families, tiers, features, the Commerce Portal API         |
 | [Features](subsystems/features.md)                                       | Feature types, resolution, strategies, Manager API, data shapes    |
