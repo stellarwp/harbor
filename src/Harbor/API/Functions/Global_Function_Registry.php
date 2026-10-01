@@ -6,12 +6,14 @@ use LiquidWeb\Harbor\Admin\Feature_Manager_Page;
 use LiquidWeb\Harbor\API\Functions\Actions\Display_Legacy_License_Page_Notice;
 use LiquidWeb\Harbor\API\Functions\Actions\Register_Submenu;
 use LiquidWeb\Harbor\Config;
+use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Portal\Catalog_Repository;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Traits\With_Debugging;
 use Throwable;
+use WP_Error;
 
 /**
  * Registers this Harbor instance's callbacks into the global function registry.
@@ -31,6 +33,7 @@ class Global_Function_Registry {
 	 * Registers this instance's callbacks into the global function registry.
 	 *
 	 * @since 1.0.0
+	 * @since TBD Feature and catalog callbacks return their default without logging when Harbor is not loaded or the feature is not in the catalog.
 	 *
 	 * @param string $version The version of this Harbor instance.
 	 *
@@ -83,11 +86,15 @@ class Global_Function_Registry {
 			'lw_harbor_is_feature_enabled',
 			$version,
 			static function ( string $slug ) {
+				if ( ! self::is_loaded() ) {
+					return false;
+				}
+
 				try {
 					$result = Config::get_container()->get( Manager::class )->is_enabled( $slug );
 
 					if ( is_wp_error( $result ) ) {
-						self::debug_log_wp_error( $result, 'Error checking feature enabled state' );
+						self::log_feature_error( $result, 'Error checking feature enabled state' );
 
 						return false;
 					}
@@ -105,11 +112,15 @@ class Global_Function_Registry {
 			'lw_harbor_is_feature_available',
 			$version,
 			static function ( string $slug ) {
+				if ( ! self::is_loaded() ) {
+					return false;
+				}
+
 				try {
 					$result = Config::get_container()->get( Manager::class )->is_available( $slug );
 
 					if ( is_wp_error( $result ) ) {
-						self::debug_log_wp_error( $result, 'Error checking feature availability' );
+						self::log_feature_error( $result, 'Error checking feature availability' );
 
 						return false;
 					}
@@ -161,6 +172,10 @@ class Global_Function_Registry {
 			'lw_harbor_refresh_catalog',
 			$version,
 			static function (): bool {
+				if ( ! self::is_loaded() ) {
+					return false;
+				}
+
 				try {
 					$result = Config::get_container()->get( Catalog_Repository::class )->refresh();
 
@@ -178,5 +193,39 @@ class Global_Function_Registry {
 				}
 			}
 		);
+	}
+
+	/**
+	 * Whether Harbor registered its providers on this request.
+	 *
+	 * Harbor::init() registers these callbacks for every host, but binds the
+	 * Features and Portal services only when a premium plugin is present.
+	 *
+	 * @since TBD
+	 *
+	 * @return bool
+	 */
+	private static function is_loaded(): bool {
+		return did_action( 'lw_harbor/loaded' ) > 0;
+	}
+
+	/**
+	 * Logs a feature lookup error.
+	 *
+	 * A slug that is not in the catalog is an expected answer, so it is not logged.
+	 *
+	 * @since TBD
+	 *
+	 * @param WP_Error $error   The error returned by the feature manager.
+	 * @param string   $context Short description of the failed check.
+	 *
+	 * @return void
+	 */
+	private static function log_feature_error( WP_Error $error, string $context ): void {
+		if ( $error->get_error_code() === Error_Code::FEATURE_NOT_FOUND ) {
+			return;
+		}
+
+		self::debug_log_wp_error( $error, $context );
 	}
 }

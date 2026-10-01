@@ -2,6 +2,8 @@
 
 namespace LiquidWeb\Harbor\Tests\API\Functions;
 
+use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Licensing\Product_Collection;
 use LiquidWeb\Harbor\Licensing\Results\Product_Entry;
@@ -202,6 +204,94 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 	public function test_is_feature_available_returns_false_when_no_license_key_stored(): void {
 		$this->assertFalse( lw_harbor_is_feature_available( 'any-feature' ) );
+	}
+
+	public function test_feature_checks_log_errors_except_a_slug_missing_from_the_catalog(): void {
+		$this->set_const_value( 'WP_DEBUG', true );
+		$this->set_const_value( 'WP_DEBUG_LOG', true );
+
+		$logged = [];
+		$this->set_fn_return(
+			'error_log',
+			static function ( string $message ) use ( &$logged ): bool {
+				$logged[] = $message;
+
+				return true;
+			},
+			true
+		);
+
+		$error = new WP_Error( Error_Code::FEATURE_NOT_FOUND, 'Feature "give-recurring" not found in the catalog.' );
+		$this->container->singleton(
+			Manager::class,
+			$this->makeEmpty(
+				Manager::class,
+				[
+					'is_enabled'   => static function () use ( &$error ): WP_Error {
+						return $error;
+					},
+					'is_available' => static function () use ( &$error ): WP_Error {
+						return $error;
+					},
+				]
+			)
+		);
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
+		$this->assertSame( [], $logged );
+
+		$error = new WP_Error( Error_Code::FEATURE_CHECK_FAILED, 'Catalog unavailable.' );
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
+		$this->assertCount( 2, $logged );
+	}
+
+	/**
+	 * Harbor::init() registers the callbacks for every host, but binds the Features and
+	 * Portal services only when a premium plugin is present.
+	 */
+	public function test_feature_and_catalog_checks_skip_their_services_when_harbor_is_not_loaded(): void {
+		$resolved = false;
+		$this->container->singleton(
+			Manager::class,
+			$this->makeEmpty(
+				Manager::class,
+				[
+					'is_enabled'   => static function () use ( &$resolved ): bool {
+						$resolved = true;
+
+						return true;
+					},
+					'is_available' => static function () use ( &$resolved ): bool {
+						$resolved = true;
+
+						return true;
+					},
+				]
+			)
+		);
+		$this->container->singleton(
+			Catalog_Repository::class,
+			$this->makeEmpty(
+				Catalog_Repository::class,
+				[
+					'refresh' => static function () use ( &$resolved ): Catalog_Collection {
+						$resolved = true;
+
+						return new Catalog_Collection();
+					},
+				]
+			)
+		);
+
+		unset( $GLOBALS['wp_actions']['lw_harbor/loaded'] );
+
+		$this->assertFalse( lw_harbor_is_feature_enabled( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_is_feature_available( 'give-recurring' ) );
+		$this->assertFalse( lw_harbor_refresh_catalog() );
+		$this->assertFalse( $resolved );
 	}
 
 	// -------------------------------------------------------------------------
