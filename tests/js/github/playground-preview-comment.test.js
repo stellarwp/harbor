@@ -1,4 +1,4 @@
-const { buildBlueprint, buildComment } = require( '../../../.github/scripts/playground-preview-comment' );
+const { HOSTS, buildBlueprint, buildComment } = require( '../../../.github/scripts/playground-preview-comment' );
 
 const ZIP_URL = 'https://evnt.is/test-zip?file=harbor-playground-pr199-abc1234.zip';
 
@@ -13,7 +13,7 @@ function blueprintsIn( body ) {
 
 describe( 'buildBlueprint', () => {
     it( 'installs Harbor Dev Tools from the zip on the pro fixture key', () => {
-        const blueprint = buildBlueprint( { zipUrl: ZIP_URL, withGive: false } );
+        const blueprint = buildBlueprint( { zipUrl: ZIP_URL } );
 
         expect( blueprint.landingPage ).toBe( '/wp-admin/options-general.php?page=lw-software-manager' );
         expect( blueprint.steps.map( ( step ) => step.step ) ).toEqual( [
@@ -27,11 +27,11 @@ describe( 'buildBlueprint', () => {
         expect( blueprint.steps[ 3 ].options.targetFolderName ).toBe( 'harbor-dev-tools' );
     } );
 
-    it( 'installs GiveWP after Harbor Dev Tools when asked', () => {
-        const blueprint = buildBlueprint( { zipUrl: ZIP_URL, withGive: true } );
+    it( 'installs a host plugin after Harbor Dev Tools when asked', () => {
+        const blueprint = buildBlueprint( { zipUrl: ZIP_URL, host: 'the-events-calendar' } );
 
         expect( blueprint.steps ).toHaveLength( 5 );
-        expect( blueprint.steps[ 4 ].pluginData ).toEqual( { resource: 'wordpress.org/plugins', slug: 'give' } );
+        expect( blueprint.steps[ 4 ].pluginData ).toEqual( { resource: 'wordpress.org/plugins', slug: 'the-events-calendar' } );
     } );
 } );
 
@@ -43,10 +43,11 @@ describe( 'buildComment', () => {
         expect( body ).toContain( `[download the zip](${ ZIP_URL })` );
     } );
 
-    it( 'carries one button per blueprint, each decoding back to that blueprint', () => {
+    it( 'carries a button for Harbor Dev Tools alone and one per host, each decoding back to its blueprint', () => {
+        expect( HOSTS.map( ( host ) => host.slug ) ).toEqual( [ 'give', 'the-events-calendar', 'kadence-blocks' ] );
         expect( blueprintsIn( body ) ).toEqual( [
-            buildBlueprint( { zipUrl: ZIP_URL, withGive: false } ),
-            buildBlueprint( { zipUrl: ZIP_URL, withGive: true } ),
+            buildBlueprint( { zipUrl: ZIP_URL } ),
+            ...HOSTS.map( ( host ) => buildBlueprint( { zipUrl: ZIP_URL, host: host.slug } ) ),
         ] );
     } );
 } );

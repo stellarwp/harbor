@@ -17,16 +17,28 @@ const BUTTON_IMAGE   = 'https://raw.githubusercontent.com/adamziel/playground-pr
  */
 const FIXTURE_KEY = 'lwsw-unified-pro-2026';
 
+/*
+ * Free plugins on WordPress.org that bundle their own copy of Harbor. Each gets
+ * a button that installs its latest release beside Harbor Dev Tools, to check a
+ * change with two Harbor hosts on one site. LearnDash is not here because it
+ * is premium and cannot be downloaded without a license.
+ */
+const HOSTS = [
+    { name: 'GiveWP', slug: 'give' },
+    { name: 'The Events Calendar', slug: 'the-events-calendar' },
+    { name: 'Kadence Blocks', slug: 'kadence-blocks' },
+];
+
 /**
  * Builds the Playground blueprint for one preview button.
  *
- * @param {Object}  args
- * @param {string}  args.zipUrl   Public URL of the Harbor Dev Tools zip built for the pull request.
- * @param {boolean} args.withGive Whether to also install the latest GiveWP release.
+ * @param {Object}      args
+ * @param {string}      args.zipUrl Public URL of the Harbor Dev Tools zip built for the pull request.
+ * @param {string|null} args.host   WordPress.org slug of a plugin to install as well, if any.
  *
  * @return {Object} The blueprint.
  */
-function buildBlueprint( { zipUrl, withGive } ) {
+function buildBlueprint( { zipUrl, host = null } ) {
     const steps = [
         /*
          * Debug output goes to the log instead of the screen: a released host
@@ -43,10 +55,10 @@ function buildBlueprint( { zipUrl, withGive } ) {
         },
     ];
 
-    if ( withGive ) {
+    if ( host ) {
         steps.push( {
             step: 'installPlugin',
-            pluginData: { resource: 'wordpress.org/plugins', slug: 'give' },
+            pluginData: { resource: 'wordpress.org/plugins', slug: host },
             options: { activate: true },
         } );
     }
@@ -84,9 +96,14 @@ function buildButton( blueprint, label ) {
  * @return {string} The comment body, as Markdown.
  */
 function buildComment( { zipUrl, sha, builtAt } ) {
-    const built    = builtAt.toISOString().slice( 0, 16 ).replace( 'T', ' ' ) + ' UTC';
-    const plain    = buildButton( buildBlueprint( { zipUrl, withGive: false } ), 'Open WordPress Playground Preview' );
-    const withGive = buildButton( buildBlueprint( { zipUrl, withGive: true } ), 'Open WordPress Playground Preview with GiveWP' );
+    const built = builtAt.toISOString().slice( 0, 16 ).replace( 'T', ' ' ) + ' UTC';
+    const plain = buildButton( buildBlueprint( { zipUrl } ), 'Open WordPress Playground Preview' );
+    const hosts = HOSTS.flatMap( ( { name, slug } ) => [
+        `**With ${ name }**`,
+        '',
+        buildButton( buildBlueprint( { zipUrl, host: slug } ), `Open WordPress Playground Preview with ${ name }` ),
+        '',
+    ] );
 
     return [
         '### WordPress Playground Preview',
@@ -97,11 +114,10 @@ function buildComment( { zipUrl, sha, builtAt } ) {
         '',
         plain,
         '',
-        '**With GiveWP** (the latest GiveWP release installed alongside Harbor Dev Tools. GiveWP bundles its own copy of Harbor, and Harbor Dev Tools stays the leader.)',
+        'Each button below also installs the latest release of one plugin beside Harbor Dev Tools. That plugin bundles its own copy of Harbor, and Harbor Dev Tools stays the leader.',
         '',
-        withGive,
-        '',
+        ...hosts,
     ].join( '\n' );
 }
 
-module.exports = { buildBlueprint, buildComment };
+module.exports = { HOSTS, buildBlueprint, buildComment };
