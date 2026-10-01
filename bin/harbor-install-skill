@@ -64,7 +64,7 @@ function remove_dir( string $dir ): void {
 	);
 
 	foreach ( $entries as $entry ) {
-		$entry->isDir() ? rmdir( $entry->getPathname() ) : unlink( $entry->getPathname() );
+		$entry->isDir() && ! $entry->isLink() ? rmdir( $entry->getPathname() ) : unlink( $entry->getPathname() );
 	}
 
 	rmdir( $dir );
