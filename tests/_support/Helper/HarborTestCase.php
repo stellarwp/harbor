@@ -24,13 +24,6 @@ class HarborTestCase extends WPTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		// Harbor::init() calls _lw_harbor_instance_registry() to register this
-		// instance into the cross-copy registry. In production this happens during
-		// the bootstrap window (before wp_loaded). The WP test environment fires
-		// wp_loaded before any test runs, so the registry's bootstrap-window guard
-		// triggers _doing_it_wrong here. Expect it so individual tests don't fail.
-		$this->setExpectedIncorrectUsage( '_lw_harbor_instance_registry' );
-
 		$container = new Container();
 		$container->singleton( ContainerInterface::class, $container );
 		Config::set_container( $container );
