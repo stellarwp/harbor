@@ -31,12 +31,12 @@ Harbor is bundled in free WordPress.org plugins (Kadence Blocks, Give, TEC free)
 **A plugin distributed on WordPress.org must not:**
 
 - present a license field that validates a key,
-- call Harbor, the Commerce Portal, the Licensing API, or Herald at runtime,
+- send a request to the Commerce Portal, the Licensing API, or Herald at runtime, directly or through Harbor,
 - install or activate anything from an entered key.
 
 **The most a free plugin may do** is show a static link pointing the user to the Portal, and optionally detect the `LWSW-` key _format_ locally — a string check with no network call — to steer a user who pasted a unified key into a legacy field.
 
-**Bundling Harbor is not the violation.** A free entry plugin still vendors Harbor and calls `Harbor::init()`; with no premium plugin on the site the gate stays closed and nothing networked is registered. What a free plugin must not do is open the gate itself or drive Harbor's licensing and install paths.
+**Bundling Harbor is not the violation.** A free entry plugin still vendors Harbor and calls `Harbor::init()`; with no premium plugin on the site the gate stays closed and nothing networked is registered. A free entry plugin may attach the gate filter on behalf of its premium add-ons, but only with a callback that returns `true` when one of them is actually active (GiveWP does this). Reading stored state through the `lw_harbor_*` helpers is fine too: they read local options and make no request (`lw_harbor_refresh_catalog()` is the exception). What a free plugin must not do is open the gate unconditionally or drive Harbor's validation, activation, and install paths.
 
 **All new licensing and activation surface lives in the premium plugin**, where the premium-plugin gate has opened and Harbor is active. Every license field, validation call, activation button, and install flow belongs there. (Pre-existing Uplink license fields in free plugins are grandfathered and are not what this rule is about; it governs new surface.)
 
@@ -360,15 +360,15 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 
 ### Never do this
 
-| Don't                                                                                 | Do instead                                                               | Why                                                                                                        |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| Build a Portal or activation query string in a plugin                                 | Call the `lw_harbor_*` helper                                            | One copy of the Portal contract per plugin; all drift the moment a parameter changes                       |
-| Validate a key, or call Harbor / Portal / Licensing / Herald, from a free .org plugin | Static Portal link, or a local `LWSW-` format check with no network call | WordPress.org guideline items 5, 6, 7 — see [the boundary](#before-you-build-the-free-vs-premium-boundary) |
-| Install or activate a plugin from an entered key                                      | User-initiated install inside the premium plugin                         | Guideline item 8 — executable code from outside the .org repo                                              |
-| Gate free-plugin onboarding on a license                                              | Complete onboarding with no key                                          | Free onboarding must never require a key                                                                   |
-| Release or QA a plugin pinned to a Harbor dev branch                                  | Wait for the tagged release, then `composer update`                      | Leader election is by version; a dev branch silently loses and the feature does not run                    |
-| Let Strauss prefix `global-functions.php`                                             | Add the `exclude_from_prefix` file pattern                               | Prefixed helpers cannot find the other Harbor copies                                                       |
-| Say "Feature Manager" in user-facing copy                                             | Say "Unified License Manager"                                            | One brand-neutral name across every plugin                                                                 |
+| Don't                                                                                     | Do instead                                                               | Why                                                                                                        |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Build a Portal or activation query string in a plugin                                     | Call the `lw_harbor_*` helper                                            | One copy of the Portal contract per plugin; all drift the moment a parameter changes                       |
+| Validate a key, or send a request to Portal / Licensing / Herald, from a free .org plugin | Static Portal link, or a local `LWSW-` format check with no network call | WordPress.org guideline items 5, 6, 7 — see [the boundary](#before-you-build-the-free-vs-premium-boundary) |
+| Install or activate a plugin from an entered key                                          | User-initiated install inside the premium plugin                         | Guideline item 8 — executable code from outside the .org repo                                              |
+| Gate free-plugin onboarding on a license                                                  | Complete onboarding with no key                                          | Free onboarding must never require a key                                                                   |
+| Release or QA a plugin pinned to a Harbor dev branch                                      | Wait for the tagged release, then `composer update`                      | Leader election is by version; a dev branch silently loses and the feature does not run                    |
+| Let Strauss prefix `global-functions.php`                                                 | Add the `exclude_from_prefix` file pattern                               | Prefixed helpers cannot find the other Harbor copies                                                       |
+| Say "Feature Manager" in user-facing copy                                                 | Say "Unified License Manager"                                            | One brand-neutral name across every plugin                                                                 |
 
 ### Filters
 

@@ -63,11 +63,17 @@ To keep it tracking the installed Harbor version, add it to your Composer script
 }
 ```
 
+Running `vendor/bin/harbor-install-skill` by hand after Strauss has deleted the package does not work: Composer's bin proxy prints a PHP include warning and installs nothing. Strauss copies the command along with the rest of the package, so run that copy instead, from your Strauss `target_directory`:
+
+```bash
+php vendor/vendor-prefixed/stellarwp/harbor/bin/harbor-install-skill
+```
+
 ### Harbor and WordPress.org
 
 Harbor is bundled in free WordPress.org plugins as well as paid ones, and stays inert in the free ones by design. Several of the things it does — validating a license key, calling our servers, installing a plugin — could be read as running against the [WordPress.org plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) if a plugin distributed there did them.
 
-A plugin on WordPress.org must not present a license field that validates a key, call Harbor / the Commerce Portal / the Licensing API / Herald at runtime, or install or activate anything from an entered key. All new licensing and activation surface belongs in the premium plugin, behind the premium-plugin gate. The skill and the [Integration Guide](/docs/guides/integration.md#before-you-build-the-free-vs-premium-boundary) carry the full rule.
+A plugin on WordPress.org must not present a license field that validates a key, send a request to the Commerce Portal / the Licensing API / Herald at runtime (directly or through Harbor), or install or activate anything from an entered key. All new licensing and activation surface belongs in the premium plugin, behind the premium-plugin gate. The skill and the [Integration Guide](/docs/guides/integration.md#before-you-build-the-free-vs-premium-boundary) carry the full rule.
 
 ## Initialize the library
 

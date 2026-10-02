@@ -21,13 +21,6 @@
 const SKILL_NAME = 'harbor-integration';
 
 /**
- * Writes a line to stdout.
- */
-function writeln( string $line ): void {
-	echo $line . PHP_EOL;
-}
-
-/**
  * Writes a line to stderr and exits with a failure code.
  */
 function fail( string $line ): void {
@@ -133,9 +126,4 @@ if ( ! is_file( $target . '/SKILL.md' ) ) {
 	fail( 'Copied ' . $target . ' but SKILL.md is missing.' );
 }
 
-writeln( 'Installed .claude/skills/' . SKILL_NAME . ' from Harbor ' . $version . '.' );
-writeln( 'Commit it. To keep it current, add to your composer.json:' );
-writeln( '' );
-writeln( '    "scripts": {' );
-writeln( '        "post-update-cmd": ["harbor-install-skill"]' );
-writeln( '    }' );
+echo 'Installed .claude/skills/' . SKILL_NAME . ' from Harbor ' . $version . '. Commit it.' . PHP_EOL;

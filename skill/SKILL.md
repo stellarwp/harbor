@@ -1,6 +1,6 @@
 ---
 name: harbor-integration
-description: Integrating LiquidWeb Harbor (unified licensing, updates, feature gating) into a WordPress plugin. Use when touching Harbor::init, Config::set_*, LWSW license keys, lw_harbor_* helper functions, lw-harbor/* or lw_harbor/* hooks, legacy license reporting, license or activation UI, onboarding that mentions a key, the Unified License Manager, or any vendored copy of Harbor (vendor/stellarwp/harbor or a Strauss-prefixed copy under vendor-prefixed/).
+description: Integrating LiquidWeb Harbor (unified licensing, updates, feature gating) into a WordPress plugin. Use when touching Harbor::init, Config::set_*, LWSW license keys, lw_harbor_* helper functions, lw-harbor/* or lw_harbor/* hooks, legacy license reporting, license or activation UI, onboarding that mentions a key, the Unified License Manager, or any vendored copy of Harbor (vendor/stellarwp/harbor or a Strauss-prefixed copy under vendor-prefixed/). Also use before changing anything that depends on whether a customer is licensed, paying, or on a paid plan (premium or add-on checks, platform or application fee waivers, feature gating, entitlements), and as soon as you meet a lw_harbor_* call or a LiquidWeb\Harbor class in code you are about to change.
 ---
 
 # Harbor integration
@@ -26,7 +26,8 @@ repository).
 A plugin on WordPress.org **must not**:
 
 - present a license field that validates a key,
-- call Harbor, the Commerce Portal, the Licensing API, or Herald at runtime,
+- send a request to the Commerce Portal, the Licensing API, or Herald at runtime, directly
+  or through Harbor,
 - install or activate anything from an entered key.
 
 The most a free plugin may do: a **static link** to the Portal, and optionally a **local
@@ -35,8 +36,13 @@ pasted a unified key into a legacy field.
 
 Bundling Harbor is not the violation. A free entry plugin still vendors Harbor and calls
 `Harbor::init()`; with no premium plugin on the site the gate stays closed and nothing
-networked is registered. Do not remove that bootstrap. What a free plugin must not do is
-open the gate itself or drive Harbor's licensing and install paths.
+networked is registered. Do not remove that bootstrap. A free entry plugin may attach the
+gate filter on behalf of its premium add-ons, but only with a callback that returns
+`true` when one of them is actually active (GiveWP does this). Reading stored state
+through the `lw_harbor_*` helpers is fine too: they read local options and make no
+request (`lw_harbor_refresh_catalog()` is the exception). What a free plugin must not do
+is open the gate unconditionally or drive Harbor's validation, activation, and install
+paths.
 
 All new licensing and activation surface belongs in the **premium** plugin, where the
 premium-plugin gate has opened and Harbor is active: license fields, validation calls,
@@ -107,8 +113,9 @@ not run — sometimes without an error, sometimes as a fatal on a missing method
 
 ## Bootstrap
 
-Order matters and is the most common source of "Harbor does nothing" bugs. A free entry
-plugin runs steps 2–4 only; step 1 belongs to the premium plugin.
+Order matters and is the most common source of "Harbor does nothing" bugs. `__return_true`
+in step 1 is for a premium plugin. A free entry plugin either skips step 1 or attaches a
+callback that returns `true` only when one of its premium add-ons is active.
 
 ```php
 use Prefix\LiquidWeb\Harbor\Config;
