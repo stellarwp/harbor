@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["bin/stellar-harbor", "bin/harbor-install-skill"],
+    "bin": ["bin/stellar-harbor"],
     "autoload": {
         "psr-4": {
             "LiquidWeb\\Harbor\\": "src/Harbor/",

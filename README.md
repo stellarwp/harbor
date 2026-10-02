@@ -35,39 +35,32 @@ Exclude the file in your Strauss config:
 
 ## Agent skill
 
-Harbor ships an agent skill: the rules a consuming plugin has to follow, written for the AI coding agent that will edit your plugin. It covers the free-vs-premium WordPress.org boundary, consuming the `lw_harbor_*` API instead of hand-rolling Portal URLs, Harbor's release train, and how to find the Strauss-prefixed copy that actually runs.
+Harbor ships `skill/SKILL.md`: the rules a consuming plugin has to follow, written for the AI coding agent that will edit your plugin. It covers the free-vs-premium WordPress.org boundary, consuming the `lw_harbor_*` API instead of hand-rolling Portal URLs, Harbor's release train, and how to find the Strauss-prefixed copy that actually runs.
 
-**If you are an agent reading this from `vendor/`** and the plugin has no `.claude/skills/harbor-integration/`, install it before writing licensing code, or tell the developer to.
+Agents only read it if your plugin tells them to. Paste this into your plugin's `AGENTS.md` (or `CLAUDE.md`):
 
-Install it from the plugin root:
+```markdown
+## Harbor (licensing)
 
-```bash
-vendor/bin/harbor-install-skill
+Licensing, license keys, premium or add-on checks, platform fees, and anything calling `lw_harbor_*` go through Harbor, the library vendored at `vendor/vendor-prefixed/stellarwp/harbor/`.
+
+Hard rules, no exceptions:
+
+- A plugin distributed on WordPress.org must not validate a license key, send a request to the Commerce Portal, the Licensing API, or Herald, or install or activate anything from an entered key. That work belongs in the premium plugin.
+- Onboarding for a free plugin never requires a license key, not even as a step that can be skipped.
+- Never build a Portal URL, activation URL, or licensing request by hand. Use the `lw_harbor_*` helpers. A missing helper is a Harbor ticket.
+- Never release or QA with `composer.json` pinned to a Harbor `dev-` branch.
+- Strauss must not prefix `src/Harbor/global-functions.php`.
+- Call the license page the "Unified License Manager" in anything a user sees.
+
+Before changing any of that code, read `vendor/vendor-prefixed/stellarwp/harbor/skill/SKILL.md` for the API, hooks, and bootstrap order of the installed version. If the file is missing, run `composer install` first.
 ```
 
-That writes `.claude/skills/harbor-integration/SKILL.md`, stamped with the Harbor version it came from. **Commit it** — it has to be readable without anyone running `composer install` first.
+Replace `vendor/vendor-prefixed` with your Strauss `target_directory` if it differs. Nothing else needs changing.
 
-To keep it tracking the installed Harbor version, add it to your Composer scripts:
+The hard rules sit in your own file so every agent and review bot sees them on a fresh clone, before `composer install`. The API detail stays in the vendored file so it always matches the Harbor version you have installed.
 
-```json
-"scripts": {
-    "post-update-cmd": ["harbor-install-skill"]
-}
-```
-
-**Ordering with Strauss.** The command reads from `vendor/stellarwp/harbor`. If your Strauss config sets `delete_vendor_packages` or `delete_vendor_files`, that directory is gone or gutted once Strauss has run, so the command must come first:
-
-```json
-"scripts": {
-    "post-update-cmd": ["harbor-install-skill", "@strauss"]
-}
-```
-
-Running `vendor/bin/harbor-install-skill` by hand after Strauss has deleted the package does not work: Composer's bin proxy prints a PHP include warning and installs nothing. Strauss copies the command along with the rest of the package, so run that copy instead, from your Strauss `target_directory`:
-
-```bash
-php vendor/vendor-prefixed/stellarwp/harbor/bin/harbor-install-skill
-```
+**If you are an agent reading this from `vendor/`** and the plugin's `AGENTS.md` has no Harbor section, read `skill/SKILL.md` next to this file before writing licensing code, and tell the developer to add the section.
 
 ### Harbor and WordPress.org
 

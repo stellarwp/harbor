@@ -84,11 +84,11 @@ Harbor PR reviewed -> merged -> tagged/released
 
 Planning consequence: any plugin ticket depending on new Harbor code inherits the Harbor release as a hard predecessor. Code review of the dependent plugin PR can run in parallel; QA cannot.
 
-### Install the agent skill
+### Tell your agents about Harbor
 
-Harbor ships an agent skill stating the rules above in the form an AI coding agent reads before it edits your plugin. Install it from the plugin root with `vendor/bin/harbor-install-skill`, commit the result, and wire it to `post-update-cmd` so it tracks the installed Harbor version.
+Harbor ships `skill/SKILL.md`, the rules above in the form an AI coding agent reads before it edits your plugin. Agents only read it if your plugin points them at it, so paste the snippet from the [README](/README.md#agent-skill) into your plugin's `AGENTS.md`. It carries the hard rules inline and a pointer to the vendored skill file.
 
-Full instructions, including the ordering constraint against Strauss, are in the [README](/README.md#agent-skill) — that file ships in the Composer dist, so it is the copy present in your `vendor/` tree. This guide is not: `.gitattributes` export-ignores `docs/`.
+The README ships in the Composer dist, so it is the copy present in your `vendor/` tree. This guide is not: `.gitattributes` export-ignores `docs/`.
 
 ---
 
