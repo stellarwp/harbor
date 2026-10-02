@@ -1,4 +1,0 @@
-significance: minor
-type: feature
-entry: Added an agent skill (skill/SKILL.md) documenting the free-vs-premium boundary, API-consumption, and release rules, plus a README snippet that consuming plugins paste into their AGENTS.md so agents read it.
-timestamp: 2026-08-25T17:00:14.000Z
