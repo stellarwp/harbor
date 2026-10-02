@@ -8,19 +8,7 @@ This document explains how to integrate a WordPress plugin with LiquidWeb Harbor
 
 Since the recommendation is to use [Strauss](https://github.com/BrianHenryIE/strauss) to prefix this library's namespaces, all examples use the `Boomshakalaka` namespace prefix. Replace `Boomshakalaka` with your actual vendor prefix wherever it appears.
 
-### Strauss must not prefix the global functions
-
-Harbor's global functions (`src/Harbor/global-functions.php`) are deliberately non-namespaced. They are how the copies of Harbor on a site find each other and route every call to the highest-version copy. Recent Strauss versions prefix global function names as well as namespaces, which breaks that negotiation: each plugin ends up with its own privately-named copy of the helpers, and `function_exists()` guards never see one another.
-
-Exclude the file in your `composer.json` Strauss config:
-
-```json
-"exclude_from_prefix": {
-    "file_patterns": [
-        "/harbor/src/Harbor/global-functions\\.php$"
-    ]
-}
-```
+Strauss must not prefix Harbor's global functions. The exclusion to add to your Strauss config is in the [README](/README.md#strauss-must-not-prefix-the-global-functions).
 
 ---
 
@@ -60,7 +48,7 @@ If the helper you need does not exist yet, that is a Harbor ticket, not a reason
 
 ### Naming: the "Unified License Manager"
 
-Harbor's in-plugin license management page is called the **Unified License Manager** in everything a user sees: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere.
+Call Harbor's license management page the **Unified License Manager** in everything your plugin shows a user: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere. The rule covers your plugin's copy; Harbor's own page is still titled "Liquid Web Software Manager".
 
 The name is deliberately brand-neutral. The company name has changed several times (Liquid Web / Nexcess / StellarWP), and a brand-based label would need re-touching in every plugin on every rebrand.
 

@@ -52,8 +52,8 @@ are grandfathered; this rule governs new surface.)
 **Free-product onboarding is never gated behind a license.** It must complete without a
 key, with no exceptions — including a step that can be skipped.
 
-If a ticket asks for validation, an install-from-key flow, or a Harbor call inside a free
-plugin, it cannot be built as written. Say so and move the work to the premium plugin.
+If a ticket asks for validation, an install-from-key flow, or a request to the licensing
+services inside a free plugin, it cannot be built as written. Say so and move the work to the premium plugin.
 
 ## Never hand-roll what Harbor exposes
 
@@ -139,6 +139,8 @@ Harbor::init();
 `Harbor::init()` registers providers, REST routes, and the admin page **only if** a
 callback on `lw_harbor/premium_plugin_exists` returned `true`. If that filter is attached
 from a class that Harbor itself loads, it is too late — the gate already evaluated.
+The global functions register before the gate, so the `lw_harbor_*` helpers exist on
+free-only sites too; see "Global helpers" for what they return there.
 Register the Harbor provider after all other providers so the container is complete.
 
 Anything that depends on a booted Harbor hooks `lw_harbor/loaded`, not `plugins_loaded`.
@@ -226,8 +228,10 @@ user's toggle.
 
 ## Naming: "Unified License Manager"
 
-Harbor's in-plugin license page is the **Unified License Manager** in everything a user
-sees — UI copy, onboarding text, link labels. The name is brand-neutral on purpose: the
+Call Harbor's license page the **Unified License Manager** in everything your plugin
+shows a user — UI copy, onboarding text, link labels. The rule covers plugin copy;
+Harbor's own page is still titled "Liquid Web Software Manager". The name is
+brand-neutral on purpose: the
 company name has changed several times (Liquid Web / Nexcess / StellarWP) and a
 brand-based label would need re-touching in every plugin on every rebrand.
 
