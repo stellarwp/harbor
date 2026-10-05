@@ -160,7 +160,7 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 1. Run the **Release Prep** workflow (`Actions → Release Prep → Run workflow`). Supply the target branch, version (e.g. `1.2.0`), and the release date (e.g. `2026-04-29`). The workflow bumps the `VERSION` constant, compiles the changelog, and opens a PR automatically.
 2. Review and merge the PR.
 3. Create a GitHub Release with a new tag in the format `vX.X.X` targeting the merge commit.
-4. The **Release** workflow opens a PR in each consumer plugin (GiveWP, Kadence Blocks, tribe-common for The Events Calendar, and LearnDash) that bumps `stellarwp/harbor` to the new version. To rerun it by hand, or to target other repos, run `composer release:update-consumers -- [version] [owner/repo ...]`. The consumer list lives in `dev_scripts/update-consumers.sh`.
+4. The **Release** workflow opens a PR in each consumer plugin (GiveWP, Kadence Blocks, tribe-common for The Events Calendar, and LearnDash) that bumps `stellarwp/harbor` to the new version. To rerun it by hand, or to target other repos, run `composer release:update-consumers -- [version] [owner/repo ...]`. Add `--dry-run` to see the change without pushing anything. The consumer list lives in `dev_scripts/update-consumers.sh`.
 
 ## Documentation
 

@@ -108,6 +108,6 @@
       "compatibility": "Run PHPCompatibilityWP for all supported PHP versions.",
       "release:prep": "Prepare a release: set version, replace TBD tags, and write changelog. Usage: composer release:prep -- <version> [date]",
       "release:set-version": "Replace TBD tags and update Harbor::VERSION. Usage: composer release:set-version -- <version>",
-      "release:update-consumers": "Open PRs bumping Harbor in consumer plugins. Usage: composer release:update-consumers -- [version] [-y] [owner/repo ...]"
+      "release:update-consumers": "Open PRs bumping Harbor in consumer plugins. Usage: composer release:update-consumers -- [version] [-y] [--dry-run] [owner/repo ...]"
     }
 }

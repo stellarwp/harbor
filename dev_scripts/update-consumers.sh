@@ -5,11 +5,13 @@
 # (.github/workflows/release.yml) and can be run by hand.
 #
 # Usage:
-#   composer release:update-consumers -- [version] [-y] [owner/repo ...]
-#   dev_scripts/update-consumers.sh [version] [-y] [owner/repo ...]
+#   composer release:update-consumers -- [version] [-y] [--dry-run] [owner/repo ...]
+#   dev_scripts/update-consumers.sh [version] [-y] [--dry-run] [owner/repo ...]
 #     version     Release version, with or without a leading "v". Defaults to
 #                 the newest tag on origin.
 #     -y, --yes   Skip the confirmation prompt (required when there is no TTY).
+#     --dry-run   Clone and run composer, then show the change instead of
+#                 pushing it or opening a PR. Needs no confirmation.
 #     owner/repo  Consumer repos to update. Defaults to CONSUMERS below.
 #
 # Each repo gets a chore/bump-harbor-<version> branch cut from its default
@@ -34,10 +36,12 @@ PKG="stellarwp/harbor"
 
 VERSION=""
 ASSUME_YES=""
+DRY_RUN=""
 REPOS=()
 for arg in "$@"; do
 	case "$arg" in
 		-y|--yes) ASSUME_YES=1 ;;
+		--dry-run) DRY_RUN=1 ;;
 		-*) echo "ERROR: unknown flag '$arg'"; exit 1 ;;
 		*/*) REPOS+=("$arg") ;;
 		*)
@@ -65,7 +69,7 @@ BRANCH="chore/bump-harbor-${VERSION}"
 echo "Bump ${PKG} to ^${VERSION} on branch ${BRANCH} in:"
 printf '  • %s\n' "${REPOS[@]}"
 
-if [ -z "$ASSUME_YES" ]; then
+if [ -z "$ASSUME_YES" ] && [ -z "$DRY_RUN" ]; then
 	[ -t 0 ] || { echo "ERROR: no TTY for confirmation. Pass -y to proceed."; exit 1; }
 	read -rp "Proceed? [y/N] " REPLY
 	[[ "$REPLY" == [Yy]* ]] || { echo "Aborted."; exit 0; }
@@ -106,6 +110,13 @@ update_repo() {
 	fi
 
 	git commit --quiet -m "chore: bump ${PKG} to ${VERSION}"
+
+	if [ -n "$DRY_RUN" ]; then
+		git show --stat --format= HEAD
+		echo "${repo}: dry run, not pushing or opening a PR."
+		return 0
+	fi
+
 	git push --quiet --force -u origin "$BRANCH"
 
 	local pr
