@@ -43,3 +43,30 @@ jobs:
 
           git tag -f "$TAG"
           git push origin --force "refs/tags/$TAG"
+
+  update-consumers:
+    name: Open PRs in consumer plugins
+    # After sync-version, which may move the tag.
+    needs: sync-version
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          coverage: none
+
+      # GH_BOT_TOKEN needs push and pull request access to every repo in
+      # CONSUMERS (dev_scripts/update-consumers.sh), plus read access to their
+      # private composer dependencies.
+      - name: Open PRs
+        env:
+          GH_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh auth setup-git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          dev_scripts/update-consumers.sh "$TAG" -y
