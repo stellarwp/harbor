@@ -162,6 +162,11 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 3. Create a GitHub Release with a new tag in the format `vX.X.X` targeting the merge commit.
 4. Optionally, once the release is checked, run the **Update Consumers** workflow (`Actions → Update Consumers → Run workflow`) instead of bumping each plugin by hand. It opens a PR in every plugin in [Plugins with Harbor](#plugins-with-harbor) that bumps `stellarwp/harbor` to the new version (The Events Calendar and Event Tickets get theirs through tribe-common). To run it locally, or to target specific repos, run `composer release:update-consumers -- [version] [owner/repo ...]`. Add `--dry-run` to see the change without pushing anything. The consumer list lives in `dev_scripts/update-consumers.sh`.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, the scripts reference, and
+how to test local Harbor changes against a partner plugin without publishing a new release.
+
 ## Documentation
 
 Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
@@ -192,6 +197,7 @@ Start with [Harbor Overview](/docs/harbor.md) for the full architecture.
 ### Guides
 
 - [Integration Guide](/docs/guides/integration.md) — How to integrate your plugin with Harbor.
+- [Partner plugin testing](/docs/guides/partner-plugin-testing.md) — Test local Harbor changes in a real partner plugin (Composer path repo).
 - [CLI Commands](/docs/guides/cli.md) — WP-CLI commands for feature management.
 - [Testing](/docs/guides/testing.md) — PHP tests with Codeception/`slic`; E2E tests with Playwright/wp-env.
 
