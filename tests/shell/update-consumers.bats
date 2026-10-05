@@ -45,10 +45,16 @@ case "$1 $2" in
 esac
 SH
 
-	# composer: writes the requested constraint the way `composer require` would.
+	# composer: `show` finds the versions in PACKAGIST_VERSIONS; `require`
+	# writes the requested constraint the way the real one would.
+	export PACKAGIST_VERSIONS="1.6.1 1.7.0"
 	cat > "$TEST_DIR/bin/composer" <<'SH'
 #!/usr/bin/env bash
 echo "composer $*" >> "$STUB_LOG"
+if [ "$1" = show ]; then
+	[[ " $PACKAGIST_VERSIONS " == *" ${*: -1} "* ]]
+	exit
+fi
 [ "$(basename "$PWD")" != "${COMPOSER_FAIL_REPO:-}" ] || { echo "composer failed" >&2; exit 1; }
 constraint="${2#*:}"
 printf '{"require":{"stellarwp/harbor":"%s"}}\n' "$constraint" > composer.json
@@ -96,6 +102,14 @@ remote_file() {
 	[[ "$output" == *"Pass -y to proceed."* ]]
 }
 
+@test "stops before touching any repo when the version is not on Packagist" {
+	export PACKAGIST_VERSIONS="1.6.1"
+	run "$SCRIPT" 1.7.0 -y impress-org/givewp
+	[ "$status" -eq 1 ]
+	[[ "$output" == *"composer can't see stellarwp/harbor 1.7.0 on Packagist yet"* ]]
+	run ! grep -q "gh repo clone" "$STUB_LOG"
+}
+
 @test "defaults to the newest stable tag on origin" {
 	run "$SCRIPT" --dry-run impress-org/givewp
 	[ "$status" -eq 0 ]
@@ -116,6 +130,19 @@ remote_file() {
 	[[ "$(remote_file impress-org/givewp composer.json)" == *'"^1.7.0"'* ]]
 	[[ "$(remote_file impress-org/givewp composer.lock)" == "locked 1.7.0" ]]
 	grep -q "gh pr create -R impress-org/givewp --head $BRANCH" "$STUB_LOG"
+	[[ "$output" == *"impress-org/givewp: opened https://github.com/impress-org/givewp/pull/1"* ]]
+}
+
+@test "lists every repo's result on the workflow summary" {
+	export GITHUB_STEP_SUMMARY="$TEST_DIR/summary.md"
+	export GH_OPEN_PR="https://github.com/stellarwp/kadence-blocks/pull/9"
+	make_remote impress-org/givewp "^1.7.0"
+	export COMPOSER_FAIL_REPO=stellarwp-memberdash
+	run "$SCRIPT" 1.7.0 -y impress-org/givewp stellarwp/kadence-blocks stellarwp/memberdash
+	[ "$status" -eq 1 ]
+	grep -qx "| impress-org/givewp | already on 1.7.0 |" "$GITHUB_STEP_SUMMARY"
+	grep -qx "| stellarwp/kadence-blocks | refreshed https://github.com/stellarwp/kadence-blocks/pull/9 |" "$GITHUB_STEP_SUMMARY"
+	grep -qx "| stellarwp/memberdash | failed |" "$GITHUB_STEP_SUMMARY"
 }
 
 @test "refreshes the branch and keeps an open PR" {
@@ -155,7 +182,7 @@ remote_file() {
 	export COMPOSER_FAIL_REPO=impress-org-givewp
 	run "$SCRIPT" 1.7.0 -y impress-org/givewp stellarwp/kadence-blocks
 	[ "$status" -eq 1 ]
-	[[ "$output" == *"Failed:"*"impress-org/givewp"* ]]
-	[[ "$output" != *"Failed:"*"kadence-blocks"* ]]
+	[[ "$output" == *"impress-org/givewp: failed"* ]]
+	[[ "$output" == *"stellarwp/kadence-blocks: opened"* ]]
 	[[ "$(remote_file stellarwp/kadence-blocks composer.json)" == *'"^1.7.0"'* ]]
 }
