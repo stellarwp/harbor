@@ -69,6 +69,17 @@ if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 	exit 1
 fi
 
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+# Packagist's CDN can serve composer metadata without a new release for up to
+# 15 minutes after it's tagged, and composer fails in every repo until it
+# catches up. Ask composer itself, from an empty directory, before starting.
+if ! composer show --all --working-dir="$TMP" "$PKG" "$VERSION" >/dev/null 2>&1; then
+	echo "ERROR: composer can't see ${PKG} ${VERSION} on Packagist yet. New releases can take up to 15 minutes. Try again shortly."
+	exit 1
+fi
+
 BRANCH="chore/bump-harbor-${VERSION}"
 
 echo "Bump ${PKG} to ^${VERSION} on branch ${BRANCH} in:"
@@ -85,8 +96,12 @@ fi
 COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"$(gh auth token)\"}}"
 export COMPOSER_AUTH
 
-TMP="$(mktemp -d)"
-trap 'rm -rf "$TMP"' EXIT
+# One "repo|result" line per repo, written from the child shells below.
+RESULTS="$TMP/results"
+touch "$RESULTS"
+record() {
+	echo "$1|$2" >> "$RESULTS"
+}
 
 BODY="Updates \`${PKG}\` to [v${VERSION}](https://github.com/stellarwp/harbor/releases/tag/v${VERSION}).
 
@@ -112,12 +127,14 @@ update_repo() {
 	git add composer.json composer.lock
 	if git diff --cached --quiet; then
 		echo "${repo}: already on ${VERSION}, nothing to do."
+		record "$repo" "already on ${VERSION}"
 		return 0
 	fi
 
 	if [ -n "$DRY_RUN" ]; then
 		git --no-pager diff --cached -- composer.json composer.lock
 		echo "${repo}: dry run, not pushing or opening a PR."
+		record "$repo" "dry run"
 		return 0
 	fi
 
@@ -128,9 +145,12 @@ update_repo() {
 	pr="$(gh pr list -R "$repo" --head "$BRANCH" --state open --json url -q '.[0].url')"
 	if [ -n "$pr" ]; then
 		echo "${repo}: refreshed ${pr}"
+		record "$repo" "refreshed ${pr}"
 	else
-		gh pr create -R "$repo" --head "$BRANCH" \
-			--title "Bump ${PKG} to ${VERSION}" --body "$BODY"
+		pr="$(gh pr create -R "$repo" --head "$BRANCH" \
+			--title "Bump ${PKG} to ${VERSION}" --body "$BODY")"
+		echo "${repo}: opened ${pr}"
+		record "$repo" "opened ${pr}"
 	fi
 }
 
@@ -144,12 +164,29 @@ for repo in "${REPOS[@]}"; do
 	( set -e; update_repo "$repo" )
 	status=$?
 	set -e
-	[ $status -eq 0 ] || FAILED+=("$repo")
+	if [ $status -ne 0 ]; then
+		FAILED+=("$repo")
+		record "$repo" "failed"
+	fi
 done
 
-if [ ${#FAILED[@]} -gt 0 ]; then
-	echo ""
-	echo "Failed:"
-	printf '  • %s\n' "${FAILED[@]}"
-	exit 1
+echo ""
+echo "Results:"
+while IFS='|' read -r repo result; do
+	echo "  • ${repo}: ${result}"
+done < "$RESULTS"
+
+# Shows the same list on the workflow run's summary page.
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+	{
+		echo "### ${PKG} ${VERSION}"
+		echo ""
+		echo "| Repo | Result |"
+		echo "| --- | --- |"
+		while IFS='|' read -r repo result; do
+			echo "| ${repo} | ${result} |"
+		done < "$RESULTS"
+	} >> "$GITHUB_STEP_SUMMARY"
 fi
+
+[ ${#FAILED[@]} -eq 0 ] || exit 1
