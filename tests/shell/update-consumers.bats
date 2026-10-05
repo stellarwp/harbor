@@ -57,7 +57,11 @@ SH
 	chmod +x "$TEST_DIR/bin/gh" "$TEST_DIR/bin/composer"
 	export PATH="$TEST_DIR/bin:$PATH"
 
-	for repo in impress-org/givewp stellarwp/kadence-blocks the-events-calendar/tribe-common stellarwp/learndash-core; do
+	CONSUMERS=(
+		impress-org/givewp stellarwp/kadence-blocks stellarwp/kadence-pro stellarwp/kadence-shop-kit
+		stellarwp/learndash-core stellarwp/memberdash stellarwp/restrict-content-pro the-events-calendar/tribe-common
+	)
+	for repo in "${CONSUMERS[@]}"; do
 		make_remote "$repo" "^1.6"
 	done
 
@@ -101,7 +105,7 @@ remote_file() {
 @test "defaults to every consumer repo" {
 	run "$SCRIPT" 1.7.0 --dry-run
 	[ "$status" -eq 0 ]
-	for repo in impress-org/givewp stellarwp/kadence-blocks the-events-calendar/tribe-common stellarwp/learndash-core; do
+	for repo in "${CONSUMERS[@]}"; do
 		[[ "$output" == *"== $repo"* ]]
 	done
 }

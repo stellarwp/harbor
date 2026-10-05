@@ -23,13 +23,18 @@
 
 set -euo pipefail
 
-# The Events Calendar consumes Harbor through tribe-common (its `common`
-# submodule), so the PR goes there.
+# The Events Calendar and Event Tickets consume Harbor through tribe-common
+# (their `common` submodule), so the PR goes there. Keep this in sync with
+# the "Plugins with Harbor" table in README.md.
 CONSUMERS=(
 	impress-org/givewp
 	stellarwp/kadence-blocks
-	the-events-calendar/tribe-common
+	stellarwp/kadence-pro
+	stellarwp/kadence-shop-kit
 	stellarwp/learndash-core
+	stellarwp/memberdash
+	stellarwp/restrict-content-pro
+	the-events-calendar/tribe-common
 )
 
 PKG="stellarwp/harbor"
@@ -96,12 +101,13 @@ update_repo() {
 	cd "$dir"
 	git checkout --quiet -B "$BRANCH"
 
-	# -w lets Harbor's own dependencies move with it. Extensions are ignored
-	# because the runner's PHP may not match the plugin's; each plugin pins
-	# config.platform.php, so the PHP version is still checked.
+	# -w lets Harbor's own dependencies move with it. The runner's PHP may not
+	# match the plugin's, so missing extensions and PHP upper bounds (old dev
+	# tools like phpunit 7) are ignored. PHP minimums are still checked, against
+	# config.platform.php where the plugin sets it.
 	composer require "${PKG}:^${VERSION}" -w \
 		--no-install --no-scripts --no-audit --no-interaction \
-		--ignore-platform-req='ext-*'
+		--ignore-platform-req='ext-*' --ignore-platform-req='php+'
 
 	git add composer.json composer.lock
 	if git diff --cached --quiet; then
