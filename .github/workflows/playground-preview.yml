@@ -1,0 +1,136 @@
+# cspell:ignore shivammathur evnt marocchino
+name: Playground Preview
+
+# Adds a "Preview in WordPress Playground" button to a pull request: a throwaway WordPress in the
+# browser running the pull request's copy of Harbor.
+#
+# Harbor is a library, so the preview installs Harbor Dev Tools built against the pull request.
+# Harbor Dev Tools bumps its bundled Harbor one patch version, which makes the pull request's
+# code the leader on the site, and serves fixture catalog and licensing data, so no license key
+# is needed.
+#
+# It is opt-in: add the "playground" label to a pull request to get a preview, and it is rebuilt
+# on every push for as long as the label stays on. Pull requests from forks are skipped, because
+# they cannot see the secrets.
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+# One run per pull request at a time. A push while a preview is still building cancels that build,
+# so an older zip can never overwrite a newer button.
+#
+# A run started by some other label builds nothing, so it goes in a group of its own and cannot
+# cancel a preview that is still building.
+concurrency:
+  group: playground-preview-${{ github.event.pull_request.number }}-${{ github.event.action != 'labeled' || github.event.label.name == 'playground' }}
+  cancel-in-progress: true
+
+jobs:
+  zip:
+    if: >-
+      !github.event.pull_request.head.repo.fork
+      && contains(github.event.pull_request.labels.*.name, 'playground')
+      && (github.event.action != 'labeled' || github.event.label.name == 'playground')
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+
+    permissions:
+      contents: read
+
+    outputs:
+      url: ${{ steps.package.outputs.url }}
+
+    steps:
+      - name: Checkout Harbor
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: harbor
+          persist-credentials: false
+
+      - name: Checkout Harbor Dev Tools
+        uses: actions/checkout@v6
+        with:
+          repository: stellarwp/harbor-dev-tools
+          path: harbor-dev-tools
+          token: ${{ secrets.GH_BOT_TOKEN }}
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          coverage: none
+
+      # watch.sh is the script behind "composer harbor:watch". With --no-watch it copies the
+      # checked-out Harbor into Harbor Dev Tools once and runs Strauss.
+      - name: Build Harbor Dev Tools against this pull request
+        working-directory: harbor-dev-tools
+        run: |
+          composer install --no-interaction
+          ./dev_scripts/watch.sh "$GITHUB_WORKSPACE/harbor" --no-watch
+
+      - name: Package the zip
+        id: package
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          name="harbor-playground-pr${PR}-${SHA:0:7}.zip"
+          mkdir zip_files
+          cd harbor-dev-tools
+          mkdir harbor-dev-tools
+          cp -r plugin.php src vendor vendor-prefixed fixtures harbor-dev-tools/
+          zip -qr "../zip_files/${name}" harbor-dev-tools
+          echo "url=https://evnt.is/test-zip?file=${name}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the zip
+        uses: the-events-calendar/action-s3-utility@main
+        with:
+          args: --acl public-read --follow-symlinks
+        env:
+          S3_BUCKET: ${{ secrets.PACKAGED_ZIP_BUCKET }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_REGION: ${{ secrets.PACKAGED_ZIP_REGION }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          COMMAND: sync
+          SOURCE_DIR: zip_files
+
+  button:
+    needs: zip
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+
+    # Reads the comment script and writes one comment on the pull request, nothing else.
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout the comment script
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: .github/scripts
+          persist-credentials: false
+
+      - name: Build the comment
+        id: comment
+        uses: actions/github-script@v9
+        env:
+          ZIP_URL: ${{ needs.zip.outputs.url }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          result-encoding: string
+          script: |
+            const { buildComment } = require( './.github/scripts/playground-preview-comment.js' );
+
+            return buildComment( { zipUrl: process.env.ZIP_URL, sha: process.env.SHA, builtAt: new Date() } );
+
+      # One comment per pull request, updated in place on every build.
+      - name: Post the comment
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: playground-preview
+          message: ${{ steps.comment.outputs.result }}
