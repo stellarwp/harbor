@@ -132,9 +132,16 @@ remote_file() {
 	run ! grep -q "gh pr" "$STUB_LOG"
 }
 
-@test "dry run neither pushes nor opens a PR" {
+@test "dry run shows the diff without committing, pushing or opening a PR" {
+	# A failing pre-commit hook proves the dry run never commits.
+	mkdir -p "$TEST_DIR/hooks"
+	printf '#!/bin/sh\nexit 1\n' > "$TEST_DIR/hooks/pre-commit"
+	chmod +x "$TEST_DIR/hooks/pre-commit"
+	export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0="$TEST_DIR/hooks"
+
 	run "$SCRIPT" 1.7.0 --dry-run impress-org/givewp
 	[ "$status" -eq 0 ]
+	[[ "$output" == *'+{"require":{"stellarwp/harbor":"^1.7.0"}}'* ]]
 	[[ "$output" == *"impress-org/givewp: dry run"* ]]
 	run ! git -C "$REMOTES/impress-org-givewp.git" rev-parse --verify --quiet "$BRANCH"
 	run ! grep -q "gh pr" "$STUB_LOG"

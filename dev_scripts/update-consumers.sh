@@ -10,7 +10,7 @@
 #     version     Release version, with or without a leading "v". Defaults to
 #                 the newest tag on origin.
 #     -y, --yes   Skip the confirmation prompt (required when there is no TTY).
-#     --dry-run   Clone and run composer, then show the change instead of
+#     --dry-run   Clone and run composer, then show the diff instead of
 #                 pushing it or opening a PR. Needs no confirmation.
 #     owner/repo  Consumer repos to update. Defaults to CONSUMERS below.
 #
@@ -109,14 +109,13 @@ update_repo() {
 		return 0
 	fi
 
-	git commit --quiet -m "chore: bump ${PKG} to ${VERSION}"
-
 	if [ -n "$DRY_RUN" ]; then
-		git show --stat --format= HEAD
+		git --no-pager diff --cached -- composer.json composer.lock
 		echo "${repo}: dry run, not pushing or opening a PR."
 		return 0
 	fi
 
+	git commit --quiet -m "chore: bump ${PKG} to ${VERSION}"
 	git push --quiet --force -u origin "$BRANCH"
 
 	local pr
