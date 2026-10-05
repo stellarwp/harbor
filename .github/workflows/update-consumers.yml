@@ -2,6 +2,7 @@
 # Opens a PR in each consumer plugin bumping stellarwp/harbor to a released
 # version. Run it by hand once a release is out and checked.
 name: Update Consumers
+run-name: Update Consumers ${{ inputs.version || 'latest' }}${{ inputs.dry_run && ' (dry run)' || '' }}
 
 on:
   workflow_dispatch:
