@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # Opens a PR on each consumer plugin bumping its stellarwp/harbor requirement
-# to a released version. Runs automatically after a release is published
-# (.github/workflows/release.yml) and can be run by hand.
+# to a released version. Run it from the Update Consumers workflow
+# (.github/workflows/update-consumers.yml) or locally.
 #
 # Usage:
 #   composer release:update-consumers -- [version] [-y] [--dry-run] [owner/repo ...]
@@ -87,7 +87,7 @@ BODY="Updates \`${PKG}\` to [v${VERSION}](https://github.com/stellarwp/harbor/re
 
 Only \`composer.json\` and \`composer.lock\` change. Run \`composer install\` to pull in the new version.
 
-Opened automatically by Harbor's release workflow."
+Opened by Harbor's update-consumers script."
 
 update_repo() {
 	local repo="$1" dir="$TMP/${1//\//-}"
