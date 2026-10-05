@@ -1,3 +1,0 @@
-significance: patch
-type: fix
-entry: Stop reporting a "called incorrectly" notice when a host plugin boots Harbor after wp_loaded, such as during plugin activation.

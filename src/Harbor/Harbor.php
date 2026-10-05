@@ -15,7 +15,7 @@ class Harbor {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '1.6.1';
+	public const VERSION = '1.6.2';
 
 	/**
 	 * Initializes the service provider.
@@ -87,7 +87,7 @@ class Harbor {
 	 * communication between vendor-prefixed copies of Harbor.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Skip the registry when the host boots after wp_loaded.
+	 * @since 1.6.2 Skip the registry when the host boots after wp_loaded.
 	 *
 	 * @return void
 	 */
