@@ -32,7 +32,7 @@ class Global_Function_Registry {
 	/**
 	 * Missing-feature messages already logged on this request.
 	 *
-	 * @since TBD
+	 * @since 1.6.2
 	 *
 	 * @var array<string, true>
 	 */
@@ -42,7 +42,7 @@ class Global_Function_Registry {
 	 * Registers this instance's callbacks into the global function registry.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Feature and catalog callbacks return their default without logging when Harbor is not loaded, and log a feature missing from the catalog once per request.
+	 * @since 1.6.2 Feature and catalog callbacks return their default without logging when Harbor is not loaded, and log a feature missing from the catalog once per request.
 	 *
 	 * @param string $version The version of this Harbor instance.
 	 *
@@ -210,7 +210,7 @@ class Global_Function_Registry {
 	 * Harbor::init() registers these callbacks for every host, but binds the
 	 * Features and Portal services only when a premium plugin is present.
 	 *
-	 * @since TBD
+	 * @since 1.6.2
 	 *
 	 * @return bool
 	 */
@@ -225,7 +225,7 @@ class Global_Function_Registry {
 	 * from the catalog is logged the first time only, so a wrong slug or a stale
 	 * catalog still shows up in the log without repeating on every check.
 	 *
-	 * @since TBD
+	 * @since 1.6.2
 	 *
 	 * @param WP_Error $error   The error returned by the feature manager.
 	 * @param string   $context Short description of the failed check.
