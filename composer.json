@@ -87,7 +87,11 @@
       "phpcs:fix": "phpcbf",
       "phpcs:ci": "dev_scripts/partial-phpcs.sh",
       "release:prep": "dev_scripts/release-prep.sh",
-      "release:set-version": "dev_scripts/set-numeric-version.sh"
+      "release:set-version": "dev_scripts/set-numeric-version.sh",
+      "release:update-consumers": [
+        "Composer\\Config::disableProcessTimeout",
+        "dev_scripts/update-consumers.sh"
+      ]
     },
     "scripts-descriptions": {
       "test:analysis": "Run static code analysis.",
@@ -103,6 +107,7 @@
       "compatibility:php-8.4": "Run PHPCompatibilityWP for PHP 8.4.",
       "compatibility": "Run PHPCompatibilityWP for all supported PHP versions.",
       "release:prep": "Prepare a release: set version, replace TBD tags, and write changelog. Usage: composer release:prep -- <version> [date]",
-      "release:set-version": "Replace TBD tags and update Harbor::VERSION. Usage: composer release:set-version -- <version>"
+      "release:set-version": "Replace TBD tags and update Harbor::VERSION. Usage: composer release:set-version -- <version>",
+      "release:update-consumers": "Open PRs bumping Harbor in consumer plugins. Usage: composer release:update-consumers -- [version] [-y] [--dry-run] [owner/repo ...]"
     }
 }

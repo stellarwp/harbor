@@ -1,0 +1,46 @@
+# cspell:ignore shivammathur
+# Opens a PR in each consumer plugin bumping stellarwp/harbor to a released
+# version. Run it by hand once a release is out and checked.
+name: Update Consumers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Harbor version (e.g. 1.7.0). Defaults to the newest stable tag."
+        required: false
+        type: string
+      dry_run:
+        description: "Show the changes without pushing or opening PRs"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  update-consumers:
+    name: Open PRs in consumer plugins
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+
+      # GH_BOT_TOKEN needs push and pull request access to every repo in
+      # CONSUMERS (dev_scripts/update-consumers.sh), plus read access to their
+      # private composer dependencies.
+      - name: Open PRs
+        env:
+          GH_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          gh auth setup-git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          args=(-y)
+          [ -z "$VERSION" ] || args+=("$VERSION")
+          [ "$DRY_RUN" != "true" ] || args+=(--dry-run)
+          dev_scripts/update-consumers.sh "${args[@]}"
