@@ -52,7 +52,7 @@ command -v gh >/dev/null || { echo "ERROR: gh CLI is required."; exit 1; }
 command -v composer >/dev/null || { echo "ERROR: composer is required."; exit 1; }
 
 if [ -z "$VERSION" ]; then
-	VERSION="$(git ls-remote --tags --refs origin 'v*' | sed 's|.*refs/tags/||' | sort -V | tail -1)"
+	VERSION="$(git ls-remote --tags --refs origin 'v*' | sed 's|.*refs/tags/||' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)"
 fi
 VERSION="${VERSION#v}"
 if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -122,8 +122,8 @@ FAILED=()
 for repo in "${REPOS[@]}"; do
 	echo ""
 	echo "== ${repo}"
-	# Subshell so one failing repo doesn't stop the rest. Not `( … ) || …`:
-	# that form silently disables errexit inside the subshell.
+	# Child shell so one failing repo does not stop the rest. Not `( … ) || …`:
+	# that form silently disables errexit inside the child shell.
 	set +e
 	( set -e; update_repo "$repo" )
 	status=$?
