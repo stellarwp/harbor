@@ -2,7 +2,7 @@
 
 A PHP library bundled by Liquid Web WordPress plugins to handle licensing, updates, and feature management. Each Liquid Web plugin ships its own vendor-prefixed copy via Strauss. Multiple copies coexist on a single WordPress site and negotiate leadership internally.
 
-We are developing version 1. It is not released. Do not worry about backward compatibility or breaking changes. When something needs to change, refactor to fit. Do not add shims, aliases, or deprecation layers.
+Harbor is released and consumed by plugins through Composer + Strauss (see the "Plugins with Harbor" table in `README.md`). Internals are still fair game to refactor — no shims, aliases, or deprecation layers for internal classes. The consumed surface is different: the `lw_harbor_*` global functions, the `lw_harbor/` and `lw-harbor/` hooks, and the `Config` / `Harbor::init()` bootstrap are vendored into shipped plugins, so changing them breaks sites running an older plugin alongside a newer one. Change those deliberately, with a version bump and a changelog entry, and update `skill/SKILL.md` and `docs/guides/integration.md` in the same change. If a hard rule for consumers changes, update the `AGENTS.md` snippet in `README.md` too.
 
 See `docs/harbor.md` for the architecture overview. Subsystem docs live in `docs/subsystems/`, architecture docs in `docs/architecture/`, API references in `docs/api/`, and guides in `docs/guides/`.
 
@@ -28,12 +28,15 @@ The subsystems live in these directories. This is where active development happe
 - `src/Harbor/Harbor.php` - Bootstrap and provider registration
 - `src/Harbor/Register.php` - Plugin/service registration entry point
 - `src/Harbor/Auth/` - Token management for OAuth (we actually need to answer this question)
+- `skill/SKILL.md` - Integration rules for agents working in consuming plugins. Ships in the Composer dist; plugins point to it from their own `AGENTS.md`
 
 ## Testing
 
 Tests use Codeception with `slic` for containerized WordPress test execution. See `docs/guides/testing.md`.
 
 Fixture data lives in `tests/_data/`. The catalog and licensing fixture files are working prototypes, not finalized API contracts.
+
+Shell tests live in `tests/shell/` and run with `bun run test:shell`. One of them fails when a public `lw_harbor_*` function is missing from the skill or the integration guide.
 
 ## PHP version
 
@@ -81,3 +84,4 @@ $this->container->singleton(
 - A product is a brand family (Kadence, GiveWP, etc.), not a plugin
 - Features are the resolved join of catalog + licensing data, not a third data source
 - The `Licensing_Client` and `Catalog_Client` contracts exist so the backend can be swapped without affecting the rest of the system
+- The premium-plugin gate in `Harbor::init()` is a compliance boundary for plugins on WordPress.org. Nothing that validates a key, makes a request, or installs code may register outside it (see "The Premium-Plugin Gate" in `docs/harbor.md`)
