@@ -241,7 +241,7 @@ add_action( 'lw_harbor/loaded', function () {
     lw_harbor_register_submenu( 'my-plugin-menu-slug' );
 } );
 
-// Optional: drop the standalone Settings → Nexcess Products entry.
+// Optional: drop the standalone Settings → Nexcess Licensing entry.
 add_filter( 'lw-harbor/hide_menu_item', '__return_true' );
 ```
 

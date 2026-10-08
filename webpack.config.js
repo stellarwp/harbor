@@ -18,6 +18,16 @@ module.exports = {
         filename:      '[name].js',
         chunkFilename: '[name].js?ver=[contenthash]',
     },
+    module: {
+        ...defaultConfig.module,
+        // Inline images into the bundle. Only the tracked build files ship, so
+        // the separate files wp-scripts emits to build/images/ would be lost.
+        rules: defaultConfig.module.rules.map( ( rule ) =>
+            String( rule.test ).includes( 'png' )
+                ? { test: rule.test, type: 'asset/inline' }
+                : rule
+        ),
+    },
     resolve: {
         ...defaultConfig.resolve,
         alias: {

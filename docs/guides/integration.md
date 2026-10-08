@@ -326,13 +326,13 @@ The function always delegates to the highest-version Harbor instance on the site
 
 ### Hiding the Settings menu item
 
-By default, Harbor registers a **Nexcess Products** entry under the WordPress **Settings** menu. If your plugin surfaces Nexcess Licensing through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
+By default, Harbor registers a **Nexcess Licensing** entry under the WordPress **Settings** menu. If your plugin surfaces Nexcess Licensing through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
 
 ```php
 add_filter('lw-harbor/hide_menu_item', '__return_true');
 ```
 
-The page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Nexcess Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
+The page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Nexcess Licensing** entry and any submenu items added through `lw_harbor_register_submenu()`.
 
 ---
 
@@ -362,7 +362,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `lw_harbor/premium_plugin_exists` | Announce that a premium plugin is present so `Harbor::init()` registers its providers. Receives and returns `bool`. **Must be attached before `Harbor::init()` runs**; see [Initialization](#1-initialization). |
 | `lw-harbor/legacy_licenses`       | Report pre-existing licenses to Harbor. Receives and returns `array $licenses`.                                                                                                                                 |
-| `lw-harbor/hide_menu_item`        | Hide the **Nexcess Products** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                             |
+| `lw-harbor/hide_menu_item`        | Hide the **Nexcess Licensing** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                             |
 
 ### Actions
 
