@@ -6325,6 +6325,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
+/* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
 /**
  * Offers shown beside the license, using the catalog's current purchase links and grants.
  *
@@ -6332,11 +6333,29 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
 /**
  * Find the entry-level paid tier without changing the catalog's order.
  */
 function paidTier(catalog) {
   return catalog.tiers.slice().sort((a, b) => a.rank - b.rank).find(tier => tier.rank > 0);
+}
+
+/**
+ * Paid features in the advertised tier, with minimum-tier fallback for older catalogs.
+ */
+function paidFeatures(catalog, tier) {
+  const capabilities = new Set(tier.herald_slugs);
+  return catalog.features.filter(feature => {
+    const minimumTier = catalog.tiers.find(entry => entry.tier_slug === feature.minimum_tier);
+    if ((0,_lib_feature_utils__WEBPACK_IMPORTED_MODULE_2__.isFreeFeature)(feature.minimum_tier) || minimumTier?.rank === 0) {
+      return false;
+    }
+    if (capabilities.size > 0) {
+      return capabilities.has(feature.slug);
+    }
+    return !minimumTier || minimumTier.rank <= tier.rank;
+  });
 }
 
 /**
@@ -6393,8 +6412,13 @@ function getUpsellOffers(catalogs, licenseProducts) {
     if (!catalog || catalog.features.length === 0 || licensedSlugs.has(product.slug)) {
       continue;
     }
-    const href = purchaseUrl(paidTier(catalog));
-    if (!href || catalog.features.some(feature => ownedCapabilities.has(feature.slug))) {
+    const tier = paidTier(catalog);
+    const href = purchaseUrl(tier);
+    if (!tier || !href) {
+      continue;
+    }
+    const features = paidFeatures(catalog, tier);
+    if (features.length > 0 && features.every(feature => ownedCapabilities.has(feature.slug))) {
       continue;
     }
     offers.push({

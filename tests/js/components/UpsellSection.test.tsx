@@ -132,5 +132,32 @@ describe( 'Catalog upsell offers', () => {
     it( 'keeps paid brand offers hidden when an existing purchase already covers their features', () => {
         expect( getUpsellOffers( [ kadence, give ], [ license( 'another-package', [ ...brandLicense.capabilities, 'give-recurring-donations' ] ) ] ) ).toEqual( [] );
     } );
+    it( 'keeps a brand offer when another purchase covers only part of the advertised tier', () => {
+        const offers = getUpsellOffers( [ kadence ], [ license( 'another-package', [ 'kadence-blocks-pro' ] ) ] );
+        expect( offers.map( ( offer ) => offer.product.slug ) ).toEqual( [ 'kadence' ] );
+    } );
+
+    it( 'hides an already-covered entry tier even when a higher tier includes more features', () => {
+        const entry = { ...kadence, tiers: [
+            { ...kadence.tiers[ 0 ], herald_slugs: [ 'kadence-blocks-pro' ] },
+            { ...kadence.tiers[ 0 ], tier_slug: 'elite', rank: 2 },
+        ] };
+        expect( getUpsellOffers( [ entry ], [ license( 'another-package', [ 'kadence-blocks-pro' ] ) ] ) ).toEqual( [] );
+    } );
+
+    it( 'uses minimum tiers to distinguish partial and full coverage in older catalogs', () => {
+        const older = { ...kadence, features: [
+            ...kadence.features,
+            { ...feature( 'kadence-extra', 'Extra Feature' ), minimum_tier: 'elite' },
+            { ...feature( 'kadence-blocks', 'Kadence Blocks' ), minimum_tier: 'free' },
+        ], tiers: [
+            { ...kadence.tiers[ 0 ], tier_slug: 'free', rank: 0, herald_slugs: [] },
+            { ...kadence.tiers[ 0 ], herald_slugs: [] },
+            { ...kadence.tiers[ 0 ], tier_slug: 'elite', rank: 2, herald_slugs: [] },
+        ] };
+        expect( getUpsellOffers( [ older ], [ license( 'another-package', [ 'kadence-blocks-pro' ] ) ] ).map( ( offer ) => offer.product.slug ) ).toEqual( [ 'kadence' ] );
+        expect( getUpsellOffers( [ older ], [ license( 'another-package', brandLicense.capabilities ) ] ) ).toEqual( [] );
+    } );
+
 
 } );

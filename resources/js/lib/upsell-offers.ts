@@ -5,6 +5,7 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { PRODUCTS } from '@/data/products';
+import { isFreeFeature } from '@/lib/feature-utils';
 import type { CatalogFeature, CatalogTier, LicenseProduct, Product, ProductCatalog } from '@/types/api';
 
 export interface UpsellOffer {
@@ -21,6 +22,23 @@ export interface UpsellOffer {
  */
 function paidTier( catalog: ProductCatalog ): CatalogTier | undefined {
     return catalog.tiers.slice().sort( ( a, b ) => a.rank - b.rank ).find( ( tier ) => tier.rank > 0 );
+}
+
+/**
+ * Paid features in the advertised tier, with minimum-tier fallback for older catalogs.
+ */
+function paidFeatures( catalog: ProductCatalog, tier: CatalogTier ): CatalogFeature[] {
+    const capabilities = new Set( tier.herald_slugs );
+    return catalog.features.filter( ( feature ) => {
+        const minimumTier = catalog.tiers.find( ( entry ) => entry.tier_slug === feature.minimum_tier );
+        if ( isFreeFeature( feature.minimum_tier ) || minimumTier?.rank === 0 ) {
+            return false;
+        }
+        if ( capabilities.size > 0 ) {
+            return capabilities.has( feature.slug );
+        }
+        return ! minimumTier || minimumTier.rank <= tier.rank;
+    } );
 }
 
 /**
@@ -83,8 +101,13 @@ export function getUpsellOffers( catalogs: ProductCatalog[], licenseProducts: Li
         if ( ! catalog || catalog.features.length === 0 || licensedSlugs.has( product.slug ) ) {
             continue;
         }
-        const href = purchaseUrl( paidTier( catalog ) );
-        if ( ! href || catalog.features.some( ( feature ) => ownedCapabilities.has( feature.slug ) ) ) {
+        const tier = paidTier( catalog );
+        const href = purchaseUrl( tier );
+        if ( ! tier || ! href ) {
+            continue;
+        }
+        const features = paidFeatures( catalog, tier );
+        if ( features.length > 0 && features.every( ( feature ) => ownedCapabilities.has( feature.slug ) ) ) {
             continue;
         }
         offers.push( { product, href } );
