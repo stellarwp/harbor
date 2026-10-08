@@ -931,7 +931,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Nexcess brand mark used in the welcome flow.
  *
- * Decorative — the visible "Software License Manager" heading carries the
+ * Decorative — the visible "Nexcess Licensing" heading carries the
  * accessible name. Uses the default URL-string export from the SVG loader,
  * matching ProductLogo and FilterBar.
  *
@@ -1396,7 +1396,7 @@ function FeatureRow({
             feature: feature,
             pendingAction: pendingAction,
             installableBusy: installableBusy,
-            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to manage updates from the Software License Manager.', '%TEXTDOMAIN%') : undefined,
+            upgradeLabel: licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to manage updates from Nexcess Licensing.', '%TEXTDOMAIN%') : undefined,
             onUpdate: licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ? undefined : handleUpdate
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
             status: badgeStatus
@@ -2009,7 +2009,7 @@ __webpack_require__.r(__webpack_exports__);
  * Info banner shown when all licensed products are unactivated on this domain.
  *
  * Fires when every product's validation_status is 'not_activated' or
- * 'activation_required'. Links to the Liquid Web portal so the user can
+ * 'activation_required'. Links to the Nexcess portal so the user can
  * activate their license for this domain.
  *
  * @package LiquidWeb\Harbor
@@ -2914,7 +2914,7 @@ function LicenseSection({
           target: "_blank",
           rel: "noopener noreferrer",
           className: "underline hover:opacity-75",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manage license in Liquid Web', '%TEXTDOMAIN%')
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Manage license in Nexcess', '%TEXTDOMAIN%')
         })
       })]
     })]
@@ -3614,15 +3614,12 @@ function WelcomeShell({
         className: "flex flex-col items-center gap-1.5 text-center",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_atoms_NexcessLogo__WEBPACK_IMPORTED_MODULE_1__.NexcessLogo, {
           className: "w-18 h-18"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "-space-y-1 mb-4",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
             className: "text-2xl leading-8 font-semibold tracking-wide p-0 text-neutral-950",
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Software License Manager', '%TEXTDOMAIN%')
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-            className: "text-xs leading-8 font-semibold m-0 text-neutral-950",
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Liquid Web by Nexcess', '%TEXTDOMAIN%')
-          })]
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Nexcess Licensing', '%TEXTDOMAIN%')
+          })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "space-y-8",
@@ -5681,7 +5678,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Appends product and tier params to the base activation URL supplied by the
- * API, producing a product-scoped URL the Liquid Web portal can use to
+ * API, producing a product-scoped URL the Nexcess portal can use to
  * pre-select the right product and tier.
  *
  * The base URL is already fully assembled by the server and includes params
