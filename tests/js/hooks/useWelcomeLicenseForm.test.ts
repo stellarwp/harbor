@@ -141,7 +141,7 @@ describe( 'pickWelcomeErrorMessage', () => {
         const cause = new HarborError( { code: serverCode, message: serverMessage } );
         return new HarborError(
             ErrorCode.LicenseStoreFailed,
-            'Liquid Web Software Manager failed to validate your license.',
+            'Unified License Manager failed to validate your license.',
             { cause }
         );
     }

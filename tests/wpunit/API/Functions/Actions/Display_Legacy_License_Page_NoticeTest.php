@@ -46,7 +46,7 @@ final class Display_Legacy_License_Page_NoticeTest extends HarborTestCase {
 		$output       = $this->invoke();
 
 		$this->assertStringContainsString( $expected_url, $output );
-		$this->assertStringContainsString( 'Liquid Web Software Manager', $output );
+		$this->assertStringContainsString( 'Unified License Manager', $output );
 	}
 
 	public function test_generic_notice_contains_expected_messaging(): void {
@@ -90,7 +90,7 @@ final class Display_Legacy_License_Page_NoticeTest extends HarborTestCase {
 		$output       = $this->invoke( 'GiveWP' );
 
 		$this->assertStringContainsString( $expected_url, $output );
-		$this->assertStringContainsString( 'Liquid Web Software Manager', $output );
+		$this->assertStringContainsString( 'Unified License Manager', $output );
 	}
 
 	public function test_product_notice_contains_expected_messaging(): void {

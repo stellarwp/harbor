@@ -1,0 +1,3 @@
+significance: patch
+type: fix
+entry: Call the license page the Unified License Manager in its page title, the legacy license notice, and error messages.

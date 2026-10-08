@@ -3,7 +3,7 @@ import { setLicense, clearLicense, VALID_LICENSE_KEY, MASKED_LICENSE_KEY } from 
 
 const PRODUCT_NAMES = [ 'GiveWP', 'The Events Calendar', 'LearnDash', 'Kadence' ];
 
-test.describe( 'Software Manager page', () => {
+test.describe( 'Unified License Manager page', () => {
 	test.beforeAll( async ( { requestUtils } ) => {
 		await setLicense( requestUtils, VALID_LICENSE_KEY );
 	} );

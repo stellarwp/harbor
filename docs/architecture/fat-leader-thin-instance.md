@@ -19,7 +19,7 @@ flowchart TD
 
         Registry -->|"Version::is_highest()"| Leader
 
-        Leader["Fat Leader (GiveWP copy)\n\n✓ Key storage & validation\n✓ Licensing & Catalog API calls\n✓ Feature resolution\n✓ REST endpoints\n✓ Admin page (Software Manager)"]
+        Leader["Fat Leader (GiveWP copy)\n\n✓ Key storage & validation\n✓ Licensing & Catalog API calls\n✓ Feature resolution\n✓ REST endpoints\n✓ Admin page (Unified License Manager)"]
 
         Leader --> ThinKadence["Thin: Kadence\n\n✗ No API calls\n✗ No admin UI\n✓ Queries leader"]
         Leader --> ThinGiveWP["Thin: GiveWP\n\n✗ No API calls\n✗ No admin UI\n✓ Queries leader"]
@@ -57,7 +57,7 @@ The leader fetches a feature catalog from the Commerce Portal API using the unif
 
 ### Admin UI
 
-The leader renders the unified licensing page (the "Software Manager"). It shows the unified key status, product registrations, and legacy key cards that link back to each product's own licensing page.
+The leader renders the unified licensing page (the "Unified License Manager"). It shows the unified key status, product registrations, and legacy key cards that link back to each product's own licensing page.
 
 ## Thin Instance
 

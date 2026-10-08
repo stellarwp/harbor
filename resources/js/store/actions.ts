@@ -103,7 +103,7 @@ export const enableFeature =
 				err,
 				ErrorCode.FeatureEnableFailed,
 				__(
-					'Liquid Web Software Manager failed to enable your feature.',
+					'Unified License Manager failed to enable your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -137,7 +137,7 @@ export const disableFeature =
 				err,
 				ErrorCode.FeatureDisableFailed,
 				__(
-					'Liquid Web Software Manager failed to disable your feature.',
+					'Unified License Manager failed to disable your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -171,7 +171,7 @@ export const updateFeature =
 				err,
 				ErrorCode.FeatureUpdateFailed,
 				__(
-					'Liquid Web Software Manager failed to update your feature.',
+					'Unified License Manager failed to update your feature.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -194,7 +194,7 @@ export const storeLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to validate your license, another action is in progress.',
+					'Unified License Manager failed to validate your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -220,7 +220,7 @@ export const storeLicense =
 				err,
 				ErrorCode.LicenseStoreFailed,
 				__(
-					'Liquid Web Software Manager failed to validate your license.',
+					'Unified License Manager failed to validate your license.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -242,7 +242,7 @@ export const refreshLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to refresh your license, another action is in progress.',
+					'Unified License Manager failed to refresh your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -264,7 +264,7 @@ export const refreshLicense =
 				err,
 				ErrorCode.LicenseRefreshFailed,
 				__(
-					'Liquid Web Software Manager failed to refresh your license.',
+					'Unified License Manager failed to refresh your license.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -293,7 +293,7 @@ export const refreshCatalog =
 				err,
 				ErrorCode.CatalogRefreshFailed,
 				__(
-					'Liquid Web Software Manager failed to refresh the product catalog.',
+					'Unified License Manager failed to refresh the product catalog.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -314,7 +314,7 @@ export const deleteLicense =
 			return new HarborError(
 				ErrorCode.LicenseActionInProgress,
 				__(
-					'Liquid Web Software Manager failed to delete your license, another action is in progress.',
+					'Unified License Manager failed to delete your license, another action is in progress.',
 					'%TEXTDOMAIN%'
 				)
 			);
@@ -333,7 +333,7 @@ export const deleteLicense =
 				err,
 				ErrorCode.LicenseDeleteFailed,
 				__(
-					'Liquid Web Software Manager failed to remove your license.',
+					'Unified License Manager failed to remove your license.',
 					'%TEXTDOMAIN%'
 				)
 			);

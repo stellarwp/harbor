@@ -2,7 +2,7 @@
 
 ## Summary
 
-The Harbor frontend is a React application rendered inside the WordPress admin. It provides the Software Manager page where users manage their unified license key and toggle features on and off. The app is built with TypeScript, Tailwind CSS, and `@wordpress/data` for state management.
+The Harbor frontend is a React application rendered inside the WordPress admin. It provides the Unified License Manager page where users manage their unified license key and toggle features on and off. The app is built with TypeScript, Tailwind CSS, and `@wordpress/data` for state management.
 
 PHP enqueues the bundle. React takes over a single mount point. All data flows through the `@wordpress/data` store, which talks to the [REST API](../api/rest/) endpoints served by the leader instance.
 
@@ -215,7 +215,7 @@ The build produces `index.js`, `index.css`, and `index.asset.php` (dependency ma
 3. Injects the `harborData` global via `wp_localize_script()`.
 4. Registers and enqueues the CSS.
 
-Assets are only enqueued on the Software Manager admin page (hook suffix check in `maybe_enqueue_assets`).
+Assets are only enqueued on the Unified License Manager admin page (hook suffix check in `maybe_enqueue_assets`).
 
 ### harborData Global
 

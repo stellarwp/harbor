@@ -229,9 +229,8 @@ user's toggle.
 ## Naming: "Unified License Manager"
 
 Call Harbor's license page the **Unified License Manager** in everything your plugin
-shows a user — UI copy, onboarding text, link labels. The rule covers plugin copy;
-Harbor's own page is still titled "Liquid Web Software Manager". The name is
-brand-neutral on purpose: the
+shows a user — UI copy, onboarding text, link labels. Harbor's own page uses the
+same name. The name is brand-neutral on purpose: the
 company name has changed several times (Liquid Web / Nexcess / StellarWP) and a
 brand-based label would need re-touching in every plugin on every rebrand.
 

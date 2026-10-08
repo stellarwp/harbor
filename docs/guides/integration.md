@@ -48,7 +48,7 @@ If the helper you need does not exist yet, that is a Harbor ticket, not a reason
 
 ### Naming: the "Unified License Manager"
 
-Call Harbor's license management page the **Unified License Manager** in everything your plugin shows a user: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere. The rule covers your plugin's copy; Harbor's own page is still titled "Liquid Web Software Manager".
+Call Harbor's license management page the **Unified License Manager** in everything your plugin shows a user: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere. Harbor's own page uses the same name.
 
 The name is deliberately brand-neutral. The company name has changed several times (Liquid Web / Nexcess / StellarWP), and a brand-based label would need re-touching in every plugin on every rebrand.
 
@@ -236,7 +236,7 @@ lw_harbor_display_legacy_license_page_notice();
 
 This outputs a standard WordPress info notice:
 
-> GiveWP is now part of Liquid Web's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
+> GiveWP is now part of Liquid Web's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Unified License Manager.
 
 Call this function directly in the render callback for your legacy license page. Because it echoes immediately when called, no hook registration is needed — it renders wherever you place it.
 
