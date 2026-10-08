@@ -31,7 +31,7 @@ describe( 'groupLicenseProducts', () => {
 
         expect( result ).toHaveLength( 1 );
         expect( result[ 0 ].productSlug ).toBe( 'give' );
-        expect( result[ 0 ].productName ).toBe( 'GiveWP' );
+        expect( result[ 0 ].productName ).toBe( 'Give' );
         expect( result[ 0 ].tiers ).toEqual( [ lp ] );
     } );
 
@@ -61,13 +61,23 @@ describe( 'groupLicenseProducts', () => {
         expect( result.map( ( g ) => g.productSlug ) ).toEqual( [ 'give', 'kadence' ] );
     } );
 
-    it( 'omits products present in licenseProducts but absent from the PRODUCTS constant', () => {
+    it( 'keeps purchases absent from the brand list', () => {
         const unknown = makeTier( 'unknown-plugin', 'pro' );
         const give    = makeTier( 'give', 'elite' );
         const result  = groupLicenseProducts( [ unknown, give ], RANK_MAP );
 
-        expect( result ).toHaveLength( 1 );
+        expect( result ).toHaveLength( 2 );
         expect( result[ 0 ].productSlug ).toBe( 'give' );
+        expect( result[ 1 ].productSlug ).toBe( 'unknown-plugin' );
+    } );
+
+    it( 'uses the catalog display name for a package alongside a retained brand', () => {
+        const result = groupLicenseProducts(
+            [ makeTier( 'nss', 'complete' ), makeTier( 'kadence', 'pro' ) ],
+            RANK_MAP,
+            { nss: 'Nexcess Software Suite' },
+        );
+        expect( result.map( ( group ) => group.productName ) ).toEqual( [ 'Kadence', 'Nexcess Software Suite' ] );
     } );
 
     it( 'omits products from the PRODUCTS constant that have no license entries', () => {

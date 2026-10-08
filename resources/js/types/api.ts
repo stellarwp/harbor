@@ -15,6 +15,18 @@
  */
 export type FeatureType = 'plugin' | 'theme' | 'service';
 
+/** Effective grants resolved by Harbor's backend for this site. */
+export type FeatureAccessSource =
+    | {
+        type: 'purchase';
+        product_slug: string;
+        tier: string;
+        product_name: string;
+        tier_name: string;
+    }
+    | { type: 'free' }
+    | { type: 'legacy' };
+
 /**
  * Base properties shared by all feature types.
  *
@@ -45,6 +57,8 @@ interface BaseFeature {
      * Whether the feature is available on this site.
      */
     is_available: boolean;
+    /** Access explanations, when provided by the backend. */
+    access_sources?: FeatureAccessSource[];
     /**
      * Whether the user's licensed tier covers this feature's minimum tier.
      */
@@ -331,7 +345,7 @@ export interface Product {
      */
     slug: string;
     /**
-     * Display name (e.g. "GiveWP").
+     * Display name (e.g. "Give").
      */
     name: string;
     /**

@@ -21,6 +21,7 @@ interface LicenseSectionProps {
     licenseProducts: LicenseProduct[];
     tierNameMap:     Record<string, string>;
     tierRankMap:     Record<string, number>;
+    productNames?:  Record<string, string>;
     onRemove:        () => Promise<HarborError | null>;
     onRefresh:       () => Promise<void>;
     isRefreshing:    boolean;
@@ -56,12 +57,24 @@ function LicenseSectionSkeleton() {
 /**
  * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
+ * @param root0 Component properties.
+ * @param root0.licenseKey Unified key currently stored on the site.
+ * @param root0.licenseProducts Purchases returned by Licensing.
+ * @param root0.tierNameMap Catalog tier display names.
+ * @param root0.tierRankMap Catalog tier ordering.
+ * @param root0.productNames Catalog product display names.
+ * @param root0.onRemove Remove the stored key.
+ * @param root0.onRefresh Refresh license data.
+ * @param root0.isRefreshing Whether a refresh is in progress.
+ * @param root0.isLoading Whether initial data is loading.
+ * @param root0.activationUrl Portal site activation URL.
  */
 export function LicenseSection( {
     licenseKey,
     licenseProducts,
     tierNameMap,
     tierRankMap,
+    productNames,
     onRemove,
     onRefresh,
     isRefreshing,
@@ -82,8 +95,8 @@ export function LicenseSection( {
     };
 
     const groupedProducts = useMemo(
-        () => groupLicenseProducts( licenseProducts, tierRankMap ),
-        [ licenseProducts, tierRankMap ],
+        () => groupLicenseProducts( licenseProducts, tierRankMap, productNames ),
+        [ licenseProducts, tierRankMap, productNames ],
     );
 
     return (

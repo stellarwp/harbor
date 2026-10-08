@@ -2,8 +2,8 @@
  * Welcome flow template.
  *
  * Centered single-column layout used by the welcome screen and the
- * boot-time AppLoader. Uses a fixed min-height because 100vh overflows
- * beneath the wp-admin bar and forces a vertical scroll.
+ * boot-time AppLoader. Fills the space below WordPress admin notices
+ * without covering their messages or actions.
  *
  * @package LiquidWeb\Harbor
  */
@@ -20,7 +20,7 @@ interface WelcomeShellProps {
  */
 export function WelcomeShell( { children }: WelcomeShellProps ) {
     return (
-        <div className="absolute top-0 left-0 w-full max-w-full flex flex-col items-center justify-center h-[calc(100vh-32px)] bg-white">
+        <div className="relative h-full w-full max-w-full flex flex-col items-center justify-center overflow-y-auto bg-white">
             <div className="w-full max-w-104">
                 <div className="flex flex-col items-center gap-1.5 text-center">
                     <NexcessLogo className="w-18 h-18" />

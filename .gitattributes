@@ -7,7 +7,6 @@ phpstan.*                export-ignore
 phpunit.*                export-ignore
 phpcs*.xml               export-ignore
 codeception.*.yml        export-ignore
-composer.json            export-ignore
 composer.lock            export-ignore
 bootstrap-plugin.php     export-ignore
 
@@ -34,3 +33,7 @@ changelog/               export-ignore
 # AI & meta files
 CLAUDE.md                export-ignore
 AGENTS.md                export-ignore
+
+# Composer consumers need the package manifest, bin entry point and integration skill.
+/resources/css export-ignore
+/.lando.stack.yml export-ignore

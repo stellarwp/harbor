@@ -7,18 +7,17 @@ import { __ } from '@wordpress/i18n';
 import { Rocket } from 'lucide-react';
 import { SectionHeader } from '@/components/atoms/SectionHeader';
 import { UpsellCard } from '@/components/molecules/UpsellCard';
-import type { Product } from '@/types/api';
+import type { UpsellOffer } from '@/lib/upsell-offers';
 
 interface UpsellSectionProps {
-    products:     Product[];
-    upsellUrlMap: Record<string, string>;
+    offers: UpsellOffer[];
 }
 
 /**
  * @since 1.0.0
  */
-export function UpsellSection( { products, upsellUrlMap }: UpsellSectionProps ) {
-    if ( products.length === 0 ) return null;
+export function UpsellSection( { offers }: UpsellSectionProps ) {
+    if ( offers.length === 0 ) return null;
 
     return (
         <>
@@ -30,11 +29,10 @@ export function UpsellSection( { products, upsellUrlMap }: UpsellSectionProps ) 
                     label={ __( 'Add to your plan', '%TEXTDOMAIN%' ) }
                 />
                 <div className="space-y-2">
-                    { products.map( ( p ) => (
+                    { offers.map( ( offer ) => (
                         <UpsellCard
-                            key={ p.slug }
-                            product={ p }
-                            href={ upsellUrlMap[ p.slug ] ?? '#' }
+                            key={ offer.product.slug }
+                            { ...offer }
                         />
                     ) ) }
                 </div>

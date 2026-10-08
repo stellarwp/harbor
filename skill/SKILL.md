@@ -284,7 +284,7 @@ PSR-11's `ContainerInterface` but not `StellarWP\ContainerContract\ContainerInte
 ## Model of the system
 
 - One `LWSW-` key per site, shared by every Liquid Web product.
-- A product is a brand family (Kadence, GiveWP, The Events Calendar, LearnDash), not a
+- A product is a brand family (Kadence, Give, The Events Calendar, LearnDash), not a
   plugin. Each has one or more entry plugins that bootstrap Harbor; most are free.
 - Features are the resolved join of catalog data (Commerce Portal) and licensing data.
   They are not a third source of truth — do not write feature state directly.

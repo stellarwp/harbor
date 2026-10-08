@@ -303,7 +303,7 @@ Product metadata (slug, display name, tagline) is defined in `resources/js/data/
 
 ```typescript
 const PRODUCTS: Product[] = [
-    { slug: 'give',                name: 'GiveWP',              tagline: 'Donation forms and fundraising for WordPress' },
+    { slug: 'give',                name: 'Give',                tagline: 'Donation forms and fundraising for WordPress' },
     { slug: 'the-events-calendar', name: 'The Events Calendar', tagline: 'Powerful event management for WordPress' },
     { slug: 'learndash',           name: 'LearnDash',           tagline: 'World-class LMS for online courses' },
     { slug: 'kadence',             name: 'Kadence',             tagline: 'Page builder and theme toolkit for WordPress' },
