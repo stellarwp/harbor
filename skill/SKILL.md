@@ -214,7 +214,7 @@ registered. Check `did_action( 'lw_harbor/loaded' )` before linking to it.
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Host portion of `home_url()`, lowercased.                                                 |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Feature active locally on this site.                                                      |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Feature included in the customer's tier.                                                  |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Nexcess Licensing URL; empty when no Harbor copy is loaded.                         |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Nexcess Licensing URL; empty when no Harbor copy is loaded.                               |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Appends a Licensing item. No-op before `lw_harbor/loaded`.                                |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Echoes the migration notice.                                                              |
 | `lw_harbor_refresh_catalog`                    | `(): bool`                          | **Synchronous** catalog re-fetch. User-initiated actions only, never a passive page load. |
