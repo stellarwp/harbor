@@ -9,7 +9,7 @@ This repository has two test suites:
 
 ## E2E tests (Playwright)
 
-E2E tests live in `tests/e2e/` and exercise the Software Manager admin page end-to-end through a real browser against a real WordPress installation.
+E2E tests live in `tests/e2e/` and exercise the Nexcess Licensing admin page end-to-end through a real browser against a real WordPress installation.
 
 ### How it works
 
@@ -73,9 +73,9 @@ The GitHub Actions workflow (`.github/workflows/tests-e2e.yml`) captures the URL
 
 ## Playground preview (manual testing)
 
-Add the `playground` label to a pull request and the `Playground Preview` workflow (`.github/workflows/playground-preview.yml`) comments with a set of buttons. Each opens a throwaway WordPress in the browser, logged in and on the Software Manager page.
+Add the `playground` label to a pull request and the `Playground Preview` workflow (`.github/workflows/playground-preview.yml`) comments with a set of buttons. Each opens a throwaway WordPress in the browser, logged in and on the Nexcess Licensing page.
 
-- **Harbor Dev Tools only**: [Harbor Dev Tools](https://github.com/stellarwp/harbor-dev-tools) built against the pull request. It bumps its bundled Harbor one patch version, so the pull request's code is the leader, and it serves fixture catalog and licensing data. The site starts on the `lwsw-unified-pro-2026` fixture key from `tests/_data/licensing/`, so the Software Manager page shows all four products. Free features install from WordPress.org and can be enabled; premium features cannot, because their downloads need a real key. Pick another fixture key under **Harbor Dev Tools** to change the license state. Its default key, `lwsw-unified-test-fixtures`, describes a product the page does not list and is meant for the REST API.
+- **Harbor Dev Tools only**: [Harbor Dev Tools](https://github.com/stellarwp/harbor-dev-tools) built against the pull request. It bumps its bundled Harbor one patch version, so the pull request's code is the leader, and it serves fixture catalog and licensing data. The site starts on the `lwsw-unified-pro-2026` fixture key from `tests/_data/licensing/`, so the Nexcess Licensing page shows all four products. Free features install from WordPress.org and can be enabled; premium features cannot, because their downloads need a real key. Pick another fixture key under **Harbor Dev Tools** to change the license state. Its default key, `lwsw-unified-test-fixtures`, describes a product the page does not list and is meant for the REST API.
 - **With GiveWP**, **With The Events Calendar**, **With Kadence Blocks**: the same, plus the latest WordPress.org release of that plugin, which bundles its own copy of Harbor. Use these to check a change with two Harbor hosts on one site. Harbor Dev Tools stays the leader as long as the pull request's Harbor version is not behind the one that plugin bundles. LearnDash has no button because it is premium and cannot be downloaded without a license. The list lives in `.github/scripts/playground-preview-comment.js`.
 
 The preview is rebuilt on every push while the label stays on. Pull requests from forks are skipped because they cannot see the secrets. Debug output is written to `wp-content/debug.log` rather than the screen.

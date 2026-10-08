@@ -2,7 +2,7 @@
  * Info banner shown when all licensed products are unactivated on this domain.
  *
  * Fires when every product's validation_status is 'not_activated' or
- * 'activation_required'. Links to the Liquid Web portal so the user can
+ * 'activation_required'. Links to the Nexcess portal so the user can
  * activate their license for this domain.
  *
  * @package LiquidWeb\Harbor

@@ -1,11 +1,11 @@
 ---
 name: harbor-integration
-description: Integrating LiquidWeb Harbor (unified licensing, updates, feature gating) into a WordPress plugin. Use when touching Harbor::init, Config::set_*, LWSW license keys, lw_harbor_* helper functions, lw-harbor/* or lw_harbor/* hooks, legacy license reporting, license or activation UI, onboarding that mentions a key, the Unified License Manager, or any vendored copy of Harbor (vendor/stellarwp/harbor or a Strauss-prefixed copy under vendor-prefixed/). Also use before changing anything that depends on whether a customer is licensed, paying, or on a paid plan (premium or add-on checks, platform or application fee waivers, feature gating, entitlements), and as soon as you meet a lw_harbor_* call or a LiquidWeb\Harbor class in code you are about to change.
+description: Integrating LiquidWeb Harbor (unified licensing, updates, feature gating) into a WordPress plugin. Use when touching Harbor::init, Config::set_*, LWSW license keys, lw_harbor_* helper functions, lw-harbor/* or lw_harbor/* hooks, legacy license reporting, license or activation UI, onboarding that mentions a key, the Nexcess Licensing page, or any vendored copy of Harbor (vendor/stellarwp/harbor or a Strauss-prefixed copy under vendor-prefixed/). Also use before changing anything that depends on whether a customer is licensed, paying, or on a paid plan (premium or add-on checks, platform or application fee waivers, feature gating, entitlements), and as soon as you meet a lw_harbor_* call or a LiquidWeb\Harbor class in code you are about to change.
 ---
 
 # Harbor integration
 
-Harbor is a PHP library bundled by Liquid Web plugins for unified licensing, updates,
+Harbor is a PHP library bundled by Nexcess plugins for unified licensing, updates,
 and feature management. It is vendored per plugin and namespace-prefixed with Strauss,
 so several copies coexist on one site and negotiate leadership internally (highest
 version wins). Never assume a shared installation.
@@ -214,7 +214,7 @@ registered. Check `did_action( 'lw_harbor/loaded' )` before linking to it.
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Host portion of `home_url()`, lowercased.                                                 |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Feature active locally on this site.                                                      |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Feature included in the customer's tier.                                                  |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Unified License Manager URL; empty when no Harbor copy is loaded.                         |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Nexcess Licensing URL; empty when no Harbor copy is loaded.                               |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Appends a Licensing item. No-op before `lw_harbor/loaded`.                                |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Echoes the migration notice.                                                              |
 | `lw_harbor_refresh_catalog`                    | `(): bool`                          | **Synchronous** catalog re-fetch. User-initiated actions only, never a passive page load. |
@@ -226,14 +226,11 @@ grows between releases, and a helper documented elsewhere may not exist in your 
 different questions. Gating premium code usually wants both, or `available` plus the
 user's toggle.
 
-## Naming: "Unified License Manager"
+## Naming: "Nexcess Licensing"
 
-Call Harbor's license page the **Unified License Manager** in everything your plugin
-shows a user — UI copy, onboarding text, link labels. The rule covers plugin copy;
-Harbor's own page is still titled "Liquid Web Software Manager". The name is
-brand-neutral on purpose: the
-company name has changed several times (Liquid Web / Nexcess / StellarWP) and a
-brand-based label would need re-touching in every plugin on every rebrand.
+Call Harbor's license page **Nexcess Licensing** in everything your plugin
+shows a user — UI copy, onboarding text, link labels. Harbor's own page uses the
+same name, so users meet one name everywhere.
 
 `Feature_Manager_Page` is the internal class name. Do not surface it to users.
 
@@ -244,7 +241,7 @@ add_action( 'lw_harbor/loaded', function () {
     lw_harbor_register_submenu( 'my-plugin-menu-slug' );
 } );
 
-// Optional: drop the standalone Settings → Liquid Web Products entry.
+// Optional: drop the standalone Settings → Nexcess Licensing entry.
 add_filter( 'lw-harbor/hide_menu_item', '__return_true' );
 ```
 
@@ -283,7 +280,7 @@ PSR-11's `ContainerInterface` but not `StellarWP\ContainerContract\ContainerInte
 
 ## Model of the system
 
-- One `LWSW-` key per site, shared by every Liquid Web product.
+- One `LWSW-` key per site, shared by every Nexcess product.
 - A product is a brand family (Kadence, GiveWP, The Events Calendar, LearnDash), not a
   plugin. Each has one or more entry plugins that bootstrap Harbor; most are free.
 - Features are the resolved join of catalog data (Commerce Portal) and licensing data.
@@ -300,7 +297,7 @@ PSR-11's `ContainerInterface` but not `StellarWP\ContainerContract\ContainerInte
 - Does it build a Portal or activation URL by hand instead of calling a helper?
 - Does it gate free onboarding on a key?
 - Does `composer.json` pin a Harbor `dev-` constraint on a branch headed for release or QA?
-- Does user-facing copy say "Unified License Manager"?
+- Does user-facing copy say "Nexcess Licensing"?
 - Is `global-functions.php` excluded from Strauss prefixing?
 
 Deeper subsystem docs (portal, features, licensing, cron, notices, REST API) live in the

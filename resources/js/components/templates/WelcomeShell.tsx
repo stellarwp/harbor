@@ -26,11 +26,8 @@ export function WelcomeShell( { children }: WelcomeShellProps ) {
                     <NexcessLogo className="w-18 h-18" />
                     <div className="-space-y-1 mb-4">
                         <h1 className="text-2xl leading-8 font-semibold tracking-wide p-0 text-neutral-950">
-                            { __( 'Software License Manager', '%TEXTDOMAIN%' ) }
+                            { __( 'Nexcess Licensing', '%TEXTDOMAIN%' ) }
                         </h1>
-                        <p className="text-xs leading-8 font-semibold m-0 text-neutral-950">
-                            { __( 'Liquid Web by Nexcess', '%TEXTDOMAIN%' ) }
-                        </p>
                     </div>
                 </div>
 				<div className="space-y-8">
