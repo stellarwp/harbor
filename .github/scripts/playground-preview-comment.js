@@ -10,7 +10,7 @@ const PLAYGROUND_URL = 'https://playground.wordpress.net/?blueprint-url=data:app
 const BUTTON_IMAGE   = 'https://raw.githubusercontent.com/adamziel/playground-preview/refs/heads/trunk/assets/playground-preview-button.svg';
 
 /*
- * The Software Manager page lists the four product brands only. Harbor Dev
+ * The Nexcess Licensing page lists the four product brands only. Harbor Dev
  * Tools' default fixture key describes a product named test-fixtures, which
  * that page does not show, so the site starts on a fixture that covers the
  * real brands.

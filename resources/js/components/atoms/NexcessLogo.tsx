@@ -1,7 +1,7 @@
 /**
  * Nexcess brand mark used in the welcome flow.
  *
- * Decorative — the visible "Software License Manager" heading carries the
+ * Decorative — the visible "Nexcess Licensing" heading carries the
  * accessible name. Uses the default URL-string export from the SVG loader,
  * matching ProductLogo and FilterBar.
  *

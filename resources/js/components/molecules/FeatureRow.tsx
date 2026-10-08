@@ -59,7 +59,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 		( isInstallableFeature( feature ) && ( licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked' ) );
 	const upgradeLabel = isVisuallyAvailable
 		? ( licenseBadgeType === 'legacy'
-			? __( 'Upgrade your license to manage updates from the Software License Manager.', '%TEXTDOMAIN%' )
+			? __( 'Upgrade your license to manage updates from Nexcess Licensing.', '%TEXTDOMAIN%' )
 			: undefined )
 		: ( upgradeTierName
 			? /* translators: %s is the name of the tier required to receive updates */

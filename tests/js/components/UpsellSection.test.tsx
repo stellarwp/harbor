@@ -29,16 +29,16 @@ function license( slug: string, capabilities: string[] ): LicenseProduct {
 
 const kadence = catalog( 'kadence', 'Kadence', [ feature( 'kadence-blocks-pro', 'Kadence Blocks Pro' ), feature( 'kadence-conversions', 'Kadence Conversions' ) ] );
 const give = catalog( 'give', 'Give', [ feature( 'give-recurring-donations', 'Recurring Donations' ) ] );
-const suite = catalog( 'nss', 'Nexcess Software Suite', [], [ 'kadence-blocks-pro', 'give-recurring-donations' ] );
+const suite = catalog( 'nps', 'Nexcess Plugin Stack', [], [ 'kadence-blocks-pro', 'give-recurring-donations' ] );
 const catalogs = [ kadence, give, suite ];
 const brandLicense = license( 'kadence', [ 'kadence-blocks-pro', 'kadence-conversions' ] );
 
 describe( 'Catalog upsell offers', () => {
-    it( 'offers NSS to a brand customer and lists only features granted by its advertised tier', async () => {
+    it( 'offers NPS to a brand customer and lists only features granted by its advertised tier', async () => {
         render( <UpsellSection offers={ getUpsellOffers( catalogs, [ brandLicense ] ) } /> );
         const links = screen.getAllByRole( 'link' );
         expect( links ).toHaveLength( 1 );
-        expect( links[ 0 ].textContent ).toContain( 'Nexcess Software Suite' );
+        expect( links[ 0 ].textContent ).toContain( 'Nexcess Plugin Stack' );
         expect( links[ 0 ].getAttribute( 'href' ) ).toBe( suite.tiers[ 0 ].purchase_url );
         await userEvent.setup().click( screen.getByText( 'See all 2 included features' ) );
         expect( screen.getByText( 'Kadence Blocks Pro' ) ).not.toBeNull();
@@ -47,21 +47,21 @@ describe( 'Catalog upsell offers', () => {
     } );
 
     it.each( [ false, true ] )( 'does not advertise a package already owned, with mixed ownership: %s', ( mixed ) => {
-        const licenses = [ license( 'nss', suite.tiers[ 0 ].herald_slugs ), ...( mixed ? [ brandLicense ] : [] ) ];
+        const licenses = [ license( 'nps', suite.tiers[ 0 ].herald_slugs ), ...( mixed ? [ brandLicense ] : [] ) ];
         expect( getUpsellOffers( catalogs, licenses ) ).toEqual( [] );
     } );
 
     it( 'offers the published package without a license', () => {
-        expect( getUpsellOffers( catalogs, [] ).map( ( offer ) => offer.product.slug ) ).toEqual( [ 'nss' ] );
+        expect( getUpsellOffers( catalogs, [] ).map( ( offer ) => offer.product.slug ) ).toEqual( [ 'nps' ] );
     } );
 
-    it( 'keeps brand offers when Portal has not published NSS', () => {
+    it( 'keeps brand offers when Portal has not published NPS', () => {
         const offers = getUpsellOffers( [ kadence, give ], [ brandLicense ] );
         expect( offers.map( ( offer ) => offer.product.slug ) ).toEqual( [ 'give' ] );
         expect( offers[ 0 ].href ).toBe( give.tiers[ 0 ].purchase_url );
     } );
 
-    it( 'does not treat an empty NSS product without paid tiers as an available offer', () => {
+    it( 'does not treat an empty NPS product without paid tiers as an available offer', () => {
         const offers = getUpsellOffers( [ kadence, give, { ...suite, tiers: [] } ], [ brandLicense ] );
         expect( offers ).toEqual( [] );
     } );
@@ -70,7 +70,7 @@ describe( 'Catalog upsell offers', () => {
         const pending = { ...suite, tiers: [ { ...suite.tiers[ 0 ], purchase_url: '' } ] };
         render( <UpsellSection offers={ getUpsellOffers( [ kadence, give, pending ], [ brandLicense ] ) } /> );
         expect( screen.queryByRole( 'link' ) ).toBeNull();
-        expect( screen.queryByText( 'Nexcess Software Suite' ) ).toBeNull();
+        expect( screen.queryByText( 'Nexcess Plugin Stack' ) ).toBeNull();
         expect( screen.queryByText( 'Add to your plan' ) ).toBeNull();
         expect( screen.queryByText( 'Give' ) ).toBeNull();
     } );
@@ -86,17 +86,17 @@ describe( 'Catalog upsell offers', () => {
         expect( container.innerHTML ).toBe( '' );
     } );
 
-    it.each( [ '', '   ', 'not-a-url', 'javascript:alert(1)', 'ftp://portal.example/package' ] )( 'hides NSS with an unusable purchase URL: %s', ( purchase_url ) => {
+    it.each( [ '', '   ', 'not-a-url', 'javascript:alert(1)', 'ftp://portal.example/package' ] )( 'hides NPS with an unusable purchase URL: %s', ( purchase_url ) => {
         const pending = { ...suite, tiers: [ { ...suite.tiers[ 0 ], purchase_url } ] };
         expect( getUpsellOffers( [ kadence, give, pending ], [ brandLicense ] ) ).toEqual( [] );
     } );
 
-    it.each( [ { capabilities: [] }, { capabilities: [ 'not-in-the-catalog' ] } ] )( 'hides NSS when its capabilities resolve to no features: %j', ( { capabilities } ) => {
+    it.each( [ { capabilities: [] }, { capabilities: [ 'not-in-the-catalog' ] } ] )( 'hides NPS when its capabilities resolve to no features: %j', ( { capabilities } ) => {
         const pending = { ...suite, tiers: [ { ...suite.tiers[ 0 ], herald_slugs: capabilities } ] };
         expect( getUpsellOffers( [ kadence, give, pending ], [ brandLicense ] ) ).toEqual( [] );
     } );
 
-    it( 'hides NSS until its referenced brand features are published', () => {
+    it( 'hides NPS until its referenced brand features are published', () => {
         expect( getUpsellOffers( [ suite ], [] ) ).toEqual( [] );
     } );
 
@@ -120,7 +120,7 @@ describe( 'Catalog upsell offers', () => {
         expect( getUpsellOffers( [ { ...kadence, features: [] }, { ...give, tiers: [] } ], [] ) ).toEqual( [] );
     } );
 
-    it( 'preserves pre-NSS brand links without depending on new tier fields', () => {
+    it( 'preserves pre-NPS brand links without depending on new tier fields', () => {
         const older = [ kadence, give ].map( ( entry ) => ( {
             ...entry, tiers: entry.tiers.map( ( tier ) => ( { ...tier, herald_slugs: [] } ) ),
         } ) );

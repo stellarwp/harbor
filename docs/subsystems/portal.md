@@ -58,9 +58,9 @@ This is an excerpt, not a replacement tier record. Keep its ranks, capability re
 
 ### Sidebar purchase offers
 
-When the catalog contains `nss` with a paid tier, a usable purchase URL and at least one resolved included feature, Harbor's **Add to your plan** section offers the package instead of the individual brands. Customers whose license already contains NSS see no package offer. The package's display name comes from the catalog, and its expandable feature list joins the advertised tier's capability references with the existing brand feature definitions.
+When the catalog contains `nps` with a paid tier, a usable purchase URL and at least one resolved included feature, Harbor's **Add to your plan** section offers the package instead of the individual brands. Customers whose license already contains NPS see no package offer. The package's display name comes from the catalog, and its expandable feature list joins the advertised tier's capability references with the existing brand feature definitions.
 
-The offer uses the lowest-ranked paid tier's `purchase_url`, which must be an absolute HTTP or HTTPS URL. If NSS is present but lacks a paid tier, usable URL or resolvable features, Harbor hides the offer without falling back to individual brands. If NSS is absent, existing brand offers remain available only for catalog products with features and a paid-tier purchase URL. An empty catalog or no eligible offers hides the entire section.
+The offer uses the lowest-ranked paid tier's `purchase_url`, which must be an absolute HTTP or HTTPS URL. If NPS is present but lacks a paid tier, usable URL or resolvable features, Harbor hides the offer without falling back to individual brands. If NPS is absent, existing brand offers remain available only for catalog products with features and a paid-tier purchase URL. An empty catalog or no eligible offers hides the entire section.
 
 Portal must separately retire old-plan checkout paths at launch, including links followed by older Harbor clients. Keeping a brand in the catalog preserves its existing entitlements; withholding its purchase URL prevents an offer in updated Harbor but does not disable checkout. Harbor reads the supplied URLs and does not probe whether checkout is accepting purchases.
 

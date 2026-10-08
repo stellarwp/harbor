@@ -73,11 +73,11 @@ describe( 'groupLicenseProducts', () => {
 
     it( 'uses the catalog display name for a package alongside a retained brand', () => {
         const result = groupLicenseProducts(
-            [ makeTier( 'nss', 'complete' ), makeTier( 'kadence', 'pro' ) ],
+            [ makeTier( 'nps', 'complete' ), makeTier( 'kadence', 'pro' ) ],
             RANK_MAP,
-            { nss: 'Nexcess Software Suite' },
+            { nps: 'Nexcess Plugin Stack' },
         );
-        expect( result.map( ( group ) => group.productName ) ).toEqual( [ 'Kadence', 'Nexcess Software Suite' ] );
+        expect( result.map( ( group ) => group.productName ) ).toEqual( [ 'Kadence', 'Nexcess Plugin Stack' ] );
     } );
 
     it( 'omits products from the PRODUCTS constant that have no license entries', () => {

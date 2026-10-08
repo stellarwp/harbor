@@ -17,7 +17,7 @@ const feature: PluginFeature = {
     plugin_slug: 'kadence-blocks-pro', authors: [], wporg_slug: null, is_harbor_host: false,
     installed_version: '1.0.0', version: '2.0.0', update_version: '2.0.0',
 };
-const purchaseSource = { type: 'purchase' as const, product_slug: 'nss', tier: 'complete', product_name: 'Nexcess Software Suite', tier_name: '1 site' };
+const purchaseSource = { type: 'purchase' as const, product_slug: 'nps', tier: 'complete', product_name: 'Nexcess Plugin Stack', tier_name: '1 site' };
 let updateFeature: jest.Mock;
 let enableFeature: jest.Mock;
 let disableFeature: jest.Mock;

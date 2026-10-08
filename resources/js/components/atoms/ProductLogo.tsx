@@ -15,14 +15,14 @@ import logoGiveNobg from '@img/logo-givewp-nobg.svg';
 import logoLearnDashNobg from '@img/logo-learndash-nobg.svg';
 import logoTecNobg from '@img/logo-tec-nobg.svg';
 import logoKadenceNobg from '@img/logo-kadence-nobg.svg';
-import logoNss from '@img/logo-nss.svg';
+import logoNps from '@img/logo-nps.svg';
 
 const LOGOS: Record<string, string> = {
     give:                  logoGive,
     'the-events-calendar': logoTheEventsCalendar,
     learndash:             logoLearnDash,
     kadence:               logoKadence,
-    nss:                   logoNss,
+    nps:                   logoNps,
 };
 
 const LOGOS_NOBG: Record<string, string> = {
@@ -30,7 +30,7 @@ const LOGOS_NOBG: Record<string, string> = {
     'the-events-calendar': logoTecNobg,
     learndash:             logoLearnDashNobg,
     kadence:               logoKadenceNobg,
-    nss:                   logoNss,
+    nps:                   logoNps,
 };
 
 interface ProductLogoProps {

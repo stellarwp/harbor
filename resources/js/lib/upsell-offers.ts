@@ -41,20 +41,20 @@ function purchaseUrl( tier: CatalogTier | undefined ): string | undefined {
 }
 
 /**
- * NSS replaces brand offers when present; incomplete catalog offers stay hidden.
+ * NPS replaces brand offers when present; incomplete catalog offers stay hidden.
  */
 export function getUpsellOffers( catalogs: ProductCatalog[], licenseProducts: LicenseProduct[] ): UpsellOffer[] {
     const licensedSlugs = new Set( licenseProducts.map( ( product ) => product.product_slug ) );
-    const suite = catalogs.find( ( catalog ) => catalog.product_slug === 'nss' );
+    const packageCatalog = catalogs.find( ( catalog ) => catalog.product_slug === 'nps' );
 
-    if ( suite ) {
-        const suiteTier = paidTier( suite );
-        const href = purchaseUrl( suiteTier );
-        if ( licensedSlugs.has( suite.product_slug ) || ! suiteTier || ! href ) {
+    if ( packageCatalog ) {
+        const packageTier = paidTier( packageCatalog );
+        const href = purchaseUrl( packageTier );
+        if ( licensedSlugs.has( packageCatalog.product_slug ) || ! packageTier || ! href ) {
             return [];
         }
 
-        const capabilities = new Set( suiteTier.herald_slugs );
+        const capabilities = new Set( packageTier.herald_slugs );
         const includedProducts = catalogs.map( ( catalog ) => ( {
             name: catalog.product_name,
             features: catalog.features.filter( ( feature ) => capabilities.has( feature.slug ) ),
@@ -66,8 +66,8 @@ export function getUpsellOffers( catalogs: ProductCatalog[], licenseProducts: Li
 
         return [ {
             product: {
-                slug: suite.product_slug,
-                name: suite.product_name,
+                slug: packageCatalog.product_slug,
+                name: packageCatalog.product_name,
                 // translators: %s: names of brands with features included in the package.
                 tagline: sprintf( __( 'Includes features from %s.', '%TEXTDOMAIN%' ), includedProducts.map( ( product ) => product.name ).join( ', ' ) ),
             },

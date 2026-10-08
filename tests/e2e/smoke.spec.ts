@@ -11,22 +11,22 @@ test.describe( 'Smoke', () => {
 		await expect( page.locator( '#lw-harbor-root' ) ).not.toBeEmpty();
 	} );
 
-	test( 'shows the Liquid Web Products menu when a premium plugin is registered', async ( { page, admin } ) => {
+	test( 'shows the Nexcess Licensing menu when a premium plugin is registered', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'index.php' );
 
 		await expect(
-			page.locator( '#adminmenu' ).getByRole( 'link', { name: 'Liquid Web Products' } )
+			page.locator( '#adminmenu' ).getByRole( 'link', { name: 'Nexcess Licensing' } )
 		).toBeVisible();
 	} );
 
-	test( 'hides the Liquid Web Products menu when no premium plugin reports itself', async ( { page, admin } ) => {
+	test( 'hides the Nexcess Licensing menu when no premium plugin reports itself', async ( { page, admin } ) => {
 		// The fixture plugin's lw_harbor/premium_plugin_exists callback returns
 		// false when this query param is present, mirroring a site with no
 		// Harbor-aware premium plugin installed.
 		await admin.visitAdminPage( 'index.php', 'lw_harbor_no_premium_exists=1' );
 
 		await expect(
-			page.locator( '#adminmenu' ).getByRole( 'link', { name: 'Liquid Web Products' } )
+			page.locator( '#adminmenu' ).getByRole( 'link', { name: 'Nexcess Licensing' } )
 		).toHaveCount( 0 );
 	} );
 } );

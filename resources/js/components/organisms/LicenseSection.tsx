@@ -162,7 +162,7 @@ export function LicenseSection( {
                     { manageUrl && (
                         <p className="text-xs text-muted-foreground text-center mt-1 mb-0">
                             <a href={ manageUrl } target="_blank" rel="noopener noreferrer" className="underline hover:opacity-75">
-                                { __( 'Manage license in Liquid Web', '%TEXTDOMAIN%' ) }
+                                { __( 'Manage license in Nexcess', '%TEXTDOMAIN%' ) }
                             </a>
                         </p>
                     ) }
