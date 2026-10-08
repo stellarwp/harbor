@@ -11,7 +11,7 @@ use Throwable;
 /**
  * Displays an informational notice on a plugin's legacy license settings page.
  *
- * Informs users that licensing is now managed centrally through Liquid Web's
+ * Informs users that licensing is now managed centrally through Nexcess's
  * unified system while the legacy page remains available for older licenses.
  *
  * @since 1.0.0
@@ -36,7 +36,7 @@ class Display_Legacy_License_Page_Notice {
 				$message = sprintf(
 					/* translators: 1: product name (e.g. "GiveWP"), 2: URL to the Nexcess Licensing page. */
 					__(
-						'%1$s is now part of Liquid Web\'s software offerings. This page is still available for managing legacy licenses from your previous %1$s account. If you purchased a new plan through Liquid Web, your products are managed through <a href="%2$s">Nexcess Licensing</a>.',
+						'%1$s is now part of Nexcess\'s software offerings. This page is still available for managing legacy licenses from your previous %1$s account. If you purchased a new plan through Nexcess, your products are managed through <a href="%2$s">Nexcess Licensing</a>.',
 						'%TEXTDOMAIN%'
 					),
 					esc_html( $product_name ),
@@ -46,7 +46,7 @@ class Display_Legacy_License_Page_Notice {
 				$message = sprintf(
 					/* translators: %s is the URL to the Nexcess Licensing page. */
 					__(
-						'This plugin is now part of Liquid Web\'s software offerings. This page is still available for managing legacy licenses from your previous account. If you purchased a new plan through Liquid Web, your products are managed through <a href="%s">Nexcess Licensing</a>.',
+						'This plugin is now part of Nexcess\'s software offerings. This page is still available for managing legacy licenses from your previous account. If you purchased a new plan through Nexcess, your products are managed through <a href="%s">Nexcess Licensing</a>.',
 						'%TEXTDOMAIN%'
 					),
 					esc_url( $url )

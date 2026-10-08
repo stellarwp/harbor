@@ -11,7 +11,7 @@ test.describe( 'Welcome screen', () => {
 	test( 'renders the welcome screen when no license is stored', async ( { page, admin } ) => {
 		await admin.visitAdminPage( PAGE.admin, PAGE.query );
 
-		await expect( page.getByRole( 'heading', { name: 'Software License Manager' } ) ).toBeVisible();
+		await expect( page.getByRole( 'heading', { name: 'Nexcess Licensing' } ) ).toBeVisible();
 		await expect( page.locator( '#welcome-license-key-input' ) ).toBeVisible();
 		await expect( page.getByRole( 'button', { name: 'Activate' } ) ).toBeVisible();
 	} );

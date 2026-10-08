@@ -93,14 +93,14 @@ class Feature_Manager_Page {
 		$this->page_hook = (string) add_submenu_page(
 			'options-general.php',
 			__( 'Nexcess Licensing', '%TEXTDOMAIN%' ),
-			__( 'Liquid Web Products', '%TEXTDOMAIN%' ),
+			__( 'Nexcess Products', '%TEXTDOMAIN%' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ $this, 'render' ]
 		);
 
 		/**
-		 * Filters whether to hide the Liquid Web Products item from the Settings menu.
+		 * Filters whether to hide the Nexcess Products item from the Settings menu.
 		 *
 		 * Hiding the menu item does not unregister the page. The Nexcess Licensing
 		 * UI remains accessible at options-general.php?page=lw-software-manager

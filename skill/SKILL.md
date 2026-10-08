@@ -5,7 +5,7 @@ description: Integrating LiquidWeb Harbor (unified licensing, updates, feature g
 
 # Harbor integration
 
-Harbor is a PHP library bundled by Liquid Web plugins for unified licensing, updates,
+Harbor is a PHP library bundled by Nexcess plugins for unified licensing, updates,
 and feature management. It is vendored per plugin and namespace-prefixed with Strauss,
 so several copies coexist on one site and negotiate leadership internally (highest
 version wins). Never assume a shared installation.
@@ -241,7 +241,7 @@ add_action( 'lw_harbor/loaded', function () {
     lw_harbor_register_submenu( 'my-plugin-menu-slug' );
 } );
 
-// Optional: drop the standalone Settings → Liquid Web Products entry.
+// Optional: drop the standalone Settings → Nexcess Products entry.
 add_filter( 'lw-harbor/hide_menu_item', '__return_true' );
 ```
 
@@ -280,7 +280,7 @@ PSR-11's `ContainerInterface` but not `StellarWP\ContainerContract\ContainerInte
 
 ## Model of the system
 
-- One `LWSW-` key per site, shared by every Liquid Web product.
+- One `LWSW-` key per site, shared by every Nexcess product.
 - A product is a brand family (Kadence, GiveWP, The Events Calendar, LearnDash), not a
   plugin. Each has one or more entry plugins that bootstrap Harbor; most are free.
 - Features are the resolved join of catalog data (Commerce Portal) and licensing data.

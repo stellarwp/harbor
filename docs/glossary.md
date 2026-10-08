@@ -4,7 +4,7 @@ Definitions for the terms used throughout Harbor's documentation. Each entry exp
 
 ## Catalog
 
-The complete, non-personalized definition of every Liquid Web product family: its tiers (ranked subscription levels) and its features (plugins and themes with minimum tier requirements). The catalog is provided by the Commerce Portal API and is the same for every site, regardless of what key the site has.
+The complete, non-personalized definition of every Nexcess product family: its tiers (ranked subscription levels) and its features (plugins and themes with minimum tier requirements). The catalog is provided by the Commerce Portal API and is the same for every site, regardless of what key the site has.
 
 The catalog answers "what does this product offer?" It is the menu — it does not know what any given customer ordered. It has no knowledge of license keys, entitlements, or local activation state.
 
@@ -137,7 +137,7 @@ See [REST: Legacy Licenses](api/rest/legacy-licenses.md) and [Integration Guide]
 
 ## Unified License Key
 
-The single `LWSW-`-prefixed license key shared by all Liquid Web products on a site. It replaces the old model where every plugin managed its own key. The key is the site's identity to the licensing system — presenting it to the Licensing API returns which products are entitled, what tier each is on, and which features (capabilities) are granted.
+The single `LWSW-`-prefixed license key shared by all Nexcess products on a site. It replaces the old model where every plugin managed its own key. The key is the site's identity to the licensing system — presenting it to the Licensing API returns which products are entitled, what tier each is on, and which features (capabilities) are granted.
 
 Rules of the model:
 
