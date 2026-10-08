@@ -78,7 +78,7 @@ flowchart TD
     CatalogCache --> Resolution["Feature Resolution\n\njoins by slug,\nchecks slug in capabilities[]"]
     LicensingCache --> Resolution
     Resolution -->|Feature_Collection| REST["REST API\n/features, /license"]
-    REST -->|JSON over HTTP| UI["React UI\n(Software Manager)\n\nis_available, is_enabled,\nenable / disable"]
+    REST -->|JSON over HTTP| UI["React UI\n(Nexcess Licensing)\n\nis_available, is_enabled,\nenable / disable"]
 ```
 
 The catalog provides structure (what features exist, their metadata, and which tier they belong to for display). Licensing provides entitlements (what the key covers and, critically, which feature slugs the license grants via the `capabilities` array). Feature resolution checks the capabilities array and produces a collection where each feature knows its availability. Strategies then handle the local mechanics of enabling and disabling.
@@ -109,7 +109,7 @@ See [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md) for 
 
 ## The Admin Page
 
-The leader renders the Software Manager, a React-based admin page for managing all Liquid Web products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
+The leader renders Nexcess Licensing, a React-based admin page for managing all Liquid Web products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
 
 ## Caching
 
