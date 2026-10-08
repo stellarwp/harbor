@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
-import logoNexcess from '@img/logo-nexcess-lockup.png';
+import logoNexcess from '@img/logo-nexcess-lockup.svg';
 
 /**
  * @since 1.0.0

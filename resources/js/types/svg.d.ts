@@ -7,9 +7,3 @@ declare module '*.svg' {
     const src: string;
     export default src;
 }
-
-// PNG files are inlined by webpack; the default export is a data URL.
-declare module '*.png' {
-    const src: string;
-    export default src;
-}
