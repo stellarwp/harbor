@@ -12,16 +12,20 @@ export interface GroupedProduct {
 
 /**
  * Groups LicenseProduct entries by product_slug, sorts tiers within each group
- * (activated-here first, then ascending by rank), and orders groups by the
- * PRODUCTS constant. Products absent from licenseProducts are omitted.
+ * (ascending by rank), and orders groups by the
+ * brand order followed by additional purchases. Catalog names override defaults.
  *
  * @since 1.0.0
+ * @param licenseProducts Customer purchases returned by Licensing.
+ * @param tierRankMap Catalog tier ordering.
+ * @param productNames Catalog display names keyed by product slug.
  */
 export function groupLicenseProducts(
     licenseProducts: LicenseProduct[],
     tierRankMap:     Record<string, number>,
+    productNames:   Record<string, string> = {},
 ): GroupedProduct[] {
-    const groups: Record<string, LicenseProduct[]> = {};
+    const groups: Record<string, LicenseProduct[]> = Object.create( null );
     licenseProducts.forEach( ( lp ) => {
         if ( ! groups[ lp.product_slug ] ) {
             groups[ lp.product_slug ] = [];
@@ -33,7 +37,13 @@ export function groupLicenseProducts(
         tiers.sort( ( a, b ) => ( tierRankMap[ a.tier ] ?? 0 ) - ( tierRankMap[ b.tier ] ?? 0 ) );
     } );
 
-    return PRODUCTS
-        .filter( ( p ) => groups[ p.slug ] !== undefined )
-        .map( ( p ) => ({ productSlug: p.slug, productName: p.name, tiers: groups[ p.slug ] }) );
+    const known = PRODUCTS.filter( ( p ) => groups[ p.slug ] !== undefined );
+    const knownSlugs = new Set( known.map( ( p ) => p.slug ) );
+    const extra = Object.keys( groups ).filter( ( slug ) => ! knownSlugs.has( slug ) );
+
+    return [ ...known.map( ( p ) => p.slug ), ...extra ].map( ( slug ) => ({
+        productSlug: slug,
+        productName: productNames[ slug ] ?? PRODUCTS.find( ( p ) => p.slug === slug )?.name ?? slug,
+        tiers: groups[ slug ],
+    }) );
 }

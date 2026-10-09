@@ -6,9 +6,7 @@ describe( 'AppLoader', () => {
         render( <AppLoader /> );
 
         // Shell chrome (title from WelcomeShell).
-        expect( screen.queryByText( 'Software License Manager' ) ).not.toBeNull();
-        // Subtitle.
-        expect( screen.queryByText( 'Liquid Web by Nexcess' ) ).not.toBeNull();
+        expect( screen.queryByText( 'Nexcess Licensing' ) ).not.toBeNull();
         // Loading indicator label.
         expect( screen.queryByText( 'Loading…' ) ).not.toBeNull();
     } );

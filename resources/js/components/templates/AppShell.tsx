@@ -107,7 +107,7 @@ export function AppShell() {
                                         <h2 className="!text-2xl !font-normal !m-0 !p-0">{ __( 'Available Features', '%TEXTDOMAIN%' ) }</h2>
                                     </div>
                                     { availableProducts.map( ( product ) => (
-                                        <ProductSection key={ product.slug } product={ product } hideLicenseBadge />
+                                        <ProductSection key={ product.slug } product={ product } hideActivation />
                                     ) ) }
                                 </>
                             ) }

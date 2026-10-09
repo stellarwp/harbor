@@ -12,7 +12,7 @@ The catalog data comes from the Commerce Portal API. It is not license-specific.
 
 ### Products
 
-The catalog is organized by product. Kadence, GiveWP, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins and themes) that customers can enable based on their tier.
+The catalog is organized by product. Kadence, Give, LearnDash, and The Events Calendar are each a product. A product encompasses many features (plugins and themes) that customers can enable based on their tier.
 
 Each product has an entry plugin that bootstraps Harbor on the site (see [Products and Entry Plugins](../harbor.md#products-and-entry-plugins)), but the product itself is the umbrella under which all of its features, tiers, and licensing live. A product catalog contains two things: tiers and features.
 
@@ -38,6 +38,39 @@ Tiers are always sorted by rank. This ordering drives feature availability. A fe
 Products that have free offerings include a free tier at rank 0 (e.g., `kadence-free`). The free tier is the entry point to the tier hierarchy. Features gated at the free tier are available without a license key — an unlicensed user resolves to rank 0, and `0 >= 0` satisfies the availability check. The `purchase_url` on the free tier points to the first paid tier, providing the upgrade path.
 
 A product's tiers are its own. Tier slugs are namespaced to the product (`kadence-basic`, `give-basic`) so there's no collision across product families.
+
+### Tier purchase and upgrade buttons
+
+The feature-list button uses the catalog tier's `name` in **Upgrade to {name}**. Customers without a purchase for that brand follow `purchase_url`; existing brand customers follow `upgrade_url` with `domain` and `portal-referral=plugin` appended. Harbor does not substitute one URL for the other.
+
+For the tier layout used when NPS has no usable offer, omit or empty both fields to hide the tier's sales button while retaining its features and existing activation controls:
+
+```json
+{
+  "tier_slug": "pro",
+  "name": "Pro",
+  "purchase_url": "",
+  "upgrade_url": ""
+}
+```
+
+This is an excerpt, not a replacement tier record. Keep its ranks, capability references and feature definitions. Existing Harbor versions already honor missing sales links; cached catalogs take effect on refresh. Portal must decide when to stop publishing those links and reject retired sales server-side, since hiding a button does not invalidate an old checkout URL.
+
+### Package feature groups
+
+When NPS has a valid catalog offer, locked features that need a new purchase are grouped under **Included in Nexcess Plugin Stack**, with a **Get Nexcess Plugin Stack** link to its purchase URL. Features outside the advertised package appear under **Not included in Nexcess Plugin Stack**, with no purchase prompt. All package labels use the catalog product name as React text, so names are escaped rather than interpreted as HTML. This replaces the old tier sales groups even if brand purchase URLs are still present for older clients.
+
+Available features and owned brand activation groups keep their existing behavior. An owned but unactivated NPS plan gets an **Activate Nexcess Plugin Stack** link instead of another purchase prompt. Customers who already own NPS are not offered another copy when a feature grant is missing.
+
+The package group uses the same offer validation as the sidebar. Without NPS, or without a usable package offer, Harbor keeps the tier layout and catalog-controlled tier links. This presentation change does not alter licensing grants or retire checkout paths in Portal.
+
+### Sidebar purchase offers
+
+When the catalog contains `nexcess-plugin-stack` with a paid tier, a usable purchase URL and at least one resolved included feature, Harbor's **Add to your plan** section offers the package instead of the individual brands. Customers whose license already contains NPS see no package offer. The package's display name comes from the catalog, and its expandable feature list joins the advertised tier's capability references with the existing brand feature definitions.
+
+The offer uses the lowest-ranked paid tier's `purchase_url`, which must be an absolute HTTP or HTTPS URL. If NPS is present but lacks a paid tier, usable URL or resolvable features, Harbor hides the offer without falling back to individual brands. If NPS is absent, existing brand offers remain available only for catalog products with features and a paid-tier purchase URL. An empty catalog or no eligible offers hides the entire section.
+
+Portal must separately retire old-plan checkout paths at launch, including links followed by older Harbor clients. Keeping a brand in the catalog preserves its existing entitlements; withholding its purchase URL prevents an offer in updated Harbor but does not disable checkout. Harbor reads the supplied URLs and does not probe whether checkout is accepting purchases.
 
 ### Features
 
@@ -229,7 +262,7 @@ The two orders answer different questions:
 
 A legacy entry only contributes a URL when its `is_active` flag is `true`, its `key` is non-empty, and the reporting plugin has opted in with `use_for_updates = true`. The opt-in keeps Harbor from routing downloads for legacy keys whose backend is not Stellar Licensing v3 compatible. Otherwise `Herald_Legacy_Url_Builder` returns an empty string and the router falls through to `Herald_Url_Builder`.
 
-The router returns an empty string when neither builder can produce a URL. That typically means the domain is empty, or that there is no matching active legacy key and no Unified key. The Herald base URL defaults to `https://herald.stellarwp.com` and is configurable via `Config::set_herald_base_url()`.
+The router returns an empty string when neither builder can produce a URL. That typically means the domain is empty, or that there is no matching active legacy key and no Unified key. The Herald base URL defaults to `https://herald.nexcess.com` and is configurable via `Config::set_herald_base_url()`.
 
 To swap the download backend entirely (point at a different service, inject a test double), register a different binding for `Download_Url_Builder::class`.
 

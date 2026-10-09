@@ -8,13 +8,13 @@
 
 ## What This Is
 
-Harbor is a PHP library that Liquid Web plugins bundle to handle licensing, updates, and feature management. Each Liquid Web plugin ships its own vendor-prefixed copy via Strauss, and there is no shared installation. Multiple copies coexist on a single WordPress site, and the library negotiates internally to avoid conflicts.
+Harbor is a PHP library that Nexcess plugins bundle to handle licensing, updates, and feature management. Each Nexcess plugin ships its own vendor-prefixed copy via Strauss, and there is no shared installation. Multiple copies coexist on a single WordPress site, and the library negotiates internally to avoid conflicts.
 
-Harbor introduces **unified licensing**. Instead of each plugin managing its own license key independently, all Liquid Web products on a site share a single `LWSW-`-prefixed key. That key determines what products are entitled, what tier each is on, and what features are available. The site asks two external services (the Licensing API and the Commerce Portal) and combines their answers to produce a resolved picture of what the customer can use.
+Harbor introduces **unified licensing**. Instead of each plugin managing its own license key independently, all Nexcess products on a site share a single `LWSW-`-prefixed key. That key determines what products are entitled, what tier each is on, and what features are available. The site asks two external services (the Licensing API and the Commerce Portal) and combines their answers to produce a resolved picture of what the customer can use.
 
 ## Products and Entry Plugins
 
-A product is a brand family, like Kadence, GiveWP, The Events Calendar, or LearnDash. Each product encompasses many features: plugins and themes that the customer can enable based on their tier.
+A product is a brand family, like Kadence, Give, The Events Calendar, or LearnDash. Each product encompasses many features: plugins and themes that the customer can enable based on their tier.
 
 Each product has an **entry plugin**, a WordPress plugin that bootstraps Harbor on the site. The entry plugin bundles a vendor-prefixed copy of the Harbor library, registers the product with the leader via the product registry, and may contribute an embedded license key. The entry plugin is how a product gets on the site, but it is not the product itself.
 
@@ -22,7 +22,7 @@ Most entry plugins are free and available on WordPress.org. This is deliberate. 
 
 | Product             | Entry plugins                          | On WordPress.org |
 | ------------------- | -------------------------------------- | ---------------- |
-| GiveWP              | `give`                                 | Yes              |
+| Give                | `give`                                 | Yes              |
 | Kadence             | `kadence-blocks`                       | Yes              |
 | The Events Calendar | `the-events-calendar`, `event-tickets` | Yes              |
 | LearnDash           | `learndash`, `memberdash`              | No               |
@@ -78,7 +78,7 @@ flowchart TD
     CatalogCache --> Resolution["Feature Resolution\n\njoins by slug,\nchecks slug in capabilities[]"]
     LicensingCache --> Resolution
     Resolution -->|Feature_Collection| REST["REST API\n/features, /license"]
-    REST -->|JSON over HTTP| UI["React UI\n(Software Manager)\n\nis_available, is_enabled,\nenable / disable"]
+    REST -->|JSON over HTTP| UI["React UI\n(Nexcess Licensing)\n\nis_available, is_enabled,\nenable / disable"]
 ```
 
 The catalog provides structure (what features exist, their metadata, and which tier they belong to for display). Licensing provides entitlements (what the key covers and, critically, which feature slugs the license grants via the `capabilities` array). Feature resolution checks the capabilities array and produces a collection where each feature knows its availability. Strategies then handle the local mechanics of enabling and disabling.
@@ -93,7 +93,7 @@ This design allows the licensing service to handle cases that tier rank comparis
 
 ## One Key Per Site
 
-A site stores exactly one unified key. All Liquid Web products share it. The key enters the site either embedded in a product's license file or typed into the admin UI by the user. If a key already exists, it takes precedence over newly contributed embedded keys.
+A site stores exactly one unified key. All Nexcess products share it. The key enters the site either embedded in a product's license file or typed into the admin UI by the user. If a key already exists, it takes precedence over newly contributed embedded keys.
 
 The key is the site's identity to the licensing system. Without a key, the site is unlicensed and no API calls are made.
 
@@ -101,7 +101,7 @@ See [Unified License Key: System Design](architecture/unified-license-key-system
 
 ## Multi-Instance Architecture
 
-Because each entry plugin bundles its own vendor-prefixed copy of Harbor, a site with multiple Liquid Web products has many Harbor instances loaded simultaneously. The instances negotiate leadership (the highest version wins), and the leader takes ownership of all unified licensing concerns: key storage, API communication, feature resolution, REST routes, and the admin page.
+Because each entry plugin bundles its own vendor-prefixed copy of Harbor, a site with multiple Nexcess products has many Harbor instances loaded simultaneously. The instances negotiate leadership (the highest version wins), and the leader takes ownership of all unified licensing concerns: key storage, API communication, feature resolution, REST routes, and the admin page.
 
 Non-leader instances (thin instances) declare themselves to the leader through the product registry and defer to it for everything else. They do not validate keys, talk to APIs, or render licensing UI.
 
@@ -109,7 +109,7 @@ See [Multi-Instance Architecture](architecture/fat-leader-thin-instance.md) for 
 
 ## The Admin Page
 
-The leader renders the Software Manager, a React-based admin page for managing all Liquid Web products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
+The leader renders Nexcess Licensing, a React-based admin page for managing all Nexcess products on the site. It shows the unified key status, licensed products with their tiers, and features that can be toggled on and off. The frontend communicates with the backend through REST endpoints served by the leader instance.
 
 ## Caching
 

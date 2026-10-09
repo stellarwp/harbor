@@ -12,7 +12,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { LicenseSection } from '@/components/organisms/LicenseSection';
 import { UpsellSection } from '@/components/organisms/UpsellSection';
 import { store as harborStore } from '@/store';
-import { PRODUCTS } from '@/data/products';
+import { getUpsellOffers } from '@/lib/upsell-offers';
 import { useToast } from '@/context/toast-context';
 import { useErrorModal } from '@/context/error-modal-context';
 import { HarborError } from '@/errors';
@@ -52,23 +52,11 @@ export function LicensePanel() {
         return { tierNameMap: names, tierRankMap: ranks };
     }, [ catalogs ] );
 
+    const productNames = useMemo( () => Object.fromEntries( catalogs.map( ( c ) => [ c.product_slug, c.product_name ] ) ), [ catalogs ] );
+
     const activationUrl = licenseKey ? getHarborDataValue( 'activationUrl' ) : null;
 
-    // Product slug → lowest paid-tier purchase URL map from the catalog.
-    const upsellUrlMap = useMemo( () => {
-        const map: Record<string, string> = {};
-        catalogs.forEach( ( catalog ) => {
-            const sorted   = catalog.tiers.slice().sort( ( a, b ) => a.rank - b.rank );
-            const paidTier = sorted.find( ( t ) => t.rank > 0 );
-            if ( paidTier?.purchase_url ) {
-                map[ catalog.product_slug ] = paidTier.purchase_url;
-            }
-        } );
-        return map;
-    }, [ catalogs ] );
-
-    const licensedSlugs  = new Set( licenseProducts.map( ( lp ) => lp.product_slug ) );
-    const upsellProducts = PRODUCTS.filter( ( p ) => ! licensedSlugs.has( p.slug ) );
+    const upsellOffers = getUpsellOffers( catalogs, licenseProducts );
 
     const handleRemove = async (): Promise<HarborError | null> => {
         const result = await deleteLicense();
@@ -103,6 +91,7 @@ export function LicensePanel() {
                 licenseProducts={ licenseProducts }
                 tierNameMap={ tierNameMap }
                 tierRankMap={ tierRankMap }
+                productNames={ productNames }
                 onRemove={ handleRemove }
                 onRefresh={ handleRefresh }
                 isRefreshing={ isRefreshing }
@@ -111,8 +100,7 @@ export function LicensePanel() {
             />
             { ! isLicenseLoading && (
                 <UpsellSection
-                    products={ upsellProducts }
-                    upsellUrlMap={ upsellUrlMap }
+                    offers={ upsellOffers }
                 />
             ) }
         </div>

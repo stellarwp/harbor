@@ -4,7 +4,7 @@
  * Plugin URI:  https://github.com/stellarwp/harbor
  * Description: Boots Harbor with fixture catalog and licensing data for E2E tests. Not for production use.
  * Version:     1.0.0
- * Author:      Liquid Web
+ * Author:      Nexcess
  */
 
 defined( 'ABSPATH' ) || exit;

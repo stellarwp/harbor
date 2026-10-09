@@ -67,6 +67,12 @@ final class Catalog_Tier {
 	 * @return self
 	 */
 	public static function from_array( array $data ): self {
+		// Portal uses capabilities; earlier catalog fixtures used herald_slugs.
+		// Preserve Harbor's existing serialized field while accepting either input.
+		if ( isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ) {
+			$data['herald_slugs'] = $data['capabilities'];
+		}
+
 		return new self(
 			[
 				'tier_slug'    => Cast::to_string( $data['tier_slug'] ?? '' ),

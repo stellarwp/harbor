@@ -51,7 +51,7 @@ Hard rules, no exceptions:
 - Never build a Portal URL, activation URL, or licensing request by hand. Use the `lw_harbor_*` helpers. A missing helper is a Harbor ticket.
 - Never release or QA with `composer.json` pinned to a Harbor `dev-` branch.
 - Strauss must not prefix `src/Harbor/global-functions.php`.
-- Call the license page the "Unified License Manager" in anything a user sees.
+- Call the license page "Nexcess Licensing" in anything a user sees.
 
 Before changing any of that code, read `vendor/vendor-prefixed/stellarwp/harbor/skill/SKILL.md` for the API, hooks, and bootstrap order of the installed version. If the file is missing, run `composer install` first.
 ```
