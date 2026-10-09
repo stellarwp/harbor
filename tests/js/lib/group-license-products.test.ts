@@ -73,9 +73,9 @@ describe( 'groupLicenseProducts', () => {
 
     it( 'uses the catalog display name for a package alongside a retained brand', () => {
         const result = groupLicenseProducts(
-            [ makeTier( 'nps', 'complete' ), makeTier( 'kadence', 'pro' ) ],
+            [ makeTier( 'nexcess-plugin-stack', 'complete' ), makeTier( 'kadence', 'pro' ) ],
             RANK_MAP,
-            { nps: 'Nexcess Plugin Stack' },
+            { 'nexcess-plugin-stack': 'Nexcess Plugin Stack' },
         );
         expect( result.map( ( group ) => group.productName ) ).toEqual( [ 'Kadence', 'Nexcess Plugin Stack' ] );
     } );

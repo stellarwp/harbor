@@ -45,7 +45,7 @@ describe( 'getLicenseBadgeType', () => {
 
     it( 'does not label a paid purchase as free', () => {
         const feature = makeFeature( {
-            access_sources: [ { type: 'purchase', product_slug: 'nps', tier: 'complete', product_name: 'Nexcess Plugin Stack', tier_name: '1 site' } ],
+            access_sources: [ { type: 'purchase', product_slug: 'nexcess-plugin-stack', tier: '1-site', product_name: 'Nexcess Plugin Stack', tier_name: '1 site' } ],
         } );
         expect( getLicenseBadgeType( feature, false ) ).toBeNull();
     } );

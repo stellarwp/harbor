@@ -74,7 +74,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 				: 'bg-muted/30'
 		) }>
 			<div className="flex flex-wrap items-center gap-x-4 gap-y-2 py-3 px-4">
-				<div className="min-w-0 flex-[1_1_12rem]">
+				<div className="min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1.5 flex-[1_1_12rem]">
 					<button
 						type="button"
 						aria-expanded={ expanded }
@@ -92,9 +92,10 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 						</span>
 						{ licenseBadgeType && <LicenseBadge type={ licenseBadgeType } /> }
 					</button>
+					{ licenseBadgeType !== 'free' && <FeatureAccessSources sources={ feature.access_sources } /> }
 				</div>
 				{ /* Keep every row's controls aligned, including services without versions or switches. */ }
-				<div className="ml-auto grid w-[21rem] max-w-full shrink-0 grid-cols-[minmax(0,1fr)_6.25rem_2rem_3.5rem] items-center gap-3">
+				<div className="ml-auto grid w-[17rem] max-w-full shrink-0 grid-cols-[minmax(0,1fr)_6.25rem_2rem] items-center gap-3">
 					<div className="min-w-0 text-right">
 						{ ( isInstallableFeature( feature ) || ! isVisuallyAvailable ) && (
 							<VersionDisplay
@@ -124,9 +125,6 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 								}
 							/>
 						) }
-					</div>
-					<div>
-						<FeatureAccessSources sources={ feature.access_sources } />
 					</div>
 				</div>
 			</div>

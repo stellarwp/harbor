@@ -43,7 +43,7 @@ A product's tiers are its own. Tier slugs are namespaced to the product (`kadenc
 
 The feature-list button uses the catalog tier's `name` in **Upgrade to {name}**. Customers without a purchase for that brand follow `purchase_url`; existing brand customers follow `upgrade_url` with `domain` and `portal-referral=plugin` appended. Harbor does not substitute one URL for the other.
 
-Omit or empty both fields to hide the tier's sales button while retaining its features and existing activation controls:
+For the tier layout used when NPS has no usable offer, omit or empty both fields to hide the tier's sales button while retaining its features and existing activation controls:
 
 ```json
 {
@@ -56,9 +56,17 @@ Omit or empty both fields to hide the tier's sales button while retaining its fe
 
 This is an excerpt, not a replacement tier record. Keep its ranks, capability references and feature definitions. Existing Harbor versions already honor missing sales links; cached catalogs take effect on refresh. Portal must decide when to stop publishing those links and reject retired sales server-side, since hiding a button does not invalidate an old checkout URL.
 
+### Package feature groups
+
+When NPS has a valid catalog offer, locked features that need a new purchase are grouped under **Included in Nexcess Plugin Stack**, with a **Get Nexcess Plugin Stack** link to its purchase URL. Features outside the advertised package appear under **Not included in Nexcess Plugin Stack**, with no purchase prompt. All package labels use the catalog product name as React text, so names are escaped rather than interpreted as HTML. This replaces the old tier sales groups even if brand purchase URLs are still present for older clients.
+
+Available features and owned brand activation groups keep their existing behavior. An owned but unactivated NPS plan gets an **Activate Nexcess Plugin Stack** link instead of another purchase prompt. Customers who already own NPS are not offered another copy when a feature grant is missing.
+
+The package group uses the same offer validation as the sidebar. Without NPS, or without a usable package offer, Harbor keeps the tier layout and catalog-controlled tier links. This presentation change does not alter licensing grants or retire checkout paths in Portal.
+
 ### Sidebar purchase offers
 
-When the catalog contains `nps` with a paid tier, a usable purchase URL and at least one resolved included feature, Harbor's **Add to your plan** section offers the package instead of the individual brands. Customers whose license already contains NPS see no package offer. The package's display name comes from the catalog, and its expandable feature list joins the advertised tier's capability references with the existing brand feature definitions.
+When the catalog contains `nexcess-plugin-stack` with a paid tier, a usable purchase URL and at least one resolved included feature, Harbor's **Add to your plan** section offers the package instead of the individual brands. Customers whose license already contains NPS see no package offer. The package's display name comes from the catalog, and its expandable feature list joins the advertised tier's capability references with the existing brand feature definitions.
 
 The offer uses the lowest-ranked paid tier's `purchase_url`, which must be an absolute HTTP or HTTPS URL. If NPS is present but lacks a paid tier, usable URL or resolvable features, Harbor hides the offer without falling back to individual brands. If NPS is absent, existing brand offers remain available only for catalog products with features and a paid-tier purchase URL. An empty catalog or no eligible offers hides the entire section.
 

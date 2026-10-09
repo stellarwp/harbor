@@ -1,12 +1,13 @@
 /**
- * Purchase logos using the backend's effective access sources.
+ * Subscription pills using the backend's effective access sources.
  *
  * @package LiquidWeb\Harbor
  */
 import { useState } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { Tooltip as TooltipPrimitive } from 'radix-ui';
-import { ProductLogo } from '@/components/atoms/ProductLogo';
+import { badgeVariants } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import type { FeatureAccessSource } from '@/types/api';
 
 interface FeatureAccessSourcesProps {
@@ -15,15 +16,19 @@ interface FeatureAccessSourcesProps {
 
 type PurchaseAccessSource = Extract<FeatureAccessSource, { type: 'purchase' }>;
 
-/** Reveals the full purchase name on hover, keyboard focus, or tap. */
-function PurchaseAccessIcon( { source }: { source: PurchaseAccessSource } ) {
+/**
+ * Show a short subscription label, with the full purchase on hover, focus, or tap.
+ */
+function PurchaseAccessPill( { source }: { source: PurchaseAccessSource } ) {
     const [ open, setOpen ] = useState( false );
     const purchaseName = source.tier_name
         ? /* translators: 1: purchase name, 2: tier name. */
           sprintf( __( '%1$s (%2$s)', '%TEXTDOMAIN%' ), source.product_name, source.tier_name )
         : source.product_name;
+    const isPackage = source.product_slug === 'nexcess-plugin-stack';
+    const pillLabel = isPackage ? __( 'Plugin Stack', '%TEXTDOMAIN%' ) : source.tier_name || source.product_name;
     /* translators: %s: purchase and tier name. */
-    const label = sprintf( __( 'Included with %s', '%TEXTDOMAIN%' ), purchaseName );
+    const label = sprintf( __( 'Included in your %s subscription.', '%TEXTDOMAIN%' ), purchaseName );
 
     return (
         <TooltipPrimitive.Root open={ open } onOpenChange={ setOpen }>
@@ -31,16 +36,18 @@ function PurchaseAccessIcon( { source }: { source: PurchaseAccessSource } ) {
                 <button
                     type="button"
                     aria-label={ label }
-                    className="flex size-6 items-center justify-center rounded cursor-help hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    className={ cn(
+                        badgeVariants( { variant: 'secondary' } ),
+                        'px-2 py-px text-xs leading-4 cursor-help focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                        isPackage && 'bg-white text-blue-600 border-blue-500'
+                    ) }
                     onClick={ ( event ) => {
                         // Radix normally closes a tooltip on click. Keep it visible for taps.
                         event.preventDefault();
                         setOpen( true );
                     } }
                 >
-                    <span aria-hidden="true">
-                        <ProductLogo slug={ source.product_slug } size={ 20 } productName={ source.product_name } variant="nobg" />
-                    </span>
+                    { pillLabel }
                 </button>
             </TooltipPrimitive.Trigger>
             <TooltipPrimitive.Portal>
@@ -67,7 +74,9 @@ function PurchaseAccessIcon( { source }: { source: PurchaseAccessSource } ) {
     );
 }
 
-/** Shows the purchases providing access without re-evaluating licensing rules. */
+/**
+ * Show the purchases providing access without re-evaluating licensing rules.
+ */
 export function FeatureAccessSources( { sources = [] }: FeatureAccessSourcesProps ) {
     const purchases = sources.filter( ( source ) => source.type === 'purchase' );
 
@@ -77,10 +86,10 @@ export function FeatureAccessSources( { sources = [] }: FeatureAccessSourcesProp
 
     return (
         <TooltipPrimitive.Provider delayDuration={ 150 }>
-            <ul className="m-0! p-0! flex flex-wrap justify-end gap-1 list-none" aria-label={ __( 'Included with', '%TEXTDOMAIN%' ) }>
+            <ul className="m-0! p-0! flex flex-wrap items-center gap-1.5 list-none" aria-label={ __( 'Included with', '%TEXTDOMAIN%' ) }>
                 { purchases.map( ( source ) => (
                     <li className="m-0!" key={ `${ source.product_slug }:${ source.tier }` }>
-                        <PurchaseAccessIcon source={ source } />
+                        <PurchaseAccessPill source={ source } />
                     </li>
                 ) ) }
             </ul>

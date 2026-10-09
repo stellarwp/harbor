@@ -29,7 +29,7 @@ function license( slug: string, capabilities: string[] ): LicenseProduct {
 
 const kadence = catalog( 'kadence', 'Kadence', [ feature( 'kadence-blocks-pro', 'Kadence Blocks Pro' ), feature( 'kadence-conversions', 'Kadence Conversions' ) ] );
 const give = catalog( 'give', 'Give', [ feature( 'give-recurring-donations', 'Recurring Donations' ) ] );
-const suite = catalog( 'nps', 'Nexcess Plugin Stack', [], [ 'kadence-blocks-pro', 'give-recurring-donations' ] );
+const suite = catalog( 'nexcess-plugin-stack', 'Nexcess Plugin Stack', [], [ 'kadence-blocks-pro', 'give-recurring-donations' ] );
 const catalogs = [ kadence, give, suite ];
 const brandLicense = license( 'kadence', [ 'kadence-blocks-pro', 'kadence-conversions' ] );
 
@@ -47,12 +47,12 @@ describe( 'Catalog upsell offers', () => {
     } );
 
     it.each( [ false, true ] )( 'does not advertise a package already owned, with mixed ownership: %s', ( mixed ) => {
-        const licenses = [ license( 'nps', suite.tiers[ 0 ].herald_slugs ), ...( mixed ? [ brandLicense ] : [] ) ];
+        const licenses = [ license( 'nexcess-plugin-stack', suite.tiers[ 0 ].herald_slugs ), ...( mixed ? [ brandLicense ] : [] ) ];
         expect( getUpsellOffers( catalogs, licenses ) ).toEqual( [] );
     } );
 
     it( 'offers the published package without a license', () => {
-        expect( getUpsellOffers( catalogs, [] ).map( ( offer ) => offer.product.slug ) ).toEqual( [ 'nps' ] );
+        expect( getUpsellOffers( catalogs, [] ).map( ( offer ) => offer.product.slug ) ).toEqual( [ 'nexcess-plugin-stack' ] );
     } );
 
     it( 'keeps brand offers when Portal has not published NPS', () => {

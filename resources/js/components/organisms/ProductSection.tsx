@@ -2,7 +2,7 @@
  * Collapsible product section with a sticky header and tier group accordions.
  *
  * Available features render as FeatureRow entries. Locked features are
- * grouped by tier and rendered inside collapsible TierGroup accordions.
+ * grouped by tier, or by package inclusion when the catalog offers NPS.
  *
  * Header counts (active / deactivated) always reflect the full unfiltered
  * feature set so they remain stable while the user searches.
@@ -23,6 +23,8 @@ import {
     DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { FeatureRow } from '@/components/molecules/FeatureRow';
+import { LockedFeatureGroup } from '@/components/molecules/LockedFeatureGroup';
+import { getPackageOffer } from '@/lib/upsell-offers';
 import { TierGroup } from '@/components/molecules/TierGroup';
 import { store as harborStore } from '@/store';
 import { useFilter } from '@/context/filter-context';
@@ -63,11 +65,14 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
     const [ tierMenuOpen, setTierMenuOpen ] = useState( false );
 
     // Full unfiltered set — used only for header counts so they stay stable.
-    const { licenseProduct, unactivatedLicenseProduct, unactivatedLicenseProducts } = useSelect(
+    const { licenseProduct, unactivatedLicenseProduct, unactivatedLicenseProducts, catalogs, packageLicenseProducts, unactivatedPackage } = useSelect(
         ( select ) => {
             const licenseProducts = select( harborStore ).getLicenseProducts();
             const forProduct      = licenseProducts.filter( ( lp ) => lp.product_slug === product.slug );
             return {
+                catalogs: select( harborStore ).getCatalog(),
+                packageLicenseProducts: licenseProducts.filter( ( lp ) => lp.product_slug === 'nexcess-plugin-stack' ),
+                unactivatedPackage: select( harborStore ).getUnactivatedLicenseProduct( 'nexcess-plugin-stack' ),
                 licenseProduct:             forProduct.find( ( lp ) => lp.activated_here === true ) ?? null,
                 unactivatedLicenseProduct:  select( harborStore ).getUnactivatedLicenseProduct( product.slug ),
                 unactivatedLicenseProducts: select( harborStore ).getUnactivatedLicenseProducts( product.slug ),
@@ -77,6 +82,13 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
     );
 
     const { availableFeatures, lockedByTier, sortedCatalogTiers, upgradeCatalogTiers, activationCatalogTiers, isUnactivatedLicense } = useProductFeatureGroups( product.slug );
+
+    const packageOffer = getPackageOffer( catalogs );
+    const packageSlugs = new Set( packageOffer?.includedProducts?.flatMap( ( entry ) => entry.features.map( ( feature ) => feature.slug ) ) );
+    // Owned brand tiers stay in their activation groups. Only features needing a new purchase move.
+    const upgradeFeatures = upgradeCatalogTiers.flatMap( ( tier ) => lockedByTier[ tier.tier_slug ] ?? [] );
+    const packageFeatures = upgradeFeatures.filter( ( feature ) => packageSlugs.has( feature.slug ) );
+    const otherFeatures = upgradeFeatures.filter( ( feature ) => ! packageSlugs.has( feature.slug ) );
 
     const activeCount      = availableFeatures.filter( ( f ) => f.is_enabled ).length;
     const deactivatedCount = availableFeatures.filter( ( f ) => ! f.is_enabled ).length;
@@ -224,7 +236,38 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
                             );
                         } ) }
 
-                        { upgradeCatalogTiers.map( ( tier ) => {
+                        { packageOffer && packageFeatures.length > 0 && (
+                            <LockedFeatureGroup
+                                label={ /* translators: %s: package product name. */ sprintf( __( 'Included in %s', '%TEXTDOMAIN%' ), packageOffer.product.name ) }
+                                features={ packageFeatures }
+                                forceOpen={ isSearching }
+                                action={ unactivatedPackage && activationUrl ? (
+                                    <Button variant="outline" size="xs" asChild>
+                                        <a href={ buildActivationUrl( activationUrl, 'nexcess-plugin-stack', unactivatedPackage.tier ) } target="_blank" rel="noopener noreferrer">
+                                            { /* translators: %s: package product name. */ sprintf( __( 'Activate %s', '%TEXTDOMAIN%' ), packageOffer.product.name ) }
+                                            <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </Button>
+                                ) : packageLicenseProducts.length === 0 ? (
+                                    <Button variant="outline" size="xs" asChild>
+                                        <a href={ packageOffer.href } target="_blank" rel="noopener noreferrer">
+                                            { /* translators: %s: package product name. */ sprintf( __( 'Get %s', '%TEXTDOMAIN%' ), packageOffer.product.name ) }
+                                            <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </Button>
+                                ) : undefined }
+                            />
+                        ) }
+
+                        { packageOffer && otherFeatures.length > 0 && (
+                            <LockedFeatureGroup
+                                label={ /* translators: %s: package product name. */ sprintf( __( 'Not included in %s', '%TEXTDOMAIN%' ), packageOffer.product.name ) }
+                                features={ otherFeatures }
+                                forceOpen={ isSearching }
+                            />
+                        ) }
+
+                        { ! packageOffer && upgradeCatalogTiers.map( ( tier ) => {
                             const locked = lockedByTier[ tier.tier_slug ] ?? [];
                             if ( locked.length === 0 ) return null;
 

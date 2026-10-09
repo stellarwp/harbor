@@ -22,7 +22,7 @@ const LOGOS: Record<string, string> = {
     'the-events-calendar': logoTheEventsCalendar,
     learndash:             logoLearnDash,
     kadence:               logoKadence,
-    nps:                   logoNps,
+    'nexcess-plugin-stack': logoNps,
 };
 
 const LOGOS_NOBG: Record<string, string> = {
@@ -30,7 +30,7 @@ const LOGOS_NOBG: Record<string, string> = {
     'the-events-calendar': logoTecNobg,
     learndash:             logoLearnDashNobg,
     kadence:               logoKadenceNobg,
-    nps:                   logoNps,
+    'nexcess-plugin-stack': logoNps,
 };
 
 interface ProductLogoProps {

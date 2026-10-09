@@ -4,7 +4,7 @@ import { useSelect } from '@wordpress/data';
 import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
 import { ProductSection } from '@/components/organisms/ProductSection';
-import type { CatalogTier, LicenseProduct, PluginFeature } from '@/types/api';
+import type { CatalogFeature, CatalogTier, LicenseProduct, PluginFeature, ProductCatalog } from '@/types/api';
 
 jest.mock( '@wordpress/data', () => ( { useSelect: jest.fn() } ) );
 jest.mock( '@/store', () => ( { store: { name: 'harbor' } } ) );
@@ -29,10 +29,13 @@ const purchase = { product_slug: 'learndash', tier: 'essentials', activated_here
 /**
  * Keep the actual tier accordion and purchase link while supplying resolved store data.
  */
-function configure( overrides: Partial<CatalogTier> = {}, owned: LicenseProduct | null = null, unactivated = false ) {
+function configure( overrides: Partial<CatalogTier> = {}, owned: LicenseProduct | null = null, unactivated = false, catalogs: ProductCatalog[] = [], packageLicenseProducts: LicenseProduct[] = [] ) {
     const catalogTier = { ...tier, ...overrides };
     ( useFilter as jest.Mock ).mockReturnValue( { searchQuery: '' } );
     ( useSelect as jest.Mock ).mockReturnValue( {
+        catalogs,
+        packageLicenseProducts,
+        unactivatedPackage: packageLicenseProducts.find( ( entry ) => entry.activated_here === false ) ?? null,
         licenseProduct: unactivated ? null : owned,
         unactivatedLicenseProduct: unactivated ? owned : null,
         unactivatedLicenseProducts: unactivated && owned ? [ owned ] : [],
@@ -116,5 +119,121 @@ describe( 'ProductSection catalog actions', () => {
         ( useFilter as jest.Mock ).mockReturnValue( { searchQuery: '' } );
         rerender( <ProductSection product={ product } /> );
         expect( heading.getAttribute( 'aria-expanded' ) ).toBe( 'false' );
+    } );
+} );
+
+const packageCatalog: ProductCatalog = {
+    product_id: 'nexcess-plugin-stack', product_slug: 'nexcess-plugin-stack', product_name: 'Nexcess Plugin Stack', features: [],
+    tiers: [ { ...tier, tier_slug: '1-site', name: '1 site', herald_slugs: [ 'sfwd-lms' ], purchase_url: 'https://portal.example/nps/' } ],
+};
+const brandCatalog: ProductCatalog = {
+    product_id: 'learndash', product_slug: 'learndash', product_name: 'LearnDash', tiers: [ tier ],
+    features: [ { slug: feature.slug, name: feature.name } as CatalogFeature ],
+};
+const packageCatalogs = [ brandCatalog, packageCatalog ];
+
+describe( 'ProductSection with a published NPS offer', () => {
+    it.each( [ true, false ] )( 'replaces tier sales prompts with the package offer, brand sales links: %s', async ( sellingBrand ) => {
+        configure( sellingBrand ? {} : { purchase_url: '', upgrade_url: '' }, null, false, packageCatalogs );
+        render( <ProductSection product={ product } /> );
+        expect( screen.queryByText( 'Pro Features' ) ).toBeNull();
+        expect( screen.queryByRole( 'link', { name: /Upgrade to/ } ) ).toBeNull();
+        expect( screen.getByRole( 'link', { name: 'Get Nexcess Plugin Stack' } ).getAttribute( 'href' ) ).toBe( 'https://portal.example/nps/' );
+        await userEvent.setup().click( screen.getByRole( 'button', { name: /Included in Nexcess Plugin Stack/ } ) );
+        expect( screen.getByText( 'LearnDash LMS' ) ).not.toBeNull();
+    } );
+
+    it( 'keeps features outside NPS separate without a package purchase prompt', async () => {
+        configure( {}, null, false, packageCatalogs );
+        const groups = ( useProductFeatureGroups as jest.Mock ).getMockImplementation()!();
+        ( useProductFeatureGroups as jest.Mock ).mockReturnValue( {
+            ...groups,
+            lockedByTier: { pro: [ feature, { ...feature, slug: 'outside-nps', name: 'Outside NPS' } ] },
+        } );
+        render( <ProductSection product={ product } /> );
+        const user = userEvent.setup();
+        await user.click( screen.getByRole( 'button', { name: /Not included in Nexcess Plugin Stack/ } ) );
+        expect( screen.getByText( 'Outside NPS' ) ).not.toBeNull();
+        expect( screen.queryByText( 'LearnDash LMS' ) ).toBeNull();
+        expect( screen.getAllByRole( 'link', { name: 'Get Nexcess Plugin Stack' } ) ).toHaveLength( 1 );
+    } );
+
+    it( 'preserves owned brand activation instead of selling its features again', () => {
+        configure( {}, { ...purchase, tier: 'pro', activated_here: false }, true, packageCatalogs );
+        render( <ProductSection product={ product } /> );
+        expect( screen.getByRole( 'link', { name: 'Activate plan' } ) ).not.toBeNull();
+        expect( screen.getByText( 'Pro Features' ) ).not.toBeNull();
+        expect( screen.queryByRole( 'link', { name: 'Get Nexcess Plugin Stack' } ) ).toBeNull();
+    } );
+
+    it( 'offers activation rather than another purchase when NPS is owned but unactivated', () => {
+        configure( {}, null, false, packageCatalogs, [ { ...purchase, product_slug: 'nexcess-plugin-stack', tier: '1-site', activated_here: false } ] );
+        render( <ProductSection product={ product } /> );
+        expect( screen.queryByRole( 'link', { name: 'Get Nexcess Plugin Stack' } ) ).toBeNull();
+        const url = new URL( screen.getByRole( 'link', { name: 'Activate Nexcess Plugin Stack' } ).getAttribute( 'href' )! );
+        expect( url.searchParams.get( 'sku' ) ).toBe( 'nexcess-plugin-stack:1-site' );
+    } );
+
+    it( 'does not sell NPS again if an owned package is missing a feature grant', () => {
+        configure( {}, null, false, packageCatalogs, [ { ...purchase, product_slug: 'nexcess-plugin-stack', tier: '1-site' } ] );
+        render( <ProductSection product={ product } /> );
+        expect( screen.getByRole( 'button', { name: /Included in Nexcess Plugin Stack/ } ) ).not.toBeNull();
+        expect( screen.queryByRole( 'link' ) ).toBeNull();
+    } );
+
+    it( 'keeps already available features outside the package sales group while searching', () => {
+        configure( {}, null, false, packageCatalogs );
+        const groups = ( useProductFeatureGroups as jest.Mock ).getMockImplementation()!();
+        ( useProductFeatureGroups as jest.Mock ).mockReturnValue( {
+            ...groups,
+            availableFeatures: [ { ...feature, slug: 'owned-feature', name: 'Already owned', is_available: true } ],
+        } );
+        ( useFilter as jest.Mock ).mockReturnValue( { searchQuery: 'LearnDash' } );
+        render( <ProductSection product={ product } /> );
+        expect( screen.getAllByText( 'Already owned' ) ).toHaveLength( 1 );
+        expect( screen.getByText( 'LearnDash LMS' ) ).not.toBeNull();
+        expect( screen.getByRole( 'button', { name: /Included in Nexcess Plugin Stack/ } ).getAttribute( 'aria-expanded' ) ).toBe( 'true' );
+    } );
+
+    it( 'does not offer NPS in a group containing only features it excludes', () => {
+        configure( {}, null, false, packageCatalogs );
+        const groups = ( useProductFeatureGroups as jest.Mock ).getMockImplementation()!();
+        ( useProductFeatureGroups as jest.Mock ).mockReturnValue( {
+            ...groups,
+            lockedByTier: { pro: [ { ...feature, slug: 'outside-nps', name: 'Outside NPS' } ] },
+        } );
+        render( <ProductSection product={ product } /> );
+        expect( screen.getByRole( 'button', { name: /Not included in Nexcess Plugin Stack/ } ) ).not.toBeNull();
+        expect( screen.queryByRole( 'link' ) ).toBeNull();
+    } );
+
+    it.each( [
+        'Another Package',
+        '<img data-catalog-injection src=x onerror="alert(1)"> & <script data-catalog-injection>alert(1)</script>',
+    ] )( 'renders the catalog name as text in every package label: %s', ( name ) => {
+        const renamedCatalogs = [ brandCatalog, { ...packageCatalog, product_name: name } ];
+        configure( {}, null, false, renamedCatalogs );
+        const groups = ( useProductFeatureGroups as jest.Mock ).getMockImplementation()!();
+        ( useProductFeatureGroups as jest.Mock ).mockReturnValue( {
+            ...groups,
+            lockedByTier: { pro: [ feature, { ...feature, slug: 'outside-nps', name: 'Outside NPS' } ] },
+        } );
+        const { container, rerender } = render( <ProductSection product={ product } /> );
+        expect( screen.getByText( 'Included in ' + name ) ).not.toBeNull();
+        expect( screen.getByText( 'Not included in ' + name ) ).not.toBeNull();
+        expect( screen.getByRole( 'link', { name: 'Get ' + name } ).getAttribute( 'href' ) ).toBe( 'https://portal.example/nps/' );
+        expect( container.querySelector( '[data-catalog-injection]' ) ).toBeNull();
+
+        configure( {}, null, false, renamedCatalogs, [ { ...purchase, product_slug: 'nexcess-plugin-stack', tier: '1-site', activated_here: false } ] );
+        rerender( <ProductSection product={ product } /> );
+        expect( screen.getByRole( 'link', { name: 'Activate ' + name } ) ).not.toBeNull();
+        expect( container.querySelector( '[data-catalog-injection]' ) ).toBeNull();
+    } );
+
+    it( 'keeps the old catalog presentation when NPS has no usable offer', () => {
+        configure( {}, null, false, [ brandCatalog, { ...packageCatalog, tiers: [ { ...packageCatalog.tiers[ 0 ], purchase_url: '' } ] } ] );
+        render( <ProductSection product={ product } /> );
+        expect( screen.getByRole( 'link', { name: 'Upgrade to Pro' } ) ).not.toBeNull();
+        expect( screen.queryByText( 'Included in Nexcess Plugin Stack' ) ).toBeNull();
     } );
 } );

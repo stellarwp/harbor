@@ -17,7 +17,7 @@ const feature: PluginFeature = {
     plugin_slug: 'kadence-blocks-pro', authors: [], wporg_slug: null, is_harbor_host: false,
     installed_version: '1.0.0', version: '2.0.0', update_version: '2.0.0',
 };
-const purchaseSource = { type: 'purchase' as const, product_slug: 'nps', tier: 'complete', product_name: 'Nexcess Plugin Stack', tier_name: '1 site' };
+const purchaseSource = { type: 'purchase' as const, product_slug: 'nexcess-plugin-stack', tier: '1-site', product_name: 'Nexcess Plugin Stack', tier_name: '1 site' };
 let updateFeature: jest.Mock;
 let enableFeature: jest.Mock;
 let disableFeature: jest.Mock;
@@ -54,6 +54,28 @@ describe( 'FeatureRow controls', () => {
         render( <FeatureRow feature={ { ...feature, access_sources: [ { type: 'free' } ] } } /> );
         expect( screen.getByText( 'Free' ) ).not.toBeNull();
         expect( ( screen.getByRole( 'switch' ) as HTMLButtonElement ).disabled ).toBe( false );
+    } );
+
+    it( 'shows purchase pills without nesting buttons or expanding on a pill click', async () => {
+        configure();
+        render( <FeatureRow feature={ { ...feature, access_sources: [ purchaseSource ] } } /> );
+        const user = userEvent.setup();
+        const pill = screen.getByRole( 'button', { name: 'Included in your Nexcess Plugin Stack (1 site) subscription.' } );
+        expect( pill.textContent ).toBe( 'Plugin Stack' );
+        expect( pill.parentElement?.closest( 'button' ) ).toBeNull();
+        await user.click( pill );
+        expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toBe( 'Included in your Nexcess Plugin Stack (1 site) subscription.' );
+        expect( screen.queryByText( feature.description ) ).toBeNull();
+        await user.click( screen.getByRole( 'button', { name: 'Kadence Blocks Pro', exact: true } ) );
+        expect( screen.getByText( feature.description ) ).not.toBeNull();
+    } );
+
+    it( 'shows only the Free pill when a free feature also has paid access sources', () => {
+        configure();
+        render( <FeatureRow feature={ { ...feature, access_sources: [ { type: 'free' }, purchaseSource ] } } /> );
+        expect( screen.getByText( 'Free' ) ).not.toBeNull();
+        expect( screen.queryByText( 'Plugin Stack' ) ).toBeNull();
+        expect( screen.queryByRole( 'list', { name: 'Included with' } ) ).toBeNull();
     } );
 
     it( 'preserves legacy-only controls and prevents Harbor-managed updates', () => {
