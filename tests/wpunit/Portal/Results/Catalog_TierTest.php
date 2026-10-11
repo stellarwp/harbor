@@ -66,33 +66,42 @@ final class Catalog_TierTest extends HarborTestCase {
 	}
 
 	/**
+	 * @return array<string, array{mixed}>
+	 */
+	public function non_web_link_provider(): array {
+		return [
+			'javascript'        => [ 'javascript:alert(1)//' ],
+			'padded mixed case' => [ ' JavaScript:alert(1)' ],
+			'data'              => [ 'data:text/html,<b>x</b>' ],
+			'vbscript'          => [ 'vbscript:alert(1)' ],
+			'protocol relative' => [ '//evil.example/checkout' ],
+			'no scheme'         => [ 'evil.example/checkout' ],
+			'relative path'     => [ '/checkout' ],
+			'plain text'        => [ 'not a url' ],
+			'non-string'        => [ [ 'https://example.com' ] ],
+		];
+	}
+
+	/**
 	 * Catalog links that are not http(s) are dropped rather than stored, including
 	 * values without a scheme that esc_url_raw() would otherwise turn into an http link.
+	 *
+	 * @dataProvider non_web_link_provider
+	 *
+	 * @param mixed $link The raw catalog value.
+	 *
+	 * @return void
 	 */
-	public function test_non_web_links_are_dropped(): void {
-		$links = [
-			'javascript:alert(1)//',
-			' JavaScript:alert(1)',
-			'data:text/html,<b>x</b>',
-			'vbscript:alert(1)',
-			'//evil.example/checkout',
-			'evil.example/checkout',
-			'/checkout',
-			'not a url',
-			[ 'https://example.com' ],
-		];
+	public function test_non_web_links_are_dropped( $link ): void {
+		$tier = Catalog_Tier::from_array(
+			[
+				'purchase_url' => $link,
+				'upgrade_url'  => $link,
+			]
+		);
 
-		foreach ( $links as $link ) {
-			$tier = Catalog_Tier::from_array(
-				[
-					'purchase_url' => $link,
-					'upgrade_url'  => $link,
-				]
-			);
-
-			$this->assertSame( '', $tier->get_purchase_url(), wp_json_encode( $link ) );
-			$this->assertSame( '', $tier->get_upgrade_url(), wp_json_encode( $link ) );
-		}
+		$this->assertSame( '', $tier->get_purchase_url() );
+		$this->assertSame( '', $tier->get_upgrade_url() );
 	}
 
 	/**
