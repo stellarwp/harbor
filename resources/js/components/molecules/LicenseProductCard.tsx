@@ -98,7 +98,7 @@ export function LicenseProductCard( {
                     { tiers.map( ( lp ) => {
                         const expiryStatus    = getExpiryStatus( lp.expires );
                         const isActivatedHere = lp.is_valid && lp.activated_here === true;
-                        const showActivate    = ! isActivatedHere && !! activationUrl;
+                        const activateHref    = isActivatedHere || ! activationUrl ? undefined : buildActivationUrl( activationUrl, lp.product_slug, lp.tier );
 
                         return (
                             <div
@@ -123,10 +123,10 @@ export function LicenseProductCard( {
                                         { formatDate( lp.expires ) }
                                     </span>
                                 </div>
-                                { showActivate && (
+                                { activateHref && (
                                     <Button variant="outline" size="xs" asChild className="shrink-0 ml-2">
                                         <a
-                                            href={ buildActivationUrl( activationUrl, lp.product_slug, lp.tier ) }
+                                            href={ activateHref }
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >

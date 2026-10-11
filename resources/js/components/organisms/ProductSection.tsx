@@ -105,7 +105,7 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
 
     // Owned-but-unactivated products keep their activation action,
     // falling back to the unactivated product record when no tier is active here.
-    const activationUrl             = getHarborDataValue( 'activationUrl' );
+    const activationUrl             = webUrl( getHarborDataValue( 'activationUrl' ) );
     const effectiveLicenseProduct   = licenseProduct ?? unactivatedLicenseProduct;
     const showHeaderActivate        = isNotActivated && !! activationUrl && !! effectiveLicenseProduct;
 

@@ -12,6 +12,7 @@ import { useSelect } from '@wordpress/data';
 import { AlertTriangle } from 'lucide-react';
 import { store as harborStore } from '@/store';
 import { getHarborDataValue } from '@/lib/harbor-data';
+import { webUrl } from '@/lib/web-url';
 
 /**
  * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
@@ -23,7 +24,7 @@ export function LegacyLicenseBanner() {
         []
     );
 
-    const portalUrl = getHarborDataValue( 'subscriptionsUrl' );
+    const portalUrl = webUrl( getHarborDataValue( 'subscriptionsUrl' ) );
     if ( ! hasLegacy || ! portalUrl ) {
 			return null;
 		}
