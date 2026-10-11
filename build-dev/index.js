@@ -3210,9 +3210,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hooks_useProductFeatureGroups__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @/hooks/useProductFeatureGroups */ "./resources/js/hooks/useProductFeatureGroups.ts");
 /* harmony import */ var _lib_upgrade_url__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @/lib/upgrade-url */ "./resources/js/lib/upgrade-url.ts");
 /* harmony import */ var _lib_activation_url__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @/lib/activation-url */ "./resources/js/lib/activation-url.ts");
-/* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+/* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__);
 /**
  * Collapsible product section with a sticky header and tier group accordions.
  *
@@ -3224,6 +3225,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -3316,7 +3318,7 @@ function ProductSection({
 
   // Owned-but-unactivated products keep their activation action,
   // falling back to the unactivated product record when no tier is active here.
-  const activationUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_20__.getHarborDataValue)('activationUrl');
+  const activationUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_21__.getHarborDataValue)('activationUrl');
   const effectiveLicenseProduct = licenseProduct ?? unactivatedLicenseProduct;
   const showHeaderActivate = isNotActivated && !!activationUrl && !!effectiveLicenseProduct;
 
@@ -3334,17 +3336,17 @@ function ProductSection({
   const defaultActivateTier = activatableTiers[0]?.lp.tier ?? effectiveLicenseProduct?.tier;
   const showTierPicker = showHeaderActivate && activatableTiers.length > 1;
   const hasContent = availableFeatures.length > 0 || Object.values(lockedByTier).some(f => f.length > 0);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("section", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("section", {
     id: product.slug,
     className: "scroll-mt-20",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
       className: "h-0"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
       className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_7__.cn)('flex items-center bg-neutral-800 text-white sticky top-0 z-10 border-x border-neutral-800 border-t', isOpen ? 'rounded-t-lg' : 'rounded-lg border-b'),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("h2", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("h2", {
         className: "flex-1 min-w-0 text-base font-semibold m-0 p-0 text-white",
         "aria-label": product.name,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("button", {
           type: "button",
           "aria-label": /* translators: %s: product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('%s features', '%TEXTDOMAIN%'), product.name),
           "aria-expanded": isOpen,
@@ -3352,130 +3354,130 @@ function ProductSection({
           "aria-describedby": `${contentId}-counts`,
           onClick: () => isSearching ? setSearchExpanded(!isOpen) : setExpanded(!isOpen),
           className: "flex items-center gap-3 w-full px-4 py-3 text-left cursor-pointer rounded-[inherit] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white hover:bg-white/5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(SectionChevron, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(SectionChevron, {
             className: "size-4 shrink-0 text-white/70",
             "aria-hidden": "true"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
             "aria-hidden": "true",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_8__.ProductLogo, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_atoms_ProductLogo__WEBPACK_IMPORTED_MODULE_8__.ProductLogo, {
               slug: product.slug,
               size: 28,
               productName: product.name
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
             children: product.name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("span", {
             id: `${contentId}-counts`,
             className: "ml-auto text-xs font-normal text-white/70 text-right",
             children: [activeCount, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('active', '%TEXTDOMAIN%'), ' · ', deactivatedCount, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('deactivated', '%TEXTDOMAIN%')]
           })]
         })
-      }), !hideActivation && showHeaderActivate && defaultActivateTier && (showTierPicker ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenu, {
+      }), !hideActivation && showHeaderActivate && defaultActivateTier && (showTierPicker ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenu, {
         modal: false,
         open: tierMenuOpen,
         onOpenChange: setTierMenuOpen,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuTrigger, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuTrigger, {
           asChild: true,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
             variant: "outline",
             size: "xs",
             className: "shrink-0 mr-4",
-            children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate plan', '%TEXTDOMAIN%'), tierMenuOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate plan', '%TEXTDOMAIN%'), tierMenuOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], {
               className: "w-3 h-3 -translate-y-px"
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
               className: "w-3 h-3 -translate-y-px"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuContent, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuContent, {
           align: "end",
           children: activatableTiers.map(({
             lp,
             name
-          }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuItem, {
+          }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_dropdown_menu__WEBPACK_IMPORTED_MODULE_10__.DropdownMenuItem, {
             asChild: true,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("a", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("a", {
               href: (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_19__.buildActivationUrl)(activationUrl, product.slug, lp.tier),
               target: "_blank",
               rel: "noopener noreferrer",
-              children: [name, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              children: [name, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 className: "w-3 h-3 ml-auto"
               })]
             })
           }, `${lp.product_slug}:${lp.tier}`))
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
         variant: "outline",
         size: "xs",
         asChild: true,
         className: "shrink-0 mr-4",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("a", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("a", {
           href: (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_19__.buildActivationUrl)(activationUrl, product.slug, defaultActivateTier),
           target: "_blank",
           rel: "noopener noreferrer",
-          children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate plan', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate plan', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
             className: "w-3 h-3 -translate-y-px"
           })]
         })
       }))]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
       id: contentId,
       hidden: !isOpen,
-      children: [isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("div", {
+      children: [isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
         className: "border border-t-0 rounded-b-lg",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("p", {
           className: "px-4 py-6 text-sm text-muted-foreground text-center",
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('No features match your search.', '%TEXTDOMAIN%')
         })
-      }), !isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("div", {
+      }), !isSearching && !hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
         className: "border border-t-0 rounded-b-lg",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("p", {
           className: "px-4 py-6 text-sm text-muted-foreground text-center",
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('No features are available for this product.', '%TEXTDOMAIN%')
         })
-      }), hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
+      }), hasContent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
         className: "border border-t-0 rounded-b-lg overflow-hidden",
-        children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_11__.FeatureRow, {
+        children: [availableFeatures.map(feature => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_molecules_FeatureRow__WEBPACK_IMPORTED_MODULE_11__.FeatureRow, {
           feature: feature
         }, feature.slug)), activationCatalogTiers.map(tier => {
           const locked = lockedByTier[tier.tier_slug] ?? [];
           if (locked.length === 0) return null;
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_14__.TierGroup, {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_14__.TierGroup, {
             tier: tier,
             features: locked,
             forceOpen: isSearching,
             showUpgrade: false,
             showUnactivated: isUnactivatedLicense
           }, tier.tier_slug);
-        }), packageOffer && packageFeatures.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_molecules_LockedFeatureGroup__WEBPACK_IMPORTED_MODULE_12__.LockedFeatureGroup, {
+        }), packageOffer && packageFeatures.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_molecules_LockedFeatureGroup__WEBPACK_IMPORTED_MODULE_12__.LockedFeatureGroup, {
           label: /* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Included in %s', '%TEXTDOMAIN%'), packageOffer.product.name),
           features: packageFeatures,
           forceOpen: isSearching,
-          action: unactivatedPackage && activationUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
+          action: unactivatedPackage && activationUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
             variant: "outline",
             size: "xs",
             asChild: true,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("a", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("a", {
               href: (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_19__.buildActivationUrl)(activationUrl, 'nexcess-plugin-stack', unactivatedPackage.tier),
               target: "_blank",
               rel: "noopener noreferrer",
-              children: [/* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate %s', '%TEXTDOMAIN%'), packageOffer.product.name), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              children: [/* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate %s', '%TEXTDOMAIN%'), packageOffer.product.name), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 className: "w-3 h-3"
               })]
             })
-          }) : packageLicenseProducts.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
+          }) : packageLicenseProducts.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_9__.Button, {
             variant: "outline",
             size: "xs",
             asChild: true,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("a", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("a", {
               href: packageOffer.href,
               target: "_blank",
               rel: "noopener noreferrer",
-              children: [/* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Get %s', '%TEXTDOMAIN%'), packageOffer.product.name), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              children: [/* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Get %s', '%TEXTDOMAIN%'), packageOffer.product.name), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 className: "w-3 h-3"
               })]
             })
           }) : undefined
-        }), packageOffer && otherFeatures.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_molecules_LockedFeatureGroup__WEBPACK_IMPORTED_MODULE_12__.LockedFeatureGroup, {
+        }), packageOffer && otherFeatures.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_molecules_LockedFeatureGroup__WEBPACK_IMPORTED_MODULE_12__.LockedFeatureGroup, {
           label: /* translators: %s: package product name. */(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Not included in %s', '%TEXTDOMAIN%'), packageOffer.product.name),
           features: otherFeatures,
           forceOpen: isSearching
@@ -3483,8 +3485,8 @@ function ProductSection({
           const locked = lockedByTier[tier.tier_slug] ?? [];
           if (locked.length === 0) return null;
           const effectiveLicenseProduct = licenseProduct ?? unactivatedLicenseProduct;
-          const buttonHref = effectiveLicenseProduct ? tier.upgrade_url ? (0,_lib_upgrade_url__WEBPACK_IMPORTED_MODULE_18__.buildUpgradeUrl)(tier.upgrade_url, (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_20__.getHarborDataValue)('domain')) : undefined : tier.purchase_url || undefined;
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_14__.TierGroup, {
+          const buttonHref = effectiveLicenseProduct ? (0,_lib_upgrade_url__WEBPACK_IMPORTED_MODULE_18__.buildUpgradeUrl)(tier.upgrade_url, (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_21__.getHarborDataValue)('domain')) : (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_20__.webUrl)(tier.purchase_url);
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_molecules_TierGroup__WEBPACK_IMPORTED_MODULE_14__.TierGroup, {
             tier: tier,
             features: locked,
             forceOpen: isSearching,
@@ -5996,6 +5998,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   buildActivationUrl: () => (/* binding */ buildActivationUrl)
 /* harmony export */ });
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+
+
 /**
  * Appends product and tier params to the base activation URL supplied by the
  * API, producing a product-scoped URL the Nexcess portal can use to
@@ -6015,16 +6020,17 @@ __webpack_require__.r(__webpack_exports__);
  * @param productSlug e.g. "givewp"
  * @param tier        e.g. "elite"
  *
+ * Returns undefined when baseUrl is not an http(s) URL.
+ *
  * @since 1.0.0
  */
 function buildActivationUrl(baseUrl, productSlug, tier) {
-  try {
-    const url = new URL(baseUrl);
-    url.searchParams.set('sku', `${productSlug}:${tier}`);
-    return url.toString();
-  } catch {
-    return baseUrl;
+  const url = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_0__.parseWebUrl)(baseUrl);
+  if (!url) {
+    return undefined;
   }
+  url.searchParams.set('sku', `${productSlug}:${tier}`);
+  return url.toString();
 }
 
 /***/ },
@@ -6377,8 +6383,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   buildUpgradeUrl: () => (/* binding */ buildUpgradeUrl)
 /* harmony export */ });
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+
+
 /**
  * Appends portal tracking parameters to a catalog upgrade URL.
+ *
+ * Returns undefined when baseUrl is not an http(s) URL, so the button renders
+ * without a link rather than with whatever the catalog supplied.
  *
  * The upgrade_url comes from the catalog tier and is a base URL without
  * site context. This function appends domain and portal-referral so the
@@ -6396,17 +6408,16 @@ __webpack_require__.r(__webpack_exports__);
  * @since 1.0.2
  */
 function buildUpgradeUrl(baseUrl, domain) {
+  const url = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_0__.parseWebUrl)(baseUrl);
+  if (!url) {
+    return undefined;
+  }
   if (!domain) {
-    return baseUrl;
+    return (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_0__.webUrl)(baseUrl);
   }
-  try {
-    const url = new URL(baseUrl);
-    url.searchParams.set('domain', domain);
-    url.searchParams.set('portal-referral', 'plugin');
-    return url.toString();
-  } catch {
-    return baseUrl;
-  }
+  url.searchParams.set('domain', domain);
+  url.searchParams.set('portal-referral', 'plugin');
+  return url.toString();
 }
 
 /***/ },
@@ -6426,11 +6437,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
 /* harmony import */ var _lib_feature_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/lib/feature-utils */ "./resources/js/lib/feature-utils.ts");
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
 /**
  * Offers shown beside the license, using the catalog's current purchase links and grants.
  *
  * @package LiquidWeb\Harbor
  */
+
 
 
 
@@ -6462,16 +6475,7 @@ function paidFeatures(catalog, tier) {
  * Accept an explicit web purchase destination without inventing a fallback URL.
  */
 function purchaseUrl(tier) {
-  const href = tier?.purchase_url?.trim();
-  if (!href) {
-    return undefined;
-  }
-  try {
-    const url = new URL(href);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? href : undefined;
-  } catch {
-    return undefined;
-  }
+  return (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_3__.webUrl)(tier?.purchase_url);
 }
 
 /**
@@ -6558,6 +6562,52 @@ __webpack_require__.r(__webpack_exports__);
 
 function cn(...inputs) {
   return (0,tailwind_merge__WEBPACK_IMPORTED_MODULE_1__.twMerge)((0,clsx__WEBPACK_IMPORTED_MODULE_0__.clsx)(inputs));
+}
+
+/***/ },
+
+/***/ "./resources/js/lib/web-url.ts"
+/*!*************************************!*\
+  !*** ./resources/js/lib/web-url.ts ***!
+  \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   parseWebUrl: () => (/* binding */ parseWebUrl),
+/* harmony export */   webUrl: () => (/* binding */ webUrl)
+/* harmony export */ });
+/**
+ * Links Harbor renders from server data, accepted only as http(s).
+ *
+ * Catalog and activation URLs arrive from the Portal and become wp-admin links.
+ * Rejecting every other scheme keeps a malformed or hostile value from ever
+ * rendering as a script or data link.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+/**
+ * Parse a link, or return undefined when it is missing or not http(s).
+ */
+function parseWebUrl(href) {
+  const trimmed = href?.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The trimmed link when it is http(s), otherwise undefined.
+ */
+function webUrl(href) {
+  return parseWebUrl(href) ? href?.trim() : undefined;
 }
 
 /***/ },
