@@ -1740,8 +1740,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/triangle-alert.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
 /* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 /**
  * Amber warning banner shown when one or more legacy licenses are active.
  *
@@ -1757,6 +1758,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * @since 1.3.0   Read subscriptionsUrl through the getHarborDataValue helper.
  * @since 1.0.0
@@ -1764,19 +1766,19 @@ __webpack_require__.r(__webpack_exports__);
 
 function LegacyLicenseBanner() {
   const hasLegacy = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_4__.store).hasUncoveredLegacyLicenses(), []);
-  const portalUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_5__.getHarborDataValue)('subscriptionsUrl');
+  const portalUrl = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_6__.webUrl)((0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_5__.getHarborDataValue)('subscriptionsUrl'));
   if (!hasLegacy || !portalUrl) {
     return null;
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     role: "alert",
     className: "flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 mt-8 mb-0 px-4 py-3 text-sm text-amber-800",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
       className: "w-4 h-4 shrink-0 mt-0.5"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
       className: "m-0",
       children: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createInterpolateElement)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('You have one or more legacy licenses active. They continue to receive product updates while valid. Consider <a>switching to a unified license</a> to manage all your products with a single key.', '%TEXTDOMAIN%'), {
-        a: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+        a: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
           href: portalUrl,
           target: "_blank",
           rel: "noopener noreferrer",
@@ -2122,7 +2124,7 @@ function LicenseProductCard({
       children: tiers.map(lp => {
         const expiryStatus = (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.getExpiryStatus)(lp.expires);
         const isActivatedHere = lp.is_valid && lp.activated_here === true;
-        const showActivate = !isActivatedHere && !!activationUrl;
+        const activateHref = isActivatedHere || !activationUrl ? undefined : (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_9__.buildActivationUrl)(activationUrl, lp.product_slug, lp.tier);
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "flex items-center justify-between px-3 py-2 bg-muted/50 border-b last:border-b-0",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
@@ -2141,13 +2143,13 @@ function LicenseProductCard({
               className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_10__.cn)('text-[11px]', _lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.expiryTextClass[expiryStatus]),
               children: [expiryStatus === 'expired' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Expired', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Expires', '%TEXTDOMAIN%'), ' ', (0,_lib_license_utils__WEBPACK_IMPORTED_MODULE_11__.formatDate)(lp.expires)]
             })]
-          }), showActivate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_6__.Button, {
+          }), activateHref && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_6__.Button, {
             variant: "outline",
             size: "xs",
             asChild: true,
             className: "shrink-0 ml-2",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
-              href: (0,_lib_activation_url__WEBPACK_IMPORTED_MODULE_9__.buildActivationUrl)(activationUrl, lp.product_slug, lp.tier),
+              href: activateHref,
               target: "_blank",
               rel: "noopener noreferrer",
               children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Activate', '%TEXTDOMAIN%'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -2262,8 +2264,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/info.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.ts");
 /* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
 /**
  * Info banner shown when all licensed products are unactivated on this domain.
  *
@@ -2279,6 +2282,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * @since 1.3.0   Read activationUrl through the getHarborDataValue helper.
  * @since 1.0.0
@@ -2287,16 +2291,16 @@ __webpack_require__.r(__webpack_exports__);
 function NotActivatedBanner() {
   const allNotActivated = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).areAllProductsNotActivated(), []);
   const licenseKey = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.useSelect)(select => select(_store__WEBPACK_IMPORTED_MODULE_3__.store).getLicenseKey(), []);
-  const activationUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_4__.getHarborDataValue)('activationUrl');
+  const activationUrl = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_5__.webUrl)((0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_4__.getHarborDataValue)('activationUrl'));
   if (!allNotActivated || !licenseKey || !activationUrl) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     role: "alert",
     className: "flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 mt-8 mb-0 px-4 py-3 text-sm text-blue-800",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
       className: "w-4 h-4 shrink-0 mt-0.5"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("p", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
       className: "m-0",
-      children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('None of your products are activated for this domain. Activate your license to download and activate premium products.', '%TEXTDOMAIN%'), ' ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
+      children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('None of your products are activated for this domain. Activate your license to download and activate premium products.', '%TEXTDOMAIN%'), ' ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         href: activationUrl,
         target: "_blank",
         rel: "noopener noreferrer",
@@ -3040,8 +3044,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data_products__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/data/products */ "./resources/js/data/products.ts");
 /* harmony import */ var _lib_group_license_products__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/lib/group-license-products */ "./resources/js/lib/group-license-products.ts");
 /* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _lib_web_url__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/lib/web-url */ "./resources/js/lib/web-url.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__);
 /**
  * License section: header, key input, and licensed-product cards.
  *
@@ -3058,24 +3063,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Pulse-skeleton that mirrors LicenseProductCard's layout while the license
  * resolver is still in flight.
  */
 function LicenseSectionSkeleton() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
     className: "space-y-3",
-    children: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+    children: _data_products__WEBPACK_IMPORTED_MODULE_9__.PRODUCTS.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
       className: "rounded-lg border bg-card px-3 py-2.5 animate-pulse",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
         className: "flex items-center gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "w-6 h-6 rounded shrink-0 bg-muted"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "h-3.5 flex-1 rounded bg-muted"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "h-4 w-14 rounded-full shrink-0 bg-muted"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "w-3.5 h-3.5 rounded shrink-0 bg-muted"
         })]
       })
@@ -3112,7 +3118,7 @@ function LicenseSection({
 }) {
   const [isEditing, setIsEditing] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const hasLicense = licenseKey !== null;
-  const manageUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_11__.getHarborDataValue)('subscriptionsUrl');
+  const manageUrl = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_12__.webUrl)((0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_11__.getHarborDataValue)('subscriptionsUrl'));
   const handleRemove = async () => {
     const error = await onRemove();
     if (!error) {
@@ -3121,49 +3127,49 @@ function LicenseSection({
     return error;
   };
   const groupedProducts = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,_lib_group_license_products__WEBPACK_IMPORTED_MODULE_10__.groupLicenseProducts)(licenseProducts, tierRankMap, productNames), [licenseProducts, tierRankMap, productNames]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
     className: "space-y-3",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__.SectionHeader, {
-      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_atoms_SectionHeader__WEBPACK_IMPORTED_MODULE_5__.SectionHeader, {
+      icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
         className: "w-4 h-4 text-muted-foreground"
       }),
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('License', '%TEXTDOMAIN%'),
-      action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("button", {
+      action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("button", {
         type: "button",
         onClick: onRefresh,
         disabled: isRefreshing,
         className: "flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:opacity-75 disabled:opacity-50 disabled:cursor-not-allowed",
-        children: [isRefreshing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [isRefreshing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
           className: "w-3 h-3 animate-spin"
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], {
           className: "w-3 h-3"
         }), isRefreshing ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refreshing...', '%TEXTDOMAIN%') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Refresh', '%TEXTDOMAIN%')]
       })
-    }), isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_atoms_LicenseKeyInputSkeleton__WEBPACK_IMPORTED_MODULE_6__.LicenseKeyInputSkeleton, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(LicenseSectionSkeleton, {})]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_7__.LicenseKeyInput, {
+    }), isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_atoms_LicenseKeyInputSkeleton__WEBPACK_IMPORTED_MODULE_6__.LicenseKeyInputSkeleton, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(LicenseSectionSkeleton, {})]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseKeyInput__WEBPACK_IMPORTED_MODULE_7__.LicenseKeyInput, {
         currentKey: licenseKey,
         isEditing: isEditing,
         onEdit: () => setIsEditing(true),
         onCancel: () => setIsEditing(false),
         onRemove: handleRemove,
         onSuccess: () => setIsEditing(false)
-      }), !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+      }), !hasLicense && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("p", {
         className: "text-xs text-muted-foreground leading-relaxed mt-0 mb-0",
         children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter your license key to download and activate premium products.', '%TEXTDOMAIN%')
       })]
-    }), !isLoading && hasLicense && groupedProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+    }), !isLoading && hasLicense && groupedProducts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
       className: "space-y-3",
-      children: [groupedProducts.map(g => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__.LicenseProductCard, {
+      children: [groupedProducts.map(g => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_molecules_LicenseProductCard__WEBPACK_IMPORTED_MODULE_8__.LicenseProductCard, {
         productSlug: g.productSlug,
         productName: g.productName,
         tiers: g.tiers,
         tierNameMap: tierNameMap,
         activationUrl: activationUrl
-      }, `${g.productSlug}:${g.tiers.some(t => t.is_valid && t.activated_here)}`)), manageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+      }, `${g.productSlug}:${g.tiers.some(t => t.is_valid && t.activated_here)}`)), manageUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("p", {
         className: "text-xs text-muted-foreground text-center mt-1 mb-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
           href: manageUrl,
           target: "_blank",
           rel: "noopener noreferrer",
@@ -3318,7 +3324,7 @@ function ProductSection({
 
   // Owned-but-unactivated products keep their activation action,
   // falling back to the unactivated product record when no tier is active here.
-  const activationUrl = (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_21__.getHarborDataValue)('activationUrl');
+  const activationUrl = (0,_lib_web_url__WEBPACK_IMPORTED_MODULE_20__.webUrl)((0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_21__.getHarborDataValue)('activationUrl'));
   const effectiveLicenseProduct = licenseProduct ?? unactivatedLicenseProduct;
   const showHeaderActivate = isNotActivated && !!activationUrl && !!effectiveLicenseProduct;
 
