@@ -64,4 +64,49 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( '', $tier->get_purchase_url() );
 		$this->assertSame( '', $tier->get_upgrade_url() );
 	}
+
+	/**
+	 * Catalog links that are not http(s) are dropped rather than stored, including
+	 * schemeless values esc_url_raw() would otherwise turn into an http link.
+	 */
+	public function test_non_web_links_are_dropped(): void {
+		$links = [
+			'javascript:alert(1)//',
+			' JavaScript:alert(1)',
+			'data:text/html,<b>x</b>',
+			'vbscript:msgbox(1)',
+			'//evil.example/checkout',
+			'evil.example/checkout',
+			'/checkout',
+			'not a url',
+			[ 'https://example.com' ],
+		];
+
+		foreach ( $links as $link ) {
+			$tier = Catalog_Tier::from_array(
+				[
+					'purchase_url' => $link,
+					'upgrade_url'  => $link,
+				]
+			);
+
+			$this->assertSame( '', $tier->get_purchase_url(), wp_json_encode( $link ) );
+			$this->assertSame( '', $tier->get_upgrade_url(), wp_json_encode( $link ) );
+		}
+	}
+
+	/**
+	 * Web links keep their destination and query string, unescaped for storage, with the scheme lowercased.
+	 */
+	public function test_web_links_are_kept_unescaped(): void {
+		$tier = Catalog_Tier::from_array(
+			[
+				'purchase_url' => ' https://example.com/checkout/?add-to-cart=123&variation_id=456 ',
+				'upgrade_url'  => 'HTTP://example.com/upgrade/kadence/pro/',
+			]
+		);
+
+		$this->assertSame( 'https://example.com/checkout/?add-to-cart=123&variation_id=456', $tier->get_purchase_url() );
+		$this->assertSame( 'http://example.com/upgrade/kadence/pro/', $tier->get_upgrade_url() );
+	}
 }
