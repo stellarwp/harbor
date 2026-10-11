@@ -1,3 +1,5 @@
+import { parseWebUrl } from '@/lib/web-url';
+
 /**
  * Appends product and tier params to the base activation URL supplied by the
  * API, producing a product-scoped URL the Nexcess portal can use to
@@ -17,18 +19,19 @@
  * @param productSlug e.g. "givewp"
  * @param tier        e.g. "elite"
  *
+ * Returns undefined when baseUrl is not an http(s) URL.
+ *
  * @since 1.0.0
  */
 export function buildActivationUrl(
     baseUrl:     string,
     productSlug: string,
     tier:        string,
-): string {
-    try {
-        const url = new URL( baseUrl );
-        url.searchParams.set( 'sku', `${ productSlug }:${ tier }` );
-        return url.toString();
-    } catch {
-        return baseUrl;
+): string | undefined {
+    const url = parseWebUrl( baseUrl );
+    if ( ! url ) {
+        return undefined;
     }
+    url.searchParams.set( 'sku', `${ productSlug }:${ tier }` );
+    return url.toString();
 }
