@@ -92,8 +92,8 @@ final class Catalog_Tier {
 	/**
 	 * Keeps a catalog link only when it is http(s), sanitized for storage.
 	 *
-	 * The scheme is checked first because esc_url_raw() prepends one to
-	 * schemeless input, which would invent a destination the catalog never gave.
+	 * The scheme is checked first because esc_url_raw() prepends one to input
+	 * without a scheme, which would invent a destination the catalog never gave.
 	 *
 	 * @param mixed $value The raw catalog value.
 	 *

@@ -67,14 +67,14 @@ final class Catalog_TierTest extends HarborTestCase {
 
 	/**
 	 * Catalog links that are not http(s) are dropped rather than stored, including
-	 * schemeless values esc_url_raw() would otherwise turn into an http link.
+	 * values without a scheme that esc_url_raw() would otherwise turn into an http link.
 	 */
 	public function test_non_web_links_are_dropped(): void {
 		$links = [
 			'javascript:alert(1)//',
 			' JavaScript:alert(1)',
 			'data:text/html,<b>x</b>',
-			'vbscript:msgbox(1)',
+			'vbscript:alert(1)',
 			'//evil.example/checkout',
 			'evil.example/checkout',
 			'/checkout',
