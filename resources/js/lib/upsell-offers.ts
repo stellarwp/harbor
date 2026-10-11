@@ -6,6 +6,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { PRODUCTS } from '@/data/products';
 import { isFreeFeature } from '@/lib/feature-utils';
+import { webUrl } from '@/lib/web-url';
 import type { CatalogFeature, CatalogTier, LicenseProduct, Product, ProductCatalog } from '@/types/api';
 
 export interface UpsellOffer {
@@ -45,17 +46,7 @@ function paidFeatures( catalog: ProductCatalog, tier: CatalogTier ): CatalogFeat
  * Accept an explicit web purchase destination without inventing a fallback URL.
  */
 function purchaseUrl( tier: CatalogTier | undefined ): string | undefined {
-    const href = tier?.purchase_url?.trim();
-    if ( ! href ) {
-        return undefined;
-    }
-
-    try {
-        const url = new URL( href );
-        return url.protocol === 'https:' || url.protocol === 'http:' ? href : undefined;
-    } catch {
-        return undefined;
-    }
+    return webUrl( tier?.purchase_url );
 }
 
 /**

@@ -15,6 +15,7 @@ import { groupLicenseProducts } from '@/lib/group-license-products';
 import type { LicenseProduct } from '@/types/api';
 import type HarborError from '@/errors/harbor-error';
 import { getHarborDataValue } from '@/lib/harbor-data';
+import { webUrl } from '@/lib/web-url';
 
 interface LicenseSectionProps {
     licenseKey:      string | null;
@@ -84,7 +85,7 @@ export function LicenseSection( {
     const [ isEditing, setIsEditing ] = useState( false );
 
     const hasLicense = licenseKey !== null;
-    const manageUrl  = getHarborDataValue( 'subscriptionsUrl' );
+    const manageUrl  = webUrl( getHarborDataValue( 'subscriptionsUrl' ) );
 
     const handleRemove = async (): Promise<HarborError | null> => {
         const error = await onRemove();

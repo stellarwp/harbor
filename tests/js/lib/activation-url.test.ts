@@ -55,8 +55,12 @@ describe( 'buildActivationUrl', () => {
         expect( new URL( result ).searchParams.get( 'sku' ) ).toBe( 'kadence:plus' );
     } );
 
-    it( 'returns the original string unchanged when baseUrl is not a valid URL', () => {
-        expect( buildActivationUrl( 'not-a-url', 'givewp', 'elite' ) ).toBe( 'not-a-url' );
+    it( 'returns undefined when baseUrl is not a valid URL', () => {
+        expect( buildActivationUrl( 'not-a-url', 'givewp', 'elite' ) ).toBeUndefined();
+    } );
+
+    it.each( [ 'javascript:alert(1)//', 'data:text/html,<b>x</b>', '' ] )( 'returns undefined for a non-http(s) baseUrl %p', ( baseUrl ) => {
+        expect( buildActivationUrl( baseUrl, 'givewp', 'elite' ) ).toBeUndefined();
     } );
 
     it( 'percent-encodes special characters in productSlug and tier', () => {

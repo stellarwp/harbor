@@ -10,8 +10,9 @@ jest.mock( '@wordpress/data', () => ( { useSelect: jest.fn() } ) );
 jest.mock( '@/store', () => ( { store: { name: 'harbor' } } ) );
 jest.mock( '@/context/filter-context', () => ( { useFilter: jest.fn() } ) );
 jest.mock( '@/hooks/useProductFeatureGroups', () => ( { useProductFeatureGroups: jest.fn() } ) );
+let mockActivationUrl = 'https://portal.example/activate';
 jest.mock( '@/lib/harbor-data', () => ( {
-    getHarborDataValue: ( key: string ) => key === 'domain' ? 'customer.example' : 'https://portal.example/activate',
+    getHarborDataValue: ( key: string ) => key === 'domain' ? 'customer.example' : mockActivationUrl,
 } ) );
 jest.mock( '@/components/molecules/FeatureRow', () => ( {
     FeatureRow: ( { feature }: { feature: PluginFeature } ) => <div>{ feature.name }</div>,
@@ -235,5 +236,27 @@ describe( 'ProductSection with a published NPS offer', () => {
         render( <ProductSection product={ product } /> );
         expect( screen.getByRole( 'link', { name: 'Upgrade to Pro' } ) ).not.toBeNull();
         expect( screen.queryByText( 'Included in Nexcess Plugin Stack' ) ).toBeNull();
+    } );
+} );
+
+describe( 'ProductSection with a rejected activation URL', () => {
+    beforeEach( () => {
+        mockActivationUrl = 'javascript:alert(1)//';
+    } );
+
+    afterEach( () => {
+        mockActivationUrl = 'https://portal.example/activate';
+    } );
+
+    it( 'hides plan activation instead of rendering it without a destination', () => {
+        configure( { purchase_url: '', upgrade_url: '' }, { ...purchase, tier: 'pro', activated_here: false }, true );
+        render( <ProductSection product={ product } /> );
+        expect( screen.queryByText( 'Activate plan' ) ).toBeNull();
+    } );
+
+    it( 'hides package activation instead of rendering it without a destination', () => {
+        configure( {}, null, false, packageCatalogs, [ { ...purchase, product_slug: 'nexcess-plugin-stack', tier: '1-site', activated_here: false } ] );
+        render( <ProductSection product={ product } /> );
+        expect( screen.queryByText( 'Activate Nexcess Plugin Stack' ) ).toBeNull();
     } );
 } );

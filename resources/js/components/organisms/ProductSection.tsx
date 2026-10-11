@@ -31,6 +31,7 @@ import { useFilter } from '@/context/filter-context';
 import { useProductFeatureGroups } from '@/hooks/useProductFeatureGroups';
 import { buildUpgradeUrl } from '@/lib/upgrade-url';
 import { buildActivationUrl } from '@/lib/activation-url';
+import { webUrl } from '@/lib/web-url';
 import { getHarborDataValue } from '@/lib/harbor-data';
 import type { Product } from '@/types/api';
 
@@ -104,7 +105,7 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
 
     // Owned-but-unactivated products keep their activation action,
     // falling back to the unactivated product record when no tier is active here.
-    const activationUrl             = getHarborDataValue( 'activationUrl' );
+    const activationUrl             = webUrl( getHarborDataValue( 'activationUrl' ) );
     const effectiveLicenseProduct   = licenseProduct ?? unactivatedLicenseProduct;
     const showHeaderActivate        = isNotActivated && !! activationUrl && !! effectiveLicenseProduct;
 
@@ -273,8 +274,8 @@ export function ProductSection( { product, hideActivation = false }: ProductSect
 
                             const effectiveLicenseProduct = licenseProduct ?? unactivatedLicenseProduct;
                             const buttonHref              = effectiveLicenseProduct
-                                ? ( tier.upgrade_url ? buildUpgradeUrl( tier.upgrade_url, getHarborDataValue( 'domain' ) ) : undefined )
-                                : ( tier.purchase_url || undefined );
+                                ? buildUpgradeUrl( tier.upgrade_url, getHarborDataValue( 'domain' ) )
+                                : webUrl( tier.purchase_url );
 
                             return (
                                 <TierGroup

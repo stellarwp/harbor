@@ -1,3 +1,5 @@
+import { parseWebUrl, webUrl } from '@/lib/web-url';
+
 /**
  * Appends portal tracking parameters to a catalog upgrade URL.
  *
@@ -19,16 +21,15 @@
 export function buildUpgradeUrl(
     baseUrl: string,
     domain:  string | null,
-): string {
+): string | undefined {
+    const url = parseWebUrl( baseUrl );
+    if ( ! url ) {
+        return undefined;
+    }
     if ( ! domain ) {
-        return baseUrl;
+        return webUrl( baseUrl );
     }
-    try {
-        const url = new URL( baseUrl );
-        url.searchParams.set( 'domain', domain );
-        url.searchParams.set( 'portal-referral', 'plugin' );
-        return url.toString();
-    } catch {
-        return baseUrl;
-    }
+    url.searchParams.set( 'domain', domain );
+    url.searchParams.set( 'portal-referral', 'plugin' );
+    return url.toString();
 }

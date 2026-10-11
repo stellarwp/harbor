@@ -33,7 +33,12 @@ describe( 'buildUpgradeUrl', () => {
         expect( buildUpgradeUrl( BASE_URL, '' ) ).toBe( BASE_URL );
     } );
 
-    it( 'returns the original string unchanged when baseUrl is not a valid URL', () => {
-        expect( buildUpgradeUrl( 'not-a-url', 'example.com' ) ).toBe( 'not-a-url' );
+    it( 'returns undefined when baseUrl is not a valid URL', () => {
+        expect( buildUpgradeUrl( 'not-a-url', 'example.com' ) ).toBeUndefined();
+    } );
+
+    it.each( [ 'javascript:alert(1)//', 'JavaScript:alert(1)', 'data:text/html,<b>x</b>', '' ] )( 'returns undefined for a non-http(s) baseUrl %p, with or without a domain', ( baseUrl ) => {
+        expect( buildUpgradeUrl( baseUrl, 'example.com' ) ).toBeUndefined();
+        expect( buildUpgradeUrl( baseUrl, null ) ).toBeUndefined();
     } );
 } );
