@@ -6020,8 +6020,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param productSlug e.g. "givewp"
  * @param tier        e.g. "elite"
  *
- * Returns undefined when baseUrl is not an http(s) URL.
- *
  * @since 1.0.0
  */
 function buildActivationUrl(baseUrl, productSlug, tier) {
@@ -6389,9 +6387,6 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Appends portal tracking parameters to a catalog upgrade URL.
  *
- * Returns undefined when baseUrl is not an http(s) URL, so the button renders
- * without a link rather than with whatever the catalog supplied.
- *
  * The upgrade_url comes from the catalog tier and is a base URL without
  * site context. This function appends domain and portal-referral so the
  * portal can identify the originating site and entry point.
@@ -6578,11 +6573,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   webUrl: () => (/* binding */ webUrl)
 /* harmony export */ });
 /**
- * Links Harbor renders from server data, accepted only as http(s).
- *
- * Catalog and activation URLs arrive from the Portal and become wp-admin links.
- * Rejecting every other scheme keeps a malformed or hostile value from ever
- * rendering as a script or data link.
+ * Catalog and activation links, accepted only as http(s) so Portal data never renders as a script link.
  *
  * @package LiquidWeb\Harbor
  */
