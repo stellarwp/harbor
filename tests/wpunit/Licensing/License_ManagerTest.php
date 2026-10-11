@@ -10,6 +10,10 @@ use LiquidWeb\Harbor\Licensing\Registry\Product_Registry;
 use LiquidWeb\Harbor\Licensing\Repositories\License_Repository;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
+use LiquidWeb\LicensingApiClient\Exceptions\ServerErrorException;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\ProductsResourceInterface;
+use Nyholm\Psr7\Response;
 use WP_Error;
 
 /**
@@ -450,6 +454,39 @@ final class License_ManagerTest extends HarborTestCase {
 		$this->assertInstanceOf( WP_Error::class, $failing->refresh_products( 'example.com' ) );
 		$this->assertEquals( $cached, $this->repository->get_products() );
 		$this->assertNotNull( $this->repository->get_products_last_failure_at() );
+	}
+
+	/**
+	 * Tests that a Licensing HTTP 503 preserves purchases and the last successful fetch time.
+	 *
+	 * @return void
+	 */
+	public function test_refresh_products_server_error_preserves_cached_purchases(): void {
+		$this->set_fn_return( 'time', 1000000 );
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$cached = $this->manager->get_products( 'example.com' );
+		$this->assertInstanceOf( Product_Collection::class, $cached );
+
+		$products = $this->createMock( ProductsResourceInterface::class );
+		$products->expects( $this->once() )
+			->method( 'catalog' )
+			->with( 'LWSW-UNIFIED-PRO-2026', 'example.com' )
+			->willThrowException( new ServerErrorException( 'Service unavailable', new Response( 503 ), 503, 'service_unavailable' ) );
+		$client = $this->createMock( LicensingClientInterface::class );
+		$client->method( 'products' )->willReturn( $products );
+		$manager = new License_Manager( $this->repository, new Product_Registry( [] ), $client );
+
+		$this->set_fn_return( 'time', 1000030 );
+		$result = $manager->refresh_products( 'example.com' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'service_unavailable', $result->get_error_code() );
+		$this->assertSame( 503, $result->get_error_data()['status'] );
+		$this->assertEquals( $cached, $this->repository->get_products() );
+		$this->assertEquals( $cached, $manager->get_products( 'example.com' ) );
+		$this->assertSame( 1000000, $this->repository->get_products_last_success_at() );
+		$this->assertSame( 1000030, $this->repository->get_products_last_failure_at() );
+		$this->assertEquals( $result, $this->repository->get_products_last_error() );
 	}
 
 	/**
