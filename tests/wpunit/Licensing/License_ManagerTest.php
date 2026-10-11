@@ -445,10 +445,7 @@ final class License_ManagerTest extends HarborTestCase {
 
 		$this->assertInstanceOf( Product_Collection::class, $cached );
 
-		$empty_dir         = sys_get_temp_dir() . '/harbor_test_' . uniqid();
-		$this->temp_dirs[] = $empty_dir;
-		mkdir( $empty_dir, 0755, true );
-		$failing = new License_Manager( $this->repository, new Product_Registry( [] ), new Fixture_Client( $empty_dir ) );
+		$failing = new License_Manager( $this->repository, new Product_Registry( [] ), new Fixture_Client( '/nonexistent' ) );
 
 		$this->assertInstanceOf( WP_Error::class, $failing->refresh_products( 'example.com' ) );
 		$this->assertEquals( $cached, $this->repository->get_products() );
