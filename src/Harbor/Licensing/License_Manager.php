@@ -350,7 +350,10 @@ class License_Manager {
 	}
 
 	/**
-	 * Flush the cached product catalog and re-fetch from the API.
+	 * Re-fetch the product catalog from the API, bypassing the cache.
+	 *
+	 * The cached catalog is replaced only by a successful response. A failed refresh
+	 * keeps it, so an outage never makes the customer look unlicensed.
 	 *
 	 * @since 1.0.0
 	 *
@@ -368,8 +371,6 @@ class License_Manager {
 				[ 'status' => 422 ]
 			);
 		}
-
-		$this->repository->delete_products();
 
 		return $this->fetch_and_cache( $key, $domain );
 	}

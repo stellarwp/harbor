@@ -434,6 +434,44 @@ final class License_ManagerTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that a failed refresh keeps the cached product collection, so the
+	 * customer's purchases survive a Licensing outage.
+	 *
+	 * @return void
+	 */
+	public function test_refresh_products_failure_preserves_existing_product_collection(): void {
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$cached = $this->manager->get_products( 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $cached );
+
+		$empty_dir         = sys_get_temp_dir() . '/harbor_test_' . uniqid();
+		$this->temp_dirs[] = $empty_dir;
+		mkdir( $empty_dir, 0755, true );
+		$failing = new License_Manager( $this->repository, new Product_Registry( [] ), new Fixture_Client( $empty_dir ) );
+
+		$this->assertInstanceOf( WP_Error::class, $failing->refresh_products( 'example.com' ) );
+		$this->assertEquals( $cached, $this->repository->get_products() );
+		$this->assertNotNull( $this->repository->get_products_last_failure_at() );
+	}
+
+	/**
+	 * Tests that a successful refresh replaces the cached product collection and clears the error.
+	 *
+	 * @return void
+	 */
+	public function test_refresh_products_success_replaces_cached_collection(): void {
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$this->repository->set_products( new WP_Error( Error_Code::INVALID_KEY, 'API failure' ) );
+
+		$result = $this->manager->refresh_products( 'example.com' );
+
+		$this->assertInstanceOf( Product_Collection::class, $result );
+		$this->assertEquals( $result, $this->repository->get_products() );
+		$this->assertNull( $this->repository->get_products_last_error() );
+	}
+
+	/**
 	 * Tests that a successful validation clears the per-key throttle entry for that key.
 	 *
 	 * @return void
