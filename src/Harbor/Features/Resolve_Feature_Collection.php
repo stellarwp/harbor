@@ -249,10 +249,11 @@ class Resolve_Feature_Collection {
 	}
 
 	/**
-	 * Returns the rank of the user's licensed tier for a product, or -1 if unlicensed.
+	 * Returns the rank of the user's highest effective tier for a product, or -1 if unlicensed.
 	 *
-	 * Returns -1 when the license is known to be ineffective for this domain, matching
-	 * the resolve_capability_sources() guard so both flags are consistent.
+	 * Only entries activated here and not known to be ineffective count, matching
+	 * the resolve_capability_sources() guard so both flags are consistent. A product
+	 * can have several entries, and an invalid one must not hide a valid one.
 	 *
 	 * @since 1.0.0
 	 *
@@ -262,19 +263,21 @@ class Resolve_Feature_Collection {
 	 * @return int The license tier rank, or -1 if no license covers this product.
 	 */
 	private function resolve_license_tier_rank( Product_Catalog $product, Product_Collection $products ): int {
-		$license = $products->get_activated_entry( $product->get_product_slug() );
+		$rank = -1;
 
-		if ( null === $license ) {
-			return -1;
+		foreach ( $products->get_all_by_slug( $product->get_product_slug() ) as $license ) {
+			if ( ! $license->get_activated_here() || $this->is_license_invalid( $license->get_validation_status() ) ) {
+				continue;
+			}
+
+			$tier = $product->get_tier_by_slug( $license->get_tier() );
+
+			if ( $tier !== null ) {
+				$rank = max( $rank, $tier->get_rank() );
+			}
 		}
 
-		if ( $this->is_license_invalid( $license->get_validation_status() ) ) {
-			return -1;
-		}
-
-		$tier = $product->get_tier_by_slug( $license->get_tier() );
-
-		return $tier !== null ? $tier->get_rank() : -1;
+		return $rank;
 	}
 
 	/**
