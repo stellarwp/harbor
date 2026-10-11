@@ -19,8 +19,6 @@ import { parseWebUrl } from '@/lib/web-url';
  * @param productSlug e.g. "givewp"
  * @param tier        e.g. "elite"
  *
- * Returns undefined when baseUrl is not an http(s) URL.
- *
  * @since 1.0.0
  */
 export function buildActivationUrl(

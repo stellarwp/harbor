@@ -3,9 +3,6 @@ import { parseWebUrl, webUrl } from '@/lib/web-url';
 /**
  * Appends portal tracking parameters to a catalog upgrade URL.
  *
- * Returns undefined when baseUrl is not an http(s) URL, so the button renders
- * without a link rather than with whatever the catalog supplied.
- *
  * The upgrade_url comes from the catalog tier and is a base URL without
  * site context. This function appends domain and portal-referral so the
  * portal can identify the originating site and entry point.

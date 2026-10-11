@@ -1,9 +1,5 @@
 /**
- * Links Harbor renders from server data, accepted only as http(s).
- *
- * Catalog and activation URLs arrive from the Portal and become wp-admin links.
- * Rejecting every other scheme keeps a malformed or hostile value from ever
- * rendering as a script or data link.
+ * Catalog and activation links, accepted only as http(s) so Portal data never renders as a script link.
  *
  * @package LiquidWeb\Harbor
  */
