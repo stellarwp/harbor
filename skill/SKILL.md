@@ -228,9 +228,8 @@ user's toggle.
 
 ## Naming: "Nexcess Licensing"
 
-Call Harbor's license page **Nexcess Licensing** in everything your plugin
-shows a user — UI copy, onboarding text, link labels. Harbor's own page uses the
-same name, so users meet one name everywhere.
+Call Harbor's license page **Nexcess Licensing** in UI copy, onboarding text,
+and link labels. This is also the title of Harbor's page and its Settings menu entry.
 
 `Feature_Manager_Page` is the internal class name. Do not surface it to users.
 
@@ -281,7 +280,7 @@ PSR-11's `ContainerInterface` but not `StellarWP\ContainerContract\ContainerInte
 ## Model of the system
 
 - One `LWSW-` key per site, shared by every Nexcess product.
-- A product is a brand family (Kadence, GiveWP, The Events Calendar, LearnDash), not a
+- A product is a brand family (Kadence, Give, The Events Calendar, LearnDash), not a
   plugin. Each has one or more entry plugins that bootstrap Harbor; most are free.
 - Features are the resolved join of catalog data (Commerce Portal) and licensing data.
   They are not a third source of truth — do not write feature state directly.

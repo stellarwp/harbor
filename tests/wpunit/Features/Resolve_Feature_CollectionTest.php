@@ -362,6 +362,68 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that an invalid entry for a product does not hide a valid tier for the same product,
+	 * whichever order Licensing returns them in.
+	 *
+	 * @return void
+	 */
+	public function test_invalid_entry_does_not_hide_a_valid_tier_of_the_same_product(): void {
+		$invalid = $this->make_product_entry( 'pro', [], 'license_banned' );
+		$valid   = $this->make_product_entry( 'basic', [ 'kad-blocks-pro' ] );
+
+		$orders = [
+			'invalid first' => [ $invalid, $valid ],
+			'valid first'   => [ $valid, $invalid ],
+		];
+
+		foreach ( $orders as $label => $entries ) {
+			$products = new Product_Collection();
+			foreach ( $entries as $entry ) {
+				$products->add( $entry );
+			}
+
+			$feature = ( $this->make_resolver( $this->make_catalog(), $products ) )()->get( 'kad-blocks-pro' );
+
+			$this->assertTrue( $feature->is_available(), $label );
+			$this->assertTrue( $feature->is_in_catalog_tier(), $label );
+		}
+	}
+
+	/**
+	 * Tests that the highest valid tier covers its features regardless of entry order.
+	 *
+	 * @return void
+	 */
+	public function test_highest_valid_tier_is_used_regardless_of_entry_order(): void {
+		$product_data = $this->make_catalog()->get( 'kadence' )->to_array();
+		// Require Pro so choosing the first, lower tier would incorrectly mark this as a bonus.
+		$product_data['features'][0]['minimum_tier'] = 'pro';
+
+		$catalog = new Catalog_Collection();
+		$catalog->add( Product_Catalog::from_array( $product_data ) );
+
+		$basic = $this->make_product_entry( 'basic', [] );
+		$pro   = $this->make_product_entry( 'pro', [ 'kad-blocks-pro' ] );
+
+		$orders = [
+			'lower tier first'  => [ $basic, $pro ],
+			'higher tier first' => [ $pro, $basic ],
+		];
+
+		foreach ( $orders as $label => $entries ) {
+			$products = new Product_Collection();
+			foreach ( $entries as $entry ) {
+				$products->add( $entry );
+			}
+
+			$feature = ( $this->make_resolver( $catalog, $products ) )()->get( 'kad-blocks-pro' );
+
+			$this->assertTrue( $feature->is_available(), $label );
+			$this->assertTrue( $feature->is_in_catalog_tier(), $label );
+		}
+	}
+
+	/**
 	 * Tests that an active legacy entry without `use_for_updates` opt-in does not grant availability.
 	 *
 	 * Covers the case where a plugin reports a legacy license whose backend is not

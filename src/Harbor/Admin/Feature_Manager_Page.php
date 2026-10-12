@@ -212,7 +212,7 @@ class Feature_Manager_Page {
 			$handle,
 			$plugin_root_url . $build_dir . '/index.css',
 			[],
-			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- version is content-hashed into the asset filename by the build pipeline.
+			$asset_data['version']
 		);
 
 		wp_set_script_translations( $handle, '%TEXTDOMAIN%' );

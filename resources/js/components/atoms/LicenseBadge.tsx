@@ -51,7 +51,7 @@ export function LicenseBadge( { type, tierName, className }: LicenseBadgeProps )
 		: labelMap[ type ]();
 
 	return (
-		<Badge variant={ variantMap[ type ] } className={ cn( className ) }>
+		<Badge variant={ variantMap[ type ] } className={ cn( type === 'free' && 'px-2 py-px text-xs leading-4', className ) }>
 			{ label }
 		</Badge>
 	);

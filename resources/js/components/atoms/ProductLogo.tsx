@@ -15,12 +15,14 @@ import logoGiveNobg from '@img/logo-givewp-nobg.svg';
 import logoLearnDashNobg from '@img/logo-learndash-nobg.svg';
 import logoTecNobg from '@img/logo-tec-nobg.svg';
 import logoKadenceNobg from '@img/logo-kadence-nobg.svg';
+import logoNps from '@img/logo-nps.svg';
 
 const LOGOS: Record<string, string> = {
     give:                  logoGive,
     'the-events-calendar': logoTheEventsCalendar,
     learndash:             logoLearnDash,
     kadence:               logoKadence,
+    'nexcess-plugin-stack': logoNps,
 };
 
 const LOGOS_NOBG: Record<string, string> = {
@@ -28,6 +30,7 @@ const LOGOS_NOBG: Record<string, string> = {
     'the-events-calendar': logoTecNobg,
     learndash:             logoLearnDashNobg,
     kadence:               logoKadenceNobg,
+    'nexcess-plugin-stack': logoNps,
 };
 
 interface ProductLogoProps {
@@ -43,7 +46,7 @@ interface ProductLogoProps {
 export function ProductLogo( { slug, size, productName, variant = 'default' }: ProductLogoProps ) {
     const src = ( variant === 'nobg' ? LOGOS_NOBG : LOGOS )[ slug ];
 
-    /* translators: %s: product name (e.g. "Kadence", "GiveWP") */
+    /* translators: %s: product name (e.g. "Kadence", "Give") */
     const alt = sprintf( __( '%s logo', '%TEXTDOMAIN%' ), productName );
 
     if ( ! src ) {

@@ -14,7 +14,7 @@ Harbor introduces **unified licensing**. Instead of each plugin managing its own
 
 ## Products and Entry Plugins
 
-A product is a brand family, like Kadence, GiveWP, The Events Calendar, or LearnDash. Each product encompasses many features: plugins and themes that the customer can enable based on their tier.
+A product is a brand family, like Kadence, Give, The Events Calendar, or LearnDash. Each product encompasses many features: plugins and themes that the customer can enable based on their tier.
 
 Each product has an **entry plugin**, a WordPress plugin that bootstraps Harbor on the site. The entry plugin bundles a vendor-prefixed copy of the Harbor library, registers the product with the leader via the product registry, and may contribute an embedded license key. The entry plugin is how a product gets on the site, but it is not the product itself.
 
@@ -22,7 +22,7 @@ Most entry plugins are free and available on WordPress.org. This is deliberate. 
 
 | Product             | Entry plugins                          | On WordPress.org |
 | ------------------- | -------------------------------------- | ---------------- |
-| GiveWP              | `give`                                 | Yes              |
+| Give                | `give`                                 | Yes              |
 | Kadence             | `kadence-blocks`                       | Yes              |
 | The Events Calendar | `the-events-calendar`, `event-tickets` | Yes              |
 | LearnDash           | `learndash`, `memberdash`              | No               |

@@ -205,8 +205,9 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Refreshes the license data from the upstream API.
 	 *
-	 * Flushes cached products and re-fetches from the licensing service.
-	 * Returns the refreshed key + products in the same shape as GET /license.
+	 * Re-fetches products from the licensing service and returns the key +
+	 * products in the same shape as GET /license. When a not-found response
+	 * leaves the cached purchases in place, those are the products returned.
 	 *
 	 * The With_Error_Throttle trait on License_Manager prevents hammering the
 	 * upstream API after a recent failure (60-second TTL).
@@ -231,8 +232,11 @@ final class License_Controller extends WP_REST_Controller {
 
 		if ( is_wp_error( $products ) ) {
 			if ( $products->get_error_code() === Error_Code::INVALID_KEY ) {
+				// Only a confirmed rejection clears the cache; an ambiguous 404 keeps the purchases.
+				$stored = $this->manager->get_products( $domain );
+
 				return new WP_REST_Response(
-					License_Response::make( $key, new Product_Collection(), $products )
+					License_Response::make( $key, $stored instanceof Product_Collection ? $stored : new Product_Collection(), $products )
 				);
 			}
 

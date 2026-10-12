@@ -1,0 +1,11 @@
+significance: minor
+type: feature
+entry: Features are now granted by every valid purchase activated on the site,
+  so a package such as the Nexcess Plugin Stack can unlock features across
+  Kadence, Give, LearnDash and The Events Calendar. Feature responses include
+  access_sources, which the licensing page uses to show which subscription
+  provides each feature. The licensing page is renamed Nexcess Licensing; use
+  that name in anything your plugin shows a user.
+  Product_Collection::get_activated_entry() is deprecated; use
+  get_all_by_slug() and check get_activated_here() instead.
+timestamp: 2026-10-12T13:39:33.681Z

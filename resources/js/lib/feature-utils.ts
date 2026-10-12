@@ -20,8 +20,19 @@ export function isFreeFeature( tier: string | null ): boolean {
  * @since 1.0.0
  */
 export function getLicenseBadgeType( feature: Feature, isLegacy: boolean ): LicenseBadgeType | null {
-    if ( isFreeFeature( feature.tier ) ) return 'free';
-    if ( isLegacy )                       return 'legacy';
+    // Resolved grants are authoritative; older responses omit access_sources.
+    const isFree = feature.access_sources !== undefined
+        ? feature.access_sources.some( ( source ) => source.type === 'free' )
+        : isFreeFeature( feature.tier );
+
+    if ( isFree ) {
+        return 'free';
+    }
+    // A package can provide unified access without a separate brand subscription.
+    const hasPurchase = feature.access_sources?.some( ( source ) => source.type === 'purchase' ) ?? false;
+    if ( isLegacy && ! hasPurchase ) {
+        return 'legacy';
+    }
     return getFeatureMismatch( feature );
 }
 

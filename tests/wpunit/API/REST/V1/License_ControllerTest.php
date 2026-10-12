@@ -11,6 +11,11 @@ use LiquidWeb\Harbor\API\REST\V1\License_Controller;
 use LiquidWeb\Harbor\Site\Data;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\LicensingApiClient\Contracts\LicensingClientInterface;
+use LiquidWeb\LicensingApiClient\Http\Factories\ResponseExceptionFactory;
+use LiquidWeb\LicensingApiClient\Http\JsonDecoder;
+use LiquidWeb\LicensingApiClient\Resources\Contracts\ProductsResourceInterface;
+use Nyholm\Psr7\Response;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -228,6 +233,37 @@ final class License_ControllerTest extends HarborTestCase {
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( 'LWSW-NOT-A-REAL-KEY', $data['key'] );
 		$this->assertSame( [], $data['products'] );
+	}
+
+	/**
+	 * @return array<string, array{int, string, bool}>
+	 */
+	public static function refresh_not_found_responses(): array {
+		return [
+			'proxy 404'        => [ 404, '<html>Not Found</html>', true ],
+			'missing route'    => [ 404, '{"code":"rest_no_route","message":"No route","data":{"status":404}}', true ],
+			'rejected license' => [ 404, '{"error":{"code":"not_found","message":"License not found."}}', false ],
+		];
+	}
+
+	/**
+	 * A refresh that keeps the cached purchases must report them, so the UI does not empty the license.
+	 *
+	 * @dataProvider refresh_not_found_responses
+	 */
+	public function test_refresh_not_found_reports_the_purchases_still_stored( int $status, string $body, bool $keeps_purchases ): void {
+		wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+		$this->manager->store_key( 'LWSW-UNIFIED-PRO-2026' );
+		$stored = $this->manager->get_products( ( new Data() )->get_domain() );
+		$this->assertNotEmpty( $stored->to_array() );
+		$this->register_routes_with_failing_licensing( $status, $body );
+
+		$data = $this->server->dispatch( new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/license/refresh' ) )->get_data();
+
+		$this->assertSame( 'LWSW-UNIFIED-PRO-2026', $data['key'] );
+		$this->assertSame( Error_Code::INVALID_KEY, $data['error']['code'] );
+		$this->assertSame( $keeps_purchases ? $stored->to_array() : [], $data['products'] );
 	}
 
 	public function test_refresh_requires_manage_options(): void {
@@ -467,5 +503,28 @@ final class License_ControllerTest extends HarborTestCase {
 
 		$this->assertSame( 429, $response->get_status() );
 		$this->assertSame( Error_Code::TOO_MANY_ATTEMPTS, $response->get_data()['code'] );
+	}
+
+	/**
+	 * Registers the routes again, backed by a Licensing client whose single catalog request fails.
+	 *
+	 * @param int    $status HTTP status of the failed response.
+	 * @param string $body   Body of the failed response.
+	 *
+	 * @return void
+	 */
+	private function register_routes_with_failing_licensing( int $status, string $body ): void {
+		// The Licensing service cannot run here; its real exception factory decodes the response.
+		$exception = ( new ResponseExceptionFactory( new JsonDecoder() ) )->make( new Response( $status, [], $body ) );
+		$products  = $this->createMock( ProductsResourceInterface::class );
+		$products->expects( $this->once() )->method( 'catalog' )->willThrowException( $exception );
+		$client = $this->createMock( LicensingClientInterface::class );
+		$client->method( 'products' )->willReturn( $products );
+
+		global $wp_rest_server;
+		$wp_rest_server = new WP_REST_Server();
+		$this->server   = $wp_rest_server;
+
+		( new License_Controller( new License_Manager( $this->repository, new Product_Registry(), $client ), new Data() ) )->register_routes();
 	}
 }

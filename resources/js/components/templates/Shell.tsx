@@ -18,7 +18,7 @@ interface ShellProps {
  */
 export function Shell( { header, sideContent, children }: ShellProps ) {
     return (
-        <div className="absolute top-0 left-0 w-full max-w-full flex flex-col overflow-hidden h-[calc(100vh-32px)]">
+        <div className="relative h-full w-full max-w-full flex flex-col overflow-hidden">
             <header className="shrink-0 border-b bg-background py-4 px-8 flex items-center gap-3">
                 { header }
             </header>
@@ -26,7 +26,7 @@ export function Shell( { header, sideContent, children }: ShellProps ) {
 				<main className="flex flex-col flex-1 min-w-0 overflow-y-auto pb-6 px-8 bg-neutral-50">
 					{ children }
 				</main>
-				<aside className="shrink-0 overflow-y-auto border-l px-8 py-4">
+				<aside className="shrink-0 overflow-y-auto border-l bg-neutral-100 px-8 py-4">
 					{ sideContent }
 				</aside>
 			</div>

@@ -107,6 +107,7 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 		$collection->add( $this->make_entry( 'learndash', 'elite', false ) );
 
+		$this->setExpectedDeprecated( Product_Collection::class . '::get_activated_entry' );
 		$entry = $collection->get_activated_entry( 'learndash' );
 
 		$this->assertNotNull( $entry );
@@ -118,6 +119,7 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection->add( $this->make_entry( 'learndash', 'essentials', false ) );
 		$collection->add( $this->make_entry( 'learndash', 'pro', false ) );
 
+		$this->setExpectedDeprecated( Product_Collection::class . '::get_activated_entry' );
 		$this->assertNull( $collection->get_activated_entry( 'learndash' ) );
 	}
 
@@ -125,6 +127,7 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection = new Product_Collection();
 		$collection->add( $this->make_entry( 'learndash', 'pro', true ) );
 
+		$this->setExpectedDeprecated( Product_Collection::class . '::get_activated_entry' );
 		$this->assertNull( $collection->get_activated_entry( 'unknown' ) );
 	}
 
@@ -133,6 +136,7 @@ final class Product_CollectionTest extends HarborTestCase {
 		$collection->add( $this->make_entry( 'learndash', 'essentials', null ) );
 		$collection->add( $this->make_entry( 'learndash', 'pro', null ) );
 
+		$this->setExpectedDeprecated( Product_Collection::class . '::get_activated_entry' );
 		$this->assertNull( $collection->get_activated_entry( 'learndash' ) );
 	}
 }

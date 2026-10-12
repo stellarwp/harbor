@@ -64,4 +64,58 @@ final class Catalog_TierTest extends HarborTestCase {
 		$this->assertSame( '', $tier->get_purchase_url() );
 		$this->assertSame( '', $tier->get_upgrade_url() );
 	}
+
+	/**
+	 * @return array<string, array{mixed}>
+	 */
+	public function non_web_link_provider(): array {
+		return [
+			'javascript'        => [ 'javascript:alert(1)//' ],
+			'padded mixed case' => [ ' JavaScript:alert(1)' ],
+			'data'              => [ 'data:text/html,<b>x</b>' ],
+			'vbscript'          => [ 'vbscript:alert(1)' ],
+			'protocol relative' => [ '//evil.example/checkout' ],
+			'no scheme'         => [ 'evil.example/checkout' ],
+			'relative path'     => [ '/checkout' ],
+			'plain text'        => [ 'not a url' ],
+			'non-string'        => [ [ 'https://example.com' ] ],
+		];
+	}
+
+	/**
+	 * Catalog links that are not http(s) are dropped rather than stored, including
+	 * values without a scheme that esc_url_raw() would otherwise turn into an http link.
+	 *
+	 * @dataProvider non_web_link_provider
+	 *
+	 * @param mixed $link The raw catalog value.
+	 *
+	 * @return void
+	 */
+	public function test_non_web_links_are_dropped( $link ): void {
+		$tier = Catalog_Tier::from_array(
+			[
+				'purchase_url' => $link,
+				'upgrade_url'  => $link,
+			]
+		);
+
+		$this->assertSame( '', $tier->get_purchase_url() );
+		$this->assertSame( '', $tier->get_upgrade_url() );
+	}
+
+	/**
+	 * Web links keep their destination and query string, unescaped for storage, with the scheme lowercased.
+	 */
+	public function test_web_links_are_kept_unescaped(): void {
+		$tier = Catalog_Tier::from_array(
+			[
+				'purchase_url' => ' https://example.com/checkout/?add-to-cart=123&variation_id=456 ',
+				'upgrade_url'  => 'HTTP://example.com/upgrade/kadence/pro/',
+			]
+		);
+
+		$this->assertSame( 'https://example.com/checkout/?add-to-cart=123&variation_id=456', $tier->get_purchase_url() );
+		$this->assertSame( 'http://example.com/upgrade/kadence/pro/', $tier->get_upgrade_url() );
+	}
 }

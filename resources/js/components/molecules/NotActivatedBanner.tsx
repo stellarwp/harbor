@@ -12,6 +12,7 @@ import { useSelect } from '@wordpress/data';
 import { Info } from 'lucide-react';
 import { store as harborStore } from '@/store';
 import { getHarborDataValue } from '@/lib/harbor-data';
+import { webUrl } from '@/lib/web-url';
 
 /**
  * @since 1.3.0   Read activationUrl through the getHarborDataValue helper.
@@ -27,7 +28,7 @@ export function NotActivatedBanner() {
 		[]
 	);
 
-	const activationUrl = getHarborDataValue( 'activationUrl' );
+	const activationUrl = webUrl( getHarborDataValue( 'activationUrl' ) );
 	if ( ! allNotActivated || ! licenseKey || ! activationUrl ) return null;
 
 	return (

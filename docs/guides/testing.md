@@ -168,7 +168,7 @@ Most fixture keys only have a licensing file. They share the same `default.json`
 
 For example, with the full `default.json` catalog:
 
-- **`lwsw-unified-give-basic-2026`** — licensing says "GiveWP at basic tier." Features from all products appear, but only basic-tier GiveWP features have `is_available: true`. Kadence features have `is_available: false` (no license entry).
+- **`lwsw-unified-give-basic-2026`** — licensing says "Give at basic tier." Features from all products appear, but only basic-tier Give features have `is_available: true`. Kadence features have `is_available: false` (no license entry).
 - **`lwsw-unified-pro-2026`** — licensing says "pro tier across multiple products." More features become available.
 
 Some fixture keys (like `lwsw-unified-test-fixtures`) ship a dedicated catalog file with a curated subset of products. When that file exists, it replaces the full catalog entirely — so fewer features appear in the output.
