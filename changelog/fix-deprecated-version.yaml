@@ -1,5 +1,0 @@
-significance: patch
-type: fix
-entry: Product_Collection::get_activated_entry() now reports the version it was
-  deprecated in, instead of "TBD", in its deprecation notice.
-timestamp: 2026-10-12T19:20:36.000Z
