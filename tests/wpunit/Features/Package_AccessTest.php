@@ -146,6 +146,35 @@ final class Package_AccessTest extends HarborTestCase {
 	}
 
 	/**
+	 * A purchase the catalog does not describe is still explained by its own identifiers.
+	 */
+	public function test_access_sources_fall_back_to_purchase_identifiers(): void {
+		$cases = [
+			'product missing from catalog' => [ $this->purchase( 'new-offer', [ 'blocks-pro' ] ), 'new-offer', 'complete' ],
+			'tier missing from catalog'    => [ array_replace( $this->purchase( 'kadence', [ 'blocks-pro' ] ), [ 'tier' => 'elite' ] ), 'Kadence', 'elite' ],
+		];
+
+		foreach ( $cases as $label => [ $purchase, $product_name, $tier_name ] ) {
+			$resource = ( new Feature_Resource( $this->resolve_purchase_features( [ $purchase ] )->get( 'blocks-pro' ), null ) )->to_array();
+
+			$this->assertTrue( $resource['is_available'], $label );
+			$this->assertSame(
+				[
+					[
+						'type'         => 'purchase',
+						'product_slug' => $purchase['product_slug'],
+						'tier'         => $purchase['tier'],
+						'product_name' => $product_name,
+						'tier_name'    => $tier_name,
+					],
+				],
+				$resource['access_sources'],
+				$label
+			);
+		}
+	}
+
+	/**
 	 * Free and opted-in legacy access are explained without exposing the legacy key.
 	 */
 	public function test_free_and_legacy_sources_do_not_require_a_package(): void {
