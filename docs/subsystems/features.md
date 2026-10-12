@@ -216,9 +216,12 @@ Every resolved feature includes these fields:
 | `tier`              | string  | Minimum tier required                                             |
 | `type`              | string  | `plugin`, `theme`, or `service`                                   |
 | `is_available`      | boolean | Whether the current license covers this feature                   |
-| `in_catalog_tier`   | boolean | Whether the licensed tier meets or exceeds the feature's min tier |
+| `access_sources`    | array   | Grants that provide access: `purchase`, `free` or `legacy`        |
+| `in_catalog_tier`   | boolean | Licensed tier meets the min tier, or another product grants it    |
 | `is_enabled`        | boolean | Whether the feature is currently enabled on this site             |
 | `documentation_url` | string  | URL to the feature's documentation                                |
+
+Each `access_sources` entry has a `type`. A `purchase` entry also carries `product_slug`, `tier`, `product_name` and `tier_name`, and only purchases activated on this site that are not expired, suspended or otherwise invalid appear. Entries never include a license key.
 
 Installable features (`plugin` and `theme`) also include:
 

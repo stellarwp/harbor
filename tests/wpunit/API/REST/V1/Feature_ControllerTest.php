@@ -992,7 +992,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertTrue( $plugin['additionalProperties'] );
 		$this->assertSame( [ Feature::TYPE_PLUGIN ], $plugin['properties']['type']['enum'] );
 
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
+		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
 
 		foreach ( $expected as $property ) {
 			$this->assertArrayHasKey( $property, $plugin['properties'], "Missing plugin schema property: {$property}" );
@@ -1014,7 +1014,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertSame( 'theme', $theme['title'] );
 		$this->assertSame( [ Feature::TYPE_THEME ], $theme['properties']['type']['enum'] );
 
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
+		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
 
 		foreach ( $expected as $property ) {
 			$this->assertArrayHasKey( $property, $theme['properties'], "Missing theme schema property: {$property}" );
@@ -1037,5 +1037,35 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertSame( 'plugin', $schema['oneOf'][0]['title'] );
 		$this->assertSame( 'theme', $schema['oneOf'][1]['title'] );
 		$this->assertSame( 'service', $schema['oneOf'][2]['title'] );
+	}
+
+	/**
+	 * Tests that every variant describes the access sources the resolver returns.
+	 *
+	 * @return void
+	 */
+	public function test_schema_access_sources_match_resolved_sources(): void {
+		$controller = new Feature_Controller( $this->manager );
+		$schema     = $controller->get_item_schema();
+		$resolved   = [
+			[
+				'type'         => 'purchase',
+				'product_slug' => 'nexcess-plugin-stack',
+				'tier'         => '10-sites',
+				'product_name' => 'Nexcess Plugin Stack',
+				'tier_name'    => '10 sites',
+			],
+			[ 'type' => 'free' ],
+			[ 'type' => 'legacy' ],
+		];
+
+		foreach ( $schema['oneOf'] as $variant ) {
+			$this->assertArrayHasKey( 'access_sources', $variant['properties'], "Missing access_sources in the {$variant['title']} schema" );
+
+			$sources = $variant['properties']['access_sources'];
+
+			$this->assertTrue( rest_validate_value_from_schema( $resolved, $sources, 'access_sources' ), $variant['title'] );
+			$this->assertWPError( rest_validate_value_from_schema( [ [ 'type' => 'gift' ] ], $sources, 'access_sources' ), $variant['title'] );
+		}
 	}
 }

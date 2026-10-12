@@ -29,6 +29,15 @@ Lists all resolved features with optional filters.
     "tier": "kadence-basic",
     "type": "plugin",
     "is_available": true,
+    "access_sources": [
+      {
+        "type": "purchase",
+        "product_slug": "kadence",
+        "tier": "kadence-basic",
+        "product_name": "Kadence",
+        "tier_name": "Basic"
+      }
+    ],
     "in_catalog_tier": true,
     "is_enabled": true,
     "documentation_url": "https://...",
