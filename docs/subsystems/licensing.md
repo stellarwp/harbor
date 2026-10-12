@@ -12,7 +12,7 @@ This document describes the data the site gets from Licensing, how it stores tha
 
 A site has one unified license key. It reaches the site in one of two ways:
 
-- **Embedded**: a product purchased from the Liquid Web store ships with a license file containing the key
+- **Embedded**: a product purchased from the Nexcess store ships with a license file containing the key
 - **User-entered**: the user types the key into the admin UI
 
 The `License_Manager` resolves the key using a priority system: a stored key always wins. If no key is stored, it scans active plugins for a bundled `LWSW_KEY.php` file. If one is found, the key it returns is auto-stored so future lookups skip the discovery step.

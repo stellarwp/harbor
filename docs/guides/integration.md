@@ -46,11 +46,9 @@ Portal and activation URLs, script handles, and license state come from Harbor's
 
 If the helper you need does not exist yet, that is a Harbor ticket, not a reason to inline it. See [The Harbor release train](#the-harbor-release-train).
 
-### Naming: the "Unified License Manager"
+### Naming: "Nexcess Licensing"
 
-Call Harbor's license management page the **Unified License Manager** in everything your plugin shows a user: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere. The rule covers your plugin's copy; Harbor's own page is still titled "Liquid Web Software Manager".
-
-The name is deliberately brand-neutral. The company name has changed several times (Liquid Web / Nexcess / StellarWP), and a brand-based label would need re-touching in every plugin on every rebrand.
+Call Harbor's license management page **Nexcess Licensing** in everything your plugin shows a user: UI copy, onboarding text, link labels, documentation. Use that name in every plugin so users meet one name everywhere. Harbor's own page uses the same name.
 
 Internally the page is `Admin\Feature_Manager_Page` and the docs refer to the Feature Manager when discussing the code. That is an implementation name — do not surface it to users.
 
@@ -200,7 +198,7 @@ add_filter('lw-harbor/legacy_licenses', function (array $licenses): array {
 | `page_url`        | Yes      | Admin URL where the user can manage this license.                                                                   |
 | `expires_at`      | No       | Expiry date string (e.g. `"2026-01-01"`).                                                                           |
 
-> **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge in the Unified License Manager.
+> **Tip:** If a single license key covers multiple add-ons, emit one entry per add-on slug so each slug can display a legacy license badge in Nexcess Licensing.
 
 ### How Harbor uses reported legacy keys
 
@@ -224,7 +222,7 @@ Because Harbor handles this, you should remove or suppress any existing license-
 
 ### Notifying users on the legacy license page
 
-If your plugin has its own license settings page, display a notice on that page to inform users that licensing has moved to Liquid Web's unified system:
+If your plugin has its own license settings page, display a notice on that page to inform users that licensing has moved to Nexcess's unified system:
 
 ```php
 // With a product name (recommended)
@@ -236,7 +234,7 @@ lw_harbor_display_legacy_license_page_notice();
 
 This outputs a standard WordPress info notice:
 
-> GiveWP is now part of Liquid Web's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Liquid Web, your products are managed through the Liquid Web Software Manager.
+> GiveWP is now part of Nexcess's software offerings. This page is still available for managing legacy licenses from your previous GiveWP account. If you purchased a new plan through Nexcess, your products are managed through Nexcess Licensing.
 
 Call this function directly in the render callback for your legacy license page. Because it echoes immediately when called, no hook registration is needed — it renders wherever you place it.
 
@@ -292,13 +290,13 @@ if (lw_harbor_is_feature_available('feature-slug')) {
 }
 ```
 
-### Get the Unified License Manager admin URL
+### Get the Nexcess Licensing admin URL
 
 ```php
 $url = lw_harbor_get_license_page_url(); // string (empty string if no Harbor copy is loaded)
 ```
 
-Label the link **Unified License Manager** in whatever UI you place it in. Never build this URL by hand.
+Label the link **Nexcess Licensing** in whatever UI you place it in. Never build this URL by hand.
 
 A non-empty URL does not mean the page exists. When no premium plugin has opened the gate, the function still returns the URL, but the page behind it is not registered. Check `did_action( 'lw_harbor/loaded' )` before showing the link.
 
@@ -314,7 +312,7 @@ Bypasses Harbor's cached catalog and fetches a fresh copy from the Commerce Port
 
 ## 5. Registering a Submenu Link
 
-If your plugin has its own top-level admin menu, call `lw_harbor_register_submenu()` to append a **Licensing** item that links directly to the Unified License Manager. This lets users reach the unified license UI without leaving your plugin's menu area.
+If your plugin has its own top-level admin menu, call `lw_harbor_register_submenu()` to append a **Licensing** item that links directly to Nexcess Licensing. This lets users reach the unified license UI without leaving your plugin's menu area.
 
 ```php
 add_action('lw_harbor/loaded', function () {
@@ -328,13 +326,13 @@ The function always delegates to the highest-version Harbor instance on the site
 
 ### Hiding the Settings menu item
 
-By default, Harbor registers a **Liquid Web Products** entry under the WordPress **Settings** menu. If your plugin surfaces the Unified License Manager through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
+By default, Harbor registers a **Nexcess Licensing** entry under the WordPress **Settings** menu. If your plugin surfaces Nexcess Licensing through its own submenu link (above) and you do not want the standalone Settings entry, hook the `lw-harbor/hide_menu_item` filter:
 
 ```php
 add_filter('lw-harbor/hide_menu_item', '__return_true');
 ```
 
-The page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Liquid Web Products** entry and any submenu items added through `lw_harbor_register_submenu()`.
+The page itself remains registered, so direct URLs continue to work. The filter hides both the standalone **Settings → Nexcess Licensing** entry and any submenu items added through `lw_harbor_register_submenu()`.
 
 ---
 
@@ -356,7 +354,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | Gate free-plugin onboarding on a license                                                  | Complete onboarding with no key                                          | Free onboarding must never require a key                                                                   |
 | Release or QA a plugin pinned to a Harbor dev branch                                      | Wait for the tagged release, then `composer update`                      | Leader election is by version; a dev branch silently loses and the feature does not run                    |
 | Let Strauss prefix `global-functions.php`                                                 | Add the `exclude_from_prefix` file pattern                               | Prefixed helpers cannot find the other Harbor copies                                                       |
-| Say "Feature Manager" in user-facing copy                                                 | Say "Unified License Manager"                                            | One brand-neutral name across every plugin                                                                 |
+| Say "Feature Manager" in user-facing copy                                                 | Say "Nexcess Licensing"                                                  | One name across every plugin                                                                               |
 
 ### Filters
 
@@ -364,7 +362,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `lw_harbor/premium_plugin_exists` | Announce that a premium plugin is present so `Harbor::init()` registers its providers. Receives and returns `bool`. **Must be attached before `Harbor::init()` runs**; see [Initialization](#1-initialization). |
 | `lw-harbor/legacy_licenses`       | Report pre-existing licenses to Harbor. Receives and returns `array $licenses`.                                                                                                                                 |
-| `lw-harbor/hide_menu_item`        | Hide the **Liquid Web Products** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                             |
+| `lw-harbor/hide_menu_item`        | Hide the **Nexcess Licensing** Settings entry and any `lw_harbor_register_submenu()` items without unregistering the page itself.                                                                               |
 
 ### Actions
 
@@ -381,7 +379,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                                                   |
-| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for the Unified License Manager (empty string if no Harbor copy is loaded).                 |
+| `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for Nexcess Licensing (empty string if no Harbor copy is loaded).                           |
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                                                        |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |
 | `lw_harbor_display_legacy_license_page_notice` | `(string $product_name = ''): void` | Display a notice on a legacy license page pointing users to the unified system.                               |

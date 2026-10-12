@@ -2,7 +2,7 @@
  * Info banner shown when all licensed products are unactivated on this domain.
  *
  * Fires when every product's validation_status is 'not_activated' or
- * 'activation_required'. Links to the Liquid Web portal so the user can
+ * 'activation_required'. Links to the Nexcess portal so the user can
  * activate their license for this domain.
  *
  * @package LiquidWeb\Harbor
@@ -12,6 +12,7 @@ import { useSelect } from '@wordpress/data';
 import { Info } from 'lucide-react';
 import { store as harborStore } from '@/store';
 import { getHarborDataValue } from '@/lib/harbor-data';
+import { webUrl } from '@/lib/web-url';
 
 /**
  * @since 1.3.0   Read activationUrl through the getHarborDataValue helper.
@@ -27,7 +28,7 @@ export function NotActivatedBanner() {
 		[]
 	);
 
-	const activationUrl = getHarborDataValue( 'activationUrl' );
+	const activationUrl = webUrl( getHarborDataValue( 'activationUrl' ) );
 	if ( ! allNotActivated || ! licenseKey || ! activationUrl ) return null;
 
 	return (

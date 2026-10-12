@@ -35,10 +35,10 @@ export function StatusBadge( { status, requiredTier }: StatusBadgeProps ) {
             ? __( 'Installing\u2026', '%TEXTDOMAIN%' )
             : __( 'Updating\u2026',   '%TEXTDOMAIN%' );
         return (
-            <div className="flex flex-col items-end gap-0.5 w-36">
+            <div className="flex flex-col items-end gap-0.5 w-full min-w-0">
                 <div className="flex items-center gap-2 w-full">
                     <Download className="w-3.5 h-3.5 text-muted-foreground animate-pulse shrink-0" />
-                    <ProgressBar className="h-1.5 rounded-full bg-muted [&>div]:bg-primary" />
+                    <ProgressBar className="h-1.5 w-full min-w-0 rounded-full bg-muted [&>div]:bg-primary" />
                 </div>
                 <span className="text-[10px] text-muted-foreground">{ label }</span>
             </div>

@@ -12,7 +12,7 @@ import type { Product } from '@/types/api';
 export const PRODUCTS: Product[] = [
     {
         slug: 'give',
-        name: 'GiveWP',
+        name: 'Give',
         tagline: 'Donation forms and fundraising for WordPress',
     },
     {

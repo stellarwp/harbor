@@ -1,6 +1,8 @@
+import { parseWebUrl } from '@/lib/web-url';
+
 /**
  * Appends product and tier params to the base activation URL supplied by the
- * API, producing a product-scoped URL the Liquid Web portal can use to
+ * API, producing a product-scoped URL the Nexcess portal can use to
  * pre-select the right product and tier.
  *
  * The base URL is already fully assembled by the server and includes params
@@ -23,12 +25,11 @@ export function buildActivationUrl(
     baseUrl:     string,
     productSlug: string,
     tier:        string,
-): string {
-    try {
-        const url = new URL( baseUrl );
-        url.searchParams.set( 'sku', `${ productSlug }:${ tier }` );
-        return url.toString();
-    } catch {
-        return baseUrl;
+): string | undefined {
+    const url = parseWebUrl( baseUrl );
+    if ( ! url ) {
+        return undefined;
     }
+    url.searchParams.set( 'sku', `${ productSlug }:${ tier }` );
+    return url.toString();
 }

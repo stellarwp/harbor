@@ -33,22 +33,23 @@ export function VersionDisplay( {
 }: VersionDisplayProps ) {
 	if ( feature.update_version ) {
 		return (
-			<div className="flex items-center gap-1.5">
-				<span className="text-xs font-mono text-muted-foreground line-through">
+			<div className="flex flex-col items-end gap-1">
+				<span className="text-xs font-mono text-muted-foreground line-through break-all">
 					v{ feature.installed_version }
 				</span>
-				<span className="text-muted-foreground text-xs">→</span>
-				<span className="text-xs font-mono font-bold">
-					v{ feature.update_version }
-				</span>
-				{ ( upgradeLabel || onUpdate ) && (
-					<UpdateButton
-						featureName={ feature.name }
-						disabled={ !! pendingAction || installableBusy }
-						onClick={ onUpdate }
-						upgradeLabel={ upgradeLabel }
-					/>
-				) }
+				<div className="flex flex-wrap items-center justify-end gap-1.5">
+					<span className="text-xs font-mono font-bold break-all">
+						v{ feature.update_version }
+					</span>
+					{ ( upgradeLabel || onUpdate ) && (
+						<UpdateButton
+							featureName={ feature.name }
+							disabled={ !! pendingAction || installableBusy }
+							onClick={ onUpdate }
+							upgradeLabel={ upgradeLabel }
+						/>
+					) }
+				</div>
 			</div>
 		);
 	}
@@ -58,7 +59,7 @@ export function VersionDisplay( {
 	}
 
 	return (
-		<span className="text-xs font-mono text-muted-foreground text-right">
+		<span className="text-xs font-mono text-muted-foreground text-right break-all">
 			{ `v${ feature.installed_version ?? feature.version }` }
 		</span>
 	);

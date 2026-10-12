@@ -131,8 +131,20 @@
 	padding-left: 0;
 }
 
+/* Keep native notices above Harbor so their links and dismiss controls still work. */
 #wpcontent:has(.lw-harbor-ui) #wpbody-content {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
 	padding-bottom: 0;
+}
+
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .notice,
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .updated,
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .error {
+	flex-shrink: 0;
+	margin: 12px 16px 0;
+	border-radius: 4px;
 }
 
 #wpcontent:has(.lw-harbor-ui) + #wpfooter {
@@ -140,8 +152,14 @@
 }
 
 .wrap:has(> .lw-harbor-ui) {
+	flex: 1;
+	min-height: 0;
 	margin: 0;
 	padding: 0;
+}
+
+#lw-harbor-root.lw-harbor-ui {
+	height: 100%;
 }
 
 @layer base {

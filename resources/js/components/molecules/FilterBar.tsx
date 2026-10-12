@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { PRODUCTS } from '@/data/products';
 import { useFilter } from '@/context/filter-context';
-import logoLW from '@img/logo-lw.svg';
+import logoNexcess from '@img/logo-nexcess-lockup.svg';
 
 /**
  * @since 1.0.0
@@ -30,8 +30,8 @@ export function FilterBar() {
     return (
         <div className="flex flex-wrap items-center gap-3">
             <img
-                src={ logoLW }
-                alt={ __( 'Liquid Web Software Manager', '%TEXTDOMAIN%' ) }
+                src={ logoNexcess }
+                alt={ __( 'Nexcess', '%TEXTDOMAIN%' ) }
                 className="w-[130px] shrink-0"
             />
 

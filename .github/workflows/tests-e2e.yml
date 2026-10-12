@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
-    name: "E2E: Software Manager"
+    name: "E2E: Nexcess Licensing"
 
     steps:
       - name: Checkout the repository

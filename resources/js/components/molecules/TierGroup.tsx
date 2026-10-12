@@ -1,18 +1,12 @@
 /**
- * Collapsible accordion grouping locked features under a tier header.
- *
- * Shows the tier name, feature count, a lock indicator, and an upgrade
- * button. Expanding the accordion reveals the locked FeatureRow entries.
+ * A catalog tier's locked features and purchase or activation state.
  *
  * @package LiquidWeb\Harbor
  */
-import { useState } from 'react';
-import { __ } from '@wordpress/i18n';
-import { ChevronRight, ChevronDown, Lock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { __, sprintf } from '@wordpress/i18n';
 import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { PurchaseLink } from '@/components/atoms/PurchaseLink';
-import { FeatureRow } from '@/components/molecules/FeatureRow';
+import { LockedFeatureGroup } from '@/components/molecules/LockedFeatureGroup';
 import type { CatalogTier, Feature } from '@/types/api';
 
 interface TierGroupProps {
@@ -35,49 +29,19 @@ interface TierGroupProps {
 }
 
 /**
- * @since 1.0.1  Added showUnactivated prop to render an Unactivated badge in place of the upgrade button.
- * @since 1.0.0
+ * Keep legacy tier labels and actions when presenting a catalog without a package offer.
  */
 export function TierGroup( { tier, features, forceOpen = false, showUpgrade = true, showUnactivated = false, buttonHref }: TierGroupProps ) {
-    const [ expanded, setExpanded ] = useState( false );
-    const isOpen = expanded || forceOpen;
-    const Chevron = isOpen ? ChevronDown : ChevronRight;
-
     return (
-        <>
-            <div className="w-full flex items-center gap-2 px-4 py-3 bg-muted/50 border-b">
-                <div
-                    onClick={ () => setExpanded( ! expanded ) }
-                    className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                >
-                    <Chevron className="w-4 h-4 shrink-0 text-muted-foreground" />
-                    <span className="font-medium text-sm">
-                        { tier.name } { __( 'Features', '%TEXTDOMAIN%' ) }
-                    </span>
-                    <Badge variant="secondary" className="text-xs">
-                        { features.length }
-                    </Badge>
-                    <Lock className="w-3.5 h-3.5 text-muted-foreground ml-1" />
-                </div>
-                { showUpgrade && buttonHref && (
-                    <PurchaseLink
-                        tierName={ tier.name }
-                        upgradeUrl={ buttonHref }
-                        className="ml-auto shrink-0"
-                    />
-                ) }
-                { showUnactivated && (
-                    <LicenseBadge type="unactivated" className="ml-auto shrink-0 text-xs" />
-                ) }
-            </div>
-
-            { isOpen && features.map( ( feature ) => (
-                <FeatureRow
-                    key={ feature.slug }
-                    feature={ feature }
-                    upgradeTierName={ tier.name }
-                />
-            ) ) }
-        </>
+        <LockedFeatureGroup
+            label={ /* translators: %s: catalog tier name. */ sprintf( __( '%s Features', '%TEXTDOMAIN%' ), tier.name ) }
+            features={ features }
+            forceOpen={ forceOpen }
+            upgradeTierName={ tier.name }
+            action={ ( showUnactivated || ( showUpgrade && buttonHref ) ) ? <>
+                { showUpgrade && buttonHref && <PurchaseLink tierName={ tier.name } upgradeUrl={ buttonHref } /> }
+                { showUnactivated && <LicenseBadge type="unactivated" className="text-xs" /> }
+            </> : undefined }
+        />
     );
 }

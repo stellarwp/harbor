@@ -1,7 +1,7 @@
 import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 import { setLicense, clearLicense, VALID_LICENSE_KEY, MASKED_LICENSE_KEY } from './_helpers/license';
 
-const PRODUCT_NAMES = [ 'GiveWP', 'The Events Calendar', 'LearnDash', 'Kadence' ];
+const PRODUCT_NAMES = [ 'Give', 'The Events Calendar', 'LearnDash', 'Kadence' ];
 
 test.describe( 'Software Manager page', () => {
 	test.beforeAll( async ( { requestUtils } ) => {

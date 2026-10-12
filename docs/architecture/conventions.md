@@ -2,7 +2,7 @@
 
 ## Naming
 
-Harbor is a PHP library bundled by Liquid Web WordPress plugins. Each plugin ships its own vendor-prefixed copy via Strauss. Multiple copies coexist on a single WordPress site and negotiate leadership internally.
+Harbor is a PHP library bundled by Nexcess WordPress plugins. Each plugin ships its own vendor-prefixed copy via Strauss. Multiple copies coexist on a single WordPress site and negotiate leadership internally.
 
 Because of this architecture, identifiers appear in several scopes with different collision risks. The conventions below ensure consistency and avoid conflicts.
 

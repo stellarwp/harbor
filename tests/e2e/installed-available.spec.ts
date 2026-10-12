@@ -89,22 +89,28 @@ test.describe( 'Installed vs Available Features', () => {
 		] );
 	} );
 
-	test( 'hides the license badge on Available cards but shows it once installed', async ( { page, admin, requestUtils } ) => {
-		// Kadence-only key leaves GiveWP unowned, so its header would carry an
-		// "Unlicensed" badge if it were not suppressed in the Available section.
+	test( 'keeps free feature access visible before and after installation without a brand license badge', async ( { page, admin, requestUtils } ) => {
+		// Give core is free even though this key owns no Give plan. Brand headers
+		// no longer assign one license state to every feature in the section.
 		await setLicense( requestUtils, KADENCE_ONLY_LICENSE_KEY );
 		await admin.visitAdminPage( PAGE.admin, PAGE.query );
 
-		const giveBadge = page.locator( 'section#give' ).getByText( 'Unlicensed' );
+		const give = page.locator( 'section#give' );
+		const giveBadge = give.getByText( 'Unlicensed' );
+		const freeBadge = give.getByRole( 'button', { name: /^GiveWP Free$/ } ).getByText( 'Free', { exact: true } );
 
 		await expect( page.getByText( 'Available Features' ) ).toBeVisible( { timeout: 15_000 } );
 		await expect( giveBadge ).toHaveCount( 0 );
 
-		// Installing GiveWP moves it to Installed Features, where the badge shows.
+		await expect( freeBadge ).toBeVisible();
+
+		// Installing Give core changes its location, not how its access is described.
 		await installPlugin( requestUtils, GIVE_PLUGIN_FILE );
 		await page.reload();
 
 		await expect( page.getByText( 'Installed Features' ) ).toBeVisible( { timeout: 15_000 } );
-		await expect( giveBadge ).toBeVisible();
+		await expect( giveBadge ).toHaveCount( 0 );
+		await expect( freeBadge ).toBeVisible();
+		expect( await topY( give ) ).toBeLessThan( await topY( page.getByText( 'Available Features' ) ) );
 	} );
 } );
