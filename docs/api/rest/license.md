@@ -1,6 +1,6 @@
 # License Endpoints
 
-All endpoints require the `manage_options` capability.
+All endpoints require the `manage_options` capability. On multisite, storing or deleting the network-level key (`network=true`) also requires `manage_network_options`; a site administrator gets a 403.
 
 See [Licensing](../../subsystems/licensing.md) for the product entry data model, validation statuses, and key discovery workflows.
 
