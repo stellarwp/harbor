@@ -100,13 +100,13 @@ final class License_Controller extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'store_item' ],
-					'permission_callback' => [ $this, 'check_permissions' ],
+					'permission_callback' => [ $this, 'check_key_write_permissions' ],
 					'args'                => $this->get_store_args(),
 				],
 				[
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => [ $this, 'delete_item' ],
-					'permission_callback' => [ $this, 'check_permissions' ],
+					'permission_callback' => [ $this, 'check_key_write_permissions' ],
 					'args'                => $this->get_network_args(),
 				],
 				'schema' => [ $this, 'get_public_item_schema' ],
@@ -159,6 +159,30 @@ final class License_Controller extends WP_REST_Controller {
 	 */
 	public function check_permissions(): bool {
 		return current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * Permission callback for storing or deleting the key.
+	 *
+	 * The network-level key applies to every site, so changing it also needs
+	 * network-level authority.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 *
+	 * @return bool
+	 */
+	public function check_key_write_permissions( WP_REST_Request $request ): bool {
+		if ( ! $this->check_permissions() ) {
+			return false;
+		}
+
+		if ( is_multisite() && (bool) $request->get_param( 'network' ) ) {
+			return current_user_can( 'manage_network_options' );
+		}
+
+		return true;
 	}
 
 	/**
