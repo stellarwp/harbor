@@ -32,11 +32,13 @@ final class GlobalFunctionsTest extends HarborTestCase {
 
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME );
 	}
 
 	protected function tearDown(): void {
 		delete_option( License_Repository::KEY_OPTION_NAME );
 		delete_option( License_Repository::PRODUCTS_STATE_OPTION_NAME );
+		delete_option( License_Repository::PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME );
 
 		parent::tearDown();
 	}
