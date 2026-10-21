@@ -167,6 +167,19 @@ final class GlobalFunctionsTest extends HarborTestCase {
 		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
 	}
 
+	public function test_is_product_license_active_returns_true_within_grace_period(): void {
+		// No valid cached product, but confirmed active 1 day ago — inside the 30-day grace window.
+		$this->container->get( License_Repository::class )->set_last_active_date( 'give', time() - DAY_IN_SECONDS );
+
+		$this->assertTrue( lw_harbor_is_product_license_active( 'give' ) );
+	}
+
+	public function test_is_product_license_active_returns_false_after_grace_period_expires(): void {
+		$this->container->get( License_Repository::class )->set_last_active_date( 'give', time() - 31 * DAY_IN_SECONDS );
+
+		$this->assertFalse( lw_harbor_is_product_license_active( 'give' ) );
+	}
+
 	public function test_is_product_license_active_returns_false_for_unknown_product(): void {
 		$collection = Product_Collection::from_array(
 			[

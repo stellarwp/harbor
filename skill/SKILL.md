@@ -208,7 +208,7 @@ registered. Check `did_action( 'lw_harbor/loaded' )` before linking to it.
 
 | Function                                       | Signature                           | Purpose                                                                                   |
 | ---------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------- |
-| `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Primary gate for premium behavior / fee waivers.                                          |
+| `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Primary gate for premium behavior / fee waivers. Includes a 30-day grace period.          |
 | `lw_harbor_has_unified_license_key`            | `(): bool`                          | Local check, no remote call.                                                              |
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Stored unified key.                                                                       |
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Host portion of `home_url()`, lowercased.                                                 |

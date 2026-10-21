@@ -82,7 +82,7 @@ class Global_Function_Registry {
 			$version,
 			static function ( string $product ): bool {
 				try {
-					return Config::get_container()->get( License_Repository::class )->is_product_valid( $product );
+					return Config::get_container()->get( License_Repository::class )->is_product_active( $product );
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error checking product license' );
 
