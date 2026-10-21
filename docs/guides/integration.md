@@ -374,7 +374,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 
 | Function                                       | Signature                           | Purpose                                                                                                       |
 | ---------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Check if a specific product slug has an active license.                                                       |
+| `lw_harbor_is_product_license_active`          | `(string $slug): bool`              | Check if a specific product slug has an active license, or had one in the last 30 days.                       |
 | `lw_harbor_has_unified_license_key`            | `(): bool`                          | Check if a unified key is stored locally (no remote call).                                                    |
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |

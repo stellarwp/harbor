@@ -136,7 +136,10 @@ if ( ! function_exists( 'lw_harbor_get_unified_license_key' ) ) {
 
 if ( ! function_exists( 'lw_harbor_is_product_license_active' ) ) {
 	/**
-	 * Whether a specific product has an active, valid license.  *
+	 * Whether a specific product has an active, valid license.
+	 *
+	 * Stays true for 30 days after the product was last confirmed valid, so a
+	 * lapsed renewal or an unreachable licensing server does not cut access off.
 	 *
 	 * @since 1.0.0
 	 *
