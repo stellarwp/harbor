@@ -14,6 +14,7 @@ use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\Traits\With_Uopz;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -130,7 +131,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 			true
 		);
 
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$controller->register_routes();
 	}
 
@@ -476,7 +477,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/features/feature-alpha' );
@@ -768,7 +769,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/features/feature-alpha/update' );
@@ -844,7 +845,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/features/feature-alpha/enable' );
@@ -878,7 +879,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'GET', '/liquidweb/harbor/v1/features' );
@@ -915,7 +916,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/features/feature-alpha/disable' );
@@ -953,7 +954,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$wp_rest_server = new WP_REST_Server();
 		$this->server   = $wp_rest_server;
 
-		$controller = new Feature_Controller( $manager );
+		$controller = new Feature_Controller( $manager, new Resolve_Headers() );
 		$controller->register_routes();
 
 		$request  = new WP_REST_Request( 'POST', '/liquidweb/harbor/v1/features/feature-alpha/enable' );
@@ -971,7 +972,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_schema_uses_one_of_with_three_variants(): void {
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$schema     = $controller->get_item_schema();
 
 		$this->assertArrayHasKey( 'oneOf', $schema );
@@ -984,7 +985,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_schema_plugin_variant_has_all_properties(): void {
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$schema     = $controller->get_item_schema();
 		$plugin     = $schema['oneOf'][0];
 
@@ -992,7 +993,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 		$this->assertTrue( $plugin['additionalProperties'] );
 		$this->assertSame( [ Feature::TYPE_PLUGIN ], $plugin['properties']['type']['enum'] );
 
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
+		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'plugin_file', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version', 'update_requires_wp', 'update_requires_php', 'update_wp_compatible', 'update_php_compatible' ];
 
 		foreach ( $expected as $property ) {
 			$this->assertArrayHasKey( $property, $plugin['properties'], "Missing plugin schema property: {$property}" );
@@ -1007,14 +1008,14 @@ final class Feature_ControllerTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_schema_theme_variant_has_installable_properties(): void {
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$schema     = $controller->get_item_schema();
 		$theme      = $schema['oneOf'][1];
 
 		$this->assertSame( 'theme', $theme['title'] );
 		$this->assertSame( [ Feature::TYPE_THEME ], $theme['properties']['type']['enum'] );
 
-		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version' ];
+		$expected = [ 'slug', 'name', 'description', 'product', 'tier', 'type', 'is_available', 'access_sources', 'in_catalog_tier', 'documentation_url', 'is_enabled', 'release_date', 'version', 'changelog', 'wporg_slug', 'installed_version', 'update_version', 'update_requires_wp', 'update_requires_php', 'update_wp_compatible', 'update_php_compatible' ];
 
 		foreach ( $expected as $property ) {
 			$this->assertArrayHasKey( $property, $theme['properties'], "Missing theme schema property: {$property}" );
@@ -1030,7 +1031,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_schema_has_two_variants(): void {
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$schema     = $controller->get_item_schema();
 
 		$this->assertCount( 3, $schema['oneOf'] );
@@ -1045,7 +1046,7 @@ final class Feature_ControllerTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_schema_access_sources_match_resolved_sources(): void {
-		$controller = new Feature_Controller( $this->manager );
+		$controller = new Feature_Controller( $this->manager, new Resolve_Headers() );
 		$schema     = $controller->get_item_schema();
 		$resolved   = [
 			[

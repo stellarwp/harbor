@@ -6,6 +6,7 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Resource;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_Error;
 use WP_REST_Controller;
@@ -51,16 +52,29 @@ class Feature_Controller extends WP_REST_Controller {
 	private Manager $manager;
 
 	/**
+	 * Resolves the requirement headers of a feature's pending update from WordPress's update transients.
+	 *
+	 * @since TBD
+	 *
+	 * @var Resolve_Headers
+	 */
+	private Resolve_Headers $resolve_headers;
+
+	/**
 	 * Constructor for the feature REST API controller.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Manager $manager The feature manager.
+	 * @since TBD Takes the update repository.
+	 *
+	 * @param Manager         $manager         The feature manager.
+	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
 	 *
 	 * @return void
 	 */
-	public function __construct( Manager $manager ) {
-		$this->manager = $manager;
+	public function __construct( Manager $manager, Resolve_Headers $resolve_headers ) {
+		$this->manager         = $manager;
+		$this->resolve_headers = $resolve_headers;
 	}
 
 	/**
@@ -196,7 +210,7 @@ class Feature_Controller extends WP_REST_Controller {
 		$data = [];
 
 		foreach ( $features as $feature ) {
-			$data[] = Feature_Resource::from_feature( $feature )->to_array();
+			$data[] = Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array();
 		}
 
 		return new WP_REST_Response( $data );
@@ -229,7 +243,7 @@ class Feature_Controller extends WP_REST_Controller {
 			);
 		}
 
-		return new WP_REST_Response( Feature_Resource::from_feature( $feature )->to_array() );
+		return new WP_REST_Response( Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array() );
 	}
 
 	/**
@@ -251,7 +265,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature )->to_array()
+			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
 		);
 	}
 
@@ -273,7 +287,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature )->to_array()
+			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
 		);
 	}
 
@@ -295,7 +309,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature )->to_array()
+			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
 		);
 	}
 
@@ -396,39 +410,63 @@ class Feature_Controller extends WP_REST_Controller {
 		];
 
 		$installable_properties = [
-			'release_date'      => [
+			'release_date'          => [
 				'description' => __( 'Release date of the latest version, or null if not applicable.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'version'           => [
+			'version'               => [
 				'description' => __( 'Latest available version from the catalog, or null. Only present for installable features.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'changelog'         => [
+			'changelog'             => [
 				'description' => __( 'Changelog HTML for the latest version, or null. Only present for installable features.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'wporg_slug'        => [
+			'wporg_slug'            => [
 				'description' => __( 'The WordPress.org slug for plugins_api() lookups, or null if not on WordPress.org.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'installed_version' => [
+			'installed_version'     => [
 				'description' => __( 'The currently installed version, or null if not installed.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'update_version'    => [
+			'update_version'        => [
 				'description' => __( 'Version available in the WordPress update transient, or null when no update is pending.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'update_requires_wp'    => [
+				'description' => __( 'Minimum WordPress version the pending update requires, or null when there is no update or it declares none.', '%TEXTDOMAIN%' ),
+				'type'        => [ 'string', 'null' ],
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'update_requires_php'   => [
+				'description' => __( 'Minimum PHP version the pending update requires, or null when there is no update or it declares none.', '%TEXTDOMAIN%' ),
+				'type'        => [ 'string', 'null' ],
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'update_wp_compatible'  => [
+				'description' => __( 'Whether the site\'s WordPress version meets the pending update\'s requirement. Returns true if there is no update, since the installed version already runs on the site.', '%TEXTDOMAIN%' ),
+				'type'        => 'boolean',
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'update_php_compatible' => [
+				'description' => __( 'Whether the site\'s PHP version meets the pending update\'s requirement. Returns true if there is no update, since the installed version already runs on the site.', '%TEXTDOMAIN%' ),
+				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],

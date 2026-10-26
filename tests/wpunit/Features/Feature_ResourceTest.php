@@ -6,6 +6,7 @@ use LiquidWeb\Harbor\Features\Feature_Resource;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 
 final class Feature_ResourceTest extends HarborTestCase {
 
@@ -64,7 +65,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_plugin_update_version_null_when_transient_absent(): void {
-		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -77,7 +78,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_plugin_update_version_null_when_not_in_transient(): void {
 		$this->set_plugin_transient( 'other-plugin/other-plugin.php', '2.0.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -94,7 +95,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_plugin_update_version_from_transient(): void {
 		$this->set_plugin_transient( 'stellar-export/stellar-export.php', '2.1.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
 
 		$this->assertSame( '2.1.0', $resource->get_update_version() );
 	}
@@ -109,7 +110,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_theme_update_version_null_when_transient_absent(): void {
-		$resource = Feature_Resource::from_feature( $this->make_theme() );
+		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -122,7 +123,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_theme_update_version_null_when_not_in_transient(): void {
 		$this->set_theme_transient( 'other-theme', '3.0.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_theme() );
+		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -139,7 +140,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_theme_update_version_from_transient(): void {
 		$this->set_theme_transient( 'kadence', '3.2.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_theme() );
+		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
 
 		$this->assertSame( '3.2.0', $resource->get_update_version() );
 	}
@@ -156,7 +157,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_to_array_includes_update_version(): void {
 		$this->set_plugin_transient( 'stellar-export/stellar-export.php', '2.5.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
 		$data     = $resource->to_array();
 
 		$this->assertArrayHasKey( 'update_version', $data );
@@ -171,11 +172,88 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_to_array_includes_null_update_version_when_no_update(): void {
-		$resource = Feature_Resource::from_feature( $this->make_plugin() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
 		$data     = $resource->to_array();
 
 		$this->assertArrayHasKey( 'update_version', $data );
 		$this->assertNull( $data['update_version'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// Update requirements
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Tests that to_array() reports the requirements of the pending update and whether the site meets them.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_includes_update_requirements(): void {
+		$transient           = new \stdClass();
+		$transient->response = [
+			'stellar-export/stellar-export.php' => (object) [
+				'new_version'  => '2.5.0',
+				'requires'     => '99.0',
+				'requires_php' => '1.0',
+			],
+		];
+		set_site_transient( 'update_plugins', $transient );
+
+		$data = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() )->to_array();
+
+		$this->assertSame( '2.5.0', $data['update_version'] );
+		$this->assertSame( '99.0', $data['update_requires_wp'] );
+		$this->assertSame( '1.0', $data['update_requires_php'] );
+		$this->assertFalse( $data['update_wp_compatible'] );
+		$this->assertTrue( $data['update_php_compatible'] );
+	}
+
+	/**
+	 * Tests that to_array() reports no requirements and returns true for compatibility when there is no update.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_update_requirements_without_an_update(): void {
+		$data = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() )->to_array();
+
+		$this->assertNull( $data['update_version'] );
+		$this->assertNull( $data['update_requires_wp'] );
+		$this->assertNull( $data['update_requires_php'] );
+		$this->assertTrue( $data['update_wp_compatible'] );
+		$this->assertTrue( $data['update_php_compatible'] );
+	}
+
+	/**
+	 * Tests that a newer WordPress.org update listed under `no_update` because the site's WordPress is too old is reported.
+	 *
+	 * @return void
+	 */
+	public function test_update_version_from_no_update_when_requirements_are_unmet(): void {
+		$transient            = new \stdClass();
+		$transient->response  = [];
+		$transient->no_update = [
+			'stellar-export/stellar-export.php' => (object) [
+				'id'          => 'w.org/plugins/stellar-export',
+				'new_version' => '3.0.0',
+				'requires'    => '99.0',
+			],
+		];
+		set_site_transient( 'update_plugins', $transient );
+
+		$plugin = Plugin::from_array(
+			[
+				'slug'              => 'stellar-export',
+				'name'              => 'Stellar Export',
+				'plugin_file'       => 'stellar-export/stellar-export.php',
+				'installed_version' => '2.0.0',
+				'is_available'      => true,
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+
+		$this->assertSame( '3.0.0', $data['update_version'] );
+		$this->assertFalse( $data['update_wp_compatible'] );
 	}
 
 	// -------------------------------------------------------------------------
