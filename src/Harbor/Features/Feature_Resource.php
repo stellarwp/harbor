@@ -101,16 +101,26 @@ final class Feature_Resource {
 		/** @var Resolve_Headers $resolve_headers */
 		$resolve_headers = Config::get_container()->get( Resolve_Headers::class );
 
-		$update = $resolve_headers( $feature );
+		/**
+		 * From the update transient: the feature's pending update entry. Harbor
+		 * writes the entries of its own features from the catalog, and
+		 * WordPress.org writes the entries of WordPress.org-hosted features.
+		 */
+		$update_headers = $resolve_headers( $feature );
 
-		if ( $update !== null ) {
-			return new self( $feature, $update->get_version(), $update );
+		if ( $update_headers !== null ) {
+			return new self( $feature, $update_headers->get_version(), $update_headers );
 		}
 
+		/**
+		 * From the catalog itself: the catalog version, which is the version
+		 * installing the feature downloads. Only used when the feature is not
+		 * installed, since it has no entry in the update transient then.
+		 */
 		$installed_version = $feature->to_array()['installed_version'] ?? null;
-		$install           = empty( $installed_version ) ? $resolve_headers->from_catalog( $feature ) : null;
+		$catalog_headers   = empty( $installed_version ) ? $resolve_headers->from_catalog( $feature ) : null;
 
-		return new self( $feature, null, $install );
+		return new self( $feature, null, $catalog_headers );
 	}
 
 	/**
