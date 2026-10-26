@@ -6530,14 +6530,15 @@ function toUnmet(version, wpCompatible, requiresWp, phpCompatible, requiresPhp) 
  * @since TBD
  */
 function getUnmetUpdateRequirements(feature) {
-  return toUnmet(feature.update_version, feature.update_wp_compatible, feature.update_requires_wp, feature.update_php_compatible, feature.update_requires_php);
+  return toUnmet(feature.update_version, feature.wp_compatible, feature.requires_wp, feature.php_compatible, feature.requires_php);
 }
 
 /**
  * The requirements of the catalog version that the site does not meet, for a
  * feature that is not installed, or null when it is installed or the site
  * meets them all. The catalog version is the version installing the feature
- * downloads.
+ * downloads. The REST API reports its requirements in the same fields as a
+ * pending update's, since a feature that is not installed has no update.
  *
  * @since TBD
  */
