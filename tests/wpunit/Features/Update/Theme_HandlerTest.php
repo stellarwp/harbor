@@ -351,6 +351,61 @@ final class Theme_HandlerTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that the update entry carries Harbor's id and the release's WordPress and PHP requirements.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_sets_id_and_requirements_on_the_update_entry(): void {
+		$handler = $this->handler_with_feature(
+			[
+				'my-theme' => [
+					'version'      => '2.0.0',
+					'package'      => 'https://example.com/my-theme.zip',
+					'has_update'   => true,
+					'requires'     => '6.6',
+					'requires_php' => '7.4',
+					'tested'       => '6.9',
+				],
+			]
+		);
+
+		$result = $handler->filter_update_check( new stdClass() );
+		$entry  = $result->response['my-theme'];
+
+		$this->assertSame( 'stellarwp/themes/my-theme', $entry['id'] );
+		$this->assertSame( '6.6', $entry['requires'] );
+		$this->assertSame( '7.4', $entry['requires_php'] );
+		$this->assertSame( '6.9', $entry['tested'] );
+	}
+
+	/**
+	 * Tests that filter_themes_api reports the release's WordPress and PHP requirements.
+	 *
+	 * @return void
+	 */
+	public function test_it_returns_requirements_in_wp_format(): void {
+		$handler = $this->handler_with_feature(
+			[
+				'my-theme' => [
+					'version'      => '2.0.0',
+					'requires'     => '6.6',
+					'requires_php' => '7.4',
+					'tested'       => '6.9',
+				],
+			]
+		);
+
+		$args       = new stdClass();
+		$args->slug = 'my-theme';
+
+		$result = $handler->filter_themes_api( false, 'theme_information', $args );
+
+		$this->assertSame( '6.6', $result->requires );
+		$this->assertSame( '7.4', $result->requires_php );
+		$this->assertSame( '6.9', $result->tested );
+	}
+
+	/**
 	 * Tests filter_update_check adds to transient->no_update when no newer version exists.
 	 *
 	 * @return void

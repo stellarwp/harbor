@@ -379,4 +379,44 @@ final class ThemeTest extends HarborTestCase {
 
 		$this->assertSame( [ 'description' => self::DESCRIPTION ], $data['sections'] );
 	}
+
+	/**
+	 * Tests that get_update_data() passes the catalog's WordPress and PHP requirements through.
+	 *
+	 * @return void
+	 */
+	public function test_get_update_data_includes_catalog_requirements(): void {
+		$catalog_feature = Catalog_Feature::from_array(
+			[
+				'slug'         => self::SLUG,
+				'kind'         => 'theme',
+				'version'      => '2.0.0',
+				'wp_requires'  => '6.6',
+				'php_requires' => '7.4',
+				'wp_tested'    => '6.9',
+			]
+		);
+
+		$url_builder = $this->createMock( Download_Url_Builder::class );
+		$url_builder->method( 'build' )->willReturn( 'https://example.com/download/' . self::SLUG );
+
+		$data = $this->make_feature()->get_update_data( $catalog_feature, $url_builder );
+
+		$this->assertSame( '6.6', $data['requires'] );
+		$this->assertSame( '7.4', $data['requires_php'] );
+		$this->assertSame( '6.9', $data['tested'] );
+	}
+
+	/**
+	 * Tests that get_update_data() uses empty strings when the catalog has no requirements.
+	 *
+	 * @return void
+	 */
+	public function test_get_update_data_uses_empty_requirements_when_catalog_has_none(): void {
+		$data = $this->get_update_data_for_changelog( null );
+
+		$this->assertSame( '', $data['requires'] );
+		$this->assertSame( '', $data['requires_php'] );
+		$this->assertSame( '', $data['tested'] );
+	}
 }

@@ -407,6 +407,70 @@ final class Plugin_HandlerTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that the update entry carries the release's WordPress and PHP requirements, or empty strings when it has none.
+	 *
+	 * @return void
+	 */
+	public function test_filter_update_check_sets_requirements_on_the_update_entry(): void {
+		$update_data = [
+			'my-plugin' => [
+				'version'      => '2.0.0',
+				'package'      => 'https://example.com/my-plugin.zip',
+				'plugin_file'  => 'my-plugin/my-plugin.php',
+				'has_update'   => true,
+				'requires'     => '6.6',
+				'requires_php' => '7.4',
+				'tested'       => '6.9',
+			],
+		];
+
+		$result = $this->handler_with_feature( $update_data )->filter_update_check( new stdClass() );
+		$entry  = $result->response['my-plugin/my-plugin.php'];
+
+		$this->assertSame( 'stellarwp/plugins/my-plugin', $entry->id );
+		$this->assertSame( '6.6', $entry->requires );
+		$this->assertSame( '7.4', $entry->requires_php );
+		$this->assertSame( '6.9', $entry->tested );
+
+		unset( $update_data['my-plugin']['requires'], $update_data['my-plugin']['requires_php'], $update_data['my-plugin']['tested'] );
+
+		$result = $this->handler_with_feature( $update_data )->filter_update_check( new stdClass() );
+		$entry  = $result->response['my-plugin/my-plugin.php'];
+
+		$this->assertSame( '', $entry->requires );
+		$this->assertSame( '', $entry->requires_php );
+		$this->assertSame( '', $entry->tested );
+	}
+
+	/**
+	 * Tests that filter_plugins_api reports the release's WordPress and PHP requirements.
+	 *
+	 * @return void
+	 */
+	public function test_it_returns_requirements_in_wp_format(): void {
+		$handler = $this->handler_with_feature(
+			[
+				'my-plugin' => [
+					'version'      => '2.0.0',
+					'plugin_file'  => 'my-plugin/my-plugin.php',
+					'requires'     => '6.6',
+					'requires_php' => '7.4',
+					'tested'       => '6.9',
+				],
+			]
+		);
+
+		$args       = new stdClass();
+		$args->slug = 'my-plugin';
+
+		$result = $handler->filter_plugins_api( false, 'plugin_information', $args );
+
+		$this->assertSame( '6.6', $result->requires );
+		$this->assertSame( '7.4', $result->requires_php );
+		$this->assertSame( '6.9', $result->tested );
+	}
+
+	/**
 	 * Tests filter_update_check adds to transient->no_update when no newer version exists.
 	 *
 	 * @return void

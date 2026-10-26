@@ -115,6 +115,9 @@ final class Theme extends Feature implements Installable {
 			'url'               => $this->get_documentation_url(),
 			'author'            => '',
 			'sections'          => $sections,
+			'requires'          => $catalog_feature->get_wp_requires() ?? '',
+			'requires_php'      => $catalog_feature->get_php_requires() ?? '',
+			'tested'            => $catalog_feature->get_wp_tested() ?? '',
 			'installed_version' => $installed_version,
 			'has_update'        => $installed_version !== '' && $catalog_version !== '' && version_compare( $catalog_version, $installed_version, '>' ),
 		];
