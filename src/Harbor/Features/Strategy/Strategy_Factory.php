@@ -8,7 +8,6 @@ use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
-use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 
 /**
  * Factory that creates Strategy instances for features.
@@ -19,26 +18,6 @@ use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
  * @since 1.0.0
  */
 class Strategy_Factory {
-
-	/**
-	 * Resolves the requirement headers of a feature's pending update from WordPress's update transients.
-	 *
-	 * @since TBD
-	 *
-	 * @var Resolve_Headers
-	 */
-	private Resolve_Headers $resolve_headers;
-
-	/**
-	 * Constructor.
-	 *
-	 * @since TBD
-	 *
-	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update for the installable strategies.
-	 */
-	public function __construct( Resolve_Headers $resolve_headers ) {
-		$this->resolve_headers = $resolve_headers;
-	}
 
 	/**
 	 * Creates the correct strategy for a given feature.
@@ -60,7 +39,7 @@ class Strategy_Factory {
 					);
 				}
 
-				return new Plugin_Strategy( $feature, $this->resolve_headers );
+				return new Plugin_Strategy( $feature );
 			case Feature::TYPE_THEME:
 				if ( ! $feature instanceof Theme ) {
 					throw new InvalidArgumentException(
@@ -68,7 +47,7 @@ class Strategy_Factory {
 					);
 				}
 
-				return new Theme_Strategy( $feature, $this->resolve_headers );
+				return new Theme_Strategy( $feature );
 			case Feature::TYPE_SERVICE:
 				if ( ! $feature instanceof Service ) {
 					throw new InvalidArgumentException(

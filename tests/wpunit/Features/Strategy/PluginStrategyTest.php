@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Strategy\Plugin_Strategy;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
-use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use WP_Error;
 use WP_Upgrader;
 
@@ -53,7 +52,7 @@ final class PluginStrategyTest extends HarborTestCase {
 		}
 
 		$this->feature  = $this->make_plugin_feature();
-		$this->strategy = new Plugin_Strategy( $this->feature, new Resolve_Headers() );
+		$this->strategy = new Plugin_Strategy( $this->feature );
 	}
 
 	protected function tearDown(): void {
@@ -382,7 +381,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 		try {
 			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
 			$this->assertWPError( $result );
@@ -417,7 +416,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 		try {
 			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
 			$this->assertWPError( $result );
@@ -461,7 +460,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 		try {
 			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
 			$this->assertWPError( $result );
@@ -503,7 +502,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 		try {
 			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
 			$this->assertWPError( $result );
@@ -536,7 +535,7 @@ final class PluginStrategyTest extends HarborTestCase {
 
 		try {
 			$feature  = $this->make_plugin_feature( $plugin_slug, $plugin_file );
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 			$result   = $strategy->enable();
 
 			$this->assertWPError( $result );
@@ -853,7 +852,7 @@ final class PluginStrategyTest extends HarborTestCase {
 				'requires_wp'  => '99.0',
 			]
 		);
-		$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+		$strategy = new Plugin_Strategy( $feature );
 		$result   = $strategy->enable();
 
 		remove_filter( 'upgrader_pre_download', $counter );
@@ -890,7 +889,7 @@ final class PluginStrategyTest extends HarborTestCase {
 					'requires_wp'  => '99.0',
 				]
 			);
-			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+			$strategy = new Plugin_Strategy( $feature );
 
 			$this->assertTrue( $strategy->enable() );
 		} finally {

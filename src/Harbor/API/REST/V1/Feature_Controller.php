@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Feature_Resource;
 use LiquidWeb\Harbor\Features\Manager;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_Error;
 use WP_REST_Controller;
@@ -52,29 +51,16 @@ class Feature_Controller extends WP_REST_Controller {
 	private Manager $manager;
 
 	/**
-	 * Resolves the requirement headers of a feature's pending update from WordPress's update transients.
-	 *
-	 * @since TBD
-	 *
-	 * @var Resolve_Headers
-	 */
-	private Resolve_Headers $resolve_headers;
-
-	/**
 	 * Constructor for the feature REST API controller.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @since TBD Takes the update repository.
-	 *
-	 * @param Manager         $manager         The feature manager.
-	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
+	 * @param Manager $manager The feature manager.
 	 *
 	 * @return void
 	 */
-	public function __construct( Manager $manager, Resolve_Headers $resolve_headers ) {
-		$this->manager         = $manager;
-		$this->resolve_headers = $resolve_headers;
+	public function __construct( Manager $manager ) {
+		$this->manager = $manager;
 	}
 
 	/**
@@ -210,7 +196,7 @@ class Feature_Controller extends WP_REST_Controller {
 		$data = [];
 
 		foreach ( $features as $feature ) {
-			$data[] = Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array();
+			$data[] = Feature_Resource::from_feature( $feature )->to_array();
 		}
 
 		return new WP_REST_Response( $data );
@@ -243,7 +229,7 @@ class Feature_Controller extends WP_REST_Controller {
 			);
 		}
 
-		return new WP_REST_Response( Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array() );
+		return new WP_REST_Response( Feature_Resource::from_feature( $feature )->to_array() );
 	}
 
 	/**
@@ -265,7 +251,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
+			Feature_Resource::from_feature( $feature )->to_array()
 		);
 	}
 
@@ -287,7 +273,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
+			Feature_Resource::from_feature( $feature )->to_array()
 		);
 	}
 
@@ -309,7 +295,7 @@ class Feature_Controller extends WP_REST_Controller {
 		}
 
 		return new WP_REST_Response(
-			Feature_Resource::from_feature( $feature, $this->resolve_headers )->to_array()
+			Feature_Resource::from_feature( $feature )->to_array()
 		);
 	}
 

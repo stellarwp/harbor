@@ -2,8 +2,8 @@
 
 namespace LiquidWeb\Harbor\Features\Strategy;
 
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Error_Code;
-use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Update\Requirements\Headers;
 use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Cast;
@@ -42,30 +42,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * @since 1.0.0
 	 */
 	protected const LOCK_KEY = 'lw_harbor_install_lock';
-
-	/**
-	 * Resolves the requirement headers of a feature's pending update from WordPress's update transients.
-	 *
-	 * @since TBD
-	 *
-	 * @var Resolve_Headers
-	 */
-	protected Resolve_Headers $resolve_headers;
-
-	/**
-	 * Construct the strategy.
-	 *
-	 * @since TBD
-	 *
-	 * @param Feature         $feature         The feature this strategy operates on.
-	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
-	 */
-	public function __construct( Feature $feature, Resolve_Headers $resolve_headers ) {
-		parent::__construct( $feature );
-
-		$this->resolve_headers = $resolve_headers;
-	}
-
 
 	// ── Abstract hooks ──────────────────────────────────────────────────
 
@@ -200,7 +176,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		 * when it is activated.
 		 */
 		if ( ! $this->check_installed() ) {
-			$headers = $this->resolve_headers->from_catalog( $this->feature );
+			$headers = $this->get_resolve_headers()->from_catalog( $this->feature );
 
 			if ( $headers !== null && ! $headers->is_met() ) {
 				$error = $headers->to_wp_error( $this->feature->get_name(), Error_Code::REQUIREMENTS_NOT_MET );
@@ -571,7 +547,20 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * @return Headers|null Null when WordPress has no update for the extension.
 	 */
 	protected function get_update_headers(): ?Headers {
-		return ( $this->resolve_headers )( $this->feature );
+		return ( $this->get_resolve_headers() )( $this->feature );
+	}
+
+	/**
+	 * Get the service that resolves the requirement headers of a feature's
+	 * pending update, or of its catalog version, from Harbor's container.
+	 *
+	 * @since TBD
+	 *
+	 * @return Resolve_Headers
+	 */
+	protected function get_resolve_headers(): Resolve_Headers {
+		/** @var Resolve_Headers */
+		return Config::get_container()->get( Resolve_Headers::class );
 	}
 
 	/**

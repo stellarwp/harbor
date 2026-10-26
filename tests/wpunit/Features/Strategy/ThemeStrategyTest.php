@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
-use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use WP_Error;
 use WP_Upgrader;
 
@@ -59,7 +58,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 		}
 
 		$this->feature             = $this->make_theme_feature();
-		$this->strategy            = new Theme_Strategy( $this->feature, new Resolve_Headers() );
+		$this->strategy            = new Theme_Strategy( $this->feature );
 		$this->original_stylesheet = get_option( 'stylesheet', '' );
 	}
 
@@ -455,7 +454,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 				'requires_php' => '99.0',
 			]
 		);
-		$strategy = new Theme_Strategy( $feature, new Resolve_Headers() );
+		$strategy = new Theme_Strategy( $feature );
 		$result   = $strategy->enable();
 
 		remove_filter( 'themes_api', $counter, 1 );

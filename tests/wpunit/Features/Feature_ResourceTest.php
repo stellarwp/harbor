@@ -6,7 +6,6 @@ use LiquidWeb\Harbor\Features\Feature_Resource;
 use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
-use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 
 final class Feature_ResourceTest extends HarborTestCase {
 
@@ -65,7 +64,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_plugin_update_version_null_when_transient_absent(): void {
-		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -78,7 +77,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_plugin_update_version_null_when_not_in_transient(): void {
 		$this->set_plugin_transient( 'other-plugin/other-plugin.php', '2.0.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -95,7 +94,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_plugin_update_version_from_transient(): void {
 		$this->set_plugin_transient( 'stellar-export/stellar-export.php', '2.1.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
 
 		$this->assertSame( '2.1.0', $resource->get_update_version() );
 	}
@@ -110,7 +109,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_theme_update_version_null_when_transient_absent(): void {
-		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_theme() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -123,7 +122,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_theme_update_version_null_when_not_in_transient(): void {
 		$this->set_theme_transient( 'other-theme', '3.0.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_theme() );
 
 		$this->assertNull( $resource->get_update_version() );
 	}
@@ -140,7 +139,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_theme_update_version_from_transient(): void {
 		$this->set_theme_transient( 'kadence', '3.2.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_theme() );
 
 		$this->assertSame( '3.2.0', $resource->get_update_version() );
 	}
@@ -157,7 +156,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	public function test_to_array_includes_update_version(): void {
 		$this->set_plugin_transient( 'stellar-export/stellar-export.php', '2.5.0' );
 
-		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
 		$data     = $resource->to_array();
 
 		$this->assertArrayHasKey( 'update_version', $data );
@@ -172,7 +171,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_to_array_includes_null_update_version_when_no_update(): void {
-		$resource = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() );
+		$resource = Feature_Resource::from_feature( $this->make_plugin() );
 		$data     = $resource->to_array();
 
 		$this->assertArrayHasKey( 'update_version', $data );
@@ -199,7 +198,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 		];
 		set_site_transient( 'update_plugins', $transient );
 
-		$data = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $this->make_plugin() )->to_array();
 
 		$this->assertSame( '2.5.0', $data['update_version'] );
 		$this->assertSame( '99.0', $data['requires_wp'] );
@@ -214,7 +213,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 	 * @return void
 	 */
 	public function test_to_array_requirements_without_an_update_or_catalog_version(): void {
-		$data = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $this->make_theme() )->to_array();
 
 		$this->assertNull( $data['update_version'] );
 		$this->assertNull( $data['requires_wp'] );
@@ -240,14 +239,14 @@ final class Feature_ResourceTest extends HarborTestCase {
 			]
 		);
 
-		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
 
 		$this->assertSame( '99.0', $data['requires_wp'] );
 		$this->assertNull( $data['requires_php'] );
 		$this->assertFalse( $data['wp_compatible'] );
 		$this->assertTrue( $data['php_compatible'] );
 
-		$data = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $this->make_plugin() )->to_array();
 
 		$this->assertTrue( $data['wp_compatible'] );
 		$this->assertTrue( $data['php_compatible'] );
@@ -270,7 +269,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 			]
 		);
 
-		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
 
 		$this->assertNull( $data['update_version'] );
 		$this->assertNull( $data['requires_wp'] );
@@ -304,7 +303,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 			]
 		);
 
-		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
 
 		$this->assertSame( '3.0.0', $data['update_version'] );
 		$this->assertFalse( $data['wp_compatible'] );

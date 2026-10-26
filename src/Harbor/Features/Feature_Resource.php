@@ -2,6 +2,7 @@
 
 namespace LiquidWeb\Harbor\Features;
 
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Types\Feature;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Update\Requirements\Headers;
@@ -88,15 +89,17 @@ final class Feature_Resource {
 	 * @since 1.0.0
 	 * @since TBD Resolves the requirement headers of the pending update, or of the catalog version when the feature is not installed, with Resolve_Headers.
 	 *
-	 * @param Feature         $feature         The resolved feature.
-	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
+	 * @param Feature $feature The resolved feature.
 	 *
 	 * @return self
 	 */
-	public static function from_feature( Feature $feature, Resolve_Headers $resolve_headers ) {
+	public static function from_feature( Feature $feature ) {
 		if ( $feature instanceof Service ) {
 			return new self( $feature, null );
 		}
+
+		/** @var Resolve_Headers $resolve_headers */
+		$resolve_headers = Config::get_container()->get( Resolve_Headers::class );
 
 		$update = $resolve_headers( $feature );
 
