@@ -1,0 +1,2120 @@
+[
+  {
+    "product_id": "",
+    "product_slug": "kadence",
+    "product_name": "Kadence",
+    "tiers": [
+      {
+        "name": "Free",
+        "rank": 0,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=kadence-free&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/kadence/free/",
+        "tier_slug": "free"
+      },
+      {
+        "name": "Basic",
+        "rank": 1,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=kadence-basic&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/kadence/basic/",
+        "tier_slug": "basic"
+      },
+      {
+        "name": "Pro",
+        "rank": 2,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=kadence-pro&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/kadence/pro/",
+        "tier_slug": "pro"
+      },
+      {
+        "name": "Agency",
+        "rank": 3,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=kadence-agency&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/kadence/agency/",
+        "tier_slug": "agency"
+      }
+    ],
+    "features": [
+      {
+        "minimum_tier": "free",
+        "name": "Kadence Blocks",
+        "description": "A free Gutenberg block library for building pages with Kadence.",
+        "category": "blocks",
+        "authors": [
+          "Kadence WP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "3.4.6",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kadence-blocks",
+        "kind": "plugin",
+        "wporg_slug": "kadence-blocks",
+        "top_dir": "kadence-blocks",
+        "main_file": "kadence-blocks.php",
+        "release_date": "2025-11-20",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "free",
+        "name": "Kadence Theme",
+        "description": "A lightweight, performant WordPress theme for site building.",
+        "category": "theme",
+        "authors": [
+          "Kadence WP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "3.3.8",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kadence",
+        "kind": "theme",
+        "wporg_slug": "kadence",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Blocks Pro",
+        "description": "Premium Gutenberg blocks for advanced page building.",
+        "category": "blocks",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "999.0.0",
+        "changelog": "<h4>999.0.0</h4><ul><li>Fixture release whose requirements no site meets.</li></ul>",
+        "slug": "kad-blocks-pro",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-blocks-pro",
+        "main_file": "kadence-blocks-pro.php",
+        "release_date": "2026-10-26",
+        "homepage": null,
+        "wp_tested": "6.9",
+        "wp_requires": "100.0.1"
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Theme Kit Pro",
+        "description": "Advanced theme customization options and header/footer builder.",
+        "category": "theme",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "999.0.0",
+        "changelog": "<h4>999.0.0</h4><ul><li>Fixture release whose requirements no site meets.</li></ul>",
+        "slug": "kad-theme-kit-pro",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-pro",
+        "main_file": "kadence-pro.php",
+        "release_date": "2026-10-26",
+        "homepage": null,
+        "wp_tested": "6.9",
+        "php_requires": "100.0.1"
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Shop Kit",
+        "description": "WooCommerce enhancements — product galleries, swatches, quick view, and more.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.8.6",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kad-shop-kit",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-woo-extras",
+        "main_file": "kadence-woo-extras.php",
+        "release_date": "2025-11-10",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Creative Kit",
+        "description": "Advanced design tools including animations and effects.",
+        "category": "design",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.2.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kad-creative-kit",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-creative-kit",
+        "main_file": "kadence-creative-kit.php",
+        "release_date": "2025-09-25",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Insights (A/B Testing)",
+        "description": "Run A/B tests on your content to optimize conversions.",
+        "category": "analytics",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.1.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kad-insights",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-insights",
+        "main_file": "kadence-insights.php",
+        "release_date": "2025-10-05",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Pattern Hub",
+        "description": "Access to premium design patterns and starter templates.",
+        "category": "design",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "kad-pattern-hub",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kad-pattern-hub",
+        "main_file": "kad-pattern-hub.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Conversions",
+        "description": "Popups, slide-ins, and banners for conversion optimization.",
+        "category": "marketing",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.5.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kad-conversions",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-conversions",
+        "main_file": "kadence-conversions.php",
+        "release_date": "2025-11-01",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Galleries",
+        "description": "Advanced image and video gallery blocks.",
+        "category": "blocks",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.3.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "kad-galleries",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kadence-galleries",
+        "main_file": "kadence-galleries.php",
+        "release_date": "2025-10-12",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Captcha",
+        "description": "Spam protection for forms with reCAPTCHA and hCaptcha.",
+        "category": "forms",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "kad-captcha",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kad-captcha",
+        "main_file": "kad-captcha.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Simple Share",
+        "description": "Social sharing buttons for posts and pages.",
+        "category": "social",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "kad-simple-share",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kad-simple-share",
+        "main_file": "kad-simple-share.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Custom Fonts",
+        "description": "Upload and use custom fonts across your site.",
+        "category": "design",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "kad-custom-fonts",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kad-custom-fonts",
+        "main_file": "kad-custom-fonts.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Reading Time",
+        "description": "Display estimated reading time on posts.",
+        "category": "content",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "kad-reading-time",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "kad-reading-time",
+        "main_file": "kad-reading-time.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Solid Security Pro",
+        "description": "Comprehensive WordPress security with malware scanning, 2FA, and brute force protection.",
+        "category": "security",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "9.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "ithemes-security-pro",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "ithemes-security-pro-pro",
+        "main_file": "ithemes-security-pro-pro.php",
+        "release_date": "2025-11-18",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Solid Backups",
+        "description": "Automated WordPress backups with cloud storage and one-click restore.",
+        "category": "security",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "9.1.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "solid-backups",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "solid-backups",
+        "main_file": "solid-backups.php",
+        "release_date": "2025-10-28",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Solid Central",
+        "description": "Manage multiple WordPress sites from one dashboard.",
+        "category": "management",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "2.1.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "solid-central",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "solid-central",
+        "main_file": "solid-central.php",
+        "release_date": "2025-09-14",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Solid Performance",
+        "description": "Caching and performance optimization for WordPress.",
+        "category": "performance",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.3.7",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "solid-performance",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "solid-performance",
+        "main_file": "solid-performance.php",
+        "release_date": "2025-11-05",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Solid Mail",
+        "description": "Reliable email delivery with SMTP and email logging.",
+        "category": "email",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.0.4",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "solid-mail",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "solid-mail",
+        "main_file": "solid-mail.php",
+        "release_date": "2025-08-22",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Flux Checkout",
+        "description": "Streamlined, fast WooCommerce checkout experience.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-flux",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-flux",
+        "main_file": "iconic-flux.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "WooCommerce Delivery Slots",
+        "description": "Let customers choose delivery dates and time slots.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-delivery-slots",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-delivery-slots",
+        "main_file": "iconic-delivery-slots.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "WooThumbs",
+        "description": "Advanced product image gallery with zoom and video support.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "5.6.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "iconic-woothumbs",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-woothumbs",
+        "main_file": "iconic-woothumbs.php",
+        "release_date": "2025-11-02",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Attribute Swatches",
+        "description": "Visual color and image swatches for product variations.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "3.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "iconic-swatches",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-woo-attribute-swatches",
+        "main_file": "iconic-woo-attribute-swatches.php",
+        "release_date": "2025-10-08",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Show Single Variations",
+        "description": "Display product variations as individual products in shop listings.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-single-variations",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-single-variations",
+        "main_file": "iconic-single-variations.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Iconic Sales Booster",
+        "description": "Cross-sells, upsells, and order bumps to increase average order value.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-sales-booster",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-sales-booster",
+        "main_file": "iconic-sales-booster.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Image Swap for WooCommerce",
+        "description": "Swap product images on hover in shop listings.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-image-swap",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-image-swap",
+        "main_file": "iconic-image-swap.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Linked Variations",
+        "description": "Link product variations across different products.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-linked-variations",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-linked-variations",
+        "main_file": "iconic-linked-variations.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Product Configurator",
+        "description": "Visual step-by-step product builder for complex products.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-configurator",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-configurator",
+        "main_file": "iconic-configurator.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Quickview",
+        "description": "Quick product preview popup without leaving the shop page.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "version": "1.8.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "iconic-quickview",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-quickview",
+        "main_file": "iconic-quickview.php",
+        "release_date": "2025-11-12",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Wishlist for WooCommerce",
+        "description": "Let customers save products to wishlists.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-wishlist",
+        "kind": "plugin",
+        "top_dir": "iconic-wishlist",
+        "main_file": "iconic-wishlist.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Account Pages",
+        "description": "Customize WooCommerce My Account pages.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-account-pages",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-account-pages",
+        "main_file": "iconic-account-pages.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Custom Fields for Variations",
+        "description": "Add custom data fields to product variations.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-custom-fields",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-custom-fields",
+        "main_file": "iconic-custom-fields.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Bundled Products",
+        "description": "Create product bundles and kits with flexible pricing.",
+        "category": "woocommerce",
+        "authors": [
+          "KadenceWP"
+        ],
+        "documentation_url": "https://www.kadencewp.com/help-center/",
+        "slug": "iconic-bundled",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "iconic-bundled",
+        "main_file": "iconic-bundled.php",
+        "homepage": null
+      }
+    ]
+  },
+  {
+    "product_id": "",
+    "product_slug": "learndash",
+    "product_name": "Learndash",
+    "tiers": [
+      {
+        "name": "Essentials",
+        "rank": 1,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=learndash-basic&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/learndash/basic/",
+        "tier_slug": "basic"
+      },
+      {
+        "name": "Pro",
+        "rank": 2,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=learndash-pro&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/learndash/pro/",
+        "tier_slug": "pro"
+      },
+      {
+        "name": "Elite",
+        "rank": 3,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=learndash-elite&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/learndash/elite/",
+        "tier_slug": "elite"
+      }
+    ],
+    "features": [
+      {
+        "minimum_tier": "basic",
+        "name": "LearnDash LMS",
+        "description": "The most trusted WordPress LMS plugin for creating and selling courses.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "999.0.0",
+        "changelog": "<h4>999.0.0</h4><ul><li>Fixture release whose requirements no site meets.</li></ul>",
+        "slug": "sfwd-lms",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "sfwd-lms",
+        "main_file": "sfwd_lms.php",
+        "release_date": "2026-10-26",
+        "homepage": null,
+        "wp_requires": "100.0.1",
+        "php_requires": "100.0.1",
+        "wp_tested": "6.9"
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "MemberDash",
+        "description": "Membership and content restriction functionality.",
+        "category": "membership",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.7.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "memberdash",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "memberdash",
+        "main_file": "memberdash.php",
+        "release_date": "2025-11-08",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Gradebook",
+        "description": "Easily customize, track, and share scores with Gradebook. Explore student progression and scores in simple, flexible gradebook tables, and share individual scores and progress with students and their parents.",
+        "category": "reporting",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "4.3.4",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-gradebook",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-gradebook",
+        "main_file": "learndash-gradebook.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "elite",
+        "name": "Groups Plus",
+        "description": "Groups Plus modifies LearnDash Groups Hierarchy to create Organizations. Using WooCommerce, you can create and sell entire Organizations and allow your customers to purchase individual course seats within their Organization.",
+        "category": "management",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.1.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-groups-plus",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-groups-plus",
+        "main_file": "learndash-groups-plus.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "elite",
+        "name": "Instructor Role",
+        "description": "Add multiple course authors without compromising site security by creating roles with restricted back-end access to Course Authors.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "5.9.13",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "instructor-role",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "instructor-role",
+        "main_file": "instructor.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Notes",
+        "description": "The Notes add-on makes note-taking simple and facilitates instructor communication during study time with an intuitive and flexible toolset.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.0.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-notes",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-notes",
+        "main_file": "learndash-student-notes.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "ProPanel",
+        "description": "Real-time reporting dashboard for course activity and student progress.",
+        "category": "reporting",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "3.0.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-propanel",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-propanel",
+        "main_file": "learndash_propanel.php",
+        "release_date": "2025-11-06",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "elite",
+        "name": "Ratings, Reviews & Feedback",
+        "description": "Full control over the display of ratings and reviews, set custom templates, and make your courses better with student feedback.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.2.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "wdm-course-review",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "wdm-course-review",
+        "main_file": "wdm-course-review.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "elite",
+        "name": "Group Registration",
+        "description": "Group registration and seat management for LearnDash courses.",
+        "category": "management",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "4.3.17",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "ld-group-registration",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "ld-group-registration",
+        "main_file": "ld-group-registration.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Achievements",
+        "description": "Award badges and points for learner milestones and accomplishments through gamification.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.0.4",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-achievements",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-achievements",
+        "main_file": "learndash-achievements.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Certificate Builder",
+        "description": "Build certificates using a drag and drop builder through the standard WordPress Gutenberg editor.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-certificate-builder",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-certificate-builder",
+        "main_file": "learndash-certificate-builder.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Elementor",
+        "description": "Use the powerful editing capabilities of Elementor to build your course exactly how you want it.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.0.11",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-elementor",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-elementor",
+        "main_file": "learndash-elementor.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Notifications",
+        "description": "Configure various notifications to be sent out automatically based on what learners do and do not do in a course.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.6.7",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-notifications",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-notifications",
+        "main_file": "learndash-notifications.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "WooCommerce",
+        "description": "Sell your LearnDash courses with the WooCommerce shopping cart.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.0.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-woocommerce",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-woocommerce",
+        "main_file": "learndash_woocommerce.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Integrity",
+        "description": "Protect your course and website from spam, abuse and the copying of your content by students.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.2.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-integrity",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-integrity",
+        "main_file": "learndash-integrity.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Events Calendar",
+        "description": "Connect an event with a course or group and automatically enroll the user using The Events Calendar.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.0.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "ld-tec",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-tec",
+        "main_file": "learndash-tec.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Zapier",
+        "description": "Create Zaps that include LearnDash activities, connecting with over 300 applications.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.3.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-zapier",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-zapier",
+        "main_file": "learndash_zapier.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Migrations",
+        "description": "Bring your course content over from other learning management systems like LearnPress, Tutor LMS, Sensei LMS, or Lifter LMS.",
+        "category": "core",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-migration",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-migration",
+        "main_file": "learndash-migration.php",
+        "release_date": "2024-11-06",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Paid Memberships Pro",
+        "description": "Create membership level access and associate the access levels to LearnDash courses with Paid Memberships Pro.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.3.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-paidmemberships",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-paidmemberships",
+        "main_file": "learndash-paidmemberships.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Easy Digital Downloads",
+        "description": "Sell LearnDash courses using the Easy Digital Downloads shopping cart.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-edd",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-edd",
+        "main_file": "learndash-edd.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "MemberPress",
+        "description": "Create membership levels in MemberPress and associate them to LearnDash courses with auto-enrollment.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.2.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-memberpress",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-memberpress",
+        "main_file": "learndash-memberpress.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Gravity Forms",
+        "description": "Create custom course registration forms and auto-enroll users with Gravity Forms.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.1.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-gravity-forms",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-gravity-forms",
+        "main_file": "learndash_gravityforms.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "bbPress",
+        "description": "Add forums to your courses with bbPress, protecting them so only enrolled users can view and post.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "2.2.5",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-bbpress",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-bbpress",
+        "main_file": "learndash-bbpress.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "ThriveCart",
+        "description": "Sell your courses with ThriveCart, a premium eCommerce solution with subscriptions, analytics, and more.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.0.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-thrivecart",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-thrivecart",
+        "main_file": "learndash-thrivecart.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "2Checkout",
+        "description": "Sell courses using the 2Checkout payment gateway.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.1.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-2checkout",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-2checkout",
+        "main_file": "sfwd-2checkout.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Event Espresso",
+        "description": "Associate online courses to live events so that when users register, they are auto-enrolled.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-event-espresso",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-event-espresso",
+        "main_file": "event-espresso.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "SamCart",
+        "description": "Sell LearnDash courses with SamCart, a high-converting hosted shopping cart.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.0.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-samcart",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-samcart",
+        "main_file": "learndash-samcart.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Multilingual",
+        "description": "Greater compatibility between LearnDash and multilingual sites using 3rd party translation plugins.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.0.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "ld-multilingual",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-multilingual",
+        "main_file": "ld-multilingual.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Restrict Content Pro",
+        "description": "Create membership levels in Restrict Content Pro and associate them to LearnDash courses with auto-enrollment.",
+        "category": "integration",
+        "authors": [
+          "LearnDash"
+        ],
+        "documentation_url": "https://www.learndash.com/support/",
+        "version": "1.1.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "learndash-restrict-content-pro",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "learndash-restrict-content-pro",
+        "main_file": "learndash-restrict-content-pro.php",
+        "release_date": "2025-11-15",
+        "homepage": null
+      }
+    ]
+  },
+  {
+    "product_id": "",
+    "product_slug": "give",
+    "product_name": "Give",
+    "tiers": [
+      {
+        "name": "Free",
+        "rank": 0,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=give-free&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/give/free/",
+        "tier_slug": "free"
+      },
+      {
+        "name": "Basic",
+        "rank": 1,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=give-basic&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/give/basic/",
+        "tier_slug": "basic"
+      },
+      {
+        "name": "Pro",
+        "rank": 2,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=give-pro&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/give/pro/",
+        "tier_slug": "pro"
+      },
+      {
+        "name": "Agency",
+        "rank": 3,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=give-agency&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/give/agency/",
+        "tier_slug": "agency"
+      }
+    ],
+    "features": [
+      {
+        "minimum_tier": "free",
+        "name": "GiveWP",
+        "description": "The most robust WordPress donation plugin for online giving.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "3.19.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give",
+        "kind": "plugin",
+        "wporg_slug": "give",
+        "top_dir": "give",
+        "main_file": "give.php",
+        "release_date": "2025-11-17",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Recurring Donations",
+        "description": "Accept recurring donations on a schedule.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.10.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-recurring-donations",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-recurring",
+        "main_file": "give-recurring.php",
+        "release_date": "2025-11-04",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Fee Recovery",
+        "description": "Optionally pass processing fees to donors.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.4.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-fee-recovery",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-fee-recovery",
+        "main_file": "give-fee-recovery.php",
+        "release_date": "2025-10-16",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Form Field Manager",
+        "description": "Add custom fields to donation forms.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "3.2.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-form-field-manager",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-form-field-manager",
+        "main_file": "give-ffm.php",
+        "release_date": "2025-09-27",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Annual Receipts",
+        "description": "Generate annual tax-deductible receipts for donors.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-annual-receipts",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-annual-receipts",
+        "main_file": "give-annual-receipts.php",
+        "release_date": "2025-08-15",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Funds & Designations",
+        "description": "Allow donors to designate gifts to specific funds.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.2.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-funds-and-designations",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-funds",
+        "main_file": "give-funds.php",
+        "release_date": "2025-10-09",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Tributes",
+        "description": "Allow donors to make tribute donations in honor of someone.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.5.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-tributes",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-tributes",
+        "main_file": "give-tributes.php",
+        "release_date": "2025-11-01",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "PDF Receipts",
+        "description": "Generate downloadable PDF donation receipts.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.4.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-pdf-receipts",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-pdf-receipts",
+        "main_file": "give-pdf-receipts.php",
+        "release_date": "2025-10-23",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Manual Donations",
+        "description": "Record offline or manual donations in the system.",
+        "category": "core",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.7.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-manual-donations",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-manual-donations",
+        "main_file": "give-manual-donations.php",
+        "release_date": "2025-09-12",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Peer-to-Peer",
+        "description": "Enable supporters to create their own fundraising pages.",
+        "category": "campaigns",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.6.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-peer-to-peer",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-peer-to-peer",
+        "main_file": "give-peer-to-peer.php",
+        "release_date": "2025-11-10",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Text to Give",
+        "description": "Accept donations via SMS text messages.",
+        "category": "campaigns",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.3.4",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-text-to-give",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-text-to-give",
+        "main_file": "give-text-to-give.php",
+        "release_date": "2025-09-20",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Stripe Gateway",
+        "description": "Accept donations through Stripe.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "3.5.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-stripe-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-stripe",
+        "main_file": "give-stripe.php",
+        "release_date": "2025-11-14",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Authorize.net",
+        "description": "Accept donations through Authorize.net.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.1.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-authorize-net-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-authorize-net",
+        "main_file": "give-authorize-net.php",
+        "release_date": "2025-08-08",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Square",
+        "description": "Accept donations through Square.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.3.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-square-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-square",
+        "main_file": "give-square.php",
+        "release_date": "2025-10-30",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "PayPal Commerce",
+        "description": "Accept donations through PayPal Commerce.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.0.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-paypal",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-paypal-commerce",
+        "main_file": "give-paypal-commerce.php",
+        "release_date": "2025-09-02",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Mollie",
+        "description": "Accept donations through Mollie.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-mollie-payment-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-mollie",
+        "main_file": "give-mollie.php",
+        "release_date": "2025-10-06",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "RazorPay",
+        "description": "Accept donations through RazorPay.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.5.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-razorpay-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-razorpay",
+        "main_file": "give-razorpay.php",
+        "release_date": "2025-08-20",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "GoCardless",
+        "description": "Accept donations through GoCardless direct debit.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.1.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-gocardless-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-gocardless",
+        "main_file": "give-gocardless.php",
+        "release_date": "2025-09-08",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Braintree",
+        "description": "Accept donations through Braintree.",
+        "category": "gateway",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.4.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-braintree-payment-gateway",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-braintree",
+        "main_file": "give-gateway-braintree.php",
+        "release_date": "2025-10-28",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Currency Switcher",
+        "description": "Allow donors to give in their local currency.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.3.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-currency-switcher",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-currency-switcher",
+        "main_file": "give-currency-switcher.php",
+        "release_date": "2025-11-11",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Salesforce",
+        "description": "Sync donation data with Salesforce CRM.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.1.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-salesforce",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-salesforce",
+        "main_file": "give-salesforce.php",
+        "release_date": "2025-08-28",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Gift Aid",
+        "description": "UK Gift Aid declarations for tax-efficient giving.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.3.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-gift-aid",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-gift-aid",
+        "main_file": "give-gift-aid.php",
+        "release_date": "2025-10-04",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Webhooks",
+        "description": "Send donation events to external services via webhooks.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.2.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-webhooks",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-webhooks",
+        "main_file": "give-webhooks.php",
+        "release_date": "2025-09-16",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "MailChimp",
+        "description": "Sync donors with MailChimp email lists.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.7.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-mailchimp",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-mailchimp",
+        "main_file": "give-mailchimp.php",
+        "release_date": "2025-11-13",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "ActiveCampaign",
+        "description": "Sync donors with ActiveCampaign.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.2.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-activecampaign",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-activecampaign",
+        "main_file": "give-activecampaign.php",
+        "release_date": "2025-10-11",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Zapier",
+        "description": "Connect donations to 5000+ apps via Zapier.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.4.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-zapier",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-zapier",
+        "main_file": "give-zapier.php",
+        "release_date": "2025-09-24",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Constant Contact",
+        "description": "Sync donors with Constant Contact.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.1.3",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-constant-contact",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-constant-contact",
+        "main_file": "give-constant-contact.php",
+        "release_date": "2025-08-12",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "ConvertKit",
+        "description": "Sync donors with ConvertKit.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.2.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-convertkit",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-convertkit",
+        "main_file": "give-convertkit.php",
+        "release_date": "2025-10-19",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Google Analytics Tracking",
+        "description": "Track donation events in Google Analytics.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "1.8.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-google-analytics",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-google-analytics",
+        "main_file": "give-google-analytics.php",
+        "release_date": "2025-11-09",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "WooCommerce Upsells",
+        "description": "Offer products as upsells during donations.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.0.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-donation-upsells-for-woocommerce",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-donation-upsells-woocommerce",
+        "main_file": "give-woocommerce.php",
+        "release_date": "2025-09-29",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Double the Donations",
+        "description": "Corporate gift matching integration.",
+        "category": "integration",
+        "authors": [
+          "GiveWP"
+        ],
+        "documentation_url": "https://givewp.com/documentation/",
+        "version": "2.3.4",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "give-double-the-donation",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "give-double-the-donation",
+        "main_file": "give-double-the-donation.php",
+        "release_date": "2025-11-16",
+        "homepage": null
+      }
+    ]
+  },
+  {
+    "product_id": "",
+    "product_slug": "the-events-calendar",
+    "product_name": "The Events Calendar",
+    "tiers": [
+      {
+        "name": "Free",
+        "rank": 0,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=the-events-calendar-free&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/the-events-calendar/free/",
+        "tier_slug": "free"
+      },
+      {
+        "name": "Basic",
+        "rank": 1,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=the-events-calendar-basic&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/the-events-calendar/basic/",
+        "tier_slug": "basic"
+      },
+      {
+        "name": "Pro",
+        "rank": 2,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=the-events-calendar-pro&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/the-events-calendar/pro/",
+        "tier_slug": "pro"
+      },
+      {
+        "name": "Agency",
+        "rank": 3,
+        "price": 0,
+        "currency": "USD",
+        "herald_slugs": [],
+        "purchase_url": "https://portal.local/checkout/?sku=the-events-calendar-agency&add-to-cart=1",
+        "upgrade_url": "https://portal.local/upgrade/the-events-calendar/agency/",
+        "tier_slug": "agency"
+      }
+    ],
+    "features": [
+      {
+        "minimum_tier": "free",
+        "name": "The Events Calendar",
+        "description": "A powerful events management plugin for WordPress.",
+        "category": "core",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "6.9.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "the-events-calendar",
+        "kind": "plugin",
+        "wporg_slug": "the-events-calendar",
+        "top_dir": "the-events-calendar",
+        "main_file": "the-events-calendar.php",
+        "release_date": "2025-11-21",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Calendar",
+        "description": "Full-featured event calendar with multiple views.",
+        "category": "core",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "slug": "tec-calendar",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "tec-calendar",
+        "main_file": "tec-calendar.php",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Tickets & RSVP",
+        "description": "Sell tickets and collect RSVPs for events.",
+        "category": "core",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "5.18.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-tickets-rsvp",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "event-tickets-plus",
+        "main_file": "event-tickets-plus.php",
+        "release_date": "2025-10-25",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Event Aggregator",
+        "description": "Import events from other calendars, Meetup, and more.",
+        "category": "import",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "5.9.2",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-event-aggregator",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "event-aggregator",
+        "main_file": "event-aggregator.php",
+        "release_date": "2025-11-03",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Community",
+        "description": "Allow community members to submit events from the frontend.",
+        "category": "community",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "4.13.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-community",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "events-community",
+        "main_file": "events-community.php",
+        "release_date": "2025-09-18",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Promoter",
+        "description": "Automated email marketing for events and attendees.",
+        "category": "marketing",
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "slug": "tec-promoter",
+        "kind": "service"
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Seating",
+        "description": "Assigned seating charts and seat selection for events.",
+        "category": "ticketing",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "1.3.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-seating",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "events-seating",
+        "main_file": "events-seating.php",
+        "release_date": "2025-11-18",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "basic",
+        "name": "Filter Bar",
+        "description": "Advanced filtering for event calendars by category, venue, and more.",
+        "category": "core",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "5.5.1",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-filter-bar",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "events-filter-bar",
+        "main_file": "events-filter-bar.php",
+        "release_date": "2025-10-31",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "pro",
+        "name": "Eventbrite Tickets",
+        "description": "Sync events and tickets with Eventbrite.",
+        "category": "integration",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "4.14.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-eventbrite",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "events-eventbrite",
+        "main_file": "events-eventbrite.php",
+        "release_date": "2025-09-03",
+        "homepage": null
+      },
+      {
+        "minimum_tier": "agency",
+        "name": "Event Schedule Manager",
+        "description": "Create multi-track schedules for conferences and multi-day events.",
+        "category": "management",
+        "authors": [
+          "StellarWP"
+        ],
+        "documentation_url": "https://theeventscalendar.com/knowledgebase/",
+        "version": "1.1.0",
+        "changelog": "<h4>Latest release</h4><ul><li>Bug fixes and performance improvements.</li></ul>",
+        "slug": "tec-schedule-manager",
+        "kind": "plugin",
+        "wporg_slug": null,
+        "top_dir": "events-schedule-manager",
+        "main_file": "events-schedule-manager.php",
+        "release_date": "2025-10-14",
+        "homepage": null
+      },
+      {
+        "slug": "promoter",
+        "kind": "service",
+        "minimum_tier": "agency",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Promoter",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
+      },
+      {
+        "slug": "assigned-seating",
+        "kind": "service",
+        "minimum_tier": "agency",
+        "plugin_file": null,
+        "wporg_slug": null,
+        "version": "",
+        "release_date": "",
+        "changelog": "",
+        "name": "Assigned Seating",
+        "description": "",
+        "category": "",
+        "authors": [],
+        "documentation_url": "",
+        "homepage": ""
+      }
+    ]
+  }
+]
