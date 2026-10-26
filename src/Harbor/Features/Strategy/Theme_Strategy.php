@@ -261,8 +261,6 @@ class Theme_Strategy extends Installable_Strategy {
 		return self::REQUIREMENTS_ERROR_CODES;
 	}
 
-
-
 	/**
 	 * Check whether an update is available for this theme.
 	 *
