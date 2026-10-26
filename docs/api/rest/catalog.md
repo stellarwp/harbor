@@ -56,7 +56,10 @@ Returns the full product catalog. Each entry represents a product family with it
         "category": "design",
         "authors": ["Suspended Starter Fish"],
         "documentation_url": "https://...",
-        "homepage": null
+        "homepage": null,
+        "wp_requires": "6.6",
+        "php_requires": "7.4",
+        "wp_tested": "6.9"
       }
     ]
   }

@@ -23,6 +23,9 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		'category'          => 'security',
 		'authors'           => [ 'KadenceWP' ],
 		'documentation_url' => 'https://www.kadencewp.com/help-center/',
+		'wp_requires'       => '6.6',
+		'php_requires'      => '7.4',
+		'wp_tested'         => '6.9',
 	];
 
 	public function test_from_array_hydrates_all_fields(): void {
@@ -42,6 +45,9 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertSame( '2.1.0', $feature->get_version() );
 		$this->assertSame( '2025-11-15', $feature->get_release_date() );
 		$this->assertSame( '<h4>2.1.0</h4><ul><li>Bug fixes.</li></ul>', $feature->get_changelog() );
+		$this->assertSame( '6.6', $feature->get_wp_requires() );
+		$this->assertSame( '7.4', $feature->get_php_requires() );
+		$this->assertSame( '6.9', $feature->get_wp_tested() );
 	}
 
 	public function test_to_array_produces_expected_shape(): void {
@@ -55,6 +61,9 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertSame( 'kadence-security-pro.php', $result['main_file'] );
 		$this->assertSame( 'kadence-security-pro/kadence-security-pro.php', $result['plugin_file'] );
 		$this->assertNull( $result['wporg_slug'] );
+		$this->assertSame( '6.6', $result['wp_requires'] );
+		$this->assertSame( '7.4', $result['php_requires'] );
+		$this->assertSame( '6.9', $result['wp_tested'] );
 	}
 
 	public function test_round_trip(): void {
@@ -82,6 +91,9 @@ final class Catalog_FeatureTest extends HarborTestCase {
 		$this->assertNull( $feature->get_version() );
 		$this->assertNull( $feature->get_release_date() );
 		$this->assertNull( $feature->get_changelog() );
+		$this->assertNull( $feature->get_wp_requires() );
+		$this->assertNull( $feature->get_php_requires() );
+		$this->assertNull( $feature->get_wp_tested() );
 	}
 
 	public function test_top_dir_and_main_file_accessors(): void {

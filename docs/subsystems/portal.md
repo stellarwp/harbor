@@ -92,6 +92,9 @@ Features are the individual plugins and themes that make up a product family. Ea
 | `authors`           | string[]\|null | Product/author names. Null if not applicable.                                                                 |
 | `documentation_url` | string         | Link to the feature's documentation                                                                           |
 | `homepage`          | string\|null   | URL to the feature's homepage                                                                                 |
+| `wp_requires`       | string\|null   | Minimum WordPress version of the latest release (`Requires at least`). Null when the release declares none    |
+| `php_requires`      | string\|null   | Minimum PHP version of the latest release (`Requires PHP`). Null when the release declares none               |
+| `wp_tested`         | string\|null   | WordPress version the latest release was tested up to (`Tested up to`). Null when the release declares none   |
 
 #### Feature Types
 
