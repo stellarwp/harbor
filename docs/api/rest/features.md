@@ -47,7 +47,11 @@ Lists all resolved features with optional filters.
     "changelog": "<p>Bug fixes and improvements.</p>",
     "wporg_slug": null,
     "installed_version": "2.6.0",
-    "update_version": "2.6.1"
+    "update_version": "2.6.1",
+    "update_requires_wp": "6.6",
+    "update_requires_php": "7.4",
+    "update_wp_compatible": true,
+    "update_php_compatible": true
   }
 ]
 ```
@@ -129,4 +133,5 @@ Returns the updated feature object.
 | 422  | `lw-harbor-feature-not-modifiable` | Service feature — must be managed via the Portal |
 | 422  | `lw-harbor-update-not-supported`   | Feature type doesn't support updates             |
 | 422  | `lw-harbor-no-update-available`    | No pending update for this feature               |
+| 422  | `lw-harbor-requirements-not-met`   | The update needs a newer WordPress or PHP        |
 | 422  | `lw-harbor-update-failed`          | Update failed                                    |
