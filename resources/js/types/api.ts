@@ -80,29 +80,30 @@ interface BaseFeature {
      */
     installed_version?: string;
     /**
-     * Minimum WordPress version of the catalog version, which is the version installing the
-     * feature downloads, or null when it declares none. Only present for installable features.
+     * Minimum WordPress version of the version an update or an install would put on the site:
+     * the pending update, or the catalog version when the feature is not installed. Null when
+     * there is no such version or it declares none. Only present for installable features.
      *
      * @since TBD
      */
     requires_wp?: string | null;
     /**
-     * Minimum PHP version of the catalog version, or null when it declares none.
+     * Minimum PHP version of the same version as requires_wp, or null.
      * Only present for installable features.
      *
      * @since TBD
      */
     requires_php?: string | null;
     /**
-     * Whether the site's WordPress version meets the catalog version's requirement.
-     * Returns true if the catalog declares none. Only present for installable features.
+     * Whether the site's WordPress version meets requires_wp. Returns true if there is no
+     * requirement. Only present for installable features.
      *
      * @since TBD
      */
     wp_compatible?: boolean;
     /**
-     * Whether the site's PHP version meets the catalog version's requirement.
-     * Returns true if the catalog declares none. Only present for installable features.
+     * Whether the site's PHP version meets requires_php. Returns true if there is no
+     * requirement. Only present for installable features.
      *
      * @since TBD
      */
@@ -112,36 +113,6 @@ interface BaseFeature {
      * Only present for installable features (plugin/theme).
      */
     update_version?: string | null;
-    /**
-     * Minimum WordPress version the pending update requires, or null when there is no
-     * update or it declares none. Only present for installable features (plugin/theme).
-     *
-     * @since TBD
-     */
-    update_requires_wp?: string | null;
-    /**
-     * Minimum PHP version the pending update requires, or null when there is no
-     * update or it declares none. Only present for installable features (plugin/theme).
-     *
-     * @since TBD
-     */
-    update_requires_php?: string | null;
-    /**
-     * Whether the site's WordPress version meets the pending update's requirement.
-     * Returns true if there is no update, since the installed version already runs on the site.
-     * Only present for installable features (plugin/theme).
-     *
-     * @since TBD
-     */
-    update_wp_compatible?: boolean;
-    /**
-     * Whether the site's PHP version meets the pending update's requirement.
-     * Returns true if there is no update, since the installed version already runs on the site.
-     * Only present for installable features (plugin/theme).
-     *
-     * @since TBD
-     */
-    update_php_compatible?: boolean;
 }
 
 /**
@@ -213,10 +184,6 @@ export interface ServiceFeature extends BaseFeature {
     requires_php?: never;
     wp_compatible?: never;
     php_compatible?: never;
-    update_requires_wp?: never;
-    update_requires_php?: never;
-    update_wp_compatible?: never;
-    update_php_compatible?: never;
 }
 
 /**

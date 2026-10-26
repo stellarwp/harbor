@@ -410,87 +410,63 @@ class Feature_Controller extends WP_REST_Controller {
 		];
 
 		$installable_properties = [
-			'release_date'          => [
+			'release_date'      => [
 				'description' => __( 'Release date of the latest version, or null if not applicable.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'version'               => [
+			'version'           => [
 				'description' => __( 'Latest available version from the catalog, or null. Only present for installable features.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'changelog'             => [
+			'changelog'         => [
 				'description' => __( 'Changelog HTML for the latest version, or null. Only present for installable features.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'wporg_slug'            => [
+			'wporg_slug'        => [
 				'description' => __( 'The WordPress.org slug for plugins_api() lookups, or null if not on WordPress.org.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'installed_version'     => [
+			'installed_version' => [
 				'description' => __( 'The currently installed version, or null if not installed.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'requires_wp'           => [
-				'description' => __( 'Minimum WordPress version of the catalog version, which is the version installing the feature downloads, or null when it declares none.', '%TEXTDOMAIN%' ),
+			'requires_wp'       => [
+				'description' => __( 'Minimum WordPress version of the version an update or an install would put on the site: the pending update, or the catalog version when the feature is not installed. Null when there is no such version or it declares none.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'requires_php'          => [
-				'description' => __( 'Minimum PHP version of the catalog version, which is the version installing the feature downloads, or null when it declares none.', '%TEXTDOMAIN%' ),
+			'requires_php'      => [
+				'description' => __( 'Minimum PHP version of the version an update or an install would put on the site: the pending update, or the catalog version when the feature is not installed. Null when there is no such version or it declares none.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'wp_compatible'         => [
-				'description' => __( 'Whether the site\'s WordPress version meets the catalog version\'s requirement. Returns true if the catalog declares none.', '%TEXTDOMAIN%' ),
+			'wp_compatible'     => [
+				'description' => __( 'Whether the site\'s WordPress version meets requires_wp. Returns true if there is no requirement.', '%TEXTDOMAIN%' ),
 				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'php_compatible'        => [
-				'description' => __( 'Whether the site\'s PHP version meets the catalog version\'s requirement. Returns true if the catalog declares none.', '%TEXTDOMAIN%' ),
+			'php_compatible'    => [
+				'description' => __( 'Whether the site\'s PHP version meets requires_php. Returns true if there is no requirement.', '%TEXTDOMAIN%' ),
 				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
-			'update_version'        => [
+			'update_version'    => [
 				'description' => __( 'Version available in the WordPress update transient, or null when no update is pending.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
-			'update_requires_wp'    => [
-				'description' => __( 'Minimum WordPress version the pending update requires, or null when there is no update or it declares none.', '%TEXTDOMAIN%' ),
-				'type'        => [ 'string', 'null' ],
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
-			'update_requires_php'   => [
-				'description' => __( 'Minimum PHP version the pending update requires, or null when there is no update or it declares none.', '%TEXTDOMAIN%' ),
-				'type'        => [ 'string', 'null' ],
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
-			'update_wp_compatible'  => [
-				'description' => __( 'Whether the site\'s WordPress version meets the pending update\'s requirement. Returns true if there is no update, since the installed version already runs on the site.', '%TEXTDOMAIN%' ),
-				'type'        => 'boolean',
-				'readonly'    => true,
-				'context'     => [ 'view' ],
-			],
-			'update_php_compatible' => [
-				'description' => __( 'Whether the site\'s PHP version meets the pending update\'s requirement. Returns true if there is no update, since the installed version already runs on the site.', '%TEXTDOMAIN%' ),
-				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],

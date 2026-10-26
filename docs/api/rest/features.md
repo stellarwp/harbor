@@ -51,11 +51,7 @@ Lists all resolved features with optional filters.
     "requires_php": "7.4",
     "wp_compatible": true,
     "php_compatible": true,
-    "update_version": "2.6.1",
-    "update_requires_wp": "6.6",
-    "update_requires_php": "7.4",
-    "update_wp_compatible": true,
-    "update_php_compatible": true
+    "update_version": "2.6.1"
   }
 ]
 ```

@@ -22,15 +22,17 @@ use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
  * which is where WordPress.org lists an update that needs a newer WordPress.
  * See Update\Requirements\Resolve_Headers.
  *
- * The update_requires_* and update_*_compatible fields describe the WordPress
- * and PHP versions that update requires and whether the site meets them. The
- * update_*_compatible fields return true if there is no update, since the
- * installed version already runs on the site.
+ * requires_wp, requires_php, wp_compatible and php_compatible describe the
+ * version an update or an install would put on the site, and whether the site
+ * meets its WordPress and PHP requirements:
  *
- * requires_wp and requires_php are the WordPress and PHP versions the catalog
- * version requires, which is the version installing the feature downloads.
- * wp_compatible and php_compatible say whether the site meets them, and
- * return true when the catalog declares none.
+ * - With an update pending, the update's entry in the update transient.
+ *   Harbor fills its own entries from the catalog; WordPress.org fills the
+ *   entries of WordPress.org-hosted features.
+ * - When the feature is not installed, the catalog version, which is the
+ *   version installing it downloads.
+ * - Otherwise there is no such version: the requirements are null and the
+ *   compatible fields return true.
  *
  * @since 1.0.0
  */
@@ -46,37 +48,35 @@ final class Feature_Resource {
 	private Feature $feature;
 
 	/**
-	 * The pending update's requirement headers, or null when no update is pending.
+	 * The update version sourced from the WordPress update transient, or null.
 	 *
-	 * @since TBD
+	 * @since 1.0.0
 	 *
-	 * @var Headers|null
+	 * @var string|null
 	 */
-	private ?Headers $update;
+	private ?string $update_version;
 
 	/**
-	 * The catalog version's requirement headers, or null when the catalog has no version.
+	 * The requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 *
 	 * @since TBD
 	 *
 	 * @var Headers|null
 	 */
-	private ?Headers $catalog;
+	private ?Headers $headers;
 
 	/**
 	 * @since 1.0.0
-	 * @since TBD Takes the pending update's requirement headers instead of its version.
+	 * @since TBD Takes the requirement headers of the version an update or an install would put on the site.
 	 *
-	 * @since TBD Takes the catalog version's requirement headers.
-	 *
-	 * @param Feature      $feature The resolved feature.
-	 * @param Headers|null $update  The pending update's requirement headers, or null when no update is pending.
-	 * @param Headers|null $catalog The catalog version's requirement headers, or null when the catalog has no version.
+	 * @param Feature      $feature        The resolved feature.
+	 * @param string|null  $update_version Version from the update transient, or null.
+	 * @param Headers|null $headers        The requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 */
-	public function __construct( Feature $feature, ?Headers $update, ?Headers $catalog = null ) {
-		$this->feature = $feature;
-		$this->update  = $update;
-		$this->catalog = $catalog;
+	public function __construct( Feature $feature, ?string $update_version, ?Headers $headers = null ) {
+		$this->feature        = $feature;
+		$this->update_version = $update_version;
+		$this->headers        = $headers;
 	}
 
 	/**
@@ -86,7 +86,7 @@ final class Feature_Resource {
 	 * results so transient access does not trigger re-resolution.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Resolves the pending update's requirement headers with Resolve_Headers.
+	 * @since TBD Resolves the requirement headers of the pending update, or of the catalog version when the feature is not installed, with Resolve_Headers.
 	 *
 	 * @param Feature         $feature         The resolved feature.
 	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
@@ -98,7 +98,16 @@ final class Feature_Resource {
 			return new self( $feature, null );
 		}
 
-		return new self( $feature, $resolve_headers( $feature ), $resolve_headers->from_catalog( $feature ) );
+		$update = $resolve_headers( $feature );
+
+		if ( $update !== null ) {
+			return new self( $feature, $update->get_version(), $update );
+		}
+
+		$installed_version = $feature->to_array()['installed_version'] ?? null;
+		$install           = empty( $installed_version ) ? $resolve_headers->from_catalog( $feature ) : null;
+
+		return new self( $feature, null, $install );
 	}
 
 	/**
@@ -114,18 +123,16 @@ final class Feature_Resource {
 			return $this->feature->to_array();
 		}
 
-		$update = $this->update;
+		$headers = $this->headers;
 
 		return array_merge(
 			$this->feature->to_array(),
 			[
-				'update_version'        => $this->get_update_version(),
-				'update_requires_wp'    => $update !== null && $update->get_wp() !== '' ? $update->get_wp() : null,
-				'update_requires_php'   => $update !== null && $update->get_php() !== '' ? $update->get_php() : null,
-				'update_wp_compatible'  => $update === null || $update->is_wp_met(),
-				'update_php_compatible' => $update === null || $update->is_php_met(),
-				'wp_compatible'         => $this->catalog === null || $this->catalog->is_wp_met(),
-				'php_compatible'        => $this->catalog === null || $this->catalog->is_php_met(),
+				'update_version' => $this->update_version,
+				'requires_wp'    => $headers !== null && $headers->get_wp() !== '' ? $headers->get_wp() : null,
+				'requires_php'   => $headers !== null && $headers->get_php() !== '' ? $headers->get_php() : null,
+				'wp_compatible'  => $headers === null || $headers->is_wp_met(),
+				'php_compatible' => $headers === null || $headers->is_php_met(),
 			]
 		);
 	}
@@ -138,18 +145,18 @@ final class Feature_Resource {
 	 * @return string|null
 	 */
 	public function get_update_version(): ?string {
-		return $this->update !== null ? $this->update->get_version() : null;
+		return $this->update_version;
 	}
 
 	/**
-	 * Returns the pending update's requirement headers, or null if no update is pending.
+	 * Returns the requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 *
 	 * @since TBD
 	 *
 	 * @return Headers|null
 	 */
-	public function get_update_headers(): ?Headers {
-		return $this->update;
+	public function get_headers(): ?Headers {
+		return $this->headers;
 	}
 
 	/**

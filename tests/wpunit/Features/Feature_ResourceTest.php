@@ -184,11 +184,11 @@ final class Feature_ResourceTest extends HarborTestCase {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Tests that to_array() reports the requirements of the pending update and whether the site meets them.
+	 * Tests that to_array() reports the pending update's requirements and whether the site meets them.
 	 *
 	 * @return void
 	 */
-	public function test_to_array_includes_update_requirements(): void {
+	public function test_to_array_reports_the_update_requirements(): void {
 		$transient           = new \stdClass();
 		$transient->response = [
 			'stellar-export/stellar-export.php' => (object) [
@@ -202,33 +202,33 @@ final class Feature_ResourceTest extends HarborTestCase {
 		$data = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() )->to_array();
 
 		$this->assertSame( '2.5.0', $data['update_version'] );
-		$this->assertSame( '99.0', $data['update_requires_wp'] );
-		$this->assertSame( '1.0', $data['update_requires_php'] );
-		$this->assertFalse( $data['update_wp_compatible'] );
-		$this->assertTrue( $data['update_php_compatible'] );
+		$this->assertSame( '99.0', $data['requires_wp'] );
+		$this->assertSame( '1.0', $data['requires_php'] );
+		$this->assertFalse( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
 	}
 
 	/**
-	 * Tests that to_array() reports no requirements and returns true for compatibility when there is no update.
+	 * Tests that to_array() reports no requirements and returns true for compatibility when there is no update and the catalog has no version.
 	 *
 	 * @return void
 	 */
-	public function test_to_array_update_requirements_without_an_update(): void {
+	public function test_to_array_requirements_without_an_update_or_catalog_version(): void {
 		$data = Feature_Resource::from_feature( $this->make_theme(), new Resolve_Headers() )->to_array();
 
 		$this->assertNull( $data['update_version'] );
-		$this->assertNull( $data['update_requires_wp'] );
-		$this->assertNull( $data['update_requires_php'] );
-		$this->assertTrue( $data['update_wp_compatible'] );
-		$this->assertTrue( $data['update_php_compatible'] );
+		$this->assertNull( $data['requires_wp'] );
+		$this->assertNull( $data['requires_php'] );
+		$this->assertTrue( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
 	}
 
 	/**
-	 * Tests that to_array() reports whether the site meets the catalog version's requirements.
+	 * Tests that to_array() reports the catalog version's requirements for a feature that is not installed.
 	 *
 	 * @return void
 	 */
-	public function test_to_array_includes_catalog_requirements(): void {
+	public function test_to_array_reports_the_catalog_requirements_when_not_installed(): void {
 		$plugin = Plugin::from_array(
 			[
 				'slug'         => 'stellar-export',
@@ -251,6 +251,30 @@ final class Feature_ResourceTest extends HarborTestCase {
 
 		$this->assertTrue( $data['wp_compatible'] );
 		$this->assertTrue( $data['php_compatible'] );
+	}
+
+	/**
+	 * Tests that an installed feature with no pending update reports no requirements, whatever the catalog requires.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_ignores_the_catalog_requirements_when_installed_and_up_to_date(): void {
+		$plugin = Plugin::from_array(
+			[
+				'slug'              => 'stellar-export',
+				'name'              => 'Stellar Export',
+				'plugin_file'       => 'stellar-export/stellar-export.php',
+				'installed_version' => '3.0.0',
+				'version'           => '3.0.0',
+				'requires_wp'       => '99.0',
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+
+		$this->assertNull( $data['update_version'] );
+		$this->assertNull( $data['requires_wp'] );
+		$this->assertTrue( $data['wp_compatible'] );
 	}
 
 	/**
@@ -283,7 +307,7 @@ final class Feature_ResourceTest extends HarborTestCase {
 		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
 
 		$this->assertSame( '3.0.0', $data['update_version'] );
-		$this->assertFalse( $data['update_wp_compatible'] );
+		$this->assertFalse( $data['wp_compatible'] );
 	}
 
 	// -------------------------------------------------------------------------

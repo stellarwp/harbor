@@ -110,8 +110,8 @@ describe( 'FeatureRow controls', () => {
     } );
 
     it.each( [
-        [ 'WordPress', { update_requires_wp: '9.9', update_wp_compatible: false }, 'Version 2.0.0 requires WordPress 9.9 or newer. Update WordPress to install it.', 'Update WordPress', '/wp-admin/update-core.php' ],
-        [ 'PHP', { update_requires_php: '9.1', update_php_compatible: false }, 'Version 2.0.0 requires PHP 9.1 or newer. Learn more about updating PHP.', 'Learn more about updating PHP', 'https://wordpress.org/support/update-php/' ],
+        [ 'WordPress', { requires_wp: '9.9', wp_compatible: false }, 'Version 2.0.0 requires WordPress 9.9 or newer. Update WordPress to install it.', 'Update WordPress', '/wp-admin/update-core.php' ],
+        [ 'PHP', { requires_php: '9.1', php_compatible: false }, 'Version 2.0.0 requires PHP 9.1 or newer. Learn more about updating PHP.', 'Learn more about updating PHP', 'https://wordpress.org/support/update-php/' ],
     ] )( 'disables the update and links to the fix when it needs a newer %s', async ( _label, fields, message, linkName, href ) => {
         configure();
         render( <FeatureRow feature={ { ...feature, ...fields } } /> );
@@ -125,20 +125,20 @@ describe( 'FeatureRow controls', () => {
 
     it( 'names both requirements when the update needs a newer WordPress and PHP', () => {
         configure();
-        render( <FeatureRow feature={ { ...feature, update_requires_wp: '9.9', update_wp_compatible: false, update_requires_php: '9.1', update_php_compatible: false } } /> );
+        render( <FeatureRow feature={ { ...feature, requires_wp: '9.9', wp_compatible: false, requires_php: '9.1', php_compatible: false } } /> );
         expect( screen.getByRole( 'status' ).textContent ).toBe( 'Version 2.0.0 requires WordPress 9.9 and PHP 9.1 or newer. Update WordPress and learn more about updating PHP to install it.' );
     } );
 
     it( 'shows no requirements notice when the site meets the update requirements', () => {
         configure();
-        render( <FeatureRow feature={ { ...feature, update_requires_wp: '6.6', update_wp_compatible: true, update_requires_php: '7.4', update_php_compatible: true } } /> );
+        render( <FeatureRow feature={ { ...feature, requires_wp: '6.6', wp_compatible: true, requires_php: '7.4', php_compatible: true } } /> );
         expect( screen.queryByRole( 'status' ) ).toBeNull();
         expect( ( screen.getByRole( 'button', { name: 'Update Kadence Blocks Pro' } ) as HTMLButtonElement ).disabled ).toBe( false );
     } );
 
     it( 'keeps the legacy license tooltip when the update also needs a newer WordPress', async () => {
         configure( { legacy: true } );
-        render( <FeatureRow feature={ { ...feature, is_available: false, access_sources: [ { type: 'legacy' } ], update_requires_wp: '9.9', update_wp_compatible: false } } /> );
+        render( <FeatureRow feature={ { ...feature, is_available: false, access_sources: [ { type: 'legacy' } ], requires_wp: '9.9', wp_compatible: false } } /> );
         const button = screen.getByRole( 'button', { name: 'Update Kadence Blocks Pro' } );
         await userEvent.setup().hover( button.parentElement as HTMLElement );
         expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toContain( 'Upgrade your license to manage updates from Nexcess Licensing.' );

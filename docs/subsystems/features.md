@@ -244,23 +244,19 @@ Each `access_sources` entry has a `type`. A `purchase` entry also carries `produ
 
 Installable features (`plugin` and `theme`) also include:
 
-| Field                   | Type         | Description                                                              |
-| ----------------------- | ------------ | ------------------------------------------------------------------------ |
-| `release_date`          | string\|null | Release date of the latest version (ISO 8601)                            |
-| `version`               | string\|null | Latest available version from the catalog                                |
-| `changelog`             | string\|null | Changelog HTML for the latest version                                    |
-| `wporg_slug`            | string\|null | WordPress.org slug, or null if not on WordPress.org                      |
-| `installed_version`     | string\|null | Currently installed version, or null if not installed                    |
-| `update_version`        | string\|null | Version from the WordPress update transient, or null                     |
-| `has_update`            | boolean      | Whether an update is available (pre-computed)                            |
-| `update_requires_wp`    | string\|null | Minimum WordPress version of the pending update, or null                 |
-| `update_requires_php`   | string\|null | Minimum PHP version of the pending update, or null                       |
-| `update_wp_compatible`  | boolean      | Whether the site meets `update_requires_wp`. True if there is no update  |
-| `update_php_compatible` | boolean      | Whether the site meets `update_requires_php`. True if there is no update |
-| `requires_wp`           | string\|null | Minimum WordPress version of the catalog version, or null                |
-| `requires_php`          | string\|null | Minimum PHP version of the catalog version, or null                      |
-| `wp_compatible`         | boolean      | Whether the site meets `requires_wp`. True if the catalog declares none  |
-| `php_compatible`        | boolean      | Whether the site meets `requires_php`. True if the catalog declares none |
+| Field               | Type         | Description                                                                                            |
+| ------------------- | ------------ | ------------------------------------------------------------------------------------------------------ |
+| `release_date`      | string\|null | Release date of the latest version (ISO 8601)                                                          |
+| `version`           | string\|null | Latest available version from the catalog                                                              |
+| `changelog`         | string\|null | Changelog HTML for the latest version                                                                  |
+| `wporg_slug`        | string\|null | WordPress.org slug, or null if not on WordPress.org                                                    |
+| `installed_version` | string\|null | Currently installed version, or null if not installed                                                  |
+| `update_version`    | string\|null | Version from the WordPress update transient, or null                                                   |
+| `has_update`        | boolean      | Whether an update is available (pre-computed)                                                          |
+| `requires_wp`       | string\|null | Minimum WordPress version of the pending update, or of the catalog version when not installed, or null |
+| `requires_php`      | string\|null | Minimum PHP version of the same version, or null                                                       |
+| `wp_compatible`     | boolean      | Whether the site meets `requires_wp`. True if there is no requirement                                  |
+| `php_compatible`    | boolean      | Whether the site meets `requires_php`. True if there is no requirement                                 |
 
 Plugin features also include:
 
@@ -270,17 +266,17 @@ Plugin features also include:
 
 ## Data Sources
 
-| Data                                                                 | Source                                                                                                                                                                                        |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Feature exists, minimum tier, delivery type, tier ranks              | Catalog                                                                                                                                                                                       |
-| Latest version, release date, changelog                              | Catalog (`version`, `release_date`, `changelog`)                                                                                                                                              |
-| **Download URL** (`package`)                                         | **`Download_Url_Builder`** (default `Herald_Url_Builder`) — built at runtime from feature slug, license key, and site domain. Empty for WordPress.org features (use `wporg_slug`)             |
-| Customer's tier, key validity                                        | Licensing                                                                                                                                                                                     |
-| **Whether available** (`is_available`)                               | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                            |
-| **Whether enabled** (`is_enabled`)                                   | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                                     |
-| **Installed version** (`installed_version`)                          | Read from disk during resolution via `Installable`. Null for uninstalled extensions                                                                                                           |
-| **Update available** (`has_update`)                                  | Computed by `Installable::has_update()`: `version_compare( catalog_version, installed_version, '>' )`. False when not installed or catalog version is absent. Plugin and Theme only           |
-| **Update requirements** (`update_requires_*`, `update_*_compatible`) | The pending update's entry in the WordPress update transient, read by `Update\Requirements\Resolve_Headers`. Harbor fills its own entries from the catalog's `wp_requires` and `php_requires` |
+| Data                                                    | Source                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feature exists, minimum tier, delivery type, tier ranks | Catalog                                                                                                                                                                                                                                                        |
+| Latest version, release date, changelog                 | Catalog (`version`, `release_date`, `changelog`)                                                                                                                                                                                                               |
+| **Download URL** (`package`)                            | **`Download_Url_Builder`** (default `Herald_Url_Builder`) — built at runtime from feature slug, license key, and site domain. Empty for WordPress.org features (use `wporg_slug`)                                                                              |
+| Customer's tier, key validity                           | Licensing                                                                                                                                                                                                                                                      |
+| **Whether available** (`is_available`)                  | **Licensing capabilities array** — feature slug present in `Product_Entry::get_capabilities()`. Falls back to catalog tier rank 0 when unlicensed.                                                                                                             |
+| **Whether enabled** (`is_enabled`)                      | Live WordPress state (plugin activation / theme disk), stamped by Manager                                                                                                                                                                                      |
+| **Installed version** (`installed_version`)             | Read from disk during resolution via `Installable`. Null for uninstalled extensions                                                                                                                                                                            |
+| **Update available** (`has_update`)                     | Computed by `Installable::has_update()`: `version_compare( catalog_version, installed_version, '>' )`. False when not installed or catalog version is absent. Plugin and Theme only                                                                            |
+| **Requirements** (`requires_*`, `*_compatible`)         | The pending update's entry in the WordPress update transient, read by `Update\Requirements\Resolve_Headers`, or the catalog version when the feature is not installed. Harbor fills its own update entries from the catalog's `wp_requires` and `php_requires` |
 
 ## Related Subsystems
 
