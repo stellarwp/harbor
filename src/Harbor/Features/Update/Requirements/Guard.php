@@ -134,7 +134,7 @@ final class Guard {
 	}
 
 	/**
-	 * Prints the WordPress requirement message after WordPress's update notice in the plugin row.
+	 * Prints the WordPress requirement message after WordPress's update notice in the plugin row, separated by a blank line.
 	 *
 	 * @since TBD
 	 *
@@ -154,8 +154,9 @@ final class Guard {
 			return;
 		}
 
+		// The blank line separates the message from WordPress's "update now" text above it.
 		printf(
-			'<br /><strong>%s</strong> <a href="%s">%s</a>',
+			'<br /><br />%s <a href="%s">%s</a>',
 			esc_html(
 				sprintf(
 					/* translators: %s: required WordPress version */
