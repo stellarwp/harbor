@@ -84,6 +84,36 @@ interface BaseFeature {
      * Only present for installable features (plugin/theme).
      */
     update_version?: string | null;
+    /**
+     * Minimum WordPress version the pending update requires, or null when there is no
+     * update or it declares none. Only present for installable features (plugin/theme).
+     *
+     * @since TBD
+     */
+    update_requires_wp?: string | null;
+    /**
+     * Minimum PHP version the pending update requires, or null when there is no
+     * update or it declares none. Only present for installable features (plugin/theme).
+     *
+     * @since TBD
+     */
+    update_requires_php?: string | null;
+    /**
+     * Whether the site's WordPress version meets the pending update's requirement.
+     * Returns true if there is no update, since the installed version already runs on the site.
+     * Only present for installable features (plugin/theme).
+     *
+     * @since TBD
+     */
+    update_wp_compatible?: boolean;
+    /**
+     * Whether the site's PHP version meets the pending update's requirement.
+     * Returns true if there is no update, since the installed version already runs on the site.
+     * Only present for installable features (plugin/theme).
+     *
+     * @since TBD
+     */
+    update_php_compatible?: boolean;
 }
 
 /**
@@ -151,6 +181,10 @@ export interface ServiceFeature extends BaseFeature {
     version?: never;
     installed_version?: never;
     update_version?: never;
+    update_requires_wp?: never;
+    update_requires_php?: never;
+    update_wp_compatible?: never;
+    update_php_compatible?: never;
 }
 
 /**

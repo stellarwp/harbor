@@ -14,6 +14,7 @@ import { FeatureIcon } from '@/components/atoms/FeatureIcon';
 import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { VersionDisplay } from '@/components/molecules/VersionDisplay';
+import { UpdateRequirementsNotice } from '@/components/molecules/UpdateRequirementsNotice';
 import { FeatureAccessSources } from '@/components/molecules/FeatureAccessSources';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ import { Dialog, DialogHeader, DialogFooter } from '@/components/ui/dialog';
 import { useFeatureRow } from '@/hooks/useFeatureRow';
 import type { Feature } from '@/types/api';
 import { isInstallableFeature } from '@/types/utils';
+import { getUnmetUpdateRequirements, getUpdateRequirementsLabel } from '@/lib/update-requirements';
 
 interface FeatureRowProps {
 	feature:          Feature;
@@ -29,6 +31,7 @@ interface FeatureRowProps {
 }
 
 /**
+ * @since TBD   Disable the Update button and show a notice when the update needs a newer WordPress or PHP version.
  * @since 1.0.0
  */
 export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
@@ -66,6 +69,13 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 			  sprintf( __( 'Upgrade to %s to receive updates and support.', '%TEXTDOMAIN%' ), upgradeTierName )
 			: undefined );
 
+	// An update the site cannot run keeps the Update button disabled. The license label takes the tooltip when both apply.
+	const unmetRequirements = isVisuallyAvailable && isInstallableFeature( feature )
+		? getUnmetUpdateRequirements( feature )
+		: null;
+	const updateDisabledLabel = upgradeLabel
+		?? ( unmetRequirements ? getUpdateRequirementsLabel( unmetRequirements ) : undefined );
+
 	return (
 		<div className={ cn(
 			'border-b last:border-b-0',
@@ -102,7 +112,7 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 								feature={ feature }
 								pendingAction={ pendingAction }
 								installableBusy={ installableBusy }
-								upgradeLabel={ upgradeLabel }
+								disabledLabel={ updateDisabledLabel }
 								onUpdate={ isVisuallyAvailable && licenseBadgeType !== 'legacy' && licenseBadgeType !== 'revoked' ? handleUpdate : undefined }
 							/>
 						) }
@@ -128,6 +138,12 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 					</div>
 				</div>
 			</div>
+
+			{ unmetRequirements && (
+				<div className="px-4 pb-3 pl-11">
+					<UpdateRequirementsNotice unmet={ unmetRequirements } />
+				</div>
+			) }
 
 			{ expanded && (
 				<div id={ detailsId } className="px-4 pb-3 pl-11">

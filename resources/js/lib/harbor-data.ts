@@ -18,6 +18,8 @@ import type { HarborData } from '@/types/harbor-data';
 const DEFAULTS = {
     licenseKeyPrefix: 'LWSW-',
     pluginsUrl:       '/wp-admin/plugins.php',
+    updateCoreUrl:    '/wp-admin/update-core.php',
+    updatePhpUrl:     'https://wordpress.org/support/update-php/',
 } as const satisfies Partial<HarborData>;
 
 type KeyWithDefault = keyof typeof DEFAULTS;
