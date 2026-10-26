@@ -11,6 +11,7 @@ use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 
 final class Strategy_FactoryTest extends HarborTestCase {
 
@@ -29,7 +30,7 @@ final class Strategy_FactoryTest extends HarborTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->factory = new Strategy_Factory();
+		$this->factory = new Strategy_Factory( new Resolve_Headers() );
 	}
 
 	/**

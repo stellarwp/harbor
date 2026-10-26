@@ -6,6 +6,7 @@ use LiquidWeb\Harbor\Features\Error_Code;
 use LiquidWeb\Harbor\Features\Strategy\Theme_Strategy;
 use LiquidWeb\Harbor\Features\Types\Theme;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use WP_Error;
 use WP_Upgrader;
 
@@ -58,7 +59,7 @@ final class ThemeStrategyTest extends HarborTestCase {
 		}
 
 		$this->feature             = $this->make_theme_feature();
-		$this->strategy            = new Theme_Strategy( $this->feature );
+		$this->strategy            = new Theme_Strategy( $this->feature, new Resolve_Headers() );
 		$this->original_stylesheet = get_option( 'stylesheet', '' );
 	}
 
@@ -367,6 +368,82 @@ final class ThemeStrategyTest extends HarborTestCase {
 
 		$this->assertWPError( $result );
 		$this->assertSame( Error_Code::INSTALL_LOCKED, $result->get_error_code() );
+	}
+
+	/**
+	 * Tests that update() refuses a theme update whose WordPress or PHP requirement the site does not meet, before taking the lock.
+	 *
+	 * @return void
+	 */
+	public function test_update_returns_requirements_not_met_for_unmet_requirements(): void {
+		$this->install_test_theme( self::STYLESHEET, 'StellarWP' );
+
+		$transient           = new \stdClass();
+		$transient->response = [
+			self::STYLESHEET => [
+				'id'           => 'stellarwp/themes/' . self::STYLESHEET,
+				'theme'        => self::STYLESHEET,
+				'new_version'  => '2.0.0',
+				'package'      => 'https://example.com/test-theme-feature.zip',
+				'requires'     => '',
+				'requires_php' => '99.0',
+			],
+		];
+		set_site_transient( 'update_themes', $transient );
+
+		try {
+			$result = $this->strategy->update();
+
+			$this->assertWPError( $result );
+			$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+			$this->assertStringContainsString( 'requires PHP 99.0 or newer', $result->get_error_message() );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
+		} finally {
+			delete_site_transient( 'update_themes' );
+		}
+	}
+
+	/**
+	 * Tests that update() reports the requirements of a WordPress.org theme update listed under `no_update`.
+	 *
+	 * @return void
+	 */
+	public function test_update_returns_requirements_not_met_for_a_wporg_update_in_no_update(): void {
+		$this->install_test_theme( self::STYLESHEET, 'StellarWP' );
+
+		$transient            = new \stdClass();
+		$transient->response  = [];
+		$transient->no_update = [
+			self::STYLESHEET => [
+				'theme'       => self::STYLESHEET,
+				'new_version' => '2.0.0',
+				'requires'    => '99.0',
+			],
+		];
+		set_site_transient( 'update_themes', $transient );
+
+		try {
+			$result = $this->strategy->update();
+
+			$this->assertWPError( $result );
+			$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+		} finally {
+			delete_site_transient( 'update_themes' );
+		}
+	}
+
+	/**
+	 * Tests that check_update_available() still works and reports its deprecation.
+	 *
+	 * @return void
+	 */
+	public function test_check_update_available_is_deprecated(): void {
+		$this->setExpectedDeprecated( Theme_Strategy::class . '::check_update_available' );
+
+		$method = new \ReflectionMethod( $this->strategy, 'check_update_available' );
+		$method->setAccessible( true );
+
+		$this->assertFalse( $method->invoke( $this->strategy ) );
 	}
 
 	// -------------------------------------------------------------------------

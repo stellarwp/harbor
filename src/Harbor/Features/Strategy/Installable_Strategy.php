@@ -3,6 +3,9 @@
 namespace LiquidWeb\Harbor\Features\Strategy;
 
 use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Update\Requirements\Headers;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_Ajax_Upgrader_Skin;
 use WP_Error;
@@ -39,6 +42,29 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * @since 1.0.0
 	 */
 	protected const LOCK_KEY = 'lw_harbor_install_lock';
+
+	/**
+	 * Resolves the requirement headers of a feature's pending update from WordPress's update transients.
+	 *
+	 * @since TBD
+	 *
+	 * @var Resolve_Headers
+	 */
+	protected Resolve_Headers $resolve_headers;
+
+	/**
+	 * Construct the strategy.
+	 *
+	 * @since TBD
+	 *
+	 * @param Feature         $feature         The feature this strategy operates on.
+	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of a feature's pending update from WordPress's update transients.
+	 */
+	public function __construct( Feature $feature, Resolve_Headers $resolve_headers ) {
+		parent::__construct( $feature );
+
+		$this->resolve_headers = $resolve_headers;
+	}
 
 
 	// ── Abstract hooks ──────────────────────────────────────────────────
@@ -109,6 +135,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Check whether an update is available for this extension.
 	 *
 	 * @since 1.0.0
+	 * @deprecated TBD Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool True if an update is available.
 	 */
@@ -201,7 +228,8 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Update the feature: upgrade the extension to the latest available version.
 	 *
 	 * Checks the WordPress update transient for an available update. If one
-	 * exists, acquires the global install lock and runs the upgrade.
+	 * exists and the site meets its WordPress and PHP requirements, acquires
+	 * the global install lock and runs the upgrade.
 	 *
 	 * @since 1.0.0
 	 *
@@ -229,7 +257,9 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 			);
 		}
 
-		if ( ! $this->check_update_available() ) {
+		$headers = $this->get_update_headers();
+
+		if ( $headers === null ) {
 			static::debug_log(
 				sprintf(
 					'No update available for "%s".',
@@ -245,6 +275,20 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 					$this->feature->get_name()
 				)
 			);
+		}
+
+		if ( ! $headers->is_met() ) {
+			$error = $headers->to_wp_error( $this->feature->get_name(), Error_Code::REQUIREMENTS_NOT_MET );
+
+			static::debug_log(
+				sprintf(
+					'Cannot update "%s": %s',
+					$this->feature->get_slug(),
+					$error->get_error_message()
+				)
+			);
+
+			return $error;
 		}
 
 		if ( ! $this->acquire_lock( self::LOCK_KEY ) ) {
@@ -268,10 +312,11 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		try {
 			$result = $this->do_update();
 
-			// Plugin_Upgrader::upgrade() deactivates the plugin before upgrading
-			// and does not reactivate it afterward (unlike the WP admin UI path).
-			// Reactivate here so an API-triggered update doesn't leave the plugin
-			// inactive.
+			/**
+			 * Make sure the extension is active after the update. The bulk
+			 * upgraders keep an active plugin active, so for plugins this only
+			 * changes something when the update left the plugin inactive.
+			 */
 			if ( $result === true ) {
 				$result = $this->do_activate();
 			}
@@ -437,7 +482,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 
 		if ( is_wp_error( $result ) ) {
 			return new WP_Error(
-				$error_code,
+				$this->has_requirements_error( $result, $skin->get_errors() ) ? Error_Code::REQUIREMENTS_NOT_MET : $error_code,
 				$is_update
 					? sprintf(
 						/* translators: %1$s: feature name, %2$s: error message */
@@ -455,17 +500,8 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		}
 
 		if ( $result !== true ) {
-			$skin_errors  = $skin->get_errors();
-			$actual_code  = $error_code;
-			$requirements = $this->get_requirements_error_codes();
-
-			if (
-				$requirements !== []
-				&& $skin_errors->has_errors()
-				&& array_intersect( array_map( [ Cast::class, 'to_string' ], $skin_errors->get_error_codes() ), $requirements )
-			) {
-				$actual_code = Error_Code::REQUIREMENTS_NOT_MET;
-			}
+			$skin_errors = $skin->get_errors();
+			$actual_code = $this->has_requirements_error( $skin_errors ) ? Error_Code::REQUIREMENTS_NOT_MET : $error_code;
 
 			$message = $skin_errors->has_errors()
 				? $skin->get_error_messages()
@@ -496,6 +532,23 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	}
 
 	/**
+	 * Get the requirement headers of the update WordPress has for this extension.
+	 *
+	 * Reads the extension's entry in the update transient's `response` list.
+	 * WordPress.org lists an update whose WordPress requirement the site does
+	 * not meet under `no_update` instead, so a newer `no_update` entry whose
+	 * requirements the site does not meet is read too. See
+	 * Resolve_Headers.
+	 *
+	 * @since TBD
+	 *
+	 * @return Headers|null Null when WordPress has no update for the extension.
+	 */
+	protected function get_update_headers(): ?Headers {
+		return ( $this->resolve_headers )( $this->feature );
+	}
+
+	/**
 	 * WordPress error codes that indicate requirements failures.
 	 *
 	 * Override in subclasses that need to detect PHP/WP version mismatches
@@ -507,6 +560,37 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 */
 	protected function get_requirements_error_codes(): array {
 		return [];
+	}
+
+	/**
+	 * Whether any of the given errors carries a requirements error code.
+	 *
+	 * The bulk upgraders return a requirements failure as the result, and the
+	 * upgrader skin collects the errors raised while the package is checked,
+	 * so run_upgrader() passes both.
+	 *
+	 * @since TBD
+	 *
+	 * @param WP_Error ...$errors The errors to check.
+	 *
+	 * @return bool
+	 */
+	private function has_requirements_error( WP_Error ...$errors ): bool {
+		$requirements = $this->get_requirements_error_codes();
+
+		if ( $requirements === [] ) {
+			return false;
+		}
+
+		foreach ( $errors as $error ) {
+			$codes = array_map( [ Cast::class, 'to_string' ], $error->get_error_codes() );
+
+			if ( array_intersect( $codes, $requirements ) !== [] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
