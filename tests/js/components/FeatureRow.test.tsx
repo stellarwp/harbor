@@ -120,7 +120,7 @@ describe( 'FeatureRow controls', () => {
         expect( screen.getByRole( 'status' ).textContent ).toBe( message );
         expect( screen.getByRole( 'link', { name: linkName } ).getAttribute( 'href' ) ).toBe( href );
         await userEvent.setup().hover( button.parentElement as HTMLElement );
-        expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toContain( 'This update requires' );
+        expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toContain( 'Requires ' );
     } );
 
     it( 'names both requirements when the update needs a newer WordPress and PHP', () => {
@@ -143,6 +143,23 @@ describe( 'FeatureRow controls', () => {
         await userEvent.setup().hover( button.parentElement as HTMLElement );
         expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toContain( 'Upgrade your license to manage updates from Nexcess Licensing.' );
         expect( screen.getByRole( 'status' ) ).not.toBeNull();
+    } );
+
+    it( 'disables the toggle and explains why when a plugin that is not installed needs a newer WordPress', async () => {
+        configure();
+        render( <FeatureRow feature={ { ...feature, installed_version: undefined, update_version: null, requires_wp: '9.9', wp_compatible: false } } /> );
+        const toggle = screen.getByRole( 'switch' ) as HTMLButtonElement;
+        expect( toggle.disabled ).toBe( true );
+        expect( screen.getByRole( 'status' ).textContent ).toBe( 'Version 2.0.0 requires WordPress 9.9 or newer. Update WordPress to install it.' );
+        await userEvent.setup().hover( toggle.parentElement as HTMLElement );
+        expect( ( await screen.findByRole( 'tooltip' ) ).textContent ).toContain( 'Requires WordPress 9.9 or newer.' );
+    } );
+
+    it( 'ignores the catalog requirements once the plugin is installed', () => {
+        configure();
+        render( <FeatureRow feature={ { ...feature, update_version: null, requires_wp: '9.9', wp_compatible: false } } /> );
+        expect( screen.queryByRole( 'status' ) ).toBeNull();
+        expect( ( screen.getByRole( 'switch' ) as HTMLButtonElement ).disabled ).toBe( false );
     } );
 
     it( 'keeps the confirmation before deactivating the last Harbor host', async () => {

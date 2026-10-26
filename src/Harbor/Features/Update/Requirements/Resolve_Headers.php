@@ -71,6 +71,38 @@ final class Resolve_Headers {
 	}
 
 	/**
+	 * Resolves the requirement headers of the feature's catalog release, which
+	 * is the version installing the feature downloads.
+	 *
+	 * Reads the catalog's `wp_requires` and `php_requires`, which feature
+	 * resolution stores on the feature as `requires_wp` and `requires_php`. A
+	 * feature that is not installed has no entry in the update transients, so
+	 * this is the only place its requirements come from.
+	 *
+	 * @since TBD
+	 *
+	 * @param Feature $feature The feature. Only plugins and themes are installed.
+	 *
+	 * @return Headers|null Null when the feature is not a plugin or theme, or the catalog has no version for it.
+	 */
+	public function from_catalog( Feature $feature ): ?Headers {
+		if ( ! $feature instanceof Plugin && ! $feature instanceof Theme ) {
+			return null;
+		}
+
+		$attributes = $feature->to_array();
+		$headers    = Headers::from_entry(
+			[
+				'new_version'  => $attributes['version'] ?? '',
+				'requires'     => $attributes['requires_wp'] ?? '',
+				'requires_php' => $attributes['requires_php'] ?? '',
+			]
+		);
+
+		return $headers->get_version() !== '' ? $headers : null;
+	}
+
+	/**
 	 * Resolves the requirement headers of the update in the transient's `response` list.
 	 *
 	 * @since TBD

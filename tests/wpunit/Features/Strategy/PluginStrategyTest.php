@@ -830,6 +830,75 @@ final class PluginStrategyTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that enable() refuses to install a plugin whose catalog version needs a newer WordPress, before downloading anything.
+	 *
+	 * @return void
+	 */
+	public function test_enable_returns_requirements_not_met_before_installing(): void {
+		$downloads = 0;
+		$counter   = static function ( $reply ) use ( &$downloads ) {
+			++$downloads;
+
+			return $reply;
+		};
+		add_filter( 'upgrader_pre_download', $counter );
+
+		$feature  = new Plugin(
+			[
+				'slug'         => 'test-feature',
+				'name'         => 'Test Feature',
+				'plugin_file'  => self::PLUGIN_FILE,
+				'is_available' => true,
+				'version'      => '2.0.0',
+				'requires_wp'  => '99.0',
+			]
+		);
+		$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+		$result   = $strategy->enable();
+
+		remove_filter( 'upgrader_pre_download', $counter );
+
+		$this->assertWPError( $result );
+		$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+		$this->assertStringContainsString( 'requires WordPress 99.0 or newer', $result->get_error_message() );
+		$this->assertSame( 0, $downloads );
+		$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
+	}
+
+	/**
+	 * Tests that enable() ignores the catalog requirements for a plugin that is already installed, since activation checks its own header.
+	 *
+	 * @return void
+	 */
+	public function test_enable_activates_an_installed_plugin_whatever_the_catalog_requires(): void {
+		$plugin_dir = WP_PLUGIN_DIR . '/test-feature';
+
+		if ( ! is_dir( $plugin_dir ) ) {
+			mkdir( $plugin_dir, 0755, true );
+		}
+
+		file_put_contents( $plugin_dir . '/test-feature.php', $this->plugin_header( '1.0.0' ) );
+
+		try {
+			$feature  = new Plugin(
+				[
+					'slug'         => 'test-feature',
+					'name'         => 'Test Feature',
+					'plugin_file'  => self::PLUGIN_FILE,
+					'is_available' => true,
+					'version'      => '2.0.0',
+					'requires_wp'  => '99.0',
+				]
+			);
+			$strategy = new Plugin_Strategy( $feature, new Resolve_Headers() );
+
+			$this->assertTrue( $strategy->enable() );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
 	 * Tests that check_update_available() still works and reports its deprecation.
 	 *
 	 * @return void

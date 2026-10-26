@@ -98,6 +98,8 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 						'kind'         => 'plugin',
 						'minimum_tier' => 'basic',
 						'version'      => '1.0.0',
+						'wp_requires'  => '6.6',
+						'php_requires' => '7.4',
 					],
 					[
 						'slug'         => 'kadence-blocks',
@@ -348,6 +350,23 @@ final class Resolve_Feature_CollectionTest extends HarborTestCase {
 		$resolver = $this->make_resolver( $this->make_catalog(), new Product_Collection() );
 
 		$this->assert_resolved_feature_flags( $resolver, 'kadence-blocks', true, true );
+	}
+
+	/**
+	 * Tests that the catalog's WordPress and PHP requirements are stored on the resolved feature.
+	 *
+	 * @return void
+	 */
+	public function test_catalog_requirements_are_stored_on_the_feature(): void {
+		$collection = ( $this->make_resolver( $this->make_catalog(), new Product_Collection() ) )();
+
+		$with_requirements = $collection->get( 'kad-blocks-pro' )->to_array();
+		$this->assertSame( '6.6', $with_requirements['requires_wp'] );
+		$this->assertSame( '7.4', $with_requirements['requires_php'] );
+
+		$without_requirements = $collection->get( 'kadence-blocks' )->to_array();
+		$this->assertNull( $without_requirements['requires_wp'] );
+		$this->assertNull( $without_requirements['requires_php'] );
 	}
 
 	/**

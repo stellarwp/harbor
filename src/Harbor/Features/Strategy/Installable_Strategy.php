@@ -168,7 +168,9 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Enable the feature: install (if needed) and activate the extension.
 	 *
 	 * Idempotent: returns true if the extension is already active. Uses a
-	 * global lock to prevent concurrent installs of any extension.
+	 * global lock to prevent concurrent installs of any extension. Refuses to
+	 * install an extension whose catalog version needs a newer WordPress or PHP
+	 * than the site runs.
 	 *
 	 * @since 1.0.0
 	 *
@@ -189,6 +191,30 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 			);
 
 			return true;
+		}
+
+		/**
+		 * An extension that is not installed is downloaded at its catalog
+		 * version, so refuse before downloading when the site cannot run it.
+		 * An installed but inactive extension is checked by its own header
+		 * when it is activated.
+		 */
+		if ( ! $this->check_installed() ) {
+			$headers = $this->resolve_headers->from_catalog( $this->feature );
+
+			if ( $headers !== null && ! $headers->is_met() ) {
+				$error = $headers->to_wp_error( $this->feature->get_name(), Error_Code::REQUIREMENTS_NOT_MET );
+
+				static::debug_log(
+					sprintf(
+						'Cannot install "%s": %s',
+						$this->feature->get_slug(),
+						$error->get_error_message()
+					)
+				);
+
+				return $error;
+			}
 		}
 
 		// Ensure the extension is on disk — install from ZIP if needed.

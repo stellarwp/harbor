@@ -38,6 +38,8 @@ final class Plugin extends Feature implements Installable {
 				'installed_version' => $attributes['installed_version'] ?? null,
 				'version'           => $attributes['version'] ?? null,
 				'changelog'         => $attributes['changelog'] ?? null,
+				'requires_wp'       => $attributes['requires_wp'] ?? null,
+				'requires_php'      => $attributes['requires_php'] ?? null,
 			]
 		);
 

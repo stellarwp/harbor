@@ -224,6 +224,36 @@ final class Feature_ResourceTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that to_array() reports whether the site meets the catalog version's requirements.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_includes_catalog_requirements(): void {
+		$plugin = Plugin::from_array(
+			[
+				'slug'         => 'stellar-export',
+				'name'         => 'Stellar Export',
+				'plugin_file'  => 'stellar-export/stellar-export.php',
+				'is_available' => true,
+				'version'      => '3.0.0',
+				'requires_wp'  => '99.0',
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin, new Resolve_Headers() )->to_array();
+
+		$this->assertSame( '99.0', $data['requires_wp'] );
+		$this->assertNull( $data['requires_php'] );
+		$this->assertFalse( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+
+		$data = Feature_Resource::from_feature( $this->make_plugin(), new Resolve_Headers() )->to_array();
+
+		$this->assertTrue( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+	}
+
+	/**
 	 * Tests that a newer WordPress.org update listed under `no_update` because the site's WordPress is too old is reported.
 	 *
 	 * @return void

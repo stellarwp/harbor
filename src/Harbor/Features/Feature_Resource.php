@@ -27,6 +27,11 @@ use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
  * update_*_compatible fields return true if there is no update, since the
  * installed version already runs on the site.
  *
+ * requires_wp and requires_php are the WordPress and PHP versions the catalog
+ * version requires, which is the version installing the feature downloads.
+ * wp_compatible and php_compatible say whether the site meets them, and
+ * return true when the catalog declares none.
+ *
  * @since 1.0.0
  */
 final class Feature_Resource {
@@ -50,15 +55,28 @@ final class Feature_Resource {
 	private ?Headers $update;
 
 	/**
+	 * The catalog version's requirement headers, or null when the catalog has no version.
+	 *
+	 * @since TBD
+	 *
+	 * @var Headers|null
+	 */
+	private ?Headers $catalog;
+
+	/**
 	 * @since 1.0.0
 	 * @since TBD Takes the pending update's requirement headers instead of its version.
 	 *
+	 * @since TBD Takes the catalog version's requirement headers.
+	 *
 	 * @param Feature      $feature The resolved feature.
 	 * @param Headers|null $update  The pending update's requirement headers, or null when no update is pending.
+	 * @param Headers|null $catalog The catalog version's requirement headers, or null when the catalog has no version.
 	 */
-	public function __construct( Feature $feature, ?Headers $update ) {
+	public function __construct( Feature $feature, ?Headers $update, ?Headers $catalog = null ) {
 		$this->feature = $feature;
 		$this->update  = $update;
+		$this->catalog = $catalog;
 	}
 
 	/**
@@ -76,9 +94,11 @@ final class Feature_Resource {
 	 * @return self
 	 */
 	public static function from_feature( Feature $feature, Resolve_Headers $resolve_headers ) {
-		$update = $feature instanceof Service ? null : $resolve_headers( $feature );
+		if ( $feature instanceof Service ) {
+			return new self( $feature, null );
+		}
 
-		return new self( $feature, $update );
+		return new self( $feature, $resolve_headers( $feature ), $resolve_headers->from_catalog( $feature ) );
 	}
 
 	/**
@@ -104,6 +124,8 @@ final class Feature_Resource {
 				'update_requires_php'   => $update !== null && $update->get_php() !== '' ? $update->get_php() : null,
 				'update_wp_compatible'  => $update === null || $update->is_wp_met(),
 				'update_php_compatible' => $update === null || $update->is_php_met(),
+				'wp_compatible'         => $this->catalog === null || $this->catalog->is_wp_met(),
+				'php_compatible'        => $this->catalog === null || $this->catalog->is_php_met(),
 			]
 		);
 	}

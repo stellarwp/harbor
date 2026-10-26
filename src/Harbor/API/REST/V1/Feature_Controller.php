@@ -440,6 +440,30 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
+			'requires_wp'           => [
+				'description' => __( 'Minimum WordPress version of the catalog version, which is the version installing the feature downloads, or null when it declares none.', '%TEXTDOMAIN%' ),
+				'type'        => [ 'string', 'null' ],
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'requires_php'          => [
+				'description' => __( 'Minimum PHP version of the catalog version, which is the version installing the feature downloads, or null when it declares none.', '%TEXTDOMAIN%' ),
+				'type'        => [ 'string', 'null' ],
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'wp_compatible'         => [
+				'description' => __( 'Whether the site\'s WordPress version meets the catalog version\'s requirement. Returns true if the catalog declares none.', '%TEXTDOMAIN%' ),
+				'type'        => 'boolean',
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
+			'php_compatible'        => [
+				'description' => __( 'Whether the site\'s PHP version meets the catalog version\'s requirement. Returns true if the catalog declares none.', '%TEXTDOMAIN%' ),
+				'type'        => 'boolean',
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+			],
 			'update_version'        => [
 				'description' => __( 'Version available in the WordPress update transient, or null when no update is pending.', '%TEXTDOMAIN%' ),
 				'type'        => [ 'string', 'null' ],

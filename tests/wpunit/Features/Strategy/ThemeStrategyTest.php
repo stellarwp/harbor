@@ -433,6 +433,40 @@ final class ThemeStrategyTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that enable() refuses to install a theme whose catalog version needs a newer PHP, before calling themes_api().
+	 *
+	 * @return void
+	 */
+	public function test_enable_returns_requirements_not_met_before_installing(): void {
+		$lookups = 0;
+		$counter = static function ( $result ) use ( &$lookups ) {
+			++$lookups;
+
+			return $result;
+		};
+		add_filter( 'themes_api', $counter, 1 );
+
+		$feature  = new Theme(
+			[
+				'slug'         => self::STYLESHEET,
+				'name'         => 'Test Theme Feature',
+				'is_available' => true,
+				'version'      => '2.0.0',
+				'requires_php' => '99.0',
+			]
+		);
+		$strategy = new Theme_Strategy( $feature, new Resolve_Headers() );
+		$result   = $strategy->enable();
+
+		remove_filter( 'themes_api', $counter, 1 );
+
+		$this->assertWPError( $result );
+		$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+		$this->assertStringContainsString( 'requires PHP 99.0 or newer', $result->get_error_message() );
+		$this->assertSame( 0, $lookups );
+	}
+
+	/**
 	 * Tests that check_update_available() still works and reports its deprecation.
 	 *
 	 * @return void

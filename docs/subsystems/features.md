@@ -68,8 +68,11 @@ How each path refuses an update the site cannot run:
 | Update button and `POST /features/{slug}/update`                     | `Installable_Strategy::update()` returns `REQUIREMENTS_NOT_MET` before taking the install lock. The update then runs through `bulk_upgrade()`, which also checks the zip's headers |
 | Plugins screen "update now", Dashboard > Updates, `wp plugin update` | WordPress's `bulk_upgrade()` checks `requires` and `requires_php`                                                                                                                  |
 | Automatic updates, `update.php?action=upgrade-plugin`                | `Update\Requirements\Guard` refuses the download on `upgrader_pre_download`, because `upgrade()` checks neither value                                                              |
+| Activate toggle and `POST /features/{slug}/enable`, not installed    | `Installable_Strategy::enable()` returns `REQUIREMENTS_NOT_MET` before downloading, from the catalog version's requirements. `install()` also checks the zip's headers             |
 
 On the Plugins screen, WordPress shows its own message when `requires_php` is not met. `Guard` adds a message for `requires` under the plugin row, linking to the WordPress update screen. Themes need neither: `wp_theme_update_row()` checks both values. `Guard` acts only on entries Harbor writes (`id` starting with `stellarwp/plugins/` or `stellarwp/themes/`).
+
+A feature that is not installed has no entry in the update transients. Feature resolution stores the catalog's `wp_requires` and `php_requires` on the feature as `requires_wp` and `requires_php`, and `Resolve_Headers::from_catalog()` reads them for the catalog version, which is the version installing the feature downloads. The Nexcess Licensing page shows the same notice for it and disables the Activate toggle. This applies to any feature whose catalog entry has the values, including WordPress.org-hosted ones. Once the feature is installed, activation checks the installed plugin's own header instead.
 
 ## Resolution
 
@@ -254,6 +257,10 @@ Installable features (`plugin` and `theme`) also include:
 | `update_requires_php`   | string\|null | Minimum PHP version of the pending update, or null                       |
 | `update_wp_compatible`  | boolean      | Whether the site meets `update_requires_wp`. True if there is no update  |
 | `update_php_compatible` | boolean      | Whether the site meets `update_requires_php`. True if there is no update |
+| `requires_wp`           | string\|null | Minimum WordPress version of the catalog version, or null                |
+| `requires_php`          | string\|null | Minimum PHP version of the catalog version, or null                      |
+| `wp_compatible`         | boolean      | Whether the site meets `requires_wp`. True if the catalog declares none  |
+| `php_compatible`        | boolean      | Whether the site meets `requires_php`. True if the catalog declares none |
 
 Plugin features also include:
 

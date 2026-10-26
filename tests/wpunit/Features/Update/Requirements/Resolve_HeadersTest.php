@@ -198,6 +198,49 @@ final class Resolve_HeadersTest extends HarborTestCase {
 	}
 
 	/**
+	 * Tests that from_catalog() reads the requirements feature resolution stored from the catalog.
+	 *
+	 * @return void
+	 */
+	public function test_from_catalog_reads_the_catalog_requirements(): void {
+		$plugin = Plugin::from_array(
+			[
+				'slug'         => 'kadence-blocks',
+				'name'         => 'Kadence Blocks',
+				'plugin_file'  => self::PLUGIN_FILE,
+				'version'      => '3.0.0',
+				'requires_wp'  => '99.0',
+				'requires_php' => '7.4',
+			]
+		);
+
+		$headers = ( new Resolve_Headers() )->from_catalog( $plugin );
+
+		$this->assertNotNull( $headers );
+		$this->assertSame( '3.0.0', $headers->get_version() );
+		$this->assertSame( '99.0', $headers->get_wp() );
+		$this->assertSame( '7.4', $headers->get_php() );
+		$this->assertFalse( $headers->is_wp_met() );
+	}
+
+	/**
+	 * Tests that from_catalog() returns null for a service and for a feature without a catalog version.
+	 *
+	 * @return void
+	 */
+	public function test_from_catalog_returns_null_without_a_catalog_version(): void {
+		$service = Service::from_array(
+			[
+				'slug' => 'promoter',
+				'name' => 'Promoter',
+			]
+		);
+
+		$this->assertNull( ( new Resolve_Headers() )->from_catalog( $service ) );
+		$this->assertNull( ( new Resolve_Headers() )->from_catalog( $this->theme( 'kadence', '' ) ) );
+	}
+
+	/**
 	 * Tests that a service feature has no pending update.
 	 *
 	 * @return void

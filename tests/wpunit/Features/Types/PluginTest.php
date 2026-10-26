@@ -121,6 +121,8 @@ final class PluginTest extends HarborTestCase {
 				'wporg_slug'        => null,
 				'version'           => null,
 				'changelog'         => null,
+				'requires_wp'       => null,
+				'requires_php'      => null,
 			],
 			$feature->to_array()
 		);
@@ -148,6 +150,8 @@ final class PluginTest extends HarborTestCase {
 			'installed_version' => '1.2.3',
 			'version'           => null,
 			'changelog'         => null,
+			'requires_wp'       => null,
+			'requires_php'      => null,
 		];
 
 		$feature = Plugin::from_array( $data );

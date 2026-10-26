@@ -14,15 +14,16 @@ import { FeatureIcon } from '@/components/atoms/FeatureIcon';
 import { LicenseBadge } from '@/components/atoms/LicenseBadge';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { VersionDisplay } from '@/components/molecules/VersionDisplay';
-import { UpdateRequirementsNotice } from '@/components/molecules/UpdateRequirementsNotice';
+import { RequirementsNotice } from '@/components/molecules/RequirementsNotice';
 import { FeatureAccessSources } from '@/components/molecules/FeatureAccessSources';
 import { Switch } from '@/components/ui/switch';
+import { Tooltip } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogHeader, DialogFooter } from '@/components/ui/dialog';
 import { useFeatureRow } from '@/hooks/useFeatureRow';
 import type { Feature } from '@/types/api';
 import { isInstallableFeature } from '@/types/utils';
-import { getUnmetUpdateRequirements, getUpdateRequirementsLabel } from '@/lib/update-requirements';
+import { getUnmetInstallRequirements, getUnmetUpdateRequirements, getRequirementsLabel } from '@/lib/requirements';
 
 interface FeatureRowProps {
 	feature:          Feature;
@@ -31,7 +32,7 @@ interface FeatureRowProps {
 }
 
 /**
- * @since TBD   Disable the Update button and show a notice when the update needs a newer WordPress or PHP version.
+ * @since TBD   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
  * @since 1.0.0
  */
 export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
@@ -70,11 +71,17 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 			: undefined );
 
 	// An update the site cannot run keeps the Update button disabled. The license label takes the tooltip when both apply.
-	const unmetRequirements = isVisuallyAvailable && isInstallableFeature( feature )
+	const unmetUpdate = isVisuallyAvailable && isInstallableFeature( feature )
 		? getUnmetUpdateRequirements( feature )
 		: null;
 	const updateDisabledLabel = upgradeLabel
-		?? ( unmetRequirements ? getUpdateRequirementsLabel( unmetRequirements ) : undefined );
+		?? ( unmetUpdate ? getRequirementsLabel( unmetUpdate ) : undefined );
+
+	// A feature that is not installed and that the site cannot run keeps the toggle disabled, since installing it would fail.
+	const unmetInstall = isVisuallyAvailable && isInstallableFeature( feature )
+		? getUnmetInstallRequirements( feature )
+		: null;
+	const unmetRequirements = unmetUpdate ?? unmetInstall;
 
 	return (
 		<div className={ cn(
@@ -121,27 +128,33 @@ export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {
 						{ isVisuallyAvailable && <StatusBadge status={ badgeStatus } /> }
 					</div>
 					<div className="flex justify-end">
-						{ isVisuallyAvailable && isInstallableFeature( feature ) && showSwitch && (
-							<Switch
-								checked={ switchChecked }
-								onCheckedChange={ handleToggle }
-								disabled={ !! pendingAction || installableBusy || ( licenseBadgeType === 'revoked' && ! switchChecked ) }
-								aria-label={
-									switchChecked
-										? /* translators: %s is the name of the feature to disable */
-										  sprintf( __( 'Disable %s', '%TEXTDOMAIN%' ), feature.name )
-										: /* translators: %s is the name of the feature to enable */
-										  sprintf( __( 'Enable %s', '%TEXTDOMAIN%' ), feature.name )
-								}
-							/>
-						) }
+						{ isVisuallyAvailable && isInstallableFeature( feature ) && showSwitch && ( () => {
+							const toggle = (
+								<Switch
+									checked={ switchChecked }
+									onCheckedChange={ handleToggle }
+									disabled={ !! pendingAction || installableBusy || !! unmetInstall || ( licenseBadgeType === 'revoked' && ! switchChecked ) }
+									aria-label={
+										switchChecked
+											? /* translators: %s is the name of the feature to disable */
+											  sprintf( __( 'Disable %s', '%TEXTDOMAIN%' ), feature.name )
+											: /* translators: %s is the name of the feature to enable */
+											  sprintf( __( 'Enable %s', '%TEXTDOMAIN%' ), feature.name )
+									}
+								/>
+							);
+
+							return unmetInstall
+								? <Tooltip label={ getRequirementsLabel( unmetInstall ) }>{ toggle }</Tooltip>
+								: toggle;
+						} )() }
 					</div>
 				</div>
 			</div>
 
 			{ unmetRequirements && (
 				<div className="px-4 pb-3 pl-11">
-					<UpdateRequirementsNotice unmet={ unmetRequirements } />
+					<RequirementsNotice unmet={ unmetRequirements } />
 				</div>
 			) }
 

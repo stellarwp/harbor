@@ -113,6 +113,8 @@ final class ThemeTest extends HarborTestCase {
 				'wporg_slug'        => null,
 				'version'           => null,
 				'changelog'         => null,
+				'requires_wp'       => null,
+				'requires_php'      => null,
 			],
 			$feature->to_array()
 		);
@@ -139,6 +141,8 @@ final class ThemeTest extends HarborTestCase {
 			'installed_version' => '2.0.0',
 			'version'           => null,
 			'changelog'         => null,
+			'requires_wp'       => null,
+			'requires_php'      => null,
 		];
 
 		$feature = Theme::from_array( $data );

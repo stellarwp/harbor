@@ -1,6 +1,7 @@
 /**
- * Amber notice shown under a feature row when its pending update needs a
- * newer WordPress or PHP version than the site runs.
+ * Amber notice shown under a feature row when its pending update, or the
+ * version installing it would download, needs a newer WordPress or PHP
+ * version than the site runs.
  *
  * Links to the WordPress update screen for the WordPress requirement and to
  * WordPress's page on updating PHP for the PHP requirement.
@@ -11,16 +12,16 @@ import { __, sprintf } from '@wordpress/i18n';
 import { createInterpolateElement } from '@wordpress/element';
 import { AlertTriangle } from 'lucide-react';
 import { getHarborDataValue } from '@/lib/harbor-data';
-import type { UnmetUpdateRequirements } from '@/lib/update-requirements';
+import type { UnmetRequirements } from '@/lib/requirements';
 
-interface UpdateRequirementsNoticeProps {
-	unmet: UnmetUpdateRequirements;
+interface RequirementsNoticeProps {
+	unmet: UnmetRequirements;
 }
 
 /**
  * @since TBD
  */
-export function UpdateRequirementsNotice( { unmet }: UpdateRequirementsNoticeProps ) {
+export function RequirementsNotice( { unmet }: RequirementsNoticeProps ) {
 	const links = {
 		wp:  <a href={ getHarborDataValue( 'updateCoreUrl' ) } className="underline font-medium" />,
 		php: <a href={ getHarborDataValue( 'updatePhpUrl' ) } target="_blank" rel="noopener noreferrer" className="underline font-medium" />,

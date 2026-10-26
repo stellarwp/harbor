@@ -80,6 +80,34 @@ interface BaseFeature {
      */
     installed_version?: string;
     /**
+     * Minimum WordPress version of the catalog version, which is the version installing the
+     * feature downloads, or null when it declares none. Only present for installable features.
+     *
+     * @since TBD
+     */
+    requires_wp?: string | null;
+    /**
+     * Minimum PHP version of the catalog version, or null when it declares none.
+     * Only present for installable features.
+     *
+     * @since TBD
+     */
+    requires_php?: string | null;
+    /**
+     * Whether the site's WordPress version meets the catalog version's requirement.
+     * Returns true if the catalog declares none. Only present for installable features.
+     *
+     * @since TBD
+     */
+    wp_compatible?: boolean;
+    /**
+     * Whether the site's PHP version meets the catalog version's requirement.
+     * Returns true if the catalog declares none. Only present for installable features.
+     *
+     * @since TBD
+     */
+    php_compatible?: boolean;
+    /**
      * Version available in the WordPress update transient, or null when no update is pending.
      * Only present for installable features (plugin/theme).
      */
@@ -181,6 +209,10 @@ export interface ServiceFeature extends BaseFeature {
     version?: never;
     installed_version?: never;
     update_version?: never;
+    requires_wp?: never;
+    requires_php?: never;
+    wp_compatible?: never;
+    php_compatible?: never;
     update_requires_wp?: never;
     update_requires_php?: never;
     update_wp_compatible?: never;
