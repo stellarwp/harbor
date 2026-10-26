@@ -3,6 +3,8 @@
 namespace LiquidWeb\Harbor\Features\Update;
 
 use LiquidWeb\Harbor\Contracts\Abstract_Provider;
+use LiquidWeb\Harbor\Features\Update\Requirements\Guard;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Version;
 
 /**
@@ -21,9 +23,11 @@ class Provider extends Abstract_Provider {
 	 */
 	public function register(): void {
 		$this->container->singleton( Resolve_Update_Data::class );
+		$this->container->singleton( Resolve_Headers::class );
 
 		$this->container->singleton( Plugin_Handler::class );
 		$this->container->singleton( Theme_Handler::class );
+		$this->container->singleton( Guard::class );
 
 		add_action( 'init', [ $this, 'register_hooks' ] );
 	}
@@ -52,5 +56,10 @@ class Provider extends Abstract_Provider {
 		add_filter( 'themes_api', [ $theme_handler, 'filter_themes_api' ], 15, 3 );
 		add_filter( 'pre_set_site_transient_update_themes', [ $theme_handler, 'filter_update_check' ], 15, 1 );
 		add_filter( 'site_transient_update_themes', [ $theme_handler, 'filter_update_check' ], 15, 1 );
+
+		$guard = $this->container->get( Guard::class );
+
+		add_filter( 'upgrader_pre_download', [ $guard, 'filter_pre_download' ], 10, 4 );
+		add_action( 'load-plugins.php', [ $guard, 'register_update_messages' ] );
 	}
 }
