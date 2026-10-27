@@ -1,0 +1,7 @@
+significance: patch
+type: fix
+entry: Stopped translating plugin headers when reading a plugin feature's
+  installed version. Features resolve on the first license lookup, often before
+  init, so every catalog plugin's text domain loaded too early and filled the
+  debug log with _load_textdomain_just_in_time notices.
+timestamp: 2026-10-26T20:36:01.598Z

@@ -384,6 +384,49 @@ final class PluginTest extends HarborTestCase {
 		$this->assertNull( $feature->get_installed_version() );
 	}
 
+	/**
+	 * Tests get_installed_version reads the Version header without translating the plugin headers.
+	 *
+	 * Features resolve on the first license lookup, which can happen before init. Translating the
+	 * headers there loads every catalog plugin's text domain too early.
+	 *
+	 * @return void
+	 */
+	public function test_get_installed_version_does_not_translate_plugin_headers(): void {
+		$plugin_dir  = WP_PLUGIN_DIR . '/' . dirname( self::PLUGIN_FILE );
+		$plugin_path = WP_PLUGIN_DIR . '/' . self::PLUGIN_FILE;
+		$version     = '1.2.3';
+		$translated  = [];
+
+		if ( ! is_dir( $plugin_dir ) ) {
+			mkdir( $plugin_dir, 0755, true );
+		}
+		file_put_contents( $plugin_path, "<?php\n/**\n * Plugin Name: " . self::NAME . "\n * Version: " . $version . "\n * Text Domain: " . self::SLUG . "\n */\n" );
+
+		add_filter(
+			'gettext_' . self::SLUG,
+			static function ( $translation, $text ) use ( &$translated ) {
+				$translated[] = $text;
+
+				return $translation;
+			},
+			10,
+			2
+		);
+
+		try {
+			$this->assertSame( $version, $this->make_feature()->get_installed_version() );
+			$this->assertSame( [], $translated );
+		} finally {
+			if ( file_exists( $plugin_path ) ) {
+				unlink( $plugin_path );
+			}
+			if ( is_dir( $plugin_dir ) ) {
+				rmdir( $plugin_dir );
+			}
+		}
+	}
+
 	// -------------------------------------------------------------------------
 	// Full round-trip
 	// -------------------------------------------------------------------------
