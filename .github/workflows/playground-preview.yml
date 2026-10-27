@@ -1,7 +1,7 @@
 # cspell:ignore shivammathur evnt marocchino
 name: Playground Preview
 
-# Adds a "Preview in WordPress Playground" button to a pull request: a throwaway WordPress in the
+# Adds a "Preview in WordPress Playground" button to every pull request: a throwaway WordPress in the
 # browser running the pull request's copy of Harbor.
 #
 # Harbor is a library, so the preview installs Harbor Dev Tools built against the pull request.
@@ -9,29 +9,22 @@ name: Playground Preview
 # code the leader on the site, and serves fixture catalog and licensing data, so no license key
 # is needed.
 #
-# It is opt-in: add the "playground" label to a pull request to get a preview, and it is rebuilt
-# on every push for as long as the label stays on. Pull requests from forks are skipped, because
-# they cannot see the secrets.
+# The preview is rebuilt on every push. Pull requests from forks are skipped, because they cannot
+# see the secrets.
 
 on:
   pull_request:
-    types: [labeled, synchronize]
+    types: [opened, reopened, synchronize]
 
 # One run per pull request at a time. A push while a preview is still building cancels that build,
 # so an older zip can never overwrite a newer button.
-#
-# A run started by some other label builds nothing, so it goes in a group of its own and cannot
-# cancel a preview that is still building.
 concurrency:
-  group: playground-preview-${{ github.event.pull_request.number }}-${{ github.event.action != 'labeled' || github.event.label.name == 'playground' }}
+  group: playground-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   zip:
-    if: >-
-      !github.event.pull_request.head.repo.fork
-      && contains(github.event.pull_request.labels.*.name, 'playground')
-      && (github.event.action != 'labeled' || github.event.label.name == 'playground')
+    if: ${{ !github.event.pull_request.head.repo.fork }}
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
     permissions:
