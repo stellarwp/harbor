@@ -84,28 +84,28 @@ interface BaseFeature {
      * the pending update, or the catalog version when the feature is not installed. Null when
      * there is no such version or it declares none. Only present for installable features.
      *
-     * @since TBD
+     * @since 2.0.4
      */
     requires_wp?: string | null;
     /**
      * Minimum PHP version of the same version as requires_wp, or null.
      * Only present for installable features.
      *
-     * @since TBD
+     * @since 2.0.4
      */
     requires_php?: string | null;
     /**
      * Whether the site's WordPress version meets requires_wp. Returns true if there is no
      * requirement. Only present for installable features.
      *
-     * @since TBD
+     * @since 2.0.4
      */
     wp_compatible?: boolean;
     /**
      * Whether the site's PHP version meets requires_php. Returns true if there is no
      * requirement. Only present for installable features.
      *
-     * @since TBD
+     * @since 2.0.4
      */
     php_compatible?: boolean;
     /**

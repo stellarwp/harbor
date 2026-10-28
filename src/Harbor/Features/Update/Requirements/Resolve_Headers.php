@@ -27,14 +27,14 @@ use LiquidWeb\Harbor\Utils\Cast;
  * from_response() and all_from_response() read the `response` list only,
  * for callers that act on the updates WordPress offers and installs.
  *
- * @since TBD
+ * @since 2.0.4
  */
 final class Resolve_Headers {
 
 	/**
 	 * The transient WordPress stores plugin updates in.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var string
 	 */
@@ -43,7 +43,7 @@ final class Resolve_Headers {
 	/**
 	 * The transient WordPress stores theme updates in.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var string
 	 */
@@ -52,7 +52,7 @@ final class Resolve_Headers {
 	/**
 	 * Resolves the requirement headers of the feature's pending update.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param Feature $feature The feature. Only plugins and themes have updates.
 	 *
@@ -79,7 +79,7 @@ final class Resolve_Headers {
 	 * feature that is not installed has no entry in the update transients, so
 	 * this is the only place its requirements come from.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param Feature $feature The feature. Only plugins and themes are installed.
 	 *
@@ -105,7 +105,7 @@ final class Resolve_Headers {
 	/**
 	 * Resolves the requirement headers of the update in the transient's `response` list.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $transient_name self::PLUGINS or self::THEMES.
 	 * @param string $key            The plugin file or theme stylesheet the transient is keyed by.
@@ -119,7 +119,7 @@ final class Resolve_Headers {
 	/**
 	 * Resolves the requirement headers of every update in the transient's `response` list.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $transient_name self::PLUGINS or self::THEMES.
 	 *
@@ -135,7 +135,7 @@ final class Resolve_Headers {
 	 * Uses the version feature resolution stored, and reads the plugin or
 	 * theme header only when the feature was built without one.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param Plugin|Theme $feature The feature.
 	 *
@@ -154,7 +154,7 @@ final class Resolve_Headers {
 	/**
 	 * Gets the pending update's headers from the given transient.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $transient_name    self::PLUGINS or self::THEMES.
 	 * @param string $key               The plugin file or theme stylesheet the transient is keyed by.
@@ -189,7 +189,7 @@ final class Resolve_Headers {
 	/**
 	 * Reads the headers of every entry with a version in one list on the transient.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $transient_name self::PLUGINS or self::THEMES.
 	 * @param string $list_name      `response` or `no_update`.

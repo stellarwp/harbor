@@ -45,7 +45,7 @@ class Theme_Strategy extends Installable_Strategy {
 	 * Theme_Upgrader::bulk_upgrade() when the update transient's `requires` or `requires_php`
 	 * is not met.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var string[]
 	 */
@@ -265,12 +265,12 @@ class Theme_Strategy extends Installable_Strategy {
 	 * Check whether an update is available for this theme.
 	 *
 	 * @since 1.0.0
-	 * @deprecated TBD Use get_update_headers(), which also returns the update's requirements.
+	 * @deprecated 2.0.4 Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool
 	 */
 	protected function check_update_available(): bool {
-		_deprecated_function( __METHOD__, 'TBD', __CLASS__ . '::get_update_headers()' );
+		_deprecated_function( __METHOD__, '2.0.4', __CLASS__ . '::get_update_headers()' );
 
 		$update_themes = get_site_transient( 'update_themes' );
 

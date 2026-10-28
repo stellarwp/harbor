@@ -111,7 +111,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Check whether an update is available for this extension.
 	 *
 	 * @since 1.0.0
-	 * @deprecated TBD Use get_update_headers(), which also returns the update's requirements.
+	 * @deprecated 2.0.4 Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool True if an update is available.
 	 */
@@ -542,7 +542,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * requirements the site does not meet is read too. See
 	 * Resolve_Headers.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return Headers|null Null when WordPress has no update for the extension.
 	 */
@@ -554,7 +554,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Get the service that resolves the requirement headers of a feature's
 	 * pending update, or of its catalog version, from Harbor's container.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return Resolve_Headers
 	 */
@@ -584,7 +584,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * upgrader skin collects the errors raised while the package is checked,
 	 * so run_upgrader() passes both.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param WP_Error ...$errors The errors to check.
 	 *

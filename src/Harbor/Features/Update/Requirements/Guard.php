@@ -30,14 +30,14 @@ use function wp_get_theme;
  * update whose `requires` the site does not meet to `no_update`, and sets
  * `requires_php` on the updates it keeps in `response`.
  *
- * @since TBD
+ * @since 2.0.4
  */
 final class Guard {
 
 	/**
 	 * Prefixes of the `id` Harbor sets on the update entries it writes.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var string[]
 	 */
@@ -49,7 +49,7 @@ final class Guard {
 	/**
 	 * Resolves the requirement headers of updates from WordPress's update transients.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var Resolve_Headers
 	 */
@@ -58,7 +58,7 @@ final class Guard {
 	/**
 	 * Constructor.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param Resolve_Headers $resolve_headers Resolves the requirement headers of updates from WordPress's update transients.
 	 */
@@ -73,7 +73,7 @@ final class Guard {
 	 * the upgrader skin collects, so Installable_Strategy::run_upgrader()
 	 * reports Error_Code::REQUIREMENTS_NOT_MET for Harbor's Update button too.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param bool|WP_Error $reply      Whether to bail without downloading. False to continue.
 	 * @param string        $package    The package URL.
@@ -119,7 +119,7 @@ final class Guard {
 	 * the update link when `requires_php` is not met. Themes need no message
 	 * because wp_theme_update_row() checks both `requires` and `requires_php`.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return void
 	 */
@@ -136,7 +136,7 @@ final class Guard {
 	/**
 	 * Prints the WordPress requirement message after WordPress's update notice in the plugin row, separated by a blank line.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param mixed $plugin_data The plugin header data.
 	 * @param mixed $response    The plugin's entry in the update transient.
@@ -172,7 +172,7 @@ final class Guard {
 	/**
 	 * Whether Harbor wrote the update entry, as opposed to WordPress.org or another updater.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param Headers $headers The update's requirement headers.
 	 *
@@ -191,7 +191,7 @@ final class Guard {
 	/**
 	 * Gets the plugin's display name, or its file when the header cannot be read.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $plugin_file The plugin file.
 	 *
@@ -212,7 +212,7 @@ final class Guard {
 	/**
 	 * Gets the theme's display name, or its stylesheet when the theme cannot be read.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $slug The theme stylesheet.
 	 *

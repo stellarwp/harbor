@@ -16,7 +16,7 @@ use WP_Error;
  * empty requirement means the update declares none, which WordPress's own
  * compatibility checks treat as met.
  *
- * @since TBD
+ * @since 2.0.4
  *
  * @phpstan-type HeadersAttributes array{
  *     id: string,
@@ -30,7 +30,7 @@ final class Headers {
 	/**
 	 * The requirement attributes.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var HeadersAttributes
 	 */
@@ -39,7 +39,7 @@ final class Headers {
 	/**
 	 * Constructor.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @phpstan-param HeadersAttributes $attributes
 	 *
@@ -52,7 +52,7 @@ final class Headers {
 	/**
 	 * Creates the requirements from an update transient entry.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param object|array<mixed> $entry A plugin entry (object) or theme entry (array).
 	 *
@@ -74,7 +74,7 @@ final class Headers {
 	/**
 	 * Gets the version of the update.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string
 	 */
@@ -85,7 +85,7 @@ final class Headers {
 	/**
 	 * Gets the minimum WordPress version, or an empty string when the update declares none.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string
 	 */
@@ -96,7 +96,7 @@ final class Headers {
 	/**
 	 * Gets the minimum PHP version, or an empty string when the update declares none.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string
 	 */
@@ -107,7 +107,7 @@ final class Headers {
 	/**
 	 * Whether the site's WordPress version meets the update's requirement.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return bool
 	 */
@@ -118,7 +118,7 @@ final class Headers {
 	/**
 	 * Whether the site's PHP version meets the update's requirement.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return bool
 	 */
@@ -129,7 +129,7 @@ final class Headers {
 	/**
 	 * Whether the site meets both the WordPress and the PHP requirement.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return bool
 	 */
@@ -141,7 +141,7 @@ final class Headers {
 	 * Gets the entry's `id`, which says which updater wrote it, e.g.
 	 * `stellarwp/plugins/kad-blocks-pro` or `w.org/plugins/kadence-blocks`.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string An empty string when the entry has none.
 	 */
@@ -152,7 +152,7 @@ final class Headers {
 	/**
 	 * Builds an error that names the unmet requirements and the site's current versions.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @param string $name The display name of the plugin or theme.
 	 * @param string $code The error code.

@@ -1519,7 +1519,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
+ * @since 2.0.4   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
  * @since 1.0.0
  */
 function FeatureRow({
@@ -2431,7 +2431,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * @since TBD
+ * @since 2.0.4
  */
 function RequirementsNotice({
   unmet
@@ -6527,7 +6527,7 @@ function toUnmet(version, wpCompatible, requiresWp, phpCompatible, requiresPhp) 
  * The requirements of the feature's pending update that the site does not
  * meet, or null when there is no update or the site meets them all.
  *
- * @since TBD
+ * @since 2.0.4
  */
 function getUnmetUpdateRequirements(feature) {
   return toUnmet(feature.update_version, feature.wp_compatible, feature.requires_wp, feature.php_compatible, feature.requires_php);
@@ -6540,7 +6540,7 @@ function getUnmetUpdateRequirements(feature) {
  * downloads. The REST API reports its requirements in the same fields as a
  * pending update's, since a feature that is not installed has no update.
  *
- * @since TBD
+ * @since 2.0.4
  */
 function getUnmetInstallRequirements(feature) {
   if (feature.installed_version) {
@@ -6552,7 +6552,7 @@ function getUnmetInstallRequirements(feature) {
 /**
  * Short text for the tooltip of a control disabled by the requirements.
  *
- * @since TBD
+ * @since 2.0.4
  */
 function getRequirementsLabel(unmet) {
   if (unmet.wp && unmet.php) {
