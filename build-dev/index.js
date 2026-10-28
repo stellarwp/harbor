@@ -1309,8 +1309,9 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Icon button that triggers a feature update.
  *
- * When upgradeLabel is provided the button is rendered disabled with an
- * upsell tooltip. The Tooltip component handles the span wrapper needed to
+ * When disabledLabel is provided the button is rendered disabled with a
+ * tooltip: an upsell, or the WordPress or PHP version the update requires.
+ * The Tooltip component handles the span wrapper needed to
  * keep hover events working when pointer-events are disabled on the button.
  *
  * @package LiquidWeb\Harbor
@@ -1327,21 +1328,21 @@ function UpdateButton({
   featureName,
   disabled = false,
   onClick,
-  upgradeLabel
+  disabledLabel
 }) {
   const button = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_2__.Button, {
     variant: "default",
     size: "icon-xs",
     className: "rounded-full",
-    disabled: !!upgradeLabel || disabled,
+    disabled: !!disabledLabel || disabled,
     onClick: onClick,
     "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Update %s', '%TEXTDOMAIN%'), featureName),
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "w-3.5 h-3.5"
     })
   });
-  return upgradeLabel ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_ui_tooltip__WEBPACK_IMPORTED_MODULE_3__.Tooltip, {
-    label: upgradeLabel,
+  return disabledLabel ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_ui_tooltip__WEBPACK_IMPORTED_MODULE_3__.Tooltip, {
+    label: disabledLabel,
     children: button
   }) : button;
 }
@@ -1480,14 +1481,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/atoms/LicenseBadge */ "./resources/js/components/atoms/LicenseBadge.tsx");
 /* harmony import */ var _components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/atoms/StatusBadge */ "./resources/js/components/atoms/StatusBadge.tsx");
 /* harmony import */ var _components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/components/molecules/VersionDisplay */ "./resources/js/components/molecules/VersionDisplay.tsx");
-/* harmony import */ var _components_molecules_FeatureAccessSources__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/molecules/FeatureAccessSources */ "./resources/js/components/molecules/FeatureAccessSources.tsx");
-/* harmony import */ var _components_ui_switch__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/components/ui/switch */ "./resources/js/components/ui/switch.tsx");
-/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
-/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
-/* harmony import */ var _hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/hooks/useFeatureRow */ "./resources/js/hooks/useFeatureRow.ts");
-/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _components_molecules_RequirementsNotice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/molecules/RequirementsNotice */ "./resources/js/components/molecules/RequirementsNotice.tsx");
+/* harmony import */ var _components_molecules_FeatureAccessSources__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/components/molecules/FeatureAccessSources */ "./resources/js/components/molecules/FeatureAccessSources.tsx");
+/* harmony import */ var _components_ui_switch__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/components/ui/switch */ "./resources/js/components/ui/switch.tsx");
+/* harmony import */ var _components_ui_tooltip__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/components/ui/tooltip */ "./resources/js/components/ui/tooltip.tsx");
+/* harmony import */ var _components_ui_button__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/components/ui/button */ "./resources/js/components/ui/button.tsx");
+/* harmony import */ var _components_ui_dialog__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @/components/ui/dialog */ "./resources/js/components/ui/dialog.tsx");
+/* harmony import */ var _hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @/hooks/useFeatureRow */ "./resources/js/hooks/useFeatureRow.ts");
+/* harmony import */ var _types_utils__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @/types/utils */ "./resources/js/types/utils.ts");
+/* harmony import */ var _lib_requirements__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @/lib/requirements */ "./resources/js/lib/requirements.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__);
 /**
  * A single feature row in the product feature list.
  *
@@ -1511,7 +1515,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 /**
+ * @since 2.0.4   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
  * @since 1.0.0
  */
 function FeatureRow({
@@ -1532,91 +1540,110 @@ function FeatureRow({
     handleUpdate,
     handleConfirmDeactivate,
     handleCancelDeactivate
-  } = (0,_hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_13__.useFeatureRow)(feature);
+  } = (0,_hooks_useFeatureRow__WEBPACK_IMPORTED_MODULE_15__.useFeatureRow)(feature);
   const Chevron = expanded ? lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"] : lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"];
 
   // Legacy-licensed and revoked features are not marked available by the API
   // but should render with the full available layout — controls visible, no muted style.
   // This override only applies to installable features (plugins/themes) since
   // non-installable features (services) have no controls to show.
-  const isVisuallyAvailable = feature.is_available || (0,_types_utils__WEBPACK_IMPORTED_MODULE_14__.isInstallableFeature)(feature) && (licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked');
+  const isVisuallyAvailable = feature.is_available || (0,_types_utils__WEBPACK_IMPORTED_MODULE_16__.isInstallableFeature)(feature) && (licenseBadgeType === 'legacy' || licenseBadgeType === 'revoked');
   const upgradeLabel = isVisuallyAvailable ? licenseBadgeType === 'legacy' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade your license to manage updates from Nexcess Licensing.', '%TEXTDOMAIN%') : undefined : upgradeTierName ? /* translators: %s is the name of the tier required to receive updates */
   (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Upgrade to %s to receive updates and support.', '%TEXTDOMAIN%'), upgradeTierName) : undefined;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+
+  // An update the site cannot run keeps the Update button disabled. The license label takes the tooltip when both apply.
+  const unmetUpdate = isVisuallyAvailable && (0,_types_utils__WEBPACK_IMPORTED_MODULE_16__.isInstallableFeature)(feature) ? (0,_lib_requirements__WEBPACK_IMPORTED_MODULE_17__.getUnmetUpdateRequirements)(feature) : null;
+  const updateDisabledLabel = upgradeLabel ?? (unmetUpdate ? (0,_lib_requirements__WEBPACK_IMPORTED_MODULE_17__.getRequirementsLabel)(unmetUpdate) : undefined);
+
+  // A feature that is not installed and that the site cannot run keeps the toggle disabled, since installing it would fail.
+  const unmetInstall = isVisuallyAvailable && (0,_types_utils__WEBPACK_IMPORTED_MODULE_16__.isInstallableFeature)(feature) ? (0,_lib_requirements__WEBPACK_IMPORTED_MODULE_17__.getUnmetInstallRequirements)(feature) : null;
+  const unmetRequirements = unmetUpdate ?? unmetInstall;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
     className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('border-b last:border-b-0', isVisuallyAvailable ? (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('bg-white', pendingAction && 'opacity-75') : 'bg-muted/30'),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
       className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-3 px-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
         className: "min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1.5 flex-[1_1_12rem]",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("button", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
           type: "button",
           "aria-expanded": expanded,
           "aria-controls": detailsId,
           onClick: () => setExpanded(!expanded),
           className: "flex items-center gap-2 min-w-0 cursor-pointer text-left rounded focus-visible:outline-2 focus-visible:outline-offset-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Chevron, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(Chevron, {
             className: "w-4 h-4 text-muted-foreground shrink-0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_atoms_FeatureIcon__WEBPACK_IMPORTED_MODULE_5__.FeatureIcon, {
             slug: feature.slug
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
             className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('font-medium min-w-0 text-sm break-words', !isVisuallyAvailable && 'text-muted-foreground'),
             children: feature.name
-          }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
+          }), licenseBadgeType && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_atoms_LicenseBadge__WEBPACK_IMPORTED_MODULE_6__.LicenseBadge, {
             type: licenseBadgeType
           })]
-        }), licenseBadgeType !== 'free' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_molecules_FeatureAccessSources__WEBPACK_IMPORTED_MODULE_9__.FeatureAccessSources, {
+        }), licenseBadgeType !== 'free' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_molecules_FeatureAccessSources__WEBPACK_IMPORTED_MODULE_10__.FeatureAccessSources, {
           sources: feature.access_sources
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
         className: "ml-auto grid w-[17rem] max-w-full shrink-0 grid-cols-[minmax(0,1fr)_6.25rem_2rem] items-center gap-3",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
           className: "min-w-0 text-right",
-          children: ((0,_types_utils__WEBPACK_IMPORTED_MODULE_14__.isInstallableFeature)(feature) || !isVisuallyAvailable) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
+          children: ((0,_types_utils__WEBPACK_IMPORTED_MODULE_16__.isInstallableFeature)(feature) || !isVisuallyAvailable) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_molecules_VersionDisplay__WEBPACK_IMPORTED_MODULE_8__.VersionDisplay, {
             feature: feature,
             pendingAction: pendingAction,
             installableBusy: installableBusy,
-            upgradeLabel: upgradeLabel,
+            disabledLabel: updateDisabledLabel,
             onUpdate: isVisuallyAvailable && licenseBadgeType !== 'legacy' && licenseBadgeType !== 'revoked' ? handleUpdate : undefined
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
           className: "flex min-w-0 justify-end",
-          children: isVisuallyAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
+          children: isVisuallyAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_atoms_StatusBadge__WEBPACK_IMPORTED_MODULE_7__.StatusBadge, {
             status: badgeStatus
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
           className: "flex justify-end",
-          children: isVisuallyAvailable && (0,_types_utils__WEBPACK_IMPORTED_MODULE_14__.isInstallableFeature)(feature) && showSwitch && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_10__.Switch, {
-            checked: switchChecked,
-            onCheckedChange: handleToggle,
-            disabled: !!pendingAction || installableBusy || licenseBadgeType === 'revoked' && !switchChecked,
-            "aria-label": switchChecked ? /* translators: %s is the name of the feature to disable */
-            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
-            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
-          })
+          children: isVisuallyAvailable && (0,_types_utils__WEBPACK_IMPORTED_MODULE_16__.isInstallableFeature)(feature) && showSwitch && (() => {
+            const toggle = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ui_switch__WEBPACK_IMPORTED_MODULE_11__.Switch, {
+              checked: switchChecked,
+              onCheckedChange: handleToggle,
+              disabled: !!pendingAction || installableBusy || !!unmetInstall || licenseBadgeType === 'revoked' && !switchChecked,
+              "aria-label": switchChecked ? /* translators: %s is the name of the feature to disable */
+              (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Disable %s', '%TEXTDOMAIN%'), feature.name) : /* translators: %s is the name of the feature to enable */
+              (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable %s', '%TEXTDOMAIN%'), feature.name)
+            });
+            return unmetInstall ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ui_tooltip__WEBPACK_IMPORTED_MODULE_12__.Tooltip, {
+              label: (0,_lib_requirements__WEBPACK_IMPORTED_MODULE_17__.getRequirementsLabel)(unmetInstall),
+              children: toggle
+            }) : toggle;
+          })()
         })]
       })]
-    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+    }), unmetRequirements && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+      className: "px-4 pb-3 pl-11",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_molecules_RequirementsNotice__WEBPACK_IMPORTED_MODULE_9__.RequirementsNotice, {
+        unmet: unmetRequirements
+      })
+    }), expanded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
       id: detailsId,
       className: "px-4 pb-3 pl-11",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("p", {
         className: (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.cn)('text-sm text-muted-foreground leading-relaxed', isVisuallyAvailable ? 'mt-[0.75em]! mb-0!' : 'mt-2 mb-0'),
         children: feature.description
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_12__.Dialog, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_14__.Dialog, {
       open: showDeactivateConfirm,
       onClose: handleCancelDeactivate,
       maxWidth: "max-w-md",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_12__.DialogHeader, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_14__.DialogHeader, {
         title: /* translators: %s is the name of the feature being deactivated */
         (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Deactivate %s?', '%TEXTDOMAIN%'), feature.name),
         description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('This plugin powers this page. Deactivating it will make this page unavailable until it is reactivated from the WordPress Plugins page.', '%TEXTDOMAIN%'),
         onClose: handleCancelDeactivate
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_12__.DialogFooter, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_11__.Button, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_ui_dialog__WEBPACK_IMPORTED_MODULE_14__.DialogFooter, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_13__.Button, {
           variant: "outline",
           onClick: handleCancelDeactivate,
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cancel', '%TEXTDOMAIN%')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_11__.Button, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ui_button__WEBPACK_IMPORTED_MODULE_13__.Button, {
           variant: "destructive",
           onClick: handleConfirmDeactivate,
           disabled: pendingAction === 'disabling',
@@ -2370,6 +2397,82 @@ function ReloadBanner() {
 
 /***/ },
 
+/***/ "./resources/js/components/molecules/RequirementsNotice.tsx"
+/*!******************************************************************!*\
+  !*** ./resources/js/components/molecules/RequirementsNotice.tsx ***!
+  \******************************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RequirementsNotice: () => (/* binding */ RequirementsNotice)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/triangle-alert.js");
+/* harmony import */ var _lib_harbor_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/harbor-data */ "./resources/js/lib/harbor-data.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/**
+ * Amber notice shown under a feature row when its pending update, or the
+ * version installing it would download, needs a newer WordPress or PHP
+ * version than the site runs.
+ *
+ * Links to the WordPress update screen for the WordPress requirement and to
+ * WordPress's page on updating PHP for the PHP requirement.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+
+
+
+
+/**
+ * @since 2.0.4
+ */
+function RequirementsNotice({
+  unmet
+}) {
+  const links = {
+    wp: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+      href: (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_3__.getHarborDataValue)('updateCoreUrl'),
+      className: "underline font-medium"
+    }),
+    php: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("a", {
+      href: (0,_lib_harbor_data__WEBPACK_IMPORTED_MODULE_3__.getHarborDataValue)('updatePhpUrl'),
+      target: "_blank",
+      rel: "noopener noreferrer",
+      className: "underline font-medium"
+    })
+  };
+  let message;
+  if (unmet.wp && unmet.php) {
+    message = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: 1: version of the update, 2: required WordPress version, 3: required PHP version */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Version %1$s requires WordPress %2$s and PHP %3$s or newer. <wp>Update WordPress</wp> and <php>learn more about updating PHP</php> to install it.', '%TEXTDOMAIN%'), unmet.version, unmet.wp, unmet.php);
+  } else if (unmet.wp) {
+    message = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: 1: version of the update, 2: required WordPress version */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Version %1$s requires WordPress %2$s or newer. <wp>Update WordPress</wp> to install it.', '%TEXTDOMAIN%'), unmet.version, unmet.wp);
+  } else {
+    message = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: 1: version of the update, 2: required PHP version */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Version %1$s requires PHP %2$s or newer. <php>Learn more about updating PHP</php>.', '%TEXTDOMAIN%'), unmet.version, unmet.php ?? '');
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    role: "status",
+    className: "flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      className: "w-3.5 h-3.5 shrink-0 mt-0.5"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+      className: "m-0",
+      children: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createInterpolateElement)(message, links)
+    })]
+  });
+}
+
+/***/ },
+
 /***/ "./resources/js/components/molecules/TierGroup.tsx"
 /*!*********************************************************!*\
   !*** ./resources/js/components/molecules/TierGroup.tsx ***!
@@ -2537,8 +2640,8 @@ __webpack_require__.r(__webpack_exports__);
  * Displays the installed/available version of a feature, with an update
  * button when a newer version is available.
  *
- * When upgradeLabel is provided the update button is rendered fully disabled
- * (no onClick handler) with an upsell tooltip.
+ * When disabledLabel is provided the update button is rendered fully disabled
+ * with a tooltip: an upsell, or the WordPress or PHP version the update requires.
  *
  * @package LiquidWeb\Harbor
  */
@@ -2550,7 +2653,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 function VersionDisplay({
   feature,
-  upgradeLabel,
+  disabledLabel,
   pendingAction = null,
   installableBusy = false,
   onUpdate
@@ -2566,11 +2669,11 @@ function VersionDisplay({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
           className: "text-xs font-mono font-bold break-all",
           children: ["v", feature.update_version]
-        }), (upgradeLabel || onUpdate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_components_atoms_UpdateButton__WEBPACK_IMPORTED_MODULE_0__.UpdateButton, {
+        }), (disabledLabel || onUpdate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_components_atoms_UpdateButton__WEBPACK_IMPORTED_MODULE_0__.UpdateButton, {
           featureName: feature.name,
           disabled: !!pendingAction || installableBusy,
           onClick: onUpdate,
-          upgradeLabel: upgradeLabel
+          disabledLabel: disabledLabel
         })]
       })]
     });
@@ -6229,7 +6332,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const DEFAULTS = {
   licenseKeyPrefix: 'LWSW-',
-  pluginsUrl: '/wp-admin/plugins.php'
+  pluginsUrl: '/wp-admin/plugins.php',
+  updateCoreUrl: '/wp-admin/update-core.php',
+  updatePhpUrl: 'https://wordpress.org/support/update-php/'
 };
 
 /**
@@ -6373,6 +6478,93 @@ function isProductOwned(slug, args) {
     return true;
   }
   return args.licenseProducts.some(lp => lp.product_slug === slug);
+}
+
+/***/ },
+
+/***/ "./resources/js/lib/requirements.ts"
+/*!******************************************!*\
+  !*** ./resources/js/lib/requirements.ts ***!
+  \******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getRequirementsLabel: () => (/* binding */ getRequirementsLabel),
+/* harmony export */   getUnmetInstallRequirements: () => (/* binding */ getUnmetInstallRequirements),
+/* harmony export */   getUnmetUpdateRequirements: () => (/* binding */ getUnmetUpdateRequirements)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * Reads whether a feature's pending update, or the version installing it
+ * would download, needs a newer WordPress or PHP version than the site runs.
+ *
+ * @package LiquidWeb\Harbor
+ */
+
+/**
+ * Builds the unmet requirements from a version and its compatibility flags,
+ * or null when the site meets them all.
+ */
+function toUnmet(version, wpCompatible, requiresWp, phpCompatible, requiresPhp) {
+  if (!version) {
+    return null;
+  }
+  const wp = wpCompatible === false ? requiresWp ?? null : null;
+  const php = phpCompatible === false ? requiresPhp ?? null : null;
+  if (!wp && !php) {
+    return null;
+  }
+  return {
+    version,
+    wp,
+    php
+  };
+}
+
+/**
+ * The requirements of the feature's pending update that the site does not
+ * meet, or null when there is no update or the site meets them all.
+ *
+ * @since 2.0.4
+ */
+function getUnmetUpdateRequirements(feature) {
+  return toUnmet(feature.update_version, feature.wp_compatible, feature.requires_wp, feature.php_compatible, feature.requires_php);
+}
+
+/**
+ * The requirements of the catalog version that the site does not meet, for a
+ * feature that is not installed, or null when it is installed or the site
+ * meets them all. The catalog version is the version installing the feature
+ * downloads. The REST API reports its requirements in the same fields as a
+ * pending update's, since a feature that is not installed has no update.
+ *
+ * @since 2.0.4
+ */
+function getUnmetInstallRequirements(feature) {
+  if (feature.installed_version) {
+    return null;
+  }
+  return toUnmet(feature.version, feature.wp_compatible, feature.requires_wp, feature.php_compatible, feature.requires_php);
+}
+
+/**
+ * Short text for the tooltip of a control disabled by the requirements.
+ *
+ * @since 2.0.4
+ */
+function getRequirementsLabel(unmet) {
+  if (unmet.wp && unmet.php) {
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: 1: required WordPress version, 2: required PHP version */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Requires WordPress %1$s and PHP %2$s or newer.', '%TEXTDOMAIN%'), unmet.wp, unmet.php);
+  }
+  if (unmet.wp) {
+    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: %s: required WordPress version */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Requires WordPress %s or newer.', '%TEXTDOMAIN%'), unmet.wp);
+  }
+  return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(/* translators: %s: required PHP version */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Requires PHP %s or newer.', '%TEXTDOMAIN%'), unmet.php ?? '');
 }
 
 /***/ },

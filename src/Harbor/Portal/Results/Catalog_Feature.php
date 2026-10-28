@@ -27,6 +27,9 @@ use LiquidWeb\Harbor\Utils\Cast;
  *     authors: ?list<string>,
  *     documentation_url: string,
  *     homepage: ?string,
+ *     wp_requires: ?string,
+ *     php_requires: ?string,
+ *     wp_tested: ?string,
  * }
  */
 final class Catalog_Feature {
@@ -54,6 +57,9 @@ final class Catalog_Feature {
 		'authors'           => null,
 		'documentation_url' => '',
 		'homepage'          => null,
+		'wp_requires'       => null,
+		'php_requires'      => null,
+		'wp_tested'         => null,
 	];
 
 	/**
@@ -104,6 +110,9 @@ final class Catalog_Feature {
 					: null,
 				'documentation_url' => Cast::to_string( $data['documentation_url'] ?? '' ),
 				'homepage'          => isset( $data['homepage'] ) ? Cast::to_string( $data['homepage'] ) : null,
+				'wp_requires'       => isset( $data['wp_requires'] ) ? Cast::to_string( $data['wp_requires'] ) : null,
+				'php_requires'      => isset( $data['php_requires'] ) ? Cast::to_string( $data['php_requires'] ) : null,
+				'wp_tested'         => isset( $data['wp_tested'] ) ? Cast::to_string( $data['wp_tested'] ) : null,
 			]
 		);
 	}
@@ -319,5 +328,44 @@ final class Catalog_Feature {
 	 */
 	public function get_homepage(): ?string {
 		return $this->attributes['homepage'];
+	}
+
+	/**
+	 * Gets the minimum WordPress version the current release requires, or null if the release does not declare one.
+	 *
+	 * Comes from the `Requires at least` header of the release zip.
+	 *
+	 * @since 2.0.4
+	 *
+	 * @return string|null
+	 */
+	public function get_wp_requires(): ?string {
+		return $this->attributes['wp_requires'];
+	}
+
+	/**
+	 * Gets the minimum PHP version the current release requires, or null if the release does not declare one.
+	 *
+	 * Comes from the `Requires PHP` header of the release zip.
+	 *
+	 * @since 2.0.4
+	 *
+	 * @return string|null
+	 */
+	public function get_php_requires(): ?string {
+		return $this->attributes['php_requires'];
+	}
+
+	/**
+	 * Gets the WordPress version the current release was tested up to, or null if the release does not declare one.
+	 *
+	 * Comes from the `Tested up to` field of the release readme.txt.
+	 *
+	 * @since 2.0.4
+	 *
+	 * @return string|null
+	 */
+	public function get_wp_tested(): ?string {
+		return $this->attributes['wp_tested'];
 	}
 }

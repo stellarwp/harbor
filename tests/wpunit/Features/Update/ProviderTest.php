@@ -4,6 +4,7 @@ namespace LiquidWeb\Harbor\Tests\Features\Update;
 
 use LiquidWeb\Harbor\Features\Update\Plugin_Handler;
 use LiquidWeb\Harbor\Features\Update\Provider;
+use LiquidWeb\Harbor\Features\Update\Requirements\Guard;
 use LiquidWeb\Harbor\Features\Update\Resolve_Update_Data;
 use LiquidWeb\Harbor\Features\Update\Theme_Handler;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
@@ -112,5 +113,45 @@ final class ProviderTest extends HarborTestCase {
 			has_filter( 'themes_api', [ $this->container->get( Theme_Handler::class ), 'filter_themes_api' ] ),
 			'themes_api should not have a callback when a higher version exists.'
 		);
+
+		$this->assertFalse(
+			has_filter( 'upgrader_pre_download', [ $this->container->get( Guard::class ), 'filter_pre_download' ] ),
+			'upgrader_pre_download should not have a callback when a higher version exists.'
+		);
+	}
+
+	/**
+	 * Tests that the requirements guard hooks are registered for the version leader.
+	 *
+	 * @return void
+	 */
+	public function test_it_registers_the_requirements_guard_when_version_leader(): void {
+		$this->assertTrue( $this->has_guard_callback( 'upgrader_pre_download', 'filter_pre_download' ) );
+		$this->assertTrue( $this->has_guard_callback( 'load-plugins.php', 'register_update_messages' ) );
+	}
+
+	/**
+	 * Whether a Guard method is hooked at priority 10, on any Guard instance.
+	 *
+	 * Other tests register the provider again, which replaces the container's
+	 * Guard singleton, so the hooked instance can differ from the current one.
+	 *
+	 * @param string $hook   The hook name.
+	 * @param string $method The Guard method.
+	 *
+	 * @return bool
+	 */
+	private function has_guard_callback( string $hook, string $method ): bool {
+		global $wp_filter;
+
+		foreach ( $wp_filter[ $hook ]->callbacks[10] ?? [] as $callback ) {
+			$function = $callback['function'];
+
+			if ( is_array( $function ) && $function[0] instanceof Guard && $function[1] === $method ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

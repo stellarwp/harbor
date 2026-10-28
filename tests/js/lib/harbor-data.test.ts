@@ -10,6 +10,8 @@ const FIXTURE: HarborData = {
     domain:           'fixture.example.com',
     version:          '9.9.9',
     licenseKeyPrefix: 'FIXTURE-',
+    updateCoreUrl:    '/wp-admin/update-core.php?from=fixture',
+    updatePhpUrl:     'https://example.com/update-php',
 };
 
 describe( 'getHarborDataValue', () => {

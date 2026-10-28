@@ -99,7 +99,10 @@
         "top_dir": "kadence-blocks-pro",
         "main_file": "kadence-blocks-pro.php",
         "release_date": "2025-11-20",
-        "homepage": null
+        "homepage": null,
+        "wp_requires": "6.6",
+        "php_requires": "7.4",
+        "wp_tested": "6.9"
       },
       {
         "minimum_tier": "basic",
@@ -118,7 +121,9 @@
         "top_dir": "kadence-pro",
         "main_file": "kadence-pro.php",
         "release_date": "2025-10-30",
-        "homepage": null
+        "homepage": null,
+        "wp_requires": "6.6",
+        "wp_tested": "6.9"
       },
       {
         "minimum_tier": "pro",

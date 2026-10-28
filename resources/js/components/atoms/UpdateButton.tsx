@@ -1,8 +1,9 @@
 /**
  * Icon button that triggers a feature update.
  *
- * When upgradeLabel is provided the button is rendered disabled with an
- * upsell tooltip. The Tooltip component handles the span wrapper needed to
+ * When disabledLabel is provided the button is rendered disabled with a
+ * tooltip: an upsell, or the WordPress or PHP version the update requires.
+ * The Tooltip component handles the span wrapper needed to
  * keep hover events working when pointer-events are disabled on the button.
  *
  * @package LiquidWeb\Harbor
@@ -16,20 +17,20 @@ interface UpdateButtonProps {
 	featureName:   string;
 	disabled?:     boolean;
 	onClick?:      () => void;
-	/** When set, the button is disabled and this text is shown as an upsell tooltip. */
-	upgradeLabel?: string;
+	/** When set, the button is disabled and this text is shown as a tooltip: an upsell, or the WordPress or PHP version the update requires. */
+	disabledLabel?: string;
 }
 
 /**
  * @since 1.0.0
  */
-export function UpdateButton( { featureName, disabled = false, onClick, upgradeLabel }: UpdateButtonProps ) {
+export function UpdateButton( { featureName, disabled = false, onClick, disabledLabel }: UpdateButtonProps ) {
 	const button = (
 		<Button
 			variant="default"
 			size="icon-xs"
 			className="rounded-full"
-			disabled={ !! upgradeLabel || disabled }
+			disabled={ !! disabledLabel || disabled }
 			onClick={ onClick }
 			aria-label={ sprintf( __( 'Update %s', '%TEXTDOMAIN%' ), featureName ) }
 		>
@@ -37,7 +38,7 @@ export function UpdateButton( { featureName, disabled = false, onClick, upgradeL
 		</Button>
 	);
 
-	return upgradeLabel
-		? <Tooltip label={ upgradeLabel }>{ button }</Tooltip>
+	return disabledLabel
+		? <Tooltip label={ disabledLabel }>{ button }</Tooltip>
 		: button;
 }

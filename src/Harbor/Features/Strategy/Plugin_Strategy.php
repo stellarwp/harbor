@@ -30,7 +30,7 @@ use function wp_json_encode;
  * - do_install()     → plugins_api() + Plugin_Upgrader
  * - do_activate()    → activate_plugin() with fatal error protection
  * - do_deactivate()  → deactivate_plugins() + verification
- * - do_update()      → Plugin_Upgrader::upgrade()
+ * - do_update()      → Plugin_Upgrader::bulk_upgrade()
  *
  * A plugin feature is active when WordPress reports the plugin as active.
  * A plugin feature is disabled if the plugin is deactivated or uninstalled.
@@ -47,7 +47,9 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * WordPress error codes that indicate PHP or WP version requirements are not met.
 	 *
-	 * Install path: emitted by Plugin_Upgrader::check_package() and captured by the skin.
+	 * Install and update paths: emitted by Plugin_Upgrader::check_package() and captured by the skin.
+	 * Update path: also returned by Plugin_Upgrader::bulk_upgrade() when the update transient's
+	 * `requires` or `requires_php` is not met.
 	 * Activation path: returned directly by activate_plugin() via validate_plugin_requirements().
 	 *
 	 * @since 1.0.0
@@ -370,6 +372,13 @@ class Plugin_Strategy extends Installable_Strategy {
 	/**
 	 * Run the plugin upgrade.
 	 *
+	 * Uses bulk_upgrade() rather than upgrade() because only bulk_upgrade()
+	 * checks requirements: it refuses an update whose `requires` or
+	 * `requires_php` in the update transient the site does not meet, and it
+	 * runs check_package() on the downloaded zip's `Requires at least` and
+	 * `Requires PHP` headers. bulk_upgrade() returns an array of results keyed
+	 * by plugin file, where a successful update is an array of install details.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
@@ -385,7 +394,15 @@ class Plugin_Strategy extends Installable_Strategy {
 
 		return $this->run_upgrader(
 			static function () use ( $upgrader, $plugin_file ) {
-				return $upgrader->upgrade( $plugin_file );
+				$results = $upgrader->bulk_upgrade( [ $plugin_file ] );
+
+				if ( ! is_array( $results ) ) {
+					return $results;
+				}
+
+				$result = $results[ $plugin_file ] ?? false;
+
+				return is_array( $result ) ? true : $result;
 			},
 			$skin,
 			Error_Code::UPDATE_FAILED,
@@ -411,10 +428,13 @@ class Plugin_Strategy extends Installable_Strategy {
 	 * Check whether an update is available for this plugin.
 	 *
 	 * @since 1.0.0
+	 * @deprecated 2.0.4 Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool
 	 */
 	protected function check_update_available(): bool {
+		_deprecated_function( __METHOD__, '2.0.4', __CLASS__ . '::get_update_headers()' );
+
 		$update_plugins = get_site_transient( 'update_plugins' );
 
 		if ( ! is_object( $update_plugins ) || empty( $update_plugins->response ) || ! is_array( $update_plugins->response ) ) {

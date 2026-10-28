@@ -686,6 +686,231 @@ final class PluginStrategyTest extends HarborTestCase {
 		}
 	}
 
+	/**
+	 * Tests that update() refuses an update whose WordPress or PHP requirement the site does not meet, before taking the lock.
+	 *
+	 * @dataProvider unmet_requirement_cases
+	 *
+	 * @param string $requires     The required WordPress version.
+	 * @param string $requires_php The required PHP version.
+	 * @param string $message      Text the error message contains.
+	 *
+	 * @return void
+	 */
+	public function test_update_returns_requirements_not_met_for_unmet_requirements( string $requires, string $requires_php, string $message ): void {
+		$this->install_test_plugin( '1.0.0' );
+
+		try {
+			$this->set_update_entry(
+				'response',
+				[
+					'id'           => 'stellarwp/plugins/test-feature',
+					'new_version'  => '2.0.0',
+					'package'      => 'https://example.com/test-feature.zip',
+					'requires'     => $requires,
+					'requires_php' => $requires_php,
+				]
+			);
+
+			$result = $this->strategy->update();
+
+			$this->assertWPError( $result );
+			$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+			$this->assertStringContainsString( $message, $result->get_error_message() );
+			$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
+	 * @return array<string, array{0: string, 1: string, 2: string}>
+	 */
+	public function unmet_requirement_cases(): array {
+		return [
+			'wordpress' => [ '99.0', '', 'requires WordPress 99.0 or newer' ],
+			'php'       => [ '', '99.0', 'requires PHP 99.0 or newer' ],
+		];
+	}
+
+	/**
+	 * Tests that update() reports the requirements of a WordPress.org update listed under `no_update` instead of "no update available".
+	 *
+	 * @return void
+	 */
+	public function test_update_returns_requirements_not_met_for_a_wporg_update_in_no_update(): void {
+		$this->install_test_plugin( '1.0.0' );
+
+		try {
+			$this->set_update_entry(
+				'no_update',
+				[
+					'id'          => 'w.org/plugins/test-feature',
+					'new_version' => '2.0.0',
+					'requires'    => '99.0',
+				]
+			);
+
+			$result = $this->strategy->update();
+
+			$this->assertWPError( $result );
+			$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
+	 * Tests that update() installs the new version through bulk_upgrade() and leaves the plugin active.
+	 *
+	 * @return void
+	 */
+	public function test_update_installs_the_new_version(): void {
+		$this->install_test_plugin( '1.0.0' );
+		$this->serve_package( '2.0.0' );
+
+		try {
+			$this->set_update_entry(
+				'response',
+				[
+					'id'          => 'stellarwp/plugins/test-feature',
+					'new_version' => '2.0.0',
+					'package'     => 'https://example.com/test-feature.zip',
+				]
+			);
+
+			$result = $this->strategy->update();
+
+			$this->assertTrue( $result );
+			$this->assertSame( '2.0.0', get_plugin_data( WP_PLUGIN_DIR . '/' . self::PLUGIN_FILE, false, false )['Version'] );
+			$this->assertTrue( is_plugin_active( self::PLUGIN_FILE ) );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
+	 * Tests that update() refuses a package whose `Requires PHP` header the site does not meet when the update entry has no requirements.
+	 *
+	 * @return void
+	 */
+	public function test_update_returns_requirements_not_met_for_the_package_header(): void {
+		$this->install_test_plugin( '1.0.0' );
+		$this->serve_package( '2.0.0', "\n * Requires PHP: 99.0" );
+
+		try {
+			$this->set_update_entry(
+				'response',
+				[
+					'id'          => 'stellarwp/plugins/test-feature',
+					'new_version' => '2.0.0',
+					'package'     => 'https://example.com/test-feature.zip',
+				]
+			);
+
+			$ob_level = ob_get_level();
+			$result   = $this->strategy->update();
+
+			/**
+			 * WP_Upgrader_Skin::error() calls header() again, and
+			 * Automatic_Upgrader_Skin::header() opens an output buffer that
+			 * nothing closes. Close it so the test leaves the buffers as it found them.
+			 */
+			while ( ob_get_level() > $ob_level ) {
+				ob_end_clean();
+			}
+
+			$this->assertWPError( $result );
+			$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+			$this->assertSame( '1.0.0', get_plugin_data( WP_PLUGIN_DIR . '/' . self::PLUGIN_FILE, false, false )['Version'] );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
+	 * Tests that enable() refuses to install a plugin whose catalog version needs a newer WordPress, before downloading anything.
+	 *
+	 * @return void
+	 */
+	public function test_enable_returns_requirements_not_met_before_installing(): void {
+		$downloads = 0;
+		$counter   = static function ( $reply ) use ( &$downloads ) {
+			++$downloads;
+
+			return $reply;
+		};
+		add_filter( 'upgrader_pre_download', $counter );
+
+		$feature  = new Plugin(
+			[
+				'slug'         => 'test-feature',
+				'name'         => 'Test Feature',
+				'plugin_file'  => self::PLUGIN_FILE,
+				'is_available' => true,
+				'version'      => '2.0.0',
+				'requires_wp'  => '99.0',
+			]
+		);
+		$strategy = new Plugin_Strategy( $feature );
+		$result   = $strategy->enable();
+
+		remove_filter( 'upgrader_pre_download', $counter );
+
+		$this->assertWPError( $result );
+		$this->assertSame( Error_Code::REQUIREMENTS_NOT_MET, $result->get_error_code() );
+		$this->assertStringContainsString( 'requires WordPress 99.0 or newer', $result->get_error_message() );
+		$this->assertSame( 0, $downloads );
+		$this->assertFalse( get_option( 'lw_harbor_install_lock.lock' ) );
+	}
+
+	/**
+	 * Tests that enable() ignores the catalog requirements for a plugin that is already installed, since activation checks its own header.
+	 *
+	 * @return void
+	 */
+	public function test_enable_activates_an_installed_plugin_whatever_the_catalog_requires(): void {
+		$plugin_dir = WP_PLUGIN_DIR . '/test-feature';
+
+		if ( ! is_dir( $plugin_dir ) ) {
+			mkdir( $plugin_dir, 0755, true );
+		}
+
+		file_put_contents( $plugin_dir . '/test-feature.php', $this->plugin_header( '1.0.0' ) );
+
+		try {
+			$feature  = new Plugin(
+				[
+					'slug'         => 'test-feature',
+					'name'         => 'Test Feature',
+					'plugin_file'  => self::PLUGIN_FILE,
+					'is_available' => true,
+					'version'      => '2.0.0',
+					'requires_wp'  => '99.0',
+				]
+			);
+			$strategy = new Plugin_Strategy( $feature );
+
+			$this->assertTrue( $strategy->enable() );
+		} finally {
+			$this->remove_test_plugin();
+		}
+	}
+
+	/**
+	 * Tests that check_update_available() still works and reports its deprecation.
+	 *
+	 * @return void
+	 */
+	public function test_check_update_available_is_deprecated(): void {
+		$this->setExpectedDeprecated( Plugin_Strategy::class . '::check_update_available' );
+
+		$method = new \ReflectionMethod( $this->strategy, 'check_update_available' );
+		$method->setAccessible( true );
+
+		$this->assertFalse( $method->invoke( $this->strategy ) );
+	}
+
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
@@ -713,5 +938,105 @@ final class PluginStrategyTest extends HarborTestCase {
 				'is_available' => true,
 			]
 		);
+	}
+
+	/**
+	 * Writes the test plugin at the given version and marks it active.
+	 *
+	 * @param string $version The plugin version.
+	 *
+	 * @return void
+	 */
+	private function install_test_plugin( string $version ): void {
+		$plugin_dir = WP_PLUGIN_DIR . '/test-feature';
+
+		if ( ! is_dir( $plugin_dir ) ) {
+			mkdir( $plugin_dir, 0755, true );
+		}
+
+		file_put_contents( $plugin_dir . '/test-feature.php', $this->plugin_header( $version ) );
+		wp_clean_plugins_cache( false );
+
+		$this->mock_activate_plugin( self::PLUGIN_FILE );
+	}
+
+	/**
+	 * Deactivates and deletes the test plugin and clears the update transient.
+	 *
+	 * @return void
+	 */
+	private function remove_test_plugin(): void {
+		deactivate_plugins( self::PLUGIN_FILE );
+		delete_site_transient( 'update_plugins' );
+
+		$plugin_dir = WP_PLUGIN_DIR . '/test-feature';
+
+		foreach ( glob( $plugin_dir . '/*' ) ?: [] as $file ) {
+			unlink( $file );
+		}
+
+		if ( is_dir( $plugin_dir ) ) {
+			rmdir( $plugin_dir );
+		}
+	}
+
+	/**
+	 * Writes a single entry for the test plugin to the update_plugins transient.
+	 *
+	 * @param string               $list_name `response` or `no_update`.
+	 * @param array<string, mixed> $entry     The entry.
+	 *
+	 * @return void
+	 */
+	private function set_update_entry( string $list_name, array $entry ): void {
+		$transient               = new \stdClass();
+		$transient->response     = [];
+		$transient->no_update    = [];
+		$transient->{$list_name} = [ self::PLUGIN_FILE => (object) array_merge( [ 'plugin' => self::PLUGIN_FILE ], $entry ) ];
+
+		set_site_transient( 'update_plugins', $transient );
+	}
+
+	/**
+	 * Makes the upgrader install a zip of the test plugin at the given version instead of downloading the package.
+	 *
+	 * @param string $version      The plugin version in the zip.
+	 * @param string $extra_header Extra plugin header lines.
+	 *
+	 * @return void
+	 */
+	private function serve_package( string $version, string $extra_header = '' ): void {
+		$header = $this->plugin_header( $version, $extra_header );
+
+		add_filter( 'filesystem_method', static fn() => 'direct' );
+
+		// bulk_upgrade() checks WordPress.org for updates afterward, which the test environment cannot reach.
+		remove_action( 'upgrader_process_complete', 'wp_update_plugins' );
+		remove_action( 'upgrader_process_complete', 'wp_update_themes' );
+		add_filter(
+			'upgrader_pre_download',
+			static function ( $reply ) use ( $header ) {
+				$zip_path = wp_tempnam( 'test-feature.zip' );
+				$zip      = new \ZipArchive();
+				$zip->open( $zip_path, \ZipArchive::OVERWRITE );
+				$zip->addFromString( 'test-feature/test-feature.php', $header );
+				$zip->close();
+
+				return $zip_path;
+			},
+			5
+		);
+	}
+
+	/**
+	 * Builds the test plugin's main file.
+	 *
+	 * @param string $version      The plugin version.
+	 * @param string $extra_header Extra plugin header lines.
+	 *
+	 * @return string
+	 */
+	private function plugin_header( string $version, string $extra_header = '' ): string {
+		return "<?php\n/**\n * Plugin Name: Test Feature\n * Author: StellarWP\n * Version: {$version}{$extra_header}\n */\n";
 	}
 }

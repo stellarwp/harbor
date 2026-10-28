@@ -262,6 +262,7 @@ class Theme_Handler {
 		$info->slug          = $slug;
 		$info->version       = $update_data['version'] ?? '';
 		$info->requires      = $update_data['requires'] ?? '';
+		$info->requires_php  = $update_data['requires_php'] ?? '';
 		$info->tested        = $update_data['tested'] ?? '';
 		$info->download_link = $update_data['package'] ?? '';
 		$info->author        = $update_data['author'] ?? '';
@@ -277,6 +278,10 @@ class Theme_Handler {
 	 *
 	 * WordPress theme transients use arrays (not stdClass objects) keyed by stylesheet.
 	 *
+	 * WordPress does not read `id` from a theme entry. Harbor sets it so that
+	 * Requirements\Guard can tell Harbor's entries
+	 * apart from the ones WordPress.org writes.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param string               $slug        The theme slug (stylesheet).
@@ -286,11 +291,14 @@ class Theme_Handler {
 	 */
 	private function to_update_array( string $slug, array $update_data ): array {
 		return [
-			'theme'       => $slug,
-			'new_version' => Cast::to_string( $update_data['version'] ?? '' ),
-			'url'         => Cast::to_string( $update_data['url'] ?? '' ),
-			'package'     => Cast::to_string( $update_data['package'] ?? '' ),
-			'requires'    => Cast::to_string( $update_data['requires'] ?? '' ),
+			'id'           => sprintf( 'stellarwp/themes/%s', $slug ),
+			'theme'        => $slug,
+			'new_version'  => Cast::to_string( $update_data['version'] ?? '' ),
+			'url'          => Cast::to_string( $update_data['url'] ?? '' ),
+			'package'      => Cast::to_string( $update_data['package'] ?? '' ),
+			'requires'     => Cast::to_string( $update_data['requires'] ?? '' ),
+			'requires_php' => Cast::to_string( $update_data['requires_php'] ?? '' ),
+			'tested'       => Cast::to_string( $update_data['tested'] ?? '' ),
 		];
 	}
 }

@@ -7,4 +7,6 @@ export interface HarborData {
     domain:            string;
     version:           string;
     licenseKeyPrefix:  string;
+    updateCoreUrl:     string;
+    updatePhpUrl:      string;
 }

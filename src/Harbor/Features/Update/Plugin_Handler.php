@@ -280,6 +280,7 @@ class Plugin_Handler {
 		$info->slug          = $slug;
 		$info->version       = $update_data['version'] ?? '';
 		$info->requires      = $update_data['requires'] ?? '';
+		$info->requires_php  = $update_data['requires_php'] ?? '';
 		$info->tested        = $update_data['tested'] ?? '';
 		$info->download_link = $update_data['package'] ?? '';
 		$info->author        = $update_data['author'] ?? '';
@@ -304,14 +305,15 @@ class Plugin_Handler {
 	private function to_update_object( string $slug, string $plugin_file, array $update_data ): stdClass {
 		$update = new stdClass();
 
-		$update->id          = $update_data['id'] ?? sprintf( 'stellarwp/plugins/%s', $slug );
-		$update->plugin      = $plugin_file;
-		$update->slug        = $slug;
-		$update->new_version = $update_data['version'] ?? '';
-		$update->url         = $update_data['url'] ?? '';
-		$update->package     = $update_data['package'] ?? '';
-		$update->tested      = $update_data['tested'] ?? '';
-		$update->requires    = $update_data['requires'] ?? '';
+		$update->id           = $update_data['id'] ?? sprintf( 'stellarwp/plugins/%s', $slug );
+		$update->plugin       = $plugin_file;
+		$update->slug         = $slug;
+		$update->new_version  = $update_data['version'] ?? '';
+		$update->url          = $update_data['url'] ?? '';
+		$update->package      = $update_data['package'] ?? '';
+		$update->tested       = $update_data['tested'] ?? '';
+		$update->requires     = $update_data['requires'] ?? '';
+		$update->requires_php = $update_data['requires_php'] ?? '';
 
 		return $update;
 	}

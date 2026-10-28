@@ -37,6 +37,8 @@ final class Theme extends Feature implements Installable {
 				'installed_version' => $attributes['installed_version'] ?? null,
 				'version'           => $attributes['version'] ?? null,
 				'changelog'         => $attributes['changelog'] ?? null,
+				'requires_wp'       => $attributes['requires_wp'] ?? null,
+				'requires_php'      => $attributes['requires_php'] ?? null,
 			]
 		);
 
@@ -115,6 +117,9 @@ final class Theme extends Feature implements Installable {
 			'url'               => $this->get_documentation_url(),
 			'author'            => '',
 			'sections'          => $sections,
+			'requires'          => $catalog_feature->get_wp_requires() ?? '',
+			'requires_php'      => $catalog_feature->get_php_requires() ?? '',
+			'tested'            => $catalog_feature->get_wp_tested() ?? '',
 			'installed_version' => $installed_version,
 			'has_update'        => $installed_version !== '' && $catalog_version !== '' && version_compare( $catalog_version, $installed_version, '>' ),
 		];
