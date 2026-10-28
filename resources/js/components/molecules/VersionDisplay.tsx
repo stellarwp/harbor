@@ -2,8 +2,8 @@
  * Displays the installed/available version of a feature, with an update
  * button when a newer version is available.
  *
- * When upgradeLabel is provided the update button is rendered fully disabled
- * (no onClick handler) with an upsell tooltip.
+ * When disabledLabel is provided the update button is rendered fully disabled
+ * with a tooltip: an upsell, or the WordPress or PHP version the update requires.
  *
  * @package LiquidWeb\Harbor
  */
@@ -13,11 +13,11 @@ import type { Feature } from '@/types/api';
 
 export interface VersionDisplayProps {
 	feature:          Feature;
-	/** When set, the update button is disabled and this text is shown as an upsell tooltip. */
-	upgradeLabel?:    string;
+	/** When set, the update button is disabled and this text is shown as a tooltip: an upsell, or the WordPress or PHP version the update requires. */
+	disabledLabel?:   string;
 	pendingAction?:   'enabling' | 'disabling' | 'installing' | 'updating' | null;
 	installableBusy?: boolean;
-	/** Required when upgradeLabel is not set and the button should be active. */
+	/** Required when disabledLabel is not set and the button should be active. */
 	onUpdate?:        () => void;
 }
 
@@ -26,7 +26,7 @@ export interface VersionDisplayProps {
  */
 export function VersionDisplay( {
 	feature,
-	upgradeLabel,
+	disabledLabel,
 	pendingAction   = null,
 	installableBusy = false,
 	onUpdate,
@@ -41,12 +41,12 @@ export function VersionDisplay( {
 					<span className="text-xs font-mono font-bold break-all">
 						v{ feature.update_version }
 					</span>
-					{ ( upgradeLabel || onUpdate ) && (
+					{ ( disabledLabel || onUpdate ) && (
 						<UpdateButton
 							featureName={ feature.name }
 							disabled={ !! pendingAction || installableBusy }
 							onClick={ onUpdate }
-							upgradeLabel={ upgradeLabel }
+							disabledLabel={ disabledLabel }
 						/>
 					) }
 				</div>

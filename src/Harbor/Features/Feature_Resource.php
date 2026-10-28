@@ -2,10 +2,11 @@
 
 namespace LiquidWeb\Harbor\Features;
 
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Types\Feature;
-use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Features\Types\Service;
-use LiquidWeb\Harbor\Features\Types\Theme;
+use LiquidWeb\Harbor\Features\Update\Requirements\Headers;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 
 /**
  * Decorates a resolved Feature with request-context data for REST API responses.
@@ -15,9 +16,24 @@ use LiquidWeb\Harbor\Features\Types\Theme;
  * filter chain hits the cached repository result, so there is no circular
  * dependency.
  *
- * update_version is the version string from the WordPress update transient
- * response object, or null when the feature has no pending update registered
- * by the handler (e.g. dot-org plugins, unlicensed, or not installed).
+ * update_version is the version of the pending update, or null when the
+ * feature has none (e.g. unlicensed or not installed). The pending update is
+ * the feature's entry in the transient's `response` list, or an entry in
+ * `no_update` with a newer version whose requirements the site does not meet,
+ * which is where WordPress.org lists an update that needs a newer WordPress.
+ * See Update\Requirements\Resolve_Headers.
+ *
+ * requires_wp, requires_php, wp_compatible and php_compatible describe the
+ * version an update or an install would put on the site, and whether the site
+ * meets its WordPress and PHP requirements:
+ *
+ * - With an update pending, the update's entry in the update transient.
+ *   Harbor fills its own entries from the catalog; WordPress.org fills the
+ *   entries of WordPress.org-hosted features.
+ * - When the feature is not installed, the catalog version, which is the
+ *   version installing it downloads.
+ * - Otherwise there is no such version: the requirements are null and the
+ *   compatible fields return true.
  *
  * @since 1.0.0
  */
@@ -42,14 +58,26 @@ final class Feature_Resource {
 	private ?string $update_version;
 
 	/**
-	 * @since 1.0.0
+	 * The requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 *
-	 * @param Feature     $feature        The resolved feature.
-	 * @param string|null $update_version Version from the update transient, or null.
+	 * @since TBD
+	 *
+	 * @var Headers|null
 	 */
-	public function __construct( Feature $feature, ?string $update_version ) {
+	private ?Headers $headers;
+
+	/**
+	 * @since 1.0.0
+	 * @since TBD Takes the requirement headers of the version an update or an install would put on the site.
+	 *
+	 * @param Feature      $feature        The resolved feature.
+	 * @param string|null  $update_version Version from the update transient, or null.
+	 * @param Headers|null $headers        The requirement headers of the version an update or an install would put on the site, or null when there is none.
+	 */
+	public function __construct( Feature $feature, ?string $update_version, ?Headers $headers = null ) {
 		$this->feature        = $feature;
 		$this->update_version = $update_version;
+		$this->headers        = $headers;
 	}
 
 	/**
@@ -59,21 +87,40 @@ final class Feature_Resource {
 	 * results so transient access does not trigger re-resolution.
 	 *
 	 * @since 1.0.0
+	 * @since TBD Resolves the requirement headers of the pending update, or of the catalog version when the feature is not installed, with Resolve_Headers.
 	 *
 	 * @param Feature $feature The resolved feature.
 	 *
 	 * @return self
 	 */
 	public static function from_feature( Feature $feature ) {
-		$update_version = null;
-
-		if ( $feature instanceof Plugin ) {
-			$update_version = self::get_plugin_update_version( $feature );
-		} elseif ( $feature instanceof Theme ) {
-			$update_version = self::get_theme_update_version( $feature );
+		if ( $feature instanceof Service ) {
+			return new self( $feature, null );
 		}
 
-		return new self( $feature, $update_version );
+		/** @var Resolve_Headers $resolve_headers */
+		$resolve_headers = Config::get_container()->get( Resolve_Headers::class );
+
+		/**
+		 * From the update transient: the feature's pending update entry. Harbor
+		 * writes the entries of its own features from the catalog, and
+		 * WordPress.org writes the entries of WordPress.org-hosted features.
+		 */
+		$update_headers = $resolve_headers( $feature );
+
+		if ( $update_headers !== null ) {
+			return new self( $feature, $update_headers->get_version(), $update_headers );
+		}
+
+		/**
+		 * From the catalog itself: the catalog version, which is the version
+		 * installing the feature downloads. Only used when the feature is not
+		 * installed, since it has no entry in the update transient then.
+		 */
+		$installed_version = $feature->to_array()['installed_version'] ?? null;
+		$catalog_headers   = empty( $installed_version ) ? $resolve_headers->from_catalog( $feature ) : null;
+
+		return new self( $feature, null, $catalog_headers );
 	}
 
 	/**
@@ -84,14 +131,22 @@ final class Feature_Resource {
 	 * @return array<string, mixed>
 	 */
 	public function to_array(): array {
-		// Services do not support update_version.
+		// Services do not support updates.
 		if ( $this->feature instanceof Service ) {
 			return $this->feature->to_array();
 		}
 
+		$headers = $this->headers;
+
 		return array_merge(
 			$this->feature->to_array(),
-			[ 'update_version' => $this->update_version ]
+			[
+				'update_version' => $this->update_version,
+				'requires_wp'    => $headers !== null && $headers->get_wp() !== '' ? $headers->get_wp() : null,
+				'requires_php'   => $headers !== null && $headers->get_php() !== '' ? $headers->get_php() : null,
+				'wp_compatible'  => $headers === null || $headers->is_wp_met(),
+				'php_compatible' => $headers === null || $headers->is_php_met(),
+			]
 		);
 	}
 
@@ -107,6 +162,17 @@ final class Feature_Resource {
 	}
 
 	/**
+	 * Returns the requirement headers of the version an update or an install would put on the site, or null when there is none.
+	 *
+	 * @since TBD
+	 *
+	 * @return Headers|null
+	 */
+	public function get_headers(): ?Headers {
+		return $this->headers;
+	}
+
+	/**
 	 * Returns the decorated Feature.
 	 *
 	 * @since 1.0.0
@@ -115,71 +181,5 @@ final class Feature_Resource {
 	 */
 	public function get_feature(): Feature {
 		return $this->feature;
-	}
-
-	/**
-	 * Reads update_version from the plugin update transient for the given plugin feature.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param Plugin $feature The plugin feature.
-	 *
-	 * @return string|null
-	 */
-	private static function get_plugin_update_version( Plugin $feature ) {
-		$transient = get_site_transient( 'update_plugins' );
-
-		if ( ! is_object( $transient ) || ! isset( $transient->response ) || ! is_array( $transient->response ) ) {
-			return null;
-		}
-
-		$plugin_file = $feature->get_plugin_file();
-
-		if ( ! isset( $transient->response[ $plugin_file ] ) ) {
-			return null;
-		}
-
-		$response = $transient->response[ $plugin_file ];
-
-		$version = is_object( $response ) ? ( $response->new_version ?? null ) : null;
-
-		if ( ! is_string( $version ) || $version === '' ) {
-			return null;
-		}
-
-		return $version;
-	}
-
-	/**
-	 * Reads update_version from the theme update transient for the given theme feature.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param Theme $feature The theme feature.
-	 *
-	 * @return string|null
-	 */
-	private static function get_theme_update_version( Theme $feature ) {
-		$transient = get_site_transient( 'update_themes' );
-
-		if ( ! is_object( $transient ) || ! isset( $transient->response ) || ! is_array( $transient->response ) ) {
-			return null;
-		}
-
-		$slug = $feature->get_slug();
-
-		if ( ! isset( $transient->response[ $slug ] ) ) {
-			return null;
-		}
-
-		$response = $transient->response[ $slug ];
-
-		$version = is_array( $response ) ? ( $response['new_version'] ?? null ) : null;
-
-		if ( ! is_string( $version ) || $version === '' ) {
-			return null;
-		}
-
-		return $version;
 	}
 }

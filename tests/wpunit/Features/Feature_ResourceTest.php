@@ -179,6 +179,137 @@ final class Feature_ResourceTest extends HarborTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// Update requirements
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Tests that to_array() reports the pending update's requirements and whether the site meets them.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_reports_the_update_requirements(): void {
+		$transient           = new \stdClass();
+		$transient->response = [
+			'stellar-export/stellar-export.php' => (object) [
+				'new_version'  => '2.5.0',
+				'requires'     => '99.0',
+				'requires_php' => '1.0',
+			],
+		];
+		set_site_transient( 'update_plugins', $transient );
+
+		$data = Feature_Resource::from_feature( $this->make_plugin() )->to_array();
+
+		$this->assertSame( '2.5.0', $data['update_version'] );
+		$this->assertSame( '99.0', $data['requires_wp'] );
+		$this->assertSame( '1.0', $data['requires_php'] );
+		$this->assertFalse( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+	}
+
+	/**
+	 * Tests that to_array() reports no requirements and returns true for compatibility when there is no update and the catalog has no version.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_requirements_without_an_update_or_catalog_version(): void {
+		$data = Feature_Resource::from_feature( $this->make_theme() )->to_array();
+
+		$this->assertNull( $data['update_version'] );
+		$this->assertNull( $data['requires_wp'] );
+		$this->assertNull( $data['requires_php'] );
+		$this->assertTrue( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+	}
+
+	/**
+	 * Tests that to_array() reports the catalog version's requirements for a feature that is not installed.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_reports_the_catalog_requirements_when_not_installed(): void {
+		$plugin = Plugin::from_array(
+			[
+				'slug'         => 'stellar-export',
+				'name'         => 'Stellar Export',
+				'plugin_file'  => 'stellar-export/stellar-export.php',
+				'is_available' => true,
+				'version'      => '3.0.0',
+				'requires_wp'  => '99.0',
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
+
+		$this->assertSame( '99.0', $data['requires_wp'] );
+		$this->assertNull( $data['requires_php'] );
+		$this->assertFalse( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+
+		$data = Feature_Resource::from_feature( $this->make_plugin() )->to_array();
+
+		$this->assertTrue( $data['wp_compatible'] );
+		$this->assertTrue( $data['php_compatible'] );
+	}
+
+	/**
+	 * Tests that an installed feature with no pending update reports no requirements, whatever the catalog requires.
+	 *
+	 * @return void
+	 */
+	public function test_to_array_ignores_the_catalog_requirements_when_installed_and_up_to_date(): void {
+		$plugin = Plugin::from_array(
+			[
+				'slug'              => 'stellar-export',
+				'name'              => 'Stellar Export',
+				'plugin_file'       => 'stellar-export/stellar-export.php',
+				'installed_version' => '3.0.0',
+				'version'           => '3.0.0',
+				'requires_wp'       => '99.0',
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
+
+		$this->assertNull( $data['update_version'] );
+		$this->assertNull( $data['requires_wp'] );
+		$this->assertTrue( $data['wp_compatible'] );
+	}
+
+	/**
+	 * Tests that a newer WordPress.org update listed under `no_update` because the site's WordPress is too old is reported.
+	 *
+	 * @return void
+	 */
+	public function test_update_version_from_no_update_when_requirements_are_unmet(): void {
+		$transient            = new \stdClass();
+		$transient->response  = [];
+		$transient->no_update = [
+			'stellar-export/stellar-export.php' => (object) [
+				'id'          => 'w.org/plugins/stellar-export',
+				'new_version' => '3.0.0',
+				'requires'    => '99.0',
+			],
+		];
+		set_site_transient( 'update_plugins', $transient );
+
+		$plugin = Plugin::from_array(
+			[
+				'slug'              => 'stellar-export',
+				'name'              => 'Stellar Export',
+				'plugin_file'       => 'stellar-export/stellar-export.php',
+				'installed_version' => '2.0.0',
+				'is_available'      => true,
+			]
+		);
+
+		$data = Feature_Resource::from_feature( $plugin )->to_array();
+
+		$this->assertSame( '3.0.0', $data['update_version'] );
+		$this->assertFalse( $data['wp_compatible'] );
+	}
+
+	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
 

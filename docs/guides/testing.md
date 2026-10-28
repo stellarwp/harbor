@@ -173,6 +173,16 @@ For example, with the full `default.json` catalog:
 
 Some fixture keys (like `lwsw-unified-test-fixtures`) ship a dedicated catalog file with a curated subset of products. When that file exists, it replaces the full catalog entirely — so fewer features appear in the output.
 
+`lwsw-unified-update-requirements` grants the same products as `lwsw-unified-pro-2026` and has its own catalog, `catalog/lwsw-unified-update-requirements.json`. It is `default.json` with version 999.0.0 for three plugins, each requiring a WordPress or PHP version no site runs:
+
+| Feature                             | Requires                       |
+| ----------------------------------- | ------------------------------ |
+| Blocks Pro (`kad-blocks-pro`)       | WordPress 100.0.1              |
+| Theme Kit Pro (`kad-theme-kit-pro`) | PHP 100.0.1                    |
+| LearnDash LMS (`sfwd-lms`)          | WordPress 100.0.1, PHP 100.0.1 |
+
+With any of those plugins installed, Harbor offers the 999.0.0 update and refuses to install it, so the update requirement checks can be tested without changing the site's WordPress or PHP version.
+
 ### File resolution order
 
 The sample plugin resolves fixture files from two directories, in order:

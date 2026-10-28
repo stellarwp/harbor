@@ -388,6 +388,8 @@ class Resolve_Feature_Collection {
 			'wporg_slug'        => $catalog_feature->get_wporg_slug(),
 			'version'           => $catalog_feature->get_version(),
 			'changelog'         => $catalog_feature->get_changelog(),
+			'requires_wp'       => $catalog_feature->get_wp_requires(),
+			'requires_php'      => $catalog_feature->get_php_requires(),
 		];
 
 		$feature = $class::from_array( $data );

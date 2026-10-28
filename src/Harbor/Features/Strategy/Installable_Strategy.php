@@ -2,7 +2,10 @@
 
 namespace LiquidWeb\Harbor\Features\Strategy;
 
+use LiquidWeb\Harbor\Config;
 use LiquidWeb\Harbor\Features\Error_Code;
+use LiquidWeb\Harbor\Features\Update\Requirements\Headers;
+use LiquidWeb\Harbor\Features\Update\Requirements\Resolve_Headers;
 use LiquidWeb\Harbor\Utils\Cast;
 use WP_Ajax_Upgrader_Skin;
 use WP_Error;
@@ -39,7 +42,6 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * @since 1.0.0
 	 */
 	protected const LOCK_KEY = 'lw_harbor_install_lock';
-
 
 	// ── Abstract hooks ──────────────────────────────────────────────────
 
@@ -109,6 +111,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Check whether an update is available for this extension.
 	 *
 	 * @since 1.0.0
+	 * @deprecated TBD Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool True if an update is available.
 	 */
@@ -141,7 +144,9 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Enable the feature: install (if needed) and activate the extension.
 	 *
 	 * Idempotent: returns true if the extension is already active. Uses a
-	 * global lock to prevent concurrent installs of any extension.
+	 * global lock to prevent concurrent installs of any extension. Refuses to
+	 * install an extension whose catalog version needs a newer WordPress or PHP
+	 * than the site runs.
 	 *
 	 * @since 1.0.0
 	 *
@@ -162,6 +167,30 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 			);
 
 			return true;
+		}
+
+		/**
+		 * An extension that is not installed is downloaded at its catalog
+		 * version, so refuse before downloading when the site cannot run it.
+		 * An installed but inactive extension is checked by its own header
+		 * when it is activated.
+		 */
+		if ( ! $this->check_installed() ) {
+			$headers = $this->get_resolve_headers()->from_catalog( $this->feature );
+
+			if ( $headers !== null && ! $headers->is_met() ) {
+				$error = $headers->to_wp_error( $this->feature->get_name(), Error_Code::REQUIREMENTS_NOT_MET );
+
+				static::debug_log(
+					sprintf(
+						'Cannot install "%s": %s',
+						$this->feature->get_slug(),
+						$error->get_error_message()
+					)
+				);
+
+				return $error;
+			}
 		}
 
 		// Ensure the extension is on disk — install from ZIP if needed.
@@ -201,7 +230,8 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 * Update the feature: upgrade the extension to the latest available version.
 	 *
 	 * Checks the WordPress update transient for an available update. If one
-	 * exists, acquires the global install lock and runs the upgrade.
+	 * exists and the site meets its WordPress and PHP requirements, acquires
+	 * the global install lock and runs the upgrade.
 	 *
 	 * @since 1.0.0
 	 *
@@ -229,7 +259,9 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 			);
 		}
 
-		if ( ! $this->check_update_available() ) {
+		$headers = $this->get_update_headers();
+
+		if ( $headers === null ) {
 			static::debug_log(
 				sprintf(
 					'No update available for "%s".',
@@ -245,6 +277,20 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 					$this->feature->get_name()
 				)
 			);
+		}
+
+		if ( ! $headers->is_met() ) {
+			$error = $headers->to_wp_error( $this->feature->get_name(), Error_Code::REQUIREMENTS_NOT_MET );
+
+			static::debug_log(
+				sprintf(
+					'Cannot update "%s": %s',
+					$this->feature->get_slug(),
+					$error->get_error_message()
+				)
+			);
+
+			return $error;
 		}
 
 		if ( ! $this->acquire_lock( self::LOCK_KEY ) ) {
@@ -268,10 +314,11 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		try {
 			$result = $this->do_update();
 
-			// Plugin_Upgrader::upgrade() deactivates the plugin before upgrading
-			// and does not reactivate it afterward (unlike the WP admin UI path).
-			// Reactivate here so an API-triggered update doesn't leave the plugin
-			// inactive.
+			/**
+			 * Make sure the extension is active after the update. The bulk
+			 * upgraders keep an active plugin active, so for plugins this only
+			 * changes something when the update left the plugin inactive.
+			 */
 			if ( $result === true ) {
 				$result = $this->do_activate();
 			}
@@ -437,7 +484,7 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 
 		if ( is_wp_error( $result ) ) {
 			return new WP_Error(
-				$error_code,
+				$this->has_requirements_error( $result, $skin->get_errors() ) ? Error_Code::REQUIREMENTS_NOT_MET : $error_code,
 				$is_update
 					? sprintf(
 						/* translators: %1$s: feature name, %2$s: error message */
@@ -455,17 +502,8 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 		}
 
 		if ( $result !== true ) {
-			$skin_errors  = $skin->get_errors();
-			$actual_code  = $error_code;
-			$requirements = $this->get_requirements_error_codes();
-
-			if (
-				$requirements !== []
-				&& $skin_errors->has_errors()
-				&& array_intersect( array_map( [ Cast::class, 'to_string' ], $skin_errors->get_error_codes() ), $requirements )
-			) {
-				$actual_code = Error_Code::REQUIREMENTS_NOT_MET;
-			}
+			$skin_errors = $skin->get_errors();
+			$actual_code = $this->has_requirements_error( $skin_errors ) ? Error_Code::REQUIREMENTS_NOT_MET : $error_code;
 
 			$message = $skin_errors->has_errors()
 				? $skin->get_error_messages()
@@ -496,6 +534,36 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	}
 
 	/**
+	 * Get the requirement headers of the update WordPress has for this extension.
+	 *
+	 * Reads the extension's entry in the update transient's `response` list.
+	 * WordPress.org lists an update whose WordPress requirement the site does
+	 * not meet under `no_update` instead, so a newer `no_update` entry whose
+	 * requirements the site does not meet is read too. See
+	 * Resolve_Headers.
+	 *
+	 * @since TBD
+	 *
+	 * @return Headers|null Null when WordPress has no update for the extension.
+	 */
+	protected function get_update_headers(): ?Headers {
+		return ( $this->get_resolve_headers() )( $this->feature );
+	}
+
+	/**
+	 * Get the service that resolves the requirement headers of a feature's
+	 * pending update, or of its catalog version, from Harbor's container.
+	 *
+	 * @since TBD
+	 *
+	 * @return Resolve_Headers
+	 */
+	protected function get_resolve_headers(): Resolve_Headers {
+		/** @var Resolve_Headers */
+		return Config::get_container()->get( Resolve_Headers::class );
+	}
+
+	/**
 	 * WordPress error codes that indicate requirements failures.
 	 *
 	 * Override in subclasses that need to detect PHP/WP version mismatches
@@ -507,6 +575,37 @@ abstract class Installable_Strategy extends Abstract_Strategy {
 	 */
 	protected function get_requirements_error_codes(): array {
 		return [];
+	}
+
+	/**
+	 * Whether any of the given errors carries a requirements error code.
+	 *
+	 * The bulk upgraders return a requirements failure as the result, and the
+	 * upgrader skin collects the errors raised while the package is checked,
+	 * so run_upgrader() passes both.
+	 *
+	 * @since TBD
+	 *
+	 * @param WP_Error ...$errors The errors to check.
+	 *
+	 * @return bool
+	 */
+	private function has_requirements_error( WP_Error ...$errors ): bool {
+		$requirements = $this->get_requirements_error_codes();
+
+		if ( $requirements === [] ) {
+			return false;
+		}
+
+		foreach ( $errors as $error ) {
+			$codes = array_map( [ Cast::class, 'to_string' ], $error->get_error_codes() );
+
+			if ( array_intersect( $codes, $requirements ) !== [] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

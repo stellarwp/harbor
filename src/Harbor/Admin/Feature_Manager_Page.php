@@ -205,6 +205,8 @@ class Feature_Manager_Page {
 				'domain'           => $this->site_data->get_domain(),
 				'version'          => Harbor::VERSION,
 				'licenseKeyPrefix' => License_Key::PREFIX,
+				'updateCoreUrl'    => self_admin_url( 'update-core.php' ),
+				'updatePhpUrl'     => wp_get_update_php_url(),
 			]
 		);
 

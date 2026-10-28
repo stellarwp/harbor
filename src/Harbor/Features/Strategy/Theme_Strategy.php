@@ -23,7 +23,7 @@ use function wp_get_theme;
  * - do_install()     → themes_api() + Theme_Upgrader
  * - do_activate()    → no-op (theme is already installed)
  * - do_deactivate()  → returns error (theme files are never deleted)
- * - do_update()      → Theme_Upgrader::upgrade()
+ * - do_update()      → Theme_Upgrader::bulk_upgrade()
  *
  * A theme feature is active when the theme is installed on disk.
  * No DB option is stored — disk presence is the sole source of truth.
@@ -37,6 +37,22 @@ class Theme_Strategy extends Installable_Strategy {
 	 * @var Theme
 	 */
 	protected Feature $feature;
+
+	/**
+	 * WordPress error codes that indicate PHP or WP version requirements are not met.
+	 *
+	 * Emitted by Theme_Upgrader::check_package() and captured by the skin, and returned by
+	 * Theme_Upgrader::bulk_upgrade() when the update transient's `requires` or `requires_php`
+	 * is not met.
+	 *
+	 * @since TBD
+	 *
+	 * @var string[]
+	 */
+	private const REQUIREMENTS_ERROR_CODES = [
+		'incompatible_php_required_version',
+		'incompatible_wp_required_version',
+	];
 
 	// ── Abstract method implementations ─────────────────────────────────
 
@@ -193,6 +209,13 @@ class Theme_Strategy extends Installable_Strategy {
 	/**
 	 * Run the theme upgrade.
 	 *
+	 * Uses bulk_upgrade() rather than upgrade() because only bulk_upgrade()
+	 * checks requirements: it refuses an update whose `requires` or
+	 * `requires_php` in the update transient the site does not meet, and it
+	 * runs check_package() on the downloaded theme's `Requires at least` and
+	 * `Requires PHP` headers. bulk_upgrade() returns an array of results keyed
+	 * by stylesheet, where a successful update is an array of install details.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @return true|WP_Error
@@ -208,7 +231,15 @@ class Theme_Strategy extends Installable_Strategy {
 
 		return $this->run_upgrader(
 			static function () use ( $upgrader, $slug ) {
-				return $upgrader->upgrade( $slug );
+				$results = $upgrader->bulk_upgrade( [ $slug ] );
+
+				if ( ! is_array( $results ) ) {
+					return $results;
+				}
+
+				$result = $results[ $slug ] ?? false;
+
+				return is_array( $result ) ? true : $result;
 			},
 			$skin,
 			Error_Code::UPDATE_FAILED,
@@ -224,13 +255,23 @@ class Theme_Strategy extends Installable_Strategy {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	protected function get_requirements_error_codes(): array {
+		return self::REQUIREMENTS_ERROR_CODES;
+	}
+
+	/**
 	 * Check whether an update is available for this theme.
 	 *
 	 * @since 1.0.0
+	 * @deprecated TBD Use get_update_headers(), which also returns the update's requirements.
 	 *
 	 * @return bool
 	 */
 	protected function check_update_available(): bool {
+		_deprecated_function( __METHOD__, 'TBD', __CLASS__ . '::get_update_headers()' );
+
 		$update_themes = get_site_transient( 'update_themes' );
 
 		if ( ! is_object( $update_themes ) || empty( $update_themes->response ) || ! is_array( $update_themes->response ) ) {

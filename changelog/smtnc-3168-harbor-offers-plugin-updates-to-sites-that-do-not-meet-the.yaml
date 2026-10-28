@@ -1,0 +1,9 @@
+significance: patch
+type: fix
+entry: Harbor no longer installs a plugin or theme update on a site whose
+  WordPress or PHP version is below the release's minimum. Update entries now
+  carry the release's required WordPress and PHP versions from the catalog,
+  automatic updates and update.php refuse the download, the Plugins screen says
+  when an update needs a newer WordPress, and the Nexcess Licensing page shows
+  the required version, links to the fix and disables the Update button.
+timestamp: 2026-10-26T14:25:45.105Z
