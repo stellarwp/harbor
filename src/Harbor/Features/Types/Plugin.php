@@ -176,6 +176,7 @@ final class Plugin extends Feature implements Installable {
 	 * Returns null if the plugin is not installed.
 	 *
 	 * @since 1.0.0
+	 * @since TBD Reads the Version header without translating the plugin headers.
 	 *
 	 * @return string|null
 	 */
@@ -188,7 +189,11 @@ final class Plugin extends Feature implements Installable {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php'; // @phpstan-ignore-line -- ABSPATH exists.
 		}
 
-		$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $this->get_plugin_file() );
+		/*
+		 * Translating the headers loads the plugin's text domain, and features resolve on the
+		 * first license lookup, often before init. Only the version is needed here.
+		 */
+		$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $this->get_plugin_file(), false, false );
 
 		// get_plugin_data() fills every header key, defaulting to an empty string,
 		// so Version is always present and the null coalesce never applied.
