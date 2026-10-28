@@ -32,7 +32,7 @@ interface FeatureRowProps {
 }
 
 /**
- * @since TBD   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
+ * @since 2.0.4   Disable the Update button or the toggle and show a notice when the update, or the version installing would download, needs a newer WordPress or PHP version.
  * @since 1.0.0
  */
 export function FeatureRow( { feature, upgradeTierName }: FeatureRowProps ) {

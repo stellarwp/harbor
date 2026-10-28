@@ -19,7 +19,7 @@ interface RequirementsNoticeProps {
 }
 
 /**
- * @since TBD
+ * @since 2.0.4
  */
 export function RequirementsNotice( { unmet }: RequirementsNoticeProps ) {
 	const links = {

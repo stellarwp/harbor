@@ -60,7 +60,7 @@ final class Feature_Resource {
 	/**
 	 * The requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @var Headers|null
 	 */
@@ -68,7 +68,7 @@ final class Feature_Resource {
 
 	/**
 	 * @since 1.0.0
-	 * @since TBD Takes the requirement headers of the version an update or an install would put on the site.
+	 * @since 2.0.4 Takes the requirement headers of the version an update or an install would put on the site.
 	 *
 	 * @param Feature      $feature        The resolved feature.
 	 * @param string|null  $update_version Version from the update transient, or null.
@@ -87,7 +87,7 @@ final class Feature_Resource {
 	 * results so transient access does not trigger re-resolution.
 	 *
 	 * @since 1.0.0
-	 * @since TBD Resolves the requirement headers of the pending update, or of the catalog version when the feature is not installed, with Resolve_Headers.
+	 * @since 2.0.4 Resolves the requirement headers of the pending update, or of the catalog version when the feature is not installed, with Resolve_Headers.
 	 *
 	 * @param Feature $feature The resolved feature.
 	 *
@@ -164,7 +164,7 @@ final class Feature_Resource {
 	/**
 	 * Returns the requirement headers of the version an update or an install would put on the site, or null when there is none.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return Headers|null
 	 */

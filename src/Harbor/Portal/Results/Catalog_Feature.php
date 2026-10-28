@@ -335,7 +335,7 @@ final class Catalog_Feature {
 	 *
 	 * Comes from the `Requires at least` header of the release zip.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string|null
 	 */
@@ -348,7 +348,7 @@ final class Catalog_Feature {
 	 *
 	 * Comes from the `Requires PHP` header of the release zip.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string|null
 	 */
@@ -361,7 +361,7 @@ final class Catalog_Feature {
 	 *
 	 * Comes from the `Tested up to` field of the release readme.txt.
 	 *
-	 * @since TBD
+	 * @since 2.0.4
 	 *
 	 * @return string|null
 	 */

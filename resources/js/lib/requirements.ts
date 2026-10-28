@@ -45,7 +45,7 @@ function toUnmet(
  * The requirements of the feature's pending update that the site does not
  * meet, or null when there is no update or the site meets them all.
  *
- * @since TBD
+ * @since 2.0.4
  */
 export function getUnmetUpdateRequirements( feature: Feature ): UnmetRequirements | null {
 	return toUnmet(
@@ -64,7 +64,7 @@ export function getUnmetUpdateRequirements( feature: Feature ): UnmetRequirement
  * downloads. The REST API reports its requirements in the same fields as a
  * pending update's, since a feature that is not installed has no update.
  *
- * @since TBD
+ * @since 2.0.4
  */
 export function getUnmetInstallRequirements( feature: Feature ): UnmetRequirements | null {
 	if ( feature.installed_version ) {
@@ -83,7 +83,7 @@ export function getUnmetInstallRequirements( feature: Feature ): UnmetRequiremen
 /**
  * Short text for the tooltip of a control disabled by the requirements.
  *
- * @since TBD
+ * @since 2.0.4
  */
 export function getRequirementsLabel( unmet: UnmetRequirements ): string {
 	if ( unmet.wp && unmet.php ) {
