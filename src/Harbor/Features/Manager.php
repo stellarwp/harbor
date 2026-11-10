@@ -557,6 +557,37 @@ class Manager {
 	}
 
 	/**
+	 * Checks whether a purchase on the Unified license grants a feature.
+	 *
+	 * Unlike is_available(), this is false when the feature is available only
+	 * through free access or an opted-in legacy license.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $slug The feature slug.
+	 *
+	 * @return bool|WP_Error True if a purchase grants it, false if not, WP_Error on failure.
+	 */
+	public function is_unified_licensed( string $slug ) {
+		$features = $this->get_all();
+
+		if ( is_wp_error( $features ) ) {
+			return $features;
+		}
+
+		$feature = $features->get( $slug );
+
+		if ( ! $feature ) {
+			return new WP_Error(
+				Error_Code::FEATURE_NOT_FOUND,
+				sprintf( 'Feature "%s" not found in the catalog.', $slug )
+			);
+		}
+
+		return $feature->is_unified_licensed();
+	}
+
+	/**
 	 * Checks whether a feature exists in the catalog.
 	 *
 	 * @since 1.0.0

@@ -43,6 +43,7 @@ class Global_Function_Registry {
 	 *
 	 * @since 1.0.0
 	 * @since 1.6.2 Feature and catalog callbacks return their default without logging when Harbor is not loaded, and log a feature missing from the catalog once per request.
+	 * @since 2.1.0 Registers lw_harbor_is_feature_unified_licensed.
 	 *
 	 * @param string $version The version of this Harbor instance.
 	 *
@@ -137,6 +138,32 @@ class Global_Function_Registry {
 					return $result;
 				} catch ( Throwable $e ) {
 					self::debug_log_throwable( $e, 'Error checking feature availability' );
+
+					return false;
+				}
+			}
+		);
+
+		\_lw_harbor_global_function_registry(
+			'lw_harbor_is_feature_unified_licensed',
+			$version,
+			static function ( string $slug ) {
+				if ( ! self::is_loaded() ) {
+					return false;
+				}
+
+				try {
+					$result = Config::get_container()->get( Manager::class )->is_unified_licensed( $slug );
+
+					if ( is_wp_error( $result ) ) {
+						self::log_feature_error( $result, 'Error checking feature Unified license' );
+
+						return false;
+					}
+
+					return $result;
+				} catch ( Throwable $e ) {
+					self::debug_log_throwable( $e, 'Error checking feature Unified license' );
 
 					return false;
 				}

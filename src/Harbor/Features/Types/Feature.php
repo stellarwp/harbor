@@ -166,6 +166,32 @@ abstract class Feature {
 	}
 
 	/**
+	 * Whether a purchase on the site's Unified license grants this feature.
+	 *
+	 * False when the feature is available only through free access or an opted-in
+	 * legacy license, even though is_available() is true for those.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return bool
+	 */
+	public function is_unified_licensed(): bool {
+		$sources = $this->attributes['access_sources'] ?? [];
+
+		if ( ! is_array( $sources ) ) {
+			return false;
+		}
+
+		foreach ( $sources as $source ) {
+			if ( is_array( $source ) && ( $source['type'] ?? '' ) === 'purchase' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Whether the user's licensed tier covers this feature's minimum tier.
 	 *
 	 * True when the license tier rank is >= the feature's minimum tier rank.

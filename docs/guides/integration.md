@@ -288,6 +288,11 @@ if (lw_harbor_is_feature_enabled('feature-slug')) {
 if (lw_harbor_is_feature_available('feature-slug')) {
     // Feature is available under the current license
 }
+
+// A purchase on the Unified license grants this feature (not free or legacy-only access)
+if (lw_harbor_is_feature_unified_licensed('feature-slug')) {
+    // The Unified license key is the one that grants access
+}
 ```
 
 ### Get the Nexcess Licensing admin URL
@@ -379,6 +384,7 @@ See [Section 2](#2-bundling-a-license-key). Bundling a key is done entirely thro
 | `lw_harbor_get_unified_license_key`            | `(): ?string`                       | Retrieve the stored unified license key.                                                                      |
 | `lw_harbor_is_feature_enabled`                 | `(string $slug): bool`              | Check if a feature is currently active locally on this site.                                                  |
 | `lw_harbor_is_feature_available`               | `(string $slug): bool`              | Check if the customer's license/tier includes this feature.                                                   |
+| `lw_harbor_is_feature_unified_licensed`        | `(string $slug): bool`              | Check if a purchase on the Unified license grants this feature (false when only free or legacy access applies). |
 | `lw_harbor_get_license_page_url`               | `(): string`                        | Get the admin URL for Nexcess Licensing (empty string if no Harbor copy is loaded).                           |
 | `lw_harbor_get_licensed_domain`                | `(): string`                        | Get the domain Harbor uses for licensing on this site.                                                        |
 | `lw_harbor_register_submenu`                   | `(string $parent_slug): void`       | Append a Licensing submenu item to a plugin's top-level admin menu. No-op until `lw_harbor/loaded` has fired. |

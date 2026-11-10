@@ -216,4 +216,108 @@ final class FunctionsTest extends HarborTestCase {
 
 		$this->assertFalse( lw_harbor_is_feature_available( 'test-feature' ) );
 	}
+
+	/**
+	 * Tests is_feature_unified_licensed is true only when a purchase grants the feature.
+	 *
+	 * @return void
+	 */
+	public function test_is_feature_unified_licensed_is_true_only_for_a_purchase_grant(): void {
+		$sources_by_slug = [
+			'purchased-feature'  => [
+				[
+					'type'         => 'purchase',
+					'product_slug' => 'learndash',
+					'tier'         => 'pro',
+				],
+			],
+			'bundled-feature'    => [
+				[ 'type' => 'free' ],
+				[
+					'type'         => 'purchase',
+					'product_slug' => 'kadence',
+					'tier'         => 'pro',
+				],
+			],
+			'legacy-feature'     => [ [ 'type' => 'legacy' ] ],
+			'free-feature'       => [ [ 'type' => 'free' ] ],
+			'unlicensed-feature' => [],
+		];
+
+		$collection = new Feature_Collection();
+
+		foreach ( $sources_by_slug as $slug => $sources ) {
+			$collection->add(
+				Plugin::from_array(
+					[
+						'slug'           => $slug,
+						'name'           => $slug,
+						'description'    => '',
+						'product'        => 'test',
+						'tier'           => 'pro',
+						'is_available'   => $sources !== [],
+						'access_sources' => $sources,
+						'plugin_file'    => $slug . '/' . $slug . '.php',
+					]
+				)
+			);
+		}
+
+		$repository = $this->makeEmpty(
+			Feature_Repository::class,
+			[
+				'get' => $collection,
+			]
+		);
+
+		$manager = new Manager( $repository, $this->makeEmpty( Strategy_Factory::class ) );
+
+		$this->container->bind(
+			Manager::class,
+			static function () use ( $manager ) {
+				return $manager;
+			}
+		);
+
+		$this->assertTrue( lw_harbor_is_feature_unified_licensed( 'purchased-feature' ) );
+		$this->assertTrue( lw_harbor_is_feature_unified_licensed( 'bundled-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_unified_licensed( 'legacy-feature' ), 'A legacy-only feature is available but not Unified licensed.' );
+		$this->assertTrue( lw_harbor_is_feature_available( 'legacy-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_unified_licensed( 'free-feature' ) );
+		$this->assertFalse( lw_harbor_is_feature_unified_licensed( 'unlicensed-feature' ) );
+	}
+
+	/**
+	 * Tests is_feature_unified_licensed returns false for a feature not in the catalog.
+	 *
+	 * @return void
+	 */
+	public function test_is_feature_unified_licensed_returns_false_for_unknown_feature(): void {
+		$this->assertFalse( lw_harbor_is_feature_unified_licensed( 'nonexistent' ) );
+	}
+
+	/**
+	 * Tests is_feature_unified_licensed returns false when the catalog returns a WP_Error.
+	 *
+	 * @return void
+	 */
+	public function test_is_feature_unified_licensed_returns_false_when_catalog_errors(): void {
+		$repository = $this->makeEmpty(
+			Feature_Repository::class,
+			[
+				'get' => new WP_Error( 'api_error', 'Could not fetch features.' ),
+			]
+		);
+
+		$manager = new Manager( $repository, $this->makeEmpty( Strategy_Factory::class ) );
+
+		$this->container->bind(
+			Manager::class,
+			static function () use ( $manager ) {
+				return $manager;
+			}
+		);
+
+		$this->assertFalse( lw_harbor_is_feature_unified_licensed( 'test-feature' ) );
+	}
 }

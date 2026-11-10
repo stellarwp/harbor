@@ -142,6 +142,7 @@ Global convenience functions in `src/Harbor/global-functions.php` (non-namespace
 
 - **`lw_harbor_is_feature_enabled(string $slug): bool|WP_Error`** — in the catalog AND active locally?
 - **`lw_harbor_is_feature_available(string $slug): bool|WP_Error`** — does the customer's tier include this feature?
+- **`lw_harbor_is_feature_unified_licensed(string $slug): bool|WP_Error`** — does a purchase on the Unified license grant this feature? False when the feature is available only through free access or an opted-in legacy license.
 
 ### WordPress Hooks
 

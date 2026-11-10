@@ -188,6 +188,27 @@ if ( ! function_exists( 'lw_harbor_is_feature_available' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lw_harbor_is_feature_unified_licensed' ) ) {
+	/**
+	 * Whether a purchase on the site's Unified license grants this feature.
+	 *
+	 * Unlike lw_harbor_is_feature_available(), this is false when the feature is
+	 * available only through free access or an opted-in legacy license. Use it to
+	 * decide whether the Unified license key is the one that grants access.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $slug The feature slug.
+	 *
+	 * @return bool
+	 */
+	function lw_harbor_is_feature_unified_licensed( string $slug ): bool {
+		$callback = _lw_harbor_global_function_registry( 'lw_harbor_is_feature_unified_licensed' );
+
+		return $callback ? (bool) $callback( $slug ) : false;
+	}
+}
+
 if ( ! function_exists( 'lw_harbor_register_submenu' ) ) {
 	/**
 	 * Registers a submenu item under a plugin's existing menu that links to the Harbor feature manager.

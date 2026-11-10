@@ -3,6 +3,7 @@
 namespace LiquidWeb\Harbor\Tests\Features\Types;
 
 use LiquidWeb\Harbor\Features\Types\Feature;
+use LiquidWeb\Harbor\Features\Types\Plugin;
 use LiquidWeb\Harbor\Tests\HarborTestCase;
 
 final class FeatureTest extends HarborTestCase {
@@ -233,5 +234,41 @@ final class FeatureTest extends HarborTestCase {
 		$this->assertSame( 'custom-type', $feature->get_type() );
 		$this->assertFalse( $feature->is_available() );
 		$this->assertSame( 'https://example.com/learn-more', $feature->get_documentation_url() );
+	}
+
+	/**
+	 * Tests that is_unified_licensed reads the purchase grant from access_sources.
+	 *
+	 * @return void
+	 */
+	public function test_is_unified_licensed_requires_a_purchase_access_source(): void {
+		$base = [
+			'slug'        => 'unified-feature',
+			'name'        => 'Unified Feature',
+			'description' => '',
+			'product'     => 'test',
+			'tier'        => 'pro',
+			'plugin_file' => 'unified-feature/unified-feature.php',
+		];
+
+		$purchased = Plugin::from_array(
+			$base + [
+				'access_sources' => [
+					[ 'type' => 'legacy' ],
+					[
+						'type'         => 'purchase',
+						'product_slug' => 'learndash',
+					],
+				],
+			] 
+		);
+		$legacy    = Plugin::from_array( $base + [ 'access_sources' => [ [ 'type' => 'legacy' ] ] ] );
+		$free      = Plugin::from_array( $base + [ 'access_sources' => [ [ 'type' => 'free' ] ] ] );
+		$none      = Plugin::from_array( $base );
+
+		$this->assertTrue( $purchased->is_unified_licensed() );
+		$this->assertFalse( $legacy->is_unified_licensed() );
+		$this->assertFalse( $free->is_unified_licensed() );
+		$this->assertFalse( $none->is_unified_licensed() );
 	}
 }
