@@ -196,7 +196,7 @@ if ( ! function_exists( 'lw_harbor_is_feature_unified_licensed' ) ) {
 	 * available only through free access or an opted-in legacy license. Use it to
 	 * decide whether the Unified license key is the one that grants access.
 	 *
-	 * @since 2.1.0
+	 * @since TBD
 	 *
 	 * @param string $slug The feature slug.
 	 *

@@ -171,7 +171,7 @@ abstract class Feature {
 	 * False when the feature is available only through free access or an opted-in
 	 * legacy license, even though is_available() is true for those.
 	 *
-	 * @since 2.1.0
+	 * @since TBD
 	 *
 	 * @return bool
 	 */

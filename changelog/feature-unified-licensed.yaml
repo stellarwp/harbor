@@ -1,4 +1,0 @@
-significance: minor
-type: feature
-entry: Added lw_harbor_is_feature_unified_licensed(), which tells a plugin whether a purchase on the Unified license grants a feature. lw_harbor_is_feature_available() is also true when only free access or an opted-in legacy license applies, so a plugin could not tell whether the Unified key was the one granting access.
-timestamp: 2026-11-10T14:40:00.000Z

@@ -562,7 +562,7 @@ class Manager {
 	 * Unlike is_available(), this is false when the feature is available only
 	 * through free access or an opted-in legacy license.
 	 *
-	 * @since 2.1.0
+	 * @since TBD
 	 *
 	 * @param string $slug The feature slug.
 	 *

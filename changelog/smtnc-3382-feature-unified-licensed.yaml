@@ -1,0 +1,5 @@
+significance: minor
+type: feature
+entry: Added the `lw_harbor_is_feature_unified_licensed()` global function to
+  check whether a purchase on the Unified license grants a feature.
+timestamp: 2026-11-10T16:19:56.717Z

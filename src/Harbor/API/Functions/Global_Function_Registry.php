@@ -43,7 +43,7 @@ class Global_Function_Registry {
 	 *
 	 * @since 1.0.0
 	 * @since 1.6.2 Feature and catalog callbacks return their default without logging when Harbor is not loaded, and log a feature missing from the catalog once per request.
-	 * @since 2.1.0 Registers lw_harbor_is_feature_unified_licensed.
+	 * @since TBD Registers lw_harbor_is_feature_unified_licensed.
 	 *
 	 * @param string $version The version of this Harbor instance.
 	 *
